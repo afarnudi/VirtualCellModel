@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		000D13D220E3789D0022183F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000D13D120E3789D0022183F /* main.cpp */; };
+		000D13DB20E378CE0022183F /* General_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000D13D920E378CE0022183F /* General_functions.cpp */; };
+		000D13DD20E378F60022183F /* Membrane_normal_direction_identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000D13DC20E378F60022183F /* Membrane_normal_direction_identifier.cpp */; };
+		000D13DF20E379080022183F /* Membrane_read_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000D13DE20E379080022183F /* Membrane_read_functions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,12 @@
 /* Begin PBXFileReference section */
 		000D13CE20E3789D0022183F /* Membrane_OBJ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Membrane_OBJ; sourceTree = BUILT_PRODUCTS_DIR; };
 		000D13D120E3789D0022183F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		000D13D820E378B10022183F /* General_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = General_constants.h; sourceTree = "<group>"; };
+		000D13D920E378CE0022183F /* General_functions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = General_functions.cpp; sourceTree = "<group>"; };
+		000D13DA20E378CE0022183F /* General_functions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = General_functions.hpp; sourceTree = "<group>"; };
+		000D13DC20E378F60022183F /* Membrane_normal_direction_identifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Membrane_normal_direction_identifier.cpp; sourceTree = "<group>"; };
+		000D13DE20E379080022183F /* Membrane_read_functions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Membrane_read_functions.cpp; sourceTree = "<group>"; };
+		000D13E020E379170022183F /* Membrane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Membrane.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +67,12 @@
 			isa = PBXGroup;
 			children = (
 				000D13D120E3789D0022183F /* main.cpp */,
+				000D13DC20E378F60022183F /* Membrane_normal_direction_identifier.cpp */,
+				000D13DE20E379080022183F /* Membrane_read_functions.cpp */,
+				000D13E020E379170022183F /* Membrane.h */,
+				000D13D820E378B10022183F /* General_constants.h */,
+				000D13D920E378CE0022183F /* General_functions.cpp */,
+				000D13DA20E378CE0022183F /* General_functions.hpp */,
 			);
 			path = Membrane_OBJ;
 			sourceTree = "<group>";
@@ -119,6 +134,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				000D13DD20E378F60022183F /* Membrane_normal_direction_identifier.cpp in Sources */,
+				000D13DB20E378CE0022183F /* General_functions.cpp in Sources */,
+				000D13DF20E379080022183F /* Membrane_read_functions.cpp in Sources */,
 				000D13D220E3789D0022183F /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
