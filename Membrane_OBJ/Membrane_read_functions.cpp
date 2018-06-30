@@ -12,12 +12,6 @@ void Membrane::read_gmesh_file (string gmesh_file)
     }
     read>> Membrane_num_of_Nodes;
     
-    Membrane_Node_Position= new double*[Membrane_num_of_Nodes];
-    for (int i=0; i<Membrane_num_of_Nodes;i++)
-    {
-        Membrane_Node_Position[i]= new double(3);
-    }
-    
     Membrane_Node_Velocity= new double*[Membrane_num_of_Nodes];
     for (int i=0; i<Membrane_num_of_Nodes;i++)
     {
@@ -42,13 +36,15 @@ void Membrane::read_gmesh_file (string gmesh_file)
         Membrane_Node_Force[i][2]= 0.0;
     }
     // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
+    vector<double> temp_node_position;
+    temp_node_position.resize(3);
     for(int i=0;i<Membrane_num_of_Nodes;i++)
     {
         read>> temp_int;
-        read>> Membrane_Node_Position [i][0];
-        read>> Membrane_Node_Position [i][1];
-        read>> Membrane_Node_Position [i][2];
-        
+        read>> temp_node_position[0];
+        read>> temp_node_position[1];
+        read>> temp_node_position[2];
+        Membrane_Node_Position.push_back(temp_node_position);
     }
     
     // In this section the Node list that make up triangles on the outer membrane and nucleus are read from the Gmesh generated file.
@@ -56,7 +52,6 @@ void Membrane::read_gmesh_file (string gmesh_file)
     read>> temp_string;
     read>> temp_int;
     int temp_num_of_triangles=temp_int;
-    cout<<temp_int<<endl;
     
     vector<int> push;
     push.resize(3);

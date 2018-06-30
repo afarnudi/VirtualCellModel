@@ -13,7 +13,7 @@ class Membrane
 {
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
-    double **Membrane_Node_Position;
+    vector<vector<double> >Membrane_Node_Position;
     vector<vector<int> > Membrane_triangle_list;
     vector<vector<int> > membrane_triangle_pair_list;
     int **Membrane_Node_Pair_list;
@@ -82,7 +82,7 @@ public:
         output_file_neme+=".xyz";
         //cout<<output_file_neme<<endl;
         cout<<"Membrane class initiated"<<endl;
-        Membrane_Normal_direction_Identifier();
+//        Membrane_Normal_direction_Identifier();
         //    cout<<Membrane_triangle_list[2][1]<<endl;
     }
 };

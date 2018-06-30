@@ -357,16 +357,16 @@
  
  */
 
-void trajectory (Membrane m, string label="membrane")
+void trajectory (Membrane membrane, string label)
 {
     ofstream Trajectory;
-    Trajectory.open(m.output_file_neme.c_str(), ios::app);
+    Trajectory.open(membrane.output_file_neme.c_str());
     Trajectory << std:: fixed;
-    Trajectory << m.Membrane_num_of_Nodes<<endl;
+    Trajectory << membrane.Membrane_num_of_Nodes<<endl;
     Trajectory << " nodes  "<<endl;
-    for(int j=0; j< m.Membrane_num_of_Nodes;j++) // saving trajectory
+    for(int j=0; j< membrane.Membrane_num_of_Nodes;j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<m.Membrane_Node_Position[j][0]<< setw(20)<<m.Membrane_Node_Position[j][1]<< setw(20)<<m.Membrane_Node_Position[j][2]<<endl;
+        Trajectory << label <<setprecision(5)<< setw(20)<<membrane.Membrane_Node_Position[j][0]<< setw(20)<<membrane.Membrane_Node_Position[j][1]<< setw(20)<<membrane.Membrane_Node_Position[j][2]<<endl;
     }
 }
 
@@ -386,13 +386,13 @@ int main(int argc, char **argv)
      traj_file_name +=".xyz";*/
     
     //just adding a comment
-    Membrane  membrane("newparticle");
+    Membrane  membrane("membrane_2D_mesh");
     //    Membrane cage("Cage");
-    for (int i=0;i<200;i++)
-    {
-        trajectory(membrane, "newparticle");
+//    for (int i=0;i<200;i++)
+//    {
+        trajectory(membrane, "membrane");
         //    trajectory(cage, "cage");
-    }
+//    }
     
     
     
