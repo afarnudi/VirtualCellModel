@@ -68,10 +68,11 @@ int main(int argc, char **argv)
 	membrane.ConstantSurfaceForceLocalTriangles();
 	 if(MD_Step!=0 && MD_Step%100==0) // thermostate
         {
-			//cout<<"mem ";
-            Thermostat_2(membrane);
-			//cout<<"new ";
-			Thermostat_2(particle);
+		 //cout<<"mem ";
+            	Thermostat_2(membrane);
+		//cout<<"new ";
+		Thermostat_2(particle);
+		cout<<(MD_Step*100/MD_num_of_steps)<<"% done"<<endl;
         }
 	if (MD_Step%200==0) //saving Results for membrane
 		{
