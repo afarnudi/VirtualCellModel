@@ -34,6 +34,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 	//void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
 	void Elastic_Force_Calculator();
 	void Membrane_MD_Evolution ();
+	void ConstantSurfaceForceLocalTriangles ();
 private:
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
@@ -48,6 +49,7 @@ private:
     double membraneshiftinZdirection=0.0; //???
     double Membrane_downward_speed=0.0; //???
     //bool =0;
+	double Average_Membrane_Node_Distance();
 	
     
     
@@ -72,7 +74,6 @@ public:
         read_membrabe_input(input_file_name);
         read_gmesh_file(membrane_mesh_file_name);
         output_file_neme=membrane_mesh_file_name ;// it is for generating trajectory file. it can be modifyed to have date and time in it.this modification can be done in main.
-        output_file_neme+=".xyz";
         cout<<"Membrane class initiated"<<endl;
         Membrane_Normal_direction_Identifier();
 		Membrane_num_of_Triangle_Pairs=Membrane_triangle_pair_counter();
@@ -88,14 +89,13 @@ public:
     {
         read_gmesh_file(membrane_mesh_file_name);
         output_file_neme=membrane_mesh_file_name;
-        output_file_neme+=".xyz";
         cout<<"Membrane class initiated"<<endl;
 		Membrane_Normal_direction_Identifier();
 		Membrane_num_of_Triangle_Pairs=Membrane_triangle_pair_counter();
-		
 		if (Membrane_num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2)
 		{cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
 		Membrane_Triangle_Pair_and_Edges_Identifier();
+		cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 	}
 };
 
