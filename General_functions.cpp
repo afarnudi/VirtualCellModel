@@ -56,4 +56,3 @@ void Vector_transformation (double MV[3],double  M[3][3] ,double V[3])
     MV[1]= M[1][0] * V [0] + M[1][1] * V [1]  +M[1][2] * V [2] ;
     MV[2]= M[2][0] * V [0] + M[2][1] * V [1]  +M[2][2] * V [2] ;
 }
-

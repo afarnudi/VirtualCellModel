@@ -20,4 +20,3 @@ void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]);
 
 
 #endif /* General_functions_hpp */
-

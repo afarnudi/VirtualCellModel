@@ -9,9 +9,9 @@
 #ifndef General_constants_h
 #define General_constants_h
 
-#define MD_num_of_steps 1000000//35000// number of MD stps
+#define MD_num_of_steps  10000//35000// number of MD stps
 #define savingstep    1000//The step on which the trajector of the membrane is saved.
-#define MD_Time_Step     0.001 // time length of steps in MD
+#define MD_Time_Step     0.0001 // time length of steps in MD
 #define KT     1.0  // KT the quanta of energy
 #define pi     3.141592 // clear !
 #define RunThermostatePerstep   100 //
@@ -25,4 +25,3 @@
 #define Periodic_condtion_status 0.0 //status 0.0 = off (The Periodic update will not be executed in the 'Main MD' loop). status = 1.0 = on
 
 #endif /* General_constants_h */
-

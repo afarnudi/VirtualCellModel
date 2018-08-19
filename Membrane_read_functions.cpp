@@ -11,18 +11,18 @@ void Membrane::read_gmesh_file (string gmesh_file)
         read>> temp_string;
     }
     read>> Membrane_num_of_Nodes;
-    
-    Membrane_Node_Velocity= new double*[Membrane_num_of_Nodes];
-    for (int i=0; i<Membrane_num_of_Nodes;i++)
-    {
-        Membrane_Node_Velocity[i]= new double(3);
-    }
-    
-    Membrane_Node_Force= new double*[Membrane_num_of_Nodes];
-    for (int i=0; i<Membrane_num_of_Nodes;i++)
-    {
-        Membrane_Node_Force[i]= new double(3);
-    }
+	
+	Membrane_Node_Velocity.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+		for(int i=0;i<Membrane_num_of_Nodes;i++)
+		{
+        Membrane_Node_Velocity[i].resize(3);
+		}
+	Membrane_Node_Force.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+		for(int i=0;i<Membrane_num_of_Nodes;i++)
+		{
+		Membrane_Node_Force[i].resize(3);
+		}
+
     
     //    In this section we set all the Node forces and velocities to zero.
     for(int i=0;i<Membrane_num_of_Nodes;i++)
