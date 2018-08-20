@@ -12,6 +12,12 @@
 		0029804321277D4100FD2491 /* ECM_Normal_direction_Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029804221277D4100FD2491 /* ECM_Normal_direction_Identifier.cpp */; };
 		002980462127FB6900FD2491 /* ECM_Node_Pair_Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002980442127FB6900FD2491 /* ECM_Node_Pair_Identifier.cpp */; };
 		0029804921293BA900FD2491 /* write_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029804721293BA900FD2491 /* write_functions.cpp */; };
+		0029804F2129479F00FD2491 /* Membrane_spring_force.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029804D2129479F00FD2491 /* Membrane_spring_force.cpp */; };
+		0029805121294FA200FD2491 /* Membrane_node_pair_identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029805021294FA200FD2491 /* Membrane_node_pair_identifier.cpp */; };
+		00298053212954F700FD2491 /* Membrane_bend_force.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00298052212954F700FD2491 /* Membrane_bend_force.cpp */; };
+		00298055212956C100FD2491 /* check.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00298054212956C100FD2491 /* check.cpp */; };
+		0029805C21295DBB00FD2491 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029805A21295DBB00FD2491 /* interaction.cpp */; };
+		0029805E21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029805D21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp */; };
 		00C6949E20FB6D8A00296C9A /* Membrane_normal_direction_identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C6949020FB6D8900296C9A /* Membrane_normal_direction_identifier.cpp */; };
 		00C6949F20FB6D8A00296C9A /* Average_Membrane_Node_Distance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C6949120FB6D8900296C9A /* Average_Membrane_Node_Distance.cpp */; };
 		00C694A020FB6D8A00296C9A /* Membrane_triangle_pair_counter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C6949220FB6D8900296C9A /* Membrane_triangle_pair_counter.cpp */; };
@@ -46,6 +52,13 @@
 		002980442127FB6900FD2491 /* ECM_Node_Pair_Identifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ECM_Node_Pair_Identifier.cpp; path = ../../../ECM/ECM_Node_Pair_Identifier.cpp; sourceTree = "<group>"; };
 		0029804721293BA900FD2491 /* write_functions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = write_functions.cpp; path = ../../write_functions.cpp; sourceTree = "<group>"; };
 		0029804821293BA900FD2491 /* write_functions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = write_functions.hpp; path = ../../write_functions.hpp; sourceTree = "<group>"; };
+		0029804D2129479F00FD2491 /* Membrane_spring_force.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Membrane_spring_force.cpp; path = ../../../Membrane_spring_forces/Membrane_spring_force.cpp; sourceTree = "<group>"; };
+		0029805021294FA200FD2491 /* Membrane_node_pair_identifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Membrane_node_pair_identifier.cpp; path = ../../Membrane_node_pair_identifier.cpp; sourceTree = "<group>"; };
+		00298052212954F700FD2491 /* Membrane_bend_force.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Membrane_bend_force.cpp; sourceTree = "<group>"; };
+		00298054212956C100FD2491 /* check.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = check.cpp; sourceTree = "<group>"; };
+		0029805A21295DBB00FD2491 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
+		0029805B21295DBB00FD2491 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
+		0029805D21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Membrane_triangle_pair_identifier.cpp; path = ../../Membrane_triangle_pair_identifier.cpp; sourceTree = "<group>"; };
 		00C6948620FB6D7100296C9A /* Mem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mem; sourceTree = BUILT_PRODUCTS_DIR; };
 		00C6949020FB6D8900296C9A /* Membrane_normal_direction_identifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Membrane_normal_direction_identifier.cpp; path = ../../Membrane_normal_direction_identifier.cpp; sourceTree = "<group>"; };
 		00C6949120FB6D8900296C9A /* Average_Membrane_Node_Distance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Average_Membrane_Node_Distance.cpp; path = ../../Average_Membrane_Node_Distance.cpp; sourceTree = "<group>"; };
@@ -87,6 +100,24 @@
 			path = ECM;
 			sourceTree = "<group>";
 		};
+		0029804C2129476800FD2491 /* Membrane_forces */ = {
+			isa = PBXGroup;
+			children = (
+				0029804D2129479F00FD2491 /* Membrane_spring_force.cpp */,
+				00298052212954F700FD2491 /* Membrane_bend_force.cpp */,
+			);
+			path = Membrane_forces;
+			sourceTree = "<group>";
+		};
+		0029805921295C6400FD2491 /* interaction */ = {
+			isa = PBXGroup;
+			children = (
+				0029805A21295DBB00FD2491 /* interaction.cpp */,
+				0029805B21295DBB00FD2491 /* interaction.hpp */,
+			);
+			name = interaction;
+			sourceTree = "<group>";
+		};
 		00C6947D20FB6D7100296C9A = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +137,8 @@
 		00C6948820FB6D7100296C9A /* Mem */ = {
 			isa = PBXGroup;
 			children = (
+				00298054212956C100FD2491 /* check.cpp */,
+				0029804C2129476800FD2491 /* Membrane_forces */,
 				00C694A920FB6DA300296C9A /* main.cpp */,
 				0029804721293BA900FD2491 /* write_functions.cpp */,
 				0029804821293BA900FD2491 /* write_functions.hpp */,
@@ -114,6 +147,7 @@
 				00C6949820FB6D8900296C9A /* ConstantSurfaceForceLocalTriangles.cpp */,
 				00C6949B20FB6D8A00296C9A /* Elastic_Force_Calculator.cpp */,
 				00C6949920FB6D8A00296C9A /* General_constants.h */,
+				0029805921295C6400FD2491 /* interaction */,
 				00C6949A20FB6D8A00296C9A /* General_functions.cpp */,
 				00C6949520FB6D8900296C9A /* General_functions.hpp */,
 				00C6949720FB6D8900296C9A /* Membrane_MD_Evolution.cpp */,
@@ -122,6 +156,8 @@
 				00C6949620FB6D8900296C9A /* Membrane_num_of_Node_Pair_Counter.cpp */,
 				00C6949320FB6D8900296C9A /* Membrane_read_functions.cpp */,
 				00C6949420FB6D8900296C9A /* Membrane_Triangle_Pair_and_Edges_Identifier.cpp */,
+				0029805D21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp */,
+				0029805021294FA200FD2491 /* Membrane_node_pair_identifier.cpp */,
 				00C6949220FB6D8900296C9A /* Membrane_triangle_pair_counter.cpp */,
 				00C6949C20FB6D8A00296C9A /* Membrane.h */,
 			);
@@ -186,14 +222,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				00C6949E20FB6D8A00296C9A /* Membrane_normal_direction_identifier.cpp in Sources */,
+				0029804F2129479F00FD2491 /* Membrane_spring_force.cpp in Sources */,
 				00C694A020FB6D8A00296C9A /* Membrane_triangle_pair_counter.cpp in Sources */,
 				00C694AA20FB6DA300296C9A /* main.cpp in Sources */,
+				0029805C21295DBB00FD2491 /* interaction.cpp in Sources */,
+				0029805121294FA200FD2491 /* Membrane_node_pair_identifier.cpp in Sources */,
+				00298053212954F700FD2491 /* Membrane_bend_force.cpp in Sources */,
+				00298055212956C100FD2491 /* check.cpp in Sources */,
 				00C694A520FB6D8A00296C9A /* ConstantSurfaceForceLocalTriangles.cpp in Sources */,
 				002980462127FB6900FD2491 /* ECM_Node_Pair_Identifier.cpp in Sources */,
 				0029803F2127731200FD2491 /* ECM.cpp in Sources */,
 				00C694A220FB6D8A00296C9A /* Membrane_Triangle_Pair_and_Edges_Identifier.cpp in Sources */,
 				00C6949F20FB6D8A00296C9A /* Average_Membrane_Node_Distance.cpp in Sources */,
 				00C694A120FB6D8A00296C9A /* Membrane_read_functions.cpp in Sources */,
+				0029805E21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp in Sources */,
 				00C694A620FB6D8A00296C9A /* General_functions.cpp in Sources */,
 				0029804921293BA900FD2491 /* write_functions.cpp in Sources */,
 				00298041212778CD00FD2491 /* ECM_read_functions.cpp in Sources */,

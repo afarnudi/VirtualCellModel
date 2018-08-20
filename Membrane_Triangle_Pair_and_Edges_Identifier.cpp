@@ -4,7 +4,7 @@
 
 void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
 {
-    
+    Membrane_triangle_pair_counter();
     int temp_triangle_node_A, temp_triangle_node_B, temp_triangle_node_C, temp_triangle_node_D, neighbor=0, neighbor_indicator;
     int triangle_pairs=0;
     int temp[2*Membrane_num_of_Triangle_Pairs][4];

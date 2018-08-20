@@ -13,28 +13,13 @@ void Membrane::read_gmesh_file (string gmesh_file)
     read>> Membrane_num_of_Nodes;
 	
 	Membrane_Node_Velocity.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    Membrane_Node_Force.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
 		for(int i=0;i<Membrane_num_of_Nodes;i++)
 		{
-        Membrane_Node_Velocity[i].resize(3);
+            Membrane_Node_Velocity[i].resize(3,0);
+            Membrane_Node_Force[i].resize(3,0);
 		}
-	Membrane_Node_Force.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
-		for(int i=0;i<Membrane_num_of_Nodes;i++)
-		{
-		Membrane_Node_Force[i].resize(3);
-		}
-
-    
-    //    In this section we set all the Node forces and velocities to zero.
-    for(int i=0;i<Membrane_num_of_Nodes;i++)
-    {
-        Membrane_Node_Velocity[i][0]= 0.0;
-        Membrane_Node_Velocity[i][1]= 0.0;
-        Membrane_Node_Velocity[i][2]= 0.0;
-        
-        Membrane_Node_Force[i][0]= 0.0;
-        Membrane_Node_Force[i][1]= 0.0;
-        Membrane_Node_Force[i][2]= 0.0;
-    }
+	
     // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
     vector<double> temp_node_position;
     temp_node_position.resize(3);
@@ -51,11 +36,11 @@ void Membrane::read_gmesh_file (string gmesh_file)
     read>> temp_string;
     read>> temp_string;
     read>> temp_int;
-    int temp_num_of_triangles=temp_int;
+    Membrane_num_of_Triangles=temp_int;
     
     vector<int> push;
     push.resize(3);
-    for(int i=0;i<temp_num_of_triangles;i++)
+    for(int i=0;i<Membrane_num_of_Triangles;i++)
     {
         read>>temp_int;
         read>>temp_int;
