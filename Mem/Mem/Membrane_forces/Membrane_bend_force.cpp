@@ -17,9 +17,9 @@ void Membrane::Membrane_bending_potetial(void){
     for(int i=0 ;i<Membrane_num_of_Triangle_Pairs;i++)  // who are neighbors?
     {
         pos1=Membrane_Triangle_Pair_Nodes[i][0];
-        pos2=Membrane_Triangle_Pair_Nodes[i][1];
-        pos3=Membrane_Triangle_Pair_Nodes[i][2];
-        pos4=Membrane_Triangle_Pair_Nodes[i][3];
+        pos2=Membrane_Triangle_Pair_Nodes[i][3];
+        pos3=Membrane_Triangle_Pair_Nodes[i][1];
+        pos4=Membrane_Triangle_Pair_Nodes[i][2];
         for (int index=0; index<3; index++) {
             temp_p1[index]=Membrane_Node_Position[pos1][index];
             temp_p2[index]=Membrane_Node_Position[pos2][index];
@@ -51,6 +51,7 @@ void Membrane::Membrane_bending_potetial(void){
         double temp_N1_length_squared=vectorlength(N1)*vectorlength(N1);
         double temp_N2_length_squared=vectorlength(N2)*vectorlength(N2);
         //**************************************************** force calculation
+//        F0*=-1;
         for (int l=0; l<3; l++) {
             F3[l]= F0 * temp_Ep2p1_length* N1[l]/ temp_N1_length_squared;
             

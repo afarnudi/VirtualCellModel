@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00209533212BE27B0047178C /* Membrane_node_neighbour_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00209532212BE27B0047178C /* Membrane_node_neighbour_list.cpp */; };
+		00209535212BEC000047178C /* neighbour_pool_constructor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00209534212BEC000047178C /* neighbour_pool_constructor.cpp */; };
+		00209537212D48CD0047178C /* Interaction_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00209536212D48CD0047178C /* Interaction_functions.cpp */; };
+		00209539212D491D0047178C /* interaction_neighbour_list_updaters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00209538212D491D0047178C /* interaction_neighbour_list_updaters.cpp */; };
+		0020953B212D49E00047178C /* triangle_interaction_neighbour_list_updaters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0020953A212D49E00047178C /* triangle_interaction_neighbour_list_updaters.cpp */; };
 		0029803F2127731200FD2491 /* ECM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029803D2127731200FD2491 /* ECM.cpp */; };
 		00298041212778CD00FD2491 /* ECM_read_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00298040212778CD00FD2491 /* ECM_read_functions.cpp */; };
 		0029804321277D4100FD2491 /* ECM_Normal_direction_Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029804221277D4100FD2491 /* ECM_Normal_direction_Identifier.cpp */; };
@@ -45,6 +50,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00209532212BE27B0047178C /* Membrane_node_neighbour_list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Membrane_node_neighbour_list.cpp; path = ../../Membrane_node_neighbour_list.cpp; sourceTree = "<group>"; };
+		00209534212BEC000047178C /* neighbour_pool_constructor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = neighbour_pool_constructor.cpp; sourceTree = "<group>"; };
+		00209536212D48CD0047178C /* Interaction_functions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Interaction_functions.cpp; path = ../../interaction/Interaction_functions.cpp; sourceTree = "<group>"; };
+		00209538212D491D0047178C /* interaction_neighbour_list_updaters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interaction_neighbour_list_updaters.cpp; path = ../../interaction/interaction_neighbour_list_updaters.cpp; sourceTree = "<group>"; };
+		0020953A212D49E00047178C /* triangle_interaction_neighbour_list_updaters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = triangle_interaction_neighbour_list_updaters.cpp; path = ../../interaction/triangle_interaction_neighbour_list_updaters.cpp; sourceTree = "<group>"; };
 		0029803D2127731200FD2491 /* ECM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ECM.cpp; path = ../../../ECM/ECM.cpp; sourceTree = "<group>"; };
 		0029803E2127731200FD2491 /* ECM.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ECM.hpp; path = ../../../ECM/ECM.hpp; sourceTree = "<group>"; };
 		00298040212778CD00FD2491 /* ECM_read_functions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ECM_read_functions.cpp; path = ../../../ECM/ECM_read_functions.cpp; sourceTree = "<group>"; };
@@ -112,7 +122,11 @@
 		0029805921295C6400FD2491 /* interaction */ = {
 			isa = PBXGroup;
 			children = (
+				00209534212BEC000047178C /* neighbour_pool_constructor.cpp */,
 				0029805A21295DBB00FD2491 /* interaction.cpp */,
+				0020953A212D49E00047178C /* triangle_interaction_neighbour_list_updaters.cpp */,
+				00209538212D491D0047178C /* interaction_neighbour_list_updaters.cpp */,
+				00209536212D48CD0047178C /* Interaction_functions.cpp */,
 				0029805B21295DBB00FD2491 /* interaction.hpp */,
 			);
 			name = interaction;
@@ -159,6 +173,7 @@
 				0029805D21295FB400FD2491 /* Membrane_triangle_pair_identifier.cpp */,
 				0029805021294FA200FD2491 /* Membrane_node_pair_identifier.cpp */,
 				00C6949220FB6D8900296C9A /* Membrane_triangle_pair_counter.cpp */,
+				00209532212BE27B0047178C /* Membrane_node_neighbour_list.cpp */,
 				00C6949C20FB6D8A00296C9A /* Membrane.h */,
 			);
 			path = Mem;
@@ -225,6 +240,7 @@
 				0029804F2129479F00FD2491 /* Membrane_spring_force.cpp in Sources */,
 				00C694A020FB6D8A00296C9A /* Membrane_triangle_pair_counter.cpp in Sources */,
 				00C694AA20FB6DA300296C9A /* main.cpp in Sources */,
+				00209537212D48CD0047178C /* Interaction_functions.cpp in Sources */,
 				0029805C21295DBB00FD2491 /* interaction.cpp in Sources */,
 				0029805121294FA200FD2491 /* Membrane_node_pair_identifier.cpp in Sources */,
 				00298053212954F700FD2491 /* Membrane_bend_force.cpp in Sources */,
@@ -240,9 +256,13 @@
 				0029804921293BA900FD2491 /* write_functions.cpp in Sources */,
 				00298041212778CD00FD2491 /* ECM_read_functions.cpp in Sources */,
 				0029804321277D4100FD2491 /* ECM_Normal_direction_Identifier.cpp in Sources */,
+				00209535212BEC000047178C /* neighbour_pool_constructor.cpp in Sources */,
 				00C694A420FB6D8A00296C9A /* Membrane_MD_Evolution.cpp in Sources */,
+				00209533212BE27B0047178C /* Membrane_node_neighbour_list.cpp in Sources */,
+				00209539212D491D0047178C /* interaction_neighbour_list_updaters.cpp in Sources */,
 				00C694A720FB6D8A00296C9A /* Elastic_Force_Calculator.cpp in Sources */,
 				00C694A820FB6D8A00296C9A /* Membrane_num_of_Node_Pair_Counter_2.cpp in Sources */,
+				0020953B212D49E00047178C /* triangle_interaction_neighbour_list_updaters.cpp in Sources */,
 				00C694A320FB6D8A00296C9A /* Membrane_num_of_Node_Pair_Counter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

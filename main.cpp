@@ -31,7 +31,8 @@ int main(int argc, char **argv)
     ECM surface("ECM_substrait_2", 0, -5, 0);
     ECM bacteria("ECM_Bacteria", 0, 4, 0);
     Membrane membrane("Membrane_Bacteria_2", 0, 5, 0);
-    membrane.shift_position(0, 9, 0);
+    membrane.shift_position(0, 9.5, 0);
+//    membrane.shift_velocity(0, -0.1, 0);
     //    Membrane  membrane("new_membrane");
     //    Membrane particle("newparticle");
     
@@ -41,34 +42,35 @@ int main(int argc, char **argv)
     bacteria_membrane_neighbour_list.resize(membrane.return_num_of_nodes(), -1);
     vector<int> surface_membrane_neighbour_list;
     surface_membrane_neighbour_list.resize(surface.return_num_of_nodes(), -1);
-    
+    bool costume_interaction_flag=false;
     surface.set_interaction_range(2.0);
     bacteria.set_interaction_range(2.0);
     for(int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++){
         
         membrane.Membrane_MD_Evolution();
         membrane.Elastic_Force_Calculator();
-        interaction_1(MD_Step, membrane, surface, surface_membrane_neighbour_list);
-        interaction_1(MD_Step, membrane, bacteria, bacteria_membrane_neighbour_list);
-        cout<<MD_Step<<endl;
-        //    membrane.ConstantSurfaceForceLocalTriangles();
-        //     if(MD_Step!=0 && MD_Step%100==0) // thermostate
-        //        {
-        //         //cout<<"mem ";
-        ////                Thermostat_2(membrane);
-        //        //cout<<"new ";
-        ////        Thermostat_2(particle);
-        //        cout<<(MD_Step*100/MD_num_of_steps)<<"% done"<<endl;
-        //        }
-        if (MD_Step%50==0) //saving Results for membrane
+//        interaction_1(MD_Step, membrane, surface, surface_membrane_neighbour_list);
+        interaction_1(MD_Step, membrane, bacteria, bacteria_membrane_neighbour_list, costume_interaction_flag);
+//        Node_ecm_Barrier(membrane, bacteria, bacteria_membrane_neighbour_list);
+//        cout<<MD_Step<<endl;
+//            membrane.ConstantSurfaceForceLocalTriangles();
+//             if(MD_Step!=0 && MD_Step%100==0) // thermostate
+//                {
+//                 //cout<<"mem ";
+//        //                Thermostat_2(membrane);
+//                //cout<<"new ";
+//        //        Thermostat_2(particle);
+//                cout<<(MD_Step*100/MD_num_of_steps)<<"% done"<<endl;
+//                }
+        if (MD_Step%100==0) //saving Results for membrane
         {
-            Results(bacteria, "bacteria", buffer);
-            Results(surface, "surface", buffer);
+//            membrane.calculate_average_force();
+//            Results(bacteria, "bacteria", buffer);
+//            Results(surface, "surface", buffer);
             Results(membrane, "membrane", buffer);
-            int percent=100*MD_Step/MD_num_of_steps;
-            if (percent%10==0) {
-                cout<<percent<<endl;
-            }
+            double percent=100*MD_Step/MD_num_of_steps;
+            cout<<percent<<endl;
+            
         }
         //    particle.Membrane_MD_Evolution();
         //    particle.Elastic_Force_Calculator();

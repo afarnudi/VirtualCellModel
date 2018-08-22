@@ -32,8 +32,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //vector<vector<int> > Membrane_Node_Pair_list;
 	vector<vector<int> > Membrane_Edges;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
     vector<vector<int> > Membrane_Triangle_Pair_Nodes;
-	vector<vector<double>>Membrane_Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
-    vector<vector<double>>Membrane_Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+	vector<vector<double> > Membrane_Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    vector<vector<double> > Membrane_Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    vector<vector<int> > node_neighbour_list;
     
     
 	void Membrane_Triangle_Pair_and_Edges_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
@@ -42,6 +43,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
 	void Elastic_Force_Calculator();
 	void Membrane_MD_Evolution ();
 	void ConstantSurfaceForceLocalTriangles ();
+    void node_neighbour_list_constructor();
+    
 private:
     
     int Membrane_num_of_Nodes;
@@ -53,7 +56,7 @@ private:
     
     double Total_Kinetic_Energy;
     double Membrane_total_potential_Energy=0.0;
-    double Membrane_spring_coefficient=2.0; // streching constant
+    double Membrane_spring_coefficient=5.0; // streching constant
     double Membrane_bending_coefficient=30.0; // bending constant
     double Membrane_damping_coefficient=0.01; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
@@ -64,6 +67,7 @@ private:
     //bool =0;
 	double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
+    
     
 	
     bool on_or_off_Membrane_spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
@@ -135,6 +139,7 @@ public:
         }
 //        Membrane_Triangle_Pair_and_Edges_Identifier();
         membrane_node_pair_identifier();
+        node_neighbour_list_constructor();
         membrane_triangle_pair_identifier();
         check();
         cout<<"Membrane class initiated.\n";
@@ -162,6 +167,16 @@ public:
     }
     int return_membrane_num_of_triangle(){
         return Membrane_num_of_Triangles;
+    }
+    void calculate_average_force(void){
+        double average_force_x=0, average_force_y=0, average_force_z=0;
+        for(int j=0 ; j<Membrane_num_of_Nodes ; j++){
+            average_force_x+=Membrane_Node_Force[j][0];
+            average_force_y+=Membrane_Node_Force[j][1];
+            average_force_z+=Membrane_Node_Force[j][2];
+            
+        }
+        cout<<"\n\naverage_force_x="<<average_force_x/Membrane_num_of_Nodes<<"\naverage_force_y="<<average_force_y/Membrane_num_of_Nodes<<"\naverage_force_z="<<average_force_z/Membrane_num_of_Nodes<<endl;
     }
 };
 
