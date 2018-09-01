@@ -28,8 +28,8 @@ private:
     
     
     double interaction_range=1.0;
-    double epsilon=1.0;
-    double sigma=20.0;
+    double epsilon=0.6;
+    double sigma=15.0;
     
     
     vector<vector<double> >ECM_Node_Velocity;

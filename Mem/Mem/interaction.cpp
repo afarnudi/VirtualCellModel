@@ -79,6 +79,13 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
             
             double tri_com[3];
             double tri_mem_node_distance=return_triangle_membrane_distance(membrane, mem_index, ecm, i, tri_com);
+            bool barrier=barrier_2(membrane, mem_index);
+            
+            if (barrier) {
+                membrane.Membrane_Node_Velocity[mem_index][0]*=-1;
+                membrane.Membrane_Node_Velocity[mem_index][1]*=-1;
+                membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
+            }
             
             double delta_x=membrane.Membrane_Node_Position[mem_index][0]-tri_com[0];
             double delta_y=membrane.Membrane_Node_Position[mem_index][1]-tri_com[1];
@@ -106,6 +113,81 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
     }
     //    cout<<"average_force_mag y direction="<<average_force_mag/num<<endl;
 }
+
+void interaction_3(Membrane &membrane){
+    for (int i=0; i<membrane.return_num_of_nodes(); i++) {
+        double y=membrane.Membrane_Node_Position[i][1];
+        if (y<2){
+            double epsilon=1;
+            double sigma=10;
+            double y_reduced=1.5*epsilon/y;
+            double y_reduced_3=y_reduced*y_reduced*y_reduced, y_reduced_5=y_reduced_3*y_reduced*y_reduced;
+            double force=4*sigma*(y_reduced_5-y_reduced_3)/(1.5*epsilon);
+            membrane.Membrane_Node_Force[i][1] += -force;
+            
+        }
+    }
+}
+
+void interaction_4(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_membrane_neighbour_list, bool &costume_interaction_flag){
+    //Build neighbour list
+    
+    if (MD_Step% 1000 ==0) {
+        if (!costume_interaction_flag) {
+            triangle_update_neighbour_list_new(membrane, ecm, ECM_membrane_neighbour_list, costume_interaction_flag);
+        } else {
+            triangle_update_neighbour_list_new_2(membrane, ecm, ECM_membrane_neighbour_list);
+        }
+        
+    }
+    
+    //Force Implimintation
+    
+    //    double average_force_mag=0;
+    //    double num=0;
+    for (int i=0; i<ecm.return_num_of_triangles(); i++) {
+        //        cout<<ECM_membrane_neighbour_list[i]<<endl;
+        if (ECM_membrane_neighbour_list[i]!=-1) {
+            //            cout<<"i'm in\n";
+            int mem_index=ECM_membrane_neighbour_list[i];
+            
+            double tri_com[3];
+            double tri_mem_node_distance=return_triangle_membrane_distance(membrane, mem_index, ecm, i, tri_com);
+            bool barrier=barrier_2(membrane, mem_index);
+            
+            if (barrier) {
+                membrane.Membrane_Node_Velocity[mem_index][0]*=-1;
+                membrane.Membrane_Node_Velocity[mem_index][1]*=-1;
+                membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
+            }
+            
+            double delta_x=membrane.Membrane_Node_Position[mem_index][0]-tri_com[0];
+            double delta_y=membrane.Membrane_Node_Position[mem_index][1]-tri_com[1];
+            double delta_z=membrane.Membrane_Node_Position[mem_index][2]-tri_com[2];
+            
+            double reduced_radius=1.5*ecm.return_epsilon()/tri_mem_node_distance;
+            double reduced_radius_squared=reduced_radius*reduced_radius;
+            double reduced_radius_cubed=reduced_radius_squared*reduced_radius;
+            double reduced_radius_quint=reduced_radius_cubed*reduced_radius_squared;
+            
+            double force_magnitude=4.0*ecm.return_sigma()*(reduced_radius_quint- reduced_radius_cubed)/(1.5*ecm.return_epsilon()*tri_mem_node_distance);
+            //            cout<<force_magnitude<<endl;
+            //            average_force_mag+=force_magnitude*delta_y;
+            //            num++;
+            //            ecm.ECM_Node_Force[i][0]+=force_magnitude*delta_x;
+            //            ecm.ECM_Node_Force[i][1]+=force_magnitude*delta_y;
+            //            ecm.ECM_Node_Force[i][2]+=force_magnitude*delta_z;
+            //
+            membrane.Membrane_Node_Force[mem_index][0] += -force_magnitude*delta_x;
+            membrane.Membrane_Node_Force[mem_index][1] += -force_magnitude*delta_y;
+            membrane.Membrane_Node_Force[mem_index][2] += -force_magnitude*delta_z;
+            //            cout<<membrane.Membrane_Node_Force[mem_index][0]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][1]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][2]<<endl;
+            
+        }
+    }
+    //    cout<<"average_force_mag y direction="<<average_force_mag/num<<endl;
+}
+
 
 void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_neighbour_list)
 {

@@ -56,9 +56,9 @@ private:
     
     double Total_Kinetic_Energy;
     double Membrane_total_potential_Energy=0.0;
-    double Membrane_spring_coefficient=5.0; // streching constant
-    double Membrane_bending_coefficient=30.0; // bending constant
-    double Membrane_damping_coefficient=0.01; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Membrane_spring_coefficient=10.0; // streching constant
+    double Membrane_bending_coefficient=5.0; // bending constant
+    double Membrane_damping_coefficient=0.00; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Membrane_spring_force_cutt_off=10000.0;
     double membraneshiftinXdirection=0.0; //???
