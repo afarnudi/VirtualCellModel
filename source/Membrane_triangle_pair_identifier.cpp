@@ -11,7 +11,7 @@
 
 void Membrane::membrane_triangle_pair_identifier(void){
     
-    Membrane_Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
+    Membrane_Triangle_Pair_Nodes.resize(Membrane_num_of_Triangle_Pairs);
     int temp_int_Triangle_Pair_index=0;
     
 //    int triangle_pairs=0;

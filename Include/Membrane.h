@@ -20,7 +20,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     int membrane_counter;
     int Membrane_num_of_Node_Pairs; //??? (This variable should be defined and explained)
-    int Num_of_Triangle_Pairs;
+    int Membrane_num_of_Triangle_Pairs;
     
     
     string output_file_neme;
@@ -103,7 +103,7 @@ public:
         cout<<"Membrane class initiated"<<endl;
         Membrane_Normal_direction_Identifier();
 		Membrane_triangle_pair_counter();
-		if (Num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2)
+		if (Membrane_num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2)
 		{cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
 		Membrane_Triangle_Pair_and_Edges_Identifier();
         
@@ -118,7 +118,7 @@ public:
         cout<<"Membrane class initiated"<<endl;
 		Membrane_Normal_direction_Identifier();
 		Membrane_triangle_pair_counter();
-		if (Num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2)
+		if (Membrane_num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2)
 		{cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
 		Membrane_Triangle_Pair_and_Edges_Identifier();
 		cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
@@ -132,8 +132,8 @@ public:
         cout<<"Number of triangles="<<Membrane_num_of_Triangles<<endl;
         Membrane_Normal_direction_Identifier(x, y, z);
         Membrane_triangle_pair_counter();
-        cout<<"Number of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
-        if (Num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2){
+        cout<<"Number of triangle pairs="<<Membrane_num_of_Triangle_Pairs<<endl;
+        if (Membrane_num_of_Triangle_Pairs != 3*(Membrane_triangle_list.size())/2){
             cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
             
         }
