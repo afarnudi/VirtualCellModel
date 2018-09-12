@@ -39,9 +39,9 @@ void Membrane::Membrane_potential_1 (void){
         temp_Node_B=Membrane_Edges[k][0];
         temp_Node_A=Membrane_Edges[k][1];
         
-        deltax=Membrane_Node_Position[temp_Node_A][0]-Membrane_Node_Position[temp_Node_B][0];
-        deltay=Membrane_Node_Position[temp_Node_A][1]-Membrane_Node_Position[temp_Node_B][1];
-        deltaz=Membrane_Node_Position[temp_Node_A][2]-Membrane_Node_Position[temp_Node_B][2];
+        deltax=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
+        deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
+        deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
         
         
         temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
@@ -123,9 +123,9 @@ void Membrane::Membrane_potential_2 (void){
         temp_Node_B=Membrane_Edges[k][0];
         temp_Node_A=Membrane_Edges[k][1];
         
-        deltax=Membrane_Node_Position[temp_Node_A][0]-Membrane_Node_Position[temp_Node_B][0];
-        deltay=Membrane_Node_Position[temp_Node_A][1]-Membrane_Node_Position[temp_Node_B][1];
-        deltaz=Membrane_Node_Position[temp_Node_A][2]-Membrane_Node_Position[temp_Node_B][2];
+        deltax=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
+        deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
+        deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
         
         
         temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);

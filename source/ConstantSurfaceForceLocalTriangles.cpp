@@ -17,13 +17,13 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
         temp_node_B=Membrane_triangle_list[i][1];
         temp_node_C=Membrane_triangle_list[i][2];
         
-        AB[0]=Membrane_Node_Position[temp_node_B][0]-Membrane_Node_Position[temp_node_A][0];
-        AB[1]=Membrane_Node_Position[temp_node_B][1]-Membrane_Node_Position[temp_node_A][1];
-        AB[2]=Membrane_Node_Position[temp_node_B][2]-Membrane_Node_Position[temp_node_A][2];
+        AB[0]=Node_Position[temp_node_B][0]-Node_Position[temp_node_A][0];
+        AB[1]=Node_Position[temp_node_B][1]-Node_Position[temp_node_A][1];
+        AB[2]=Node_Position[temp_node_B][2]-Node_Position[temp_node_A][2];
         
-        AC[0]=Membrane_Node_Position[temp_node_C][0]-Membrane_Node_Position[temp_node_A][0];
-        AC[1]=Membrane_Node_Position[temp_node_C][1]-Membrane_Node_Position[temp_node_A][1];
-        AC[2]=Membrane_Node_Position[temp_node_C][2]-Membrane_Node_Position[temp_node_A][2];
+        AC[0]=Node_Position[temp_node_C][0]-Node_Position[temp_node_A][0];
+        AC[1]=Node_Position[temp_node_C][1]-Node_Position[temp_node_A][1];
+        AC[2]=Node_Position[temp_node_C][2]-Node_Position[temp_node_A][2];
         
         crossvector(temp_ABxAC, AB, AC);
         s_i = vectorlength(temp_ABxAC)/2.0;
@@ -34,13 +34,13 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
             temp_node_B=Membrane_triangle_list[i][(j+1)%3];
             temp_node_C=Membrane_triangle_list[i][(j+2)%3];
             
-            AB[0]=Membrane_Node_Position[temp_node_B][0]-Membrane_Node_Position[temp_node_A][0];
-            AB[1]=Membrane_Node_Position[temp_node_B][1]-Membrane_Node_Position[temp_node_A][1];
-            AB[2]=Membrane_Node_Position[temp_node_B][2]-Membrane_Node_Position[temp_node_A][2];
+            AB[0]=Node_Position[temp_node_B][0]-Node_Position[temp_node_A][0];
+            AB[1]=Node_Position[temp_node_B][1]-Node_Position[temp_node_A][1];
+            AB[2]=Node_Position[temp_node_B][2]-Node_Position[temp_node_A][2];
             
-            AC[0]=Membrane_Node_Position[temp_node_C][0]-Membrane_Node_Position[temp_node_A][0];
-            AC[1]=Membrane_Node_Position[temp_node_C][1]-Membrane_Node_Position[temp_node_A][1];
-            AC[2]=Membrane_Node_Position[temp_node_C][2]-Membrane_Node_Position[temp_node_A][2];
+            AC[0]=Node_Position[temp_node_C][0]-Node_Position[temp_node_A][0];
+            AC[1]=Node_Position[temp_node_C][1]-Node_Position[temp_node_A][1];
+            AC[2]=Node_Position[temp_node_C][2]-Node_Position[temp_node_A][2];
             
             temp_AB_length_squared=vectorlength(AB)*vectorlength(AB);
             temp_AC_length_squared=vectorlength(AC)*vectorlength(AC);

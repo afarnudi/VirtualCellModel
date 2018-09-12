@@ -63,7 +63,7 @@ void Results (Membrane membrane, string label, char* buffer)
     Trajectory << " nodes  "<<endl;
     for(int j=0; j< membrane.return_num_of_nodes();j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<membrane.Membrane_Node_Position[j][0]<< setw(20)<<membrane.Membrane_Node_Position[j][1]<< setw(20)<<membrane.Membrane_Node_Position[j][2]<<endl;
+        Trajectory << label <<setprecision(5)<< setw(20)<<membrane.Node_Position[j][0]<< setw(20)<<membrane.Node_Position[j][1]<< setw(20)<<membrane.Node_Position[j][2]<<endl;
     }
     
     //    //Energy:

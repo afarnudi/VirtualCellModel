@@ -43,9 +43,9 @@ void triangle_update_neighbour_list(Membrane membrane, ECM ecm, vector<int> &ECM
                 crossvector(ABxAC, AB, AC);
                 
                 double relevant_position[3];
-                relevant_position[0]=membrane.Membrane_Node_Position[membrane_index][0]-tri_com[0];
-                relevant_position[1]=membrane.Membrane_Node_Position[membrane_index][1]-tri_com[1];
-                relevant_position[2]=membrane.Membrane_Node_Position[membrane_index][2]-tri_com[2];
+                relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
+                relevant_position[1]=membrane.Node_Position[membrane_index][1]-tri_com[1];
+                relevant_position[2]=membrane.Node_Position[membrane_index][2]-tri_com[2];
                 
                 
                 if (innerproduct(relevant_position, ABxAC)>0) {
@@ -117,9 +117,9 @@ void triangle_update_neighbour_list_2(Membrane membrane, ECM ecm, vector<int> &E
                 crossvector(ABxAC, AB, AC);
                 
                 double relevant_position[3];
-                relevant_position[0]=membrane.Membrane_Node_Position[membrane_index][0]-tri_com[0];
-                relevant_position[1]=membrane.Membrane_Node_Position[membrane_index][1]-tri_com[1];
-                relevant_position[2]=membrane.Membrane_Node_Position[membrane_index][2]-tri_com[2];
+                relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
+                relevant_position[1]=membrane.Node_Position[membrane_index][1]-tri_com[1];
+                relevant_position[2]=membrane.Node_Position[membrane_index][2]-tri_com[2];
                 
                 if (innerproduct(relevant_position, ABxAC)>0) {
                     temp_neighbour_list_index.push_back(membrane_index);
@@ -189,9 +189,9 @@ void triangle_update_neighbour_list_new(Membrane membrane, ECM ecm, vector<int> 
                     crossvector(ABxAC, AB, AC);
                     
                     double relevant_position[3];
-                    relevant_position[0]=membrane.Membrane_Node_Position[membrane_index][0]-tri_com[0];
-                    relevant_position[1]=membrane.Membrane_Node_Position[membrane_index][1]-tri_com[1];
-                    relevant_position[2]=membrane.Membrane_Node_Position[membrane_index][2]-tri_com[2];
+                    relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
+                    relevant_position[1]=membrane.Node_Position[membrane_index][1]-tri_com[1];
+                    relevant_position[2]=membrane.Node_Position[membrane_index][2]-tri_com[2];
                     
                     
                     if (innerproduct(relevant_position, ABxAC)>0) {
@@ -273,9 +273,9 @@ void triangle_update_neighbour_list_new_2(Membrane membrane, ECM ecm, vector<int
                     crossvector(ABxAC, AB, AC);
                     
                     double relevant_position[3];
-                    relevant_position[0]=membrane.Membrane_Node_Position[membrane_index][0]-tri_com[0];
-                    relevant_position[1]=membrane.Membrane_Node_Position[membrane_index][1]-tri_com[1];
-                    relevant_position[2]=membrane.Membrane_Node_Position[membrane_index][2]-tri_com[2];
+                    relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
+                    relevant_position[1]=membrane.Node_Position[membrane_index][1]-tri_com[1];
+                    relevant_position[2]=membrane.Node_Position[membrane_index][2]-tri_com[2];
                     
                     if (innerproduct(relevant_position, ABxAC)>0) {
                         temp_neighbour_list_index.push_back(membrane_index);
@@ -306,14 +306,14 @@ void triangle_update_neighbour_list_new_2(Membrane membrane, ECM ecm, vector<int
 }
 
 bool barrier_2(Membrane mem, int mem_index){
-    double x=mem.Membrane_Node_Position[mem_index][0];
-    double z=mem.Membrane_Node_Position[mem_index][2];
+    double x=mem.Node_Position[mem_index][0];
+    double z=mem.Node_Position[mem_index][2];
     double zy;
     double xyz;
     double dr=0.6;
     if (z<6 && z>-6) {
         if (x<=10 && x>= -10){
-            zy=sqrt( (mem.Membrane_Node_Position[mem_index][1]-4)*(mem.Membrane_Node_Position[mem_index][1]-4)+(mem.Membrane_Node_Position[mem_index][2])*(mem.Membrane_Node_Position[mem_index][2]) );
+            zy=sqrt( (mem.Node_Position[mem_index][1]-4)*(mem.Node_Position[mem_index][1]-4)+(mem.Node_Position[mem_index][2])*(mem.Node_Position[mem_index][2]) );
             if (zy<(4+dr)) {
                 double relevant_speed[3];
                 double position[3];
@@ -321,15 +321,15 @@ bool barrier_2(Membrane mem, int mem_index){
                 relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
                 relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
                 
-                position[0]=mem.Membrane_Node_Position[mem_index][0];
-                position[1]=mem.Membrane_Node_Position[mem_index][1]-4;
-                position[2]=mem.Membrane_Node_Position[mem_index][2];
+                position[0]=mem.Node_Position[mem_index][0];
+                position[1]=mem.Node_Position[mem_index][1]-4;
+                position[2]=mem.Node_Position[mem_index][2];
                 if (innerproduct(relevant_speed, position)<0) {
                     return true;
                 }
             }
         } else if (x>10 && x< (14 + dr)) {
-            xyz=sqrt( (mem.Membrane_Node_Position[mem_index][0]-10)*(mem.Membrane_Node_Position[mem_index][0]-10)+(mem.Membrane_Node_Position[mem_index][1]-4)*(mem.Membrane_Node_Position[mem_index][1]-4)+mem.Membrane_Node_Position[mem_index][2]*mem.Membrane_Node_Position[mem_index][2] );
+            xyz=sqrt( (mem.Node_Position[mem_index][0]-10)*(mem.Node_Position[mem_index][0]-10)+(mem.Node_Position[mem_index][1]-4)*(mem.Node_Position[mem_index][1]-4)+mem.Node_Position[mem_index][2]*mem.Node_Position[mem_index][2] );
             if (xyz<(4+dr)) {
                 double relevant_speed[3];
                 double position[3];
@@ -337,15 +337,15 @@ bool barrier_2(Membrane mem, int mem_index){
                 relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
                 relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
                 
-                position[0]=mem.Membrane_Node_Position[mem_index][0]-10;
-                position[1]=mem.Membrane_Node_Position[mem_index][1]-4;
-                position[2]=mem.Membrane_Node_Position[mem_index][2];
+                position[0]=mem.Node_Position[mem_index][0]-10;
+                position[1]=mem.Node_Position[mem_index][1]-4;
+                position[2]=mem.Node_Position[mem_index][2];
                 if (innerproduct(relevant_speed, position)<0) {
                     return true;
                 }
             }
         } else if (x < -10 && x > -(14 + dr) ) {
-            xyz=sqrt( (mem.Membrane_Node_Position[mem_index][0]+10)*(mem.Membrane_Node_Position[mem_index][0]+10)+(mem.Membrane_Node_Position[mem_index][1]-4)*(mem.Membrane_Node_Position[mem_index][1]-4)+mem.Membrane_Node_Position[mem_index][2]*mem.Membrane_Node_Position[mem_index][2] );
+            xyz=sqrt( (mem.Node_Position[mem_index][0]+10)*(mem.Node_Position[mem_index][0]+10)+(mem.Node_Position[mem_index][1]-4)*(mem.Node_Position[mem_index][1]-4)+mem.Node_Position[mem_index][2]*mem.Node_Position[mem_index][2] );
             if (xyz<(4 + dr) ) {
                 double relevant_speed[3];
                 double position[3];
@@ -353,9 +353,9 @@ bool barrier_2(Membrane mem, int mem_index){
                 relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
                 relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
                 
-                position[0]=mem.Membrane_Node_Position[mem_index][0]+10;
-                position[1]=mem.Membrane_Node_Position[mem_index][1]-4;
-                position[2]=mem.Membrane_Node_Position[mem_index][2];
+                position[0]=mem.Node_Position[mem_index][0]+10;
+                position[1]=mem.Node_Position[mem_index][1]-4;
+                position[2]=mem.Node_Position[mem_index][2];
                 if (innerproduct(relevant_speed, position)<0) {
                     return true;
                 }
