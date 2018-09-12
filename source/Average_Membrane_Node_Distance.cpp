@@ -7,7 +7,7 @@ double Membrane::Average_Membrane_Node_Distance()
 	double temp[3];
 	double temp_length;
 	int temp_Node_A,temp_Node_B;
-	for (int i=0; i<Membrane_num_of_Triangle_Pairs; i++)
+	for (int i=0; i<Num_of_Triangle_Pairs; i++)
 	{
 		temp_Node_A=Membrane_Edges[i][0];
 		temp_Node_B=Membrane_Edges[i][1];
@@ -17,7 +17,7 @@ double Membrane::Average_Membrane_Node_Distance()
 		temp_length= vectorlength(temp);
 		average_membrane_Node_distance+=temp_length;
 	}
-	average_membrane_Node_distance=average_membrane_Node_distance/Membrane_num_of_Triangle_Pairs;
+	average_membrane_Node_distance=average_membrane_Node_distance/Num_of_Triangle_Pairs;
 	return(average_membrane_Node_distance);
 	
 }

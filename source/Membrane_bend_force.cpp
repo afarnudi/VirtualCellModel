@@ -14,7 +14,7 @@ void Membrane::Membrane_bending_potetial(void){
     double temp_p1[3], temp_p2[3], temp_p3[3], temp_p4[3];
     double  N1[3], N2[3], N3[3], p3p1[3], p3p2[3], p4p2[3], p4p1[3], Ep2p1[3], sinus, F0, F1[3], F2[3], F3[3], F4[3];// for exmple p3p1 is p3-p1 and ....
     // Beginning of the  triangle-triangle (bending) force calculations
-    for(int i=0 ;i<Membrane_num_of_Triangle_Pairs;i++)  // who are neighbors?
+    for(int i=0 ;i<Num_of_Triangle_Pairs;i++)  // who are neighbors?
     {
         pos1=Membrane_Triangle_Pair_Nodes[i][0];
         pos2=Membrane_Triangle_Pair_Nodes[i][3];

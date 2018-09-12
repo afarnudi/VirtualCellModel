@@ -7,13 +7,13 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
     Membrane_triangle_pair_counter();
     int temp_triangle_node_A, temp_triangle_node_B, temp_triangle_node_C, temp_triangle_node_D, neighbor=0, neighbor_indicator;
     int triangle_pairs=0;
-    int temp[2*Membrane_num_of_Triangle_Pairs][4];
-    int temp2[2*Membrane_num_of_Triangle_Pairs][4];
+    int temp[2*Num_of_Triangle_Pairs][4];
+    int temp2[2*Num_of_Triangle_Pairs][4];
 
-	Membrane_Edges.resize(Membrane_num_of_Triangle_Pairs);
-	Membrane_Triangle_Pair_Nodes.resize(Membrane_num_of_Triangle_Pairs);
+	Membrane_Edges.resize(Num_of_Triangle_Pairs);
+	Membrane_Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
 	membrane_triangle_pair_list.resize(Membrane_triangle_list.size());
-	for (int i=0; i<Membrane_num_of_Triangle_Pairs; i++)
+	for (int i=0; i<Num_of_Triangle_Pairs; i++)
 	{
 		Membrane_Edges[i].resize(2);
 		Membrane_Triangle_Pair_Nodes[i].resize(4);
@@ -169,7 +169,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
         }
     }
     
-    for(int i=0;i<2*Membrane_num_of_Triangle_Pairs;i++)//saving temp in temp2
+    for(int i=0;i<2*Num_of_Triangle_Pairs;i++)//saving temp in temp2
     {
         for(int j=0;j<4;j++)
         {
@@ -177,7 +177,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
         }
     }
     
-    for(int abc=0;abc<2*Membrane_num_of_Triangle_Pairs;abc++)// sorting temp
+    for(int abc=0;abc<2*Num_of_Triangle_Pairs;abc++)// sorting temp
     {
         if( temp[abc][0]  > temp[abc][1]    )
         {
@@ -226,7 +226,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
         }
     }
     
-    for(int abc=0;abc<2*Membrane_num_of_Triangle_Pairs;abc++)
+    for(int abc=0;abc<2*Num_of_Triangle_Pairs;abc++)
     {
         if(temp[abc][0] !=-1)
         {
@@ -234,7 +234,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
             temp_triangle_node_B=temp[abc][1] ;
             temp_triangle_node_C=temp[abc][2] ;
             temp_triangle_node_D=temp[abc][3] ;
-            for(int cab=0;cab<2*Membrane_num_of_Triangle_Pairs;cab++)
+            for(int cab=0;cab<2*Num_of_Triangle_Pairs;cab++)
             {
                 if( temp_triangle_node_A==temp[cab][0]  &   temp_triangle_node_B==temp[cab][1]    &   temp_triangle_node_C==temp[cab][2]    &   temp_triangle_node_D==temp[cab][3]  & abc!=cab  )
                 {
@@ -250,7 +250,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
     
     int temp_int=0;
 	
-    for(int abc=0;abc<2*Membrane_num_of_Triangle_Pairs;abc++)
+    for(int abc=0;abc<2*Num_of_Triangle_Pairs;abc++)
     {
         if( temp[abc][0] !=-1)
         {
