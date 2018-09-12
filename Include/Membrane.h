@@ -14,7 +14,7 @@ class Membrane
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
-    double Membrane_Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
+    double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     
     

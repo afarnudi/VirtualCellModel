@@ -83,7 +83,7 @@ void Membrane::read_membrabe_input(string input_file)
     inputs>>temp_str;
     inputs>>Membrane_damping_coefficient; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     inputs>>temp_str;
-    inputs>>Membrane_Node_Mass;
+    inputs>>Node_Mass;
     inputs>>temp_str;
     inputs>>K_surfaceConstant_local;
     inputs>>temp_str;
