@@ -19,7 +19,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     
     int membrane_counter;
-    int Membrane_num_of_Node_Pairs; //??? (This variable should be defined and explained)
+    int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Membrane_num_of_Triangle_Pairs;
     
     
