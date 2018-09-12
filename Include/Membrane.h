@@ -26,7 +26,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     string output_file_neme;
     
     
-    vector<vector<double> >Membrane_Node_Position;
+    vector<vector<double> >Node_Position;
     vector<vector<int> > Membrane_triangle_list;
     vector<vector<int> > membrane_triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
@@ -153,9 +153,9 @@ public:
     }
     void shift_position (double x, double y, double z){
         for (int i=0; i<Membrane_num_of_Nodes; i++) {
-            Membrane_Node_Position[i][0]+=x;
-            Membrane_Node_Position[i][1]+=y;
-            Membrane_Node_Position[i][2]+=z;
+            Node_Position[i][0]+=x;
+            Node_Position[i][1]+=y;
+            Node_Position[i][2]+=z;
         }
     }
     void shift_velocity (double vx, double vy, double vz){

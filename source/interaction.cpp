@@ -30,9 +30,9 @@ void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
 //            cout<<"i'm in\n";
             int mem_index=ECM_membrane_neighbour_list[i];
             double ecm_mem_node_distance=return_ecm_membrane_node_distance(membrane, mem_index, ecm, i);
-            double delta_x=membrane.Membrane_Node_Position[mem_index][0]-ecm.ECM_Node_Position[i][0];
-            double delta_y=membrane.Membrane_Node_Position[mem_index][1]-ecm.ECM_Node_Position[i][1];
-            double delta_z=membrane.Membrane_Node_Position[mem_index][2]-ecm.ECM_Node_Position[i][2];
+            double delta_x=membrane.Node_Position[mem_index][0]-ecm.ECM_Node_Position[i][0];
+            double delta_y=membrane.Node_Position[mem_index][1]-ecm.ECM_Node_Position[i][1];
+            double delta_z=membrane.Node_Position[mem_index][2]-ecm.ECM_Node_Position[i][2];
             double reduced_radius=1.5*ecm.return_epsilon()/ecm_mem_node_distance;
             double reduced_radius_squared=reduced_radius*reduced_radius;
             double reduced_radius_cubed=reduced_radius_squared*reduced_radius;
@@ -87,9 +87,9 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
                 membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
             }
             
-            double delta_x=membrane.Membrane_Node_Position[mem_index][0]-tri_com[0];
-            double delta_y=membrane.Membrane_Node_Position[mem_index][1]-tri_com[1];
-            double delta_z=membrane.Membrane_Node_Position[mem_index][2]-tri_com[2];
+            double delta_x=membrane.Node_Position[mem_index][0]-tri_com[0];
+            double delta_y=membrane.Node_Position[mem_index][1]-tri_com[1];
+            double delta_z=membrane.Node_Position[mem_index][2]-tri_com[2];
             
             double reduced_radius=1.5*ecm.return_epsilon()/tri_mem_node_distance;
             double reduced_radius_squared=reduced_radius*reduced_radius;
@@ -116,7 +116,7 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
 
 void interaction_3(Membrane &membrane){
     for (int i=0; i<membrane.return_num_of_nodes(); i++) {
-        double y=membrane.Membrane_Node_Position[i][1];
+        double y=membrane.Node_Position[i][1];
         if (y<2){
             double epsilon=1;
             double sigma=10;
@@ -161,9 +161,9 @@ void interaction_4(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
                 membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
             }
             
-            double delta_x=membrane.Membrane_Node_Position[mem_index][0]-tri_com[0];
-            double delta_y=membrane.Membrane_Node_Position[mem_index][1]-tri_com[1];
-            double delta_z=membrane.Membrane_Node_Position[mem_index][2]-tri_com[2];
+            double delta_x=membrane.Node_Position[mem_index][0]-tri_com[0];
+            double delta_y=membrane.Node_Position[mem_index][1]-tri_com[1];
+            double delta_z=membrane.Node_Position[mem_index][2]-tri_com[2];
             
             double reduced_radius=1.5*ecm.return_epsilon()/tri_mem_node_distance;
             double reduced_radius_squared=reduced_radius*reduced_radius;
@@ -226,7 +226,7 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
         for (int index=0; index<membrane_list.size(); index++)
         {
             int temp_node_index=membrane_list[index];
-            node_ecm_distance_amplitude = sqrt( (triangle_COM_position[0]-membrane.Membrane_Node_Position[temp_node_index][0])*(triangle_COM_position[0]- membrane.Membrane_Node_Position[temp_node_index][0]) + (triangle_COM_position[1]- membrane.Membrane_Node_Position[temp_node_index][1])*(triangle_COM_position[1]- membrane.Membrane_Node_Position[temp_node_index][1]) + (triangle_COM_position[2]- membrane.Membrane_Node_Position[temp_node_index][2])*(triangle_COM_position[2]- membrane.Membrane_Node_Position[temp_node_index][2]) );
+            node_ecm_distance_amplitude = sqrt( (triangle_COM_position[0]-membrane.Node_Position[temp_node_index][0])*(triangle_COM_position[0]- membrane.Node_Position[temp_node_index][0]) + (triangle_COM_position[1]- membrane.Node_Position[temp_node_index][1])*(triangle_COM_position[1]- membrane.Node_Position[temp_node_index][1]) + (triangle_COM_position[2]- membrane.Node_Position[temp_node_index][2])*(triangle_COM_position[2]- membrane.Node_Position[temp_node_index][2]) );
             if (  node_ecm_distance_amplitude < 0.9*ecm.return_epsilon()  )
             {
                 AB[0]=ecm.ECM_Node_Position[ node_B][0]-ecm.ECM_Node_Position[node_A][0];
@@ -237,9 +237,9 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
                 AC[2]=ecm.ECM_Node_Position[ node_C][2]-ecm.ECM_Node_Position[ node_A][2];
                 crossvector(ABxAC,AB,AC);
                 
-                node_triangle_distance_vector[0]=membrane.Membrane_Node_Position[temp_node_index][0]-triangle_COM_position[0];
-                node_triangle_distance_vector[1]=membrane.Membrane_Node_Position[temp_node_index][1]-triangle_COM_position[1];
-                node_triangle_distance_vector[2]=membrane.Membrane_Node_Position[temp_node_index][2]-triangle_COM_position[2];
+                node_triangle_distance_vector[0]=membrane.Node_Position[temp_node_index][0]-triangle_COM_position[0];
+                node_triangle_distance_vector[1]=membrane.Node_Position[temp_node_index][1]-triangle_COM_position[1];
+                node_triangle_distance_vector[2]=membrane.Node_Position[temp_node_index][2]-triangle_COM_position[2];
                 
                 relevant_velocity[0] = membrane.Membrane_Node_Velocity[temp_node_index][0];
                 relevant_velocity[1] = membrane.Membrane_Node_Velocity[temp_node_index][1];

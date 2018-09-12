@@ -29,7 +29,7 @@ void Membrane::read_gmesh_file (string gmesh_file)
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
-        Membrane_Node_Position.push_back(temp_node_position);
+        Node_Position.push_back(temp_node_position);
     }
     
     // In this section the Node list that make up triangles on the outer membrane and nucleus are read from the Gmesh generated file.

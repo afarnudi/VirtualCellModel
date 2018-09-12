@@ -21,10 +21,10 @@ void Membrane::Membrane_bending_potetial(void){
         pos3=Membrane_Triangle_Pair_Nodes[i][1];
         pos4=Membrane_Triangle_Pair_Nodes[i][2];
         for (int index=0; index<3; index++) {
-            temp_p1[index]=Membrane_Node_Position[pos1][index];
-            temp_p2[index]=Membrane_Node_Position[pos2][index];
-            temp_p3[index]=Membrane_Node_Position[pos3][index];
-            temp_p4[index]=Membrane_Node_Position[pos4][index];
+            temp_p1[index]=Node_Position[pos1][index];
+            temp_p2[index]=Node_Position[pos2][index];
+            temp_p3[index]=Node_Position[pos3][index];
+            temp_p4[index]=Node_Position[pos4][index];
             p3p1[index]=temp_p3[index]-temp_p1[index];
             p3p2[index]=temp_p3[index]-temp_p2[index];
             p4p2[index]=temp_p4[index]-temp_p2[index];
