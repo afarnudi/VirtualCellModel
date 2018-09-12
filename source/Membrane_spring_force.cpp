@@ -34,7 +34,7 @@ void Membrane::Membrane_potential_1 (void){
     
     Total_Potential_Energy=0.0;
     
-    for (int k=0 ; k< Membrane_num_of_Node_Pairs ; k++)
+    for (int k=0 ; k< Num_of_Node_Pairs ; k++)
     {
         temp_Node_B=Membrane_Edges[k][0];
         temp_Node_A=Membrane_Edges[k][1];
@@ -118,7 +118,7 @@ void Membrane::Membrane_potential_2 (void){
     
     int temp_Node_A, temp_Node_B;
     
-    for (int k=0 ; k< Membrane_num_of_Node_Pairs ; k++)
+    for (int k=0 ; k< Num_of_Node_Pairs ; k++)
     {
         temp_Node_B=Membrane_Edges[k][0];
         temp_Node_A=Membrane_Edges[k][1];

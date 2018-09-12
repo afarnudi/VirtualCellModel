@@ -71,7 +71,7 @@ void Membrane::membrane_node_pair_identifier(void){
         repeatednumber3=0;
     }
     
-    Membrane_num_of_Node_Pairs=Membrane_Edges.size();
-    cout<<"Membrane # of node pairs: "<<Membrane_num_of_Node_Pairs<<endl;
+    Num_of_Node_Pairs=Membrane_Edges.size();
+    cout<<"Membrane # of node pairs: "<<Num_of_Node_Pairs<<endl;
 }
 
