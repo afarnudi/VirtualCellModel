@@ -10,16 +10,16 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
     int temp[2*Num_of_Triangle_Pairs][4];
     int temp2[2*Num_of_Triangle_Pairs][4];
 
-	Membrane_Edges.resize(Num_of_Triangle_Pairs);
-	Membrane_Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
-	membrane_triangle_pair_list.resize(Membrane_triangle_list.size());
-	for (int i=0; i<Num_of_Triangle_Pairs; i++)
-	{
-		Membrane_Edges[i].resize(2);
-		Membrane_Triangle_Pair_Nodes[i].resize(4);
-	}
+    Membrane_Edges.resize(Num_of_Triangle_Pairs);
+    Membrane_Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
+    membrane_triangle_pair_list.resize(Membrane_triangle_list.size());
+    for (int i=0; i<Num_of_Triangle_Pairs; i++)
+    {
+        Membrane_Edges[i].resize(2);
+        Membrane_Triangle_Pair_Nodes[i].resize(4);
+    }
 
-	
+    
     
     for(int i=0 ;i<Membrane_triangle_list.size();i++)
     {
@@ -27,12 +27,12 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
         temp_triangle_node_B=Membrane_triangle_list[i][1];
         temp_triangle_node_C=Membrane_triangle_list[i][2];
         neighbor_indicator=0;
-		
+        
         //        Indicates the existence of Node neighbor for a node pair (other than the membrane of the triangle):
         //        neighbor_indicator=0 No Node Pairs; neighbor_indicator=1, for temp_triangle_node_A-temp_triangle_node_B; neighbor_indicator=2, for temp_triangle_node_B-temp_triangle_node_C; And neighbor_indicator=3 for temp_triangle_node_C-temp_triangle_node_A.
         for(int j=0;j<Membrane_triangle_list.size();j++)
         {
-			
+            
             //************************** finding neighbors **************************
             // neibours of temp_triangle_node_A-temp_triangle_node_B:
             if ( Membrane_triangle_list[j][0]==temp_triangle_node_A  &&  Membrane_triangle_list[j][1]==temp_triangle_node_B  && Membrane_triangle_list[j][2]!=temp_triangle_node_C ){
@@ -60,7 +60,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
                 neighbor=Membrane_triangle_list[j][0];
                 neighbor_indicator=1;
             }
-			
+            
             // neibors of temp_triangle_node_B-temp_triangle_node_C :
             if      ( Membrane_triangle_list[j][0]==temp_triangle_node_B  &  Membrane_triangle_list[j][1]==temp_triangle_node_C  & Membrane_triangle_list[j][2]!=temp_triangle_node_A ){
                 neighbor=Membrane_triangle_list[j][2];
@@ -89,7 +89,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
                 neighbor=Membrane_triangle_list[j][0];
                 neighbor_indicator=2;
             }
-			
+            
             // neibors of temp_triangle_node_C-temp_triangle_node_A :
             if      ( Membrane_triangle_list[j][0]==temp_triangle_node_C  &  Membrane_triangle_list[j][1]==temp_triangle_node_A  & Membrane_triangle_list[j][2]!=temp_triangle_node_B ){
                 neighbor=Membrane_triangle_list[j][2];
@@ -117,8 +117,8 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
                 neighbor=Membrane_triangle_list[j][0];
                 neighbor_indicator=3;
             }
-			
-			
+            
+            
             
             if(neighbor_indicator!=0)  //  to speed up  the programme we first check if we have found a neighbor or not
             {
@@ -249,7 +249,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
     
     
     int temp_int=0;
-	
+    
     for(int abc=0;abc<2*Num_of_Triangle_Pairs;abc++)
     {
         if( temp[abc][0] !=-1)
@@ -258,10 +258,10 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
             Membrane_Triangle_Pair_Nodes[temp_int][1]=temp2[abc][1] ;
             Membrane_Triangle_Pair_Nodes[temp_int][2]=temp2[abc][2] ;
             Membrane_Triangle_Pair_Nodes[temp_int][3]=temp2[abc][3] ;
-			
-			Membrane_Edges[temp_int][0]=temp2[abc][0];
-			Membrane_Edges[temp_int][1]=temp2[abc][1];
-			
+            
+            Membrane_Edges[temp_int][0]=temp2[abc][0];
+            Membrane_Edges[temp_int][1]=temp2[abc][1];
+            
             
             temp_int++;
         }

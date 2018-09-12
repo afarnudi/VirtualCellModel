@@ -3,8 +3,8 @@
 
 void Membrane::Membrane_triangle_pair_counter ()
 {
-	
-	    //In this function we count the total number of triangles that have a common edge (we count them twice, hence report half the number at the end).
+    
+        //In this function we count the total number of triangles that have a common edge (we count them twice, hence report half the number at the end).
     int temp_triangle_node_A, temp_triangle_node_B, temp_triangle_node_C;
     Num_of_Triangle_Pairs=0;  // This counts the number of triangle pairs that have an edge in common.
     for(int i=0 ;i<Membrane_num_of_Triangles;i++)  // who are neighbors??
