@@ -20,7 +20,7 @@ void ECM::read_gmesh_file (string gmesh_file){
     read>> Num_of_Nodes;
     
     Node_Velocity.resize(Num_of_Nodes);
-    ECM_Node_Force.resize(Num_of_Nodes);
+    Node_Force.resize(Num_of_Nodes);
     for(int i=0;i<Num_of_Nodes;i++)
     {
         Node_Velocity[i].resize(3);
@@ -29,11 +29,11 @@ void ECM::read_gmesh_file (string gmesh_file){
         Node_Velocity[i][1]= 0.0;
         Node_Velocity[i][2]= 0.0;
         
-        ECM_Node_Force[i].resize(3);
+        Node_Force[i].resize(3);
         
-        ECM_Node_Force[i][0]= 0.0;
-        ECM_Node_Force[i][1]= 0.0;
-        ECM_Node_Force[i][2]= 0.0;
+        Node_Force[i][0]= 0.0;
+        Node_Force[i][1]= 0.0;
+        Node_Force[i][2]= 0.0;
     }
     
     // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
