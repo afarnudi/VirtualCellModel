@@ -11,11 +11,11 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
     double s_i=0;
     
     
-    for(  int i=0;i<Membrane_triangle_list.size();i++)
+    for(  int i=0;i<Triangle_list.size();i++)
     {
-        temp_node_A=Membrane_triangle_list[i][0];
-        temp_node_B=Membrane_triangle_list[i][1];
-        temp_node_C=Membrane_triangle_list[i][2];
+        temp_node_A=Triangle_list[i][0];
+        temp_node_B=Triangle_list[i][1];
+        temp_node_C=Triangle_list[i][2];
         
         AB[0]=Node_Position[temp_node_B][0]-Node_Position[temp_node_A][0];
         AB[1]=Node_Position[temp_node_B][1]-Node_Position[temp_node_A][1];
@@ -30,9 +30,9 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
         f0= K_surfaceConstant_local*(s_i -  s0_i )/2.0*vectorlength(temp_ABxAC);
         
         for (int j=0; j<3; j++) {
-            temp_node_A=Membrane_triangle_list[i][j%3];
-            temp_node_B=Membrane_triangle_list[i][(j+1)%3];
-            temp_node_C=Membrane_triangle_list[i][(j+2)%3];
+            temp_node_A=Triangle_list[i][j%3];
+            temp_node_B=Triangle_list[i][(j+1)%3];
+            temp_node_C=Triangle_list[i][(j+2)%3];
             
             AB[0]=Node_Position[temp_node_B][0]-Node_Position[temp_node_A][0];
             AB[1]=Node_Position[temp_node_B][1]-Node_Position[temp_node_A][1];
@@ -45,9 +45,9 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
             temp_AB_length_squared=vectorlength(AB)*vectorlength(AB);
             temp_AC_length_squared=vectorlength(AC)*vectorlength(AC);
             
-            Membrane_Node_Force[temp_node_A][0] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[0]  -temp_AB_length_squared *  AC[0] + innerproduct(AB,AC)*  ( AB[0]+AC[0] )   ) ;
-            Membrane_Node_Force[temp_node_A][1] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[1]  -temp_AB_length_squared *  AC[1] + innerproduct(AB,AC)*  ( AB[1]+AC[1] )   ) ;
-            Membrane_Node_Force[temp_node_A][2] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[2]  -temp_AB_length_squared *  AC[2] + innerproduct(AB,AC)*  ( AB[2]+AC[2] )   ) ;
+            Node_Force[temp_node_A][0] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[0]  -temp_AB_length_squared *  AC[0] + innerproduct(AB,AC)*  ( AB[0]+AC[0] )   ) ;
+            Node_Force[temp_node_A][1] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[1]  -temp_AB_length_squared *  AC[1] + innerproduct(AB,AC)*  ( AB[1]+AC[1] )   ) ;
+            Node_Force[temp_node_A][2] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[2]  -temp_AB_length_squared *  AC[2] + innerproduct(AB,AC)*  ( AB[2]+AC[2] )   ) ;
         }
     }
     

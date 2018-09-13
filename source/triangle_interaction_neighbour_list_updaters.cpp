@@ -317,9 +317,9 @@ bool barrier_2(Membrane mem, int mem_index){
             if (zy<(4+dr)) {
                 double relevant_speed[3];
                 double position[3];
-                relevant_speed[0]=mem.Membrane_Node_Velocity[mem_index][0];
-                relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
-                relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
+                relevant_speed[0]=mem.Node_Velocity[mem_index][0];
+                relevant_speed[1]=mem.Node_Velocity[mem_index][1];
+                relevant_speed[2]=mem.Node_Velocity[mem_index][2];
                 
                 position[0]=mem.Node_Position[mem_index][0];
                 position[1]=mem.Node_Position[mem_index][1]-4;
@@ -333,9 +333,9 @@ bool barrier_2(Membrane mem, int mem_index){
             if (xyz<(4+dr)) {
                 double relevant_speed[3];
                 double position[3];
-                relevant_speed[0]=mem.Membrane_Node_Velocity[mem_index][0];
-                relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
-                relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
+                relevant_speed[0]=mem.Node_Velocity[mem_index][0];
+                relevant_speed[1]=mem.Node_Velocity[mem_index][1];
+                relevant_speed[2]=mem.Node_Velocity[mem_index][2];
                 
                 position[0]=mem.Node_Position[mem_index][0]-10;
                 position[1]=mem.Node_Position[mem_index][1]-4;
@@ -349,9 +349,9 @@ bool barrier_2(Membrane mem, int mem_index){
             if (xyz<(4 + dr) ) {
                 double relevant_speed[3];
                 double position[3];
-                relevant_speed[0]=mem.Membrane_Node_Velocity[mem_index][0];
-                relevant_speed[1]=mem.Membrane_Node_Velocity[mem_index][1];
-                relevant_speed[2]=mem.Membrane_Node_Velocity[mem_index][2];
+                relevant_speed[0]=mem.Node_Velocity[mem_index][0];
+                relevant_speed[1]=mem.Node_Velocity[mem_index][1];
+                relevant_speed[2]=mem.Node_Velocity[mem_index][2];
                 
                 position[0]=mem.Node_Position[mem_index][0]+10;
                 position[1]=mem.Node_Position[mem_index][1]-4;

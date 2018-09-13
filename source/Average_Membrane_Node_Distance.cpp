@@ -1,7 +1,7 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
 
-double Membrane::Average_Membrane_Node_Distance()
+double Membrane::Average_Node_Distance()
 {
     double average_membrane_Node_distance=0.0;
     double temp[3];
@@ -9,8 +9,8 @@ double Membrane::Average_Membrane_Node_Distance()
     int temp_Node_A,temp_Node_B;
     for (int i=0; i<Num_of_Triangle_Pairs; i++)
     {
-        temp_Node_A=Membrane_Edges[i][0];
-        temp_Node_B=Membrane_Edges[i][1];
+        temp_Node_A=Node_Bond_list[i][0];
+        temp_Node_B=Node_Bond_list[i][1];
         temp[0]=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
         temp[1]=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
         temp[2]=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];

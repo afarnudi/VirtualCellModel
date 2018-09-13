@@ -8,7 +8,7 @@
 
 #include "Membrane.h"
 
-void Membrane::membrane_node_pair_identifier(void){
+void Membrane::Node_Bonds_identifier(void){
     
     vector<int> push;
     push.resize(2);
@@ -20,25 +20,25 @@ void Membrane::membrane_node_pair_identifier(void){
     int repeatednumber2=0;
     int repeatednumber3=0;
     
-    for(int i=0;i<Membrane_num_of_Triangles;i++)
+    for(int i=0;i<Num_of_Triangles;i++)
     {
-        temp_Membrane_triangle_Node_A= Membrane_triangle_list[i][0];
-        temp_Membrane_triangle_Node_B= Membrane_triangle_list[i][1];
-        temp_Membrane_triangle_Node_C= Membrane_triangle_list[i][2];
+        temp_Membrane_triangle_Node_A= Triangle_list[i][0];
+        temp_Membrane_triangle_Node_B= Triangle_list[i][1];
+        temp_Membrane_triangle_Node_C= Triangle_list[i][2];
         
-        for(int j=0;j<Membrane_Edges.size();j++)
+        for(int j=0;j<Node_Bond_list.size();j++)
         {
-            if(  ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_A &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_B )  || ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_B &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_A )    )
+            if(  ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_A &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_B )  || ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_B &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_A )    )
             {
                 repeatednumber1=1;
             }
             
-            if(  ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_B &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_C )  || ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_C &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_B )    )
+            if(  ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_B &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_C )  || ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_C &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_B )    )
             {
                 repeatednumber2=1;
             }
             
-            if(  ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_A &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_C )  || ( Membrane_Edges[j][0]==temp_Membrane_triangle_Node_C &  Membrane_Edges[j][1]==temp_Membrane_triangle_Node_A )    )
+            if(  ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_A &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_C )  || ( Node_Bond_list[j][0]==temp_Membrane_triangle_Node_C &  Node_Bond_list[j][1]==temp_Membrane_triangle_Node_A )    )
             {
                 repeatednumber3=1;
             }
@@ -48,14 +48,14 @@ void Membrane::membrane_node_pair_identifier(void){
         {
             push[0]=temp_Membrane_triangle_Node_A;
             push[1]=temp_Membrane_triangle_Node_B;
-            Membrane_Edges.push_back(push);
+            Node_Bond_list.push_back(push);
         }
         
         if(repeatednumber2==0)
         {
             push[0]=temp_Membrane_triangle_Node_B;
             push[1]=temp_Membrane_triangle_Node_C;
-            Membrane_Edges.push_back(push);
+            Node_Bond_list.push_back(push);
             
         }
         
@@ -63,7 +63,7 @@ void Membrane::membrane_node_pair_identifier(void){
         {
             push[0]=temp_Membrane_triangle_Node_A;
             push[1]=temp_Membrane_triangle_Node_C;
-            Membrane_Edges.push_back(push);
+            Node_Bond_list.push_back(push);
         }
         
         repeatednumber1=0;
@@ -71,7 +71,7 @@ void Membrane::membrane_node_pair_identifier(void){
         repeatednumber3=0;
     }
     
-    Num_of_Node_Pairs=Membrane_Edges.size();
+    Num_of_Node_Pairs=Node_Bond_list.size();
     cout<<"Membrane # of node pairs: "<<Num_of_Node_Pairs<<endl;
 }
 

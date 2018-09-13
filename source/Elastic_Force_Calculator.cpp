@@ -22,8 +22,8 @@ void Membrane::Elastic_Force_Calculator()
     Total_Potential_Energy=0.0;
 
 //    Membrane_potential_1();
-    Membrane_potential_2();
+    potential_2();
 
-    Membrane_bending_potetial();
+    Bending_potetial();
     //    exit (EXIT_FAILURE);
 }

@@ -10,20 +10,20 @@ void Membrane::read_gmesh_file (string gmesh_file)
     {
         read>> temp_string;
     }
-    read>> Membrane_num_of_Nodes;
+    read>> Num_of_Nodes;
 	
-	Membrane_Node_Velocity.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
-    Membrane_Node_Force.resize(Membrane_num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
-		for(int i=0;i<Membrane_num_of_Nodes;i++)
+	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+		for(int i=0;i<Num_of_Nodes;i++)
 		{
-            Membrane_Node_Velocity[i].resize(3,0);
-            Membrane_Node_Force[i].resize(3,0);
+            Node_Velocity[i].resize(3,0);
+            Node_Force[i].resize(3,0);
 		}
 	
     // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
     vector<double> temp_node_position;
     temp_node_position.resize(3);
-    for(int i=0;i<Membrane_num_of_Nodes;i++)
+    for(int i=0;i<Num_of_Nodes;i++)
     {
         read>> temp_int;
         read>> temp_node_position[0];
@@ -36,11 +36,11 @@ void Membrane::read_gmesh_file (string gmesh_file)
     read>> temp_string;
     read>> temp_string;
     read>> temp_int;
-    Membrane_num_of_Triangles=temp_int;
+    Num_of_Triangles=temp_int;
     
     vector<int> push;
     push.resize(3);
-    for(int i=0;i<Membrane_num_of_Triangles;i++)
+    for(int i=0;i<Num_of_Triangles;i++)
     {
         read>>temp_int;
         read>>temp_int;
@@ -51,18 +51,18 @@ void Membrane::read_gmesh_file (string gmesh_file)
         read>>push[0];
         read>>push[1];
         read>>push[2];
-        //We have written the programme so that the Node indecies start from '0'. The node indecies in the Gmesh generated file start from '1', so we correct the 'Membrane_triangle_list'.
+        //We have written the programme so that the Node indecies start from '0'. The node indecies in the Gmesh generated file start from '1', so we correct the 'Triangle_list'.
         push[0]--;
         push[1]--;
         push[2]--;
-        Membrane_triangle_list.push_back(push);
+        Triangle_list.push_back(push);
         // Sometimes Gmesh will create duplicate nodes, this will delete any duplicates
         if (i!=0)
         {
-            if (Membrane_triangle_list[Membrane_triangle_list.size()-1][0]==Membrane_triangle_list[Membrane_triangle_list.size()-2][0] && Membrane_triangle_list[Membrane_triangle_list.size()-1][1]==Membrane_triangle_list[Membrane_triangle_list.size()-2][1] && Membrane_triangle_list[Membrane_triangle_list.size()-1][2]==Membrane_triangle_list[Membrane_triangle_list.size()-2][2])
+            if (Triangle_list[Triangle_list.size()-1][0]==Triangle_list[Triangle_list.size()-2][0] && Triangle_list[Triangle_list.size()-1][1]==Triangle_list[Triangle_list.size()-2][1] && Triangle_list[Triangle_list.size()-1][2]==Triangle_list[Triangle_list.size()-2][2])
             {
-                cout<<Membrane_triangle_list[Membrane_triangle_list.size()-1][0]<<"\t"<<Membrane_triangle_list[Membrane_triangle_list.size()-1][1]<<"\t"<<Membrane_triangle_list[Membrane_triangle_list.size()-1][2]<<endl;
-                Membrane_triangle_list.erase(Membrane_triangle_list.begin()+Membrane_triangle_list.size()-2);
+                cout<<Triangle_list[Triangle_list.size()-1][0]<<"\t"<<Triangle_list[Triangle_list.size()-1][1]<<"\t"<<Triangle_list[Triangle_list.size()-1][2]<<endl;
+                Triangle_list.erase(Triangle_list.begin()+Triangle_list.size()-2);
             }
         }
     }
@@ -77,25 +77,25 @@ void Membrane::read_membrabe_input(string input_file)
     inputs.open("membrane_inputs_file_name");
     string temp_str; //This is just a temp string charachter that we use to read unnecessary words in inputs file . We never use this  in the actual programme.
     inputs>>temp_str;
-    inputs>>Membrane_spring_coefficient; // streching constant
+    inputs>>Spring_coefficient; // streching constant
     inputs>>temp_str;
-    inputs>>Membrane_bending_coefficient; // bending constant
+    inputs>>Bending_coefficient; // bending constant
     inputs>>temp_str;
-    inputs>>Membrane_damping_coefficient; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    inputs>>Damping_coefficient; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     inputs>>temp_str;
     inputs>>Node_Mass;
     inputs>>temp_str;
     inputs>>K_surfaceConstant_local;
     inputs>>temp_str;
-    inputs>>on_or_off_Membrane_spring_force_cutt_off; //??? I add it myself because virus should not have cut off
+    inputs>>on_or_off_Spring_force_cutt_off; //??? I add it myself because virus should not have cut off
     inputs>>temp_str;
-    inputs>>Membrane_spring_force_cutt_off;
+    inputs>>Spring_force_cutt_off;
     inputs>>temp_str;
-    inputs>>membraneshiftinXdirection; //???
+    inputs>>ShiftinXdirection; //???
     inputs>>temp_str;
-    inputs>>membraneshiftinZdirection; //???
+    inputs>>ShiftinZdirection; //???
     inputs>>temp_str;
-    inputs>>Membrane_downward_speed; //???
+    inputs>>Downward_speed; //???
     inputs>>temp_str;
     //inputs>>energy_calculation_flag;
     /*end of initializing constants*/

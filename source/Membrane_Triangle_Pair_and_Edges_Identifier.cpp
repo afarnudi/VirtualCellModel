@@ -2,119 +2,119 @@
 #include "Membrane.h"
 
 
-void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
+void Membrane::Triangle_Pair_and_Node_Bonds_Identifier()
 {
-    Membrane_triangle_pair_counter();
+    Triangle_pair_counter();
     int temp_triangle_node_A, temp_triangle_node_B, temp_triangle_node_C, temp_triangle_node_D, neighbor=0, neighbor_indicator;
     int triangle_pairs=0;
     int temp[2*Num_of_Triangle_Pairs][4];
     int temp2[2*Num_of_Triangle_Pairs][4];
 
-    Membrane_Edges.resize(Num_of_Triangle_Pairs);
-    Membrane_Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
-    membrane_triangle_pair_list.resize(Membrane_triangle_list.size());
+    Node_Bond_list.resize(Num_of_Triangle_Pairs);
+    Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
+    Triangle_pair_list.resize(Triangle_list.size());
     for (int i=0; i<Num_of_Triangle_Pairs; i++)
     {
-        Membrane_Edges[i].resize(2);
-        Membrane_Triangle_Pair_Nodes[i].resize(4);
+        Node_Bond_list[i].resize(2);
+        Triangle_Pair_Nodes[i].resize(4);
     }
 
     
     
-    for(int i=0 ;i<Membrane_triangle_list.size();i++)
+    for(int i=0 ;i<Triangle_list.size();i++)
     {
-        temp_triangle_node_A=Membrane_triangle_list[i][0];  // read the tree lable number of nodes  of every triangle
-        temp_triangle_node_B=Membrane_triangle_list[i][1];
-        temp_triangle_node_C=Membrane_triangle_list[i][2];
+        temp_triangle_node_A=Triangle_list[i][0];  // read the tree lable number of nodes  of every triangle
+        temp_triangle_node_B=Triangle_list[i][1];
+        temp_triangle_node_C=Triangle_list[i][2];
         neighbor_indicator=0;
         
         //        Indicates the existence of Node neighbor for a node pair (other than the membrane of the triangle):
         //        neighbor_indicator=0 No Node Pairs; neighbor_indicator=1, for temp_triangle_node_A-temp_triangle_node_B; neighbor_indicator=2, for temp_triangle_node_B-temp_triangle_node_C; And neighbor_indicator=3 for temp_triangle_node_C-temp_triangle_node_A.
-        for(int j=0;j<Membrane_triangle_list.size();j++)
+        for(int j=0;j<Triangle_list.size();j++)
         {
             
             //************************** finding neighbors **************************
             // neibours of temp_triangle_node_A-temp_triangle_node_B:
-            if ( Membrane_triangle_list[j][0]==temp_triangle_node_A  &&  Membrane_triangle_list[j][1]==temp_triangle_node_B  && Membrane_triangle_list[j][2]!=temp_triangle_node_C ){
-                neighbor=Membrane_triangle_list[j][2];
+            if ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]!=temp_triangle_node_C ){
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=1;
             }
-            if     ( Membrane_triangle_list[j][0]==temp_triangle_node_B  &&  Membrane_triangle_list[j][1]==temp_triangle_node_A  && Membrane_triangle_list[j][2]!=temp_triangle_node_C )
+            if     ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]!=temp_triangle_node_C )
             {
-                neighbor=Membrane_triangle_list[j][2];
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=1;
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_A  &  Membrane_triangle_list[j][1]!=temp_triangle_node_C  & Membrane_triangle_list[j][2]==temp_triangle_node_B ){
-                neighbor=Membrane_triangle_list[j][1];
+            if      ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]!=temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_B ){
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=1;
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_B  &  Membrane_triangle_list[j][1]!=temp_triangle_node_C  & Membrane_triangle_list[j][2]==temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][1];
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]!=temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_A ){
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=1;
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_C  &  Membrane_triangle_list[j][1]==temp_triangle_node_A  & Membrane_triangle_list[j][2]==temp_triangle_node_B ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_B ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=1;
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_C  &  Membrane_triangle_list[j][1]==temp_triangle_node_B  & Membrane_triangle_list[j][2]==temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_A ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=1;
             }
             
             // neibors of temp_triangle_node_B-temp_triangle_node_C :
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_B  &  Membrane_triangle_list[j][1]==temp_triangle_node_C  & Membrane_triangle_list[j][2]!=temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][2];
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]!=temp_triangle_node_A ){
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=2;
             }
-            if     ( Membrane_triangle_list[j][0]==temp_triangle_node_C  &  Membrane_triangle_list[j][1]==temp_triangle_node_B  & Membrane_triangle_list[j][2]!=temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][2];
+            if     ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]!=temp_triangle_node_A ){
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=2;
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_B  &  Membrane_triangle_list[j][1]!=temp_triangle_node_A  & Membrane_triangle_list[j][2]==temp_triangle_node_C ){
-                neighbor=Membrane_triangle_list[j][1];
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]!=temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_C ){
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=2;
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_C  &  Membrane_triangle_list[j][1]!=temp_triangle_node_A  & Membrane_triangle_list[j][2]==temp_triangle_node_B )
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]!=temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_B )
             {
-                neighbor=Membrane_triangle_list[j][1];
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=2;
                 
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_A  &  Membrane_triangle_list[j][1]==temp_triangle_node_B  & Membrane_triangle_list[j][2]==temp_triangle_node_C ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_C ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=2;
                 
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_A  &  Membrane_triangle_list[j][1]==temp_triangle_node_C  & Membrane_triangle_list[j][2]==temp_triangle_node_B ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_B ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=2;
             }
             
             // neibors of temp_triangle_node_C-temp_triangle_node_A :
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_C  &  Membrane_triangle_list[j][1]==temp_triangle_node_A  & Membrane_triangle_list[j][2]!=temp_triangle_node_B ){
-                neighbor=Membrane_triangle_list[j][2];
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]!=temp_triangle_node_B ){
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=3;
                 
             }
-            if     ( Membrane_triangle_list[j][0]==temp_triangle_node_A  &  Membrane_triangle_list[j][1]==temp_triangle_node_C  & Membrane_triangle_list[j][2]!=temp_triangle_node_B ){
-                neighbor=Membrane_triangle_list[j][2];
+            if     ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]!=temp_triangle_node_B ){
+                neighbor=Triangle_list[j][2];
                 neighbor_indicator=3;
                 
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_C  &  Membrane_triangle_list[j][1]!=temp_triangle_node_B  & Membrane_triangle_list[j][2]==temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][1];
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]!=temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_A ){
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=3;
             }
-            if      ( Membrane_triangle_list[j][0]==temp_triangle_node_A  &  Membrane_triangle_list[j][1]!=temp_triangle_node_B  & Membrane_triangle_list[j][2]==temp_triangle_node_C ){
-                neighbor=Membrane_triangle_list[j][1];
+            if      ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]!=temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_C ){
+                neighbor=Triangle_list[j][1];
                 neighbor_indicator=3;
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_B  &  Membrane_triangle_list[j][1]==temp_triangle_node_C  & Membrane_triangle_list[j][2]==temp_triangle_node_A ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_A ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=3;
             }
-            if      ( Membrane_triangle_list[j][0]!=temp_triangle_node_B  &  Membrane_triangle_list[j][1]==temp_triangle_node_A  & Membrane_triangle_list[j][2]==temp_triangle_node_C ){
-                neighbor=Membrane_triangle_list[j][0];
+            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_C ){
+                neighbor=Triangle_list[j][0];
                 neighbor_indicator=3;
             }
             
@@ -123,7 +123,7 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
             if(neighbor_indicator!=0)  //  to speed up  the programme we first check if we have found a neighbor or not
             {
                 // note that temp_triangle_node_A-temp_triangle_node_B-temp_triangle_node_C-neighbor  are 4 point of two triangle wich will interact
-                membrane_triangle_pair_list[i].push_back(j);
+                Triangle_pair_list[i].push_back(j);
                 
                 if(neighbor_indicator==1)
                 {
@@ -155,15 +155,15 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
         }
     }
     
-    for (int i=0; i<Membrane_triangle_list.size(); i++) {
-        if (membrane_triangle_pair_list[i].size()!=3) {
+    for (int i=0; i<Triangle_list.size(); i++) {
+        if (Triangle_pair_list[i].size()!=3) {
             cout<<"\nThere is an error in the 'Membrane_Triangle_Pair_Identifier' function. This error indicates that there is a membrane triangle that has more/less than 3 triangle neighbors."<<endl;
-//            cout<<"membrane_triangle_pair_list["<<i<<"].size()="<<membrane_triangle_pair_list[i].size()<<endl;
+//            cout<<"Triangle_pair_list["<<i<<"].size()="<<Triangle_pair_list[i].size()<<endl;
             cout<<"triangle "<<i<<" neighbors:\n";
-            for (int k=0; k<membrane_triangle_pair_list[i].size(); k++) {
-                cout<<membrane_triangle_pair_list[i][k]<<"\n";
+            for (int k=0; k<Triangle_pair_list[i].size(); k++) {
+                cout<<Triangle_pair_list[i][k]<<"\n";
 //                for (int k2=0; k2<3; k2++) {
-////                    Membrane_triangle_list[membrane_triangle_pair_list[i][k]][k2]<<"\t";
+////                    Triangle_list[Triangle_pair_list[i][k]][k2]<<"\t";
 //                }
             }
         }
@@ -254,13 +254,13 @@ void Membrane::Membrane_Triangle_Pair_and_Edges_Identifier()
     {
         if( temp[abc][0] !=-1)
         {
-            Membrane_Triangle_Pair_Nodes[temp_int][0]=temp2[abc][0] ;
-            Membrane_Triangle_Pair_Nodes[temp_int][1]=temp2[abc][1] ;
-            Membrane_Triangle_Pair_Nodes[temp_int][2]=temp2[abc][2] ;
-            Membrane_Triangle_Pair_Nodes[temp_int][3]=temp2[abc][3] ;
+            Triangle_Pair_Nodes[temp_int][0]=temp2[abc][0] ;
+            Triangle_Pair_Nodes[temp_int][1]=temp2[abc][1] ;
+            Triangle_Pair_Nodes[temp_int][2]=temp2[abc][2] ;
+            Triangle_Pair_Nodes[temp_int][3]=temp2[abc][3] ;
             
-            Membrane_Edges[temp_int][0]=temp2[abc][0];
-            Membrane_Edges[temp_int][1]=temp2[abc][1];
+            Node_Bond_list[temp_int][0]=temp2[abc][0];
+            Node_Bond_list[temp_int][1]=temp2[abc][1];
             
             
             temp_int++;

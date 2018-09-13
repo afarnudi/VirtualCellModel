@@ -45,10 +45,10 @@ void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
 //            ecm.ECM_Node_Force[i][1]+=force_magnitude*delta_y;
 //            ecm.ECM_Node_Force[i][2]+=force_magnitude*delta_z;
 //            
-            membrane.Membrane_Node_Force[mem_index][0] += -force_magnitude*delta_x;
-            membrane.Membrane_Node_Force[mem_index][1] += -force_magnitude*delta_y;
-            membrane.Membrane_Node_Force[mem_index][2] += -force_magnitude*delta_z;
-//            cout<<membrane.Membrane_Node_Force[mem_index][0]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][1]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][2]<<endl;
+            membrane.Node_Force[mem_index][0] += -force_magnitude*delta_x;
+            membrane.Node_Force[mem_index][1] += -force_magnitude*delta_y;
+            membrane.Node_Force[mem_index][2] += -force_magnitude*delta_z;
+//            cout<<membrane.Node_Force[mem_index][0]<<"\t"<<            membrane.Node_Force[mem_index][1]<<"\t"<<            membrane.Node_Force[mem_index][2]<<endl;
             
         }
     }
@@ -82,9 +82,9 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
             bool barrier=barrier_2(membrane, mem_index);
             
             if (barrier) {
-                membrane.Membrane_Node_Velocity[mem_index][0]*=-1;
-                membrane.Membrane_Node_Velocity[mem_index][1]*=-1;
-                membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
+                membrane.Node_Velocity[mem_index][0]*=-1;
+                membrane.Node_Velocity[mem_index][1]*=-1;
+                membrane.Node_Velocity[mem_index][2]*=-1;
             }
             
             double delta_x=membrane.Node_Position[mem_index][0]-tri_com[0];
@@ -104,10 +104,10 @@ void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
             //            ecm.ECM_Node_Force[i][1]+=force_magnitude*delta_y;
             //            ecm.ECM_Node_Force[i][2]+=force_magnitude*delta_z;
             //
-            membrane.Membrane_Node_Force[mem_index][0] += -force_magnitude*delta_x;
-            membrane.Membrane_Node_Force[mem_index][1] += -force_magnitude*delta_y;
-            membrane.Membrane_Node_Force[mem_index][2] += -force_magnitude*delta_z;
-            //            cout<<membrane.Membrane_Node_Force[mem_index][0]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][1]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][2]<<endl;
+            membrane.Node_Force[mem_index][0] += -force_magnitude*delta_x;
+            membrane.Node_Force[mem_index][1] += -force_magnitude*delta_y;
+            membrane.Node_Force[mem_index][2] += -force_magnitude*delta_z;
+            //            cout<<membrane.Node_Force[mem_index][0]<<"\t"<<            membrane.Node_Force[mem_index][1]<<"\t"<<            membrane.Node_Force[mem_index][2]<<endl;
             
         }
     }
@@ -123,7 +123,7 @@ void interaction_3(Membrane &membrane){
             double y_reduced=1.5*epsilon/y;
             double y_reduced_3=y_reduced*y_reduced*y_reduced, y_reduced_5=y_reduced_3*y_reduced*y_reduced;
             double force=4*sigma*(y_reduced_5-y_reduced_3)/(1.5*epsilon);
-            membrane.Membrane_Node_Force[i][1] += -force;
+            membrane.Node_Force[i][1] += -force;
             
         }
     }
@@ -156,9 +156,9 @@ void interaction_4(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
             bool barrier=barrier_2(membrane, mem_index);
             
             if (barrier) {
-                membrane.Membrane_Node_Velocity[mem_index][0]*=-1;
-                membrane.Membrane_Node_Velocity[mem_index][1]*=-1;
-                membrane.Membrane_Node_Velocity[mem_index][2]*=-1;
+                membrane.Node_Velocity[mem_index][0]*=-1;
+                membrane.Node_Velocity[mem_index][1]*=-1;
+                membrane.Node_Velocity[mem_index][2]*=-1;
             }
             
             double delta_x=membrane.Node_Position[mem_index][0]-tri_com[0];
@@ -178,10 +178,10 @@ void interaction_4(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
             //            ecm.ECM_Node_Force[i][1]+=force_magnitude*delta_y;
             //            ecm.ECM_Node_Force[i][2]+=force_magnitude*delta_z;
             //
-            membrane.Membrane_Node_Force[mem_index][0] += -force_magnitude*delta_x;
-            membrane.Membrane_Node_Force[mem_index][1] += -force_magnitude*delta_y;
-            membrane.Membrane_Node_Force[mem_index][2] += -force_magnitude*delta_z;
-            //            cout<<membrane.Membrane_Node_Force[mem_index][0]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][1]<<"\t"<<            membrane.Membrane_Node_Force[mem_index][2]<<endl;
+            membrane.Node_Force[mem_index][0] += -force_magnitude*delta_x;
+            membrane.Node_Force[mem_index][1] += -force_magnitude*delta_y;
+            membrane.Node_Force[mem_index][2] += -force_magnitude*delta_z;
+            //            cout<<membrane.Node_Force[mem_index][0]<<"\t"<<            membrane.Node_Force[mem_index][1]<<"\t"<<            membrane.Node_Force[mem_index][2]<<endl;
             
         }
     }
@@ -241,15 +241,15 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
                 node_triangle_distance_vector[1]=membrane.Node_Position[temp_node_index][1]-triangle_COM_position[1];
                 node_triangle_distance_vector[2]=membrane.Node_Position[temp_node_index][2]-triangle_COM_position[2];
                 
-                relevant_velocity[0] = membrane.Membrane_Node_Velocity[temp_node_index][0];
-                relevant_velocity[1] = membrane.Membrane_Node_Velocity[temp_node_index][1];
-                relevant_velocity[2] = membrane.Membrane_Node_Velocity[temp_node_index][2];
+                relevant_velocity[0] = membrane.Node_Velocity[temp_node_index][0];
+                relevant_velocity[1] = membrane.Node_Velocity[temp_node_index][1];
+                relevant_velocity[2] = membrane.Node_Velocity[temp_node_index][2];
                 
                 if    ( innerproduct(relevant_velocity,ABxAC)<0)
                 {
-                    membrane.Membrane_Node_Velocity[temp_node_index][0]*=-1;
-                    membrane.Membrane_Node_Velocity[temp_node_index][1]*=-1;
-                    membrane.Membrane_Node_Velocity[temp_node_index][2]*=-1;
+                    membrane.Node_Velocity[temp_node_index][0]*=-1;
+                    membrane.Node_Velocity[temp_node_index][1]*=-1;
+                    membrane.Node_Velocity[temp_node_index][2]*=-1;
                 }//END OF:  if    ( (abs( perpendicular_distance )<Actin_Membrane_Radius_of_Hard_Sphere_Interaction) &&
             }//END OF: if (  actin_membrane_distance_amplitude < sqrt(0.43*a * 0.43*a +
             

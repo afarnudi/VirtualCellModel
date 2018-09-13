@@ -8,7 +8,7 @@
 
 #include "Membrane.h"
 
-void Membrane::Membrane_bending_potetial(void){
+void Membrane::Bending_potetial(void){
     int pos1,pos2,pos3,pos4;  // to making calculation of surface force easier
     //    double temp_potential_energy = 0.0;
     double temp_p1[3], temp_p2[3], temp_p3[3], temp_p4[3];
@@ -16,10 +16,10 @@ void Membrane::Membrane_bending_potetial(void){
     // Beginning of the  triangle-triangle (bending) force calculations
     for(int i=0 ;i<Num_of_Triangle_Pairs;i++)  // who are neighbors?
     {
-        pos1=Membrane_Triangle_Pair_Nodes[i][0];
-        pos2=Membrane_Triangle_Pair_Nodes[i][3];
-        pos3=Membrane_Triangle_Pair_Nodes[i][1];
-        pos4=Membrane_Triangle_Pair_Nodes[i][2];
+        pos1=Triangle_Pair_Nodes[i][0];
+        pos2=Triangle_Pair_Nodes[i][3];
+        pos3=Triangle_Pair_Nodes[i][1];
+        pos4=Triangle_Pair_Nodes[i][2];
         for (int index=0; index<3; index++) {
             temp_p1[index]=Node_Position[pos1][index];
             temp_p2[index]=Node_Position[pos2][index];
@@ -42,7 +42,7 @@ void Membrane::Membrane_bending_potetial(void){
         //            cout<<"temp_sinus="<<temp_sinus<<"\nsinus="<<sinus<<endl;
         //            exit (EXIT_FAILURE);
         //        }
-        F0 = -(1-2*signbit(innerproduct(N3, Ep2p1)))*Membrane_bending_coefficient*sinus;
+        F0 = -(1-2*signbit(innerproduct(N3, Ep2p1)))*Bending_coefficient*sinus;
         //        cout<<"\nF0="<<F0<<endl;
         //        if( parallelORantiparallel(xpos ) == +1 )
         //        {
@@ -60,10 +60,10 @@ void Membrane::Membrane_bending_potetial(void){
             F1[l]= (F0/temp_Ep2p1_length)*( innerproduct(p3p2,Ep2p1)*N1[l]/temp_N1_length_squared + innerproduct(p4p2,Ep2p1)*N2[l]/temp_N2_length_squared );
             
             F2[l]= (-F0/temp_Ep2p1_length)*( innerproduct(p3p1,Ep2p1)*N1[l]/temp_N1_length_squared + innerproduct(p4p1,Ep2p1)*N2[l]/temp_N2_length_squared );
-            Membrane_Node_Force[pos1][l] += F1[l];
-            Membrane_Node_Force[pos2][l] += F2[l];
-            Membrane_Node_Force[pos3][l] += F3[l];
-            Membrane_Node_Force[pos4][l] += F4[l];
+            Node_Force[pos1][l] += F1[l];
+            Node_Force[pos2][l] += F2[l];
+            Node_Force[pos3][l] += F3[l];
+            Node_Force[pos4][l] += F4[l];
             
         }
         
@@ -79,6 +79,6 @@ void Membrane::Membrane_bending_potetial(void){
         //***************** Potential BUG: Not very sure about the calculations *****************************
         //***************** for 'Total_Potential_Energy. Need to double check *********************************
         //*******************************************************************************************************
-        Total_Potential_Energy += Membrane_bending_coefficient*(1.0 -  ( innerproduct(N1,N2)/(vectorlength(N1)*vectorlength(N2)  )   ) );
+        Total_Potential_Energy += Bending_coefficient*(1.0 -  ( innerproduct(N1,N2)/(vectorlength(N1)*vectorlength(N2)  )   ) );
     }  // end of 'for-i'
 }
