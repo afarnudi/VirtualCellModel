@@ -45,6 +45,7 @@ public:
     vector<vector<double> > Node_Position;
     vector<vector<int> > Triangle_List;
     
+    void triangle_normal_calculator(int triangle_index, double ABxAC[3]);
     
     string output_file_neme;
     
