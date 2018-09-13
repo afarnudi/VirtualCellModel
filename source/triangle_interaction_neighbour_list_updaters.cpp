@@ -27,20 +27,8 @@ void triangle_update_neighbour_list(Membrane membrane, ECM ecm, vector<int> &ECM
             
             if (triangle_membrane_distance<ecm.return_interaction_range()) {
                 
-                double AB[3], AC[3], ABxAC[3];
-                int node_A=ecm.ECM_triangle_list[triangle_index][0];
-                int node_B=ecm.ECM_triangle_list[triangle_index][1];
-                int node_C=ecm.ECM_triangle_list[triangle_index][2];
-                
-                AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
-                
-                AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
-                
-                crossvector(ABxAC, AB, AC);
+                double ABxAC[3];
+                ecm.triangle_normal_calculator(triangle_index, ABxAC);
                 
                 double relevant_position[3];
                 relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
@@ -101,20 +89,8 @@ void triangle_update_neighbour_list_2(Membrane membrane, ECM ecm, vector<int> &E
             double tri_membrane_distance=return_triangle_membrane_distance(membrane, neighbour_pool[membrane_index], ecm, tri_index, tri_com);
             
             if (tri_membrane_distance<range) {
-                double AB[3], AC[3], ABxAC[3];
-                int node_A=ecm.ECM_triangle_list[tri_index][0];
-                int node_B=ecm.ECM_triangle_list[tri_index][1];
-                int node_C=ecm.ECM_triangle_list[tri_index][2];
-                
-                AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
-                
-                AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
-                
-                crossvector(ABxAC, AB, AC);
+                double ABxAC[3];
+                ecm.triangle_normal_calculator(tri_index, ABxAC);
                 
                 double relevant_position[3];
                 relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
@@ -173,20 +149,8 @@ void triangle_update_neighbour_list_new(Membrane membrane, ECM ecm, vector<int> 
                 
                 if (triangle_membrane_distance<ecm.return_interaction_range()) {
                     
-                    double AB[3], AC[3], ABxAC[3];
-                    int node_A=ecm.ECM_triangle_list[triangle_index][0];
-                    int node_B=ecm.ECM_triangle_list[triangle_index][1];
-                    int node_C=ecm.ECM_triangle_list[triangle_index][2];
-                    
-                    AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                    AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                    AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
-                    
-                    AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                    AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                    AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
-                    
-                    crossvector(ABxAC, AB, AC);
+                    double ABxAC[3];
+                    ecm.triangle_normal_calculator(triangle_index, ABxAC);
                     
                     double relevant_position[3];
                     relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];
@@ -257,20 +221,8 @@ void triangle_update_neighbour_list_new_2(Membrane membrane, ECM ecm, vector<int
                 
                 
                 if (tri_membrane_distance<range) {
-                    double AB[3], AC[3], ABxAC[3];
-                    int node_A=ecm.ECM_triangle_list[tri_index][0];
-                    int node_B=ecm.ECM_triangle_list[tri_index][1];
-                    int node_C=ecm.ECM_triangle_list[tri_index][2];
-                    
-                    AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                    AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                    AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
-                    
-                    AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                    AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                    AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
-                    
-                    crossvector(ABxAC, AB, AC);
+                    double ABxAC[3];
+                    ecm.triangle_normal_calculator(tri_index, ABxAC);
                     
                     double relevant_position[3];
                     relevant_position[0]=membrane.Node_Position[membrane_index][0]-tri_com[0];

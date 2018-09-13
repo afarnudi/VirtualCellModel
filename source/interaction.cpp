@@ -30,9 +30,9 @@ void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &ECM_m
 //            cout<<"i'm in\n";
             int mem_index=ECM_membrane_neighbour_list[i];
             double ecm_mem_node_distance=return_ecm_membrane_node_distance(membrane, mem_index, ecm, i);
-            double delta_x=membrane.Node_Position[mem_index][0]-ecm.ECM_Node_Position[i][0];
-            double delta_y=membrane.Node_Position[mem_index][1]-ecm.ECM_Node_Position[i][1];
-            double delta_z=membrane.Node_Position[mem_index][2]-ecm.ECM_Node_Position[i][2];
+            double delta_x=membrane.Node_Position[mem_index][0]-ecm.Node_Position[i][0];
+            double delta_y=membrane.Node_Position[mem_index][1]-ecm.Node_Position[i][1];
+            double delta_z=membrane.Node_Position[mem_index][2]-ecm.Node_Position[i][2];
             double reduced_radius=1.5*ecm.return_epsilon()/ecm_mem_node_distance;
             double reduced_radius_squared=reduced_radius*reduced_radius;
             double reduced_radius_cubed=reduced_radius_squared*reduced_radius;
@@ -193,7 +193,7 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
 {
     double triangle_COM_position[3]; // coordinates to the centre of mass of the triangles
     double node_ecm_distance_amplitude;// distance between solvent particle and com of triangle
-    double ABxAC[3], AB[3], AC[3]; // normal vector of membrane
+    double ABxAC[3]; // normal vector of membrane
     double node_triangle_distance_vector[3];
     double relevant_velocity[3];
     
@@ -216,12 +216,12 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
     
     for (int i =0; i < ecm.return_num_of_triangles(); i++)
     {
-        int node_A=ecm.ECM_triangle_list[i][0];
-        int node_B=ecm.ECM_triangle_list[i][1];
-        int node_C=ecm.ECM_triangle_list[i][2];
-        triangle_COM_position[0]=(ecm.ECM_Node_Position[node_A][0] + ecm.ECM_Node_Position[node_B][0] + ecm.ECM_Node_Position[node_C][0])/3.0;
-        triangle_COM_position[1]=(ecm.ECM_Node_Position[node_A][1] + ecm.ECM_Node_Position[node_B][1] + ecm.ECM_Node_Position[node_C][1])/3.0;
-        triangle_COM_position[2]=(ecm.ECM_Node_Position[node_A][2] + ecm.ECM_Node_Position[node_B][2] + ecm.ECM_Node_Position[node_C][2])/3.0;
+        int node_A=ecm.Triangle_List[i][0];
+        int node_B=ecm.Triangle_List[i][1];
+        int node_C=ecm.Triangle_List[i][2];
+        triangle_COM_position[0]=(ecm.Node_Position[node_A][0] + ecm.Node_Position[node_B][0] + ecm.Node_Position[node_C][0])/3.0;
+        triangle_COM_position[1]=(ecm.Node_Position[node_A][1] + ecm.Node_Position[node_B][1] + ecm.Node_Position[node_C][1])/3.0;
+        triangle_COM_position[2]=(ecm.Node_Position[node_A][2] + ecm.Node_Position[node_B][2] + ecm.Node_Position[node_C][2])/3.0;
         
         for (int index=0; index<membrane_list.size(); index++)
         {
@@ -229,13 +229,7 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
             node_ecm_distance_amplitude = sqrt( (triangle_COM_position[0]-membrane.Node_Position[temp_node_index][0])*(triangle_COM_position[0]- membrane.Node_Position[temp_node_index][0]) + (triangle_COM_position[1]- membrane.Node_Position[temp_node_index][1])*(triangle_COM_position[1]- membrane.Node_Position[temp_node_index][1]) + (triangle_COM_position[2]- membrane.Node_Position[temp_node_index][2])*(triangle_COM_position[2]- membrane.Node_Position[temp_node_index][2]) );
             if (  node_ecm_distance_amplitude < 0.9*ecm.return_epsilon()  )
             {
-                AB[0]=ecm.ECM_Node_Position[ node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                AB[1]=ecm.ECM_Node_Position[ node_B][1]-ecm.ECM_Node_Position[ node_A][1];
-                AB[2]=ecm.ECM_Node_Position[ node_B][2]-ecm.ECM_Node_Position[ node_A][2];
-                AC[0]=ecm.ECM_Node_Position[ node_C][0]-ecm.ECM_Node_Position[ node_A][0];
-                AC[1]=ecm.ECM_Node_Position[ node_C][1]-ecm.ECM_Node_Position[ node_A][1];
-                AC[2]=ecm.ECM_Node_Position[ node_C][2]-ecm.ECM_Node_Position[ node_A][2];
-                crossvector(ABxAC,AB,AC);
+                ecm.triangle_normal_calculator(i, ABxAC);
                 
                 node_triangle_distance_vector[0]=membrane.Node_Position[temp_node_index][0]-triangle_COM_position[0];
                 node_triangle_distance_vector[1]=membrane.Node_Position[temp_node_index][1]-triangle_COM_position[1];

@@ -17,45 +17,45 @@ void ECM::read_gmesh_file (string gmesh_file){
     {
         read>> temp_string;
     }
-    read>> ECM_num_of_Nodes;
+    read>> Num_of_Nodes;
     
-    ECM_Node_Velocity.resize(ECM_num_of_Nodes);
-    ECM_Node_Force.resize(ECM_num_of_Nodes);
-    for(int i=0;i<ECM_num_of_Nodes;i++)
+    Node_Velocity.resize(Num_of_Nodes);
+    Node_Force.resize(Num_of_Nodes);
+    for(int i=0;i<Num_of_Nodes;i++)
     {
-        ECM_Node_Velocity[i].resize(3);
+        Node_Velocity[i].resize(3);
         
-        ECM_Node_Velocity[i][0]= 0.0;
-        ECM_Node_Velocity[i][1]= 0.0;
-        ECM_Node_Velocity[i][2]= 0.0;
+        Node_Velocity[i][0]= 0.0;
+        Node_Velocity[i][1]= 0.0;
+        Node_Velocity[i][2]= 0.0;
         
-        ECM_Node_Force[i].resize(3);
+        Node_Force[i].resize(3);
         
-        ECM_Node_Force[i][0]= 0.0;
-        ECM_Node_Force[i][1]= 0.0;
-        ECM_Node_Force[i][2]= 0.0;
+        Node_Force[i][0]= 0.0;
+        Node_Force[i][1]= 0.0;
+        Node_Force[i][2]= 0.0;
     }
     
     // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
     vector<double> temp_node_position;
     temp_node_position.resize(3);
-    for(int i=0;i<ECM_num_of_Nodes;i++)
+    for(int i=0;i<Num_of_Nodes;i++)
     {
         read>> temp_int;
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
-        ECM_Node_Position.push_back(temp_node_position);
+        Node_Position.push_back(temp_node_position);
     }
     
     read>> temp_string;
     read>> temp_string;
     read>> temp_int;
-    ECM_num_of_Triangles =temp_int;
+    Num_of_Triangles =temp_int;
     
     vector<int> push;
     push.resize(3);
-    for(int i=0;i<ECM_num_of_Triangles;i++)
+    for(int i=0;i<Num_of_Triangles;i++)
     {
         read>>temp_int;
         read>>temp_int;
@@ -70,14 +70,14 @@ void ECM::read_gmesh_file (string gmesh_file){
         push[0]--;
         push[1]--;
         push[2]--;
-        ECM_triangle_list.push_back(push);
+        Triangle_List.push_back(push);
         // Sometimes Gmesh will create duplicate nodes, this will delete any duplicates
         if (i!=0)
         {
-            if (ECM_triangle_list[ECM_triangle_list.size()-1][0]==ECM_triangle_list[ECM_triangle_list.size()-2][0] && ECM_triangle_list[ECM_triangle_list.size()-1][1]==ECM_triangle_list[ECM_triangle_list.size()-2][1] && ECM_triangle_list[ECM_triangle_list.size()-1][2]==ECM_triangle_list[ECM_triangle_list.size()-2][2])
+            if (Triangle_List[Triangle_List.size()-1][0]==Triangle_List[Triangle_List.size()-2][0] && Triangle_List[Triangle_List.size()-1][1]==Triangle_List[Triangle_List.size()-2][1] && Triangle_List[Triangle_List.size()-1][2]==Triangle_List[Triangle_List.size()-2][2])
             {
-                cout<<ECM_triangle_list[ECM_triangle_list.size()-1][0]<<"\t"<<ECM_triangle_list[ECM_triangle_list.size()-1][1]<<"\t"<<ECM_triangle_list[ECM_triangle_list.size()-1][2]<<endl;
-                ECM_triangle_list.erase(ECM_triangle_list.begin()+ECM_triangle_list.size()-2);
+                cout<<Triangle_List[Triangle_List.size()-1][0]<<"\t"<<Triangle_List[Triangle_List.size()-1][1]<<"\t"<<Triangle_List[Triangle_List.size()-1][2]<<endl;
+                Triangle_List.erase(Triangle_List.begin()+Triangle_List.size()-2);
             }
         }
     }
