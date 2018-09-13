@@ -8,7 +8,7 @@
 
 #include "ECM.hpp"
 
-void ECM::ECM_Node_Pair_Identifier(void){
+void ECM::node_pair_identifier(void){
     Num_of_Node_Pairs=0;
     vector<vector<int> > ECM_Node_Pair_list;
     vector<int> Node_Pairs;
