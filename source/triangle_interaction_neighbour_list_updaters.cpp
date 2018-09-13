@@ -32,13 +32,13 @@ void triangle_update_neighbour_list(Membrane membrane, ECM ecm, vector<int> &ECM
                 int node_B=ecm.ECM_triangle_list[triangle_index][1];
                 int node_C=ecm.ECM_triangle_list[triangle_index][2];
                 
-                AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
+                AB[0]=ecm.Node_Position[node_B][0]-ecm.Node_Position[node_A][0];
+                AB[1]=ecm.Node_Position[node_B][1]-ecm.Node_Position[node_A][1];
+                AB[2]=ecm.Node_Position[node_B][2]-ecm.Node_Position[node_A][2];
                 
-                AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
+                AC[0]=ecm.Node_Position[node_C][0]-ecm.Node_Position[node_A][0];
+                AC[1]=ecm.Node_Position[node_C][1]-ecm.Node_Position[node_A][1];
+                AC[2]=ecm.Node_Position[node_C][2]-ecm.Node_Position[node_A][2];
                 
                 crossvector(ABxAC, AB, AC);
                 
@@ -106,13 +106,13 @@ void triangle_update_neighbour_list_2(Membrane membrane, ECM ecm, vector<int> &E
                 int node_B=ecm.ECM_triangle_list[tri_index][1];
                 int node_C=ecm.ECM_triangle_list[tri_index][2];
                 
-                AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
+                AB[0]=ecm.Node_Position[node_B][0]-ecm.Node_Position[node_A][0];
+                AB[1]=ecm.Node_Position[node_B][1]-ecm.Node_Position[node_A][1];
+                AB[2]=ecm.Node_Position[node_B][2]-ecm.Node_Position[node_A][2];
                 
-                AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
+                AC[0]=ecm.Node_Position[node_C][0]-ecm.Node_Position[node_A][0];
+                AC[1]=ecm.Node_Position[node_C][1]-ecm.Node_Position[node_A][1];
+                AC[2]=ecm.Node_Position[node_C][2]-ecm.Node_Position[node_A][2];
                 
                 crossvector(ABxAC, AB, AC);
                 
@@ -178,13 +178,13 @@ void triangle_update_neighbour_list_new(Membrane membrane, ECM ecm, vector<int> 
                     int node_B=ecm.ECM_triangle_list[triangle_index][1];
                     int node_C=ecm.ECM_triangle_list[triangle_index][2];
                     
-                    AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                    AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                    AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
+                    AB[0]=ecm.Node_Position[node_B][0]-ecm.Node_Position[node_A][0];
+                    AB[1]=ecm.Node_Position[node_B][1]-ecm.Node_Position[node_A][1];
+                    AB[2]=ecm.Node_Position[node_B][2]-ecm.Node_Position[node_A][2];
                     
-                    AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                    AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                    AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
+                    AC[0]=ecm.Node_Position[node_C][0]-ecm.Node_Position[node_A][0];
+                    AC[1]=ecm.Node_Position[node_C][1]-ecm.Node_Position[node_A][1];
+                    AC[2]=ecm.Node_Position[node_C][2]-ecm.Node_Position[node_A][2];
                     
                     crossvector(ABxAC, AB, AC);
                     
@@ -262,13 +262,13 @@ void triangle_update_neighbour_list_new_2(Membrane membrane, ECM ecm, vector<int
                     int node_B=ecm.ECM_triangle_list[tri_index][1];
                     int node_C=ecm.ECM_triangle_list[tri_index][2];
                     
-                    AB[0]=ecm.ECM_Node_Position[node_B][0]-ecm.ECM_Node_Position[node_A][0];
-                    AB[1]=ecm.ECM_Node_Position[node_B][1]-ecm.ECM_Node_Position[node_A][1];
-                    AB[2]=ecm.ECM_Node_Position[node_B][2]-ecm.ECM_Node_Position[node_A][2];
+                    AB[0]=ecm.Node_Position[node_B][0]-ecm.Node_Position[node_A][0];
+                    AB[1]=ecm.Node_Position[node_B][1]-ecm.Node_Position[node_A][1];
+                    AB[2]=ecm.Node_Position[node_B][2]-ecm.Node_Position[node_A][2];
                     
-                    AC[0]=ecm.ECM_Node_Position[node_C][0]-ecm.ECM_Node_Position[node_A][0];
-                    AC[1]=ecm.ECM_Node_Position[node_C][1]-ecm.ECM_Node_Position[node_A][1];
-                    AC[2]=ecm.ECM_Node_Position[node_C][2]-ecm.ECM_Node_Position[node_A][2];
+                    AC[0]=ecm.Node_Position[node_C][0]-ecm.Node_Position[node_A][0];
+                    AC[1]=ecm.Node_Position[node_C][1]-ecm.Node_Position[node_A][1];
+                    AC[2]=ecm.Node_Position[node_C][2]-ecm.Node_Position[node_A][2];
                     
                     crossvector(ABxAC, AB, AC);
                     

@@ -45,7 +45,7 @@ void ECM::read_gmesh_file (string gmesh_file){
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
-        ECM_Node_Position.push_back(temp_node_position);
+        Node_Position.push_back(temp_node_position);
     }
     
     read>> temp_string;

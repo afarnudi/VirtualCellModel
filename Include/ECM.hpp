@@ -41,8 +41,8 @@ private:
     void node_pair_identifier(void);
     
 public:
-    vector<vector<double> >Node_Force;
-    vector<vector<double> >ECM_Node_Position;
+    vector<vector<double> > Node_Force;
+    vector<vector<double> > Node_Position;
     vector<vector<int> > ECM_triangle_list;
     
     

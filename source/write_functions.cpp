@@ -31,7 +31,7 @@ void Results (ECM ecm, string label, char* buffer)
     Trajectory << " nodes  "<<endl;
     for(int j=0; j< ecm.return_num_of_nodes();j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<ecm.ECM_Node_Position[j][0]<< setw(20)<<ecm.ECM_Node_Position[j][1]<< setw(20)<<ecm.ECM_Node_Position[j][2]<<endl;
+        Trajectory << label <<setprecision(5)<< setw(20)<<ecm.Node_Position[j][0]<< setw(20)<<ecm.Node_Position[j][1]<< setw(20)<<ecm.Node_Position[j][2]<<endl;
     }
     
     //    //Energy:
