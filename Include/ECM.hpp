@@ -22,8 +22,8 @@ class ECM {
 private:
     
     int Num_of_Nodes=0;
-    int ECM_num_of_Triangle_Pairs=0;
-    int ECM_num_of_Node_Pairs=0;
+    int Num_of_Triangle_Pairs=0;
+    int Num_of_Node_Pairs=0;
     int ECM_num_of_Triangles=0;
     
     

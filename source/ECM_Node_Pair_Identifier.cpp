@@ -9,7 +9,7 @@
 #include "ECM.hpp"
 
 void ECM::ECM_Node_Pair_Identifier(void){
-    ECM_num_of_Node_Pairs=0;
+    Num_of_Node_Pairs=0;
     vector<vector<int> > ECM_Node_Pair_list;
     vector<int> Node_Pairs;
     Node_Pairs.resize(2);
@@ -77,7 +77,7 @@ void ECM::ECM_Node_Pair_Identifier(void){
         repeatednumber3=0;
     }
     
-    ECM_num_of_Node_Pairs=ECM_Node_Pair_list.size();
+    Num_of_Node_Pairs=ECM_Node_Pair_list.size();
     cout<<"ECM # of node pairs: "<<ECM_Node_Pair_list.size()<<endl;
 }
 
