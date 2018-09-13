@@ -8,7 +8,7 @@
 
 #include "ECM.hpp"
 
-void ECM::Normal_direction_Identifier(double x, double y, double z){
+void ECM::normal_direction_Identifier(double x, double y, double z){
     
     double AC[3], AB[3], ABxAC[3], refernece[3];
     int Point_A, Point_B, Point_C;

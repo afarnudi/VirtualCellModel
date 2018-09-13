@@ -37,7 +37,7 @@ private:
     
     void read_input(string input_file);
     void read_gmesh_file (string gmesh_file);
-    void Normal_direction_Identifier(double x, double y, double z);
+    void normal_direction_Identifier(double x, double y, double z);
     void ECM_Node_Pair_Identifier(void);
     
 public:
@@ -55,7 +55,7 @@ public:
         read_gmesh_file(ECM_mesh_file_name);
         output_file_neme=ECM_mesh_file_name ;// it is for generating trajectory file. it can be modifyed to have date and time in it.this modification can be done in main.
         cout<<"\n\nECM class initiated"<<endl;
-        Normal_direction_Identifier(x, y, z);
+        normal_direction_Identifier(x, y, z);
         ECM_Node_Pair_Identifier();
         
 //        ECM_Triangle_Pair_and_Edges_Identifier();
