@@ -43,7 +43,7 @@ private:
 public:
     vector<vector<double> > Node_Force;
     vector<vector<double> > Node_Position;
-    vector<vector<int> > ECM_triangle_list;
+    vector<vector<int> > Triangle_List;
     
     
     string output_file_neme;

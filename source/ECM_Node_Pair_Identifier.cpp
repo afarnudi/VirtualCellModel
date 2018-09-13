@@ -26,9 +26,9 @@ void ECM::node_pair_identifier(void){
     
     for(int i=0;i<Num_of_Triangles;i++)
     {
-        temp_ECM_triangle_Node_A= ECM_triangle_list[i][0];
-        temp_ECM_triangle_Node_B= ECM_triangle_list[i][1];
-        temp_ECM_triangle_Node_C= ECM_triangle_list[i][2];
+        temp_ECM_triangle_Node_A= Triangle_List[i][0];
+        temp_ECM_triangle_Node_B= Triangle_List[i][1];
+        temp_ECM_triangle_Node_C= Triangle_List[i][2];
         
         for(int j=0;j<ECM_Node_Pair_list.size();j++)
         {

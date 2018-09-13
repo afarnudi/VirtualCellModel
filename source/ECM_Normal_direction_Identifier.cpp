@@ -12,12 +12,12 @@ void ECM::normal_direction_Identifier(double x, double y, double z){
     
     double AC[3], AB[3], ABxAC[3], refernece[3];
     int Point_A, Point_B, Point_C;
-    cout<<ECM_triangle_list.size()<<endl;
-    for(  int i=0;i<ECM_triangle_list.size();i++)
+    cout<<Triangle_List.size()<<endl;
+    for(  int i=0;i<Triangle_List.size();i++)
     {
-        Point_A=ECM_triangle_list[i][0];
-        Point_B=ECM_triangle_list[i][1];
-        Point_C=ECM_triangle_list[i][2];
+        Point_A=Triangle_List[i][0];
+        Point_B=Triangle_List[i][1];
+        Point_C=Triangle_List[i][2];
         
         AB[0]=Node_Position[Point_B][0]-Node_Position[Point_A][0];
         AB[1]=Node_Position[Point_B][1]-Node_Position[Point_A][1];
@@ -36,8 +36,8 @@ void ECM::normal_direction_Identifier(double x, double y, double z){
         
         if(innerproduct(ABxAC, refernece)<0 )
         {
-            ECM_triangle_list[i][1]=Point_C;
-            ECM_triangle_list[i][2]=Point_B;
+            Triangle_List[i][1]=Point_C;
+            Triangle_List[i][2]=Point_B;
             //cout<<"min"<<endl;
         }
     } // END OF: for(  int i=0;i<Membrane_num_of_Triangles;i++  )

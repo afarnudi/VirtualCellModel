@@ -216,9 +216,9 @@ void Node_ecm_Barrier(Membrane &membrane, ECM &ecm, vector<int> ECM_membrane_nei
     
     for (int i =0; i < ecm.return_num_of_triangles(); i++)
     {
-        int node_A=ecm.ECM_triangle_list[i][0];
-        int node_B=ecm.ECM_triangle_list[i][1];
-        int node_C=ecm.ECM_triangle_list[i][2];
+        int node_A=ecm.Triangle_List[i][0];
+        int node_B=ecm.Triangle_List[i][1];
+        int node_C=ecm.Triangle_List[i][2];
         triangle_COM_position[0]=(ecm.Node_Position[node_A][0] + ecm.Node_Position[node_B][0] + ecm.Node_Position[node_C][0])/3.0;
         triangle_COM_position[1]=(ecm.Node_Position[node_A][1] + ecm.Node_Position[node_B][1] + ecm.Node_Position[node_C][1])/3.0;
         triangle_COM_position[2]=(ecm.Node_Position[node_A][2] + ecm.Node_Position[node_B][2] + ecm.Node_Position[node_C][2])/3.0;

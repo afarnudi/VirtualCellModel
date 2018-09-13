@@ -70,14 +70,14 @@ void ECM::read_gmesh_file (string gmesh_file){
         push[0]--;
         push[1]--;
         push[2]--;
-        ECM_triangle_list.push_back(push);
+        Triangle_List.push_back(push);
         // Sometimes Gmesh will create duplicate nodes, this will delete any duplicates
         if (i!=0)
         {
-            if (ECM_triangle_list[ECM_triangle_list.size()-1][0]==ECM_triangle_list[ECM_triangle_list.size()-2][0] && ECM_triangle_list[ECM_triangle_list.size()-1][1]==ECM_triangle_list[ECM_triangle_list.size()-2][1] && ECM_triangle_list[ECM_triangle_list.size()-1][2]==ECM_triangle_list[ECM_triangle_list.size()-2][2])
+            if (Triangle_List[Triangle_List.size()-1][0]==Triangle_List[Triangle_List.size()-2][0] && Triangle_List[Triangle_List.size()-1][1]==Triangle_List[Triangle_List.size()-2][1] && Triangle_List[Triangle_List.size()-1][2]==Triangle_List[Triangle_List.size()-2][2])
             {
-                cout<<ECM_triangle_list[ECM_triangle_list.size()-1][0]<<"\t"<<ECM_triangle_list[ECM_triangle_list.size()-1][1]<<"\t"<<ECM_triangle_list[ECM_triangle_list.size()-1][2]<<endl;
-                ECM_triangle_list.erase(ECM_triangle_list.begin()+ECM_triangle_list.size()-2);
+                cout<<Triangle_List[Triangle_List.size()-1][0]<<"\t"<<Triangle_List[Triangle_List.size()-1][1]<<"\t"<<Triangle_List[Triangle_List.size()-1][2]<<endl;
+                Triangle_List.erase(Triangle_List.begin()+Triangle_List.size()-2);
             }
         }
     }
