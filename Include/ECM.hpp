@@ -21,7 +21,7 @@ using namespace std;
 class ECM {
 private:
     
-    int ECM_num_of_Nodes=0;
+    int Num_of_Nodes=0;
     int ECM_num_of_Triangle_Pairs=0;
     int ECM_num_of_Node_Pairs=0;
     int ECM_num_of_Triangles=0;
@@ -64,7 +64,7 @@ public:
         
     }
     int return_num_of_nodes(void){
-        return ECM_num_of_Nodes;
+        return Num_of_Nodes;
     }
     int return_num_of_triangles(void){
         return ECM_num_of_Triangles;
