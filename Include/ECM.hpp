@@ -24,7 +24,7 @@ private:
     int Num_of_Nodes=0;
     int Num_of_Triangle_Pairs=0;
     int Num_of_Node_Pairs=0;
-    int ECM_num_of_Triangles=0;
+    int Num_of_Triangles=0;
     
     
     double interaction_range=1.0;
@@ -67,7 +67,7 @@ public:
         return Num_of_Nodes;
     }
     int return_num_of_triangles(void){
-        return ECM_num_of_Triangles;
+        return Num_of_Triangles;
     }
     double return_interaction_range(void){
         return interaction_range;

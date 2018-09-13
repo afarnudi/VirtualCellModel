@@ -24,7 +24,7 @@ void ECM::ECM_Node_Pair_Identifier(void){
     int repeatednumber2=0;
     int repeatednumber3=0;
     
-    for(int i=0;i<ECM_num_of_Triangles;i++)
+    for(int i=0;i<Num_of_Triangles;i++)
     {
         temp_ECM_triangle_Node_A= ECM_triangle_list[i][0];
         temp_ECM_triangle_Node_B= ECM_triangle_list[i][1];

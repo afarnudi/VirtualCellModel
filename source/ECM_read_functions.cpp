@@ -51,11 +51,11 @@ void ECM::read_gmesh_file (string gmesh_file){
     read>> temp_string;
     read>> temp_string;
     read>> temp_int;
-    ECM_num_of_Triangles =temp_int;
+    Num_of_Triangles =temp_int;
     
     vector<int> push;
     push.resize(3);
-    for(int i=0;i<ECM_num_of_Triangles;i++)
+    for(int i=0;i<Num_of_Triangles;i++)
     {
         read>>temp_int;
         read>>temp_int;
