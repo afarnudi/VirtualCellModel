@@ -32,7 +32,7 @@ private:
     double sigma=15.0;
     
     
-    vector<vector<double> >ECM_Node_Velocity;
+    vector<vector<double> > Node_Velocity;
     vector<vector<int> > ECM_Node_Pair_list;
     
     void read_ECM_input(string input_file);
