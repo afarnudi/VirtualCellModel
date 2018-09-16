@@ -40,7 +40,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
-    void Elastic_Force_Calculator();
+    void Elastic_Force_Calculator(double theta_0);
     void MD_Evolution ();
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
@@ -56,9 +56,9 @@ private:
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
-    double Spring_coefficient=10.0; // streching constant
+    double Spring_coefficient=10; // streching constant
     double Bending_coefficient=5.0; // bending constant
-    double Damping_coefficient=0.00; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Damping_coefficient=0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Spring_force_cutt_off=10000.0;
     double ShiftinXdirection=0.0; //???
@@ -91,6 +91,8 @@ private:
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);
+//    void Bending_potetial_2(void);
+    void Bending_potetial_2(double theta_0);
     void check(void);
     
 public:
@@ -106,8 +108,6 @@ public:
         if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
         {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
         Triangle_Pair_and_Node_Bonds_Identifier();
-        
-        
         
     }
     
@@ -126,13 +126,14 @@ public:
     
     Membrane(string Mesh_file_name, double x, double y, double z)
     {
+        cout<<"Initialising the Membrane Class..."<<endl;
         read_gmesh_file(Mesh_file_name);
         output_file_neme=Mesh_file_name;
-        cout<<"\n\nNumber of Nodes="<<Num_of_Nodes<<endl;
-        cout<<"Number of triangles="<<Num_of_Triangles<<endl;
+        cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
+        cout<<"# of triangles="<<Num_of_Triangles<<endl;
         Normal_direction_Identifier(x, y, z);
         Triangle_pair_counter();
-        cout<<"Number of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
+        cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
         if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
             cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
             
@@ -142,7 +143,7 @@ public:
         Node_neighbour_list_constructor();
         Triangle_pair_identifier();
         check();
-        cout<<"Membrane class initiated.\n";
+        cout<<"\n\nMembrane class initiated.\n";
 //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
     }
     
