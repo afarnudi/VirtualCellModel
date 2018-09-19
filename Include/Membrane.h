@@ -16,6 +16,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
+	double Radius;
     
     
     int membrane_counter;
@@ -45,20 +46,20 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     
-private:
+//private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     int Num_of_Nodes;
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     int **Normal_direction; //??? (These 2 elements should be defined and explained)
-    
+    int spring_model=2;
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
     double Spring_coefficient=10; // streching constant
     double Bending_coefficient=5.0; // bending constant
-    double Damping_coefficient=0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Damping_coefficient=1.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Spring_force_cutt_off=10000.0;
     double ShiftinXdirection=0.0; //???
@@ -73,7 +74,7 @@ private:
     bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
     
     
-    
+    private:
     /*variables*/
     
     
@@ -129,6 +130,8 @@ public:
         cout<<"Initialising the Membrane Class..."<<endl;
         read_gmesh_file(Mesh_file_name);
         output_file_neme=Mesh_file_name;
+		Radius= sqrt((Node_Position[0][0]-x)*(Node_Position[0][0]-x) + (Node_Position[0][1]-y)*(Node_Position[0][1]-y) + (Node_Position[0][2]-z)*(Node_Position[0][2]-z));
+		cout<<"\n\nRadius="<<Radius<<endl;
         cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
         cout<<"# of triangles="<<Num_of_Triangles<<endl;
         Normal_direction_Identifier(x, y, z);

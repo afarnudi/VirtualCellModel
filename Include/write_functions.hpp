@@ -18,5 +18,8 @@
 
 void Results (ECM ecm, string label, char* buffer);
 void Results (Membrane membrane, string label, char* buffer);
+void generatingReport (char* buffer, Membrane membrane );
+void generatingReport (char* buffer, Membrane membrane, Membrane particle );
+void generatingReport (char* buffer, Membrane membrane, ECM ecm );
 
 #endif /* write_functions_hpp */
