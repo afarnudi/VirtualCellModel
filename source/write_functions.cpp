@@ -46,16 +46,20 @@ void Results (Membrane membrane, string label, char* buffer)
     
     string energy_file_name;
     string traj_file_name;
+
     membrane.output_file_neme+=buffer;
     traj_file_name="Results_";
     traj_file_name+=membrane.output_file_neme;
     traj_file_name+=".xyz";
     energy_file_name="Results_Potential_Energy";
     energy_file_name+=membrane.output_file_neme;
+	 
+     
     
     //trajectory:
     
     ofstream Trajectory;
+	
     
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
@@ -65,7 +69,10 @@ void Results (Membrane membrane, string label, char* buffer)
     {
         Trajectory << label <<setprecision(5)<< setw(20)<<membrane.Node_Position[j][0]<< setw(20)<<membrane.Node_Position[j][1]<< setw(20)<<membrane.Node_Position[j][2]<<endl;
     }
+	
+	
     
+	
     //    //Energy:
     //    ofstream Potential_Energy;
     //    Potential_Energy.open(energy_file_name.c_str(), ios::app);
@@ -89,6 +96,9 @@ void generatingReport (char* buffer, Membrane membrane )
 	Report<<"***Membrane Properties***"<<endl;
 	Report<<"Membrane Node Mass"<< setw(20)<<membrane.Node_Mass<<endl;
 	Report<<"Membrane Radius"<< setw(20)<<membrane.Radius<<endl;
+	Report<<"Minimum node pair length"<< setw(20)<<membrane.Min_node_pair_length<<endl;
+	Report<<"Maximum node pair length"<< setw(20)<<membrane.Max_node_pair_length<<endl;
+	Report<<"Average node pair length"<< setw(20)<<membrane.Average_node_pair_length<<endl;
 	Report<<"number of Membrane's Nodes "<< setw(20)<<membrane.Num_of_Nodes<<endl;
 	Report<<"number of Membrane's Triangles "<< setw(20)<<membrane.Num_of_Triangles<<endl;
 	Report<<"number of Membrane's Nodes"<< setw(20)<<membrane.Num_of_Nodes<<endl;
@@ -176,4 +186,18 @@ void generatingReport (char* buffer, Membrane membrane, ECM ecm )
 	// 
 	//Report<<"number of ECM's Nodes "<< setw(20)<<ecm.Num_of_Nodes<<endl;
 	//Report<<"number of ECM's Triangles "<< setw(20)<<ecm.Num_of_Triangles<<endl;
+}
+
+void checkingForce (Membrane membrane, int MD_Step, char* buffer)
+{
+	string check_force_name="check_force_";
+	check_force_name+=buffer;
+	ofstream check_force;
+	check_force.open(check_force_name.c_str(), ios::app);
+	check_force<< "MD step = "<<MD_Step<<endl;
+	for(int j=0; j< membrane.return_num_of_nodes();j++) // saving Forces
+    {
+        check_force  <<setprecision(5)<< setw(20)<<membrane.Node_Force[j][0]<< setw(20)<<membrane.Node_Force[j][1]<< setw(20)<<membrane.Node_Force[j][2]<<endl;
+    }
+	check_force<< "_________________________________________________________"<<endl;
 }

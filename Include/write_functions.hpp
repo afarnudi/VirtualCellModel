@@ -21,5 +21,6 @@ void Results (Membrane membrane, string label, char* buffer);
 void generatingReport (char* buffer, Membrane membrane );
 void generatingReport (char* buffer, Membrane membrane, Membrane particle );
 void generatingReport (char* buffer, Membrane membrane, ECM ecm );
+void checkingForce (Membrane membrane, int MD_Step, char* buffer);
 
 #endif /* write_functions_hpp */

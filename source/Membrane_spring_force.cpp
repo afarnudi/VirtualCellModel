@@ -8,12 +8,15 @@
 
 #include "Membrane.h"
 
+
 void Membrane::potential_1 (void){
     //modifications on this function:
     // 1- changing Membrane_Node_pair_list to Node_Bond_list
     // 2- changing Membrane_Num_of_Node_Pairs to Membrane_num_of_Triangle_Pairs (because these 2 numbers are equal)
-    
+
+	//cout<<"Standard Spring"<<endl;
     double le0,le1,lmax,lmin;
+	double min, max;
     double deltax,deltay,deltaz,temp_Node_distance,temp_force;
 //    int pos1,pos2,pos3,pos4;  // to making calculation of surface force easier
     double temp_potential_energy = 0.0;
@@ -22,15 +25,15 @@ void Membrane::potential_1 (void){
     
     /// calculate network force:
     int temp_Node_A, temp_Node_B;
-//    le0=1.15000*Node_radius;
-//    lmax=1.33000*Node_radius;
-//    le1=0.85000*Node_radius;
-//    lmin=0.67000*Node_radius;
+   // le0= 0.994;
+    //lmax=1.170;
+    //le1=0.654;
+   //lmin=0.478;
     
-    le0=2.05000*Node_radius;
-    lmax=3.05*Node_radius;//2.97
-    le1=1.5000*Node_radius;
-    lmin=1.19000*Node_radius;//1.21
+   le0=Max_node_pair_length - 0.09;
+   lmax=Max_node_pair_length + 0.09;
+   le1=Min_node_pair_length + 0.09;
+   lmin=Min_node_pair_length - 0.09;
     
     Total_Potential_Energy=0.0;
     
@@ -85,18 +88,26 @@ void Membrane::potential_1 (void){
         /// my cutoff for force amplitute and for avoiding leting particle scape from force trap
         if(temp_force>965.31  || temp_Node_distance>lmax )
         {
-//            cout<<"4\n";
+          cout<<"4\n";
+		  cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
+		  cout<<"temp_force_before_cut_off"<<temp_force<<endl;
+		  
             temp_force = 965.31+Spring_force_cutt_off* ( temp_Node_distance - 1.3280*Node_radius );
             temp_potential_energy=   1.81599  + 965.31 * ( temp_Node_distance - 1.3280*Node_radius )+0.5*Spring_force_cutt_off * ( temp_Node_distance - 1.3280*Node_radius ) * ( temp_Node_distance - 1.3280*Node_radius );
-        }
+			cout<<"temp_force_after_cut_off"<<temp_force<<endl;
+		}
         
         
         if(temp_force<-1000.05   ||  temp_Node_distance<lmin )
         {
-//            cout<<"5\n";
+            cout<<"5\n";
+			cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
+		    cout<<"temp_force_before_cut_off"<<temp_force<<endl;
+		  
             temp_force =-1000.05-Spring_force_cutt_off* ( 0.671965*Node_radius - temp_Node_distance );
             temp_potential_energy = 1.85038 + 1005.05 * ( 0.671965*Node_radius - temp_Node_distance )+0.5*Spring_force_cutt_off*( 0.671965*Node_radius - temp_Node_distance )*( 0.671965*Node_radius - temp_Node_distance );
-        }
+			cout<<"temp_force_after_cut_off"<<temp_force<<endl;
+		}
         
         Total_Potential_Energy += temp_potential_energy;
         
@@ -113,6 +124,8 @@ void Membrane::potential_1 (void){
     
 }
 void Membrane::potential_2 (void){
+	
+	//cout<<"Houkian Spring"<<endl;
     
     double deltax,deltay,deltaz,temp_Node_distance,temp_force;
     

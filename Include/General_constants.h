@@ -9,7 +9,7 @@
 #ifndef General_constants_h
 #define General_constants_h
 
-#define MD_num_of_steps  10000//35000// number of MD stps
+#define MD_num_of_steps  300000//35000// number of MD stps
 #define savingstep    1000//The step on which the trajector of the membrane is saved.
 #define MD_Time_Step     0.001 // time length of steps in MD
 #define KT     1.0  // KT the quanta of energy

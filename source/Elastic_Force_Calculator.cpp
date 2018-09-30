@@ -20,8 +20,8 @@ void Membrane::Elastic_Force_Calculator(double theta_0)
 //    le1=0.85000*Node_radius;
 //    lmin=0.67000*Node_radius;
     Total_Potential_Energy=0.0;
-	if (spring_model=1) {potential_1();}
-    if (spring_model=2) {potential_2();}
+	if (spring_model==1) {potential_1();}
+    if (spring_model==2) {potential_2();}
 
 //    Bending_potetial();
     Bending_potetial_2(0);

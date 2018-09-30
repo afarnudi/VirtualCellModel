@@ -57,9 +57,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
-    double Spring_coefficient=10; // streching constant
-    double Bending_coefficient=5.0; // bending constant
-    double Damping_coefficient=1.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Spring_coefficient=10.0; // streching constant
+    double Bending_coefficient=10.0; // bending constant
+    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Spring_force_cutt_off=10000.0;
     double ShiftinXdirection=0.0; //???
