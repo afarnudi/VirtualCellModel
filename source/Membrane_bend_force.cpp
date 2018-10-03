@@ -108,7 +108,11 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         
         double E_length=vectorlength(E), N1_length=vectorlength(N1), N1_length_2=N1_length*N1_length, N2_length=vectorlength(N2), N2_length_2=N2_length*N2_length;
         double N1dotN2=innerproduct(N1, N2)/(N1_length*N2_length);
-        sinus=sqrt((1.000001-N1dotN2)/2);
+        sinus=(1.000001-N1dotN2)/2;
+		if(sinus<0){
+			sinus=-sinus;
+			}
+		sinus=sqrt(sinus);
         sign=-(1-2*signbit(innerproduct(N3, E)));
         F0 = (sinus-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sinus/(N1_length+N2_length);
         
