@@ -12,6 +12,10 @@
 void Membrane::Triangle_pair_identifier(void){
     
     Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
+    
+    vector<int> temp_triangle_pair;
+    temp_triangle_pair.resize(2);
+    
     int temp_int_Triangle_Pair_index=0;
     
 //    int triangle_pairs=0;
@@ -28,7 +32,7 @@ void Membrane::Triangle_pair_identifier(void){
         int neighbour_indicator=0;
         //        Indicates the existence of Node neighbour for a node pair (other than the membrane of the triangle):
         //        neighbour_indicator=0 No Node Pairs; neighbour_indicator=1, for temp_triangle_node_A-temp_triangle_node_B; neighbour_indicator=2, for temp_triangle_node_B-temp_triangle_node_C; And neighbour_indicator=3 for temp_triangle_node_C-temp_triangle_node_A.
-        for(int j=i;j<Num_of_Triangles;j++)
+        for(int j=i+1;j<Num_of_Triangles;j++)
         {
             //************************** finding neighbours **************************
             // neibours of temp_triangle_node_A-temp_triangle_node_B:
@@ -124,6 +128,9 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_A;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    temp_triangle_pair[0]=i;
+                    temp_triangle_pair[0]=j;
+                    Triangle_pair_list.push_back(temp_triangle_pair);
                     
                     
                 } else if(neighbour_indicator==2)
@@ -132,6 +139,9 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_C;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    temp_triangle_pair[0]=i;
+                    temp_triangle_pair[0]=j;
+                    Triangle_pair_list.push_back(temp_triangle_pair);
                     
                 } else if (neighbour_indicator==3)
                 {
@@ -139,11 +149,17 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_C;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_A;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    temp_triangle_pair[0]=i;
+                    temp_triangle_pair[0]=j;
+                    Triangle_pair_list.push_back(temp_triangle_pair);
                 }
                 temp_int_Triangle_Pair_index++;
             }
             neighbour_indicator=0;
         }
+    }
+    if (Triangle_pair_list.size()!=Num_of_Triangle_Pairs) {
+        cout<<"Triangle_pair_list.size()!=Num_of_Triangle_Pairs"<<endl;
     }
     
 }

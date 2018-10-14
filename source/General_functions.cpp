@@ -8,6 +8,8 @@
 
 #include "General_functions.hpp"
 #include <math.h>
+
+
 void crossvector( double c[3],double d[3],double b[3] ) // cross porduct
 {
     c[0]=d[1]*b[2]-d[2]*b[1];    // normal vector to plane (not unitary length)

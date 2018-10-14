@@ -16,7 +16,6 @@ void Membrane::potential_1 (void){
 
 	//cout<<"Standard Spring"<<endl;
     double le0,le1,lmax,lmin;
-	double min, max;
     double deltax,deltay,deltaz,temp_Node_distance,temp_force;
 //    int pos1,pos2,pos3,pos4;  // to making calculation of surface force easier
     double temp_potential_energy = 0.0;

@@ -101,3 +101,78 @@ void Membrane::read_membrabe_input(string input_file)
     /*end of initializing constants*/
 }
 
+void Membrane::import(string import_file_name){
+    cout<<"Importing the Membrane from the resume file:"<<endl;
+    cout<<import_file_name<<endl<<endl;
+    ifstream read_resume_file;
+    
+    read_resume_file.open(import_file_name.c_str());
+    if (read_resume_file) {
+        cout << "Managed to read file successfully. \n\n";
+    }else{
+        cout << "Unable to read file.";
+    }
+    int temp;
+    read_resume_file>>temp;
+    cout<<"Resuming the MD from step "<<temp<<endl;
+    
+    read_resume_file>>Num_of_Nodes;
+    cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
+    
+    Node_Force.resize(Num_of_Nodes);
+    
+    vector<double> read_double;
+    read_double.resize(3);
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
+        Node_Position.push_back(read_double);
+
+        read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
+        Node_Velocity.push_back(read_double);
+        
+        Node_Force[i].resize(3,0);
+    }
+    cout<<"Coordinates and velocities loaded"<<endl;
+    cout<<"Node forces set to zero"<<endl;
+    
+    read_resume_file>>Num_of_Triangles;
+    cout<<"Number of Triangles: "<<Num_of_Triangles<<endl;
+    
+    vector<int> read_int;
+    read_int.resize(3);
+    for (int i=0; i<Num_of_Triangles; i++) {
+        read_resume_file>>read_int[0]>>read_int[1]>>read_int[2];
+        Triangle_list.push_back(read_int);
+    }
+    
+    read_resume_file>>Num_of_Node_Pairs;
+    cout<<"Number of Node Pairs: "<<Num_of_Node_Pairs<<endl;
+    
+    
+    read_int.resize(2);
+    for (int i=0; i<Num_of_Node_Pairs; i++) {
+        read_resume_file>>read_int[0]>>read_int[1];
+        Node_Bond_list.push_back(read_int);
+    }
+    //In the import function we should call the neighbour list constructor
+    read_resume_file>>Num_of_Triangle_Pairs;
+    cout<<"Number of Triangle Pairs: "<<Num_of_Triangle_Pairs<<endl;
+    
+    vector<int> read_int_4;
+    read_int_4.resize(4);
+    for (int i=0; i<Num_of_Triangle_Pairs; i++) {
+        read_resume_file>>read_int[0]>>read_int[1];
+        Triangle_pair_list.push_back(read_int);
+        
+        read_resume_file>>read_int_4[0]>>read_int_4[1]>>read_int_4[2]>>read_int_4[3];
+        Triangle_Pair_Nodes.push_back(read_int_4);
+    }
+    
+    Node_neighbour_list_constructor();
+    read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
+    cout<<"Spring coefficients:"<<endl;
+    cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
+    cout<<"\n\nMembrane class initiated.\n";
+    //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
+}
