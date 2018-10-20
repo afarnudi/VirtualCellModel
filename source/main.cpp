@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     bool Include_Membrane =true;
     bool Include_ECM= false;
     bool Include_Particle=false;
-    bool resume=true;
+    bool resume=false;
     //initialling Membrane classes
     //if (Include_Membrane)
     //this does not work because the varibles of type membrane and ecm are defined just in if statement scope. we have to find a solution for this if we want to use input file.
@@ -44,19 +44,24 @@ int main(int argc, char **argv)
     }
     
     cout<<membrane.return_num_of_nodes()<<endl;
-    if ((Include_ECM==false) & (Include_Particle==false))
-    {generatingReport(buffer,membrane);}
-    if(Include_ECM==true & Include_Particle==false)
-    {     ECM ecm("ECM",0,0,0);
-        generatingReport(buffer, membrane, ecm);
-    }
-    if(Include_ECM==false & Include_Particle==true)
-    {
-        Membrane Particle;
+	if (Include_Membrane)
+	{
+		MembraneGeneratingReport(buffer,membrane);
+	}
+	
+	if(Include_ECM)
+	{
+		ECM ecm("ECM",0,0,0);
+		EcmGeneratingReport (buffer,ecm);
+	}
+	
+	if (Include_Particle)
+	{
+		Membrane Particle;
         Particle.initialise("particle",0,0,0);
-        generatingReport(buffer, membrane, Particle);
-    }
-    //    }
+        ParticleGeneratingReport(buffer, Particle);	
+	}
+   
     //begining of MD loop
     cout<<"Beginnig the MD\nProgress:\n";
     int progress=0;
@@ -70,18 +75,16 @@ int main(int argc, char **argv)
             if (MD_Step%savingstep==0) //saving Results for membrane
             {
                 membrane.export_for_resume(buffer, MD_Step);
-            }// End of if (MD_Step%100==0)
+            }// End of if (MD_Step%savingstep==0)
             if (MD_Step%100==0) //saving Results for membrane
             {
                 Results(membrane, "membrane", buffer);
-                //double percent=100*MD_Step/MD_num_of_steps;
-                //cout<<percent<<endl;
             }// End of if (MD_Step%100==0)
             if (int(100*MD_Step/MD_num_of_steps)>progress){
                 cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\n";
                 progress+=5;
             }
-        }//End of if (Include_Membrane==true)
+        }//End of if (Include_Membrane)
         
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     
