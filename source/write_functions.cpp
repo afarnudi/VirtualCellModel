@@ -78,10 +78,10 @@ void Results (Membrane membrane, string label, char* buffer)
     //    Potential_Energy<<membrane.Total_Potential_Energy<<endl;
 }
 
-void generatingReport (char* buffer, Membrane membrane )
+void MembraneGeneratingReport (char* buffer, Membrane membrane )
 {
 	string Report_file_name;
-	Report_file_name= "Report_";
+	Report_file_name= "Membrane_Report_";
 	Report_file_name+=buffer;
     Report_file_name+=".txt";
 	
@@ -112,10 +112,10 @@ void generatingReport (char* buffer, Membrane membrane )
 	
 }
 
-void generatingReport (char* buffer, Membrane membrane, Membrane particle )
+void ParticleGeneratingReport (char* buffer, Membrane particle )
 {
 	string Report_file_name;
-	Report_file_name= "Report_";
+	Report_file_name= "Particle_Report_";
 	Report_file_name+=buffer;
     Report_file_name+=".txt";
 	
@@ -127,19 +127,6 @@ void generatingReport (char* buffer, Membrane membrane, Membrane particle )
 	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
 	Report<<"KT"<< setw(20)<<KT<<endl;
 	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"***Membrane Properties***"<<endl;
-	Report<<"Membrane Node Mass"<< setw(20)<<membrane.Node_Mass<<endl;
-	Report<<"Membrane Radius"<< setw(20)<<membrane.Radius<<endl;
-	Report<<"number of Membrane's Nodes "<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"number of Membrane's Triangles "<< setw(20)<<membrane.return_num_of_triangle()<<endl;
-	Report<<"number of Membrane's Nodes"<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"Membrane Spring coefficient"<< setw(20)<<membrane.Spring_coefficient<<endl;
-	Report<<"Membrane Bending coefficient"<< setw(20)<<membrane.Bending_coefficient<<endl;
-	Report<<"Membrane Damping coefficient"<< setw(20)<<membrane.Damping_coefficient<<endl;
-	if (membrane.spring_model==1)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Standard Model"<<endl;}
-	if (membrane.spring_model==2)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;}
 	Report<<"***Particle Properties***"<<endl;
 	Report<<"Particle Node Mass"<< setw(20)<<particle.Node_Mass<<endl;
 	Report<<"Particle Radius"<< setw(20)<<particle.Radius<<endl;
@@ -156,10 +143,10 @@ void generatingReport (char* buffer, Membrane membrane, Membrane particle )
 }
 
 
-void generatingReport (char* buffer, Membrane membrane, ECM ecm )
+void EcmGeneratingReport (char* buffer, ECM ecm )
 {
 	string Report_file_name;
-	Report_file_name= "Report_";
+	Report_file_name= "ECM_Report_";
     Report_file_name+=buffer;
     Report_file_name+=".txt";
 	
@@ -171,19 +158,6 @@ void generatingReport (char* buffer, Membrane membrane, ECM ecm )
 	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
 	Report<<"KT"<< setw(20)<<KT<<endl;
 	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"***Membrane Properties***"<<endl;
-	Report<<"Membrane Node Mass"<< setw(20)<<membrane.Node_Mass<<endl;
-	Report<<"Membrane Radius"<< setw(20)<<membrane.Radius<<endl;
-	Report<<"number of Membrane's Nodes "<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"number of Membrane's Triangles "<< setw(20)<<membrane.return_num_of_triangle()<<endl;
-	Report<<"number of Membrane's Nodes"<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"Membrane Spring coefficient"<< setw(20)<<membrane.Spring_coefficient<<endl;
-	Report<<"Membrane Bending coefficient"<< setw(20)<<membrane.Bending_coefficient<<endl;
-	Report<<"Membrane Damping coefficient"<< setw(20)<<membrane.Damping_coefficient<<endl;
-	if (membrane.spring_model==1)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Standard Model"<<endl;}
-	if (membrane.spring_model==2)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;}
 	Report<<"***ECM Properties***"<<endl;
 	// 
 	//Report<<"number of ECM's Nodes "<< setw(20)<<ecm.Num_of_Nodes<<endl;

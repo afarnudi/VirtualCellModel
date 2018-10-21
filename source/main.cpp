@@ -11,8 +11,95 @@ using namespace std;
 
 class Membrane
 {
+<<<<<<< HEAD
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+=======
+    //time
+    clock_t tStart = clock();//Time the programme
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    char buffer [80];
+    strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
+    
+    //indicating what kind of objects participate in simulation (we can set the value this flags via an input file)
+    bool Include_Membrane =true;
+    bool Include_ECM= false;
+    bool Include_Particle=false;
+    bool resume=false;
+    //initialling Membrane classes
+    //if (Include_Membrane)
+    //this does not work because the varibles of type membrane and ecm are defined just in if statement scope. we have to find a solution for this if we want to use input file.
+    Membrane membrane;
+    if (resume) {
+        membrane.import("Resume_2018_10_14_21_31.txt");
+    } else{
+        membrane.initialise("new_membrane", 0, 0, 0);
+    }
+    
+    cout<<membrane.return_num_of_nodes()<<endl;
+	if (Include_Membrane)
+	{
+		MembraneGeneratingReport(buffer,membrane);
+	}
+	
+	if(Include_ECM)
+	{
+		ECM ecm("ECM",0,0,0);
+		EcmGeneratingReport (buffer,ecm);
+	}
+	
+	if (Include_Particle)
+	{
+		Membrane Particle;
+        Particle.initialise("particle",0,0,0);
+        ParticleGeneratingReport(buffer, Particle);	
+	}
+   
+    //begining of MD loop
+    cout<<"Beginnig the MD\nProgress:\n";
+    int progress=0;
+    for(int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++){
+        
+        if (Include_Membrane)
+        {
+            membrane.MD_Evolution();
+            membrane.Elastic_Force_Calculator(0);
+            
+            if (MD_Step%savingstep==0) //saving Results for membrane
+            {
+                membrane.export_for_resume(buffer, MD_Step);
+            }// End of if (MD_Step%savingstep==0)
+            if (MD_Step%100==0) //saving Results for membrane
+            {
+                Results(membrane, "membrane", buffer);
+            }// End of if (MD_Step%100==0)
+            if (int(100*MD_Step/MD_num_of_steps)>progress){
+                cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\n";
+                progress+=5;
+            }
+        }//End of if (Include_Membrane)
+        
+    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
+    
+    cout<<"done"<<endl;
+    printf("Time taken: %.2fminutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
+    return 0;
+}
+
+void Thermostat_2(Membrane membrane)
+{
+    double V_com[3];
+    
+    V_com[0]=0;
+    V_com[1]=0;
+    V_com[2]=0;
+    for (int i=0; i<membrane.return_num_of_nodes(); i++) {
+        V_com[0]+=membrane.Node_Velocity[i][0];
+        V_com[1]+=membrane.Node_Velocity[i][1];
+        V_com[2]+=membrane.Node_Velocity[i][2];
+    }
+>>>>>>> f8583b41623ac1dc6d30459b7fec28b1fb95fd56
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
