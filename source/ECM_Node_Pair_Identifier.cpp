@@ -77,7 +77,7 @@ void ECM::node_pair_identifier(void){
         repeatednumber3=0;
     }
     
-    Num_of_Node_Pairs=ECM_Node_Pair_list.size();
+    Num_of_Node_Pairs=int(ECM_Node_Pair_list.size());
     cout<<"ECM # of node pairs: "<<ECM_Node_Pair_list.size()<<endl;
 }
 

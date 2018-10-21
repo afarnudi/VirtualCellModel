@@ -71,7 +71,7 @@ void Membrane::Node_Bonds_identifier(void){
         repeatednumber3=0;
     }
     
-    Num_of_Node_Pairs=Node_Bond_list.size();
+    Num_of_Node_Pairs=int(Node_Bond_list.size());
     cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl;
 }
 

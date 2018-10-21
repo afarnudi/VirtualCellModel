@@ -20,7 +20,7 @@ void neighbour_pool_constructor (vector<int> &neighbour_pool, Membrane membrane)
         }
     }
     
-    int pool_size=neighbour_pool.size();
+    int pool_size=int(neighbour_pool.size());
 //    cout<<"pool_size="<<pool_size<<endl;
     
     for (int i=0; i<pool_size; i++) {
