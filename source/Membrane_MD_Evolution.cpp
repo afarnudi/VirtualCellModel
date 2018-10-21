@@ -1,7 +1,7 @@
 #include "Membrane.h"
 
 
- void Membrane::MD_Evolution(){
+ void Membrane::MD_Evolution_beginning(){
 
         for(int j=0 ; j<Num_of_Nodes ; j++){
             Node_Position[j][0] += Node_Velocity[j][0]*MD_Time_Step - Node_Force[j][0]*MD_Time_Step*MD_Time_Step/(Node_Mass*2.0);

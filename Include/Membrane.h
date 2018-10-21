@@ -42,7 +42,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     void Elastic_Force_Calculator(double theta_0);
-    void MD_Evolution ();
+    void MD_Evolution_beginning ();
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(char* buffer, int MD_step);
