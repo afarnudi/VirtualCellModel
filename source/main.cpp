@@ -44,18 +44,23 @@ int main(int argc, char **argv)
     }
     
     cout<<membrane.return_num_of_nodes()<<endl;
-    if ((Include_ECM==false) & (Include_Particle==false))
-    {generatingReport(buffer,membrane);}
-    if(Include_ECM==true & Include_Particle==false)
-    {     ECM ecm("ECM",0,0,0);
-        generatingReport(buffer, membrane, ecm);
-    }
-    if(Include_ECM==false & Include_Particle==true)
-    {
-        Membrane Particle;
+	
+	if (Include_Membrane)
+	{
+		MembraneGeneratingReport(buffer,membrane);
+	}
+	if (Include_ECM)
+	{
+		 ECM ecm("ECM",0,0,0);
+		EcmGeneratingReport(buffer, ecm);
+	}
+	if (Include_Particle)
+	{
+		Membrane Particle;
         Particle.initialise("particle",0,0,0);
-        generatingReport(buffer, membrane, Particle);
-    }
+		ParticleGeneratingReport(buffer, Particle);
+	}
+
     //    }
     //begining of MD loop
     cout<<"Beginnig the MD\nProgress:\n";
@@ -66,9 +71,6 @@ int main(int argc, char **argv)
         {
             membrane.MD_Evolution_beginning();
             membrane.Elastic_Force_Calculator(0);
-            
-            
-            
             membrane.MD_Evolution_end();
             if (MD_Step%savingstep==0) //saving Results for membrane
             {
