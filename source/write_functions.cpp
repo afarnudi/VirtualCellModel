@@ -89,10 +89,10 @@ void MembraneGeneratingReport (char* buffer, Membrane membrane )
 	Report.open(Report_file_name.c_str());
 	Report<< std:: fixed;
 	Report<<"***General Constants***"<<endl;
-	Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"KT"<< setw(20)<<KT<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
 	Report<<"***Membrane Properties***"<<endl;
 	Report<<"Membrane Node Mass"<< setw(20)<<membrane.Node_Mass<<endl;
 	Report<<"Membrane Radius"<< setw(20)<<membrane.Radius<<endl;
@@ -123,10 +123,10 @@ void ParticleGeneratingReport (char* buffer, Membrane particle )
 	Report.open(Report_file_name.c_str());
 	Report<< std:: fixed;
 	Report<<"***General Constants***"<<endl;
-	Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"KT"<< setw(20)<<KT<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
 	Report<<"***Particle Properties***"<<endl;
 	Report<<"Particle Node Mass"<< setw(20)<<particle.Node_Mass<<endl;
 	Report<<"Particle Radius"<< setw(20)<<particle.Radius<<endl;
@@ -154,10 +154,10 @@ void EcmGeneratingReport (char* buffer, ECM ecm )
 	Report.open(Report_file_name.c_str());
 	Report<< std:: fixed;
 	Report<<"***General Constants***"<<endl;
-	Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"KT"<< setw(20)<<KT<<endl;
-	Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
+//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
 	Report<<"***ECM Properties***"<<endl;
 	// 
 	//Report<<"number of ECM's Nodes "<< setw(20)<<ecm.Num_of_Nodes<<endl;

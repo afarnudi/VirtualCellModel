@@ -36,21 +36,21 @@ double sign_function(double x)
     return 1.0;
 }
 
-double periodiccondition(double dx )
-{
-    if( dx>Lbox/2.0  )
-    {
-        return dx-(Lbox+1.0); /// so the new dx is <0
-    }
-    else if(dx<-Lbox/2.0  )
-    {
-        return (Lbox+1.0)+dx;  /// so the new dx is >0
-    }
-    else
-    {
-        return dx;
-    }
-}
+//double periodiccondition(double dx )
+//{
+//    if( dx>Lbox/2.0  )
+//    {
+//        return dx-(Lbox+1.0); /// so the new dx is <0
+//    }
+//    else if(dx<-Lbox/2.0  )
+//    {
+//        return (Lbox+1.0)+dx;  /// so the new dx is >0
+//    }
+//    else
+//    {
+//        return dx;
+//    }
+//}
 
 void Vector_transformation (double MV[3],double  M[3][3] ,double V[3])
 {

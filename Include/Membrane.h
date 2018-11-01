@@ -17,6 +17,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
 	double Radius=0;
+    double Node_radius=1;
     
     
     int membrane_counter;
@@ -42,8 +43,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     void Elastic_Force_Calculator(double theta_0);
-    void MD_Evolution_beginning ();
-    void MD_Evolution_end ();
+    void MD_Evolution_beginning (double MD_Time_Step);
+    void MD_Evolution_end (double MD_Time_Step);
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(char* buffer, int MD_step);
