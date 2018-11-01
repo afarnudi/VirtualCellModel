@@ -9,6 +9,19 @@
 #ifndef General_constants_h
 #define General_constants_h
 
+namespace GenConst {
+    extern int MD_num_of_steps;
+    extern int MD_traj_save_step;
+    extern double MD_Time_Step;
+    extern double MD_KT;
+    extern int MD_thrmo_step;
+    extern int MC_step;
+    extern double Mem_fluidity;
+    extern double Lbox;
+    extern bool Periodic_condtion_status;
+
+}
+
 //#define MD_num_of_steps  300000//35000// number of MD stps
 //#define MD_traj_save_step    2000//The step on which the trajector of the membrane is saved.
 //#define MD_Time_Step     0.001 // time length of steps in MD
