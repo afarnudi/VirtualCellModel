@@ -11,11 +11,10 @@
 void Results (ECM ecm, string label, char* buffer)
 {
     //output file names:
-    
     string energy_file_name;
     string traj_file_name;
     ecm.output_file_neme+=buffer;
-    traj_file_name="Results_";
+    traj_file_name="Results/Results_";
     traj_file_name+=ecm.output_file_neme;
     traj_file_name+=".xyz";
     energy_file_name="Results_Potential_Energy";
@@ -48,14 +47,11 @@ void Results (Membrane membrane, string label, char* buffer)
     string traj_file_name;
 
     membrane.output_file_neme+=buffer;
-    traj_file_name="Results_";
+    traj_file_name="Results/Results_";
     traj_file_name+=membrane.output_file_neme;
     traj_file_name+=".xyz";
-    energy_file_name="Results_Potential_Energy";
+    energy_file_name="Results/Results_Potential_Energy";
     energy_file_name+=membrane.output_file_neme;
-	 
-     
-    
     //trajectory:
     
     ofstream Trajectory;
@@ -78,95 +74,94 @@ void Results (Membrane membrane, string label, char* buffer)
     //    Potential_Energy<<membrane.Total_Potential_Energy<<endl;
 }
 
-void MembraneGeneratingReport (char* buffer, Membrane membrane )
+void Membrane::generate_report(char* buffer)
 {
 	string Report_file_name;
-	Report_file_name= "Membrane_Report_";
+	Report_file_name= "Results/Membrane_Report_";
 	Report_file_name+=buffer;
     Report_file_name+=".txt";
 	
 	ofstream Report;
 	Report.open(Report_file_name.c_str());
 	Report<< std:: fixed;
-	Report<<"***General Constants***"<<endl;
-//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"***Membrane Properties***"<<endl;
-	Report<<"Membrane Node Mass"<< setw(20)<<membrane.Node_Mass<<endl;
-	Report<<"Membrane Radius"<< setw(20)<<membrane.Radius<<endl;
-	Report<<"Minimum node pair length"<< setw(20)<<membrane.Min_node_pair_length<<endl;
-	Report<<"Maximum node pair length"<< setw(20)<<membrane.Max_node_pair_length<<endl;
-	Report<<"Average node pair length"<< setw(20)<<membrane.Average_node_pair_length<<endl;
-	Report<<"number of Membrane's Nodes "<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"number of Membrane's Triangles "<< setw(20)<<membrane.return_num_of_triangle()<<endl;
-	Report<<"number of Membrane's Nodes"<< setw(20)<<membrane.return_num_of_nodes()<<endl;
-	Report<<"Membrane Spring coefficient"<< setw(20)<<membrane.Spring_coefficient<<endl;
-	Report<<"Membrane Bending coefficient"<< setw(20)<<membrane.Bending_coefficient<<endl;
-	Report<<"Membrane Damping coefficient"<< setw(20)<<membrane.Damping_coefficient<<endl;
-	if (membrane.spring_model==1)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Standard Model"<<endl;}
-	if (membrane.spring_model==2)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;}
+	Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
+	Report<<"Radius"<< setw(20)<<Radius<<endl;
+	Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
+	Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;
+	Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
+    Report<<"# of Nodes "<< setw(20)<<return_num_of_nodes()<<endl;
+    Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
+	Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
+	Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
+	Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;
+	if (spring_model==1)
+	{
+        Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
+        
+    }
+	if (spring_model==2)
+	{
+        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
+        
+    }
 	
 }
 
-void ParticleGeneratingReport (char* buffer, Membrane particle )
-{
-	string Report_file_name;
-	Report_file_name= "Particle_Report_";
-	Report_file_name+=buffer;
-    Report_file_name+=".txt";
-	
-	ofstream Report;
-	Report.open(Report_file_name.c_str());
-	Report<< std:: fixed;
-	Report<<"***General Constants***"<<endl;
-//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"***Particle Properties***"<<endl;
-	Report<<"Particle Node Mass"<< setw(20)<<particle.Node_Mass<<endl;
-	Report<<"Particle Radius"<< setw(20)<<particle.Radius<<endl;
-	Report<<"number of Particle's Nodes "<< setw(20)<<particle.return_num_of_nodes()<<endl;
-	Report<<"number of Particle's Triangles "<< setw(20)<<particle.return_num_of_triangle()<<endl;
-	Report<<"number of Particle's Nodes"<< setw(20)<<particle.return_num_of_nodes()<<endl;
-	Report<<"Particle Spring coefficient"<< setw(20)<<particle.Spring_coefficient<<endl;
-	Report<<"Particle Bending coefficient"<< setw(20)<<particle.Bending_coefficient<<endl;
-	Report<<"Particle Damping coefficient"<< setw(20)<<particle.Damping_coefficient<<endl;
-	if (particle.spring_model==1)
-	{Report<<"Particle Spring Model:"<< setw(20)<<"Standard Model"<<endl;}
-	if (particle.spring_model==2)
-	{Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;}
-}
+//void ParticleGeneratingReport (char* buffer, Membrane particle )
+//{
+//    string Report_file_name;
+//    Report_file_name= "Results/Particle_Report_";
+//    Report_file_name+=buffer;
+//    Report_file_name+=".txt";
+//
+//    ofstream Report;
+//    Report.open(Report_file_name.c_str());
+//    Report<< std:: fixed;
+//    Report<<"***General Constants***"<<endl;
+////    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
+////    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+////    Report<<"KT"<< setw(20)<<MD_KT<<endl;
+////    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"***Particle Properties***"<<endl;
+//    Report<<"Particle Node Mass"<< setw(20)<<particle.Node_Mass<<endl;
+//    Report<<"Particle Radius"<< setw(20)<<particle.Radius<<endl;
+//    Report<<"number of Particle's Nodes "<< setw(20)<<particle.return_num_of_nodes()<<endl;
+//    Report<<"number of Particle's Triangles "<< setw(20)<<particle.return_num_of_triangle()<<endl;
+//    Report<<"number of Particle's Nodes"<< setw(20)<<particle.return_num_of_nodes()<<endl;
+//    Report<<"Particle Spring coefficient"<< setw(20)<<particle.Spring_coefficient<<endl;
+//    Report<<"Particle Bending coefficient"<< setw(20)<<particle.Bending_coefficient<<endl;
+//    Report<<"Particle Damping coefficient"<< setw(20)<<particle.Damping_coefficient<<endl;
+//    if (particle.spring_model==1)
+//    {Report<<"Particle Spring Model:"<< setw(20)<<"Standard Model"<<endl;}
+//    if (particle.spring_model==2)
+//    {Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;}
+//}
 
 
-void EcmGeneratingReport (char* buffer, ECM ecm )
-{
-	string Report_file_name;
-	Report_file_name= "ECM_Report_";
-    Report_file_name+=buffer;
-    Report_file_name+=".txt";
-	
-	ofstream Report;
-	Report.open(Report_file_name.c_str());
-	Report<< std:: fixed;
-	Report<<"***General Constants***"<<endl;
-//    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-//    Report<<"KT"<< setw(20)<<MD_KT<<endl;
-//    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
-	Report<<"***ECM Properties***"<<endl;
-	// 
-	//Report<<"number of ECM's Nodes "<< setw(20)<<ecm.Num_of_Nodes<<endl;
-	//Report<<"number of ECM's Triangles "<< setw(20)<<ecm.Num_of_Triangles<<endl;
-}
+//void EcmGeneratingReport (char* buffer, ECM ecm )
+//{
+//    string Report_file_name;
+//    Report_file_name= "Results/ECM_Report_";
+//    Report_file_name+=buffer;
+//    Report_file_name+=".txt";
+//
+//    ofstream Report;
+//    Report.open(Report_file_name.c_str());
+//    Report<< std:: fixed;
+//    Report<<"***General Constants***"<<endl;
+////    Report<<"Number of MD steps"<< setw(20)<<MD_num_of_steps<<endl;
+////    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+////    Report<<"KT"<< setw(20)<<MD_KT<<endl;
+////    Report<<"MD time step"<< setw(20)<<MD_Time_Step<<endl;
+//    Report<<"***ECM Properties***"<<endl;
+//    //
+//    //Report<<"number of ECM's Nodes "<< setw(20)<<ecm.Num_of_Nodes<<endl;
+//    //Report<<"number of ECM's Triangles "<< setw(20)<<ecm.Num_of_Triangles<<endl;
+//}
 
 void checkingForce (Membrane membrane, int MD_Step, char* buffer)
 {
-	string check_force_name="check_force_";
+	string check_force_name="Results/check_force_";
 	check_force_name+=buffer;
 	ofstream check_force;
 	check_force.open(check_force_name.c_str(), ios::app);
@@ -180,7 +175,7 @@ void checkingForce (Membrane membrane, int MD_Step, char* buffer)
 
 void Membrane::export_for_resume(char* buffer, int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Resume_";
+    string resume_file_name="Results/Resume_";
     resume_file_name+=buffer;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());

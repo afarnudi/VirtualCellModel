@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void read_general_parameters(string input_file_name, vector<string> &membrane_list){
+void read_general_parameters(string input_file_name, vector<string> &membrane_config_list){
     ifstream read_map("General_param_map.txt");
     map<string, double> general_param_map;
     map<string, double>::iterator it;
@@ -53,7 +53,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_li
                         //                general_param_map[param_name]=param_value;
                         for (int j=0; j<it->second; j++) {
                             cout<<split[i+2+j]<<endl<<endl;
-                            membrane_list.push_back(split[i+2+j]);
+                            membrane_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     }

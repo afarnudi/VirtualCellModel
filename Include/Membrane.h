@@ -5,6 +5,8 @@
 #include <fstream>
 #include <vector>
 #include <math.h>
+#include <map>
+
 #include "General_functions.hpp"
 
 using namespace std;
@@ -23,7 +25,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
-    
+    double X_in_mem=0;
+    double Y_in_mem=0;
+    double Z_in_mem=0;
     
     string output_file_neme;
     
@@ -48,11 +52,12 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(char* buffer, int MD_step);
-    void initialise(string input_file_name , string Mesh_file_name);
+//    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(string Mesh_file_name);
-    void initialise(string Mesh_file_name, double x, double y, double z);
+//    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(string import_file_name);
-    
+    void import_config(string config_file_name);
+    void  generate_report(char* buffer);
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     
@@ -66,9 +71,11 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Bending_coefficient=10.0; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
-    double Spring_force_cutt_off=10000.0;
-    double ShiftinXdirection=0.0; //???
-    double ShiftinZdirection=0.0; //???
+    double Spring_force_cutt_off=1000.0;
+    double Shift_in_X_direction=0.0; //???
+    double Shift_in_Z_direction=0.0; //???
+    double Shift_in_Y_direction=0.0; //???
+    
     double Downward_speed=0.0; //???
     //bool =0;
     double com[3]; //center of mass
@@ -85,7 +92,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
-    
+    map<string, double> param_map;
     
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
@@ -102,6 +109,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
     void check(void);
+    
     
     
 public:
