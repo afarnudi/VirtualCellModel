@@ -2,7 +2,7 @@
 #include "General_constants.h"
 using namespace std;
 
-void read_general_parameters(map<string, double> general_param_map, string input_file_name){
+void read_general_parameters(map<string, double> general_param_map, string input_file_name, vector<string> &membrane_list){
     ifstream read_map(input_file_name.c_str());
     string param_name;
     double param_value;
@@ -10,8 +10,24 @@ void read_general_parameters(map<string, double> general_param_map, string input
     map<string, double>::iterator it;
     
     while (read_map>>param_name>>param_value) {
+        if (param_name=="Num_of_Membranes") {
+            general_param_map[param_name]=param_value;
+            for (int i=0; i<param_value*2; i++) {
+                read_map>>param_name;
+                membrane_list.push_back(param_name);
+            }
+            continue;
+        }
         general_param_map[param_name]=param_value;
     }
+//    for (auto const& x : general_param_map)
+//    {
+//        cout << x.first << " = " << x.second << endl;
+//    }
+//    for (int i=0; i<membrane_list.size(); i++) {
+//        cout<<membrane_list[i]<<"\n";
+//    }
+//    exit(EXIT_SUCCESS);
     
     param_name="MD_num_of_steps";
     it = general_param_map.find(param_name);
@@ -61,6 +77,14 @@ void read_general_parameters(map<string, double> general_param_map, string input
         } else {
             GenConst::Periodic_condtion_status=true;
         }
+    }
+    param_name="Num_of_Membranes";
+    it = general_param_map.find(param_name);
+    if (it != general_param_map.end()){
+        GenConst::Num_of_Membranes=it->second;
+        
+    } else {
+        GenConst::Num_of_Membranes=0;
     }
 }
  

@@ -19,7 +19,7 @@ namespace GenConst {
     extern double Mem_fluidity;
     extern double Lbox;
     extern bool Periodic_condtion_status;
-
+    extern int Num_of_Membranes;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

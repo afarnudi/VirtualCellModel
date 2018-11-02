@@ -10,9 +10,11 @@
 #define maps_hpp
 #include <map>
 #include <fstream>
+#include <vector>
+#include <iostream>
 
 using namespace std;
 
-void read_general_parameters(map<string, double> general_param_map, string input_file_name);
+void read_general_parameters(map<string, double> general_param_map, string input_file_name, vector<string> &membrane_list);
 
 #endif /* maps_hpp */
