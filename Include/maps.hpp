@@ -12,9 +12,12 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
-void read_general_parameters(map<string, double> general_param_map, string input_file_name, vector<string> &membrane_list);
+void read_general_parameters(string input_file_name, vector<string> &membrane_list);
+void set_parameter(map<string, double> &general_param_map, string param_name, double param_value);
 
 #endif /* maps_hpp */
