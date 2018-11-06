@@ -65,8 +65,9 @@ void Membrane::import_config(string config_file_name){
         it=param_map.find("Mesh_file_name");
         if(it!=param_map.end()){
             initialise(Mesh_file_name);
-        } else {
-            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
         }
+//        else {
+//            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
+//        }
     }
 }
