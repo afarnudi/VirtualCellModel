@@ -52,9 +52,9 @@ int main(int argc, char **argv)
     vector<string> membrane_config_list;
     read_general_parameters(general_file_name, membrane_config_list);
     vector<Membrane> Membranes;
-    bool Include_Membrane =false;
+    bool Include_Membrane = false;
     if (GenConst::Num_of_Membranes!=0) {
-        Include_Membrane =true;
+        Include_Membrane = true;
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
             Membranes[i].import_config(membrane_config_list[i]);
@@ -134,15 +134,15 @@ int main(int argc, char **argv)
                 //cout<<percent<<endl;
             }// End of if (MD_Step%100==0)
             if (int(100*MD_Step/GenConst::MD_num_of_steps)>progress){
-                cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;;
+                cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
                 progress+=5;
             }
             
         }//End of if (Include_Membrane==true)
         
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-    
-    cout<<"done"<<endl;
+    cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
+    cout<<"\nDone!"<<endl;
     printf("Time taken: %.2fminutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }

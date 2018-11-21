@@ -11,6 +11,7 @@ void Membrane::import_config(string config_file_name){
     bool resume=false;
     
     if (read_config_file.is_open()) {
+        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -42,7 +43,7 @@ void Membrane::import_config(string config_file_name){
                     }
                     break;
                 } else if (split[i]=="Mesh_file_name") {
-                    Mesh_file_name=split[i+1];
+                    Mesh_file_name=split[i+2];
                     cout<<"Membrane will initilise via '"<<Mesh_file_name<<"' file.\n";
                     break;
                 }
@@ -53,8 +54,10 @@ void Membrane::import_config(string config_file_name){
         }//End of while(getline(read_config_file, line))
         
         
-    }//End of if (read_config_file.is_open())
-    
+    } else {//End of if (read_config_file.is_open())
+        cout<<"Couldn't open the '"<<config_file_name<<"' file.\n";
+        exit(EXIT_FAILURE);
+    }
     if(!resume && Mesh_file_name=="non"){
         cout<<"The 'Resume' parameter located in the Membrane config file is not set! Resume should be set to 0 for a membrane initilisation or set to 1 if the membrane is to be imported from a 'resume' file. Please edit the membrane config file and run the programme again.\n\nIn case this is a new run, please provide the meshfile name in the mebrane confi file.\n";
         exit(EXIT_FAILURE);
