@@ -91,6 +91,7 @@ void Membrane::generate_report(char* buffer)
 	Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
     Report<<"# of Nodes "<< setw(20)<<return_num_of_nodes()<<endl;
     Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
+    Report<<"Spring model"<< setw(20)<<spring_model<<endl;
 	Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
 	Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
 	Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;

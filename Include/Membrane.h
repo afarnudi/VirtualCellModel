@@ -109,6 +109,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
     void check(void);
+    void node_distance_correction(void);
     
     
     

@@ -24,5 +24,23 @@ void Membrane::check(void){
             Max_node_pair_length=dist;
         }
     }
-    Average_node_pair_length/=Num_of_Node_Pairs; cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
+    Average_node_pair_length/=Num_of_Node_Pairs; cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
+    if ((Min_node_pair_length*2>Max_node_pair_length) && Bending_coefficient!=0) {
+        cout<<"Initial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n";
+        
+    }
+}
+
+void Membrane::node_distance_correction(void){
+    for(int MD_Step=0 ;MD_Step<=1000 ; MD_Step++){
+        
+        MD_Evolution_beginning(GenConst::MD_Time_Step);
+        
+        
+        Elastic_Force_Calculator(0);
+        
+        MD_Evolution_end(GenConst::MD_Time_Step);
+        
+        
+    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 }
