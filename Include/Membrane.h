@@ -6,6 +6,7 @@
 #include <vector>
 #include <math.h>
 #include <map>
+#include <iomanip>
 
 #include "General_functions.hpp"
 
@@ -57,7 +58,11 @@ public: //these are using in monte carlo flip function. for defining them as pri
 //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(string import_file_name);
     void import_config(string config_file_name);
-    void  generate_report(char* buffer);
+    void set_map_parameter(string param_name, double param_value);
+    void generate_report(char* buffer);
+    
+    void Thermostat_2(double MD_KT);
+    void Results (string label);
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     
@@ -103,12 +108,14 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void potential_1 (void);
     void potential_2 (void);
+    void FENE (void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);
 //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
     void check(void);
+    void calculate_mesh_properties(void);
     void node_distance_correction(void);
     
     
@@ -248,6 +255,8 @@ public:
         }
         cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
+    
+    
 };
 
 #endif // MEMBRANE_H

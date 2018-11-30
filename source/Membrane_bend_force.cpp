@@ -114,7 +114,7 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
 			}
 		sinus=sqrt(sinus);
         sign=-(1-2*signbit(innerproduct(N3, E)));
-        F0 = -(sinus-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sinus/(N1_length+N2_length);
+        F0 = (sinus-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sinus/(N1_length+N2_length);
         
         double temp_1, temp_2, temp_3_1, temp_3_2, temp_4_1, temp_4_2;
         temp_1=E_length/N1_length_2;
@@ -126,10 +126,10 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         
         
         for (int l=0; l<3; l++) {
-            Node_Force[pos1][l] +=  F0*temp_1*N1[l];
-            Node_Force[pos2][l] +=  F0*temp_2*N2[l];
-            Node_Force[pos3][l] +=  F0*temp_3_1*N1[l]+F0*temp_3_2*N2[l];
-            Node_Force[pos4][l] += -F0*temp_4_1*N1[l]-F0*temp_4_2*N2[l];
+            Node_Force[pos1][l] -=  F0*temp_1*N1[l];
+            Node_Force[pos2][l] -=  F0*temp_2*N2[l];
+            Node_Force[pos3][l] -=  F0*temp_3_1*N1[l]+F0*temp_3_2*N2[l];
+            Node_Force[pos4][l] -= -F0*temp_4_1*N1[l]-F0*temp_4_2*N2[l];
             
         }
     }  // end of 'for-i'

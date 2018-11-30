@@ -25,29 +25,30 @@ void Membrane::import_config(string config_file_name){
             istringstream iss(line);
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
             
-            for (int i=0; i<split.size(); i++) {
-                if (split[i] == comment || (split[i][0]=='/' && split[i][1]=='/')) {
-                    break;
-                }
-                
-                param_map[split[i]]=stod(split[i+1]);
-                if (split[i]=="Resume") {
-                    //                        set_parameter(general_param_map, param_name, param_value);
-                    //                general_param_map[param_name]=param_value;
-                    if (stoi(split[i+1])==0) {
-                        cout<<"Resume flag off. Looking for membrane config parameters.\n";
-                    } else {
-                        resume=true;
-                        resume_file_name=split[i+2];
-                        cout<<"Resume flag on. Membrane will resume using the '"<<resume_file_name<<"' file.\n";
-                    }
-                    break;
-                } else if (split[i]=="Mesh_file_name") {
-                    Mesh_file_name=split[i+2];
-                    cout<<"Membrane will initilise via '"<<Mesh_file_name<<"' file.\n";
-                    break;
-                }
+            if (split[0] == comment || (split[0][0]=='/' && split[0][1]=='/')) {
                 break;
+            }
+            
+            param_map[split[0]]=stod(split[1]);
+            
+            if (split[0]=="Resume") {
+                //                        set_parameter(general_param_map, param_name, param_value);
+                //                general_param_map[param_name]=param_value;
+                if (stoi(split[1])==0) {
+                    cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                } else {
+                    resume=true;
+                    resume_file_name=split[2];
+                    cout<<"Resume flag on. Membrane will resume using the '"<<resume_file_name<<"' file.\n";
+                }
+//                break;
+            } else if (split[0]=="Mesh_file_name") {
+                Mesh_file_name=split[2];
+                cout<<"Membrane will initilise via '"<<Mesh_file_name<<"' file.\n";
+//                break;
+            } else {
+                set_map_parameter(split[0], param_map[split[0]]);
+//                break;
                 //                cout<<split[i]<<"\t";
             }
             
@@ -72,5 +73,39 @@ void Membrane::import_config(string config_file_name){
 //        else {
 //            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
 //        }
+    }
+}
+
+void Membrane::set_map_parameter(string param_name, double param_value){
+    
+//    map<string, double>::iterator it;
+    if (param_name=="Node_Mass") {
+        Node_Mass=param_value;
+    } else if (param_name=="Node_radius"){
+        Node_radius=param_value;
+    } else if (param_name=="spring_model"){
+        spring_model=param_value;
+    } else if (param_name=="Spring_coefficient"){
+        Spring_coefficient=param_value;
+    } else if (param_name=="Bending_coefficient"){
+        Bending_coefficient=param_value;
+    } else if (param_name=="Damping_coefficient"){
+        Damping_coefficient=param_value;
+    } else if (param_name=="K_surfaceConstant_local"){
+        K_surfaceConstant_local=param_value;
+    } else if (param_name=="Shift_in_X_direction"){
+        Shift_in_X_direction=param_value;
+    } else if (param_name=="Shift_in_Y_direction"){
+        Shift_in_Y_direction=param_value;
+    } else if (param_name=="Shift_in_Z_direction"){
+        Shift_in_Z_direction=param_value;
+    } else if (param_name=="Downward_speed"){
+        Downward_speed=param_value;
+    } else if (param_name=="X_in_mem"){
+        X_in_mem=param_value;
+    } else if (param_name=="Y_in_mem"){
+        Y_in_mem=param_value;
+    } else if (param_name=="Z_in_mem"){
+        Z_in_mem=param_value;
     }
 }
