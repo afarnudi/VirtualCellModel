@@ -3,5 +3,6 @@ MD_traj_save_step	100
 MD_Time_Step	0.001
 MD_KT	1
 Num_of_Membranes	1	mem_config_2.txt
+Num_of_Chromatins	1	chromatin_config_1.txt
 MD_thrmo_step	100
 MC_step	100

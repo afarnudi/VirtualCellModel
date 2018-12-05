@@ -3,6 +3,7 @@ MD_traj_save_step	1000
 MD_Time_Step	0.001
 MD_KT	1.0
 Num_of_Membranes	0
+Num_of_Chromatins	0
 MD_thrmo_step	100
 MC_step	100
 Lbox	1000

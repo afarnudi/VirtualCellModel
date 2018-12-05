@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void read_general_parameters(string input_file_name, vector<string> &membrane_config_list){
+void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list){
     ifstream read_map("General_param_map.txt");
     map<string, double> general_param_map;
     map<string, double>::iterator it;
@@ -54,6 +54,14 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         for (int j=0; j<it->second; j++) {
                             cout<<split[i+2+j]<<endl<<endl;
                             membrane_config_list.push_back(split[i+2+j]);
+                        }
+                        continue;
+                    } else if (it->first=="Num_of_Chromatins") {
+                        //                        set_parameter(general_param_map, param_name, param_value);
+                        //                general_param_map[param_name]=param_value;
+                        for (int j=0; j<it->second; j++) {
+                            cout<<split[i+2+j]<<endl<<endl;
+                            chromatin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     }
@@ -157,6 +165,13 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             GenConst::Num_of_Membranes=it->second;
         } else {
             GenConst::Num_of_Membranes=0;
+        }
+    } else if (param_name=="Num_of_Chromatins"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Num_of_Chromatins=it->second;
+        } else {
+            GenConst::Num_of_Chromatins=0;
         }
     }
 }
