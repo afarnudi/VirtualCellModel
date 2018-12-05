@@ -18,6 +18,7 @@
 #include "write_functions.hpp"
 #include "interaction.hpp"
 #include "maps.hpp"
+#include "Chromatin.h"
 
 namespace GenConst {
     int MD_num_of_steps;
@@ -30,10 +31,8 @@ namespace GenConst {
     double Lbox;
     bool Periodic_condtion_status;
     int Num_of_Membranes;
+    int Num_of_Chromatins;
 }
-
-
-void Thermostat_2(Membrane membrane, double MD_KT);
 
 
 int main(int argc, char **argv)
@@ -50,9 +49,14 @@ int main(int argc, char **argv)
     //    map<string, double> general_param_map;
     string general_file_name="general-config.txt";
     vector<string> membrane_config_list;
-    read_general_parameters(general_file_name, membrane_config_list);
+    vector<string> chromatin_config_list;
+    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list);
+    
     vector<Membrane> Membranes;
+    vector<Chromatin> Chromatins;
     bool Include_Membrane = false;
+    bool Include_Chromatin = false;
+    
     if (GenConst::Num_of_Membranes!=0) {
         Include_Membrane = true;
         Membranes.resize(GenConst::Num_of_Membranes);
@@ -61,9 +65,17 @@ int main(int argc, char **argv)
         }
     }
     
+    if (GenConst::Num_of_Chromatins!=0) {
+        Include_Chromatin = true;
+        Chromatins.resize(GenConst::Num_of_Chromatins);
+        for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
+            Chromatins[i].import_config(chromatin_config_list[i]);
+        }
+    }
+    
     bool Include_ECM= false;
     //    bool Include_Particle=false;
-    bool resume=false;
+    //    bool resume=false;
     //initialling Membrane classes
     //if (Include_Membrane)
     //this does not work because the varibles of type membrane and ecm are defined just in if statement scope. we have to find a solution for this if we want to use input file.
@@ -111,12 +123,15 @@ int main(int argc, char **argv)
             }
             
             
-            
-            
-            
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
+                    Membranes[i].Thermostat_2(GenConst::MD_KT);
+                }
             }
+            
+            
+            
             if (MD_Step%GenConst::MD_traj_save_step==0) //saving Results for membrane
             {
                 for (int i=0; i<Membranes.size(); i++) {
@@ -145,62 +160,6 @@ int main(int argc, char **argv)
     cout<<"\nDone!"<<endl;
     printf("Time taken: %.2fminutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
-}
-
-void Thermostat_2(Membrane membrane, double MD_KT)
-{
-    double V_com[3];
-    
-    V_com[0]=0;
-    V_com[1]=0;
-    V_com[2]=0;
-    for (int i=0; i<membrane.return_num_of_nodes(); i++) {
-        V_com[0]+=membrane.Node_Velocity[i][0];
-        V_com[1]+=membrane.Node_Velocity[i][1];
-        V_com[2]+=membrane.Node_Velocity[i][2];
-    }
-    
-    
-    V_com[0]/=membrane.return_num_of_nodes();
-    V_com[2]/=membrane.return_num_of_nodes();
-    V_com[1]/=membrane.return_num_of_nodes();
-    
-    //    cout<<"COM before= "<<sqrt(V_com[0]*V_com[0]+V_com[1]*V_com[1]+V_com[2]*V_com[2])<<"\nV_X="<<V_com[0]<<"\tV_Y="<<V_com[1]<<"\tV_Z="<<V_com[2]<<endl;
-    
-    
-    double alpha;
-    //----------------------membrane---------------------
-    
-    //    alpha=sqrt(  (3*Membrane_num_of_Nodes*KT) / kineticenergymembrane( membrane.Node_Velocity )         );/// NOTE THAT THERMOSTATE IS FOR MEMBRANE YET. IN ORDER TO
-    /// UPDATE IT FOR BOTH THE MEMBRANE AND NUCLEI WE HAVE TO
-    /// WRITE  alpha=sqrt(      (2*3*Membrane_num_of_Nodes*KT) / kineticenergy( membrane.Node_Velocity,vnuclei
-    double Kinetic_energy=0;
-    for (int i=0; i<membrane.return_num_of_nodes(); i++) {
-        membrane.Node_Velocity[i][0]-=V_com[0];
-        membrane.Node_Velocity[i][1]-=V_com[1];
-        membrane.Node_Velocity[i][2]-=V_com[2];
-    }
-    
-    for (int i=0; i<membrane.return_num_of_nodes(); i++) {
-        Kinetic_energy+=membrane.Node_Velocity[i][0]*membrane.Node_Velocity[i][0]+membrane.Node_Velocity[i][1]*membrane.Node_Velocity[i][1]+membrane.Node_Velocity[i][2]*membrane.Node_Velocity[i][2];
-    }
-    Kinetic_energy*=membrane.Node_Mass;
-    
-    
-    
-    alpha=sqrt(3*(membrane.return_num_of_nodes())*MD_KT)/Kinetic_energy;
-    //cout<<alpha<<endl;
-    //cout<<V_com[0]<<"\t"<<V_com[1]<<"\t"<<V_com[2]<<"\n";
-    
-    for(int i=0;i<membrane.return_num_of_nodes();i++)
-    {
-        membrane.Node_Velocity [i][0]*=alpha;
-        membrane.Node_Velocity [i][1]*=alpha;
-        membrane.Node_Velocity [i][2]*=alpha;
-        membrane.Node_Velocity[i][0]+=V_com[0];
-        membrane.Node_Velocity[i][1]+=V_com[1];
-        membrane.Node_Velocity[i][2]+=V_com[2];
-    }
 }
 
 

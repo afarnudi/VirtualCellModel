@@ -12,12 +12,8 @@
 void Chromatin::initialise(void){
     cout<<"Initialising the Chromatin Class..."<<endl;
     build_random_chain();
-//    cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
-    //        Triangle_Pair_and_Node_Bonds_Identifier();
-//    Node_neighbour_list_constructor();
-//    check();
     cout<<"\n\nChromatinb class initiated.\n";
-    //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
+
 }
 
 void Chromatin::build_random_chain(void){
