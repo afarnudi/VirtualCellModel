@@ -21,7 +21,6 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Total_Potential_Energy;
     double Node_radius=1;
     
-    
     int chromatin_counter;
     string output_file_neme;
     
@@ -42,7 +41,10 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void generate_report(char* buffer);
     void Thermostat_2(double MD_KT);
     void Results (string label);
+    void build_random_chain(void);
 
+    
+    
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
     
     int spring_model=2;
@@ -61,7 +63,7 @@ private: //(if we define these constants as private members of the class, we can
     
     private:
     /*variables*/
-    int Num_of_Nodes;
+    int Num_of_Nodes=0;
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     map<string, double> param_map;
