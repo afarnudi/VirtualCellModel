@@ -63,6 +63,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void Thermostat_2(double MD_KT);
     void Results (string label);
+    void write_traj (string label);
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     
@@ -245,6 +246,12 @@ public:
     int return_num_of_triangle(){
         return Num_of_Triangles;
     }
+    
+    double return_node_position(int node_number, int node_coordinate){
+        return Node_Position[node_number][node_coordinate];
+    }
+    
+    
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;
         for(int j=0 ; j<Num_of_Nodes ; j++){

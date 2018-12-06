@@ -99,6 +99,10 @@ public:
         }
     }
     
+    double return_node_position(int node_number, int node_coordinate){
+        return Node_Position[node_number][node_coordinate];
+    }
+    
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;
         for(int j=0 ; j<Num_of_Nodes ; j++){

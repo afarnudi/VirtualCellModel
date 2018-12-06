@@ -95,37 +95,4 @@ void Membrane::calculate_mesh_properties(void){
 }
 
 
-void Membrane::Results (string label)
-{
-    //output file names:
-    
-    string energy_file_name;
-    string traj_file_name;
-    
-    traj_file_name="Results/PreResults";
-    traj_file_name+=".xyz";
-    //trajectory:
-    
-    ofstream Trajectory;
-    
-    Trajectory.open(traj_file_name.c_str(), ios::app);
-    Trajectory << std:: fixed;
-    Trajectory <<Num_of_Nodes<<endl;
-    Trajectory << " nodes  "<<endl;
-    for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
-    {
-//        if (j==5 || j==220) {
-//            Trajectory << "b" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
-//        } else {
-            Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
-//        }
-    }
-    
-    
-    
-    
-    //    //Energy:
-    //    ofstream Potential_Energy;
-    //    Potential_Energy.open(energy_file_name.c_str(), ios::app);
-    //    Potential_Energy<<membrane.Total_Potential_Energy<<endl;
-}
+

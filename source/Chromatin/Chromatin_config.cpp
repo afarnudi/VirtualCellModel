@@ -32,20 +32,17 @@ void Chromatin::import_config(string config_file_name){
             param_map[split[0]]=stod(split[1]);
             
             if (split[0]=="Resume") {
-                //                        set_parameter(general_param_map, param_name, param_value);
-                //                general_param_map[param_name]=param_value;
+        
                 if (stoi(split[1])==0) {
                     cout<<"Resume flag off. The Chromatins will be initiated using the config parameters.\n";
                 } else {
                     resume=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag on. Chromatin will resume using the '"<<resume_file_name<<"' file.\n";
+                    cout<<"Resume flag on. Chromatin will resume using the '"<<resume_file_name<<" file.\n";
                 }
-//                break;
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
-//                break;
-                //                cout<<split[i]<<"\t";
+
             }
             
         }//End of while(getline(read_config_file, line))
@@ -59,7 +56,7 @@ void Chromatin::import_config(string config_file_name){
         import(resume_file_name);
     } else {
         if (Num_of_Nodes==0) {
-            cout<< "Error. \nPlease specify the number of Chromatin chain nodes in the "<<config_file_name<< "file.\n";
+            cout<< "Error. \nPlease specify the number of Chromatin chain nodes in the "<<config_file_name<< " file.\n";
             exit(EXIT_FAILURE);
         }
         initialise();
@@ -89,7 +86,7 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
         Shift_in_Y_direction=param_value;
     } else if (param_name=="Shift_in_Z_direction"){
         Shift_in_Z_direction=param_value;
-    } else if (param_name=="num_of_Nodes" && Num_of_Nodes==0){
-        Shift_in_Z_direction=param_value;
+    } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
+        Num_of_Nodes=param_value;
     }
 }

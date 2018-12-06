@@ -26,11 +26,8 @@ void Chromatin::build_random_chain(void){
     {
         Node_Velocity[i].resize(3,0);
         Node_Force[i].resize(3,0);
+        Node_Position[i].resize(3,0);
     }
-    Node_Position[0][0]=0;
-    Node_Position[0][1]=0;
-    Node_Position[0][2]=0;
-    
     const double PI  =3.141592653589793238463;
     
     for (int i=1; i<Num_of_Nodes; i++) {

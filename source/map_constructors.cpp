@@ -49,20 +49,26 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     it->second=stod(split[i+1]);
                     set_parameter(general_param_map, it->first, it->second);
                     if (it->first=="Num_of_Membranes") {
-//                        set_parameter(general_param_map, param_name, param_value);
-                        //                general_param_map[param_name]=param_value;
+
                         for (int j=0; j<it->second; j++) {
                             cout<<split[i+2+j]<<endl<<endl;
                             membrane_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     } else if (it->first=="Num_of_Chromatins") {
-                        //                        set_parameter(general_param_map, param_name, param_value);
-                        //                general_param_map[param_name]=param_value;
+                        
                         for (int j=0; j<it->second; j++) {
                             cout<<split[i+2+j]<<endl<<endl;
                             chromatin_config_list.push_back(split[i+2+j]);
                         }
+                        continue;
+                    } else if (it->first=="trajectory_file_name") {
+                        if (it->second!=0) {
+                            GenConst::trajectory_file_name=split[i+2];
+                        } else {
+                            GenConst::trajectory_file_name="VCProject_";
+                        }
+                        
                         continue;
                     }
                     break;

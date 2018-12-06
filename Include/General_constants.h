@@ -8,6 +8,8 @@
 
 #ifndef General_constants_h
 #define General_constants_h
+#include <string>
+
 
 namespace GenConst {
     extern int MD_num_of_steps;
@@ -21,6 +23,7 @@ namespace GenConst {
     extern bool Periodic_condtion_status;
     extern int Num_of_Membranes;
     extern int Num_of_Chromatins;
+    extern std::string trajectory_file_name;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps
