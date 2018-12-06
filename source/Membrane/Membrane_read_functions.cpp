@@ -69,38 +69,6 @@ void Membrane::read_gmesh_file (string gmesh_file)
 }
 
 
-//void Membrane::read_membrabe_input(string input_file)
-//
-//{
-//    /*start of initializing constants*/
-//    ifstream inputs;
-//    inputs.open("membrane_inputs_file_name");
-//    string temp_str; //This is just a temp string charachter that we use to read unnecessary words in inputs file . We never use this  in the actual programme.
-//    inputs>>temp_str;
-//    inputs>>Spring_coefficient; // streching constant
-//    inputs>>temp_str;
-//    inputs>>Bending_coefficient; // bending constant
-//    inputs>>temp_str;
-//    inputs>>Damping_coefficient; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
-//    inputs>>temp_str;
-//    inputs>>Node_Mass;
-//    inputs>>temp_str;
-//    inputs>>K_surfaceConstant_local;
-//    inputs>>temp_str;
-//    inputs>>on_or_off_Spring_force_cutt_off; //??? I add it myself because virus should not have cut off
-//    inputs>>temp_str;
-//    inputs>>Spring_force_cutt_off;
-//    inputs>>temp_str;
-//    inputs>>ShiftinXdirection; //???
-//    inputs>>temp_str;
-//    inputs>>ShiftinZdirection; //???
-//    inputs>>temp_str;
-//    inputs>>Downward_speed; //???
-//    inputs>>temp_str;
-//    //inputs>>energy_calculation_flag;
-//    /*end of initializing constants*/
-//}
-
 void Membrane::import(string import_file_name){
     cout<<"Importing the Membrane from the resume file:"<<endl;
     cout<<import_file_name<<endl<<endl;

@@ -63,7 +63,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void Thermostat_2(double MD_KT);
     void Results (string label);
-    void write_traj (string label);
+    void write_traj (string traj_name, string label);
+    
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     

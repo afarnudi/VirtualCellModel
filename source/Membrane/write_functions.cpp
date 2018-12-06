@@ -8,6 +8,16 @@
 
 #include "Membrane.h"
 
+
+void Membrane::write_traj (string traj_name, string label){
+    ofstream Trajectory;
+    Trajectory.open(traj_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
+    for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
+    {
+        Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+    }
+}
 void Membrane::Results (string label)
 {
     string energy_file_name;
