@@ -51,19 +51,26 @@ int main(int argc, char **argv)
     
     read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list);
     
+    ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
+    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
     
     vector<Membrane> Membranes;
     vector<Chromatin> Chromatins;
+    
     bool Include_Membrane  = false;
     bool Include_Chromatin = false;
+    bool Include_ECM       = false;
     
     if (GenConst::Num_of_Membranes!=0) {
         Include_Membrane = true;
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
+            Membranes[i].set_file_time(buffer);
+            Membranes[i].set_index(i);
             Membranes[i].import_config(membrane_config_list[i]);
-            Membranes[i].generate_report(buffer, i);
+            Membranes[i].generate_report();
         }
     }
     
@@ -71,12 +78,14 @@ int main(int argc, char **argv)
         Include_Chromatin = true;
         Chromatins.resize(GenConst::Num_of_Chromatins);
         for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
+            Chromatins[i].set_file_time(buffer);
+            Chromatins[i].set_index(i);
             Chromatins[i].import_config(chromatin_config_list[i]);
-            Membranes[i].generate_report(buffer, i);
+            Chromatins[i].generate_report();
         }
     }
     
-    bool Include_ECM= false;
+    
     
     if (Include_ECM)
     {
@@ -84,21 +93,24 @@ int main(int argc, char **argv)
         //        EcmGeneratingReport(buffer, ecm);
     }
     
-    cout<<"\nBeginnig the MD\nProgbress:\n";
-    int progress=0;
+    
     int num_of_elements=0;
+    if (Include_Membrane) {
+        for (int i=0; i<Membranes.size(); i++) {
+            num_of_elements+=Membranes[i].return_num_of_nodes();
+        }
+    }
+    if (Include_Chromatin) {
+        for (int i=0; i<Chromatins.size(); i++) {
+            num_of_elements+=Chromatins[i].return_num_of_nodes();
+        }
+    }
+    
+    
+    int progress=0;
+    cout<<"\nBeginnig the MD\nProgbress:\n";
+    
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
-        
-        if (Include_Membrane) {
-            for (int i=0; i<Membranes.size(); i++) {
-                num_of_elements+=Membranes[i].return_num_of_nodes();
-            }
-        }
-        if (Include_Chromatin) {
-            for (int i=0; i<Chromatins.size(); i++) {
-                num_of_elements+=Chromatins[i].return_num_of_nodes();
-            }
-        }
         
         
         
@@ -108,7 +120,19 @@ int main(int argc, char **argv)
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
                 Membranes[i].Elastic_Force_Calculator(0);
             }
-        }//End of if (Include_Membrane==true)
+        }
+        if (Include_Chromatin)
+        {
+            for (int i=0; i<Chromatins.size(); i++) {
+                Chromatins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                Chromatins[i].Elastic_Force_Calculator();
+            }
+        }
+        
+        
+        
+        
+        
         
         
         if (Include_Membrane) {
@@ -119,14 +143,19 @@ int main(int argc, char **argv)
                 }
             }
         }
+        if (Include_Chromatin) {
+            for (int i=0; i<Chromatins.size(); i++) {
+                Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
+                    Chromatins[i].Thermostat_2(GenConst::MD_KT);
+                }
+            }
+        }
         
         
         
         if (MD_Step%GenConst::MD_traj_save_step==0) //saving Results
         {
-            ofstream Trajectory;
-            Trajectory.open(traj_file_name.c_str(), ios::app);
-            Trajectory << std:: fixed;
             Trajectory << num_of_elements<<endl;
             Trajectory << " nodes  "<<endl;
             
@@ -135,7 +164,7 @@ int main(int argc, char **argv)
                 for (int i=0; i<Membranes.size(); i++) {
                     string label="Membrane_"+to_string(i);
                     Membranes[i].write_traj(traj_file_name, label);
-                    Membranes[i].export_for_resume(buffer, MD_Step, i);
+                    Membranes[i].export_for_resume(MD_Step);
                 }
             }
             
@@ -143,7 +172,7 @@ int main(int argc, char **argv)
                 for (int i=0; i<Chromatins.size(); i++) {
                     string label="chromatin_"+to_string(i);
                     Chromatins[i].write_traj(traj_file_name, label);
-                    Chromatins[i].export_for_resume(buffer, MD_Step, i);
+                    Chromatins[i].export_for_resume(MD_Step);
                 }
             }
         }// End of if (MD_Step%100==0)
