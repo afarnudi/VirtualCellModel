@@ -18,13 +18,13 @@ void Membrane::write_traj (string traj_name, string label){
         Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
     }
 }
-void Membrane::Results (string label)
+
+void Membrane::relaxation_traj (void)
 {
     string energy_file_name;
     string traj_file_name;
     
-    traj_file_name="Results/PreResults";
-    traj_file_name+=".xyz";
+    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".xyz";
     //trajectory:
     
     ofstream Trajectory;
@@ -33,29 +33,18 @@ void Membrane::Results (string label)
     Trajectory << std:: fixed;
     Trajectory <<Num_of_Nodes<<endl;
     Trajectory << " nodes  "<<endl;
-    for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
+    for(int j=0; j< Num_of_Nodes; j++) // saving trajectory
     {
-        //        if (j==5 || j==220) {
-        //            Trajectory << "b" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
-        //        } else {
-        Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
-        //        }
+        Trajectory << "mem" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
     }
     
-    
-    
-    
-    //    //Energy:
-    //    ofstream Potential_Energy;
-    //    Potential_Energy.open(energy_file_name.c_str(), ios::app);
-    //    Potential_Energy<<membrane.Total_Potential_Energy<<endl;
 }
 
 
-void Membrane::export_for_resume(char* buffer, int MD_step){
+void Membrane::export_for_resume(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Resume_";
-    resume_file_name+=buffer;
+    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(mem_index)+"_";
+    resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
     
@@ -87,11 +76,11 @@ void Membrane::export_for_resume(char* buffer, int MD_step){
 }
 
 
-void Membrane::generate_report(char* buffer)
+void Membrane::generate_report()
 {
     string Report_file_name;
-    Report_file_name= "Results/Membrane_Report_";
-    Report_file_name+=buffer;
+    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(mem_index)+"_";
+    Report_file_name+=file_time;
     Report_file_name+=".txt";
     
     ofstream Report;

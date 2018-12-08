@@ -10,9 +10,9 @@
 //void build_random_chain(void);
 
 void Chromatin::initialise(void){
-    cout<<"Initialising the Chromatin Class..."<<endl;
+    cout<<"\nInitialising the Chromatin Class..."<<endl;
     build_random_chain();
-    cout<<"\n\nChromatinb class initiated.\n";
+    cout<<"Chromatin class initiated.\n";
 
 }
 

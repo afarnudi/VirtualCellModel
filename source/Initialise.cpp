@@ -36,8 +36,8 @@ void Membrane::initialise(string Mesh_file_name){
     read_gmesh_file(Mesh_file_name);
     output_file_neme=Mesh_file_name;
     Radius= sqrt((Node_Position[0][0]-X_in_mem)*(Node_Position[0][0]-X_in_mem) + (Node_Position[0][1]-Y_in_mem)*(Node_Position[0][1]-Y_in_mem) + (Node_Position[0][2]-Z_in_mem)*(Node_Position[0][2]-Z_in_mem));
-    cout<<"\n\nRadius="<<Radius<<endl;
-    cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
+    cout<<"\nRadius="<<Radius<<endl;
+    cout<<"# of Nodes="<<Num_of_Nodes<<endl;
     cout<<"# of triangles="<<Num_of_Triangles<<endl;
     Normal_direction_Identifier(X_in_mem, Y_in_mem, Z_in_mem);
     Triangle_pair_counter();
@@ -51,6 +51,6 @@ void Membrane::initialise(string Mesh_file_name){
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
     check();
-    cout<<"\n\nMembrane class initiated.\n";
+    cout<<"\nMembrane class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

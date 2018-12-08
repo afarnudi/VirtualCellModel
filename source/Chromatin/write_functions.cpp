@@ -20,10 +20,10 @@ void Chromatin::write_traj (string traj_name, string label){
     }
 }
 
-void Chromatin::export_for_resume(char* buffer, int MD_step){
+void Chromatin::export_for_resume(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Resume_";
-    resume_file_name+=buffer;
+    string resume_file_name="Results/Resumes/Resume_Chromatin_"+to_string(chrom_index)+"_";
+    resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
     
@@ -36,11 +36,11 @@ void Chromatin::export_for_resume(char* buffer, int MD_step){
     }
 }
 
-void Chromatin::generate_report(char* buffer)
+void Chromatin::generate_report(void)
 {
     string Report_file_name;
-    Report_file_name= "Results/Membrane_Report_";
-    Report_file_name+=buffer;
+    Report_file_name= "Results/Reports/Report_Chromatin_"+to_string(chrom_index)+"_";
+    Report_file_name+=file_time;
     Report_file_name+=".txt";
     
     ofstream Report;

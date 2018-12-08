@@ -29,7 +29,7 @@ void Membrane::check(void){
 //    cout<<"spring_model= "<<spring_model<<endl;
 //    cout<<"=============================\n";
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
-        cout<<"Initial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n";
+        cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
         node_distance_correction();
         calculate_mesh_properties();
 //        exit(EXIT_FAILURE);
@@ -58,7 +58,7 @@ void Membrane::node_distance_correction(void){
             
             
         }
-        Results("mem");
+        relaxation_traj();
 //        Thermostat_2(GenConst::MD_KT);
 //        calculate_mesh_properties();
         

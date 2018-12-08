@@ -44,7 +44,7 @@ void Membrane::import_config(string config_file_name){
 //                break;
             } else if (split[0]=="Mesh_file_name") {
                 Mesh_file_name=split[2];
-                cout<<"Membrane will initilise via '"<<Mesh_file_name<<"' file.\n";
+                cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
 //                break;
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);

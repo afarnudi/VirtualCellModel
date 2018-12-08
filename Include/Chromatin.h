@@ -23,7 +23,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     int chromatin_counter;
     string output_file_neme;
-    
+    string file_time;
     
     vector<vector<double> >Node_Position;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -33,22 +33,23 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
     void Node_neighbour_list_constructor();
-    void export_for_resume(char* buffer, int MD_step);
+    void export_for_resume(int MD_step);
     void write_traj (string traj_name, string label);
     
     void import(string import_file_name);
     void import_config(string config_file_name);
     void set_map_parameter(string param_name, double param_value);
-    void generate_report(char* buffer);
+    void generate_report(void);
     void Thermostat_2(double MD_KT);
     void Results (string label);
     void build_random_chain(void);
-
+    void Elastic_Force_Calculator();
+    void FENE(void);
     
     
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
-    
-    int spring_model=2;
+    int chrom_index;
+    int spring_model=0;
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
@@ -74,7 +75,7 @@ private: //(if we define these constants as private members of the class, we can
 
     void potential_1 (void);
     void potential_2 (void);
-    void FENE (void);
+//    void FENE (void);
     void check(void);
     void calculate_mesh_properties(void);
     void node_distance_correction(void);
@@ -114,7 +115,12 @@ public:
         }
         cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
-    
+    void set_file_time(char* buffer){
+        file_time=buffer;
+    }
+    void set_index(int index){
+        chrom_index=index;
+    }
     
 };
 

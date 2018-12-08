@@ -31,6 +31,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Z_in_mem=0;
     
     string output_file_neme;
+    string file_time;
     
     
     vector<vector<double> >Node_Position;
@@ -52,17 +53,17 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void MD_Evolution_end (double MD_Time_Step);
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
-    void export_for_resume(char* buffer, int MD_step);
+    void export_for_resume(int MD_step);
 //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(string Mesh_file_name);
 //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(string import_file_name);
     void import_config(string config_file_name);
     void set_map_parameter(string param_name, double param_value);
-    void generate_report(char* buffer);
+    void generate_report(void);
     
     void Thermostat_2(double MD_KT);
-    void Results (string label);
+    void relaxation_traj (void);
     void write_traj (string traj_name, string label);
     
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
@@ -93,7 +94,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
     
     
-    private:
+private:
+    int mem_index;
     /*variables*/
     int Num_of_Nodes;
     /*constants*/
@@ -262,6 +264,12 @@ public:
             
         }
         cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
+    }
+    void set_file_time(char* buffer){
+        file_time=buffer;
+    }
+    void set_index(int index){
+        mem_index=index;
     }
     
     

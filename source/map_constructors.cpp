@@ -25,6 +25,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
     
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
+        cout<<"General Parameter file opened successfully.\nList of config-file:\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -51,14 +52,14 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     if (it->first=="Num_of_Membranes") {
 
                         for (int j=0; j<it->second; j++) {
-                            cout<<split[i+2+j]<<endl<<endl;
+                            cout<<"\t"<<split[i+2+j]<<endl;
                             membrane_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     } else if (it->first=="Num_of_Chromatins") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<split[i+2+j]<<endl<<endl;
+                            cout<<"\t"<<split[i+2+j]<<endl;
                             chromatin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
@@ -74,27 +75,11 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     break;
                 }
                 //                cout<<split[i]<<"\t";
-            }
+            } // End of for (int i=0; i<split.size(); i++) {
             //            cout<<endl;
             
-        }
-//        for (auto const& x : general_param_map)
-//        {
-//            cout << x.first << " = " << x.second << endl;
-//        }
-//        while (read_config_file>>param_name>>param_value) {
-//            if (param_name=="Num_of_Membranes") {
-//                set_parameter(general_param_map, param_name, param_value);
-////                general_param_map[param_name]=param_value;
-//                for (int i=0; i<param_value; i++) {
-//                    read_config_file>>param_name;
-//                    membrane_list.push_back(param_name);
-//                }
-//                continue;
-//            }
-//            set_parameter(general_param_map, param_name, param_value);
-////            general_param_map[param_name]=param_value;
-//        }
+        } //End of while(getline(read_config_file, line)){
+        cout<<endl;
     } else {
         cout<<"Couldn't open the config file.\n";
         exit(EXIT_FAILURE);
