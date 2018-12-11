@@ -9,8 +9,8 @@ OBJDIR=objects
 
 INCDIRS=-I$(INCDIR)
 
-SRCFILES=$(wildcard $(SRCDIR)/*.cpp)
-OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
+SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp)
+OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 
 
