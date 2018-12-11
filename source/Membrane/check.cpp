@@ -24,7 +24,9 @@ void Membrane::check(void){
             Max_node_pair_length=dist;
         }
     }
-    Average_node_pair_length/=Num_of_Node_Pairs; cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
+    Average_node_pair_length/=Num_of_Node_Pairs;
+    
+    cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
 //    cout<<"=============================\n";
 //    cout<<"spring_model= "<<spring_model<<endl;
 //    cout<<"=============================\n";
@@ -91,6 +93,9 @@ void Membrane::calculate_mesh_properties(void){
         }
     }
     temp_avg/=Num_of_Node_Pairs;
+    Max_node_pair_length=temp_max;
+    Min_node_pair_length=temp_min;
+    Average_node_pair_length=temp_avg;
     cout<<"Max node distance="<<temp_max<<"\tmin node distance="<<temp_min<<"\tAverage node distance="<<temp_avg<<endl;
 }
 

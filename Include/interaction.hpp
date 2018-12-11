@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Membrane.h"
 #include "ECM.hpp"
+#include "Chromatin.h"
 
 void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
 void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
@@ -34,4 +35,10 @@ void triangle_update_neighbour_list_new_2(Membrane membrane, ECM ecm, vector<int
 double return_ecm_membrane_node_distance(Membrane mem, int mem_node, ECM ecm, int ecm_node);
 double return_triangle_membrane_distance(Membrane mem, int mem_node, ECM ecm, int tri_index, double tri_com[3]);
 bool barrier_2(Membrane mem, int mem_index);
+
+
+void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem);
+void Chromatin_Membrane_hard_sphere(Chromatin chromo, Membrane Mem);
+
+
 #endif /* interaction_hpp */

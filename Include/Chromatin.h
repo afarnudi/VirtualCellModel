@@ -29,6 +29,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<int> > Node_neighbour_list;
+    vector<vector<int>> Membrane_neighbbour_node;
     
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
@@ -45,7 +46,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void build_random_chain(void);
     void Elastic_Force_Calculator();
     void FENE(void);
-    
+    void hard_sphere (void);
+    void Strong_spring(void);
     
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
     int chrom_index;
@@ -122,6 +124,13 @@ public:
         chrom_index=index;
     }
     
+    double return_node_radius(void){
+        return Node_radius;
+    }
+    
+    void add_to_force(double force,int index, int coor){
+        Node_Force[index][coor]+=force;
+    }
 };
 
 #endif // CHROMATIN_H

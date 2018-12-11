@@ -18,7 +18,7 @@ void Chromatin::potential_1 (void){
     //lmax=1.170;
     //le1=0.654;
    //lmin=0.478;
-    double width=0.2;
+//    double width=0.2;
 //   le0=(2.2-width)*Node_radius;
 //   lmax=(2.2+width)*Node_radius;
 //   le1=(2.2+width)*Node_radius;
@@ -57,12 +57,12 @@ void Chromatin::potential_1 (void){
             temp_potential_energy= Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance);
             
         }
-        
         if(temp_Node_distance < (le1+le0)/2.0   &&  temp_Node_distance > lmin  )  // repulsive force
         {
             temp_force= -(Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin))*( 1.0/(temp_Node_distance-lmin) + 1.0/((temp_Node_distance-le1)*(temp_Node_distance-le1)));                 // force on i th from j
             temp_potential_energy= Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin);
         }
+        
         if(temp_force>965.31  || temp_Node_distance>lmax )
         {
 
@@ -70,8 +70,6 @@ void Chromatin::potential_1 (void){
             temp_potential_energy=   1.81599  + 965.31 * ( temp_Node_distance - 1.3280*Node_radius )+0.5*Spring_force_cutt_off * ( temp_Node_distance - 1.3280*Node_radius ) * ( temp_Node_distance - 1.3280*Node_radius );
 //            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
 		}
-        
-        
         if(temp_force<-1000.05   ||  temp_Node_distance<lmin )
         {
 		  
@@ -158,6 +156,39 @@ void Chromatin::FENE(void){
             Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
             Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
         }
+    }
+    // End of Membrane Node Pair forces
+}
+
+void Chromatin::Strong_spring (void){
+    
+    double deltax,deltay,deltaz,temp_Node_distance,temp_force;
+    
+    int temp_Node_A, temp_Node_B;
+    
+    for (int k=0 ; k< Num_of_Nodes-1 ; k++)
+    {
+        temp_Node_B=k;
+        temp_Node_A=k+1;
+        
+        deltax=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
+        deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
+        deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
+        
+        
+        temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
+       
+        temp_force=100*Spring_coefficient*(temp_Node_distance-2.1*Node_radius);
+        
+        
+        // implimentation of forces:
+        Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
+        Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        
+        Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
+        Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
     }
     // End of Membrane Node Pair forces
 }

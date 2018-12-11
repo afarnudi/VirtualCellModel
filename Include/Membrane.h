@@ -271,7 +271,12 @@ public:
     void set_index(int index){
         mem_index=index;
     }
-    
+    double return_node_radius(void){
+        return Node_radius;
+    }
+    void add_to_force(double force,int index, int coor){
+        Node_Force[index][coor]+=force;
+    }
     
 };
 

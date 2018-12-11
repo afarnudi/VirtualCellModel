@@ -22,6 +22,8 @@ void Chromatin::build_random_chain(void){
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
     
+    double Vcom[3]={0,0,0};
+    
     for(int i=0;i<Num_of_Nodes;i++)
     {
         Node_Velocity[i].resize(3,0);
@@ -33,6 +35,9 @@ void Chromatin::build_random_chain(void){
     for (int i=1; i<Num_of_Nodes; i++) {
         double theta=((double)rand()/(double)RAND_MAX)*PI;
         double phi=((double)rand()/(double)RAND_MAX)*2*PI;
+//        double temp_x=Node_Position[i-1][0]+Node_radius*(2.1+((double)rand()/(double)RAND_MAX)*0.2)*sin(theta)*cos(phi);
+//        double temp_y=Node_Position[i-1][1]+Node_radius*(2.1+((double)rand()/(double)RAND_MAX)*0.2)*sin(theta)*sin(phi);
+//        double temp_z=Node_Position[i-1][2]+Node_radius*(2.1+((double)rand()/(double)RAND_MAX)*0.2)*cos(theta);
         double temp_x=Node_Position[i-1][0]+Node_radius*2.1*sin(theta)*cos(phi);
         double temp_y=Node_Position[i-1][1]+Node_radius*2.1*sin(theta)*sin(phi);
         double temp_z=Node_Position[i-1][2]+Node_radius*2.1*cos(theta);
@@ -50,8 +55,27 @@ void Chromatin::build_random_chain(void){
             Node_Position[i][0]=temp_x;
             Node_Position[i][1]=temp_y;
             Node_Position[i][2]=temp_z;
+            
+            Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
+            Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
+            Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
+            
+            Vcom[0]+=Node_Velocity[i][0];
+            Vcom[1]+=Node_Velocity[i][1];
+            Vcom[2]+=Node_Velocity[i][2];
         }
         
     } // for (int i=1; i<Num_of_Nodes; i++)
     
+    Vcom[0]/=Num_of_Nodes;
+    Vcom[1]/=Num_of_Nodes;
+    Vcom[2]/=Num_of_Nodes;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        Node_Velocity[i][0]-=Vcom[0];
+        Node_Velocity[i][1]-=Vcom[1];
+        Node_Velocity[i][2]-=Vcom[2];
+    }
+    
+    
+    Membrane_neighbbour_node.resize(Num_of_Nodes);
 }
