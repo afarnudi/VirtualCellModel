@@ -23,5 +23,5 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $< -o $@
 
 .PHONY: clean
-clean:
-	rm -f $(OBJDIR)/$(OBJFILES) $(BINDIR)/$(TARGET)
+#clean:
+#	rm -f $(OBJDIR)/$(OBJFILES) $(BINDIR)/$(TARGET)
