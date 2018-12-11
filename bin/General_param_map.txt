@@ -9,3 +9,4 @@ MC_step	100
 Lbox	1000
 Periodic_condtion_status 0
 Mem_fluidity	0.001
+trajectory_file_name	0

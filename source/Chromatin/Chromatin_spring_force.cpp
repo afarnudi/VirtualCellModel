@@ -24,10 +24,10 @@ void Chromatin::potential_1 (void){
 //   le1=(2.2+width)*Node_radius;
 //   lmin=(2.2-width)*Node_radius;
     
-    le0=2.2*Node_radius;
+    le0=2.1*Node_radius;
     lmax=2.4*Node_radius;
-    le1=2.2*Node_radius;
-//    lmin=2.*Node_radius;
+    le1=2.3*Node_radius;
+    lmin=2.*Node_radius;
     
     Total_Potential_Energy=0.0;
     
@@ -46,19 +46,19 @@ void Chromatin::potential_1 (void){
         double temp_exp_le0=exp(1.0/(le0-temp_Node_distance));
         double temp_exp_le1=exp(1.0/(temp_Node_distance-le1));
         
-        if(temp_Node_distance >le1  && temp_Node_distance < le0 )  //free zone
-        {
-            temp_potential_energy=0 ; // free zone
-        }
+//        if(temp_Node_distance >le1  && temp_Node_distance < le0 )  //free zone
+//        {
+//            temp_potential_energy=0 ; // free zone
+//        }
         
-        if(temp_Node_distance > le0  && temp_Node_distance <lmax )  //bondforce
+        if(temp_Node_distance > (le1+le0)/2.0  && temp_Node_distance <lmax )  //bondforce
         {
             temp_force = (Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance))*( 1.0/(lmax-temp_Node_distance) +  1.0/((le0-temp_Node_distance)*(le0-temp_Node_distance)));
             temp_potential_energy= Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance);
             
         }
         
-        if(temp_Node_distance < le1   &&  temp_Node_distance > lmin  )  // repulsive force
+        if(temp_Node_distance < (le1+le0)/2.0   &&  temp_Node_distance > lmin  )  // repulsive force
         {
             temp_force= -(Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin))*( 1.0/(temp_Node_distance-lmin) + 1.0/((temp_Node_distance-le1)*(temp_Node_distance-le1)));                 // force on i th from j
             temp_potential_energy= Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin);
