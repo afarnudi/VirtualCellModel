@@ -46,27 +46,29 @@ void Membrane::node_distance_correction(void){
     Damping_coefficient=0;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
-        
         Max_node_pair_length=slope*MD_Step+max;
 //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
         for (int i=0; i<100; i++) {
             MD_Evolution_beginning(GenConst::MD_Time_Step);
-            
-//            FENE();
             potential_1();
-//            Bending_potetial();
-            
             MD_Evolution_end(GenConst::MD_Time_Step);
-            
-            
         }
         relaxation_traj();
-//        Thermostat_2(GenConst::MD_KT);
-//        calculate_mesh_properties();
-        
-        
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-//    cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
+    Damping_coefficient=2;
+    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps/2 ; MD_Step++){
+        //Setting the min angle of triangles to 20 dgrees or pi/9
+//        Max_node_pair_length=slope*MD_Step+max;
+        //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
+        for (int i=0; i<100; i++) {
+            MD_Evolution_beginning(GenConst::MD_Time_Step);
+            potential_1();
+            Bending_potetial_2(0);
+            MD_Evolution_end(GenConst::MD_Time_Step);
+        }
+        relaxation_traj();
+    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
+    
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Velocity[i][j]=0;

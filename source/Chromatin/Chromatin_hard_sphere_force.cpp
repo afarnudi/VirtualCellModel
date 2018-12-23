@@ -15,6 +15,8 @@ void Chromatin::hard_sphere (void){
     double temp_potential_energy = 0.0;
     int temp_Node_A, temp_Node_B;
    
+//    le1=2.3*Node_radius;
+//    lmin=2.*Node_radius;
     le1=2.3*Node_radius;
     lmin=2.*Node_radius;
     
