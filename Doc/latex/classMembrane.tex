@@ -1,0 +1,235 @@
+\hypertarget{classMembrane}{}\section{Membrane Class Reference}
+\label{classMembrane}\index{Membrane@{Membrane}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Triangle\+\_\+\+Pair\+\_\+and\+\_\+\+Node\+\_\+\+Bonds\+\_\+\+Identifier} ()\hypertarget{classMembrane_ad34ca5376368cc72a38b64ed6b0dd386}{}\label{classMembrane_ad34ca5376368cc72a38b64ed6b0dd386}
+
+\item 
+void \hyperlink{classMembrane_aff8b24e17a5e51e8e00f1c1780694d1f}{Elastic\+\_\+\+Force\+\_\+\+Calculator} (double theta\+\_\+0)
+\item 
+void {\bfseries M\+D\+\_\+\+Evolution\+\_\+beginning} (double M\+D\+\_\+\+Time\+\_\+\+Step)\hypertarget{classMembrane_a718a254c0f843b06e07d0aad8451b652}{}\label{classMembrane_a718a254c0f843b06e07d0aad8451b652}
+
+\item 
+void {\bfseries M\+D\+\_\+\+Evolution\+\_\+end} (double M\+D\+\_\+\+Time\+\_\+\+Step)\hypertarget{classMembrane_a5292913dd4500db14e26147920a21e58}{}\label{classMembrane_a5292913dd4500db14e26147920a21e58}
+
+\item 
+void {\bfseries Constant\+Surface\+Force\+Local\+Triangles} ()\hypertarget{classMembrane_afeb736c81896f74f23e44ceaaa0d1e04}{}\label{classMembrane_afeb736c81896f74f23e44ceaaa0d1e04}
+
+\item 
+void {\bfseries Node\+\_\+neighbour\+\_\+list\+\_\+constructor} ()\hypertarget{classMembrane_aca9785ad0ab2514006a46c0c9bd8cf5c}{}\label{classMembrane_aca9785ad0ab2514006a46c0c9bd8cf5c}
+
+\item 
+void {\bfseries export\+\_\+for\+\_\+resume} (int M\+D\+\_\+step)\hypertarget{classMembrane_a45aaa9c0cbd3d22aa9b03e24480b69de}{}\label{classMembrane_a45aaa9c0cbd3d22aa9b03e24480b69de}
+
+\item 
+void {\bfseries initialise} (string Mesh\+\_\+file\+\_\+name)\hypertarget{classMembrane_a3353b57d3d0ca9f1d32ec3edea9e2f01}{}\label{classMembrane_a3353b57d3d0ca9f1d32ec3edea9e2f01}
+
+\item 
+void {\bfseries import} (string import\+\_\+file\+\_\+name)\hypertarget{classMembrane_aeb1fc7d31b55a36f50ec2e08da6868de}{}\label{classMembrane_aeb1fc7d31b55a36f50ec2e08da6868de}
+
+\item 
+void {\bfseries import\+\_\+config} (string config\+\_\+file\+\_\+name)\hypertarget{classMembrane_af7a605e77cda2b76181e4e5cc1062212}{}\label{classMembrane_af7a605e77cda2b76181e4e5cc1062212}
+
+\item 
+void {\bfseries set\+\_\+map\+\_\+parameter} (string param\+\_\+name, double param\+\_\+value)\hypertarget{classMembrane_af9277adfc93a1eab3444b43d3ecfeeeb}{}\label{classMembrane_af9277adfc93a1eab3444b43d3ecfeeeb}
+
+\item 
+void {\bfseries generate\+\_\+report} (void)\hypertarget{classMembrane_a36462fa0881cf8ee5a0c7268ae4fdd30}{}\label{classMembrane_a36462fa0881cf8ee5a0c7268ae4fdd30}
+
+\item 
+void \hyperlink{classMembrane_acd87b1b9cf2c6c91a887749528c9f556}{Thermostat\+\_\+2} (double M\+D\+\_\+\+KT)
+\item 
+void {\bfseries relaxation\+\_\+traj} (void)\hypertarget{classMembrane_aa4286fd20ae452585ec5d19c67268eed}{}\label{classMembrane_aa4286fd20ae452585ec5d19c67268eed}
+
+\item 
+void {\bfseries write\+\_\+traj} (string traj\+\_\+name, string label)\hypertarget{classMembrane_af874e67698eab4a453afaf7e19285bfe}{}\label{classMembrane_af874e67698eab4a453afaf7e19285bfe}
+
+\item 
+int {\bfseries return\+\_\+num\+\_\+of\+\_\+nodes} (void)\hypertarget{classMembrane_ab2ddc39626226efe51bc7e00d651571c}{}\label{classMembrane_ab2ddc39626226efe51bc7e00d651571c}
+
+\item 
+void {\bfseries shift\+\_\+position} (double x, double y, double z)\hypertarget{classMembrane_aae01bd33119728d0b268081bee3815e7}{}\label{classMembrane_aae01bd33119728d0b268081bee3815e7}
+
+\item 
+void {\bfseries shift\+\_\+velocity} (double vx, double vy, double vz)\hypertarget{classMembrane_a2fb1efa5e780590d62530cc31c8e6b07}{}\label{classMembrane_a2fb1efa5e780590d62530cc31c8e6b07}
+
+\item 
+int {\bfseries return\+\_\+num\+\_\+of\+\_\+triangle} ()\hypertarget{classMembrane_ac3ff3f3a5177589537f5bc6cbd05c27d}{}\label{classMembrane_ac3ff3f3a5177589537f5bc6cbd05c27d}
+
+\item 
+double {\bfseries return\+\_\+node\+\_\+position} (int node\+\_\+number, int node\+\_\+coordinate)\hypertarget{classMembrane_ad732cbc68d1776054f522ab576f487a1}{}\label{classMembrane_ad732cbc68d1776054f522ab576f487a1}
+
+\item 
+void {\bfseries calculate\+\_\+average\+\_\+force} (void)\hypertarget{classMembrane_a696ec76d17d33335f2c41aa498485e56}{}\label{classMembrane_a696ec76d17d33335f2c41aa498485e56}
+
+\item 
+void {\bfseries set\+\_\+file\+\_\+time} (char $\ast$buffer)\hypertarget{classMembrane_a6b74827fd9dc653001b7cd6315b065a2}{}\label{classMembrane_a6b74827fd9dc653001b7cd6315b065a2}
+
+\item 
+void {\bfseries set\+\_\+index} (int index)\hypertarget{classMembrane_a82ba6c57b18e9cc8a8e9cbbbb5ffef08}{}\label{classMembrane_a82ba6c57b18e9cc8a8e9cbbbb5ffef08}
+
+\item 
+double {\bfseries return\+\_\+node\+\_\+radius} (void)\hypertarget{classMembrane_a1f9083e074f16cca0c87d0373ac6a450}{}\label{classMembrane_a1f9083e074f16cca0c87d0373ac6a450}
+
+\item 
+void {\bfseries add\+\_\+to\+\_\+force} (double force, int index, int coor)\hypertarget{classMembrane_a7524333ddca2039be9931fad57135fad}{}\label{classMembrane_a7524333ddca2039be9931fad57135fad}
+
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries Node\+\_\+\+Mass} =1.\+0\hypertarget{classMembrane_abe50bfd82f67d5fa2ed233a9ba7631fc}{}\label{classMembrane_abe50bfd82f67d5fa2ed233a9ba7631fc}
+
+\item 
+double {\bfseries Total\+\_\+\+Potential\+\_\+\+Energy}\hypertarget{classMembrane_a75960354fe00e218f119830036810935}{}\label{classMembrane_a75960354fe00e218f119830036810935}
+
+\item 
+double {\bfseries Radius} =0\hypertarget{classMembrane_a6d1611097b82cabb54fd45b85faf56cd}{}\label{classMembrane_a6d1611097b82cabb54fd45b85faf56cd}
+
+\item 
+double {\bfseries Node\+\_\+radius} =1\hypertarget{classMembrane_a55d6293286907a4848bdb73f58730b20}{}\label{classMembrane_a55d6293286907a4848bdb73f58730b20}
+
+\item 
+int {\bfseries membrane\+\_\+counter}\hypertarget{classMembrane_ab26d858b40d68539f31ec9fbd376522e}{}\label{classMembrane_ab26d858b40d68539f31ec9fbd376522e}
+
+\item 
+int {\bfseries Num\+\_\+of\+\_\+\+Node\+\_\+\+Pairs}\hypertarget{classMembrane_acfd08625a4fc02f3222b55d0314bb059}{}\label{classMembrane_acfd08625a4fc02f3222b55d0314bb059}
+
+\item 
+int {\bfseries Num\+\_\+of\+\_\+\+Triangle\+\_\+\+Pairs}\hypertarget{classMembrane_a3f911bf4b8933e725d5beaa5ab976544}{}\label{classMembrane_a3f911bf4b8933e725d5beaa5ab976544}
+
+\item 
+double {\bfseries X\+\_\+in\+\_\+mem} =0\hypertarget{classMembrane_af6ed0c1ab34021f48a6dd14f21eb0c64}{}\label{classMembrane_af6ed0c1ab34021f48a6dd14f21eb0c64}
+
+\item 
+double {\bfseries Y\+\_\+in\+\_\+mem} =0\hypertarget{classMembrane_ac0f150a6d43b73a2623d527a8cecefb3}{}\label{classMembrane_ac0f150a6d43b73a2623d527a8cecefb3}
+
+\item 
+double {\bfseries Z\+\_\+in\+\_\+mem} =0\hypertarget{classMembrane_aab209cb4603762ae1886325f4f799de5}{}\label{classMembrane_aab209cb4603762ae1886325f4f799de5}
+
+\item 
+string {\bfseries output\+\_\+file\+\_\+neme}\hypertarget{classMembrane_ab411c25e4dd5ac0ce13060eff8a6a923}{}\label{classMembrane_ab411c25e4dd5ac0ce13060eff8a6a923}
+
+\item 
+string {\bfseries file\+\_\+time}\hypertarget{classMembrane_aeb5028f36a7d69ba7ed0c5cfe0af545f}{}\label{classMembrane_aeb5028f36a7d69ba7ed0c5cfe0af545f}
+
+\item 
+vector$<$ vector$<$ double $>$ $>$ {\bfseries Node\+\_\+\+Position}\hypertarget{classMembrane_a71d4c2117b63d8145b236bd51668033f}{}\label{classMembrane_a71d4c2117b63d8145b236bd51668033f}
+
+\item 
+vector$<$ vector$<$ int $>$ $>$ {\bfseries Triangle\+\_\+list}\hypertarget{classMembrane_ad61d1fbb53ef3a3fb7b4670581327051}{}\label{classMembrane_ad61d1fbb53ef3a3fb7b4670581327051}
+
+\item 
+vector$<$ vector$<$ int $>$ $>$ {\bfseries Triangle\+\_\+pair\+\_\+list}\hypertarget{classMembrane_ad4f0d5f17a9f50e1505e4264ba6e139a}{}\label{classMembrane_ad4f0d5f17a9f50e1505e4264ba6e139a}
+
+\item 
+vector$<$ vector$<$ int $>$ $>$ {\bfseries Node\+\_\+\+Bond\+\_\+list}\hypertarget{classMembrane_a653506414e86b70ec87450c4639abaa5}{}\label{classMembrane_a653506414e86b70ec87450c4639abaa5}
+
+\item 
+vector$<$ vector$<$ int $>$ $>$ {\bfseries Triangle\+\_\+\+Pair\+\_\+\+Nodes}\hypertarget{classMembrane_a16c7d8283b2b53178f1c0c8c8a3fe0cf}{}\label{classMembrane_a16c7d8283b2b53178f1c0c8c8a3fe0cf}
+
+\item 
+vector$<$ vector$<$ double $>$ $>$ {\bfseries Node\+\_\+\+Velocity}\hypertarget{classMembrane_ac6661af8931b8e555f4cb9fbdcb394d0}{}\label{classMembrane_ac6661af8931b8e555f4cb9fbdcb394d0}
+
+\item 
+vector$<$ vector$<$ double $>$ $>$ {\bfseries Node\+\_\+\+Force}\hypertarget{classMembrane_a3c1eb46e7611377e2cef72ff17255e32}{}\label{classMembrane_a3c1eb46e7611377e2cef72ff17255e32}
+
+\item 
+vector$<$ vector$<$ int $>$ $>$ {\bfseries Node\+\_\+neighbour\+\_\+list}\hypertarget{classMembrane_a705770b79289d894b0b58919e810d71a}{}\label{classMembrane_a705770b79289d894b0b58919e810d71a}
+
+\item 
+int $\ast$$\ast$ {\bfseries Normal\+\_\+direction}\hypertarget{classMembrane_aacb12cbcff4d9068cc3ec4edc1525fbd}{}\label{classMembrane_aacb12cbcff4d9068cc3ec4edc1525fbd}
+
+\item 
+int {\bfseries spring\+\_\+model} =2\hypertarget{classMembrane_abda57a1da212a2a1fc36e0faa5e6baf4}{}\label{classMembrane_abda57a1da212a2a1fc36e0faa5e6baf4}
+
+\item 
+double {\bfseries Total\+\_\+\+Kinetic\+\_\+\+Energy}\hypertarget{classMembrane_ace96624cf2fada1f08fc9c17ce2e1051}{}\label{classMembrane_ace96624cf2fada1f08fc9c17ce2e1051}
+
+\item 
+double {\bfseries Total\+\_\+potential\+\_\+\+Energy} =0.\+0\hypertarget{classMembrane_a44386c31326522dc000f7d88edde2c4b}{}\label{classMembrane_a44386c31326522dc000f7d88edde2c4b}
+
+\item 
+double {\bfseries Spring\+\_\+coefficient} =10.\+0\hypertarget{classMembrane_a51536477e359a874919d08dc7a97c7fa}{}\label{classMembrane_a51536477e359a874919d08dc7a97c7fa}
+
+\item 
+double {\bfseries Bending\+\_\+coefficient} =20.\+0$\ast$Gen\+Const\+::\+M\+D\+\_\+\+KT\hypertarget{classMembrane_a25001dd440e0d8631a7191b3750f4188}{}\label{classMembrane_a25001dd440e0d8631a7191b3750f4188}
+
+\item 
+double {\bfseries Damping\+\_\+coefficient} =0.\+0\hypertarget{classMembrane_a673f0965635a8b716ffe7b1569550fe7}{}\label{classMembrane_a673f0965635a8b716ffe7b1569550fe7}
+
+\item 
+double {\bfseries K\+\_\+surface\+Constant\+\_\+local} =100.\+0\hypertarget{classMembrane_a9d4d4fc012f1c7cec680d64c1b287726}{}\label{classMembrane_a9d4d4fc012f1c7cec680d64c1b287726}
+
+\item 
+double {\bfseries Spring\+\_\+force\+\_\+cutt\+\_\+off} =1000.\+0\hypertarget{classMembrane_aa83ec44fdb8de36286e6f4b35af460f3}{}\label{classMembrane_aa83ec44fdb8de36286e6f4b35af460f3}
+
+\item 
+double {\bfseries Shift\+\_\+in\+\_\+\+X\+\_\+direction} =0.\+0\hypertarget{classMembrane_a3c9d4f24bc0e38e0a18aeb771e3d4386}{}\label{classMembrane_a3c9d4f24bc0e38e0a18aeb771e3d4386}
+
+\item 
+double {\bfseries Shift\+\_\+in\+\_\+\+Z\+\_\+direction} =0.\+0\hypertarget{classMembrane_a2fa88fd7d9832ef58e63b10208a7ccae}{}\label{classMembrane_a2fa88fd7d9832ef58e63b10208a7ccae}
+
+\item 
+double {\bfseries Shift\+\_\+in\+\_\+\+Y\+\_\+direction} =0.\+0\hypertarget{classMembrane_a73b22fb2ebda65accee05510303249ae}{}\label{classMembrane_a73b22fb2ebda65accee05510303249ae}
+
+\item 
+double {\bfseries Downward\+\_\+speed} =0.\+0\hypertarget{classMembrane_a2dae9292b1e7fb768963ada117f98e2c}{}\label{classMembrane_a2dae9292b1e7fb768963ada117f98e2c}
+
+\item 
+double {\bfseries com} \mbox{[}3\mbox{]}\hypertarget{classMembrane_a9908419011350ca5fea46af3f881425c}{}\label{classMembrane_a9908419011350ca5fea46af3f881425c}
+
+\item 
+double {\bfseries Min\+\_\+node\+\_\+pair\+\_\+length}\hypertarget{classMembrane_a7abb097e17e7293dc1cf559d66a01111}{}\label{classMembrane_a7abb097e17e7293dc1cf559d66a01111}
+
+\item 
+double {\bfseries Max\+\_\+node\+\_\+pair\+\_\+length}\hypertarget{classMembrane_adf55fbfa96375a631b399bd7f6cb1829}{}\label{classMembrane_adf55fbfa96375a631b399bd7f6cb1829}
+
+\item 
+double {\bfseries Average\+\_\+node\+\_\+pair\+\_\+length}\hypertarget{classMembrane_ae80a22b9f52cc51918d78269af4a2061}{}\label{classMembrane_ae80a22b9f52cc51918d78269af4a2061}
+
+\item 
+bool {\bfseries on\+\_\+or\+\_\+off\+\_\+\+Spring\+\_\+force\+\_\+cutt\+\_\+off} =0\hypertarget{classMembrane_a9bfff9bd03305c8b5cbac2e3d546727b}{}\label{classMembrane_a9bfff9bd03305c8b5cbac2e3d546727b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Membrane@{Membrane}!Elastic\+\_\+\+Force\+\_\+\+Calculator@{Elastic\+\_\+\+Force\+\_\+\+Calculator}}
+\index{Elastic\+\_\+\+Force\+\_\+\+Calculator@{Elastic\+\_\+\+Force\+\_\+\+Calculator}!Membrane@{Membrane}}
+\subsubsection[{\texorpdfstring{Elastic\+\_\+\+Force\+\_\+\+Calculator(double theta\+\_\+0)}{Elastic_Force_Calculator(double theta_0)}}]{\setlength{\rightskip}{0pt plus 5cm}void Membrane\+::\+Elastic\+\_\+\+Force\+\_\+\+Calculator (
+\begin{DoxyParamCaption}
+\item[{double}]{theta\+\_\+0}
+\end{DoxyParamCaption}
+)}\hypertarget{classMembrane_aff8b24e17a5e51e8e00f1c1780694d1f}{}\label{classMembrane_aff8b24e17a5e51e8e00f1c1780694d1f}
+calculate network force\+: \index{Membrane@{Membrane}!Thermostat\+\_\+2@{Thermostat\+\_\+2}}
+\index{Thermostat\+\_\+2@{Thermostat\+\_\+2}!Membrane@{Membrane}}
+\subsubsection[{\texorpdfstring{Thermostat\+\_\+2(double M\+D\+\_\+\+K\+T)}{Thermostat_2(double MD_KT)}}]{\setlength{\rightskip}{0pt plus 5cm}void Membrane\+::\+Thermostat\+\_\+2 (
+\begin{DoxyParamCaption}
+\item[{double}]{M\+D\+\_\+\+KT}
+\end{DoxyParamCaption}
+)}\hypertarget{classMembrane_acd87b1b9cf2c6c91a887749528c9f556}{}\label{classMembrane_acd87b1b9cf2c6c91a887749528c9f556}
+U\+P\+D\+A\+TE IT F\+OR B\+O\+TH T\+HE M\+E\+M\+B\+R\+A\+NE A\+ND N\+U\+C\+L\+EI WE H\+A\+VE TO W\+R\+I\+TE alpha=sqrt( (2$\ast$3$\ast$\+Membrane\+\_\+num\+\_\+of\+\_\+\+Nodes$\ast$\+KT) / kineticenergy( membrane.\+Node\+\_\+\+Velocity,vnuclei 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/Membrane.\+h\item 
+source/Initialise.\+cpp\item 
+source/\+Membrane/Average\+\_\+\+Membrane\+\_\+\+Node\+\_\+\+Distance.\+cpp\item 
+source/\+Membrane/check.\+cpp\item 
+source/\+Membrane/Constant\+Surface\+Force\+Local\+Triangles.\+cpp\item 
+source/\+Membrane/Elastic\+\_\+\+Force\+\_\+\+Calculator.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+bend\+\_\+force.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+config.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+\+M\+D\+\_\+\+Evolution.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+node\+\_\+neighbour\+\_\+list.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+node\+\_\+pair\+\_\+identifier.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+normal\+\_\+direction\+\_\+identifier.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+read\+\_\+functions.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+spring\+\_\+force.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+\+Thermostat.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+\+Triangle\+\_\+\+Pair\+\_\+and\+\_\+\+Edges\+\_\+\+Identifier.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+triangle\+\_\+pair\+\_\+counter.\+cpp\item 
+source/\+Membrane/Membrane\+\_\+triangle\+\_\+pair\+\_\+identifier.\+cpp\item 
+source/\+Membrane/write\+\_\+functions.\+cpp\end{DoxyCompactItemize}

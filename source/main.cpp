@@ -21,7 +21,7 @@
 #include "Chromatin.h"
 
 namespace GenConst {
-    int MD_num_of_steps;
+    int MD_num_of_steps;  /*! samal! */
     int MD_traj_save_step;
     double MD_Time_Step;
     double MD_KT;
@@ -34,7 +34,6 @@ namespace GenConst {
     int Num_of_Chromatins;
     string trajectory_file_name;
 }
-
 
 int main(int argc, char **argv)
 {
