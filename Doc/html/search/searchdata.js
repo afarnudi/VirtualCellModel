@@ -3,8 +3,8 @@ var indexSectionsWithContent =
   0: "cefmt",
   1: "cemt",
   2: "t",
-  3: "c",
-  4: "eft",
+  3: "cm",
+  4: "efmt",
   5: "c"
 };
 

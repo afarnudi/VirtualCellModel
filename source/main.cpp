@@ -20,6 +20,9 @@
 #include "maps.hpp"
 #include "Chromatin.h"
 
+///@file
+///@brief This is main!
+
 namespace GenConst {
     int MD_num_of_steps;  /*! samal! */
     int MD_traj_save_step;
@@ -34,6 +37,12 @@ namespace GenConst {
     int Num_of_Chromatins;
     string trajectory_file_name;
 }
+
+/*! \brief Brief description
+*		brief description continued.
+*
+*   detailed description.
+*/
 
 int main(int argc, char **argv)
 {
