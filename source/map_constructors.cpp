@@ -18,7 +18,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
             set_parameter(general_param_map, param_name, param_value);
         }
     } else {
-        cout<<"Couldn't open the 'General_param_map.txt'. Please check the file.\n";
+        cout<<"Couldn't open the 'General_param_map.txt'. Please check the file and make sure that the file is in the same directory as the executable file.\n";
         exit(EXIT_FAILURE);
     }
     
