@@ -14,7 +14,7 @@
 /bin/Results/Resumes/*.*
 /bin/Results/Relaxation/*.*
 /Doc/html/*.*
-/Doc/html/search/*.*
+#/Doc/html/search/*.*
 /Doc/latex/*.*
 
 # Packages #
