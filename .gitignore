@@ -13,8 +13,8 @@
 /bin/Results/Reports/
 /bin/Results/Resumes/
 /bin/Results/Relaxation/
-/Doc/html
-/Doc/latex
+/Doc/html/
+/Doc/latex/
 
 # Packages #
 ############
