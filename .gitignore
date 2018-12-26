@@ -6,9 +6,12 @@
 *.exe
 *.o
 *.so
+*.xyz
 
 /Mem/
-/bin/Results
+/bin/Results/Reports/
+/bin/Results/Resumes/
+/bin/Results/Relaxation/
 /Doc/html
 /Doc/latex
 
