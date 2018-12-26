@@ -9,12 +9,13 @@
 *.xyz
 *.html
 
-/Mem/
-/bin/Results/Reports/
-/bin/Results/Resumes/
-/bin/Results/Relaxation/
-/Doc/html/
-/Doc/latex/
+/Mem/*.*
+/bin/Results/Reports/*.*
+/bin/Results/Resumes/*.*
+/bin/Results/Relaxation/*.*
+/Doc/html/*.*
+/Doc/html/search/*.*
+/Doc/latex/*.*
 
 # Packages #
 ############
