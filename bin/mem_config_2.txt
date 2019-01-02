@@ -1,5 +1,5 @@
 Resume	0	Resume_2018_10_14_21_31.txt
-Mesh_file_name	1	membrane_chromatin
+Mesh_file_name	1	new_membrane
 Node_Mass	1
 Node_radius	1
 spring_model	1
