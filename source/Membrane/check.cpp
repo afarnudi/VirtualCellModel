@@ -39,12 +39,13 @@ void Membrane::check(void){
 }
 
 void Membrane::node_distance_correction(void){
-    double MD_relax_Steps=1000;
-    double slope=(1.88*Min_node_pair_length-Max_node_pair_length)/MD_relax_Steps, max=Max_node_pair_length;
+    double MD_relax_Steps_1=1000;
+    double MD_relax_Steps_2=7000;
+    double slope=(1.88*Min_node_pair_length-Max_node_pair_length)/MD_relax_Steps_1, max=Max_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
     Damping_coefficient=0;
-    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps ; MD_Step++){
+    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_1 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
         Max_node_pair_length=slope*MD_Step+max;
 //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
@@ -56,7 +57,7 @@ void Membrane::node_distance_correction(void){
         relaxation_traj();
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     Damping_coefficient=2;
-    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps/2 ; MD_Step++){
+    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_2 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
 //        Max_node_pair_length=slope*MD_Step+max;
         //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
