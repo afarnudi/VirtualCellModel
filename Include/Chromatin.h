@@ -21,6 +21,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     double Node_radius=1;
+    double COM_velocity[3];
+    double COM_position[3];
     
     int chromatin_counter;
     string output_file_neme;

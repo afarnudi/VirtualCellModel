@@ -27,6 +27,11 @@ double vectorlength(double v[3]) // calculate length of vector
     return  sqrt( v[0]*v[0]+v[1]*v[1]+v[2]*v[2] );
 }
 
+double vector_length_squared(double v[3]) // calculate length of vector
+{
+    return  v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
+}
+
 double sign_function(double x)
 {
     if(x<0){

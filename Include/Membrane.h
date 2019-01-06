@@ -22,7 +22,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Total_Potential_Energy;
 	double Radius=0;
     double Node_radius=1;
-    
+    double COM_velocity[3];
+    double COM_position[3];
     
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
@@ -64,6 +65,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void generate_report(void);
     
     void Thermostat_2(double MD_KT);
+    void Thermostat_N6(double MD_KT);
     void relaxation_traj (void);
     void write_traj (string traj_name, string label);
     
@@ -278,7 +280,32 @@ public:
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
-    
+    void update_COM_velocity(void){
+        COM_velocity[0]=0;
+        COM_velocity[1]=0;
+        COM_velocity[2]=0;
+        for (int i=0; i<Num_of_Nodes; i++) {
+            COM_velocity[0]+=Node_Velocity[i][0];
+            COM_velocity[1]+=Node_Velocity[i][1];
+            COM_velocity[2]+=Node_Velocity[i][2];
+        }
+        COM_velocity[0]/=Num_of_Nodes;
+        COM_velocity[2]/=Num_of_Nodes;
+        COM_velocity[1]/=Num_of_Nodes;
+    }
+    void update_COM_position(void){
+        COM_position[0]=0;
+        COM_position[1]=0;
+        COM_position[2]=0;
+        for (int i=0; i<Num_of_Nodes; i++) {
+            COM_position[0]+=Node_Position[i][0];
+            COM_position[1]+=Node_Position[i][1];
+            COM_position[2]+=Node_Position[i][2];
+        }
+        COM_velocity[0]/=Num_of_Nodes;
+        COM_velocity[2]/=Num_of_Nodes;
+        COM_velocity[1]/=Num_of_Nodes;
+    }
 };
 
 #endif // MEMBRANE_H
