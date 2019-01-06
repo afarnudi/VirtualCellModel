@@ -73,7 +73,7 @@ void Membrane::potential_1 (void){
         if(temp_Node_distance > le0  & temp_Node_distance <lmax )  //bondforce
         {
 //            cout<<"2\n";
-            temp_force = (Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance))*( 1.0/(lmax-temp_Node_distance) +  1.0/((le0-temp_Node_distance)*(le0-temp_Node_distance)));
+            temp_force = -(Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance))*( 1.0/(lmax-temp_Node_distance) +  1.0/((le0-temp_Node_distance)*(le0-temp_Node_distance)));
             temp_potential_energy= Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance);
             
         }
@@ -81,7 +81,7 @@ void Membrane::potential_1 (void){
         if(temp_Node_distance < le1   &  temp_Node_distance > lmin  )  // repulsive force
         {
 //            cout<<"3\n";
-            temp_force= -(Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin))*( 1.0/(temp_Node_distance-lmin) + 1.0/((temp_Node_distance-le1)*(temp_Node_distance-le1)));                 // force on i th from j
+            temp_force= (Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin))*( 1.0/(temp_Node_distance-lmin) + 1.0/((temp_Node_distance-le1)*(temp_Node_distance-le1)));                 // force on i th from j
             temp_potential_energy= Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin);
         }
         /// my cutoff for force amplitute and for avoiding leting particle scape from force trap
@@ -91,7 +91,7 @@ void Membrane::potential_1 (void){
 //          cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
 //          cout<<"temp_force_before_cut_off"<<temp_force<<endl;
 		  
-            temp_force = 965.31+Spring_force_cutt_off* ( temp_Node_distance - 1.3280*Node_radius );
+            temp_force = -965.31-Spring_force_cutt_off* ( temp_Node_distance - 1.3280*Node_radius );
             temp_potential_energy=   1.81599  + 965.31 * ( temp_Node_distance - 1.3280*Node_radius )+0.5*Spring_force_cutt_off * ( temp_Node_distance - 1.3280*Node_radius ) * ( temp_Node_distance - 1.3280*Node_radius );
 //            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
 		}
@@ -103,7 +103,7 @@ void Membrane::potential_1 (void){
 //            cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
 //            cout<<"temp_force_before_cut_off"<<temp_force<<endl;
 		  
-            temp_force =-1000.05-Spring_force_cutt_off* ( 0.671965*Node_radius - temp_Node_distance );
+            temp_force = 1000.05+Spring_force_cutt_off* ( 0.671965*Node_radius - temp_Node_distance );
             temp_potential_energy = 1.85038 + 1005.05 * ( 0.671965*Node_radius - temp_Node_distance )+0.5*Spring_force_cutt_off*( 0.671965*Node_radius - temp_Node_distance )*( 0.671965*Node_radius - temp_Node_distance );
 //            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
 		}
@@ -111,13 +111,13 @@ void Membrane::potential_1 (void){
         Total_Potential_Energy += temp_potential_energy;
         
         // implimentation of forces:
-        Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
-        Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        Node_Force[temp_Node_A][0] += temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
+        Node_Force[temp_Node_A][1] += temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_A][2] += temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
         
-        Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
-        Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        Node_Force[temp_Node_B][0] += -temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
+        Node_Force[temp_Node_B][1] += -temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_B][2] += -temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
     }
     // End of Membrane Node Pair forces
     
@@ -151,17 +151,17 @@ void Membrane::potential_2 (void){
 //            Node_Velocity[temp_Node_B][2]/=2.0;
 //
 //        }
-        temp_force=Spring_coefficient*(temp_Node_distance-Average_node_pair_length);
+        temp_force=-Spring_coefficient*(temp_Node_distance-Average_node_pair_length);
         
         
         // implimentation of forces:
-        Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
-        Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        Node_Force[temp_Node_A][0] += temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
+        Node_Force[temp_Node_A][1] += temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_A][2] += temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
         
-        Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
-        Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        Node_Force[temp_Node_B][0] += -temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
+        Node_Force[temp_Node_B][1] += -temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+        Node_Force[temp_Node_B][2] += -temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
     }
     // End of Membrane Node Pair forces
 }
@@ -215,19 +215,19 @@ void Membrane::FENE(void){
         } else {
             double temp_R=(temp_Node_distance-equi_point)/delta_r_max;
             temp_potential_energy=-(0.5)*epsilon*delta_r_max*delta_r_max*log(1-temp_R*temp_R);
-            temp_force=epsilon*(temp_Node_distance-equi_point)/(1-temp_R*temp_R);
+            temp_force=-epsilon*(temp_Node_distance-equi_point)/(1-temp_R*temp_R);
             
             
             Total_Potential_Energy += temp_potential_energy;
             
             // implimentation of forces:
-            Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
-            Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-            Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+            Node_Force[temp_Node_A][0] += temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
+            Node_Force[temp_Node_A][1] += temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+            Node_Force[temp_Node_A][2] += temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
             
-            Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
-            Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-            Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+            Node_Force[temp_Node_B][0] += -temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
+            Node_Force[temp_Node_B][1] += -temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
+            Node_Force[temp_Node_B][2] += -temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
         }
     }
     // End of Membrane Node Pair forces

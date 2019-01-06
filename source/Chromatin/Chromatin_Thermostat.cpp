@@ -37,7 +37,7 @@ void Chromatin::Thermostat_2(double MD_KT){
     
     
     
-    alpha=sqrt(3*Num_of_Nodes*MD_KT)/Kinetic_energy;
+    alpha=sqrt(3*Num_of_Nodes*MD_KT/Kinetic_energy);
 //    cout<<"3*Num_of_Nodes*MD_KT="<<3*Num_of_Nodes*MD_KT<<"\tKinetic_energy= "<<Kinetic_energy<<endl;
 //    cout<<"V_com= "<<sqrt(V_com[0]*V_com[0]+V_com[1]*V_com[1]+V_com[2]*V_com[2])<<"\talpha= "<<alpha<<endl;
 //    cout<<alpha<<endl;

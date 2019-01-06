@@ -20,11 +20,8 @@
 #include "maps.hpp"
 #include "Chromatin.h"
 
-///@file
-///@brief This is main!
-
 namespace GenConst {
-    int MD_num_of_steps;  /*! samal! */
+    int MD_num_of_steps;
     int MD_traj_save_step;
     double MD_Time_Step;
     double MD_KT;
@@ -38,11 +35,6 @@ namespace GenConst {
     string trajectory_file_name;
 }
 
-/*! \brief Brief description
-*		brief description continued.
-*
-*   detailed description.
-*/
 
 int main(int argc, char **argv)
 {
@@ -112,6 +104,7 @@ int main(int argc, char **argv)
         for (int i=0; i<Chromatins.size(); i++) {
             num_of_elements+=Chromatins[i].return_num_of_nodes();
         }
+        Chromatins[0].shift_velocity(0, 0.05, 0);
     }
     
     
@@ -138,6 +131,23 @@ int main(int argc, char **argv)
         }
         
         
+        if (Include_Chromatin && Include_Membrane) {
+            
+            if (MD_Step%2000==0) {
+                for (int i=0; i<Chromatins.size(); i++) {
+                    for (int j=0; j<Membranes.size(); j++) {
+                        Chromatin_Membrane_neighbour_finder(Chromatins[i], Membranes[j]);
+                    }
+                }
+            }
+            
+            for (int i=0; i<Chromatins.size(); i++) {
+                for (int j=0; j<Membranes.size(); j++) {
+                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[j]);
+                }
+            }
+            
+        }
         
         
         
