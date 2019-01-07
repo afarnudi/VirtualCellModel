@@ -40,7 +40,8 @@ void Membrane::check(void){
 
 void Membrane::node_distance_correction(void){
     double MD_relax_Steps_1=1000;
-    double MD_relax_Steps_2=7000;
+    double MD_relax_Steps_2=2500;
+    double MD_relax_Steps_3=500;
     double slope=(1.88*Min_node_pair_length-Max_node_pair_length)/MD_relax_Steps_1, max=Max_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
@@ -67,6 +68,8 @@ void Membrane::node_distance_correction(void){
             Bending_potetial_2(0);
             MD_Evolution_end(GenConst::MD_Time_Step);
         }
+        if(MD_Step >= MD_relax_Steps_3)
+        {Damping_coefficient=0.9*Damping_coefficient;}
         relaxation_traj();
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     
