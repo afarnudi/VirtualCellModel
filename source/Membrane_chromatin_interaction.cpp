@@ -14,11 +14,11 @@ void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem){
 void Chromatin_Membrane_hard_sphere(Chromatin chromo, Membrane Mem){
     double le1,lmin;
     double deltax,deltay,deltaz,Node_distance,force;
-    double interaction_strength=100;
+    double interaction_strength=10;
     int Node_A, Node_B;
     lmin=chromo.return_node_radius()+Mem.Average_node_pair_length/2.0;
     le1=lmin*1.5;
-    cout<<"lmin= "<<lmin<<endl;
+//    cout<<"lmin= "<<lmin<<endl;
 //    for (int i=0; i<chromo.return_num_of_nodes(); i++) {
 //        for (int j=0; j<chromo.Membrane_neighbbour_node[i].size(); j++) {
 //            cout<<i<<"\t"<<chromo.Membrane_neighbbour_node[i][j]<<"\n";
