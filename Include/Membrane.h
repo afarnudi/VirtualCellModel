@@ -68,7 +68,10 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Thermostat_N6(double MD_KT);
     void relaxation_traj (void);
     void write_traj (string traj_name, string label);
+    void omega(int MD_Step, double step);
+    void equilibrate (void);
     
+    double Omega[3]={0};
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     

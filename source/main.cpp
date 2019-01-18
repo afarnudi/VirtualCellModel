@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     
     
     int progress=0;
-    cout<<"\nBeginnig the MD\nProgbress:\n";
+    cout<<"\nBeginnig the MD\nProgress:\n";
     
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
         
@@ -158,6 +158,10 @@ int main(int argc, char **argv)
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
                     Membranes[i].Thermostat_2(GenConst::MD_KT);
+
+                }
+                if (MD_Step%1000==0 && MD_Step>0) {
+                    Membranes[i].omega(MD_Step, 1000);
                 }
             }
         }
