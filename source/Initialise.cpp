@@ -51,6 +51,9 @@ void Membrane::initialise(string Mesh_file_name){
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
     check();
+    node_distance_correction();
+    calculate_mesh_properties();
+    check();
     cout<<"\nMembrane class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }
