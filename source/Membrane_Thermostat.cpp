@@ -142,9 +142,7 @@ void Membrane::Thermostat_N6(double MD_KT){
 //        final_ang_mom[2]+=cross_delete[2];
     }
     
-<<<<<<< HEAD
-    double alpha=sqrt(MD_KT/initial_temperature);
-=======
+//    double alpha=sqrt(MD_KT/initial_temperature);
 //    final_Omega[0]=Moment_of_inertia_COM[0][0]*final_ang_mom[0]+Moment_of_inertia_COM[0][1]*final_ang_mom[1]+Moment_of_inertia_COM[0][2]*final_ang_mom[2];
 //    final_Omega[1]=Moment_of_inertia_COM[1][0]*final_ang_mom[0]+Moment_of_inertia_COM[1][1]*final_ang_mom[1]+Moment_of_inertia_COM[1][2]*final_ang_mom[2];
 //    final_Omega[2]=Moment_of_inertia_COM[2][0]*final_ang_mom[0]+Moment_of_inertia_COM[2][1]*final_ang_mom[1]+Moment_of_inertia_COM[2][2]*final_ang_mom[2];
@@ -167,7 +165,6 @@ void Membrane::Thermostat_N6(double MD_KT){
 //    cout<<"alpha = "<<alpha<<endl;
     
     
->>>>>>> d94dc722042d645e7bcd0a9dcf453bd8260d2091
     for(int i=0;i<Num_of_Nodes;i++)
     {
         Node_Velocity [i][0]*=alpha;
@@ -188,8 +185,6 @@ void Membrane::Thermostat_N6(double MD_KT){
         
     }
 }
-<<<<<<< HEAD
-=======
 
 void Membrane::omega(int MD_Step, double step){
 //    string energy_file_name;
@@ -317,4 +312,3 @@ void matrix_inverse (double mat[3][3]){
         
     }
 }
->>>>>>> d94dc722042d645e7bcd0a9dcf453bd8260d2091

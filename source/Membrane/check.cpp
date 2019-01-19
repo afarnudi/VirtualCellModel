@@ -37,15 +37,11 @@ void Membrane::check(void){
 }
 
 void Membrane::node_distance_correction(void){
-<<<<<<< HEAD
     double MD_relax_Steps_1=1000;
     double MD_relax_Steps_2=2500;
     double MD_relax_Steps_3=500;
-    double slope=(1.88*Min_node_pair_length-Max_node_pair_length)/MD_relax_Steps_1, max=Max_node_pair_length;
-=======
-    double MD_relax_Steps=1000;
-    double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps, min=Min_node_pair_length;
->>>>>>> d94dc722042d645e7bcd0a9dcf453bd8260d2091
+    
+    double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps_1, min=Min_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
     Damping_coefficient=0;
