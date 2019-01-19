@@ -10,11 +10,11 @@
 #include <math.h>
 
 
-void crossvector( double c[3],double d[3],double b[3] ) // cross porduct
+void crossvector( double c[3], double a[3],double b[3] ) // cross porduct
 {
-    c[0]=d[1]*b[2]-d[2]*b[1];    // normal vector to plane (not unitary length)
-    c[1]=d[2]*b[0]-d[0]*b[2];
-    c[2]=d[0]*b[1]-d[1]*b[0];
+    c[0]=a[1]*b[2]-a[2]*b[1];    // normal vector to plane (not unitary length)
+    c[1]=a[2]*b[0]-a[0]*b[2];
+    c[2]=a[0]*b[1]-a[1]*b[0];
 }
 
 double innerproduct(double n1[3],double n2[3])

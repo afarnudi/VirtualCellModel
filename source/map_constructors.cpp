@@ -116,10 +116,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::MD_Time_Step=it->second;
         }
-    } else if (param_name=="MD_KT"){
+    } else if (param_name=="MD_T"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::MD_KT=it->second;
+            GenConst::MD_T=it->second;
+        }
+    } else if (param_name=="K"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::K=it->second;
         }
     } else if(param_name=="MD_thrmo_step"){
         it = general_param_map.find(param_name);

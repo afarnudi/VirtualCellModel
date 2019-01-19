@@ -24,7 +24,8 @@ namespace GenConst {
     int MD_num_of_steps;
     int MD_traj_save_step;
     double MD_Time_Step;
-    double MD_KT;
+    double MD_T;
+    double K;
     int MD_thrmo_step;
     int MC_step;
     double Mem_fluidity;
@@ -157,11 +158,14 @@ int main(int argc, char **argv)
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Membranes[i].Thermostat_2(GenConst::MD_KT);
-
+//                    Membranes[i].Thermostat_Bussi(GenConst::MD_T);
+                    Membranes[i].Thermostat_2(GenConst::MD_T);
+//                    Membranes[i].Thermostat_N6(GenConst::MD_T);
+                    Membranes[i].write_parameters(MD_Step);
                 }
                 if (MD_Step%1000==0 && MD_Step>0) {
                     Membranes[i].omega(MD_Step, 1000);
+                    
                 }
             }
         }
@@ -169,7 +173,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Chromatins[i].Thermostat_2(GenConst::MD_KT);
+                    Chromatins[i].Thermostat_2(GenConst::MD_T);
                 }
             }
         }
