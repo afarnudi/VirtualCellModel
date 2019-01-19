@@ -20,6 +20,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
+    double Total_Kinetic_Energy;
 	double Radius=0;
     double Node_radius=1;
     double COM_velocity[3];
@@ -66,8 +67,11 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void Thermostat_2(double MD_KT);
     void Thermostat_N6(double MD_KT);
+    void Thermostat_Bussi(double MD_KT);
+    
     void relaxation_traj (void);
     void write_traj (string traj_name, string label);
+    void write_parameters(int MD_Step);
     void omega(int MD_Step, double step);
     void equilibrate (void);
     
@@ -79,10 +83,11 @@ public: //these are using in monte carlo flip function. for defining them as pri
     int **Normal_direction; //??? (These 2 elements should be defined and explained)
     int spring_model=2;
     
-    double Total_Kinetic_Energy;
+    
+//    vector <double> T_Kinetic_Energy;
     double Total_potential_Energy=0.0;
     double Spring_coefficient=10.0; // streching constant
-    double Bending_coefficient=20.0*GenConst::MD_KT; // bending constant
+    double Bending_coefficient=20.0*GenConst::MD_T; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Spring_force_cutt_off=1000.0;

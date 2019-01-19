@@ -7,7 +7,7 @@
 //
 
 #include "Membrane.h"
-
+#include "General_constants.h"
 
 void Membrane::write_traj (string traj_name, string label){
     ofstream Trajectory;
@@ -86,26 +86,69 @@ void Membrane::generate_report()
     ofstream Report;
     Report.open(Report_file_name.c_str());
     Report<< std:: fixed;
+    Report<<"General MD Params:\n---------------\n";
+    Report<<"MD_num_of_steps"<<setw(20)<<GenConst::MD_num_of_steps<<endl;
+    Report<<"MD_traj_save_step"<<setw(20)<<GenConst::MD_traj_save_step<<endl;
+    Report<<"MD_Time_Step"<<setw(20)<<GenConst::MD_Time_Step<<endl;
+    Report<<"MD_T"<<setw(20)<<GenConst::MD_T<<endl;
+    Report<<"MD_thrmo_step"<<setw(20)<<GenConst::MD_thrmo_step<<endl;
+    Report<<"MC_step"<<setw(20)<<GenConst::MC_step<<endl;
+    Report<<"Mem_fluidity"<<setw(20)<<GenConst::Mem_fluidity<<endl;
+    Report<<"Lbox"<<setw(20)<<GenConst::Lbox<<endl;
+    Report<<"Periodic_condtion_status"<<setw(20)<<GenConst::Periodic_condtion_status<<endl;
+    Report<<"Num_of_Membranes"<<setw(20)<<GenConst::Num_of_Membranes<<endl;
+    Report<<"trajectory_file_name"<<setw(20)<<GenConst::trajectory_file_name<<endl;
+    
+    
+    Report<<"Membrane Params:\n---------------\n";
     Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
     Report<<"Radius"<< setw(20)<<Radius<<endl;
+    Report<<"spring_model"<< setw(20)<<spring_model<<endl;
+    if (spring_model==1)
+    {
+        Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
+    }
+    if (spring_model==2)
+    {
+        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
+    }
+    Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
+    Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
+    Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;
+    Report<<"K_surfaceConstant_local"<< setw(20)<<K_surfaceConstant_local<<endl;
+    Report<<"Shift_in_X_direction"<< setw(20)<<Shift_in_X_direction<<endl;
+    Report<<"Shift_in_Y_direction"<< setw(20)<<Shift_in_Y_direction<<endl;
+    Report<<"Shift_in_Z_direction"<< setw(20)<<Shift_in_Z_direction<<endl;
+    Report<<"Downward_speed"<< setw(20)<<Downward_speed<<endl;
+    Report<<"X_in_mem"<< setw(20)<<X_in_mem<<endl;
+    Report<<"Y_in_mem"<< setw(20)<<Y_in_mem<<endl;
+    Report<<"Z_in_mem"<< setw(20)<<Z_in_mem<<endl;
+    
     Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
     Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;
     Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
     Report<<"# of Nodes "<< setw(20)<<return_num_of_nodes()<<endl;
     Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
-    Report<<"Spring model"<< setw(20)<<spring_model<<endl;
-    Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
-    Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
-    Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;
-    if (spring_model==1)
-    {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
-        
-    }
-    if (spring_model==2)
-    {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
-        
-    }
+    
+    
+    
+    
+    
+}
+
+void Membrane::write_parameters(int MD_Step){
+    //    string energy_file_name;
+    string traj_file_name;
+    double to_T=2.0/(3.0*Num_of_Nodes-3);
+    
+    traj_file_name="Results/K_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
+    //trajectory:
+    
+    ofstream Trajectory;
+    
+    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
+    Trajectory<<MD_Step<<setw(20)<<Total_Kinetic_Energy<<"\t"<<to_T*Total_Kinetic_Energy<<endl;
+//    cout<<MD_Step<<"\t"<<Total_Kinetic_Energy<<endl;
     
 }

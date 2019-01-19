@@ -32,6 +32,7 @@
 //    cout<< "Average node distance is   "<<Average_Node_Distance()<<endl;
 //}
 void Membrane::initialise(string Mesh_file_name){
+//    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Membrane Class..."<<endl;
     read_gmesh_file(Mesh_file_name);
     output_file_neme=Mesh_file_name;

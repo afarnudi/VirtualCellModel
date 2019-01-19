@@ -15,7 +15,8 @@ namespace GenConst {
     extern int MD_num_of_steps;
     extern int MD_traj_save_step;
     extern double MD_Time_Step;
-    extern double MD_KT;
+    extern double MD_T;
+    extern double K;
     extern int MD_thrmo_step;
     extern int MC_step;
     extern double Mem_fluidity;

@@ -40,13 +40,13 @@ void Membrane::check(void){
 
 void Membrane::node_distance_correction(void){
     double MD_relax_Steps=1000;
-    double slope=(1.88*Min_node_pair_length-Max_node_pair_length)/MD_relax_Steps, max=Max_node_pair_length;
+    double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps, min=Min_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
     Damping_coefficient=0;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
-        Max_node_pair_length=slope*MD_Step+max;
+        Min_node_pair_length=slope*MD_Step+min;
 //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
         for (int i=0; i<100; i++) {
             MD_Evolution_beginning(GenConst::MD_Time_Step);

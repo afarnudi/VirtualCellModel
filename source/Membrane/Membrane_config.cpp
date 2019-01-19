@@ -1,6 +1,6 @@
 #include <sstream>
 #include "Membrane.h"
-
+#include "General_constants.h"
 using namespace std;
 
 void Membrane::import_config(string config_file_name){
@@ -86,9 +86,9 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value;
+        Spring_coefficient=param_value*GenConst::MD_T;
     } else if (param_name=="Bending_coefficient"){
-        Bending_coefficient=param_value;
+        Bending_coefficient=param_value*GenConst::MD_T;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
     } else if (param_name=="K_surfaceConstant_local"){
