@@ -54,7 +54,10 @@ void Membrane::node_distance_correction(void){
             potential_1();
             MD_Evolution_end(GenConst::MD_Time_Step);
         }
-        relaxation_traj();
+        if (MD_Step!=0 && MD_Step%10==0) {
+            relaxation_traj();
+        }
+        
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     Damping_coefficient=2;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_2 ; MD_Step++){
@@ -69,7 +72,9 @@ void Membrane::node_distance_correction(void){
         }
         if(MD_Step >= MD_relax_Steps_3)
         {Damping_coefficient=0.9*Damping_coefficient;}
-        relaxation_traj();
+        if (MD_Step!=0 && MD_Step%10==0) {
+            relaxation_traj();
+        }
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     
     for (int i=0; i<Num_of_Nodes; i++) {

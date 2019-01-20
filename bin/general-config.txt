@@ -1,7 +1,7 @@
 MD_num_of_steps	3000000
 MD_traj_save_step	1000
 MD_Time_Step	0.0001
-MD_T	3s0
+MD_T	30
 Num_of_Membranes	1	mem_config_2.txt
 Num_of_Chromatins	0	chromatin_config_1.txt
 MD_thrmo_step	100
