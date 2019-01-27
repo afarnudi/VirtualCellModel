@@ -43,6 +43,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void error_calculator_step_2(void);
     double error_com=0;
     double error;
+    double k_angular=0, delta_k_angular=0;
     
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
@@ -79,7 +80,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void relaxation_traj (void);
     void write_traj (string traj_name, string label);
     void write_parameters(int MD_Step);
-    void omega(int MD_Step, double step);
+    void omega_calculator(void);
+    void omega_calculator_2(void);
     void equilibrate (void);
     
     double Omega[3]={0};

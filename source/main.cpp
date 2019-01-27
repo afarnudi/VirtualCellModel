@@ -152,10 +152,6 @@ int main(int argc, char **argv)
             
         }
         
-        
-        
-        
-        
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
@@ -166,10 +162,7 @@ int main(int argc, char **argv)
 //                    Membranes[i].Thermostat_N6(GenConst::MD_T);
                     Membranes[i].write_parameters(MD_Step);
                 }
-                if (MD_Step%1000==0 && MD_Step>0) {
-                    Membranes[i].omega(MD_Step, 1000);
-                    
-                }
+                
             }
         }
         if (Include_Chromatin) {

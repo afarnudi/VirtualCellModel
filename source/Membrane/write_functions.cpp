@@ -139,13 +139,12 @@ void Membrane::generate_report()
 void Membrane::write_parameters(int MD_Step){
     //    string energy_file_name;
     string traj_file_name;
+    omega_calculator();
     double to_T=2.0/(3.0*Num_of_Nodes-3);
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
     traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
-    //trajectory:
-    
     ofstream Trajectory;
     
     Trajectory.open(traj_file_name.c_str(), ios::app);
@@ -153,12 +152,12 @@ void Membrane::write_parameters(int MD_Step){
     if (GenConst::File_header==false) {
         Trajectory<<"MD Step\t"<<"Total Kinetic Energy\t"<<"Temperature\t"
         <<"Error\t"<<"Error_com\t"
-        <<"omega_x\t"<<"omega_y\t"<<"omega_z\t"<<"omega"<<endl;
+        <<"omega_x\t"<<"omega_y\t"<<"omega_z\t"<<"omega\t"
+        <<"k_Omega\t"<<"delta_k_omega"<<endl;
         GenConst::File_header=true;
     }
     Trajectory<<MD_Step<<"\t"<<Total_Kinetic_Energy<<"\t"<<to_T*Total_Kinetic_Energy
     <<"\t"<<error<<"\t"<<error_com
-    <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len<<endl;
-//    cout<<MD_Step<<"\t"<<Total_Kinetic_Energy<<endl;
-    
+    <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len
+    <<"\t"<<k_angular<<"\t"<<delta_k_angular<<endl;
 }

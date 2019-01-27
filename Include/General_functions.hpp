@@ -19,5 +19,5 @@ double vector_length_squared(double v[3]);
 double sign_function(double x);
 double periodiccondition(double dx );
 void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]);
-
+void matrix_inverse (double mat[3][3]);
 #endif /* General_functions_hpp */
