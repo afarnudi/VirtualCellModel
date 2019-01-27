@@ -26,8 +26,8 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
         AC[2]=Node_Position[temp_node_C][2]-Node_Position[temp_node_A][2];
         
         crossvector(temp_ABxAC, AB, AC);
-        s_i = vectorlength(temp_ABxAC)/2.0;
-        f0= K_surfaceConstant_local*(s_i -  s0_i )/2.0*vectorlength(temp_ABxAC);
+        s_i = vector_length(temp_ABxAC)/2.0;
+        f0= K_surfaceConstant_local*(s_i -  s0_i )/2.0*vector_length(temp_ABxAC);
         
         for (int j=0; j<3; j++) {
             temp_node_A=Triangle_list[i][j%3];
@@ -42,8 +42,8 @@ void Membrane::ConstantSurfaceForceLocalTriangles()
             AC[1]=Node_Position[temp_node_C][1]-Node_Position[temp_node_A][1];
             AC[2]=Node_Position[temp_node_C][2]-Node_Position[temp_node_A][2];
             
-            temp_AB_length_squared=vectorlength(AB)*vectorlength(AB);
-            temp_AC_length_squared=vectorlength(AC)*vectorlength(AC);
+            temp_AB_length_squared=vector_length(AB)*vector_length(AB);
+            temp_AC_length_squared=vector_length(AC)*vector_length(AC);
             
             Node_Force[temp_node_A][0] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[0]  -temp_AB_length_squared *  AC[0] + innerproduct(AB,AC)*  ( AB[0]+AC[0] )   ) ;
             Node_Force[temp_node_A][1] +=  f0 *2.0* ( -temp_AC_length_squared *  AB[1]  -temp_AB_length_squared *  AC[1] + innerproduct(AB,AC)*  ( AB[1]+AC[1] )   ) ;

@@ -188,15 +188,15 @@ void Membrane::Thermostat_N6(double MD_KT){
 
 void Membrane::omega(int MD_Step, double step){
 //    string energy_file_name;
-    string traj_file_name;
+//    string traj_file_name;
     
-    traj_file_name="Results/Omega_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
+//    traj_file_name="Results/Omega_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
     //trajectory:
     
-    ofstream Trajectory;
+//    ofstream Trajectory;
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
-    Trajectory << std:: fixed;
+//    Trajectory.open(traj_file_name.c_str(), ios::app);
+//    Trajectory << std:: fixed;
 //    Trajectory <<Num_of_Nodes<<endl;
 //    Trajectory << " nodes  "<<endl;
     
@@ -222,13 +222,13 @@ void Membrane::omega(int MD_Step, double step){
         COM_omega[1]+=temp_cross[1]/len;
         COM_omega[2]+=temp_cross[2]/len;
     }
-    Omega[0]+=COM_omega[0]/Num_of_Nodes;
-    Omega[1]+=COM_omega[1]/Num_of_Nodes;
-    Omega[2]+=COM_omega[2]/Num_of_Nodes;
+    Omega[0]=COM_omega[0]/Num_of_Nodes;
+    Omega[1]=COM_omega[1]/Num_of_Nodes;
+    Omega[2]=COM_omega[2]/Num_of_Nodes;
     
-    Trajectory<<MD_Step<<setw(20)<<COM_omega[0]<<setw(20)<<COM_omega[1]<<setw(20)<<COM_omega[2]<< setw(20)<<sqrt(COM_omega[0]*COM_omega[0]+COM_omega[2]*COM_omega[2]+COM_omega[1]*COM_omega[1])
+//    Trajectory<<MD_Step<<setw(20)<<COM_omega[0]<<setw(20)<<COM_omega[1]<<setw(20)<<COM_omega[2]<< setw(20)<<sqrt(COM_omega[0]*COM_omega[0]+COM_omega[2]*COM_omega[2]+COM_omega[1]*COM_omega[1])
     
-    <<setw(20)<<step*Omega[0]/MD_Step<<setw(20)<<step*Omega[1]/MD_Step<<setw(20)<<step*Omega[2]/MD_Step<< setw(20)<<sqrt(Omega[0]*Omega[0]+Omega[2]*Omega[2]+Omega[1]*Omega[1])*step/MD_Step<<endl;
+//    <<setw(20)<<step*Omega[0]/MD_Step<<setw(20)<<step*Omega[1]/MD_Step<<setw(20)<<step*Omega[2]/MD_Step<< setw(20)<<sqrt(Omega[0]*Omega[0]+Omega[2]*Omega[2]+Omega[1]*Omega[1])*step/MD_Step<<endl;
 
     for(int i=0;i<Num_of_Nodes;i++)
     {

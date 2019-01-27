@@ -22,7 +22,7 @@ double innerproduct(double n1[3],double n2[3])
     return n1[0]*n2[0]+n1[1]*n2[1]+n1[2]*n2[2];
 }
 
-double vectorlength(double v[3]) // calculate length of vector
+double vector_length(double v[3]) // calculate length of vector
 {
     return  sqrt( v[0]*v[0]+v[1]*v[1]+v[2]*v[2] );
 }

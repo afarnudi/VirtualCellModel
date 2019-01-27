@@ -36,6 +36,13 @@ public: //these are using in monte carlo flip function. for defining them as pri
     string output_file_neme;
     string file_time;
     
+    //error calculation
+    vector<vector<double> >Node_Position_lag_step;
+    vector<vector<double> >Node_Force_lag_step;
+    void error_calculator_step_1(void);
+    void error_calculator_step_2(void);
+    double error_com=0;
+    double error;
     
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;

@@ -14,7 +14,7 @@
 
 void crossvector( double c[3],double d[3],double b[3] ); // cross porduct
 double innerproduct(double n1[3],double n2[3]);
-double vectorlength(double v[3]); // calculate length of vector
+double vector_length(double v[3]); // calculate length of vector
 double vector_length_squared(double v[3]);
 double sign_function(double x);
 double periodiccondition(double dx );

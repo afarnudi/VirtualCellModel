@@ -31,7 +31,7 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         crossvector(N2, x2_4, x2_3);
         crossvector(N3, N1, N2);
         
-        double E_length=vectorlength(E), N1_length=vectorlength(N1), N1_length_2=N1_length*N1_length, N2_length=vectorlength(N2), N2_length_2=N2_length*N2_length;
+        double E_length=vector_length(E), N1_length=vector_length(N1), N1_length_2=N1_length*N1_length, N2_length=vector_length(N2), N2_length_2=N2_length*N2_length;
         double N1dotN2=innerproduct(N1, N2)/(N1_length*N2_length);
         sinus=(1.000001-N1dotN2)/2;
 		if(sinus<0){

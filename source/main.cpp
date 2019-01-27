@@ -34,6 +34,7 @@ namespace GenConst {
     int Num_of_Membranes;
     int Num_of_Chromatins;
     string trajectory_file_name;
+    bool File_header;
 }
 
 
@@ -119,6 +120,7 @@ int main(int argc, char **argv)
         if (Include_Membrane)
         {
             for (int i=0; i<Membranes.size(); i++) {
+                Membranes[i].error_calculator_step_1();
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
                 Membranes[i].Elastic_Force_Calculator(0);
             }
@@ -157,9 +159,10 @@ int main(int argc, char **argv)
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-//                    Membranes[i].Thermostat_Bussi(GenConst::MD_T);
-                    Membranes[i].Thermostat_2(GenConst::MD_T);
+                Membranes[i].error_calculator_step_2();
+                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {//I think we can remove the first clause.
+                    Membranes[i].Thermostat_Bussi(GenConst::MD_T);
+//                    Membranes[i].Thermostat_2(GenConst::MD_T);
 //                    Membranes[i].Thermostat_N6(GenConst::MD_T);
                     Membranes[i].write_parameters(MD_Step);
                 }
