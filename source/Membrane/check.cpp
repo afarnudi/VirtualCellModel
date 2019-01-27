@@ -37,7 +37,7 @@ void Membrane::check(void){
 }
 
 void Membrane::node_distance_correction(void){
-    double MD_relax_Steps_1=1000;
+    double MD_relax_Steps_1=2000;
     double MD_relax_Steps_2=2500;
     double MD_relax_Steps_3=500;
     
@@ -56,6 +56,7 @@ void Membrane::node_distance_correction(void){
         }
         relaxation_traj();
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
+    check();
     Damping_coefficient=2;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_2 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
