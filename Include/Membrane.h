@@ -74,6 +74,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void write_parameters(int MD_Step);
     void omega(int MD_Step, double step);
     void equilibrate (void);
+    void write_pov_traj(string traj_name, string label, int currentstep);
     
     double Omega[3]={0};
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
