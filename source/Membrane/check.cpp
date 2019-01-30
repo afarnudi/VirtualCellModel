@@ -44,7 +44,9 @@ void Membrane::node_distance_correction(void){
     double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps_1, min=Min_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
+    double temp_Bending_coefficient=Bending_coefficient;
     Damping_coefficient=0;
+    
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_1 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
         Min_node_pair_length=slope*MD_Step+min;
@@ -61,6 +63,7 @@ void Membrane::node_distance_correction(void){
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     check();
     Damping_coefficient=2;
+    Bending_coefficient=35*GenConst::MD_T*GenConst::K;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_2 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
 //        Max_node_pair_length=slope*MD_Step+max;
@@ -85,6 +88,7 @@ void Membrane::node_distance_correction(void){
         }
     }
     Damping_coefficient=temp_Damping_coefficient;
+    Bending_coefficient=temp_Bending_coefficient;
 }
 
 void Membrane::calculate_mesh_properties(void){
@@ -93,7 +97,7 @@ void Membrane::calculate_mesh_properties(void){
     double temp_avg=0;
     for (int i=0; i<Num_of_Node_Pairs; i++) {
         double dist=0;
-        dist=sqrt((Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])*(Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])+(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])*(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])+(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2])*(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2]));
+        dist=sqrt((Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])*(Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0]) + (Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])*(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1]) + (Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2])*(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2]));
         temp_avg+=dist;
         
         if (temp_min>dist) {

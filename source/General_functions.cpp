@@ -22,7 +22,7 @@ double innerproduct(double n1[3],double n2[3])
     return n1[0]*n2[0]+n1[1]*n2[1]+n1[2]*n2[2];
 }
 
-double vectorlength(double v[3]) // calculate length of vector
+double vector_length(double v[3]) // calculate length of vector
 {
     return  sqrt( v[0]*v[0]+v[1]*v[1]+v[2]*v[2] );
 }
@@ -62,4 +62,26 @@ void Vector_transformation (double MV[3],double  M[3][3] ,double V[3])
     MV[0]= M[0][0] * V [0] + M[0][1] * V [1]  +M[0][2] * V [2] ;
     MV[1]= M[1][0] * V [0] + M[1][1] * V [1]  +M[1][2] * V [2] ;
     MV[2]= M[2][0] * V [0] + M[2][1] * V [1]  +M[2][2] * V [2] ;
+}
+
+
+void matrix_inverse (double mat[3][3]){
+    int i, j;
+    float determinant = 0;
+    
+    //finding determinant
+    for(i = 0; i < 3; i++)
+        determinant += (mat[0][i] * (mat[1][(i+1)%3] * mat[2][(i+2)%3] - mat[1][(i+2)%3] * mat[2][(i+1)%3]));
+    
+    double mat_temp[3][3]={0};
+    for(i = 0; i < 3; i++){
+        for(j = 0; j < 3; j++)
+            mat_temp[i][j]=((mat[(j+1)%3][(i+1)%3] * mat[(j+2)%3][(i+2)%3]) - (mat[(j+1)%3][(i+2)%3] * mat[(j+2)%3][(i+1)%3]))/ determinant;
+        
+    }
+    for(i = 0; i < 3; i++){
+        for(j = 0; j < 3; j++)
+            mat[i][j]=mat_temp[i][j];
+        
+    }
 }

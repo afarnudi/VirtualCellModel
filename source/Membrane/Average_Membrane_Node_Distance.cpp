@@ -14,7 +14,7 @@ double Membrane::Average_Node_Distance()
         temp[0]=Node_Position[Node_A][0]-Node_Position[Node_B][0];
         temp[1]=Node_Position[Node_A][1]-Node_Position[Node_B][1];
         temp[2]=Node_Position[Node_A][2]-Node_Position[Node_B][2];
-        length= vectorlength(temp);
+        length= vector_length(temp);
         average_membrane_Node_distance+=length;
     }
     average_membrane_Node_distance=average_membrane_Node_distance/Num_of_Triangle_Pairs;

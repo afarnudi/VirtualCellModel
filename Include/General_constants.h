@@ -25,6 +25,7 @@ namespace GenConst {
     extern int Num_of_Membranes;
     extern int Num_of_Chromatins;
     extern std::string trajectory_file_name;
+    extern bool File_header;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps
