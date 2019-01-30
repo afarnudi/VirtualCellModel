@@ -44,6 +44,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double error_com=0;
     double error;
     double k_angular=0, delta_k_angular=0;
+    double num_of_cut_off;
     
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
@@ -96,7 +97,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 //    vector <double> T_Kinetic_Energy;
     double Total_potential_Energy=0.0;
     double Spring_coefficient=10.0; // streching constant
-    double Bending_coefficient=20.0*GenConst::MD_T; // bending constant
+    double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
     double Spring_force_cutt_off=1000.0;

@@ -35,6 +35,7 @@ void Membrane::potential_1 (void){
    lmin=Min_node_pair_length - 0.09;
     
     Total_Potential_Energy=0.0;
+    num_of_cut_off=0;
     
     for (int k=0 ; k< Num_of_Node_Pairs ; k++)
     {
@@ -90,7 +91,7 @@ void Membrane::potential_1 (void){
 //          cout<<"4\n";
 //          cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
 //          cout<<"temp_force_before_cut_off"<<temp_force<<endl;
-		  
+            num_of_cut_off++;
             temp_force = -965.31-Spring_force_cutt_off* ( temp_Node_distance - 1.3280*Node_radius );
             temp_potential_energy=   1.81599  + 965.31 * ( temp_Node_distance - 1.3280*Node_radius )+0.5*Spring_force_cutt_off * ( temp_Node_distance - 1.3280*Node_radius ) * ( temp_Node_distance - 1.3280*Node_radius );
 //            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
@@ -102,7 +103,7 @@ void Membrane::potential_1 (void){
 //            cout<<"5\n";
 //            cout<<"temp_Node_distance"<<temp_Node_distance<<endl;
 //            cout<<"temp_force_before_cut_off"<<temp_force<<endl;
-		  
+            num_of_cut_off++;
             temp_force = 1000.05+Spring_force_cutt_off* ( 0.671965*Node_radius - temp_Node_distance );
             temp_potential_energy = 1.85038 + 1005.05 * ( 0.671965*Node_radius - temp_Node_distance )+0.5*Spring_force_cutt_off*( 0.671965*Node_radius - temp_Node_distance )*( 0.671965*Node_radius - temp_Node_distance );
 //            cout<<"temp_force_after_cut_off"<<temp_force<<endl;

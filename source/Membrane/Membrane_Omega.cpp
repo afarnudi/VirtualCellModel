@@ -48,11 +48,13 @@ void Membrane::omega_calculator_2(){
     update_COM_velocity();
     update_COM_position();
     
-    double COM_omega[3]={0,0,0};
-    double COM_angular_momentum[3]={0,0,0};
+    Omega[0]=0;
+    Omega[1]=0;
+    Omega[2]=0;
+    double COM_angular_momentum[3]={0};
     double temp_cross[3]={0};
     double Moment_of_inertia_COM[3][3]={0};
-    double Moment_of_inertia_COM_inverse[3][3];
+    double Moment_of_inertia_COM_inverse[3][3]={0};
     for (int i=0; i<Num_of_Nodes; i++) {
         Node_Velocity[i][0] -= COM_velocity[0];
         Node_Velocity[i][1] -= COM_velocity[1];
@@ -83,25 +85,23 @@ void Membrane::omega_calculator_2(){
     
     for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) {
-            Moment_of_inertia_COM_inverse[i][j]=Moment_of_inertia_COM_inverse[i][j];
+            Moment_of_inertia_COM_inverse[i][j]=Moment_of_inertia_COM[i][j];
         }
     }
 //    std::copy(&c[0][0], &Moment_of_inertia_COM[0][0]+9, &Moment_of_inertia_COM_inverse);
     matrix_inverse(Moment_of_inertia_COM_inverse);
-    COM_omega[0]=Moment_of_inertia_COM_inverse[0][0]*COM_angular_momentum[0]+
+    Omega[0]=Moment_of_inertia_COM_inverse[0][0]*COM_angular_momentum[0]+
                  Moment_of_inertia_COM_inverse[0][1]*COM_angular_momentum[1]+
                  Moment_of_inertia_COM_inverse[0][2]*COM_angular_momentum[2];
-    COM_omega[1]=Moment_of_inertia_COM_inverse[1][0]*COM_angular_momentum[0]+
+    Omega[1]=Moment_of_inertia_COM_inverse[1][0]*COM_angular_momentum[0]+
                  Moment_of_inertia_COM_inverse[1][1]*COM_angular_momentum[1]+
                  Moment_of_inertia_COM_inverse[1][2]*COM_angular_momentum[2];
-    COM_omega[2]=Moment_of_inertia_COM_inverse[2][0]*COM_angular_momentum[0]+
+    Omega[2]=Moment_of_inertia_COM_inverse[2][0]*COM_angular_momentum[0]+
                  Moment_of_inertia_COM_inverse[2][1]*COM_angular_momentum[1]+
                  Moment_of_inertia_COM_inverse[2][2]*COM_angular_momentum[2];
-    
-    double temp_k_omega=0.5*(COM_omega[0]*COM_angular_momentum[0] +
-                             COM_omega[1]*COM_angular_momentum[1] +
-                             COM_omega[2]*COM_angular_momentum[2]);
-    
+    double temp_k_omega=0.5*(Omega[0]*COM_angular_momentum[0] +
+                             Omega[1]*COM_angular_momentum[1] +
+                             Omega[2]*COM_angular_momentum[2]);
     delta_k_angular=temp_k_omega-k_angular;
     k_angular=temp_k_omega;
     
