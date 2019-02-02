@@ -40,6 +40,17 @@ int main{
             povray_output_creator(MD_Step, Membrane_Node_Position, Membrane_triangle_list, Membrane_Normal_direction,  Membrane_Node_Pair_list, Actin_Node_Position, Actin_Node_Pair_List, Chromatin_Bead_Position,   ECM_Node_Position, ECM_Node_Pair_List, ECM_surface_triangle_list, Outer_Membrane_num_of_triangles, Membrane_num_of_Node_Pairs, Outer_Membrane_num_of_Node_Pairs, Actin_num_of_Bonds, ECM_num_of_Bonds, Membrane_num_of_Nodes);
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 }
     //pov
     povray_output_creator( MD_num_of_steps, Membrane_Node_Position, Membrane_triangle_list,

@@ -40,6 +40,7 @@ void Membrane::node_distance_correction(void){
     double MD_relax_Steps_1=2000;
     double MD_relax_Steps_2=2500;
     double MD_relax_Steps_3=500;
+    string pov_relaxation_file_name ="Results/Relaxation/Relaxation_POV_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time;
     
     double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps_1, min=Min_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
@@ -58,6 +59,7 @@ void Membrane::node_distance_correction(void){
         }
         if (MD_Step!=0 && MD_Step%10==0) {
             relaxation_traj();
+            
         }
         
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
@@ -89,6 +91,7 @@ void Membrane::node_distance_correction(void){
     }
     Damping_coefficient=temp_Damping_coefficient;
     Bending_coefficient=temp_Bending_coefficient;
+    write_pov_traj(pov_relaxation_file_name, to_string(mem_index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
 }
 
 void Membrane::calculate_mesh_properties(void){
