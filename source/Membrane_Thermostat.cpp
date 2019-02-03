@@ -4,7 +4,7 @@
 
 
 
-void Membrane::Thermostat_Bussi(double MD_KT){
+void Membrane::Thermostat_Bussi(double MD_T){
     update_COM_velocity();
     
     double alpha=0;
@@ -20,7 +20,7 @@ void Membrane::Thermostat_Bussi(double MD_KT){
     
 //    cout<<Total_Kinetic_Energy<<endl;
 //    T_Kinetic_Energy[MD_step%100]=Total_Kinetic_Energy;
-    double sigma=0.5*Num_degrees_of_freedom*GenConst::MD_T;
+    double sigma=0.5*Num_degrees_of_freedom*MD_T*GenConst::K;
     alpha=resamplekin(Total_Kinetic_Energy, sigma, Num_degrees_of_freedom, GenConst::MD_thrmo_step);
     alpha=sqrt(alpha/Total_Kinetic_Energy);
 //    cout<<"T = "<<2*Total_Kinetic_Energy/Num_degrees_of_freedom<<endl;
@@ -37,7 +37,7 @@ void Membrane::Thermostat_Bussi(double MD_KT){
     }
 }
 
-void Membrane::Thermostat_2(double MD_KT){
+void Membrane::Thermostat_2(double MD_T){
     update_COM_velocity();
     
     double alpha;
@@ -54,7 +54,7 @@ void Membrane::Thermostat_2(double MD_KT){
     
     
     
-    alpha=sqrt(MD_KT/Temperature);
+    alpha=sqrt(GenConst::K*MD_T/Temperature);
     
 //    cout<<"T = "<<Temperature<<endl;
 //    cout<<"alpha_ thermo_2 = "<<alpha;
@@ -71,7 +71,7 @@ void Membrane::Thermostat_2(double MD_KT){
     }
 }
 
-void Membrane::Thermostat_N6(double MD_KT){
+void Membrane::Thermostat_N6(double MD_T){
     
     update_COM_velocity();
     update_COM_position();
@@ -129,7 +129,7 @@ void Membrane::Thermostat_N6(double MD_KT){
         Total_Kinetic_Energy+=vector_length_squared(b);
     }
     double Num_degrees_of_freedom=3*Num_of_Nodes-6;
-    double sigma=0.5*Num_degrees_of_freedom*GenConst::MD_T;
+    double sigma=0.5*Num_degrees_of_freedom*MD_T*GenConst::K;
     double alpha=resamplekin(Total_Kinetic_Energy, sigma, Num_degrees_of_freedom, GenConst::MD_thrmo_step);
     alpha=sqrt(alpha/Total_Kinetic_Energy);
     

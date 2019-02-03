@@ -135,6 +135,7 @@ private:
     void potential_1 (void);
     void potential_2 (void);
     void FENE (void);
+    void Relaxation_potential(void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);

@@ -10,7 +10,7 @@
 
 void Membrane::Bending_potetial_2(double sin_theta_0){
     int pos1,pos2,pos3,pos4;
-    double  N1[3], N2[3], N3[3], sinus, sign, F0;
+    double  N1[3], N2[3], N3[3], sin, sign, F0;
     double E[3],x1_3[3], x1_4[3], x2_3[3], x2_4[3];
     
     for(int i=0 ;i<Num_of_Triangle_Pairs;i++)  // who are neighbors?
@@ -33,13 +33,13 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         
         double E_length=vector_length(E), N1_length=vector_length(N1), N1_length_2=N1_length*N1_length, N2_length=vector_length(N2), N2_length_2=N2_length*N2_length;
         double N1dotN2=innerproduct(N1, N2)/(N1_length*N2_length);
-        sinus=(1.000001-N1dotN2)/2;
-		if(sinus<0){
-			sinus=-sinus;
+        sin=(1.000001-N1dotN2)/2;
+		if(sin<0){
+			sin=-sin;
 			}
-		sinus=sqrt(sinus);
+		sin=sqrt(sin);
         sign=-(1-2*signbit(innerproduct(N3, E)));
-        F0 = (sinus-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sinus/(N1_length+N2_length);
+        F0 = (sin-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sin/(N1_length+N2_length);
         
         double temp_1, temp_2, temp_3_1, temp_3_2, temp_4_1, temp_4_2;
         temp_1=E_length/N1_length_2;
@@ -55,7 +55,6 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
             Node_Force[pos2][l] -=  F0*temp_2*N2[l];
             Node_Force[pos3][l] -=  F0*temp_3_1*N1[l]+F0*temp_3_2*N2[l];
             Node_Force[pos4][l] -= -F0*temp_4_1*N1[l]-F0*temp_4_2*N2[l];
-            
         }
     }  // end of 'for-i'
 }
