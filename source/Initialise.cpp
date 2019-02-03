@@ -52,9 +52,9 @@ void Membrane::initialise(string Mesh_file_name){
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
     check();
-    node_distance_correction();
-    calculate_mesh_properties();
-    check();
+//    node_distance_correction();
+//    calculate_mesh_properties();
+//    check();
     
     //Used in the error calculator
     Node_Position_lag_step.resize(Num_of_Nodes);

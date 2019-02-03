@@ -43,18 +43,19 @@ void Membrane::potential_1 (void){
         } else if(Node_distance > le0  & Node_distance <lmax )  //bondforce
         {
             double exp_le0=exp(1.0/(le0-Node_distance));
-            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*(1.0/(lmax-Node_distance)+1.0/((le0-Node_distance)*(le0-Node_distance) )  );
+            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
             temp_potential_energy = Spring_coefficient*exp_le0/(lmax-Node_distance);
             
         } else if(Node_distance < le1   &  Node_distance > lmin  )  // repulsive force
         {
             double exp_le1=exp(1.0/(Node_distance-le1));
-            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1.0/(Node_distance-lmin)+1.0/( (Node_distance-le1)*(Node_distance-le1) ) );
+            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
             temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
         }
         
         if(Node_distance>lmax || Node_distance<lmin)
         {
+            cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
             cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
             exit(EXIT_FAILURE);
         }
@@ -171,4 +172,82 @@ void Membrane::FENE(void){
         }
     }
     
+}
+
+void Membrane::Relaxation_potential (void){
+    
+    double le0,le1,lmax,lmin;
+    double deltax, deltay, deltaz, Node_distance, temp_force;
+    double temp_potential_energy = 0.0;
+    int Node_A, Node_B;
+    
+    lmax=Max_node_pair_length - 0.09;
+    lmin=Min_node_pair_length + 0.09;
+    
+    le0=lmin+3*(lmax-lmin)/4.0;
+    le1=lmin+(lmax-lmin)/4.0;
+    
+    Total_Potential_Energy=0.0;
+    num_of_cut_off=0;
+    
+    for (int k=0 ; k< Num_of_Node_Pairs ; k++)
+    {
+        Node_B=Node_Bond_list[k][0];
+        Node_A=Node_Bond_list[k][1];
+        
+        deltax=Node_Position[Node_A][0]-Node_Position[Node_B][0];
+        deltay=Node_Position[Node_A][1]-Node_Position[Node_B][1];
+        deltaz=Node_Position[Node_A][2]-Node_Position[Node_B][2];
+        
+        
+        Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
+        temp_force=0.0;
+        
+        if(Node_distance >le1  & Node_distance < le0 )  //free zone
+        {
+            temp_potential_energy=0 ; // free zone
+        } else if(Node_distance > le0  & Node_distance <lmax )  //bondforce
+        {
+            double exp_le0=exp(1.0/(le0-Node_distance));
+            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
+            temp_potential_energy = Spring_coefficient*exp_le0/(lmax-Node_distance);
+            
+        } else if(Node_distance < le1   &  Node_distance > lmin  )  // repulsive force
+        {
+            double exp_le1=exp(1.0/(Node_distance-le1));
+            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+            temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
+        }
+        /// my cutoff for force amplitute and for avoiding leting particle scape from force trap
+        if(temp_force>1000  || Node_distance>lmax )
+        {
+            double c=1500;
+            temp_force = -2.0*c*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmax-lmin) )*c;
+            temp_potential_energy=   c*Node_distance*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmin-lmax) )*c*Node_distance;
+        }
+        
+        
+        if(temp_force<-1000   ||  Node_distance<lmin )
+        {
+            double c=1500;
+            temp_force = -2.0*c*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmax-lmin) )*c;
+            temp_potential_energy=   c*Node_distance*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmin-lmax) )*c*Node_distance;
+        }
+        
+        Total_Potential_Energy += temp_potential_energy;
+        
+        // implimentation of forces:
+        double delta_v_x=Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+        delta_v_y=Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+        delta_v_z=Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2];
+        
+        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance - Damping_coefficient*delta_v_x;
+        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance - Damping_coefficient*delta_v_y;
+        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance - Damping_coefficient*delta_v_z;
+        
+        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance + Damping_coefficient*delta_v_x;
+        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance + Damping_coefficient*delta_v_y;
+        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance + Damping_coefficient*delta_v_z;
+    }
+//    cout<<"here"<<endl;
 }
