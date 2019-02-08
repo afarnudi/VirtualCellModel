@@ -92,6 +92,7 @@ void Membrane::generate_report()
     Report<<"MD_Time_Step"<<setw(20)<<GenConst::MD_Time_Step<<endl;
     Report<<"MD_T"<<setw(20)<<GenConst::MD_T<<endl;
     Report<<"MD_thrmo_step"<<setw(20)<<GenConst::MD_thrmo_step<<endl;
+    Report<<"Bussi_tau"<<setw(20)<<GenConst::Bussi_tau<<endl;
     Report<<"MC_step"<<setw(20)<<GenConst::MC_step<<endl;
     Report<<"Mem_fluidity"<<setw(20)<<GenConst::Mem_fluidity<<endl;
     Report<<"Lbox"<<setw(20)<<GenConst::Lbox<<endl;
@@ -140,7 +141,6 @@ void Membrane::write_parameters(int MD_Step){
     //    string energy_file_name;
     string traj_file_name;
     omega_calculator_2();
-    double to_T=2.0/(3.0*Num_of_Nodes-3);
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
@@ -150,16 +150,11 @@ void Membrane::write_parameters(int MD_Step){
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
     if (GenConst::File_header==false) {
-        Trajectory<<"MD Step\t"<<"Total Kinetic Energy\t"<<"Temperature\t"
-        <<"Error\t"<<"Error_com\t"
-        <<"omega_x\t"<<"omega_y\t"<<"omega_z\t"<<"omega\t"
-        <<"k_Omega\t"<<"delta_k_omega\t"
-        <<"#cut_off"<<endl;
+        Trajectory<<"MD Step\t"<<"Total Kinetic Energy\t"
+        <<"omega_x\t"<<"omega_y\t"<<"omega_z\t"<<"omega\n";
         GenConst::File_header=true;
     }
-    Trajectory<<MD_Step<<"\t"<<Total_Kinetic_Energy<<"\t"<<to_T*Total_Kinetic_Energy
-    <<"\t"<<error<<"\t"<<error_com
+    Trajectory<<MD_Step<<"\t"<<Total_Kinetic_Energy
     <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len
-    <<"\t"<<k_angular<<"\t"<<delta_k_angular
-    <<"\t"<<num_of_cut_off<<endl;
+    <<endl;
 }

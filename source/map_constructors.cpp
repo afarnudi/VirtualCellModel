@@ -121,6 +121,7 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::MD_T=it->second;
+            GenConst::Buffer_temperature=GenConst::MD_T;
         }
     } else if (param_name=="K"){
         it = general_param_map.find(param_name);
@@ -170,5 +171,10 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         } else {
             GenConst::Num_of_Chromatins=0;
         }
-    }
+    } else if (param_name=="Bussi_tau"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Bussi_tau=it->second;
+        }
+    } 
 }

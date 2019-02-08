@@ -52,18 +52,6 @@ void Membrane::initialise(string Mesh_file_name){
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
     check();
-//    node_distance_correction();
-//    calculate_mesh_properties();
-//    check();
-    
-    //Used in the error calculator
-    Node_Position_lag_step.resize(Num_of_Nodes);
-    Node_Force_lag_step.resize(Num_of_Nodes);
-    for (int i=0; i<Num_of_Nodes; i++) {
-        Node_Position_lag_step[i].resize(3,0);
-        Node_Force_lag_step[i].resize(3,0);
-    }
-    
     
     cout<<"\nMembrane class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;

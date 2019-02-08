@@ -21,7 +21,7 @@ void Membrane::Thermostat_Bussi(double MD_T){
 //    cout<<Total_Kinetic_Energy<<endl;
 //    T_Kinetic_Energy[MD_step%100]=Total_Kinetic_Energy;
     double sigma=0.5*Num_degrees_of_freedom*MD_T*GenConst::K;
-    alpha=resamplekin(Total_Kinetic_Energy, sigma, Num_degrees_of_freedom, GenConst::MD_thrmo_step);
+    alpha=resamplekin(Total_Kinetic_Energy, sigma, Num_degrees_of_freedom, GenConst::Bussi_tau);
     alpha=sqrt(alpha/Total_Kinetic_Energy);
 //    cout<<"T = "<<2*Total_Kinetic_Energy/Num_degrees_of_freedom<<endl;
 //    cout<<"alpha_ Bussi = "<<alpha;
