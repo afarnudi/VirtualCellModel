@@ -23,7 +23,6 @@ void Membrane::potential_1 (void){
     le1=lmin+(lmax-lmin)/4.0;
     
     Total_Potential_Energy=0.0;
-    num_of_cut_off=0;
     
     for (int k=0 ; k< Num_of_Node_Pairs ; k++)
     {
@@ -62,18 +61,34 @@ void Membrane::potential_1 (void){
         
         Total_Potential_Energy += temp_potential_energy;
         
+        //damper
+        if (Damping_coefficient>0.00001) {
+            double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+                Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+                Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+            double delta_r[3]={deltax, deltay, deltaz};
+            double temp_damp=innerproduct(delta_r, delta_v);
+            double delta_r_2=vector_length_squared(delta_r);
+            temp_damp=temp_damp/delta_r_2;
+            
+            Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+            
+            Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+        }
+        
+        
         // implimentation of forces:
-        double delta_v_x=Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
-               delta_v_y=Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
-               delta_v_z=Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2];
+        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
+        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
+        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
         
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance - Damping_coefficient*delta_v_x;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance - Damping_coefficient*delta_v_y;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance - Damping_coefficient*delta_v_z;
-        
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance + Damping_coefficient*delta_v_x;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance + Damping_coefficient*delta_v_y;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance + Damping_coefficient*delta_v_z;
+        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
+        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
+        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
     }
     
 }
@@ -100,17 +115,34 @@ void Membrane::potential_2 (void){
         temp_force=-Spring_coefficient*(Node_distance-Average_node_pair_length);
         
         
-        // implimentation of forces:
-        double delta_v_x=Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
-               delta_v_y=Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
-               delta_v_z=Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2];
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance - Damping_coefficient*delta_v_x;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance - Damping_coefficient*delta_v_y;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance - Damping_coefficient*delta_v_z;
+        //damper
+        if (Damping_coefficient>0.00001) {
+            double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+                Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+                Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+            double delta_r[3]={deltax, deltay, deltaz};
+            double temp_damp=innerproduct(delta_r, delta_v);
+            double delta_r_2=vector_length_squared(delta_r);
+            temp_damp=temp_damp/delta_r_2;
+            
+            Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+            
+            Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+        }
         
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance + Damping_coefficient*delta_v_x;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance + Damping_coefficient*delta_v_y;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance + Damping_coefficient*delta_v_z;
+        
+        // implimentation of forces:
+        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
+        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
+        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+        
+        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
+        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
+        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
     }
     
 }
@@ -158,17 +190,34 @@ void Membrane::FENE(void){
             
             Total_Potential_Energy += temp_potential_energy;
             
-            // implimentation of forces:
-            double delta_v_x=Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
-                   delta_v_y=Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
-                   delta_v_z=Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2];
-            Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance - Damping_coefficient*delta_v_x;
-            Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance - Damping_coefficient*delta_v_y;
-            Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance - Damping_coefficient*delta_v_z;
+            //damper
+            if (Damping_coefficient>0.00001) {
+                double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+                    Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+                    Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+                double delta_r[3]={deltax, deltay, deltaz};
+                double temp_damp=innerproduct(delta_r, delta_v);
+                double delta_r_2=vector_length_squared(delta_r);
+                temp_damp=temp_damp/delta_r_2;
+                
+                Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+                Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+                Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+                
+                Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+                Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+                Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+            }
             
-            Node_Force[Node_B][0] += -temp_force*deltax/Node_distance + Damping_coefficient*delta_v_x;
-            Node_Force[Node_B][1] += -temp_force*deltay/Node_distance + Damping_coefficient*delta_v_y;
-            Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance + Damping_coefficient*delta_v_z;
+            
+            // implimentation of forces:
+            Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
+            Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
+            Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+            
+            Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
+            Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
+            Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
         }
     }
     
@@ -188,7 +237,6 @@ void Membrane::Relaxation_potential (void){
     le1=lmin+(lmax-lmin)/4.0;
     
     Total_Potential_Energy=0.0;
-    num_of_cut_off=0;
     
     for (int k=0 ; k< Num_of_Node_Pairs ; k++)
     {
@@ -236,18 +284,34 @@ void Membrane::Relaxation_potential (void){
         
         Total_Potential_Energy += temp_potential_energy;
         
+        //damper
+        if (Damping_coefficient>0.00001) {
+            double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+                Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+                Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+            double delta_r[3]={deltax, deltay, deltaz};
+            double temp_damp=innerproduct(delta_r, delta_v);
+            double delta_r_2=vector_length_squared(delta_r);
+            temp_damp=temp_damp/delta_r_2;
+            
+            Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+            
+            Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+        }
+        
+        
         // implimentation of forces:
-        double delta_v_x=Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
-        delta_v_y=Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
-        delta_v_z=Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2];
+        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
+        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
+        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
         
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance - Damping_coefficient*delta_v_x;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance - Damping_coefficient*delta_v_y;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance - Damping_coefficient*delta_v_z;
-        
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance + Damping_coefficient*delta_v_x;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance + Damping_coefficient*delta_v_y;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance + Damping_coefficient*delta_v_z;
+        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
+        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
+        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
     }
 //    cout<<"here"<<endl;
 }

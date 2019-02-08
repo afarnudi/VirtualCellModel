@@ -27,6 +27,8 @@ namespace GenConst {
     extern std::string trajectory_file_name;
     extern bool File_header;
     extern bool Relaxation;
+    extern double Buffer_temperature;
+    extern double Bussi_tau;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

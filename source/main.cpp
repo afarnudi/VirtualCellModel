@@ -19,6 +19,7 @@
 #include "interaction.hpp"
 #include "maps.hpp"
 #include "Chromatin.h"
+#include "Global_functions.hpp"
 
 namespace GenConst {
     int MD_num_of_steps;
@@ -36,6 +37,8 @@ namespace GenConst {
     string trajectory_file_name;
     bool File_header;
     bool Relaxation;
+    double Buffer_temperature;
+    double Bussi_tau;
 }
 
 
@@ -121,7 +124,6 @@ int main(int argc, char **argv)
         if (Include_Membrane)
         {
             for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].error_calculator_step_1();
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
                 Membranes[i].Elastic_Force_Calculator(0);
             }
@@ -156,12 +158,13 @@ int main(int argc, char **argv)
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                Membranes[i].error_calculator_step_2();
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {//I think we can remove the first clause.
-                    Membranes[i].Thermostat_Bussi(GenConst::MD_T);
+//                    set_temperature(MD_Step, GenConst::MD_T, 1000000);
+                    Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
 //                    Membranes[i].Thermostat_2(GenConst::MD_T);
 //                    Membranes[i].Thermostat_N6(GenConst::MD_T);
                     Membranes[i].write_parameters(MD_Step);
+                    
                 }
                 
             }
@@ -211,7 +214,7 @@ int main(int argc, char **argv)
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
     cout<<"\nDone!"<<endl;
-    printf("Time taken: %.2fminutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
+    printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }
 

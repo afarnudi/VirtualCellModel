@@ -99,11 +99,11 @@ void Membrane::omega_calculator_2(){
     Omega[2]=Moment_of_inertia_COM_inverse[2][0]*COM_angular_momentum[0]+
                  Moment_of_inertia_COM_inverse[2][1]*COM_angular_momentum[1]+
                  Moment_of_inertia_COM_inverse[2][2]*COM_angular_momentum[2];
-    double temp_k_omega=0.5*(Omega[0]*COM_angular_momentum[0] +
-                             Omega[1]*COM_angular_momentum[1] +
-                             Omega[2]*COM_angular_momentum[2]);
-    delta_k_angular=temp_k_omega-k_angular;
-    k_angular=temp_k_omega;
+//    double temp_k_omega=0.5*(Omega[0]*COM_angular_momentum[0] +
+//                             Omega[1]*COM_angular_momentum[1] +
+//                             Omega[2]*COM_angular_momentum[2]);
+//    delta_k_angular=temp_k_omega-k_angular;
+//    k_angular=temp_k_omega;
     
     for(int i=0;i<Num_of_Nodes;i++)
     {

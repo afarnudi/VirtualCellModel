@@ -6,6 +6,7 @@ K	1
 Num_of_Membranes	0
 Num_of_Chromatins	0
 MD_thrmo_step	100
+Bussi_tau	300
 MC_step	100
 Lbox	1000
 Periodic_condtion_status 0
