@@ -243,7 +243,7 @@ void Membrane::generate_report()
 void Membrane::write_parameters(int MD_Step){
     //    string energy_file_name;
     string traj_file_name;
-    omega_calculator_2();
+//    omega_calculator_2();
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
