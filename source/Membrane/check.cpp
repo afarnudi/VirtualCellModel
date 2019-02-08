@@ -30,12 +30,17 @@ void Membrane::check(void){
 
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
         cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
+
+    }
+    if (((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) or GenConst::Relaxation==true) {
         node_distance_correction();
-        calculate_mesh_properties();
+        calculate_mesh_properties();  
     }
 }
 
 void Membrane::node_distance_correction(void){
+    cout<<"\nBeginnig the Relaxation\nProgress:\n";
+     int progress=0;
     double MD_relax_Steps_1=2000;
     double MD_relax_Steps_2=2500;
     double MD_relax_Steps_3=500;
@@ -58,9 +63,10 @@ void Membrane::node_distance_correction(void){
             MD_Evolution_end(GenConst::MD_Time_Step);
         }
         if (MD_Step!=0 && MD_Step%10==0) {
-            relaxation_traj();
-            
-        }
+            relaxation_traj();}
+        if (int(100*MD_Step/(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
+        progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 //    check();
 //    Damping_coefficient=2;
@@ -84,6 +90,9 @@ void Membrane::node_distance_correction(void){
         if (MD_Step!=0 && MD_Step%10==0) {
             relaxation_traj();
         }
+        if ( int( 100*(MD_Step+MD_relax_Steps_1) /(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step+ MD_relax_Steps_1<<"\r" << std::flush;
+        progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 
     for (int i=0; i<Num_of_Nodes; i++) {

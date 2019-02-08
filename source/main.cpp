@@ -35,6 +35,7 @@ namespace GenConst {
     int Num_of_Chromatins;
     string trajectory_file_name;
     bool File_header;
+    bool Relaxation;
 }
 
 

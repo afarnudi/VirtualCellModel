@@ -170,5 +170,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         } else {
             GenConst::Num_of_Chromatins=0;
         }
+    } else if(param_name=="Relaxation"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second==0.0) {
+                GenConst::Relaxation=false;
+            } else {
+                GenConst::Relaxation=true;
+            }
+        }
     }
+    
 }

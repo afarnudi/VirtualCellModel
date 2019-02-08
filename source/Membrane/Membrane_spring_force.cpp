@@ -181,8 +181,8 @@ void Membrane::Relaxation_potential (void){
     double temp_potential_energy = 0.0;
     int Node_A, Node_B;
     
-    lmax=Max_node_pair_length - 0.09;
-    lmin=Min_node_pair_length + 0.09;
+    lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
+    lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
     
     le0=lmin+3*(lmax-lmin)/4.0;
     le1=lmin+(lmax-lmin)/4.0;
