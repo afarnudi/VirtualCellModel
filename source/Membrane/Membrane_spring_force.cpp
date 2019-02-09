@@ -80,7 +80,6 @@ void Membrane::potential_1 (void){
             Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
         }
         
-        
         // implimentation of forces:
         Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
         Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;

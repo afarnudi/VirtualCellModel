@@ -173,7 +173,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Chromatins[i].Thermostat_2(GenConst::MD_T);
+                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.1);
                 }
             }
         }
