@@ -63,7 +63,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void import_config(string config_file_name);
     void set_map_parameter(string param_name, double param_value);
     void generate_report(void);
-    
+    void export_velocities(int MD_step);
     void Thermostat_2(double MD_KT);
     void Thermostat_N6(double MD_KT);
     void Thermostat_Bussi(double MD_KT);
@@ -75,7 +75,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void omega_calculator_2(void);
     void equilibrate (void);
     void write_pov_traj(string traj_name, string label, int currentstep);
-    
+    double Average_velocity();
     double Omega[3]={0};
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
@@ -95,7 +95,6 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
-    
     double Downward_speed=0.0; //???
     //bool =0;
     double com[3]; //center of mass

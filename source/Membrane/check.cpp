@@ -132,5 +132,12 @@ void Membrane::calculate_mesh_properties(void){
     cout<<"Max_node_pair_length="<<Max_node_pair_length<<"\tMin_node_pair_length="<<Min_node_pair_length<<endl;
 }
 
-
+double Membrane::Average_velocity(){
+    double average_velocity=0;
+    for (int i=0; i< Num_of_Nodes; i++){
+        average_velocity+=sqrt(Node_Velocity[i][0]*Node_Velocity[i][0] +Node_Velocity[i][1]*Node_Velocity[i][1] + Node_Velocity[i][2]*Node_Velocity[i][2] );
+    }
+    average_velocity= average_velocity/Num_of_Nodes;
+    return(average_velocity);
+}
 
