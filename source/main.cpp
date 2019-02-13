@@ -196,7 +196,7 @@ int main(int argc, char **argv)
             
             if (Include_Chromatin) {
                 for (int i=0; i<Chromatins.size(); i++) {
-                    string label="chromatin_"+to_string(i);
+                    string label="Chromatin_"+to_string(i);
                     Chromatins[i].write_traj(traj_file_name, label);
                     Chromatins[i].export_for_resume(MD_Step);
                 }

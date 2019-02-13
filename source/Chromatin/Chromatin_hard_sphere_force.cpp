@@ -66,14 +66,15 @@ void Chromatin::hard_sphere (void){
                 Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
             }
             
+            temp_force=temp_force/Node_distance;
             // implimentation of forces:
-            Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
-            Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
-            Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+            Node_Force[Node_A][0] +=  temp_force*deltax;
+            Node_Force[Node_A][1] +=  temp_force*deltay;
+            Node_Force[Node_A][2] +=  temp_force*deltaz;
             
-            Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
-            Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
-            Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
+            Node_Force[Node_B][0] += -temp_force*deltax;
+            Node_Force[Node_B][1] += -temp_force*deltay;
+            Node_Force[Node_B][2] += -temp_force*deltaz;
         }
     }
     

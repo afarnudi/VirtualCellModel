@@ -11,83 +11,78 @@
 
 void Chromatin::potential_1 (void){
     double le0,le1,lmax,lmin;
-    double deltax,deltay,deltaz,temp_Node_distance,temp_force;
+    double deltax,deltay,deltaz,Node_distance,temp_force;
     double temp_potential_energy = 0.0;
-    int temp_Node_A, temp_Node_B;
-   // le0= 0.994;
-    //lmax=1.170;
-    //le1=0.654;
-   //lmin=0.478;
-//    double width=0.2;
-//   le0=(2.2-width)*Node_radius;
-//   lmax=(2.2+width)*Node_radius;
-//   le1=(2.2+width)*Node_radius;
-//   lmin=(2.2-width)*Node_radius;
+    int Node_A, Node_B;
     
-    le0=2.1*Node_radius;
-    lmax=2.4*Node_radius;
-    le1=2.3*Node_radius;
     lmin=2.*Node_radius;
+    lmax=2.4*Node_radius;
+    
+    le1=2.1*Node_radius;
+    le0=2.3*Node_radius;
+    
     
     Total_Potential_Energy=0.0;
     
     for (int k=0 ; k< Num_of_Nodes-1 ; k++)
     {
-        temp_Node_B=k;
-        temp_Node_A=k+1;
+        Node_B=k;
+        Node_A=k+1;
         
-        deltax=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
-        deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
-        deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
+        deltax=Node_Position[Node_A][0]-Node_Position[Node_B][0];
+        deltay=Node_Position[Node_A][1]-Node_Position[Node_B][1];
+        deltaz=Node_Position[Node_A][2]-Node_Position[Node_B][2];
         
-        
-        temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
+        Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
         temp_force=0.0;
-        double temp_exp_le0=exp(1.0/(le0-temp_Node_distance));
-        double temp_exp_le1=exp(1.0/(temp_Node_distance-le1));
         
-//        if(temp_Node_distance >le1  && temp_Node_distance < le0 )  //free zone
-//        {
-//            temp_potential_energy=0 ; // free zone
-//        }
-        
-        if(temp_Node_distance > (le1+le0)/2.0  && temp_Node_distance <lmax )  //bondforce
+        if(Node_distance > le1  && Node_distance <lmax )  //bondforce
         {
-            temp_force = (Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance))*( 1.0/(lmax-temp_Node_distance) +  1.0/((le0-temp_Node_distance)*(le0-temp_Node_distance)));
-            temp_potential_energy= Spring_coefficient*temp_exp_le0/(lmax-temp_Node_distance);
+            double exp_le0=exp(1.0/(le0-Node_distance));
+            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
+            temp_potential_energy = Spring_coefficient*exp_le0/(lmax-Node_distance);
             
+        } else if(Node_distance < le0   &&  Node_distance > lmin  )  // repulsive force
+        {
+            double exp_le1=exp(1.0/(Node_distance-le1));
+            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+            temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
         }
-        if(temp_Node_distance < (le1+le0)/2.0   &&  temp_Node_distance > lmin  )  // repulsive force
+        if(Node_distance>lmax || Node_distance<lmin)
         {
-            temp_force= -(Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin))*( 1.0/(temp_Node_distance-lmin) + 1.0/((temp_Node_distance-le1)*(temp_Node_distance-le1)));                 // force on i th from j
-            temp_potential_energy= Spring_coefficient*temp_exp_le1/(temp_Node_distance-lmin);
+            cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
+            cout<<"The potential between the Chromatin nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
+            exit(EXIT_FAILURE);
         }
-        
-        if(temp_force>965.31  || temp_Node_distance>lmax )
-        {
-
-            temp_force = 965.31+Spring_force_cutt_off* ( temp_Node_distance - 1.3280*Node_radius );
-            temp_potential_energy=   1.81599  + 965.31 * ( temp_Node_distance - 1.3280*Node_radius )+0.5*Spring_force_cutt_off * ( temp_Node_distance - 1.3280*Node_radius ) * ( temp_Node_distance - 1.3280*Node_radius );
-//            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
-		}
-        if(temp_force<-1000.05   ||  temp_Node_distance<lmin )
-        {
-		  
-            temp_force =-1000.05-Spring_force_cutt_off* ( 0.671965*Node_radius - temp_Node_distance );
-            temp_potential_energy = 1.85038 + 1005.05 * ( 0.671965*Node_radius - temp_Node_distance )+0.5*Spring_force_cutt_off*( 0.671965*Node_radius - temp_Node_distance )*( 0.671965*Node_radius - temp_Node_distance );
-//            cout<<"temp_force_after_cut_off"<<temp_force<<endl;
-		}
         
         Total_Potential_Energy += temp_potential_energy;
         
-        // implimentation of forces:
-        Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
-        Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        if (Damping_coefficient>0.00001) {
+            double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+                Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+                Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+            double delta_r[3]={deltax, deltay, deltaz};
+            double temp_damp=innerproduct(delta_r, delta_v);
+            double delta_r_2=vector_length_squared(delta_r);
+            temp_damp=temp_damp/delta_r_2;
+            
+            Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+            
+            Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+            Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+            Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+        }
         
-        Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
-        Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
+        // implimentation of forces:
+        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
+        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
+        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+        
+        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
+        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
+        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
     }
     // End of Membrane Node Pair forces
     
@@ -129,12 +124,6 @@ void Chromatin::FENE(void){
         temp_force=0.0;
         
         if (temp_Node_distance<(equi_point-delta_r_max) || temp_Node_distance>(equi_point+delta_r_max)){
-            //            Node_Velocity[temp_Node_A][0]*=-1;
-            //            Node_Velocity[temp_Node_A][1]*=-1;
-            //            Node_Velocity[temp_Node_A][2]*=-1;
-            //            Node_Velocity[temp_Node_B][0]*=-1;
-            //            Node_Velocity[temp_Node_B][1]*=-1;
-            //            Node_Velocity[temp_Node_B][2]*=-1;
             cout<<"Node distance out of bounds of the FENE cut off.\nNode numbers "<<temp_Node_A<<" and "<<temp_Node_B<<endl;
             cout<<"Node distance "<<temp_Node_distance<<endl;
             exit(EXIT_FAILURE);
@@ -178,7 +167,7 @@ void Chromatin::Strong_spring (void){
         
         temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
        
-        temp_force=100*Spring_coefficient*(temp_Node_distance-2.1*Node_radius);
+        temp_force=Spring_coefficient*(temp_Node_distance-2.1*Node_radius);
         
         
         // implimentation of forces:
