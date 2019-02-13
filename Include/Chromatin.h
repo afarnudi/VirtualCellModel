@@ -46,6 +46,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void generate_report(void);
     void Thermostat_2(double MD_KT);
     void Thermostat_N6(double MD_KT);
+    void Thermostat_Bussi(double MD_T);
     void Results (string label);
     void build_random_chain(void);
     void Elastic_Force_Calculator();

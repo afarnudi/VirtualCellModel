@@ -173,7 +173,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Chromatins[i].Thermostat_2(GenConst::MD_T);
+                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.1);
                 }
             }
         }
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
             
             if (Include_Chromatin) {
                 for (int i=0; i<Chromatins.size(); i++) {
-                    string label="chromatin_"+to_string(i);
+                    string label="Chromatin_"+to_string(i);
                     Chromatins[i].write_traj(traj_file_name, label);
                     Chromatins[i].export_for_resume(MD_Step);
                 }

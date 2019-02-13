@@ -38,7 +38,7 @@ bool barrier_2(Membrane mem, int mem_index);
 
 
 void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem);
-void Chromatin_Membrane_hard_sphere(Chromatin chromo, Membrane Mem);
+void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
 void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
 
 

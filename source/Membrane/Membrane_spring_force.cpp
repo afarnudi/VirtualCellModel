@@ -36,10 +36,7 @@ void Membrane::potential_1 (void){
         Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
         temp_force=0.0;
         
-        if(Node_distance >le1  & Node_distance < le0 )  //free zone
-        {
-            temp_potential_energy=0 ; // free zone
-        } else if(Node_distance > le0  & Node_distance <lmax )  //bondforce
+        if(Node_distance > le0  & Node_distance <lmax )  //bondforce
         {
             double exp_le0=exp(1.0/(le0-Node_distance));
             temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
@@ -80,15 +77,15 @@ void Membrane::potential_1 (void){
             Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
         }
         
-        
+        temp_force=temp_force/Node_distance;
         // implimentation of forces:
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+        Node_Force[Node_A][0] +=  temp_force*deltax;
+        Node_Force[Node_A][1] +=  temp_force*deltay;
+        Node_Force[Node_A][2] +=  temp_force*deltaz;
         
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
+        Node_Force[Node_B][0] += -temp_force*deltax;
+        Node_Force[Node_B][1] += -temp_force*deltay;
+        Node_Force[Node_B][2] += -temp_force*deltaz;
     }
     
 }
@@ -134,15 +131,15 @@ void Membrane::potential_2 (void){
             Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
         }
         
-        
+        temp_force=temp_force/Node_distance;
         // implimentation of forces:
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+        Node_Force[Node_A][0] +=  temp_force*deltax;
+        Node_Force[Node_A][1] +=  temp_force*deltay;
+        Node_Force[Node_A][2] +=  temp_force*deltaz;
         
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
+        Node_Force[Node_B][0] += -temp_force*deltax;
+        Node_Force[Node_B][1] += -temp_force*deltay;
+        Node_Force[Node_B][2] += -temp_force*deltaz;
     }
     
 }
@@ -209,15 +206,15 @@ void Membrane::FENE(void){
                 Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
             }
             
-            
+            temp_force=temp_force/Node_distance;
             // implimentation of forces:
-            Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
-            Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
-            Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+            Node_Force[Node_A][0] +=  temp_force*deltax;
+            Node_Force[Node_A][1] +=  temp_force*deltay;
+            Node_Force[Node_A][2] +=  temp_force*deltaz;
             
-            Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
-            Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
-            Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
+            Node_Force[Node_B][0] += -temp_force*deltax;
+            Node_Force[Node_B][1] += -temp_force*deltay;
+            Node_Force[Node_B][2] += -temp_force*deltaz;
         }
     }
     
@@ -303,15 +300,15 @@ void Membrane::Relaxation_potential (void){
             Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
         }
         
-        
+        temp_force=temp_force/Node_distance;
         // implimentation of forces:
-        Node_Force[Node_A][0] +=  temp_force*deltax/Node_distance;
-        Node_Force[Node_A][1] +=  temp_force*deltay/Node_distance;
-        Node_Force[Node_A][2] +=  temp_force*deltaz/Node_distance;
+        Node_Force[Node_A][0] +=  temp_force*deltax;
+        Node_Force[Node_A][1] +=  temp_force*deltay;
+        Node_Force[Node_A][2] +=  temp_force*deltaz;
         
-        Node_Force[Node_B][0] += -temp_force*deltax/Node_distance;
-        Node_Force[Node_B][1] += -temp_force*deltay/Node_distance;
-        Node_Force[Node_B][2] += -temp_force*deltaz/Node_distance;
+        Node_Force[Node_B][0] += -temp_force*deltax;
+        Node_Force[Node_B][1] += -temp_force*deltay;
+        Node_Force[Node_B][2] += -temp_force*deltaz;
     }
 //    cout<<"here"<<endl;
 }
