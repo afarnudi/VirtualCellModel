@@ -94,6 +94,5 @@ void Chromatin::build_random_chain(void){
         Node_Velocity[i][2] -= velocity_COM[2];
     }
     
-    
-    Membrane_neighbbour_node.resize(Num_of_Nodes);
+    Membrane_neighbour_node.resize(Num_of_Nodes);
 }
