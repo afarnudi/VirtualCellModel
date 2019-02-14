@@ -18,11 +18,14 @@ void Chromatin::initialise(void){
 
 void Chromatin::build_random_chain(void){
     
+    double position_COM[3]={0};
+    double velocity_COM[3]={0};
+    
     Node_Position.resize(Num_of_Nodes);
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
     
-    double Vcom[3]={0,0,0};
+    
     
     for(int i=0;i<Num_of_Nodes;i++)
     {
@@ -52,28 +55,43 @@ void Chromatin::build_random_chain(void){
         } // for (int k=0; k<i; k++)
         
         if (accept_random_step) {
-            Node_Position[i][0]=temp_x;
-            Node_Position[i][1]=temp_y;
-            Node_Position[i][2]=temp_z;
+            Node_Position[i][0] = temp_x;
+            Node_Position[i][1] = temp_y;
+            Node_Position[i][2] = temp_z;
+            
             
             Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
             Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
             Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
             
-            Vcom[0]+=Node_Velocity[i][0];
-            Vcom[1]+=Node_Velocity[i][1];
-            Vcom[2]+=Node_Velocity[i][2];
+            position_COM[0] += temp_x;
+            position_COM[0] += temp_y;
+            position_COM[0] += temp_z;
+            
+            velocity_COM[0]+=Node_Velocity[i][0];
+            velocity_COM[1]+=Node_Velocity[i][1];
+            velocity_COM[2]+=Node_Velocity[i][2];
         }
         
     } // for (int i=1; i<Num_of_Nodes; i++)
     
-    Vcom[0]/=Num_of_Nodes;
-    Vcom[1]/=Num_of_Nodes;
-    Vcom[2]/=Num_of_Nodes;
+    position_COM[0] /= Num_of_Nodes;
+    position_COM[1] /= Num_of_Nodes;
+    position_COM[2] /= Num_of_Nodes;
+    
+    
+    velocity_COM[0]/=Num_of_Nodes;
+    velocity_COM[1]/=Num_of_Nodes;
+    velocity_COM[2]/=Num_of_Nodes;
+    
     for (int i=0; i<Num_of_Nodes; i++) {
-        Node_Velocity[i][0]-=Vcom[0];
-        Node_Velocity[i][1]-=Vcom[1];
-        Node_Velocity[i][2]-=Vcom[2];
+        Node_Position[i][0] -= position_COM[0];
+        Node_Position[i][1] -= position_COM[1];
+        Node_Position[i][2] -= position_COM[2];
+        
+        Node_Velocity[i][0] -= velocity_COM[0];
+        Node_Velocity[i][1] -= velocity_COM[1];
+        Node_Velocity[i][2] -= velocity_COM[2];
     }
     
     

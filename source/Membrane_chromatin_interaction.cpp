@@ -14,7 +14,7 @@ void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem){
 void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double le1,lmin;
     double deltax,deltay,deltaz,Node_distance,force;
-    double interaction_strength=1000*GenConst::MD_T, temp_potential_energy=0;
+    double interaction_strength=300*GenConst::MD_T, temp_potential_energy=0;
     int Node_A, Node_B;
     
     lmin=chromo.return_node_radius()+Mem.Average_node_pair_length;
