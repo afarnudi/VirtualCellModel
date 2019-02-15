@@ -224,9 +224,12 @@ void Membrane::generate_report()
     Report<<"Shift_in_Y_direction"<< setw(20)<<Shift_in_Y_direction<<endl;
     Report<<"Shift_in_Z_direction"<< setw(20)<<Shift_in_Z_direction<<endl;
     Report<<"Downward_speed"<< setw(20)<<Downward_speed<<endl;
-    Report<<"X_in_mem"<< setw(20)<<X_in_mem<<endl;
-    Report<<"Y_in_mem"<< setw(20)<<Y_in_mem<<endl;
-    Report<<"Z_in_mem"<< setw(20)<<Z_in_mem<<endl;
+    Report<<"X_in_mem"<< setw(20)<<X_in<<endl;
+    Report<<"Y_in_mem"<< setw(20)<<Y_in<<endl;
+    Report<<"Z_in_mem"<< setw(20)<<Z_in<<endl;
+    Report<<"position_scale_x"<< setw(20)<<X_scale<<endl;
+    Report<<"position_scale_y"<< setw(20)<<Y_scale<<endl;
+    Report<<"position_scale_z"<< setw(20)<<Z_scale<<endl;
     
     Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
     Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;

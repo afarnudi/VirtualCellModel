@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list){
+void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list, vector<string> &actin_config_list){
     ifstream read_map("General_param_map.txt");
     map<string, double> general_param_map;
     map<string, double>::iterator it;
@@ -64,7 +64,14 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                             chromatin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
-                    } else if (it->first=="trajectory_file_name") {
+                    } else if (it->first=="Num_of_Actins") {
+                        
+                        for (int j=0; j<it->second; j++) {
+                            cout<<"\t"<<split[i+2+j]<<endl;
+                            actin_config_list.push_back(split[i+2+j]);
+                        }
+                        continue;
+                    }else if (it->first=="trajectory_file_name") {
                         if (it->second!=0) {
                             GenConst::trajectory_file_name=split[i+2];
                         } else {
@@ -170,6 +177,13 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             GenConst::Num_of_Chromatins=it->second;
         } else {
             GenConst::Num_of_Chromatins=0;
+        }
+    } else if (param_name=="Num_of_Actins"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Num_of_Actins=it->second;
+        } else {
+            GenConst::Num_of_Actins=0;
         }
     } else if (param_name=="Bussi_tau"){
         it = general_param_map.find(param_name);

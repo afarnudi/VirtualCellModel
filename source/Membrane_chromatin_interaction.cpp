@@ -14,7 +14,7 @@ void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem){
 void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double le1,lmin;
     double deltax,deltay,deltaz,Node_distance,force;
-    double interaction_strength=1000*GenConst::MD_T, temp_potential_energy=0;
+    double interaction_strength=300*GenConst::MD_T, temp_potential_energy=0;
     int Node_A, Node_B;
     
     lmin=chromo.return_node_radius()+Mem.Average_node_pair_length;
@@ -24,9 +24,9 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
 
         Node_B=i;
         
-        for (int j=0; j<chromo.Membrane_neighbbour_node[i].size(); j++) {
+        for (int j=0; j<chromo.Membrane_neighbour_node[i].size(); j++) {
             
-            Node_A=chromo.Membrane_neighbbour_node[i][j];
+            Node_A=chromo.Membrane_neighbour_node[i][j];
             
             deltax=chromo.return_node_position(Node_B, 0)-Mem.return_node_position(Node_A, 0);
             deltay=chromo.return_node_position(Node_B, 1)-Mem.return_node_position(Node_A, 1);
@@ -68,8 +68,8 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
 
 void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem){
     
-    chromo.Membrane_neighbbour_node.clear();
-    chromo.Membrane_neighbbour_node.resize(chromo.return_num_of_nodes());
+    chromo.Membrane_neighbour_node.clear();
+    chromo.Membrane_neighbour_node.resize(chromo.return_num_of_nodes());
     double threshold_dist=(chromo.return_node_radius()+Mem.Average_node_pair_length)*1.25;
     for (int i=0; i<chromo.return_num_of_nodes(); i++) {
         for (int j=0; j<Mem.return_num_of_nodes(); j++) {
@@ -79,7 +79,7 @@ void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem){
             double delta_z=chromo.return_node_position(i, 2)-Mem.return_node_position(j, 2);
             double dist=sqrt(delta_x*delta_x+delta_y*delta_y+delta_z*delta_z);
             if (dist<threshold_dist) {
-                chromo.Membrane_neighbbour_node[i].push_back(j);
+                chromo.Membrane_neighbour_node[i].push_back(j);
 //                cout<<i<<"\t"<<j<<endl;
             }
         }

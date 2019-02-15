@@ -29,9 +29,12 @@ public: //these are using in monte carlo flip function. for defining them as pri
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
-    double X_in_mem=0;
-    double Y_in_mem=0;
-    double Z_in_mem=0;
+    double X_in=0;
+    double Y_in=0;
+    double Z_in=0;
+    double X_scale=0;
+    double Y_scale=0;
+    double Z_scale=0;
     
     string output_file_neme;
     string file_time;
@@ -119,7 +122,7 @@ private:
     void read_membrabe_input(string input_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
-    void Normal_direction_Identifier(double x, double y, double z);
+//    void Normal_direction_Identifier(double x, double y, double z);
     
     void potential_1 (void);
     void potential_2 (void);

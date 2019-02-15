@@ -32,7 +32,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<int> > Node_neighbour_list;
-    vector<vector<int>> Membrane_neighbbour_node;
+    vector<vector<int>> Membrane_neighbour_node;
     
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);

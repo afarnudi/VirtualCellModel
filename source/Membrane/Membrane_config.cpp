@@ -48,7 +48,7 @@ void Membrane::import_config(string config_file_name){
 //                break;
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
-//                break;
+                //                break;
                 //                cout<<split[i]<<"\t";
             }
             
@@ -101,11 +101,17 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Shift_in_Z_direction=param_value;
     } else if (param_name=="Downward_speed"){
         Downward_speed=param_value;
-    } else if (param_name=="X_in_mem"){
-        X_in_mem=param_value;
-    } else if (param_name=="Y_in_mem"){
-        Y_in_mem=param_value;
-    } else if (param_name=="Z_in_mem"){
-        Z_in_mem=param_value;
+    } else if (param_name=="X_in"){
+        X_in=param_value;
+    } else if (param_name=="Y_in"){
+        Y_in=param_value;
+    } else if (param_name=="Z_in"){
+        Z_in=param_value;
+    } else if (param_name=="position_scale_x"){
+        X_scale=param_value;
+    } else if (param_name=="position_scale_y"){
+        Y_scale=param_value;
+    } else if (param_name=="position_scale_z"){
+        Z_scale=param_value;
     }
 }

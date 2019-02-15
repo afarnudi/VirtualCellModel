@@ -5,6 +5,7 @@ MD_T	1
 K	1
 Num_of_Membranes	0
 Num_of_Chromatins	0
+Num_of_Actins	0
 MD_thrmo_step	200
 Bussi_tau	10
 MC_step	100

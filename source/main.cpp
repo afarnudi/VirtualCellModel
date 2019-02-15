@@ -34,6 +34,7 @@ namespace GenConst {
     bool Periodic_condtion_status;
     int Num_of_Membranes;
     int Num_of_Chromatins;
+    int Num_of_Actins;
     string trajectory_file_name;
     bool File_header;
     bool Relaxation;
@@ -54,8 +55,9 @@ int main(int argc, char **argv)
     string general_file_name="general-config.txt";
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
+    vector<string> actin_config_list;
     
-    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list);
+    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list);
     
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
