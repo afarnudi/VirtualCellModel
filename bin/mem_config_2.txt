@@ -11,6 +11,9 @@ Shift_in_X_direction	0
 Shift_in_Y_direction	0
 Shift_in_Z_direction	0
 Downward_speed	0
-X_in_mem	0
-Y_in_mem	0
-Z_in_mem	0
+X_in	0
+Y_in	0
+Z_in	0
+position_scale_x	1
+position_scale_y	1
+position_scale_z	1

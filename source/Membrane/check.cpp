@@ -50,8 +50,8 @@ void Membrane::node_distance_correction(void){
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
     double temp_Damping_coefficient=Damping_coefficient;
     double temp_Bending_coefficient=Bending_coefficient;
-    Damping_coefficient=0.02;
-    Bending_coefficient=35*GenConst::MD_T*GenConst::K;
+    Damping_coefficient=0.5;
+    Bending_coefficient=2*35*GenConst::MD_T*GenConst::K;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_1 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
         Min_node_pair_length=slope*MD_Step+min;

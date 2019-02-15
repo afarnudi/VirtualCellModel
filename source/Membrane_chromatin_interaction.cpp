@@ -14,7 +14,7 @@ void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem){
 void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double le1,lmin;
     double deltax,deltay,deltaz,Node_distance,force;
-    double interaction_strength=300*GenConst::MD_T, temp_potential_energy=0;
+    double interaction_strength=5*GenConst::MD_T*GenConst::K, temp_potential_energy=0;
     int Node_A, Node_B;
     
     lmin=chromo.return_node_radius()+Mem.Average_node_pair_length;
@@ -42,12 +42,13 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
                 double exp_le1=exp(1.0/(Node_distance-le1));
                 force = ( (interaction_strength*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
                 temp_potential_energy = interaction_strength*exp_le1/(Node_distance-lmin);
-            } else if(force<-1000   ||  Node_distance<lmin )
-            {
-                double c=1500;
-                force = -2.0*c*Node_distance/(lmin) + 3*c;
-                temp_potential_energy=   c*Node_distance*Node_distance/lmin -3*c*Node_distance;
             }
+//            else if(force<-1000   ||  Node_distance<lmin )
+//            {
+//                double c=1500;
+//                force = -2.0*c*Node_distance/(lmin) + 3*c;
+//                temp_potential_energy=   c*Node_distance*Node_distance/lmin -3*c*Node_distance;
+//            }
             
             if (force!=0) {
                 force=force/Node_distance;
