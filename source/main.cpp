@@ -13,13 +13,17 @@
 #include <math.h>
 
 #include "Membrane.h"
+#include "Chromatin.h"
+#include "Actin.h"
+
 #include "General_functions.hpp"
 #include "ECM.hpp"
 #include "write_functions.hpp"
 #include "interaction.hpp"
 #include "maps.hpp"
-#include "Chromatin.h"
 #include "Global_functions.hpp"
+
+
 
 namespace GenConst {
     int MD_num_of_steps;
@@ -66,10 +70,12 @@ int main(int argc, char **argv)
     
     vector<Membrane> Membranes;
     vector<Chromatin> Chromatins;
+    vector<Actin> Actins;
     
     bool Include_Membrane  = false;
     bool Include_Chromatin = false;
     bool Include_ECM       = false;
+    bool Include_Actin     = false;
     
     if (GenConst::Num_of_Membranes!=0) {
         Include_Membrane = true;
@@ -90,6 +96,17 @@ int main(int argc, char **argv)
             Chromatins[i].set_index(i);
             Chromatins[i].import_config(chromatin_config_list[i]);
             Chromatins[i].generate_report();
+        }
+    }
+    
+    if (GenConst::Num_of_Actins!=0) {
+        Include_Actin = true;
+        Actins.resize(GenConst::Num_of_Actins);
+        for (int i=0; i<GenConst::Num_of_Actins; i++) {
+//            Actins[i].set_file_time(buffer);
+//            Actins[i].set_index(i);
+//            Actins[i].import_config(actin_config_list[i]);
+//            Actins[i].generate_report();
         }
     }
     
@@ -165,7 +182,7 @@ int main(int argc, char **argv)
                     Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
 //                    Membranes[i].Thermostat_2(GenConst::MD_T);
 //                    Membranes[i].Thermostat_N6(GenConst::MD_T);
-                    Membranes[i].write_parameters(MD_Step);
+//                    Membranes[i].write_parameters(MD_Step);
                     
                 }
                 
