@@ -36,11 +36,11 @@ void Membrane::initialise(string Mesh_file_name){
     cout<<"Initialising the Membrane Class..."<<endl;
     read_gmesh_file(Mesh_file_name);
     output_file_neme=Mesh_file_name;
-    Radius= sqrt((Node_Position[0][0]-X_in_mem)*(Node_Position[0][0]-X_in_mem) + (Node_Position[0][1]-Y_in_mem)*(Node_Position[0][1]-Y_in_mem) + (Node_Position[0][2]-Z_in_mem)*(Node_Position[0][2]-Z_in_mem));
+    Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     cout<<"\nRadius="<<Radius<<endl;
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;
     cout<<"# of triangles="<<Num_of_Triangles<<endl;
-    Normal_direction_Identifier(X_in_mem, Y_in_mem, Z_in_mem);
+    Normal_direction_Identifier();
     Triangle_pair_counter();
     cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){

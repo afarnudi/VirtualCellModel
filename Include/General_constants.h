@@ -24,6 +24,7 @@ namespace GenConst {
     extern bool Periodic_condtion_status;
     extern int Num_of_Membranes;
     extern int Num_of_Chromatins;
+    extern int Num_of_Actins;
     extern std::string trajectory_file_name;
     extern bool File_header;
     extern bool Relaxation;
