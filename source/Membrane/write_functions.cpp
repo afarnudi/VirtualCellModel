@@ -264,14 +264,3 @@ void Membrane::write_parameters(int MD_Step){
     <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len
     <<endl;
 }
-/*
-void Membrane::export_velocities(int MD_step){
-    ofstream average_velocity;
-    string velocity_file_name="Results/Resumes/Velocity_Membrane_"+to_string(mem_index)+"_";
-    velocity_file_name+=file_time;
-    velocity_file_name+=".txt";
-    average_velocity.open(velocity_file_name.c_str());
-    for (int i=0; i<Num_of_Nodes; i++) {
-    average_velocity<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";}
-}
-*/        

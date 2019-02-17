@@ -36,6 +36,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Y_scale=0;
     double Z_scale=0;
     
+    double min_radius_after_relaxation;
+    
     string output_file_neme;
     string file_time;
     
@@ -317,6 +319,9 @@ public:
         COM_velocity[0]/=Num_of_Nodes;
         COM_velocity[2]/=Num_of_Nodes;
         COM_velocity[1]/=Num_of_Nodes;
+    }
+    double return_min_radius_after_relaxation(void){
+        return min_radius_after_relaxation;
     }
 };
 

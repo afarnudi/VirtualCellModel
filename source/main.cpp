@@ -25,6 +25,7 @@
 
 
 
+
 namespace GenConst {
     int MD_num_of_steps;
     int MD_traj_save_step;
@@ -94,7 +95,13 @@ int main(int argc, char **argv)
         for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
             Chromatins[i].set_file_time(buffer);
             Chromatins[i].set_index(i);
-            Chromatins[i].import_config(chromatin_config_list[i]);
+            if (GenConst::Num_of_Membranes == GenConst::Num_of_Chromatins) {
+                ///put a flag for chromatin inside membrane
+                Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].return_min_radius_after_relaxation());
+            } else {
+                Chromatins[i].import_config(chromatin_config_list[i]);
+            }
+            
             Chromatins[i].generate_report();
         }
     }
@@ -129,7 +136,7 @@ int main(int argc, char **argv)
         for (int i=0; i<Chromatins.size(); i++) {
             num_of_elements+=Chromatins[i].return_num_of_nodes();
         }
-        Chromatins[0].shift_velocity(0, 0.05, 0);
+//        Chromatins[0].shift_velocity(0, 0.05, 0);
     }
     
     
@@ -192,7 +199,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.1);
+                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
                 }
             }
         }
@@ -236,5 +243,4 @@ int main(int argc, char **argv)
     printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }
-
 

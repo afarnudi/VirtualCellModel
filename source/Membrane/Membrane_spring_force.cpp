@@ -39,13 +39,13 @@ void Membrane::potential_1 (void){
         if(Node_distance > le0  & Node_distance <lmax )  //bondforce
         {
             double exp_le0=exp(1.0/(le0-Node_distance));
-            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
+            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1.0/(lmax-Node_distance)+1.0/( (le0-Node_distance)*(le0-Node_distance) ) );
             temp_potential_energy = Spring_coefficient*exp_le0/(lmax-Node_distance);
             
         } else if(Node_distance < le1   &  Node_distance > lmin  )  // repulsive force
         {
             double exp_le1=exp(1.0/(Node_distance-le1));
-            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1.0/(Node_distance-lmin)+1.0/( (Node_distance-le1)*(Node_distance-le1) ) );
             temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
         }
         
@@ -254,13 +254,13 @@ void Membrane::Relaxation_potential (void){
         } else if(Node_distance > le0  & Node_distance <lmax )  //bondforce
         {
             double exp_le0=exp(1.0/(le0-Node_distance));
-            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1/(lmax-Node_distance)+1/( (le0-Node_distance)*(le0-Node_distance) ) );
+            temp_force = ( (Spring_coefficient*exp_le0)/(Node_distance-lmax) )*( 1.0/(lmax-Node_distance)+1.0/( (le0-Node_distance)*(le0-Node_distance) ) );
             temp_potential_energy = Spring_coefficient*exp_le0/(lmax-Node_distance);
             
         } else if(Node_distance < le1   &  Node_distance > lmin  )  // repulsive force
         {
             double exp_le1=exp(1.0/(Node_distance-le1));
-            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+            temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1.0/(Node_distance-lmin)+1.0/( (Node_distance-le1)*(Node_distance-le1) ) );
             temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
         }
         /// my cutoff for force amplitute and for avoiding leting particle scape from force trap

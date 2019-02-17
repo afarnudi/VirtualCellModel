@@ -7,9 +7,6 @@
 //
 
 #include "interaction.hpp"
-void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem){
-    
-}
 
 void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double le1,lmin;
@@ -17,7 +14,7 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double interaction_strength=0.05*GenConst::MD_T*GenConst::K, temp_potential_energy=0;
     int Node_A, Node_B;
     
-    lmin=chromo.return_node_radius()+Mem.Average_node_pair_length;
+    lmin=Mem.Average_node_pair_length;
     le1=lmin*2;
 
     for (int i=0; i<chromo.return_num_of_nodes(); i++) {
@@ -40,7 +37,7 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
             if(Node_distance < le1   &&  Node_distance > lmin  )  // repulsive force
             {
                 double exp_le1=exp(1.0/(Node_distance-le1));
-                force = ( (interaction_strength*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+                force = ( (interaction_strength*exp_le1)/(Node_distance-lmin) )*( 1.0/(Node_distance-lmin)+1.0/( (Node_distance-le1)*(Node_distance-le1) ) );
                 temp_potential_energy = interaction_strength*exp_le1/(Node_distance-lmin);
             }
 //            else if(force<-1000   ||  Node_distance<lmin )

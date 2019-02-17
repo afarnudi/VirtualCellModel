@@ -65,7 +65,7 @@ void Membrane::node_distance_correction(void){
         if (MD_Step!=0 && MD_Step%10==0) {
             relaxation_traj();}
         if (int(100*MD_Step/(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100<<"\r" << std::flush;
         progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 //    check();
@@ -91,16 +91,25 @@ void Membrane::node_distance_correction(void){
             relaxation_traj();
         }
         if ( int( 100*(MD_Step+MD_relax_Steps_1) /(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step+ MD_relax_Steps_1<<"\r" << std::flush;
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100+ MD_relax_Steps_1*100<<"\r" << std::flush;
         progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 
+    double min_node_distance=10000000000000;
+    double temp_dist;
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Velocity[i][j]=0;
             Node_Force[i][j]=0;
         }
+        double a[3]={Node_Position[i][0], Node_Position[i][1], Node_Position[i][2]};
+        temp_dist=vector_length(a);
+        if (temp_dist < min_node_distance) {
+            min_node_distance=temp_dist;
+        }
     }
+    min_radius_after_relaxation=min_node_distance;
+    
     Damping_coefficient=temp_Damping_coefficient;
     Bending_coefficient=temp_Bending_coefficient;
     write_pov_traj(pov_relaxation_file_name, to_string(mem_index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);

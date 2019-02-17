@@ -8,19 +8,20 @@ For each entity there are two (in some cases three) kinds of descriptions, which
 Description Before Members
 Detailed Description
 Use this method before entity:
-	////
-	/// …text…
-	///
+
+        ///
+        /// ... text ...
+        /// 
 
 ### Brief Description ###
 
 Use the \brief command with above comment block. This comment ends at the end of a paragraph, so the detailed description follows after an empty line.
 Here is an example:
-	/// \brief Brief Description.
-	/// 		Brief description continued.
-	///
-	/// Detailed description starts here.
-	///
+/*! \brief Brief description.
+*         Brief description continued.
+*
+*  Detailed description starts here.
+*/
 
 ## Description After Members ##
 

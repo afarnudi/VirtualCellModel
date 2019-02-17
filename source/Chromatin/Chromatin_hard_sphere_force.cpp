@@ -40,7 +40,7 @@ void Chromatin::hard_sphere (void){
             }
             if(temp_force<-1000   ||  Node_distance<lmin )
             {
-                double c=1500;
+                double c=1000;
                 temp_force = -2.0*c*Node_distance/(Node_radius) + 3*c;
                 temp_potential_energy=   c*Node_distance*Node_distance/(Node_radius) - 3*c*Node_distance;
             }

@@ -2,7 +2,7 @@
 
 
 void Chromatin::import(string import_file_name){
-    cout<<"Importing the Membrane from the resume file:"<<endl;
+    cout<<"Importing the Chromatin from the resume file:"<<endl;
     cout<<import_file_name<<endl<<endl;
     ifstream read_resume_file;
     

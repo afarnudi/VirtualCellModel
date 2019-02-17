@@ -88,7 +88,6 @@ void Chromatin::potential_1 (void){
     
 }
 
-
 void Chromatin::FENE(void){
     
     double equi_point, delta_r_max, epsilon;
@@ -167,7 +166,7 @@ void Chromatin::Strong_spring (void){
         
         temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
        
-        temp_force=Spring_coefficient*(temp_Node_distance-2.1*Node_radius);
+        temp_force=Spring_coefficient*(temp_Node_distance-2*Node_radius);
         
         
         // implimentation of forces:

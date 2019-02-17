@@ -8,7 +8,25 @@
 
 #include "Chromatin.h"
 
-
+void Chromatin::packing_traj (void)
+{
+    string energy_file_name;
+    string traj_file_name;
+    
+    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+to_string(chrom_index)+"_"+file_time+".xyz";
+    
+    ofstream Trajectory;
+    
+    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
+    Trajectory <<Num_of_Nodes<<endl;
+    Trajectory << " nodes  "<<endl;
+    for(int j=0; j< Num_of_Nodes; j++) // saving trajectory
+    {
+        Trajectory << "chem" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+    }
+    
+}
 
 void Chromatin::write_traj (string traj_name, string label){
     ofstream Trajectory;

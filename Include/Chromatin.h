@@ -42,13 +42,14 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void import(string import_file_name);
     void import_config(string config_file_name);
+    void import_config(string config_file_name, double min_radius);
     void set_map_parameter(string param_name, double param_value);
     void generate_report(void);
     void Thermostat_2(double MD_KT);
     void Thermostat_N6(double MD_KT);
     void Thermostat_Bussi(double MD_T);
     void Results (string label);
-    void build_random_chain(void);
+    double build_random_chain(void);
     void Elastic_Force_Calculator();
     void FENE(void);
     void hard_sphere (void);
@@ -87,6 +88,12 @@ private: //(if we define these constants as private members of the class, we can
     void calculate_mesh_properties(void);
     void node_distance_correction(void);
     void initialise(void);
+    void initialise(double min_radius);
+    void Pack(double Max_dist, double min_radius);
+    void packing_potential(double Sphere_Radius);
+    void packing_traj (void);
+    void reset_com_velocity(void);
+    void rescale_velocities(double scale);
     
 public:
     
