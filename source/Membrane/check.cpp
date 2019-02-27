@@ -112,6 +112,7 @@ void Membrane::node_distance_correction(void){
     
     Damping_coefficient=temp_Damping_coefficient;
     Bending_coefficient=temp_Bending_coefficient;
+    export_relaxed(0);
     write_pov_traj(pov_relaxation_file_name, to_string(mem_index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
 }
 

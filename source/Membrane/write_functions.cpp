@@ -264,3 +264,38 @@ void Membrane::write_parameters(int MD_Step){
     <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len
     <<endl;
 }
+
+
+void Membrane::export_relaxed(int MD_step){
+    ofstream write_resume_file;
+    string resume_file_name="Results/Relaxation/Resume_Membrane_"+to_string(mem_index)+"_";
+    resume_file_name+=file_time;
+    resume_file_name+=".txt";
+    write_resume_file.open(resume_file_name.c_str());
+    
+    write_resume_file<<MD_step<<endl;
+    write_resume_file<<Num_of_Nodes<<endl;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
+        write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
+        //Node_force=0
+    }
+    
+    write_resume_file<<Num_of_Triangles<<endl;
+    for (int i=0; i<Num_of_Triangles; i++) {
+        write_resume_file<<Triangle_list[i][0]<<"\t"<<Triangle_list[i][1]<<"\t"<<Triangle_list[i][2]<<"\n";
+    }
+    
+    write_resume_file<<Num_of_Node_Pairs<<endl;
+    for (int i=0; i<Num_of_Node_Pairs; i++) {
+        write_resume_file<<Node_Bond_list[i][0]<<"\t"<<Node_Bond_list[i][1]<<"\n";
+    }
+    //In the import function we should call the neighbour list constructor
+    write_resume_file<<Num_of_Triangle_Pairs<<endl;
+    for (int i=0; i<Num_of_Triangle_Pairs; i++) {
+        write_resume_file<<Triangle_pair_list[i][0]<<"\t"<<Triangle_pair_list[i][1]<<"\n";
+        write_resume_file<<Triangle_Pair_Nodes[i][0]<<"\t"<<Triangle_Pair_Nodes[i][1]<<"\t"<<Triangle_Pair_Nodes[i][2]<<"\t"<<Triangle_Pair_Nodes[i][3]<<"\t"<<"\n";
+    }
+    write_resume_file<<Max_node_pair_length<<"\t"<<Min_node_pair_length<<"\t"<<Average_node_pair_length<<endl;
+    //run_check_ for max and min node distances
+}

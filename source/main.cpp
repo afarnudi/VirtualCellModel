@@ -158,7 +158,7 @@ int main(int argc, char **argv)
         {
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
-                Chromatins[i].Elastic_Force_Calculator();
+                Chromatins[i].Force_Calculator_2();
             }
         }
         

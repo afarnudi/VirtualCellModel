@@ -163,7 +163,6 @@ void Chromatin::Strong_spring (void){
         deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
         deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
         
-        
         temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
        
         temp_force=Spring_coefficient*(temp_Node_distance-2*Node_radius);

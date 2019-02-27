@@ -8,6 +8,23 @@
 
 #include "Chromatin.h"
 
+void Chromatin::write_parameters(int MD_Step){
+    string traj_file_name;
+    
+    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+to_string(chrom_index)+"_"+file_time+".txt";
+    ofstream Trajectory;
+    
+    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
+    
+    for (int i=0; i<Num_of_Nodes-2; i++) {
+        for (int j=i+2; Num_of_Nodes; j++) {
+            Trajectory<<Contact_Matrix[i][j]<<"\t";
+        }
+        Trajectory<<"\n";
+    }
+}
+
 void Chromatin::packing_traj (void)
 {
     string energy_file_name;

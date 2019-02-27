@@ -68,7 +68,7 @@ void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem){
     
     chromo.Membrane_neighbour_node.clear();
     chromo.Membrane_neighbour_node.resize(chromo.return_num_of_nodes());
-    double threshold_dist=(chromo.return_node_radius()+Mem.Average_node_pair_length)*1.25;
+    double threshold_dist=(chromo.return_node_radius()+Mem.Average_node_pair_length);
     for (int i=0; i<chromo.return_num_of_nodes(); i++) {
         for (int j=0; j<Mem.return_num_of_nodes(); j++) {
             

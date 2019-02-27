@@ -7,71 +7,71 @@ void Membrane::Triangle_pair_counter ()
         //In this function we count the total number of triangles that have a common edge (we count them twice, hence report half the number at the end).
     int temp_triangle_node_A, temp_triangle_node_B, temp_triangle_node_C;
     Num_of_Triangle_Pairs=0;  // This counts the number of triangle pairs that have an edge in common.
-    for(int i=0 ;i<Num_of_Triangles;i++)  // who are neighbors??
+    for(int i=0 ;i<Num_of_Triangles-1;i++)  // who are neighbors??
     {
         temp_triangle_node_A=Triangle_list[i][0];  // read the tree lable number of nodes  of every triangle
         temp_triangle_node_B=Triangle_list[i][1];
         temp_triangle_node_C=Triangle_list[i][2];
         
-        for(int j=i;j<Num_of_Triangles;j++)
+        for(int j=i+1;j<Num_of_Triangles;j++)
         {
             if      ( (Triangle_list[j][0]==temp_triangle_node_A)  &&  (Triangle_list[j][1]==temp_triangle_node_B)  && (Triangle_list[j][2]!=temp_triangle_node_C) ){
                 Num_of_Triangle_Pairs++;
             }
-            if     ( (Triangle_list[j][0]==temp_triangle_node_B)  &&  (Triangle_list[j][1]==temp_triangle_node_A)  && (Triangle_list[j][2]!=temp_triangle_node_C) ){
+            else if     ( (Triangle_list[j][0]==temp_triangle_node_B)  &&  (Triangle_list[j][1]==temp_triangle_node_A)  && (Triangle_list[j][2]!=temp_triangle_node_C) ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
             // neibors of temp_triangle_node_B-temp_triangle_node_C :
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_A ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
-            if     ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]!=temp_triangle_node_A ){
+            else if     ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]!=temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            // neibors of temp_triangle_node_C-temp_triangle_node_A :
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]!=temp_triangle_node_B ){
+            
+            else if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]!=temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            if     ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_B ){
+            else if     ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_B ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
+            else if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
                 Num_of_Triangle_Pairs++;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
+            else if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
                 Num_of_Triangle_Pairs++;
             }
         }
     }
-    Num_of_Triangle_Pairs/2;
+//    Num_of_Triangle_Pairs=Num_of_Triangle_Pairs/2;
 }
