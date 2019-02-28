@@ -1,3 +1,26 @@
+/**
+ * \class Membrane
+ *
+ * \ingroup Membrane
+ * (Note, this needs exactly one \defgroup Membrane)
+ *
+ * \brief The class 'Membrane' will build the required inviroment for simulating a triangular mesh of points in space bound by a potential suitable to simulate the behaviour of a cell membrane.
+ *
+ * This class is meant as an example.  It is not useful by itself
+ * rather its usefulness is only a function of how much it helps
+ * the reader.  It is in a sense defined by the person who reads it
+ * and otherwise does not exist in any real form.
+ *
+ * \note Attempts at zen rarely work.
+ *
+ *
+ * \version $Revision: 0.0 $
+ *
+ *
+ * Contact: a.farnudi@gmail.com
+ *
+ */
+
 #ifndef MEMBRANE_H
 #define MEMBRANE_H
 #include <string>
@@ -13,8 +36,10 @@
 
 using namespace std;
 
+
 class Membrane
 {
+    
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     

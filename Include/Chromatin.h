@@ -33,7 +33,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<int> > Node_neighbour_list;
     vector<vector<int> > Membrane_neighbour_node;
     vector<vector<double> > Contact_Matrix;
-    vector<double> AB_index;
+    vector<int> AB_index;
     
     
     void MD_Evolution_beginning (double MD_Time_Step);

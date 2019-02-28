@@ -14,7 +14,7 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem){
     double interaction_strength=0.05*GenConst::MD_T*GenConst::K, temp_potential_energy=0;
     int Node_A, Node_B;
     
-    lmin=Mem.Average_node_pair_length;
+    lmin=Mem.Max_node_pair_length/2;
     le1=lmin*2;
 
     for (int i=0; i<chromo.return_num_of_nodes(); i++) {

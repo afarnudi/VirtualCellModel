@@ -25,6 +25,8 @@ void Chromatin::Force_Calculator_2(void)
     double deltax,deltay,deltaz,Node_distance,temp_force;
     double temp_potential_energy = 0.0, epsilon;
     int Node_A, Node_B;
+    double le1=2.3*Node_radius;
+    double lmin=2.*Node_radius;
     
     double Threshold_force=10;
     
@@ -44,7 +46,9 @@ void Chromatin::Force_Calculator_2(void)
             temp_force=0.0;
             
             if (Node_distance < 4.0 && Node_distance > 2.0) {
-                Contact_Matrix[k][j]++;
+                if (Node_distance<2.5) {
+                    Contact_Matrix[k][j]++;
+                }
                 if (AB_index[k]*AB_index[j] != 0) {
                     double sigma = 0.35;
                     double r_1 = (Node_distance -2.0)/sigma;
@@ -55,33 +59,13 @@ void Chromatin::Force_Calculator_2(void)
                     temp_force = 2*epsilon*( 2.0/r_5 - 1.0/r_3 )/sigma;
                     temp_potential_energy = epsilon * ( r_1*1.0/r_5 - r_1*1.0/r_3  );
 //
-//                    double r_4 = Node_distance-1.5;
-//                    r_4 *= r_4;
-//                    r_4 *= r_4;
 //
-//                    double r_9 = Node_distance-1.35;
-//                    r_9 = r_9*r_9*r_9;
-//                    r_9 *= r_9;
-//                    r_9 *= r_9;
-//
-//                    temp_force = epsilon*(3.0/r_4 - 8.0/r_9)/Node_radius;
-//
-//                    temp_potential_energy = Spring_coefficient*( (Node_distance-1.35)/r_9 - (Node_distance-1.5)/r_4);
                 }
-//                    else if (Node_distance < 2.3){
-//                    double r_4 = Node_distance-1.5;
-//                    r_4 *= r_4;
-//                    r_4 *= r_4;
-//
-//                    double r_9 = Node_distance-1.35;
-//                    r_9 = r_9*r_9*r_9;
-//                    r_9 *= r_9;
-//                    r_9 *= r_9;
-//
-//                    temp_force = epsilon*(3.0/r_4 - 8.0/r_9)/Node_radius;
-//
-//                    temp_potential_energy = Spring_coefficient*( (Node_distance-1.35)/r_9 - (Node_distance-1.5)/r_4);
-//                }
+                    else if (Node_distance < 2.3){
+                        double exp_le1=exp(1.0/(Node_distance-le1));
+                        temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+                        temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
+                }
                 
             }
             else if(temp_force<-Threshold_force   ||  Node_distance < 2 )

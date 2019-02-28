@@ -49,9 +49,16 @@ void Chromatin::write_traj (string traj_name, string label){
     ofstream Trajectory;
     Trajectory.open(traj_name.c_str(), ios::app);
     Trajectory << std:: fixed;
+    string label_A =label+"_A";
+    string label_B =label+"_B";
     for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        if (AB_index[j]!=0) {
+            Trajectory << label_A <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        } else {
+            Trajectory << label_B <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        }
+        
     }
 }
 
@@ -67,6 +74,7 @@ void Chromatin::export_for_resume(int MD_step){
     for (int i=0; i<Num_of_Nodes; i++) {
         write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
         write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
+        write_resume_file<<AB_index[i]<<"\n";
         //Node_force=0
     }
 }

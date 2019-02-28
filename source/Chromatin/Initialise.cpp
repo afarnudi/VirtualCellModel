@@ -144,7 +144,8 @@ void Chromatin::Pack(double min_radius){
         velocity_COM[0]/=Num_of_Nodes;
         velocity_COM[1]/=Num_of_Nodes;
         velocity_COM[2]/=Num_of_Nodes;
-        
+//        cout<<"Chromatin com velocity after packing:\n";
+//        cout<<velocity_COM[0]<<"\t"<<velocity_COM[1]<<"\t"<<velocity_COM[2]<<endl;
         //    position_COM[0]/=Num_of_Nodes;
         //    position_COM[1]/=Num_of_Nodes;
         //    position_COM[2]/=Num_of_Nodes;
@@ -264,6 +265,7 @@ void Chromatin::export_pack(int MD_step){
         for (int i=0; i<Num_of_Nodes; i++) {
             write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
             write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
+            write_resume_file<<AB_index[i]<<"\n";
             //Node_force=0
         }
 }
