@@ -122,9 +122,9 @@ int main(int argc, char **argv)
         Include_Actin = true;
         Actins.resize(GenConst::Num_of_Actins);
         for (int i=0; i<GenConst::Num_of_Actins; i++) {
-//            Actins[i].set_file_time(buffer);
-//            Actins[i].set_index(i);
-//            Actins[i].import_config(actin_config_list[i]);
+            Actins[i].set_file_time(buffer);
+            Actins[i].set_index(i);
+            Actins[i].import_config(actin_config_list[i]);
 //            Actins[i].generate_report();
         }
     }

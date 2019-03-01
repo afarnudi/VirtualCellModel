@@ -127,7 +127,7 @@ void Membrane::relaxation_traj (void)
     string energy_file_name;
     string traj_file_name;
     
-    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".xyz";
+    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".xyz";
     //trajectory:
     
     ofstream Trajectory;
@@ -146,7 +146,7 @@ void Membrane::relaxation_traj (void)
 
 void Membrane::export_for_resume(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(mem_index)+"_";
+    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -182,7 +182,7 @@ void Membrane::export_for_resume(int MD_step){
 void Membrane::generate_report()
 {
     string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(mem_index)+"_";
+    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(index)+"_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
@@ -250,7 +250,7 @@ void Membrane::write_parameters(int MD_Step){
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
-    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
+    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".txt";
     ofstream Trajectory;
     
     Trajectory.open(traj_file_name.c_str(), ios::app);
@@ -268,7 +268,7 @@ void Membrane::write_parameters(int MD_Step){
 
 void Membrane::export_relaxed(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Relaxation/Resume_Membrane_"+to_string(mem_index)+"_";
+    string resume_file_name="Results/Relaxation/Resume_Membrane_"+to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());

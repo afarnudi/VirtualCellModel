@@ -136,7 +136,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     
 private:
-    int mem_index;
+    int index;
     /*variables*/
     int Num_of_Nodes;
     /*constants*/
@@ -311,8 +311,8 @@ public:
     void set_file_time(char* buffer){
         file_time=buffer;
     }
-    void set_index(int index){
-        mem_index=index;
+    void set_index(int ind){
+        index=ind;
     }
     double return_node_radius(void){
         return Node_radius;

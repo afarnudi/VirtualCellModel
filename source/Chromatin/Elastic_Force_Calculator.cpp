@@ -34,7 +34,6 @@ void Chromatin::Force_Calculator_2(void)
     {
         Node_B=k;
         for (int j=k+2; j<Num_of_Nodes; j++) {
-            
             Node_A=j;
             
             deltax=Node_Position[Node_A][0]-Node_Position[Node_B][0];
