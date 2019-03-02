@@ -37,22 +37,22 @@ Here is an example:
 Documenting members manually
 For each entity we have a structural command, here is the list of structural commands:
 
-\class to document a class
-\struct to document a C-struct
-\union to document a union
-\enum to document an enumeration type
-\fn to document a function
-\var to document a variable or typedef of enum value
-\def to document a #define
-\typedef to document a type defenition
-\file to document a file
-\namespace to document a namespace
-\package to document a Java package
-\interface to document an IDL interface
+\ class to document a class\*
+\ struct to document a C-struct
+\ union to document a union
+\ enum to document an enumeration type
+\ fn to document a function
+\ var to document a variable or typedef of enum value
+\ def to document a #define
+\ typedef to document a type defenition
+\ file to document a file
+\ namespace to document a namespace
+\ package to document a Java package
+\ interface to document an IDL interface
 
 Here is an example:
 
-	///	\class test
+	///	\ class test
 	/// 	\brief a class test
 	///	
 	///	a more detailed class descriptions.
@@ -62,6 +62,6 @@ Attention
 
 To document global objects (functions, typedefs, enum, macros, etc), you must document the file in which they are defined. In other words, there must at least be a
 	
-	/// \file
+	/// \ file
 	/// 
 	///

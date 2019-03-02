@@ -1,9 +1,6 @@
 /**
  * \class Membrane
  *
- * \ingroup Membrane
- * (Note, this needs exactly one \defgroup Membrane)
- *
  * \brief The class 'Membrane' will build the required inviroment for simulating a triangular mesh of points in space bound by a potential suitable to simulate the behaviour of a cell membrane.
  *
  * This class is meant as an example.  It is not useful by itself

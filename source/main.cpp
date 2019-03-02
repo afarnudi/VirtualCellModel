@@ -9,6 +9,8 @@
  output description for the file.
  @date Monday, September 19, 2011
  */
+ 
+ /// \file
 
 #include <stdio.h>
 #include <ctime>
@@ -255,4 +257,5 @@ int main(int argc, char **argv)
     printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }
+
 

@@ -5,6 +5,7 @@
 //  Created by Ali Farnudi on 27/08/2017.
 //  Copyright © 2017 Ali Farnudi. All rights reserved.
 //
+/// \file
 
 #ifndef General_functions_hpp
 #define General_functions_hpp
