@@ -29,12 +29,13 @@ void Membrane::check(void){
     cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
 
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
-        cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
-
-    }
-    if (((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) or GenConst::Relaxation==true) {
-        node_distance_correction();
-        calculate_mesh_properties();  
+        if (!Relaxation) {
+            cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. If the Membrane is not attached to an Actin or another network we strongly recommend turning on the 'Relaxation' flag or switching off the bending.\n\n";
+        } else {
+            cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
+            node_distance_correction();
+            calculate_mesh_properties();
+        }
     }
 }
 

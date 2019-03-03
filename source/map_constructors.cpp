@@ -190,14 +190,10 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::Bussi_tau=it->second;
         }
-    } else if(param_name=="Relaxation"){
+    } else if (param_name=="Actin_Membrane_Bond_Coefficient"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            if (it->second==0.0) {
-                GenConst::Relaxation=false;
-            } else {
-                GenConst::Relaxation=true;
-            }
+            GenConst::Actin_Membrane_Bond_Coefficient=it->second;
         }
     }
 

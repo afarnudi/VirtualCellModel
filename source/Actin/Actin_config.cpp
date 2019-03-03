@@ -97,5 +97,7 @@ void Actin::set_map_parameter(string param_name, double param_value){
         Shift_in_Z_direction=param_value;
     } else if (param_name=="Downward_speed"){
         Downward_speed=param_value;
+    } else if (param_name=="Kelvin_Damping_Coefficient"){
+        Kelvin_Damping_Coefficient=param_value;
     }
 }
