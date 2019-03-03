@@ -70,6 +70,8 @@ public:
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
     void Thermostat_Bussi(double MD_T);
+    void write_traj (string traj_name, string label);
+    void generate_report();
     
     //General members:
     void set_file_time(char* buffer){

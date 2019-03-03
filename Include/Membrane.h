@@ -165,8 +165,6 @@ private:
     void node_distance_correction(void);
     void export_relaxed(int MD_step);
     
-    
-    
 public:
     
     int return_num_of_nodes(void){

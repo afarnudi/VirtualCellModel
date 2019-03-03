@@ -244,8 +244,8 @@ int main(int argc, char **argv)
         
         
         
-        
-        if (MD_Step%GenConst::MD_traj_save_step==0) //saving Results
+        //saving Results
+        if (MD_Step%GenConst::MD_traj_save_step==0)
         {
             Trajectory << num_of_elements<<endl;
             Trajectory << " nodes  "<<endl;
@@ -266,6 +266,13 @@ int main(int argc, char **argv)
                     Chromatins[i].export_for_resume(MD_Step);
                 }
             }
+            if (Include_Actin) {
+                for (int i=0; i<Actins.size(); i++) {
+                    string label="Actin_"+to_string(i);
+                    Actins[i].write_traj(traj_file_name, label);
+//                    Actins[i].export_for_resume(MD_Step);
+                }
+            }
         }// End of if (MD_Step%100==0)
         
         
@@ -273,8 +280,6 @@ int main(int argc, char **argv)
             cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
             progress+=5;
         }
-        
-        
         
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
