@@ -45,8 +45,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Total_Kinetic_Energy;
 	double Radius=0;
     double Node_radius=1;
-    double COM_velocity[3];
-    double COM_position[3];
+    double COM_velocity[3]={0};
+    double COM_position[3]={0};
     
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
@@ -130,7 +130,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     
     bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
-    
+    void Relax(void);
     
 private:
     int index;
@@ -140,6 +140,9 @@ private:
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     map<string, double> param_map;
+    
+    bool Relaxation=false;
+    bool Relax_with_actin=false;
     
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
@@ -165,109 +168,6 @@ private:
     
     
 public:
-    
-//    Membrane(string input_file_name , string Mesh_file_name)
-//    {
-//        read_membrabe_input(input_file_name);
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name ;// it is for generating trajectory file. it can be modifyed to have date and time in it.this modification can be done in main.
-//        cout<<"Membrane class initiated"<<endl;
-//        Normal_direction_Identifier();
-//        Triangle_pair_counter();
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//        {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//        Triangle_Pair_and_Node_Bonds_Identifier();
-//
-//    }
-//
-//    Membrane(string Mesh_file_name)
-//    {
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name;
-//        cout<<"Membrane class initiated"<<endl;
-//        Normal_direction_Identifier();
-//        Triangle_pair_counter();
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//        {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//        Triangle_Pair_and_Node_Bonds_Identifier();
-//        cout<< "Average node distance is   "<<Average_Node_Distance()<<endl;
-//    }
-//
-//    Membrane(string Mesh_file_name, double x, double y, double z)
-//    {
-//        cout<<"Initialising the Membrane Class..."<<endl;
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name;
-//        Radius= sqrt((Node_Position[0][0]-x)*(Node_Position[0][0]-x) + (Node_Position[0][1]-y)*(Node_Position[0][1]-y) + (Node_Position[0][2]-z)*(Node_Position[0][2]-z));
-//        cout<<"\n\nRadius="<<Radius<<endl;
-//        cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
-//        cout<<"# of triangles="<<Num_of_Triangles<<endl;
-//        Normal_direction_Identifier(x, y, z);
-//        Triangle_pair_counter();
-//        cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
-//            cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
-//
-//        }
-////        Triangle_Pair_and_Node_Bonds_Identifier();
-//        Node_Bonds_identifier();
-//        Node_neighbour_list_constructor();
-//        Triangle_pair_identifier();
-//        check();
-//        cout<<"\n\nMembrane class initiated.\n";
-////        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
-//    }
-//    Membrane(string import_file_name, bool resume)
-//    {
-//        cout<<"Importing the Membrane from the resume file:"<<endl;
-//        cout<<import_file_name<<endl<<endl;
-//        ifstream read_resume_file;
-//
-//        read_resume_file.open(import_file_name.c_str());
-//        int temp;
-//        read_resume_file>>temp;
-//        cout<<"Resuming the MD from step "<<temp<<endl;
-//
-//        read_resume_file>>Num_of_Nodes;
-//        cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
-//        for (int i=0; i<Num_of_Nodes; i++) {
-//            read_resume_file>>Node_Position[i][0]>>Node_Position[i][1]>>Node_Position[i][2];
-//            read_resume_file>>Node_Velocity[i][0]>>Node_Velocity[i][1]>>Node_Velocity[i][2];
-//            Node_Force[i][0]=0;
-//            Node_Force[i][1]=0;
-//            Node_Force[i][2]=0;
-//        }
-//        cout<<"Coordinates and velocities loaded"<<endl;
-//        cout<<"Node forces set to zero"<<endl;
-//
-//        read_resume_file>>Num_of_Triangles;
-//        cout<<"Number of Triangles: "<<Num_of_Triangles<<endl;
-//        for (int i=0; i<Num_of_Triangles; i++) {
-//            read_resume_file>>Triangle_list[i][0]>>Triangle_list[i][1]>>Triangle_list[i][2];
-//        }
-//
-//        read_resume_file>>Num_of_Node_Pairs;
-//        cout<<"Number of Node Pairs: "<<Num_of_Node_Pairs<<endl;
-//        for (int i=0; i<Num_of_Node_Pairs; i++) {
-//            read_resume_file>>Node_Bond_list[i][0]>>Node_Bond_list[i][1];
-//        }
-//        //In the import function we should call the neighbour list constructor
-//        read_resume_file>>Num_of_Triangle_Pairs;
-//        cout<<"Number of Triangle Pairs: "<<Num_of_Triangle_Pairs<<endl;
-//        for (int i=0; i<Num_of_Triangle_Pairs; i++) {
-//            read_resume_file>>Triangle_pair_list[i][0]>>Triangle_pair_list[i][1];
-//            read_resume_file>>Triangle_Pair_Nodes[i][0]>>Triangle_Pair_Nodes[i][1]>>Triangle_Pair_Nodes[i][2]>>Triangle_Pair_Nodes[i][3];
-//        }
-//
-//        Node_neighbour_list_constructor();
-//        read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
-//        cout<<"Spring coefficients:"<<endl;
-//        cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
-//        cout<<"\n\nMembrane class initiated.\n";
-//        //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
-//    }
-    
-    
     
     int return_num_of_nodes(void){
         return Num_of_Nodes;
@@ -345,6 +245,9 @@ public:
     }
     double return_min_radius_after_relaxation(void){
         return min_radius_after_relaxation;
+    }
+    bool return_relax_with_actin_flag(void){
+        return Relax_with_actin;
     }
 };
 

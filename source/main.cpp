@@ -56,9 +56,9 @@ namespace GenConst {
     int Num_of_Actins;
     string trajectory_file_name;
     bool File_header;
-    bool Relaxation;
     double Buffer_temperature;
     double Bussi_tau;
+    double Actin_Membrane_Bond_Coefficient;
 }
 
 
@@ -131,7 +131,16 @@ int main(int argc, char **argv)
         }
     }
     
-    
+    if (Include_Actin && Include_Membrane) {
+        for (int i=0; i<GenConst::Num_of_Actins; i++) {
+            Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[i]);
+            
+            if (Membranes[i].return_relax_with_actin_flag()) {
+                Membranes[i].Relax();
+            }
+        }
+        
+    }
     
     if (Include_ECM)
     {
@@ -160,7 +169,7 @@ int main(int argc, char **argv)
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
         
         
-        
+        //Velocity Verlet first stage
         if (Include_Membrane)
         {
             for (int i=0; i<Membranes.size(); i++) {
@@ -175,36 +184,43 @@ int main(int argc, char **argv)
                 Chromatins[i].Force_Calculator_2();
             }
         }
+        if (Include_Actin)
+        {
+            for (int i=0; i<Actins.size(); i++) {
+                Actins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                Actins[i].Elastic_Force_Calculator();
+            }
+        }
         
+        //Shared Forces
         
         if (Include_Chromatin && Include_Membrane) {
-            
             if (MD_Step%2000==0) {
                 for (int i=0; i<Chromatins.size(); i++) {
-                    for (int j=0; j<Membranes.size(); j++) {
-                        Chromatin_Membrane_neighbour_finder(Chromatins[i], Membranes[j]);
-                    }
+                    Chromatin_Membrane_neighbour_finder(Chromatins[i], Membranes[i]);
+                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
                 }
             }
-            
-            for (int i=0; i<Chromatins.size(); i++) {
-                for (int j=0; j<Membranes.size(); j++) {
-                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[j]);
-                }
-            }
+
             
         }
         
+        if (Include_Membrane && Include_Actin) {
+            for (int i=0; i<Actins.size(); i++) {
+                Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[i]);
+            }
+        }
+        
+        
+        
+        
+        
+        //Velocity Verlet second stage
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {//I think we can remove the first clause.
-//                    set_temperature(MD_Step, GenConst::MD_T, 1000000);
                     Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
-//                    Membranes[i].Thermostat_2(GenConst::MD_T);
-//                    Membranes[i].Thermostat_N6(GenConst::MD_T);
-//                    Membranes[i].write_parameters(MD_Step);
-                    
                 }
                 
             }
@@ -217,6 +233,15 @@ int main(int argc, char **argv)
                 }
             }
         }
+        if (Include_Actin) {
+            for (int i=0; i<Actins.size(); i++) {
+                Actins[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
+                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+                }
+            }
+        }
+        
         
         
         

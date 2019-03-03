@@ -13,7 +13,9 @@ void Actin::initialise(string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Actin Class..."<<endl;
     read_gmesh_file(Mesh_file_name);
-//    output_file_neme=Mesh_file_name;
+    output_file_neme=Mesh_file_name;
+    cout<<"# of Nodes="<<Num_of_Nodes<<endl;
+    Node_Bond_identifier();
 //    Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
 //    cout<<"\nRadius="<<Radius<<endl;
 //    cout<<"# of Nodes="<<Num_of_Nodes<<endl;

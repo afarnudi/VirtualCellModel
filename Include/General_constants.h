@@ -27,9 +27,9 @@ namespace GenConst {
     extern int Num_of_Actins;
     extern std::string trajectory_file_name;
     extern bool File_header;
-    extern bool Relaxation;
     extern double Buffer_temperature;
     extern double Bussi_tau;
+    extern double Actin_Membrane_Bond_Coefficient;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

@@ -13,6 +13,7 @@
 #include "Membrane.h"
 #include "ECM.hpp"
 #include "Chromatin.h"
+#include "Actin.h"
 
 void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
 void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
@@ -37,9 +38,12 @@ double return_triangle_membrane_distance(Membrane mem, int mem_node, ECM ecm, in
 bool barrier_2(Membrane mem, int mem_index);
 
 
-void Chromatin_Membrane_neighbour_finder(Chromatin& chromo, Membrane Mem);
+//Chromatin-Membrane
+void Chromatin_Membrane_neighbour_finder(Chromatin &chromo, Membrane Mem);
 void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
-void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
+//void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
 
-
+//Actin-Membrane
+void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem);
+void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem);
 #endif /* interaction_hpp */
