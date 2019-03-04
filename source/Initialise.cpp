@@ -36,6 +36,14 @@ void Membrane::initialise(string Mesh_file_name){
     cout<<"Initialising the Membrane Class..."<<endl;
     read_gmesh_file(Mesh_file_name);
     output_file_neme=Mesh_file_name;
+    if (rescale==true){
+        cout<<Node_Position[0][0]<<endl;
+        Rescale(5);
+        cout<<Node_Position[0][0]<<endl;
+        output_file_neme+="_rescaled_";
+        cout<<"mesh rescaled by factor 1/5"<<endl;
+    }
+    
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     cout<<"\nRadius="<<Radius<<endl;
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;
@@ -51,6 +59,8 @@ void Membrane::initialise(string Mesh_file_name){
     Node_Bonds_identifier();
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
+    DamperCheck.resize(Num_of_Node_Pairs);
+    SinusCheck.resize(Num_of_Node_Pairs);
     check();
     
     cout<<"\nMembrane class initiated.\n******************************\n\n";

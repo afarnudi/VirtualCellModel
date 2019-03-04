@@ -8,6 +8,7 @@
 
 #include "Membrane.h"
 #include "General_constants.h"
+#include "General_functions.hpp"
 
 void Membrane::write_traj (string traj_name, string label){
     ofstream Trajectory;
@@ -275,3 +276,27 @@ void Membrane::export_velocities(int MD_step){
     average_velocity<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";}
 }
 */        
+void Membrane::Damper_check(int MD_step){
+    double average=0;
+    double averageSinus=0;
+    ofstream average_sinus_check;
+    ofstream average_damper_check;
+    string average_sinus_check_file_name="Results/Damper/averageSinus";
+    string average_damper_check_file_name="Results/Damper/average";
+    average_sinus_check_file_name+=file_time;
+    average_damper_check_file_name+=file_time;
+    average_sinus_check_file_name+=".txt";
+    average_damper_check_file_name+=".txt";
+    average_sinus_check.open(average_sinus_check_file_name.c_str() , ios::app);
+    average_damper_check.open(average_damper_check_file_name.c_str(), ios::app);
+   // damper_check << "MD Step: "<<MD_step<<"\n";
+   // average_damper_check << "MD Step: "<<MD_step<<"\n";
+    for (int i=0; i<Num_of_Node_Pairs; i++) { 
+       // damper_check<< DamperCheck[i]<<"\n";
+        average+=DamperCheck[i];
+        averageSinus+=SinusCheck[i];
+    }
+    
+    average_sinus_check<< averageSinus/Num_of_Node_Pairs<<"\n";
+    average_damper_check<< average/Num_of_Node_Pairs<<"\n";
+}

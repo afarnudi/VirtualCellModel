@@ -113,5 +113,8 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Y_scale=param_value;
     } else if (param_name=="position_scale_z"){
         Z_scale=param_value;
+    }else if (param_name=="rescale"){
+        rescale=param_value;
     }
+    
 }

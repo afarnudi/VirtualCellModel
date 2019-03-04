@@ -25,7 +25,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Node_radius=1;
     double COM_velocity[3];
     double COM_position[3];
-    
+    double temp_damp_force[][3];
+
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
@@ -35,7 +36,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double X_scale=0;
     double Y_scale=0;
     double Z_scale=0;
-    
+    bool rescale=0;
     string output_file_neme;
     string file_time;
     
@@ -48,8 +49,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<int> > Node_neighbour_list;
-    
-    
+    vector<double>DamperCheck;
+    vector<double>SinusCheck;
+    void Damper_check(int MD_step);
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
@@ -78,7 +80,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void omega_calculator_2(void);
     void equilibrate (void);
     void write_pov_traj(string traj_name, string label, int currentstep);
-    double Average_velocity();
+    double Average_velocity_squared();
     double Omega[3]={0};
 //private: (if we define these constants as private members of the class, we can't put them in the final report)
     
@@ -123,11 +125,12 @@ private:
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
 //    void Normal_direction_Identifier(double x, double y, double z);
-    
+    void Rescale(double rescale_factor);
     void potential_1 (void);
     void potential_2 (void);
     void FENE (void);
     void Relaxation_potential(void);
+    void Relaxation_potential_2 (void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);
@@ -136,7 +139,7 @@ private:
     void check(void);
     void calculate_mesh_properties(void);
     void node_distance_correction(void);
-    
+    void node_distance_correction_2(void);
     
     
 public:
