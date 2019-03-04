@@ -20,7 +20,28 @@ double Actin::Kelvin(double distance, int bond_index){
     double initial_distance=Node_Bond_relaxed_length[bond_index];
     
     Total_Potential_Energy += 0.5*Spring_coefficient*(distance-initial_distance)*(distance-initial_distance);
+    
     Node_Bond_relaxed_length[bond_index] +=  GenConst::MD_Time_Step*( (distance-initial_distance)/distance )/Kelvin_Damping_Coefficient;
+//    if (bond_index == 0) {
+//        cout<<"Node_Bond_relaxed_length[bond_index]="<<Node_Bond_relaxed_length[bond_index]<<endl;
+//    }
     
     return -Spring_coefficient*(distance-initial_distance);
 }
+
+double Actin::Maxwell(double distance, int bond_index){
+    
+    double initial_distance=Node_Bond_relaxed_length[bond_index];
+    double gamma_0 = (distance/initial_distance) - 1;
+    
+    Node_Bond_relaxed_length[bond_index] +=  Dashpot_Viscosity*(distance-initial_distance)*(1-exp_tau);
+    //    if (bond_index == 0) {
+    //        cout<<"Node_Bond_relaxed_length[bond_index]="<<Node_Bond_relaxed_length[bond_index]<<endl;
+    //    }
+//    if (bond_index == 10) {
+//        cout<< Node_Bond_relaxed_length[bond_index]<<endl;
+//    }
+    return -Spring_coefficient*gamma_0*exp_tau;
+}
+
+

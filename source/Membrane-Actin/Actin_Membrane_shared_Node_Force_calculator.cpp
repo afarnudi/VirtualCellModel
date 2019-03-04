@@ -27,7 +27,7 @@ void Actin_Membrane_shared_Node_Force_calculator(Actin &act, Membrane &mem){
         
         if (Node_distance > 0.001 || Node_distance < -0.001) {
             
-            force = -GenConst::Actin_Membrane_Bond_Coefficient; //The force = -GenConst::Actin_Membrane_Bond_Coefficient*Node_distance and for the components it has to get multiplied by delta_xyz/Node_distance. We have ignored the multiplication and division to reduce computation time and round up errors.
+            force = GenConst::Actin_Membrane_Bond_Coefficient; //The force = -GenConst::Actin_Membrane_Bond_Coefficient*Node_distance and for the components it has to get multiplied by delta_xyz/Node_distance. We have ignored the multiplication and division to reduce computation time and round up errors.
             
             mem.add_to_force(force*delta_x, mem_node, 0);
             mem.add_to_force(force*delta_y, mem_node, 1);

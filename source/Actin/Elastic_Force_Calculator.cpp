@@ -26,9 +26,11 @@ void Actin::Elastic_Force_Calculator(void)
         if (spring_model == 0) {
             force = Hookian(distance, initial_distance);
         } else if (spring_model == 1){
-            force = Kelvin(distance, initial_distance);
+            force = Kelvin(distance, i);
+        } else if (spring_model == 2){
+            force = Maxwell(distance, i);
         }
-        force/=distance;
+        force/= distance;
         
         Node_Force[node_B][0] += force*delta_x;
         Node_Force[node_B][1] += force*delta_y;

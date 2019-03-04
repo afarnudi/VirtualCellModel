@@ -16,6 +16,9 @@ void Actin::initialise(string Mesh_file_name){
     output_file_neme=Mesh_file_name;
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;
     Node_Bond_identifier();
+    initialise_node_bond_relaxed_length();
+    tau_Maxwell_relax=Dashpot_Viscosity/Spring_coefficient;
+    exp_tau=exp(-GenConst::MD_Time_Step/tau_Maxwell_relax);
 //    Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
 //    cout<<"\nRadius="<<Radius<<endl;
 //    cout<<"# of Nodes="<<Num_of_Nodes<<endl;

@@ -25,7 +25,7 @@ private:
     double Node_radius=1;
     int spring_model=2;
     double Spring_coefficient=100;
-    double Damping_coefficient=0.5;
+//    double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
     double Downward_speed=0;
@@ -43,6 +43,14 @@ private:
     vector<double> Node_Bond_relaxed_length;
     
     double Total_Potential_Energy=0;
+
+    double Kelvin_Damping_Coefficient=100;
+    double Total_Kinetic_Energy=0;
+    double COM_velocity[3]={0};
+    double COM_position[3]={0};
+    double Dashpot_Viscosity;
+    double tau_Maxwell_relax=0;
+    double exp_tau=0;
     
     
     //Private members:
@@ -52,12 +60,10 @@ private:
     void Node_Bond_relaxed_length_initialiser(void);
     double Hookian(double distance, double initial_distance);
     double Kelvin(double distance, int bond_index);
+    void initialise_node_bond_relaxed_length(void);
+    double Maxwell(double distance, int bond_index);
     
-    double Kelvin_Damping_Coefficient=100;
-    double Total_Kinetic_Energy=0;
-    double COM_velocity[3]={0};
-    double COM_position[3]={0};
-    
+
 public:
     //Shared List
     vector<vector<int> > Actin_Membrane_shared_Node_list;

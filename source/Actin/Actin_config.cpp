@@ -87,9 +87,7 @@ void Actin::set_map_parameter(string param_name, double param_value){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
         Spring_coefficient=param_value*GenConst::MD_T;
-    } else if (param_name=="Damping_coefficient"){
-        Damping_coefficient=param_value;
-    } else if (param_name=="Shift_in_X_direction"){
+    }  else if (param_name=="Shift_in_X_direction"){
         Shift_in_X_direction=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
         Shift_in_Y_direction=param_value;
@@ -99,5 +97,7 @@ void Actin::set_map_parameter(string param_name, double param_value){
         Downward_speed=param_value;
     } else if (param_name=="Kelvin_Damping_Coefficient"){
         Kelvin_Damping_Coefficient=param_value;
+    } else if (param_name=="Dashpot_Viscosity"){
+        Dashpot_Viscosity=param_value;
     }
 }

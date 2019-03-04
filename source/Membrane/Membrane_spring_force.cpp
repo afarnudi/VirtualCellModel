@@ -16,8 +16,8 @@ void Membrane::potential_1 (void){
     
     int Node_A, Node_B;
     
-    lmax=Max_node_pair_length;
-    lmin=Min_node_pair_length;
+    lmax=Max_node_pair_length*1.05;
+    lmin=Min_node_pair_length*1.05;
     
     le0=lmin+3*(lmax-lmin)/4.0;
     le1=lmin+(lmax-lmin)/4.0;
@@ -51,10 +51,27 @@ void Membrane::potential_1 (void){
         
         if(Node_distance>lmax || Node_distance<lmin)
         {
-            cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
-            cout<<"Node A = "<<Node_A<<"\tNode B = "<<Node_B<<endl;
-            cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
-            exit(EXIT_FAILURE);
+            if (GenConst::Num_of_Actins == 0) {
+                cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
+                cout<<"Node A = "<<Node_A<<"\tNode B = "<<Node_B<<endl;
+                cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
+                exit(EXIT_FAILURE);
+            } else {
+                if(temp_force>1000  || Node_distance>lmax )
+                {
+                    double c=800;
+                    temp_force = -2.0*c*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmax-lmin) )*c;
+                    temp_potential_energy=   c*Node_distance*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmin-lmax) )*c*Node_distance;
+                }
+                
+                
+                if(temp_force<-1000   ||  Node_distance<lmin )
+                {
+                    double c=800;
+                    temp_force = -2.0*c*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmax-lmin) )*c;
+                    temp_potential_energy=   c*Node_distance*Node_distance/(lmax-lmin)+( (lmin+lmax)/(lmin-lmax) )*c*Node_distance;
+                }
+            }
         }
         
         Total_Potential_Energy += temp_potential_energy;

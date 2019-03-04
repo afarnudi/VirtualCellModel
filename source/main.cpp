@@ -159,9 +159,12 @@ int main(int argc, char **argv)
         for (int i=0; i<Chromatins.size(); i++) {
             num_of_elements+=Chromatins[i].return_num_of_nodes();
         }
-//        Chromatins[0].shift_velocity(0, 0.05, 0);
     }
-    
+    if (Include_Actin) {
+        for (int i=0; i<Actins.size(); i++) {
+            num_of_elements+=Actins[i].return_num_of_nodes();
+        }
+    }
     
     int progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
@@ -237,7 +240,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Actins.size(); i++) {
                 Actins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+//                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
                 }
             }
         }
