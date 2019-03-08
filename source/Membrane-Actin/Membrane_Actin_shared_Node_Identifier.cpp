@@ -22,9 +22,9 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem){
             mem_y = mem.return_node_position(mem_node_counter, 1);
             mem_z = mem.return_node_position(mem_node_counter, 2);
             
-            act_x = act.return_node_position(mem_node_counter, 0);
-            act_y = act.return_node_position(mem_node_counter, 1);
-            act_z = act.return_node_position(mem_node_counter, 2);
+            act_x = act.return_node_position(act_node_counter, 0);
+            act_y = act.return_node_position(act_node_counter, 1);
+            act_z = act.return_node_position(act_node_counter, 2);
             
             
             if( mem_x == act_x &&  mem_y == act_y &&  mem_z == act_z   )
@@ -32,9 +32,15 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem){
                 push[0]=act_node_counter;
                 push[1]=mem_node_counter;
                 act.Actin_Membrane_shared_Node_list.push_back(push);
+                
                 break;
+                
             }
         }
     }
     act.Num_of_Actin_Membrane_shared_Nodes=int(act.Actin_Membrane_shared_Node_list.size());
+    cout<<"\n# of shared nodes = "<<act.Num_of_Actin_Membrane_shared_Nodes<<endl;
+    if (act.Num_of_Actin_Membrane_shared_Nodes != mem.return_num_of_nodes()) {
+        cout<<"Not all of the Membrane node positions are compatibale with the actin nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
+    }
 }

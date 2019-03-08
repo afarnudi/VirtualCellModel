@@ -9,7 +9,7 @@
 #include "Membrane.h"
 
 
-void Membrane::potential_1 (void){
+void Membrane::log_barrier (void){
     double le0,le1,lmax,lmin;
     double deltax, deltay, deltaz, Node_distance, temp_force;
     double temp_potential_energy = 0.0;
@@ -107,9 +107,9 @@ void Membrane::potential_1 (void){
     }
     
 }
-void Membrane::potential_2 (void){
+void Membrane::Hookian (void){
     
-    //cout<<"Houkian Spring"<<endl;
+    //cout<<"Hookian Spring"<<endl;
     
     double deltax,deltay,deltaz,Node_distance,temp_force;
     
@@ -161,7 +161,6 @@ void Membrane::potential_2 (void){
     }
     
 }
-
 void Membrane::FENE(void){
     
     double equi_point, delta_r_max, epsilon;

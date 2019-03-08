@@ -151,8 +151,8 @@ private:
     void Normal_direction_Identifier();
 //    void Normal_direction_Identifier(double x, double y, double z);
     
-    void potential_1 (void);
-    void potential_2 (void);
+    void log_barrier (void);
+    void Hookian (void);
     void FENE (void);
     void Relaxation_potential(void);
     void Node_Bonds_identifier(void);

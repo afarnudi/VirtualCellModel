@@ -23,7 +23,7 @@ void Actin::initialise_node_bond_relaxed_length(void){
         delta_z = Node_Position[Node_B][2] - Node_Position[Node_A][2];
         
         double a[3]={delta_x, delta_y, delta_z};
-        Node_Bond_relaxed_length.push_back(vector_length(a)*1.05);
+        Node_Bond_relaxed_length.push_back( vector_length(a) );
     }
 }
 

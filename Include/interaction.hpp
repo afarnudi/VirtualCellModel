@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "Membrane.h"
-#include "ECM.hpp"
+#include "ECM.h"
 #include "Chromatin.h"
 #include "Actin.h"
 

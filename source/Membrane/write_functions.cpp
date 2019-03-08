@@ -208,13 +208,12 @@ void Membrane::generate_report()
     Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
     Report<<"Radius"<< setw(20)<<Radius<<endl;
     Report<<"spring_model"<< setw(20)<<spring_model<<endl;
-    if (spring_model==1)
-    {
+    if (spring_model==1){
+        Report<<"Membrane Spring Model:"<< setw(20)<<"logarithmic barrier"<<endl;
+    } else if (spring_model==2) {
+        Report<<"Membrane Spring Model:"<< setw(20)<<"Hookian"<<endl;
+    } else if (spring_model==3) {
         Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
-    }
-    if (spring_model==2)
-    {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
     }
     Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
     Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;

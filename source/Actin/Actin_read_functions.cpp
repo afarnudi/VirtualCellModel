@@ -3,6 +3,7 @@
 
 void Actin::read_gmesh_file (string gmesh_file)
 {
+    cout<<endl<<endl<<gmesh_file<<endl<<endl;
     ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(gmesh_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary Gmesh generated intigers. We never use these intigers in the actual programme.
@@ -18,7 +19,7 @@ void Actin::read_gmesh_file (string gmesh_file)
 	
 	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
     Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
-		for(int i=0;i<Num_of_Nodes;i++)
+    for(int i=0;i<Num_of_Nodes;i++)
 		{
             Node_Velocity[i].resize(3,0);
             Node_Force[i].resize(3,0);

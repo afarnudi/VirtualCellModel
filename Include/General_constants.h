@@ -25,6 +25,7 @@ namespace GenConst {
     extern int Num_of_Membranes;
     extern int Num_of_Chromatins;
     extern int Num_of_Actins;
+    extern int Num_of_ECMs;
     extern std::string trajectory_file_name;
     extern bool File_header;
     extern double Buffer_temperature;

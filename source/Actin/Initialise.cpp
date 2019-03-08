@@ -36,6 +36,6 @@ void Actin::initialise(string Mesh_file_name){
 //    Triangle_pair_identifier();
 //    check();
 //    
-    cout<<"\nMembrane class initiated.\n******************************\n\n";
+    cout<<"\nActin class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }
