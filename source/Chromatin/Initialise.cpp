@@ -7,6 +7,7 @@
 //
 
 #include "Chromatin.h"
+#include <algorithm>
 //void build_random_chain(void);
 
 void Chromatin::initialise(void){

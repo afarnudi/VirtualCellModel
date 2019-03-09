@@ -1,4 +1,4 @@
-TARGET=Memb
+TARGET=VCM
 CXXFLAGS=-std=c++11 -O2
 
 BINDIR=bin
@@ -9,7 +9,7 @@ OBJDIR=objects
 
 INCDIRS=-I$(INCDIR)
 
-SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp)
+SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane\-Actin/*.cpp) $(SRCDIR)/Membrane\-Chromatin/*.cpp)
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 
