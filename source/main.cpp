@@ -156,6 +156,13 @@ int main(int argc, char **argv)
         
     }
     
+    if (Include_Membrane && Include_ECM) {
+        for (int i=0; i<GenConst::Num_of_Membranes; i++) {
+            for (int j=0; j<GenConst::Num_of_ECMs; j++) {
+                Membrane_ECM_neighbour_finder(ECMs[j], Membranes[i]);
+            }
+        }
+    }
     
     
     
@@ -173,6 +180,11 @@ int main(int argc, char **argv)
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
             num_of_elements+=Actins[i].return_num_of_nodes();
+        }
+    }
+    if (Include_ECM) {
+        for (int i=0; i<ECMs.size(); i++) {
+            num_of_elements+=ECMs[i].return_num_of_nodes();
         }
     }
     
@@ -221,6 +233,9 @@ int main(int argc, char **argv)
                     Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
                 }
             }
+            for (int i=0; i<Chromatins.size(); i++) {
+                Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
+            }
 
             
         }
@@ -231,6 +246,20 @@ int main(int argc, char **argv)
             }
         }
         
+        if (Include_Membrane && Include_ECM) {
+            if (MD_Step%2000==0) {
+                for (int i=0; i<Membranes.size(); i++) {
+                    for (int j=0; j<ECMs.size(); j++) {
+                        Membrane_ECM_shared_node_force (ECMs[j], Membranes[i]);
+                    }
+                    
+//                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
+                }
+            }
+//            for (int i=0; i<ECMs.size(); i++) {
+//                ECM_Membrane_shared_Node_Force_calculator(Actins[i], Membranes[i]);
+//            }
+        }
         
         
         
@@ -299,6 +328,13 @@ int main(int argc, char **argv)
                     string label="Actin_"+to_string(i);
                     Actins[i].write_traj(traj_file_name, label);
 //                    Actins[i].export_for_resume(MD_Step);
+                }
+            }
+            if (Include_ECM) {
+                for (int i=0; i<ECMs.size(); i++) {
+                    string label="ECM_"+to_string(i);
+                    ECMs[i].write_traj(traj_file_name, label);
+                    //                    Actins[i].export_for_resume(MD_Step);
                 }
             }
         }// End of if (MD_Step%100==0)

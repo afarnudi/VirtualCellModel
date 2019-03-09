@@ -46,4 +46,13 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
 //Actin-Membrane
 void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem);
 void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem);
+
+//ECM-Membrane
+void Membrane_ECM_neighbour_finder (ECM ecm, Membrane &mem);
+void initialise_ecm_mem_neighbour_list (ECM ecm, Membrane &mem);
+void update_ecm_mem_neighbour_list (ECM ecm, Membrane &mem);
+void prune_list(int mem_nodes, vector<vector<double> >  &dist_list, vector<vector<int> >  &inde_list);
+void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<double> >  dist_list, vector<vector<int> >  inde_list);
+void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem);
+
 #endif /* interaction_hpp */

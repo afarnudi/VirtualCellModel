@@ -15,6 +15,7 @@
 #include <vector>
 #include <math.h>
 #include <map>
+#include <iomanip>
 #include "General_functions.hpp"
 
 using namespace std;
@@ -75,6 +76,8 @@ public:
     void import_config(string config_file_name);
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
+    void write_traj (string traj_name, string label);
+    void generate_report(void);
     
 //    void triangle_normal_calculator(int triangle_index, double ABxAC[3]);
     
@@ -121,6 +124,20 @@ public:
     double return_sigma(void){
         return sigma;
     }
+    double return_node_position(int node_number, int node_coordinate){
+        return Node_Position[node_number][node_coordinate];
+    }
+    void add_to_force(double force,int index, int coor){
+        Node_Force[index][coor]+=force;
+    }
+    void shift_node_positions(void){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]+=Shift_in_X_direction;
+            Node_Position[i][1]+=Shift_in_Y_direction;
+            Node_Position[i][2]+=Shift_in_Z_direction;
+        }
+    }
+    
 };
 
 #endif /* ECM_hpp */

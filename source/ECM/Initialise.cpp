@@ -21,7 +21,7 @@ void ECM::initialise(string Mesh_file_name, int dimension){
     cout<<"# of Triangles = "<<Num_of_Triangles<<endl;
     Node_Bond_identifier();
     Node_neighbour_list_constructor();
-    
+    shift_node_positions();
 //    Normal_direction_Identifier();
 //    Triangle_pair_counter();
 //    cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
