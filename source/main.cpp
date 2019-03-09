@@ -219,7 +219,7 @@ int main(int argc, char **argv)
         if (Include_ECM)
         {
             for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+//                ECMs[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
 //                ECMs[i].Elastic_Force_Calculator();
             }
         }
@@ -247,18 +247,15 @@ int main(int argc, char **argv)
         }
         
         if (Include_Membrane && Include_ECM) {
-            if (MD_Step%2000==0) {
-                for (int i=0; i<Membranes.size(); i++) {
-                    for (int j=0; j<ECMs.size(); j++) {
-                        Membrane_ECM_shared_node_force (ECMs[j], Membranes[i]);
+            for (int i=0; i<Membranes.size(); i++) {
+                for (int j=0; j<ECMs.size(); j++) {
+                    Membrane_ECM_shared_node_force (ECMs[j], Membranes[i]);
+                    if (MD_Step%2000==0) {
+//                        cout<<"here\n";
+                        update_ecm_mem_neighbour_list (ECMs[j], Membranes[i]);
                     }
-                    
-//                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
                 }
             }
-//            for (int i=0; i<ECMs.size(); i++) {
-//                ECM_Membrane_shared_Node_Force_calculator(Actins[i], Membranes[i]);
-//            }
         }
         
         
@@ -292,7 +289,7 @@ int main(int argc, char **argv)
         }
         if (Include_ECM) {
             for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
+//                ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
                     //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
                 }

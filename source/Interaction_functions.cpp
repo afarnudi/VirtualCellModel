@@ -14,7 +14,7 @@ void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem){
     double force=0, temp_potential_energy=0;
     double delta_x=0, delta_y=0, delta_z=0, Node_distance=0;
     double sigma = 0.35;
-    double epsilon = 4 * GenConst::K * GenConst::MD_T;
+    double epsilon = 4 * GenConst::K * GenConst::MD_T*10;
     
     for (int i=0; i<mem_nodes; i++) {
         if (mem.ECM_Node_neighbour_list[i].size() != 0) {
@@ -27,7 +27,7 @@ void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem){
             double a[3]={delta_x, delta_y, delta_z};
             Node_distance = vector_length(a);
             
-            double r_1 = Node_distance/sigma;
+            double r_1 = (Node_distance)/sigma;
             double r_3 = r_1*r_1*r_1;
             double r_5 = r_3*r_1*r_1;
             
@@ -39,10 +39,10 @@ void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem){
             mem.add_to_force(force*delta_x, i, 0);
             mem.add_to_force(force*delta_y, i, 1);
             mem.add_to_force(force*delta_z, i, 2);
-            
-            ecm.add_to_force(-force*delta_x, ecm_Node, 0);
-            ecm.add_to_force(-force*delta_y, ecm_Node, 1);
-            ecm.add_to_force(-force*delta_z, ecm_Node, 2);
+//            cout<<"got one\n";
+//            ecm.add_to_force(-force*delta_x, ecm_Node, 0);
+//            ecm.add_to_force(-force*delta_y, ecm_Node, 1);
+//            ecm.add_to_force(-force*delta_z, ecm_Node, 2);
         }
     }
 }

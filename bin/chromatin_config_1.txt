@@ -1,9 +1,9 @@
-Resume	0	Resume_2018_10_14_21_31.txt
-Num_of_Nodes	15
+Resume	1	Results/Relaxation/Resume_Chromatin_0_2019_02_27_time_14_39.txt
+Num_of_Nodes	300
 Node_Mass	0.2
-Node_radius	0.5
+Node_radius	0.4
 spring_model	2
-Spring_coefficient	10
+Spring_coefficient	1000
 Damping_coefficient	0
 Shift_in_X_direction	0
 Shift_in_Y_direction	0
