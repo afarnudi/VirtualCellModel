@@ -86,9 +86,9 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value*GenConst::MD_T;
+        Spring_coefficient=param_value;//*GenConst::MD_T;
     } else if (param_name=="Bending_coefficient"){
-        Bending_coefficient=param_value*GenConst::MD_T;
+        Bending_coefficient=param_value;//*GenConst::MD_T;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
     } else if (param_name=="K_surfaceConstant_local"){

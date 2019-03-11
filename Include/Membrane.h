@@ -51,6 +51,25 @@ private:
     
     double ECM_interaction_cut_off=0;
     
+    double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
+    double Total_Potential_Energy;
+    double Total_Kinetic_Energy;
+    double Radius=0;
+    double Node_radius=1;
+    double COM_velocity[3]={0};
+    double COM_position[3]={0};
+    
+    int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
+    int Num_of_Triangle_Pairs;
+    double X_in=0;
+    double Y_in=0;
+    double Z_in=0;
+    double X_scale=0;
+    double Y_scale=0;
+    double Z_scale=0;
+    
+    
+    
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
     void read_membrabe_input(string input_file);
@@ -74,23 +93,10 @@ private:
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
-    double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
-    double Total_Potential_Energy;
-    double Total_Kinetic_Energy;
-	double Radius=0;
-    double Node_radius=1;
-    double COM_velocity[3]={0};
-    double COM_position[3]={0};
     
-    int membrane_counter;
-    int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
-    int Num_of_Triangle_Pairs;
-    double X_in=0;
-    double Y_in=0;
-    double Z_in=0;
-    double X_scale=0;
-    double Y_scale=0;
-    double Z_scale=0;
+    
+    
+//    int membrane_counter;
     
     double min_radius_after_relaxation;
     
@@ -139,7 +145,6 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void write_pov_traj(string traj_name, string label, int currentstep);
     double Average_velocity();
     double Omega[3]={0};
-//private: (if we define these constants as private members of the class, we can't put them in the final report)
     
     
     

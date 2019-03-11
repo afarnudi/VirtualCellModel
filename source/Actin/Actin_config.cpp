@@ -86,7 +86,7 @@ void Actin::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value*GenConst::MD_T;
+        Spring_coefficient=param_value;//*GenConst::MD_T;
     }  else if (param_name=="Shift_in_X_direction"){
         Shift_in_X_direction=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
