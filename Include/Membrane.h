@@ -68,6 +68,7 @@ private:
     double Y_scale=0;
     double Z_scale=0;
     
+    double ECM_interaction_strength=1;
     
     
     double Average_Node_Distance();
@@ -218,6 +219,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double return_ECM_interaction_cut_off(void){
         return ECM_interaction_cut_off;
     }
+    double return_ECM_interaction_strength(void){
+        return ECM_interaction_strength;
+    }
     
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
@@ -244,9 +248,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
             COM_position[1]+=Node_Position[i][1];
             COM_position[2]+=Node_Position[i][2];
         }
-        COM_velocity[0]/=Num_of_Nodes;
-        COM_velocity[2]/=Num_of_Nodes;
-        COM_velocity[1]/=Num_of_Nodes;
+        COM_position[0]/=Num_of_Nodes;
+        COM_position[2]/=Num_of_Nodes;
+        COM_position[1]/=Num_of_Nodes;
     }
     double return_min_radius_after_relaxation(void){
         return min_radius_after_relaxation;

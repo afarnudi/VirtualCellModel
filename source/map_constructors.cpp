@@ -74,7 +74,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     } else if (it->first=="Num_of_ECMs") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
+//                            cout<<"\t"<<split[i+2+j]<<endl;
                             ecm_config_list.push_back(split[i+2+j]);
                         }
                         continue;

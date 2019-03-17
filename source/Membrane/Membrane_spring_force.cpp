@@ -10,7 +10,7 @@
 
 
 void Membrane::log_barrier (void){
-    double le0,le1,lmax,lmin;
+    double le0, le1, lmax, lmin;
     double deltax, deltay, deltaz, Node_distance, temp_force;
     double temp_potential_energy = 0.0;
     

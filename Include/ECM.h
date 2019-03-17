@@ -55,7 +55,8 @@ private:
     double interaction_range=1.0;
     double epsilon=0.6;
     double sigma=15.0;
-    
+    double COM_velocity[3]={0};
+    double COM_position[3]={0};
     
     vector<vector<double> > Node_Velocity;
     vector<vector<int> > Node_Pair_list;
@@ -68,8 +69,9 @@ private:
     
 //    void read_input(string input_file);
     void read_gmesh_file_2D (string gmesh_file);
-    void normal_direction_Identifier(double x, double y, double z);
-    
+    void read_gmesh_file_3D (string gmesh_file);
+    void normal_direction_Identifier (double x, double y, double z);
+    void normal_direction_Identifier (void);
     
     
 public:
@@ -138,7 +140,32 @@ public:
             Node_Position[i][2]+=Shift_in_Z_direction;
         }
     }
-    
+    void update_COM_velocity(void){
+        COM_velocity[0]=0;
+        COM_velocity[1]=0;
+        COM_velocity[2]=0;
+        for (int i=0; i<Num_of_Nodes; i++) {
+            COM_velocity[0]+=Node_Velocity[i][0];
+            COM_velocity[1]+=Node_Velocity[i][1];
+            COM_velocity[2]+=Node_Velocity[i][2];
+        }
+        COM_velocity[0]/=Num_of_Nodes;
+        COM_velocity[2]/=Num_of_Nodes;
+        COM_velocity[1]/=Num_of_Nodes;
+    }
+    void update_COM_position(void){
+        COM_position[0]=0;
+        COM_position[1]=0;
+        COM_position[2]=0;
+        for (int i=0; i<Num_of_Nodes; i++) {
+            COM_position[0]+=Node_Position[i][0];
+            COM_position[1]+=Node_Position[i][1];
+            COM_position[2]+=Node_Position[i][2];
+        }
+        COM_position[0]/=Num_of_Nodes;
+        COM_position[2]/=Num_of_Nodes;
+        COM_position[1]/=Num_of_Nodes;
+    }
 };
 
 #endif /* ECM_hpp */

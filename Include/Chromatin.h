@@ -172,9 +172,9 @@ public:
             COM_position[1]+=Node_Position[i][1];
             COM_position[2]+=Node_Position[i][2];
         }
-        COM_velocity[0]/=Num_of_Nodes;
-        COM_velocity[2]/=Num_of_Nodes;
-        COM_velocity[1]/=Num_of_Nodes;
+        COM_position[0]/=Num_of_Nodes;
+        COM_position[2]/=Num_of_Nodes;
+        COM_position[1]/=Num_of_Nodes;
     }
 };
 
