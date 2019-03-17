@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list, vector<string> &actin_config_list){
+void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list, vector<string> &actin_config_list, vector<string> &ecm_config_list){
     ifstream read_map("General_param_map.txt");
     map<string, double> general_param_map;
     map<string, double>::iterator it;
@@ -71,7 +71,14 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                             actin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
-                    }else if (it->first=="trajectory_file_name") {
+                    } else if (it->first=="Num_of_ECMs") {
+                        
+                        for (int j=0; j<it->second; j++) {
+                            cout<<"\t"<<split[i+2+j]<<endl;
+                            ecm_config_list.push_back(split[i+2+j]);
+                        }
+                        continue;
+                    } else if (it->first=="trajectory_file_name") {
                         if (it->second!=0) {
                             GenConst::trajectory_file_name=split[i+2];
                         } else {
@@ -185,19 +192,22 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         } else {
             GenConst::Num_of_Actins=0;
         }
+    } else if (param_name=="Num_of_ECMs"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Num_of_ECMs=it->second;
+        } else {
+            GenConst::Num_of_ECMs=0;
+        }
     } else if (param_name=="Bussi_tau"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Bussi_tau=it->second;
         }
-    } else if(param_name=="Relaxation"){
+    } else if (param_name=="Actin_Membrane_Bond_Coefficient"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            if (it->second==0.0) {
-                GenConst::Relaxation=false;
-            } else {
-                GenConst::Relaxation=true;
-            }
+            GenConst::Actin_Membrane_Bond_Coefficient=it->second;
         }
     }
 

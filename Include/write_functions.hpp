@@ -10,7 +10,7 @@
 #define write_functions_hpp
 
 #include <stdio.h>
-#include "ECM.hpp"
+#include "ECM.h"
 #include "Membrane.h"
 #include <iomanip>
 #include <limits>

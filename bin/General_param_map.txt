@@ -5,7 +5,8 @@ MD_T	1
 K	1
 Num_of_Membranes	0
 Num_of_Chromatins	0
-Num_of_Actins	0
+Num_of_Actins		0
+Num_of_ECMs		0
 MD_thrmo_step	200
 Bussi_tau	10
 MC_step	100
@@ -13,4 +14,4 @@ Lbox	1000
 Periodic_condtion_status 0
 Mem_fluidity	0.001
 trajectory_file_name	0
-Relaxation 1
+Actin_Membrane_Bond_Coefficient	400

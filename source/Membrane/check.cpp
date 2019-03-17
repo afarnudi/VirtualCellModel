@@ -29,12 +29,13 @@ void Membrane::check(void){
     cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
 
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
-        cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
-
-    }
-    if (((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) or GenConst::Relaxation==true) {
-        node_distance_correction();
-        calculate_mesh_properties();  
+        if (!Relaxation) {
+            cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. If the Membrane is not attached to an Actin or another network we strongly recommend turning on the 'Relaxation' flag or switching off the bending.\n\n";
+        } else {
+            cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
+            node_distance_correction();
+            calculate_mesh_properties();
+        }
     }
 }
 
@@ -44,7 +45,7 @@ void Membrane::node_distance_correction(void){
     double MD_relax_Steps_1=2000;//2000;
     double MD_relax_Steps_2=2500;//20000;
     double MD_relax_Steps_3=500;
-    string pov_relaxation_file_name ="Results/Relaxation/Relaxation_POV_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time;
+    string pov_relaxation_file_name ="Results/Relaxation/Relaxation_POV_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time;
     
     double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps_1, min=Min_node_pair_length;
 //    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
@@ -66,7 +67,7 @@ void Membrane::node_distance_correction(void){
             relaxation_traj();
             Damper_check(MD_Step);}
         if (int(100*MD_Step/(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100<<"\r" << std::flush;
         progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 //    check();
@@ -93,19 +94,29 @@ void Membrane::node_distance_correction(void){
            // Damper_check(MD_Step+MD_relax_Steps_1);
         }
         if ( int( 100*(MD_Step+MD_relax_Steps_1) /(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step+ MD_relax_Steps_1<<"\r" << std::flush;
+            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100+ MD_relax_Steps_1*100<<"\r" << std::flush;
         progress+=5;}
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
 
+    double min_node_distance=10000000000000;
+    double temp_dist;
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Velocity[i][j]=0;
             Node_Force[i][j]=0;
         }
+        double a[3]={Node_Position[i][0], Node_Position[i][1], Node_Position[i][2]};
+        temp_dist=vector_length(a);
+        if (temp_dist < min_node_distance) {
+            min_node_distance=temp_dist;
+        }
     }
+    min_radius_after_relaxation=min_node_distance;
+    
     Damping_coefficient=temp_Damping_coefficient;
     Bending_coefficient=temp_Bending_coefficient;
-    write_pov_traj(pov_relaxation_file_name, to_string(mem_index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
+    export_relaxed(0);
+    write_pov_traj(pov_relaxation_file_name, to_string(index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
 }
 
 void Membrane::calculate_mesh_properties(void){
@@ -141,90 +152,5 @@ double Membrane::Average_velocity_squared(){
     }
     average_velocity_squard= average_velocity_squard/Num_of_Nodes;
     return(average_velocity_squard);
-}
-
-void Membrane::node_distance_correction_2(void){
-    cout<<"\nBeginnig the Relaxation\nProgress:\n";
-     int progress=0;
-    double MD_relax_Steps_1=2000;//2000;
-    double MD_relax_Steps_2=50000;//20000;
-    double MD_relax_Steps_3=1800000;
-    string pov_relaxation_file_name ="Results/Relaxation/Relaxation_POV_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time;
-    
-    double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/MD_relax_Steps_1, min=Min_node_pair_length;
-//    cout<<"spring coefficient= "<<Spring_coefficient<<endl;
-    double temp_Damping_coefficient=Damping_coefficient;
-    double temp_Bending_coefficient=Bending_coefficient;
-    Damping_coefficient=0.5;
-    Bending_coefficient=70*GenConst::MD_T*GenConst::K;
-    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_1 ; MD_Step++){
-        //Setting the min angle of triangles to 20 dgrees or pi/9
-        Min_node_pair_length=slope*MD_Step+min;
-
-        for (int i=0; i<100; i++) {
-            MD_Evolution_beginning(GenConst::MD_Time_Step);
-            Relaxation_potential_2();
-            Bending_potetial_2(0);
-            MD_Evolution_end(GenConst::MD_Time_Step);
-        }
-        if (MD_Step!=0 && MD_Step%10==0) {
-            relaxation_traj();}
-        if (int(100*MD_Step/(MD_relax_Steps_1*100+ MD_relax_Steps_2+ MD_relax_Steps_3))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100<<"\r" << std::flush;
-        progress+=5;}
-    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-//    check();
-//    Damping_coefficient=2;
-//    Bending_coefficient=35*GenConst::MD_T*GenConst::K;
-//=======
-//    }
-     Damping_coefficient=1;
-    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_2 ; MD_Step++){
-        //Setting the min angle of triangles to 20 dgrees or pi/9
-            MD_Evolution_beginning(GenConst::MD_Time_Step);
-            Relaxation_potential();
-            Bending_potetial_2(0);
-            MD_Evolution_end(GenConst::MD_Time_Step);
-        if (MD_Step!=0 && MD_Step%1000==0) {
-            relaxation_traj();}
-        if (( ( MD_Step+100*MD_relax_Steps_1) /((MD_relax_Steps_1*100)+ MD_relax_Steps_2 + MD_relax_Steps_3))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step+ MD_relax_Steps_1*100<<"\r" << std::flush;
-        progress+=5;}
-    } 
-   
-//>>>>>>> Thermo
-    double temp_temperature=(Average_velocity_squared() * Node_Mass)/(3*GenConst::K);
-    
-    for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_3 ; MD_Step++){
-        //Setting the min angle of triangles to 20 dgrees or pi/9
-//        Max_node_pair_length=slope*MD_Step+max;
-        //        cout<<"Max_node_pair_length= "<<Max_node_pair_length<<endl;
-        if (MD_Step%600000==0){
-        temp_temperature=temp_temperature/2;}
-        MD_Evolution_beginning(GenConst::MD_Time_Step);
-        Relaxation_potential_2();
-        Bending_potetial_2(0);
-        MD_Evolution_end(GenConst::MD_Time_Step);
-        Thermostat_Bussi(temp_temperature);
-        
-        
-        if (MD_Step!=0 && MD_Step%1000==0) {
-            relaxation_traj();
-
-        }
-        if(( int( MD_Step+MD_relax_Steps_1*100 + MD_relax_Steps_2) /(MD_relax_Steps_1*100+ MD_relax_Steps_2 + MD_relax_Steps_3))>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step+ MD_relax_Steps_1*100 + MD_relax_Steps_2 <<"\r" << std::flush;
-        progress+=5;}
-    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-
-    for (int i=0; i<Num_of_Nodes; i++) {
-        for (int j=0; j<3; j++) {
-            Node_Velocity[i][j]=0;
-            Node_Force[i][j]=0;
-        }
-    }
-    Damping_coefficient=temp_Damping_coefficient;
-    Bending_coefficient=temp_Bending_coefficient;
-    write_pov_traj(pov_relaxation_file_name, to_string(mem_index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
 }
 

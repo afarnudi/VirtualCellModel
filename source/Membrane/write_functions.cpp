@@ -128,7 +128,7 @@ void Membrane::relaxation_traj (void)
     string energy_file_name;
     string traj_file_name;
     
-    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".xyz";
+    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".xyz";
     //trajectory:
     
     ofstream Trajectory;
@@ -147,7 +147,7 @@ void Membrane::relaxation_traj (void)
 
 void Membrane::export_for_resume(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(mem_index)+"_";
+    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -183,7 +183,7 @@ void Membrane::export_for_resume(int MD_step){
 void Membrane::generate_report()
 {
     string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(mem_index)+"_";
+    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(index)+"_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
@@ -209,13 +209,12 @@ void Membrane::generate_report()
     Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
     Report<<"Radius"<< setw(20)<<Radius<<endl;
     Report<<"spring_model"<< setw(20)<<spring_model<<endl;
-    if (spring_model==1)
-    {
+    if (spring_model==1){
+        Report<<"Membrane Spring Model:"<< setw(20)<<"logarithmic barrier"<<endl;
+    } else if (spring_model==2) {
+        Report<<"Membrane Spring Model:"<< setw(20)<<"Hookian"<<endl;
+    } else if (spring_model==3) {
         Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
-    }
-    if (spring_model==2)
-    {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
     }
     Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
     Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
@@ -251,7 +250,7 @@ void Membrane::write_parameters(int MD_Step){
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
-    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(mem_index)+"_"+file_time+".txt";
+    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".txt";
     ofstream Trajectory;
     
     Trajectory.open(traj_file_name.c_str(), ios::app);
@@ -265,17 +264,42 @@ void Membrane::write_parameters(int MD_Step){
     <<"\t"<<Omega[0]<<"\t"<<Omega[1]<<"\t"<<Omega[2]<<"\t"<<Omega_len
     <<endl;
 }
-/*
-void Membrane::export_velocities(int MD_step){
-    ofstream average_velocity;
-    string velocity_file_name="Results/Resumes/Velocity_Membrane_"+to_string(mem_index)+"_";
-    velocity_file_name+=file_time;
-    velocity_file_name+=".txt";
-    average_velocity.open(velocity_file_name.c_str());
+
+
+void Membrane::export_relaxed(int MD_step){
+    ofstream write_resume_file;
+    string resume_file_name="Results/Relaxation/Resume_Membrane_"+to_string(index)+"_";
+    resume_file_name+=file_time;
+    resume_file_name+=".txt";
+    write_resume_file.open(resume_file_name.c_str());
+    
+    write_resume_file<<MD_step<<endl;
+    write_resume_file<<Num_of_Nodes<<endl;
     for (int i=0; i<Num_of_Nodes; i++) {
-    average_velocity<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";}
+        write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
+        write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
+        //Node_force=0
+    }
+    
+    write_resume_file<<Num_of_Triangles<<endl;
+    for (int i=0; i<Num_of_Triangles; i++) {
+        write_resume_file<<Triangle_list[i][0]<<"\t"<<Triangle_list[i][1]<<"\t"<<Triangle_list[i][2]<<"\n";
+    }
+    
+    write_resume_file<<Num_of_Node_Pairs<<endl;
+    for (int i=0; i<Num_of_Node_Pairs; i++) {
+        write_resume_file<<Node_Bond_list[i][0]<<"\t"<<Node_Bond_list[i][1]<<"\n";
+    }
+    //In the import function we should call the neighbour list constructor
+    write_resume_file<<Num_of_Triangle_Pairs<<endl;
+    for (int i=0; i<Num_of_Triangle_Pairs; i++) {
+        write_resume_file<<Triangle_pair_list[i][0]<<"\t"<<Triangle_pair_list[i][1]<<"\n";
+        write_resume_file<<Triangle_Pair_Nodes[i][0]<<"\t"<<Triangle_Pair_Nodes[i][1]<<"\t"<<Triangle_Pair_Nodes[i][2]<<"\t"<<Triangle_Pair_Nodes[i][3]<<"\t"<<"\n";
+    }
+    write_resume_file<<Max_node_pair_length<<"\t"<<Min_node_pair_length<<"\t"<<Average_node_pair_length<<endl;
+    //run_check_ for max and min node distances
 }
-*/        
+     
 void Membrane::Damper_check(int MD_step){
     double average=0;
     double averageSinus=0;

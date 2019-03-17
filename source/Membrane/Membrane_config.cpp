@@ -115,6 +115,21 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Z_scale=param_value;
     }else if (param_name=="rescale"){
         rescale=param_value;
+
+    } else if (param_name=="ECM_interaction_cut_off"){
+        ECM_interaction_cut_off=param_value;
+    } else if(param_name=="Relaxation"){
+        if (int(param_value) == 0){
+            Relaxation=false;
+        } else {
+            Relaxation=true;
+        }
+    } else if(param_name=="Relax_with_actin"){
+        if (int(param_value) == 0) {
+            Relax_with_actin=false;
+        } else{
+            Relax_with_actin=true;
+        }
     }
     
 }

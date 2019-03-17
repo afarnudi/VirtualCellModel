@@ -6,7 +6,7 @@
 //  Copyright © 2018 Ali Farnudi. All rights reserved.
 //
 
-#include "ECM.hpp"
+#include "ECM.h"
 
 void ECM::normal_direction_Identifier(double x, double y, double z){
     

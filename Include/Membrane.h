@@ -1,3 +1,23 @@
+/**
+ * \class Membrane
+ *
+ * \brief The class 'Membrane' will build the required inviroment for simulating a triangular mesh of points in space bound by a potential suitable to simulate the behaviour of a cell membrane.
+ *
+ * This class is meant as an example.  It is not useful by itself
+ * rather its usefulness is only a function of how much it helps
+ * the reader.  It is in a sense defined by the person who reads it
+ * and otherwise does not exist in any real form.
+ *
+ * \note Attempts at zen rarely work.
+ *
+ *
+ * \version $Revision: 0.0 $
+ *
+ *
+ * Contact: a.farnudi@gmail.com
+ *
+ */
+
 #ifndef MEMBRANE_H
 #define MEMBRANE_H
 #include <string>
@@ -13,8 +33,44 @@
 
 using namespace std;
 
+
 class Membrane
 {
+    
+private:
+    int index;
+    /*variables*/
+    int Num_of_Nodes;
+    /*constants*/
+    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
+    int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
+    map<string, double> param_map;
+    
+    bool Relaxation=false;
+    bool Relax_with_actin=false;
+    
+    double ECM_interaction_cut_off=0;
+    
+    double Average_Node_Distance();
+    void read_gmesh_file (string gmesh_file);
+    void read_membrabe_input(string input_file);
+    void Triangle_pair_counter ();
+    void Normal_direction_Identifier();
+    //    void Normal_direction_Identifier(double x, double y, double z);
+    
+    void log_barrier (void);
+    void Hookian (void);
+    void FENE (void);
+    void Relaxation_potential(void);
+    void Node_Bonds_identifier(void);
+    void Triangle_pair_identifier(void);
+    void Bending_potetial(void);
+    //    void Bending_potetial_2(void);
+    void Bending_potetial_2(double theta_0);
+    void check(void);
+    void calculate_mesh_properties(void);
+    void node_distance_correction(void);
+    void export_relaxed(int MD_step);
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
@@ -23,10 +79,9 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Total_Kinetic_Energy;
 	double Radius=0;
     double Node_radius=1;
-    double COM_velocity[3];
-    double COM_position[3];
     double temp_damp_force[][3];
-
+    double COM_velocity[3]={0};
+    double COM_position[3]={0};
     int membrane_counter;
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
@@ -37,6 +92,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Y_scale=0;
     double Z_scale=0;
     bool rescale=0;
+    double min_radius_after_relaxation;
     string output_file_neme;
     string file_time;
     
@@ -52,6 +108,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<double>DamperCheck;
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
+    vector<vector<int> > ECM_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
@@ -105,41 +162,16 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
-    
-    
     bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
     
     
 private:
     int mem_index;
     /*variables*/
-    int Num_of_Nodes;
-    /*constants*/
-    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
-    int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
-    map<string, double> param_map;
-    
-    double Average_Node_Distance();
-    void read_gmesh_file (string gmesh_file);
-    void read_membrabe_input(string input_file);
-    void Triangle_pair_counter ();
-    void Normal_direction_Identifier();
 //    void Normal_direction_Identifier(double x, double y, double z);
     void Rescale(double rescale_factor);
     void potential_1 (void);
     void potential_2 (void);
-    void FENE (void);
-    void Relaxation_potential(void);
-    void Relaxation_potential_2 (void);
-    void Node_Bonds_identifier(void);
-    void Triangle_pair_identifier(void);
-    void Bending_potetial(void);
-//    void Bending_potetial_2(void);
-    void Bending_potetial_2(double theta_0);
-    void check(void);
-    void calculate_mesh_properties(void);
-    void node_distance_correction(void);
-    void node_distance_correction_2(void);
     
     
 public:
@@ -246,6 +278,8 @@ public:
 //    }
     
     
+
+    void Relax(void);
     
     int return_num_of_nodes(void){
         return Num_of_Nodes;
@@ -286,12 +320,16 @@ public:
     void set_file_time(char* buffer){
         file_time=buffer;
     }
-    void set_index(int index){
-        mem_index=index;
+    void set_index(int ind){
+        index=ind;
     }
     double return_node_radius(void){
         return Node_radius;
     }
+    double return_ECM_interaction_cut_off(void){
+        return ECM_interaction_cut_off;
+    }
+    
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
@@ -320,6 +358,12 @@ public:
         COM_velocity[0]/=Num_of_Nodes;
         COM_velocity[2]/=Num_of_Nodes;
         COM_velocity[1]/=Num_of_Nodes;
+    }
+    double return_min_radius_after_relaxation(void){
+        return min_radius_after_relaxation;
+    }
+    bool return_relax_with_actin_flag(void){
+        return Relax_with_actin;
     }
 };
 

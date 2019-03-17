@@ -23,8 +23,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     double Node_radius=1;
     double COM_velocity[3];
     double COM_position[3];
-    
-    int chromatin_counter;
+
     string output_file_neme;
     string file_time;
     
@@ -32,7 +31,10 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<int> > Node_neighbour_list;
-    vector<vector<int>> Membrane_neighbour_node;
+    vector<vector<int> > Membrane_neighbour_node;
+    vector<vector<double> > Contact_Matrix;
+    vector<int> AB_index;
+    
     
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
@@ -42,6 +44,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     
     void import(string import_file_name);
     void import_config(string config_file_name);
+    void import_config(string config_file_name, double min_radius);
     void set_map_parameter(string param_name, double param_value);
     void generate_report(void);
     void Thermostat_2(double MD_KT);
@@ -49,10 +52,13 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Thermostat_Bussi(double MD_T);
     void Results (string label);
     void build_random_chain(void);
-    void Elastic_Force_Calculator();
+    void Force_Calculator();
+    void Force_Calculator_2();
     void FENE(void);
     void hard_sphere (void);
     void Strong_spring(void);
+    void write_parameters(int MD_Step);
+    void export_pack(int MD_step);
     
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
     int chrom_index;
@@ -87,6 +93,13 @@ private: //(if we define these constants as private members of the class, we can
     void calculate_mesh_properties(void);
     void node_distance_correction(void);
     void initialise(void);
+    void initialise(double min_radius);
+    void Pack(double min_radius);
+    double chromatin_prepack(void);
+    void packing_potential(double Sphere_Radius);
+    void packing_traj (void);
+    void reset_com_velocity(void);
+    void rescale_velocities(double scale);
     
 public:
     

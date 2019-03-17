@@ -2,7 +2,7 @@
 
 
 void Chromatin::import(string import_file_name){
-    cout<<"Importing the Membrane from the resume file:"<<endl;
+    cout<<"Importing the Chromatin from the resume file:"<<endl;
     cout<<import_file_name<<endl<<endl;
     ifstream read_resume_file;
     
@@ -20,9 +20,12 @@ void Chromatin::import(string import_file_name){
     cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
     
     Node_Force.resize(Num_of_Nodes);
+    AB_index.resize(Num_of_Nodes);
+    Contact_Matrix.resize(Num_of_Nodes);
     
     vector<double> read_double;
     read_double.resize(3);
+//    int read_int;
     
     for (int i=0; i<Num_of_Nodes; i++) {
         read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
@@ -31,16 +34,13 @@ void Chromatin::import(string import_file_name){
         read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
         Node_Velocity.push_back(read_double);
         
+        read_resume_file>>AB_index[i];
+        
         Node_Force[i].resize(3,0);
+        Contact_Matrix[i].resize(Num_of_Nodes,0);
     }
     cout<<"Coordinates and velocities loaded"<<endl;
     cout<<"Node forces set to zero"<<endl;
-    
-    vector<int> read_int;
-    read_int.resize(3);
-    
-    read_int.resize(2);
-    
     
 //    Node_neighbour_list_constructor();
     read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
