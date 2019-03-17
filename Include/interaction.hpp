@@ -51,8 +51,8 @@ void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem);
 void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem);
 void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
 void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
-void prune_list(int mem_nodes, vector<vector<double> >  &dist_list, vector<vector<int> >  &inde_list);
-void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<double> >  dist_list, vector<vector<int> >  inde_list);
+void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pairs);
+void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<pair<double, int> > > neighbour_pairs);
 void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem);
 
 #endif /* interaction_hpp */
