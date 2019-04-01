@@ -42,8 +42,8 @@ void Membrane::check(void){
 void Membrane::node_distance_correction(void){
     cout<<"\nBeginnig the Relaxation\nProgress:\n";
      int progress=0;
-    double MD_relax_Steps_1=2000;
-    double MD_relax_Steps_2=2500;
+    double MD_relax_Steps_1=2000;//2000;
+    double MD_relax_Steps_2=2500;//20000;
     double MD_relax_Steps_3=500;
     string pov_relaxation_file_name ="Results/Relaxation/Relaxation_POV_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time;
     
@@ -52,7 +52,7 @@ void Membrane::node_distance_correction(void){
     double temp_Damping_coefficient=Damping_coefficient;
     double temp_Bending_coefficient=Bending_coefficient;
     Damping_coefficient=0.5;
-    Bending_coefficient=2*35*GenConst::MD_T*GenConst::K;
+    Bending_coefficient=70*GenConst::MD_T*GenConst::K;
     for(int MD_Step=0 ;MD_Step<=MD_relax_Steps_1 ; MD_Step++){
         //Setting the min angle of triangles to 20 dgrees or pi/9
         Min_node_pair_length=slope*MD_Step+min;
@@ -64,7 +64,8 @@ void Membrane::node_distance_correction(void){
             MD_Evolution_end(GenConst::MD_Time_Step);
         }
         if (MD_Step!=0 && MD_Step%10==0) {
-            relaxation_traj();}
+            relaxation_traj();
+            Damper_check(MD_Step);}
         if (int(100*MD_Step/(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
             cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100<<"\r" << std::flush;
         progress+=5;}
@@ -90,6 +91,7 @@ void Membrane::node_distance_correction(void){
         {Damping_coefficient=0.9*Damping_coefficient;}
         if (MD_Step!=0 && MD_Step%10==0) {
             relaxation_traj();
+           // Damper_check(MD_Step+MD_relax_Steps_1);
         }
         if ( int( 100*(MD_Step+MD_relax_Steps_1) /(MD_relax_Steps_1+ MD_relax_Steps_2))>progress){
             cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step*100+ MD_relax_Steps_1*100<<"\r" << std::flush;
@@ -143,12 +145,12 @@ void Membrane::calculate_mesh_properties(void){
     cout<<"Max_node_pair_length="<<Max_node_pair_length<<"\tMin_node_pair_length="<<Min_node_pair_length<<endl;
 }
 
-double Membrane::Average_velocity(){
-    double average_velocity=0;
+double Membrane::Average_velocity_squared(){
+    double average_velocity_squard=0;
     for (int i=0; i< Num_of_Nodes; i++){
-        average_velocity+=sqrt(Node_Velocity[i][0]*Node_Velocity[i][0] +Node_Velocity[i][1]*Node_Velocity[i][1] + Node_Velocity[i][2]*Node_Velocity[i][2] );
+        average_velocity_squard+=sqrt(Node_Velocity[i][0]*Node_Velocity[i][0] +Node_Velocity[i][1]*Node_Velocity[i][1] + Node_Velocity[i][2]*Node_Velocity[i][2] );
     }
-    average_velocity= average_velocity/Num_of_Nodes;
-    return(average_velocity);
+    average_velocity_squard= average_velocity_squard/Num_of_Nodes;
+    return(average_velocity_squard);
 }
 
