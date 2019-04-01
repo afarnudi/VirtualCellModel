@@ -200,6 +200,9 @@ int main(int argc, char **argv)
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
                 Membranes[i].Elastic_Force_Calculator(0);
+                if (!Membranes[i].bending_coefficient_status() && MD_Step % GenConst::MD_traj_save_step==0) {
+                    Membranes[i].excluded_volume();
+                }
             }
         }
         if (Include_Chromatin)

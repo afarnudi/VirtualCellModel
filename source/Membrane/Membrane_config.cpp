@@ -6,7 +6,7 @@ using namespace std;
 void Membrane::import_config(string config_file_name){
     
     map<string, double>::iterator it;
-    string resume_file_name, Mesh_file_name="non";
+    
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
     

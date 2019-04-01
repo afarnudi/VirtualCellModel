@@ -46,6 +46,9 @@ private:
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     map<string, double> param_map;
     
+    string Mesh_file_name="None";
+    string resume_file_name="None";
+    
     bool Relaxation=false;
     bool Relax_with_actin=false;
     
@@ -92,9 +95,12 @@ private:
     void node_distance_correction(void);
     void export_relaxed(int MD_step);
     
+    
+    
+    
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
-    
+    void excluded_volume(void);
     
     
 //    int membrane_counter;
@@ -125,6 +131,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    
 //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(string Mesh_file_name);
 //    void initialise(string Mesh_file_name, double x, double y, double z);
@@ -257,6 +264,13 @@ public: //these are using in monte carlo flip function. for defining them as pri
     }
     bool return_relax_with_actin_flag(void){
         return Relax_with_actin;
+    }
+    bool bending_coefficient_status(void){
+        if (Bending_coefficient !=0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 };
 

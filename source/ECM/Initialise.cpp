@@ -22,6 +22,7 @@ void ECM::initialise(string Mesh_file_name, int dimension){
     cout<<"# of Nodes = "<<Num_of_Nodes<<endl;
     cout<<"# of Triangles = "<<Num_of_Triangles<<endl;
     Node_Bond_identifier();
+    cout<<"# of bonds = "<<Num_of_Node_Pairs<<endl;
     Node_neighbour_list_constructor();
     
     if (dimension == 3 ) {
