@@ -8,7 +8,11 @@
 
 #include "Membrane.h"
 
-void Membrane::Relax(void){
+void Membrane::Relax_1(void){
+   // node_distance_correction();
+    calculate_mesh_properties();
+}
+void Membrane::Relax_2(void){
     node_distance_correction();
     calculate_mesh_properties();
 }

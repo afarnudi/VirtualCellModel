@@ -48,7 +48,8 @@ private:
     
     bool Relaxation=false;
     bool Relax_with_actin=false;
-    
+    int Relaxation_Prosses_Model=1; // 1 represents the relaxation prosses without node correction and 2 includes node corrections.
+    int correction_progress;
     double ECM_interaction_cut_off=0;
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
@@ -75,6 +76,7 @@ private:
     void read_membrabe_input(string input_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
+
     //    void Normal_direction_Identifier(double x, double y, double z);
     
     void log_barrier (void);
@@ -86,9 +88,7 @@ private:
     void Bending_potetial(void);
     //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
-    void check(void);
-    void calculate_mesh_properties(void);
-    void node_distance_correction(void);
+    
     void export_relaxed(int MD_step);
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
@@ -123,7 +123,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<int> > Node_neighbour_list;
     vector<double>DamperCheck;
     vector<double>SinusCheck;
-    void Damper_check(int MD_step);
+    void Damper_check(int MD_step);    
+    void check(void);
     vector<vector<int> > ECM_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
@@ -134,6 +135,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    void node_distance_correction(void);
 //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(string Mesh_file_name);
 //    void initialise(string Mesh_file_name, double x, double y, double z);
@@ -145,7 +147,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Thermostat_2(double MD_KT);
     void Thermostat_N6(double MD_KT);
     void Thermostat_Bussi(double MD_KT);
-    
+    void calculate_mesh_properties(void);
     void relaxation_traj (void);
     void write_traj (string traj_name, string label);
     void write_parameters(int MD_Step);
@@ -294,10 +296,16 @@ public:
     
     
 
-    void Relax(void);
-    
+    void Relax_1(void);
+    void Relax_2(void);
     int return_num_of_nodes(void){
         return Num_of_Nodes;
+    }
+   int  return_Relaxation_Prosses_Model(void){
+       return Relaxation_Prosses_Model;
+   }
+    bool  return_Relaxation_flag(void){
+        return Relaxation;
     }
     void shift_position (double x, double y, double z){
         for (int i=0; i<Num_of_Nodes; i++) {
@@ -379,6 +387,9 @@ public:
     }
     bool return_relax_with_actin_flag(void){
         return Relax_with_actin;
+    }
+    int return_correction_progress(void){
+        return correction_progress;
     }
 };
 

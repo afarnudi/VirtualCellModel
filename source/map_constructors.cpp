@@ -55,6 +55,8 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         for (int j=0; j<it->second; j++) {
                             cout<<"\t"<<split[i+2+j]<<endl;
                             membrane_config_list.push_back(split[i+2+j]);
+                cout<<GenConst::Num_of_Membranes<<endl;
+                            
                         }
                         continue;
                     } else if (it->first=="Num_of_Chromatins") {
@@ -125,6 +127,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::MD_traj_save_step=it->second;
+        }
+    } else if (param_name=="MD_num_of_Relaxation_steps"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::MD_num_of_Relaxation_steps=it->second;
+        }else if (param_name=="MD_correction_steps"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::MD_correction_steps=it->second;
         }
     } else if (param_name=="MD_Time_Step"){
         it = general_param_map.find(param_name);
@@ -211,4 +222,5 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         }
     }
 
+}
 }

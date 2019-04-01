@@ -4,13 +4,14 @@
 using namespace std;
 
 void Membrane::import_config(string config_file_name){
-    
+    cout<<"Hi"<<endl;
     map<string, double>::iterator it;
     string resume_file_name, Mesh_file_name="non";
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
     
     if (read_config_file.is_open()) {
+        
         cout<<"'"<<config_file_name<<"' file opened successfully.\n";
         string line;
         int line_num=0;
