@@ -155,14 +155,14 @@ Please enter the 3D mesh file name:
     print('The actin has {} nodes and {} pyramids,'.format(len(Nodes_all),  len(pyr_act) ) )
     if len(tri_r_in) != 0:
         
-        print('I found two membranes. The radii are r_1 = {} and r_2 = {}'.format(round(radius_in,5), round(radius_out,5) ) ) 
+        print('\nI found two membranes. The radii are r_1 = {} and r_2 = {}'.format(round(radius_in,5), round(radius_out,5) ) ) 
         print('Membrane 1 has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_in),  len(tri_r_in), round(radius_in,5) ) )
         print('Membrane 2 has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_out),  len(tri_r_out), round(radius_out,5) ) )
         filename = input("What should I call the membrane mesh with radius {}?\n".format(round(radius_in,5) ) )
         write (nodes_r_in, tri_r_in, filename)
     else :
         
-        print('I only found one membrane.' )
+        print('\nI only found one membrane.' )
         print('It has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_out),  len(tri_r_out), round(radius_out,5) ) )
     
     filename = input("What should I call the membrane with radius {}?\n".format(round(radius_out,5) ))
