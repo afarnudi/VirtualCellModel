@@ -6,7 +6,7 @@ Created on Fri Mar 29 14:40:30 2019
 @author: alifarnudi
 """
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def read_file(filename):
     """
@@ -23,11 +23,12 @@ def read_file(filename):
         Nodes=[]
         Tris=[]
         Pyr=[]
+        print('\nWhat I found in {}:'.format(filename))
         for line in file:
             count_1 += 1
             if count_1 == 5:
                 num_of_nodes=int(line)
-#                print('# of Nodes = ', num_of_nodes)
+                print('\n{} nodes,'.format(num_of_nodes) )
             elif count_2 != num_of_nodes :
                 count_2 += 1
                 split=line.split()
@@ -45,11 +46,17 @@ def read_file(filename):
                 elif len(split) == 9:
                     Pyr.append( tuple([int(split[5]), int(split[6]), int(split[7]), int(split[8])]) )
                 else:
-                        return Nodes, Tris, Pyr
+                    print('{} triangles (elements with 3 nodes),'.format(len(Tris) ) )
+                    print('{} pyramids  (elements with 4 nodes).'.format(len(Pyr ) ) )
+                    return Nodes, Tris, Pyr
+    print('{} triangles (elements with 3 nodes),'.format(len(Tris) ) )
+    print('{} pyramids  (elements with 4 nodes).'.format(len(Pyr ) ) )
     return Nodes, Tris, Pyr
 
 def find_radii(Node_list):
     """
+This function makes a list of all the node distances from the origin (0, 0, 0), sorts the list, 
+and returns the Min (first element) and Max (last element) of the list. 
     """
     r=[]
     for i in Node_list:
@@ -64,6 +71,11 @@ def find_radii(Node_list):
     return r[0],r[-1]
 
 def find_nodes(node_list, radius):
+    """
+This function uses the coordinates from the 'node_list' and calculates their distance from the origin (0, 0, 0).
+After which, it will make a list of all the nodes that have a distance within 1% of the input 'radius'.
+
+    """
     nodes=[]
     for i in node_list:
         r_temp=np.sqrt(np.sum(np.square(np.array(i))))
@@ -72,6 +84,9 @@ def find_nodes(node_list, radius):
     return nodes
 
 def find_act_nodes(all_nodes, first_nodes, second_nodes):
+    """
+This function returns all the nodes in 'all_nodes' that are not in 'first_nodes' and 'second_nodes'.
+    """
     master_set = set(all_nodes)
     set_1 = set(first_nodes)
     set_2 = set(second_nodes)
@@ -80,6 +95,11 @@ def find_act_nodes(all_nodes, first_nodes, second_nodes):
     return list(act_set)
 
 def write(nodes, tris, file_name):
+    """
+In this function we write a mesh file that resembles the Gmsh V2.0 format style.
+This format generaly starts with the number of elements, followed by the element parameters.
+Example: number of nodes in the mesh, followed by the node coordinates.
+    """
     with open(file_name, 'w') as f:
         f.write("$MeshFormat\n2.2 0 8\n$EndMeshFormat\n$Nodes\n")
         f.write(str(len(nodes))+'\n')
@@ -88,7 +108,7 @@ def write(nodes, tris, file_name):
             count += 1
             f.write('{} {} {} {}\n'.format(count ,node[0],node[1],node[2]))
         f.write("$EndNodes\n$Elements\n")
-        f.write(str(len(tris)) )
+        f.write(str(len(tris))+'\n')
         count =0
         for tri in tris:
             count +=1
@@ -115,7 +135,7 @@ the foud membrane(s)from the bulk mesh (actin).
 After analysis is finished the programme saves the membrane(s) and actin into seperate files 
 ready for importing into The Vertual Cell Model software package.\n\n
                           
-Please enter the 3D mesh file name:\n
+Please enter the 3D mesh file name:
 """
 
     file_name_act = input(message)
@@ -126,21 +146,29 @@ Please enter the 3D mesh file name:\n
 
     nodes_r_in  = find_nodes(Nodes_all, radius_in)
     nodes_r_out = find_nodes(Nodes_all, radius_out)
-    act_nodes   = find_act_nodes(Nodes_all, nodes_r_in, nodes_r_out)
+#    act_nodes   = find_act_nodes(Nodes_all, nodes_r_in, nodes_r_out)
 
     tri_r_in    = find_tris(Nodes_all, Tris_all, nodes_r_in)
     tri_r_out   = find_tris(Nodes_all, Tris_all, nodes_r_out)    
     
+    print('\n----------------------------\n')
+    print('The actin has {} nodes and {} pyramids,'.format(len(Nodes_all),  len(pyr_act) ) )
     if len(tri_r_in) != 0:
+        
         print('I found two membranes. The radii are r_1 = {} and r_2 = {}'.format(round(radius_in,5), round(radius_out,5) ) ) 
+        print('Membrane 1 has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_in),  len(tri_r_in), round(radius_in,5) ) )
+        print('Membrane 2 has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_out),  len(tri_r_out), round(radius_out,5) ) )
         filename = input("What should I call the membrane mesh with radius {}?\n".format(round(radius_in,5) ) )
         write (nodes_r_in, tri_r_in, filename)
     else :
+        
         print('I only found one membrane.' )
+        print('It has {} nodes and {} triangles and a radius of {}'.format(len(nodes_r_out),  len(tri_r_out), round(radius_out,5) ) )
+    
     filename = input("What should I call the membrane with radius {}?\n".format(round(radius_out,5) ))
     write (nodes_r_out, tri_r_out, filename)
     filename = input("What should I call the actin mesh?\n")
-    write (act_nodes, pyr_act, 'act')
+    write (Nodes_all, pyr_act, filename)
 
 
 
