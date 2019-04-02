@@ -317,7 +317,7 @@ void Membrane::Damper_check(int MD_step){
    // average_damper_check << "MD Step: "<<MD_step<<"\n";
     for (int i=0; i<Num_of_Node_Pairs; i++) { 
        // damper_check<< DamperCheck[i]<<"\n";
-        average+=DamperCheck[i];
+//        average+=DamperCheck[i];
         averageSinus+=SinusCheck[i];
     }
     

@@ -97,7 +97,6 @@ int main(int argc, char **argv)
     bool Include_Chromatin = false;
     bool Include_Actin     = false;
     bool Include_ECM       = false;
-    cout<<GenConst::Num_of_Membranes<<endl;
     if (GenConst::Num_of_Membranes!=0) {
         Include_Membrane = true;
         
@@ -105,7 +104,6 @@ int main(int argc, char **argv)
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
-            cout<<"Hi";
             Membranes[i].import_config(membrane_config_list[i]);
             Membranes[i].generate_report();
         }

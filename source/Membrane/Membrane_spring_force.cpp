@@ -37,7 +37,7 @@ void Membrane::log_barrier (void){
     {
         Node_B=Node_Bond_list[k][0];
         Node_A=Node_Bond_list[k][1];
-        DamperCheck[k]= 0.0;
+//        DamperCheck[k]= 0.0;
         deltax=Node_Position[Node_A][0]-Node_Position[Node_B][0];
         deltay=Node_Position[Node_A][1]-Node_Position[Node_B][1];
         deltaz=Node_Position[Node_A][2]-Node_Position[Node_B][2];
