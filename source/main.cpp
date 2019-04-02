@@ -192,56 +192,10 @@ int main(int argc, char **argv)
             num_of_elements+=ECMs[i].return_num_of_nodes();
         }
     }
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> relaxation prosess
-    
-    
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> relaxation process
 if (Include_Membrane){
-        for (int i=0; i<Membranes.size(); i++){
-        Membranes[i].check();
-        if (Membranes[i].return_Relaxation_flag ()){
-            cout<<"\nBeginnig the Relaxation\nProgress:\n";
-            int Relaxation_progress=0; 
-           if (Membranes[i].return_Relaxation_Prosses_Model()==1){
-            double relax_temp= GenConst::MD_T;  
-            for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_Relaxation_steps ; MD_Step++){
-                Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
-                Membranes[i].Elastic_Force_Calculator(0);
-                Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if(MD_Step%100==0){
-                    Membranes[i].Thermostat_2(relax_temp);
-                    relax_temp=relax_temp/2;}
-                if (int(100*MD_Step/GenConst::MD_num_of_Relaxation_steps)>Relaxation_progress){
-            cout<<"[ "<<Relaxation_progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
-            Relaxation_progress+=5;}
-            // I am not sure that this will work fine in the case of having more than one membrane.
-                if (MD_Step%GenConst::MD_traj_save_step == 0){
-                Trajectory << num_of_elements<<endl;
-                Trajectory << " nodes  "<<endl;
-                string label="Membrane_"+to_string(i);
-                Membranes[i].write_traj(traj_file_name, label);
-                }//End of if (MD_Step%GenConst::MD_traj_save_step == 0)
-            
-           } //End of for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_Relaxation_steps ; MD_Step++)
-           Membranes[i].calculate_mesh_properties();
-           }// End of if (Membranes[i].return_Relaxation_Prosses_Model()==1)
-           if (Membranes[i].return_Relaxation_Prosses_Model()==2){
-               Membranes[i].node_distance_correction();
-               int Relaxation_progress= Membranes[i].return_correction_progress();
-                double relax_temp= GenConst::MD_T;
-                for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_Relaxation_steps ; MD_Step++){
-                Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
-                Membranes[i].Elastic_Force_Calculator(0);
-                Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if(MD_Step%100==0){
-                    Membranes[i].Thermostat_2(relax_temp);
-                    relax_temp=relax_temp/2;}
-                if (int(100*MD_Step/(GenConst::MD_num_of_Relaxation_steps + GenConst::MD_correction_steps * 100))>Relaxation_progress){
-            cout<<"[ "<<Relaxation_progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
-            Relaxation_progress+=5;}
-        } // End of for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_Relaxation_steps ; MD_Step++)
-        Membranes[i].calculate_mesh_properties();
-        } // End of if (Membranes[i].return_Relaxation_Prosses_Model()==2)
-    } //End of if (Membranes[i].return_Relaxation_flag ())
+    for (int i=0; i<Membranes.size(); i++){
+        Membranes[i].Relax_1();
     }// End of for (int i=0; i<Membranes.size(); i++)
 } // End of if (Include_Membrane)   
     

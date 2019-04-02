@@ -98,7 +98,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
  
 
 
-    double temp_damp_force[][3];
+  //  double temp_damp_force[][3];
 
     int membrane_counter;
     bool rescale=0;
