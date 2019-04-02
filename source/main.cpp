@@ -212,6 +212,9 @@ if (Include_Membrane){
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
                 Membranes[i].Elastic_Force_Calculator(0);
+                if (!Membranes[i].bending_coefficient_status() && MD_Step % GenConst::MD_traj_save_step==0) {
+                    Membranes[i].excluded_volume();
+                }
             }
         }
         if (Include_Chromatin)
@@ -295,7 +298,7 @@ if (Include_Membrane){
             for (int i=0; i<Actins.size(); i++) {
                 Actins[i].MD_Evolution_end(GenConst::MD_Time_Step);
                 if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-//                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
                 }
             }
         }

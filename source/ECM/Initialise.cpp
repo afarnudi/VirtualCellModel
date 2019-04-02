@@ -14,15 +14,23 @@ void ECM::initialise(string Mesh_file_name, int dimension){
     cout<<"Initialising the ECM Class..."<<endl;
     if (dimension == 2) {
         read_gmesh_file_2D(Mesh_file_name);
+    } else if (dimension == 3){
+        read_gmesh_file_3D(Mesh_file_name);
     }
     
     output_file_neme=Mesh_file_name;
     cout<<"# of Nodes = "<<Num_of_Nodes<<endl;
     cout<<"# of Triangles = "<<Num_of_Triangles<<endl;
     Node_Bond_identifier();
+    cout<<"# of bonds = "<<Num_of_Node_Pairs<<endl;
     Node_neighbour_list_constructor();
+    
+    if (dimension == 3 ) {
+        normal_direction_Identifier();
+    }
+    
     shift_node_positions();
-//    Normal_direction_Identifier();
+//
 //    Triangle_pair_counter();
 //    cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
 //    if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
