@@ -33,7 +33,7 @@ void Membrane::check(void){
             cout<<"\nWarning:Initial node distances are not ready/optimised for triangle bending calculations. If the Membrane is not attached to an Actin or another network we strongly recommend turning on the 'Relaxation' flag or switching off the bending.\n\n";
         } else {
             cout<<"\nInitial node distances are not ready/optimised for triangle bending calculations. A few MD steps will be added to the beginning of the simulation to avoid programme break down.\n\n";
-            Relaxation_Prosses_Model=2;
+            Relaxation_Process_Model=2;
         }
     }
 }

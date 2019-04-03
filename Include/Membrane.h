@@ -44,8 +44,8 @@ private:
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
-    int MD_num_of_Relaxation_steps;
-    int MD_correction_steps;
+    int MD_num_of_Relaxation_steps=200000;
+    int MD_correction_steps=2000;
     map<string, double> param_map;
 
     string Mesh_file_name="None";
@@ -53,7 +53,7 @@ private:
 
     bool Relaxation=false;
     bool Relax_with_actin=false;
-    int Relaxation_Prosses_Model=1; // 1 represents the relaxation prosses without node correction and 2 includes node corrections.
+    int Relaxation_Process_Model=1; // 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
     double ECM_interaction_cut_off=0;
 
@@ -311,8 +311,8 @@ public:
     int return_num_of_nodes(void){
         return Num_of_Nodes;
     }
-   int  return_Relaxation_Prosses_Model(void){
-       return Relaxation_Prosses_Model;
+   int  return_Relaxation_Process_Model(void){
+       return Relaxation_Process_Model;
    }
     bool  return_Relaxation_flag(void){
         return Relaxation;

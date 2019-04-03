@@ -13,7 +13,7 @@ void Membrane::Relax_1(void){
         if (Relaxation){
             cout<<"\nBeginnig the Relaxation\nProgress:\n";
             int Relaxation_progress=0; 
-           if (Relaxation_Prosses_Model==1){
+           if (Relaxation_Process_Model==1){
             double relax_temp= GenConst::MD_T;  
             for(int MD_Step=0 ;MD_Step<MD_num_of_Relaxation_steps ; MD_Step++){
                 MD_Evolution_beginning(GenConst::MD_Time_Step);
@@ -37,7 +37,7 @@ void Membrane::Relax_1(void){
            } //End of for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_Relaxation_steps ; MD_Step++)
            calculate_mesh_properties();
            }// End of if (Membranes[i].return_Relaxation_Prosses_Model()==1)
-           if (Relaxation_Prosses_Model==2){
+           if (Relaxation_Process_Model==2){
                node_distance_correction();
                int Relaxation_progress=return_correction_progress();
                 double relax_temp= GenConst::MD_T;
@@ -84,4 +84,5 @@ void Membrane::node_distance_correction(void){
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     Bending_coefficient=temp_Bending_coefficient;
     }//end
+
 
