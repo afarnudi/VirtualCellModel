@@ -190,14 +190,12 @@ int main(int argc, char **argv)
             num_of_elements+=ECMs[i].return_num_of_nodes();
         }
     }
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> relaxation process
-if (Include_Membrane){
-    for (int i=0; i<Membranes.size(); i++){
-        Membranes[i].Relax_1();
-    }// End of for (int i=0; i<Membranes.size(); i++)
-} // End of if (Include_Membrane)   
-    
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main MD prosses
+    if (Include_Membrane){
+        for (int i=0; i<Membranes.size(); i++){
+            
+            Membranes[i].Relax_1();
+        }// End of for (int i=0; i<Membranes.size(); i++)
+    } // End of if (Include_Membrane)
     int progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
