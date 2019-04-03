@@ -51,7 +51,7 @@ private:
 
     bool Relaxation=false;
     bool Relax_with_actin=false;
-    int Relaxation_Prosses_Model=1; // 1 represents the relaxation prosses without node correction and 2 includes node corrections.
+    int Relaxation_Process_Model=1; // 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
     double ECM_interaction_cut_off=0;
 
@@ -308,8 +308,8 @@ public:
     int return_num_of_nodes(void){
         return Num_of_Nodes;
     }
-   int  return_Relaxation_Prosses_Model(void){
-       return Relaxation_Prosses_Model;
+   int  return_Relaxation_Process_Model(void){
+       return Relaxation_Process_Model;
    }
     bool  return_Relaxation_flag(void){
         return Relaxation;

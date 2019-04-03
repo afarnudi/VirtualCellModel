@@ -4,7 +4,6 @@
 using namespace std;
 
 void Membrane::import_config(string config_file_name){
-    cout<<"Hi"<<endl;
     map<string, double>::iterator it;
     
     ifstream read_config_file(config_file_name.c_str());
