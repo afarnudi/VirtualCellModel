@@ -22,10 +22,10 @@ void Membrane::log_barrier (void){
        lmin=Average_node_pair_length-0.5*Average_node_pair_length;
     }
     else{
-    lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
-    lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
-    //lmax=Max_node_pair_length*1.05;
-    //lmin=Min_node_pair_length*1.05;
+    //lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
+    //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
+    lmax=Max_node_pair_length*1.05;
+    lmin=Min_node_pair_length*1.05;
     }
     
     le0=lmin+3*(lmax-lmin)/4;
@@ -250,8 +250,8 @@ void Membrane::FENE(void){
     }
     
 }
-/*
- * it seems the Relaxation Potential has no difference with log barier potential
+
+
 void Membrane::Relaxation_potential (void){
     
     double le0,le1,lmax,lmin;
@@ -312,7 +312,7 @@ void Membrane::Relaxation_potential (void){
         }
         
         Total_Potential_Energy += temp_potential_energy;
-        
+        /*
         //damper>>>>> we have a Bug here! when we turn on the Damper, the memberane will rotate after some MD steps. so it is better not to use any Damper Coeficient other than zero.
         if (Damping_coefficient>0.00001) {
             double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
@@ -325,7 +325,7 @@ void Membrane::Relaxation_potential (void){
             double temp_damp_check[3];
             double temp_damp_force[3]={Damping_coefficient*temp_damp*deltax, Damping_coefficient*temp_damp*deltay, Damping_coefficient*temp_damp*deltaz};
             crossvector(temp_damp_check, temp_damp_force, delta_r);
-            DamperCheck[k]= vector_length(temp_damp_check);
+            //DamperCheck[k]= vector_length(temp_damp_check);
 
             
             Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
@@ -336,7 +336,7 @@ void Membrane::Relaxation_potential (void){
             Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
             Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
         }
-        
+        */
         temp_force=temp_force/Node_distance;
         // implimentation of forces:
         Node_Force[Node_A][0] +=  temp_force*deltax;
@@ -349,4 +349,4 @@ void Membrane::Relaxation_potential (void){
     }
 //    cout<<"here"<<endl;
 }
-*/
+

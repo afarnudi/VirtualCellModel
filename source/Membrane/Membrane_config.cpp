@@ -4,7 +4,6 @@
 using namespace std;
 
 void Membrane::import_config(string config_file_name){
-    cout<<"Hi"<<endl;
     map<string, double>::iterator it;
     
     ifstream read_config_file(config_file_name.c_str());
@@ -92,6 +91,10 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Bending_coefficient=param_value*GenConst::MD_T;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
+    }else if (param_name=="MD_num_of_Relaxation_steps"){
+        MD_num_of_Relaxation_steps=param_value;
+    } else if (param_name=="MD_correction_steps"){
+        MD_correction_steps=param_value;
     } else if (param_name=="K_surfaceConstant_local"){
         K_surfaceConstant_local=param_value;
     } else if (param_name=="Shift_in_X_direction"){

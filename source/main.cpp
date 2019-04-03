@@ -41,9 +41,7 @@
 
 
 namespace GenConst {
-    int MD_correction_steps;
     int MD_num_of_steps;
-    int MD_num_of_Relaxation_steps;
     int MD_traj_save_step;
     double MD_Time_Step;
     double MD_T;

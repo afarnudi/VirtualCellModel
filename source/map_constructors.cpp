@@ -126,16 +126,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::MD_traj_save_step=it->second;
         }
-    } else if (param_name=="MD_num_of_Relaxation_steps"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_num_of_Relaxation_steps=it->second;
-        }
-    } else if (param_name=="MD_correction_steps"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_correction_steps=it->second;
-        }
     } else if (param_name=="MD_Time_Step"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){

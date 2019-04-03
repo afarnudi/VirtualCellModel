@@ -118,30 +118,6 @@ void Membrane::node_distance_correction(void){
     write_pov_traj(pov_relaxation_file_name, to_string(index),  MD_relax_Steps_1+ MD_relax_Steps_2-1);
 }*/
 
-void Membrane::node_distance_correction(void){
-    cout<<"\nBeginnig the Relaxation\nProgress:\n";
-      correction_progress=0;
-   // double MD_relax_Steps_1=2000;//2000;
-    double slope=(Max_node_pair_length/1.8-Min_node_pair_length)/GenConst::MD_correction_steps, min=Min_node_pair_length;
-    double temp_Bending_coefficient=Bending_coefficient;
-    Bending_coefficient=70*GenConst::MD_T*GenConst::K;
-    for(int MD_Step=0 ;MD_Step<=GenConst::MD_correction_steps ; MD_Step++){
-        //Setting the min angle of triangles to 20 dgrees or pi/9
-        Min_node_pair_length=slope*MD_Step+min;
-        for (int i=0; i<100; i++) {
-            MD_Evolution_beginning(GenConst::MD_Time_Step);
-            Elastic_Force_Calculator(0);
-            MD_Evolution_end(GenConst::MD_Time_Step);
-        }
-        /*if (MD_Step!=0 && MD_Step%10==0) {
-            relaxation_traj();
-            Damper_check(MD_Step);}*/
-        if (int(100*MD_Step/(GenConst::MD_correction_steps*100 + GenConst::MD_num_of_Relaxation_steps))>correction_progress){
-            cout<<"[ "<<correction_progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
-        correction_progress+=5;}
-    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-    Bending_coefficient=temp_Bending_coefficient;
-    }
 void Membrane::calculate_mesh_properties(void){
     double temp_min=1000;
     double temp_max=0;

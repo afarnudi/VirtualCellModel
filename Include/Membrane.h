@@ -44,6 +44,8 @@ private:
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
+    int MD_num_of_Relaxation_steps;
+    int MD_correction_steps;
     map<string, double> param_map;
 
     string Mesh_file_name="None";
@@ -190,6 +192,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 
 
 private:
+
     int mem_index;
     /*variables*/
 //    void Normal_direction_Identifier(double x, double y, double z);
