@@ -15,3 +15,6 @@ X_in_mem	0
 Y_in_mem	0
 Z_in_mem	0
 rescale		0
+Relaxation 1
+MD_correction_steps 2000
+MD_num_of_Relaxation_steps 2000000
