@@ -202,40 +202,87 @@ int main(int argc, char **argv)
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
 
+        
+        //Thermostat step first step
+        if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
+            if (Include_Membrane) {
+                for (int i=0; i<Membranes.size(); i++) {
+                    Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
+                }
+            }
+            if (Include_Actin) {
+                for (int i=0; i<Actins.size(); i++) {
+//                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+                }
+            }
+            if (Include_Chromatin) {
+                for (int i=0; i<Chromatins.size(); i++) {
+                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
+                }
+            }
+            if (Include_ECM) {
+                for (int i=0; i<ECMs.size(); i++) {
+//                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
+                }
+            }
+        }
+        
 
-
-        //Velocity Verlet first stage
+        //Velocity Verlet first step
         if (Include_Membrane)
         {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
-                Membranes[i].Elastic_Force_Calculator(0);
             }
         }
         if (Include_Chromatin)
         {
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
-                Chromatins[i].Force_Calculator_2();
             }
         }
         if (Include_Actin)
         {
             for (int i=0; i<Actins.size(); i++) {
                 Actins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+            }
+        }
+        if (Include_ECM)
+        {
+            for (int i=0; i<ECMs.size(); i++) {
+                ECMs[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+            }
+        }
+        
+        
+        
+        //force implamentation
+        if (Include_Membrane)
+        {
+            for (int i=0; i<Membranes.size(); i++) {
+                Membranes[i].Elastic_Force_Calculator(0);
+            }
+        }
+        if (Include_Chromatin)
+        {
+            for (int i=0; i<Chromatins.size(); i++) {
+                Chromatins[i].Force_Calculator_2();
+            }
+        }
+        if (Include_Actin)
+        {
+            for (int i=0; i<Actins.size(); i++) {
                 Actins[i].Elastic_Force_Calculator();
             }
         }
         if (Include_ECM)
         {
             for (int i=0; i<ECMs.size(); i++) {
-//                ECMs[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
 //                ECMs[i].Elastic_Force_Calculator();
             }
         }
 
         //Shared Forces
-
         if (Include_Chromatin && Include_Membrane) {
             if (MD_Step%2000==0) {
                 for (int i=0; i<Chromatins.size(); i++) {
@@ -261,7 +308,6 @@ int main(int argc, char **argv)
                 for (int j=0; j<ECMs.size(); j++) {
                     Membrane_ECM_shared_node_force (ECMs[j], Membranes[i]);
                     if (MD_Step%2000==0) {
-//                        cout<<"here\n";
                         update_ecm_mem_neighbour_list (ECMs[j], Membranes[i]);
                     }
                 }
@@ -271,42 +317,53 @@ int main(int argc, char **argv)
 
 
 
-        //Velocity Verlet second stage
+        //Velocity Verlet second step
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
-               // if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {//I think we can remove the first clause.
-               //     Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
-               // }
-
             }
         }
         if (Include_Chromatin) {
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
-                }
             }
         }
         if (Include_Actin) {
             for (int i=0; i<Actins.size(); i++) {
                 Actins[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-//                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
-                }
             }
         }
         if (Include_ECM) {
             for (int i=0; i<ECMs.size(); i++) {
-//                ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
-                if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-                    //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
-                }
+                ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
             }
         }
 
-
+        
+        
+        //Thermostat second step
+        if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
+            if (Include_Membrane) {
+                for (int i=0; i<Membranes.size(); i++) {
+                    Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
+                }
+            }
+            if (Include_Actin) {
+                for (int i=0; i<Actins.size(); i++) {
+                    //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+                }
+            }
+            if (Include_Chromatin) {
+                for (int i=0; i<Chromatins.size(); i++) {
+                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
+                }
+            }
+            if (Include_ECM) {
+                for (int i=0; i<ECMs.size(); i++) {
+                    //                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
+                }
+            }
+        }
 
         //saving Results
         if (MD_Step%GenConst::MD_traj_save_step == 0)
