@@ -8,29 +8,6 @@
 
 #include "Membrane.h"
 
-
-//void Membrane::initialise(string input_file_name , string Mesh_file_name){
-//    read_membrabe_input(input_file_name);
-//    read_gmesh_file(Mesh_file_name);
-//    output_file_neme=Mesh_file_name ;// it is for generating trajectory file. it can be modifyed to have date and time in it.this modification can be done in main.
-//    cout<<"Membrane class initiated"<<endl;
-//    Normal_direction_Identifier();
-//    Triangle_pair_counter();
-//    if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//    {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//    Triangle_Pair_and_Node_Bonds_Identifier();
-//}
-//void Membrane::initialise(string Mesh_file_name){
-//    read_gmesh_file(Mesh_file_name);
-//    output_file_neme=Mesh_file_name;
-//    cout<<"Membrane class initiated"<<endl;
-//    Normal_direction_Identifier();
-//    Triangle_pair_counter();
-//    if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//    {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//    Triangle_Pair_and_Node_Bonds_Identifier();
-//    cout<< "Average node distance is   "<<Average_Node_Distance()<<endl;
-//}
 void Membrane::initialise(string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Membrane Class..."<<endl;

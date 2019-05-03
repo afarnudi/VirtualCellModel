@@ -10,7 +10,7 @@
  @date Monday, September 19, 2011
  */
 
- /// \file
+/// \file
 
 #include <stdio.h>
 #include <ctime>
@@ -66,49 +66,50 @@ namespace GenConst {
 int main(int argc, char **argv)
 {
     //time
-
+    
     clock_t tStart = clock();//Time the programme
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
-
+    
     string general_file_name="general-config.txt";
+    cout<<"Please enter the path (relative to the binary file) + name of the config file:\n";
+    cin>>general_file_name;
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
     vector<string> actin_config_list;
     vector<string> ecm_config_list;
-
+    
     read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list);
-
+    
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
-
+    
     vector<Membrane> Membranes;
     vector<Chromatin> Chromatins;
     vector<Actin> Actins;
     vector<ECM> ECMs;
-
+    
     bool Include_Membrane  = false;
     bool Include_Chromatin = false;
     bool Include_Actin     = false;
     bool Include_ECM       = false;
-    cout<<GenConst::Num_of_Membranes<<endl;
+    
     if (GenConst::Num_of_Membranes!=0) {
         Include_Membrane = true;
-
+        
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
-            cout<<"Hi";
             Membranes[i].import_config(membrane_config_list[i]);
             Membranes[i].generate_report();
         }
     }
-
+    
     if (GenConst::Num_of_Chromatins!=0) {
         Include_Chromatin = true;
         Chromatins.resize(GenConst::Num_of_Chromatins);
@@ -121,11 +122,11 @@ int main(int argc, char **argv)
             } else {
                 Chromatins[i].import_config(chromatin_config_list[i]);
             }
-
+            
             Chromatins[i].generate_report();
         }
     }
-
+    
     if (GenConst::Num_of_Actins!=0) {
         Include_Actin = true;
         Actins.resize(GenConst::Num_of_Actins);
@@ -133,10 +134,10 @@ int main(int argc, char **argv)
             Actins[i].set_file_time(buffer);
             Actins[i].set_index(i);
             Actins[i].import_config(actin_config_list[i]);
-//            Actins[i].generate_report();
+            //            Actins[i].generate_report();
         }
     }
-
+    
     if (GenConst::Num_of_ECMs!=0){
         Include_ECM=true;
         ECMs.resize(GenConst::Num_of_ECMs);
@@ -145,10 +146,10 @@ int main(int argc, char **argv)
             ECMs[i].set_index(i);
             ECMs[i].import_config(ecm_config_list[i]);
         }
-
+        
     }
-
-
+    
+    
     if (Include_Membrane && Include_ECM) {
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
             for (int j=0; j<GenConst::Num_of_ECMs; j++) {
@@ -156,9 +157,9 @@ int main(int argc, char **argv)
             }
         }
     }
-
-
-
+    
+    
+    
     int num_of_elements=0;
     if (Include_Membrane) {
         for (int i=0; i<Membranes.size(); i++) {
@@ -180,28 +181,31 @@ int main(int argc, char **argv)
             num_of_elements+=ECMs[i].return_num_of_nodes();
         }
     }
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> relaxation process
+    
     if (Include_Membrane){
         if (Include_Actin){
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
-            Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[i]);
-            if (Membranes[i].return_relax_with_actin_flag()) {
-                Membranes[i].Relax_1();
+                for (int j=0; j<Membranes.size(); j++) {
+                    Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , j);
+                    if (Membranes[j].return_relax_with_actin_flag()) {
+                        Membranes[j].Relax_1();
+                    }
                 }
+                
             } //for (int i=0; i<GenConst::Num_of_Actins; i++)
         } //if (Include_Actin)
         else{
-        for (int i=0; i<Membranes.size(); i++){
-            Membranes[i].Relax_1();
+            for (int i=0; i<Membranes.size(); i++){
+                Membranes[i].Relax_1();
             }// End of for (int i=0; i<Membranes.size(); i++)
         }//end else
     } // End of if (Include_Membrane)
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main MD prosses
+    
+    
     int progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
-
+//        cout<<Membranes[0].return_node_position(0, 0);
         
         //Thermostat step first step
         if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
@@ -212,7 +216,7 @@ int main(int argc, char **argv)
             }
             if (Include_Actin) {
                 for (int i=0; i<Actins.size(); i++) {
-//                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
+                    //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
                 }
             }
             if (Include_Chromatin) {
@@ -222,12 +226,12 @@ int main(int argc, char **argv)
             }
             if (Include_ECM) {
                 for (int i=0; i<ECMs.size(); i++) {
-//                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
+                    //                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
                 }
             }
         }
         
-
+        
         //Velocity Verlet first step
         if (Include_Membrane)
         {
@@ -278,10 +282,10 @@ int main(int argc, char **argv)
         if (Include_ECM)
         {
             for (int i=0; i<ECMs.size(); i++) {
-//                ECMs[i].Elastic_Force_Calculator();
+                //                ECMs[i].Elastic_Force_Calculator();
             }
         }
-
+        
         //Shared Forces
         if (Include_Chromatin && Include_Membrane) {
             if (MD_Step%2000==0) {
@@ -293,16 +297,18 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
             }
-
-
+            
+            
         }
-
+        
         if (Include_Membrane && Include_Actin) {
             for (int i=0; i<Actins.size(); i++) {
-                Actin_Membrane_shared_Node_Force_calculator(Actins[i], Membranes[i]);
+                for (int j=0; j<Membranes.size(); j++) {
+                    Actin_Membrane_shared_Node_Force_calculator(Actins[i], Membranes[j], j);
+                }
             }
         }
-
+        
         if (Include_Membrane && Include_ECM) {
             for (int i=0; i<Membranes.size(); i++) {
                 for (int j=0; j<ECMs.size(); j++) {
@@ -313,10 +319,10 @@ int main(int argc, char **argv)
                 }
             }
         }
-
-
-
-
+        
+        
+        
+        
         //Velocity Verlet second step
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
@@ -338,7 +344,7 @@ int main(int argc, char **argv)
                 ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
             }
         }
-
+        
         
         
         //Thermostat second step
@@ -364,14 +370,14 @@ int main(int argc, char **argv)
                 }
             }
         }
-
+        
         //saving Results
         if (MD_Step%GenConst::MD_traj_save_step == 0)
         {
             Trajectory << num_of_elements<<endl;
             Trajectory << " nodes  "<<endl;
-
-
+            
+            
             if (Include_Membrane) {
                 for (int i=0; i<Membranes.size(); i++) {
                     string label="Membrane_"+to_string(i);
@@ -379,7 +385,7 @@ int main(int argc, char **argv)
                     Membranes[i].export_for_resume(MD_Step);
                 }
             }
-
+            
             if (Include_Chromatin) {
                 for (int i=0; i<Chromatins.size(); i++) {
                     string label="Chromatin_"+to_string(i);
@@ -391,7 +397,7 @@ int main(int argc, char **argv)
                 for (int i=0; i<Actins.size(); i++) {
                     string label="Actin_"+to_string(i);
                     Actins[i].write_traj(traj_file_name, label);
-//                    Actins[i].export_for_resume(MD_Step);
+                    //                    Actins[i].export_for_resume(MD_Step);
                 }
             }
             if (Include_ECM) {
@@ -402,13 +408,13 @@ int main(int argc, char **argv)
                 }
             }
         }// End of if (MD_Step%100==0)
-
-
+        
+        
         if (int(100*MD_Step/GenConst::MD_num_of_steps)>progress){
             cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
             progress+=5;
         }
-
+        
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
     cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
     cout<<"\nDone!"<<endl;
