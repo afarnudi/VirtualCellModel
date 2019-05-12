@@ -55,4 +55,8 @@ void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pai
 void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<pair<double, int> > > neighbour_pairs);
 void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem);
 
+
+//Particle_Membrane
+void Particle_Membrane_neighbour_finder(Membrane particle, Membrane Mem);
+
 #endif /* interaction_hpp */

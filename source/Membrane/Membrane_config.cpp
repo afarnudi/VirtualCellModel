@@ -81,7 +81,9 @@ void Membrane::set_map_parameter(string param_name, double param_value){
 //    map<string, double>::iterator it;
     if (param_name=="Node_Mass") {
         Node_Mass=param_value;
-    } else if (param_name=="Node_radius"){
+    } else if (param_name=="mesh_format"){
+        mesh_format=param_value;
+    }else if (param_name=="Node_radius"){
         Node_radius=param_value;
     } else if (param_name=="spring_model"){
         spring_model=param_value;
