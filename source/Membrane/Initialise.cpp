@@ -11,7 +11,11 @@
 void Membrane::initialise(string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Membrane Class..."<<endl;
-    read_gmesh_file(Mesh_file_name);
+    if (mesh_format==1){
+        read_gmesh_file(Mesh_file_name);
+    }else if (mesh_format==2){
+        read_ply_file(Mesh_file_name);
+    }
     output_file_neme=Mesh_file_name;
     if (rescale==true){
         cout<<Node_Position[0][0]<<endl;

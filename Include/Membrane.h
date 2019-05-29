@@ -79,6 +79,7 @@ private:
 
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
+    void read_ply_file (string ply_file);
     void read_membrabe_input(string input_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
@@ -112,11 +113,6 @@ private:
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
 
     void excluded_volume(void);
-
-
-//    int membrane_counter;
-
-
     double min_radius_after_relaxation;
     string output_file_neme;
     string file_time;
@@ -171,8 +167,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 
     int **Normal_direction; //??? (These 2 elements should be defined and explained)
     int spring_model=2;
-
-
+    int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
 //    vector <double> T_Kinetic_Energy;
     double Total_potential_Energy=0.0;
     double Spring_coefficient=10.0; // streching constant

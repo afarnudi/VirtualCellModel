@@ -144,3 +144,58 @@ void Membrane::import(string import_file_name){
     cout<<"\n\nMembrane class initiated.\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }
+
+
+void Membrane::read_ply_file (string ply_file)
+{
+    ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
+    read.open(ply_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
+    int temp_int; // This is just a temp intiger charachter that we use to read unnecessary ply file intigers. We never use these intigers in the actual programme.
+    string temp_string;
+    for (int i=0; i<18; i++)
+    {
+        read>> temp_string;
+    }
+    read>> Num_of_Nodes;
+	
+	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    for(int i=0;i<Num_of_Nodes;i++)
+    {
+            Node_Velocity[i].resize(3,0);
+            Node_Force[i].resize(3,0);
+    }
+    for (int i=0; i<11; i++)
+    {
+        read>> temp_string;
+    }
+    read>>Num_of_Triangles;
+    
+    for (int i=0; i<6; i++)
+    {
+        read>> temp_string;
+    }
+    // In this section the Node coordinates are read from the ply file.
+    vector<double> temp_node_position;
+    temp_node_position.resize(3);
+    for(int i=0;i<Num_of_Nodes;i++)
+    {
+        read>> temp_node_position[0];
+        read>> temp_node_position[1];
+        read>> temp_node_position[2];
+        Node_Position.push_back(temp_node_position);
+    }
+    
+    // In this section the Node list that make up triangles on the outer membrane and nucleus are read from the  ply file.
+    vector<int> push;
+    push.resize(3);
+    for(int i=0;i<Num_of_Triangles;i++)
+    {
+        read>>temp_int;        
+        read>>push[0];
+        read>>push[1];
+        read>>push[2];
+        Triangle_list.push_back(push);
+        
+    }
+}
