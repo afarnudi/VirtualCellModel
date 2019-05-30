@@ -100,8 +100,31 @@ private:
 
 
 
-
-
+    // -----------------------------------------------------------------------------
+    //                          OpenMM
+    // -----------------------------------------------------------------------------
+    // This is not part of OpenMM; just a struct we can use to collect atom
+    // parameters for this example. Normally atom parameters would come from the
+    // force field's parameterization file. We're going to use data in Angstrom and
+    // Kilocalorie units and show how to safely convert to OpenMM's internal unit
+    // system which uses nanometers and kilojoules.
+    struct MyAtomInfo {
+        const char* pdb;
+        double      mass, charge, vdwRadiusInAng, vdwEnergyInKcal,
+        gbsaRadiusInAng, gbsaScaleFactor;
+        double      initPosInAng[3];
+        double      posInAng[3]; // leave room for runtime state info
+    };
+//    atoms[] = {
+//        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
+//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0},
+//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,    -8, 0,  0},
+//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 9,  0},
+//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0,-9,  0},
+//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 0,-10},
+//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0, 0, 10},
+//        {""} // end of list
+//    };
 
 
   //  double temp_damp_force[][3];
