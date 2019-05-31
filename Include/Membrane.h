@@ -1,17 +1,15 @@
 /**
- * \class Membrane
- *
- * \brief The class 'Membrane' will build the required inviroment for simulating a triangular mesh of points in space bound by a potential suitable to simulate the behaviour of a cell membrane.
- *
- * This class is meant as an example.  It is not useful by itself
- * rather its usefulness is only a function of how much it helps
- * the reader.  It is in a sense defined by the person who reads it
- * and otherwise does not exist in any real form.
- *
- * \note Attempts at zen rarely work.
+ * \class Membrane Membrane.h Include/Membrane.h
  *
  *
- * \version $Revision: 0.0 $
+ * \brief The class 'Membrane' manages the required enviroment (system, forces, etc) of coordinates on a triangular mesh.
+ *
+ * The Membrane class deciphers the mesh coordinates from the input mesh file provided in the configuration file. The bond information is also extracted from the mesh file and stored in the class.
+ * The various interactions of membrane nodes and all the membrane node info is also stored in this class.
+ *
+ * \note Work in progress.
+ *
+ *
  *
  *
  * Contact: a.farnudi@gmail.com
@@ -36,35 +34,38 @@ using namespace std;
 
 class Membrane
 {
-
+    
 private:
+    /** Store the label(pdb) used to write to the trajectory file */
+    string label;
+    
     int index;
     /*variables*/
     int Num_of_Nodes;
     /*constants*/
-    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
-    int Num_of_Triangles; //This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
+    ///This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
+    int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     int MD_num_of_Relaxation_steps=200000;
     int MD_correction_steps=2000;
     map<string, double> param_map;
-
+    
     string Mesh_file_name="None";
     string resume_file_name="None";
-
+    
     bool Relaxation=false;
     bool Relax_with_actin=false;
-    int Relaxation_Process_Model=1; // 1 represents the relaxation Processes without node correction and 2 includes node corrections.
+    int Relaxation_Process_Model=1; /// 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
     double ECM_interaction_cut_off=0;
-
-    double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
+    
+    double Node_Mass=1.0;///  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
-
+    
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
     double X_in=0;
@@ -73,10 +74,10 @@ private:
     double X_scale=0;
     double Y_scale=0;
     double Z_scale=0;
-
+    
     double ECM_interaction_strength=1;
-
-
+    
+    
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
     void read_ply_file (string ply_file);
@@ -85,7 +86,7 @@ private:
     void Normal_direction_Identifier();
     void node_distance_correction(void);
     //    void Normal_direction_Identifier(double x, double y, double z);
-
+    
     void log_barrier (void);
     void Hookian (void);
     void FENE (void);
@@ -95,51 +96,59 @@ private:
     void Bending_potetial(void);
     //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
-
+    
     void export_relaxed(int MD_step);
-
-
-
+    
+    
+    
     // -----------------------------------------------------------------------------
     //                          OpenMM
     // -----------------------------------------------------------------------------
-    // This is not part of OpenMM; just a struct we can use to collect atom
-    // parameters for this example. Normally atom parameters would come from the
-    // force field's parameterization file. We're going to use data in Angstrom and
-    // Kilocalorie units and show how to safely convert to OpenMM's internal unit
-    // system which uses nanometers and kilojoules.
-    struct MyAtomInfo {
+    /**
+     * This is a struct we can use to collect atom parameters from the config files.
+     * We're going to use data already imported into the class and convert to OpenMM's
+     * internal unit system.
+     */
+    struct my_atom_info {
         const char* pdb;
         double      mass, charge, vdwRadiusInAng, vdwEnergyInKcal,
         gbsaRadiusInAng, gbsaScaleFactor;
         double      initPosInAng[3];
         double      posInAng[3]; // leave room for runtime state info
     };
-//    atoms[] = {
-//        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
-//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0},
-//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,    -8, 0,  0},
-//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 9,  0},
-//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0,-9,  0},
-//        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 0,-10},
-//        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0, 0, 10},
-//        {""} // end of list
-//    };
-
-
-  //  double temp_damp_force[][3];
-
+    vector<my_atom_info> atoms; //Store OpenMM atom information.
+    
+    //    atoms[] = {
+    //        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
+    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0},
+    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,    -8, 0,  0},
+    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 9,  0},
+    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0,-9,  0},
+    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 0,-10},
+    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0, 0, 10},
+    //        {""} // end of list
+    //    };
+    
+    /**
+     * Convert the imported node information ready to pass to the OpenMM engin.
+     */
+    void my_atom_info_constructor(void);
+    
+    //  double temp_damp_force[][3];
+    
     int membrane_counter;
     bool rescale=0;
-
-
-public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
-
+    
+    
+public:
+    
+    ///node-node hard sphere interaction.
     void excluded_volume(void);
+    
     double min_radius_after_relaxation;
     string output_file_neme;
     string file_time;
-
+    
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
     vector<vector<int> > Triangle_pair_list;
@@ -149,7 +158,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<int> > Node_neighbour_list;
-//    vector<double>DamperCheck;
+    //    vector<double>DamperCheck;
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
     void check(void);
@@ -163,10 +172,10 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
-
-//    void initialise(string input_file_name , string Mesh_file_name);
+    
+    //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(string Mesh_file_name);
-//    void initialise(string Mesh_file_name, double x, double y, double z);
+    //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(string import_file_name);
     void import_config(string config_file_name);
     void set_map_parameter(string param_name, double param_value);
@@ -177,6 +186,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Thermostat_Bussi(double MD_KT);
     void calculate_mesh_properties(void);
     void relaxation_traj (void);
+    void write_traj (string traj_name);
     void write_traj (string traj_name, string label);
     void write_parameters(int MD_Step);
     void omega_calculator(void);
@@ -185,13 +195,13 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void write_pov_traj(string traj_name, string label, int currentstep);
     double Average_velocity_squared();
     double Omega[3]={0};
-
-
-
+    
+    
+    
     int **Normal_direction; //??? (These 2 elements should be defined and explained)
     int spring_model=2;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
-//    vector <double> T_Kinetic_Energy;
+    //    vector <double> T_Kinetic_Energy;
     double Total_potential_Energy=0.0;
     double Spring_coefficient=10.0; // streching constant
     double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
@@ -205,133 +215,37 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //bool =0;
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
-
+    
     bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
-
-
+    
+    
 private:
-
+    
     int mem_index;
     /*variables*/
-//    void Normal_direction_Identifier(double x, double y, double z);
+    //    void Normal_direction_Identifier(double x, double y, double z);
     void Rescale(double rescale_factor);
     void potential_1 (void);
     void potential_2 (void);
-
-
+    
+    
 public:
-
-//    Membrane(string input_file_name , string Mesh_file_name)
-//    {
-//        read_membrabe_input(input_file_name);
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name ;// it is for generating trajectory file. it can be modifyed to have date and time in it.this modification can be done in main.
-//        cout<<"Membrane class initiated"<<endl;
-//        Normal_direction_Identifier();
-//        Triangle_pair_counter();
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//        {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//        Triangle_Pair_and_Node_Bonds_Identifier();
-//
-//    }
-//
-//    Membrane(string Mesh_file_name)
-//    {
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name;
-//        cout<<"Membrane class initiated"<<endl;
-//        Normal_direction_Identifier();
-//        Triangle_pair_counter();
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2)
-//        {cout<<"error! some triangles have less or more neighbour than 3"<<endl;}
-//        Triangle_Pair_and_Node_Bonds_Identifier();
-//        cout<< "Average node distance is   "<<Average_Node_Distance()<<endl;
-//    }
-//
-//    Membrane(string Mesh_file_name, double x, double y, double z)
-//    {
-//        cout<<"Initialising the Membrane Class..."<<endl;
-//        read_gmesh_file(Mesh_file_name);
-//        output_file_neme=Mesh_file_name;
-//        Radius= sqrt((Node_Position[0][0]-x)*(Node_Position[0][0]-x) + (Node_Position[0][1]-y)*(Node_Position[0][1]-y) + (Node_Position[0][2]-z)*(Node_Position[0][2]-z));
-//        cout<<"\n\nRadius="<<Radius<<endl;
-//        cout<<"\n\n# of Nodes="<<Num_of_Nodes<<endl;
-//        cout<<"# of triangles="<<Num_of_Triangles<<endl;
-//        Normal_direction_Identifier(x, y, z);
-//        Triangle_pair_counter();
-//        cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
-//        if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
-//            cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
-//
-//        }
-////        Triangle_Pair_and_Node_Bonds_Identifier();
-//        Node_Bonds_identifier();
-//        Node_neighbour_list_constructor();
-//        Triangle_pair_identifier();
-//        check();
-//        cout<<"\n\nMembrane class initiated.\n";
-////        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
-//    }
-//    Membrane(string import_file_name, bool resume)
-//    {
-//        cout<<"Importing the Membrane from the resume file:"<<endl;
-//        cout<<import_file_name<<endl<<endl;
-//        ifstream read_resume_file;
-//
-//        read_resume_file.open(import_file_name.c_str());
-//        int temp;
-//        read_resume_file>>temp;
-//        cout<<"Resuming the MD from step "<<temp<<endl;
-//
-//        read_resume_file>>Num_of_Nodes;
-//        cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
-//        for (int i=0; i<Num_of_Nodes; i++) {
-//            read_resume_file>>Node_Position[i][0]>>Node_Position[i][1]>>Node_Position[i][2];
-//            read_resume_file>>Node_Velocity[i][0]>>Node_Velocity[i][1]>>Node_Velocity[i][2];
-//            Node_Force[i][0]=0;
-//            Node_Force[i][1]=0;
-//            Node_Force[i][2]=0;
-//        }
-//        cout<<"Coordinates and velocities loaded"<<endl;
-//        cout<<"Node forces set to zero"<<endl;
-//
-//        read_resume_file>>Num_of_Triangles;
-//        cout<<"Number of Triangles: "<<Num_of_Triangles<<endl;
-//        for (int i=0; i<Num_of_Triangles; i++) {
-//            read_resume_file>>Triangle_list[i][0]>>Triangle_list[i][1]>>Triangle_list[i][2];
-//        }
-//
-//        read_resume_file>>Num_of_Node_Pairs;
-//        cout<<"Number of Node Pairs: "<<Num_of_Node_Pairs<<endl;
-//        for (int i=0; i<Num_of_Node_Pairs; i++) {
-//            read_resume_file>>Node_Bond_list[i][0]>>Node_Bond_list[i][1];
-//        }
-//        //In the import function we should call the neighbour list constructor
-//        read_resume_file>>Num_of_Triangle_Pairs;
-//        cout<<"Number of Triangle Pairs: "<<Num_of_Triangle_Pairs<<endl;
-//        for (int i=0; i<Num_of_Triangle_Pairs; i++) {
-//            read_resume_file>>Triangle_pair_list[i][0]>>Triangle_pair_list[i][1];
-//            read_resume_file>>Triangle_Pair_Nodes[i][0]>>Triangle_Pair_Nodes[i][1]>>Triangle_Pair_Nodes[i][2]>>Triangle_Pair_Nodes[i][3];
-//        }
-//
-//        Node_neighbour_list_constructor();
-//        read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
-//        cout<<"Spring coefficients:"<<endl;
-//        cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
-//        cout<<"\n\nMembrane class initiated.\n";
-//        //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
-//    }
-
-
-
+    /** Assigns the label(pdb) used to write to the trajectory files. */
+    void set_label(string lab){
+        label=lab;
+    }
     void Relax_1(void);
     void Relax_2(void);
+    
+    /** \brief public access to total number of membrane nodes.
+     * \return integer number of nodes in the membrane
+     */
     int return_num_of_nodes(void){
         return Num_of_Nodes;
     }
-   int  return_Relaxation_Process_Model(void){
-       return Relaxation_Process_Model;
-   }
+    int  return_Relaxation_Process_Model(void){
+        return Relaxation_Process_Model;
+    }
     bool  return_Relaxation_flag(void){
         return Relaxation;
     }
@@ -352,19 +266,19 @@ public:
     int return_num_of_triangle(){
         return Num_of_Triangles;
     }
-
+    
     double return_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
-
-
+    
+    
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;
         for(int j=0 ; j<Num_of_Nodes ; j++){
             average_force_x+=Node_Force[j][0];
             average_force_y+=Node_Force[j][1];
             average_force_z+=Node_Force[j][2];
-
+            
         }
         cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
@@ -383,7 +297,7 @@ public:
     double return_ECM_interaction_strength(void){
         return ECM_interaction_strength;
     }
-
+    
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
@@ -420,7 +334,7 @@ public:
         return Relax_with_actin;
     }
     int return_correction_progress(void){
-    return correction_progress;}
+        return correction_progress;}
     bool bending_coefficient_status(void){
         if (Bending_coefficient !=0) {
             return true;

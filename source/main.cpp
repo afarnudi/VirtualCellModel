@@ -103,6 +103,8 @@ int main(int argc, char **argv)
         
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
+            string label="Membrane_"+to_string(i);
+            Membranes[i].set_label(label);
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
             Membranes[i].import_config(membrane_config_list[i]);
@@ -380,8 +382,8 @@ int main(int argc, char **argv)
             
             if (Include_Membrane) {
                 for (int i=0; i<Membranes.size(); i++) {
-                    string label="Membrane_"+to_string(i);
-                    Membranes[i].write_traj(traj_file_name, label);
+//                    string label="Membrane_"+to_string(i);
+                    Membranes[i].write_traj(traj_file_name);
                     Membranes[i].export_for_resume(MD_Step);
                 }
             }
