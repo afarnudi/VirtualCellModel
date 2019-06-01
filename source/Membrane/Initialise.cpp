@@ -41,11 +41,16 @@ void Membrane::initialise(string Mesh_file_name){
     }
     output_file_neme=Mesh_file_name;
     if (rescale==true){
-        cout<<Node_Position[0][0]<<endl;
-        Rescale(5);
-        cout<<Node_Position[0][0]<<endl;
-        output_file_neme+="_rescaled_";
-        cout<<"mesh rescaled by factor 1/5"<<endl;
+        Rescale(rescale_factor);
+        cout<<"mesh rescaled by factor"<< rescale_factor <<endl;
+    }
+    
+    if(Shift==true){
+    shift_position ( Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    cout<<"The Whole Membrane is Shifted"<<endl;
+    cout<<"Shift in X direction = "<< Shift_in_X_direction<<endl;
+    cout<<"Shift in Y direction = "<< Shift_in_Y_direction<<endl;
+    cout<<"Shift in Z direction = "<< Shift_in_Z_direction<<endl;
     }
     
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));

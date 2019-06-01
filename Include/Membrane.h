@@ -52,11 +52,12 @@ private:
     string resume_file_name="None";
 
     bool Relaxation=false;
+    bool Shift= false;
     bool Relax_with_actin=false;
     int Relaxation_Process_Model=1; // 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
     double ECM_interaction_cut_off=0;
-
+    double vesicle_interaction_cut_off=0;
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     double Total_Kinetic_Energy;
@@ -75,7 +76,7 @@ private:
     double Z_scale=0;
 
     double ECM_interaction_strength=1;
-
+    double vesicle_interaction_strength=1;
 
     double Average_Node_Distance();
     void read_gmesh_file (string gmesh_file);
@@ -108,15 +109,16 @@ private:
 
     int membrane_counter;
     bool rescale=0;
+    double rescale_factor=30;
 
 
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
-
+    int Error_finding;
     void excluded_volume(void);
     double min_radius_after_relaxation;
     string output_file_neme;
     string file_time;
-
+    bool particle_type=0; // True means the object is a particle and false means it is a vesicle
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
     vector<vector<int> > Triangle_pair_list;
@@ -131,6 +133,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Damper_check(int MD_step);
     void check(void);
     vector<vector<int> > ECM_Node_neighbour_list;
+    vector<vector<int> > Vesicle_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
@@ -194,9 +197,10 @@ private:
     void Rescale(double rescale_factor);
     void potential_1 (void);
     void potential_2 (void);
+    void shift_position (double x , double y, double z);
 
 
-public:
+public: 
 
 //    Membrane(string input_file_name , string Mesh_file_name)
 //    {
@@ -312,13 +316,7 @@ public:
     bool  return_Relaxation_flag(void){
         return Relaxation;
     }
-    void shift_position (double x, double y, double z){
-        for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]+=x;
-            Node_Position[i][1]+=y;
-            Node_Position[i][2]+=z;
-        }
-    }
+    
     void shift_velocity (double vx, double vy, double vz){
         for (int i=0; i<Num_of_Nodes; i++) {
             Node_Velocity[i][0]+=vx;
@@ -360,7 +358,12 @@ public:
     double return_ECM_interaction_strength(void){
         return ECM_interaction_strength;
     }
-
+    double return_vesicle_interaction_cut_off(void){
+        return vesicle_interaction_cut_off;
+    }
+    double return_vesicle_interaction_strength(void){
+        return vesicle_interaction_strength;
+    }
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }

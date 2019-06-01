@@ -63,3 +63,41 @@ void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem){
 //    return sqrt( (mem.Node_Position[mem_node][0]-tri_com[0])*(mem.Node_Position[mem_node][0]-tri_com[0])+(mem.Node_Position[mem_node][1]-tri_com[1])*(mem.Node_Position[mem_node][1]-tri_com[1])+(mem.Node_Position[mem_node][2]-tri_com[2])*(mem.Node_Position[mem_node][2]-tri_com[2]) );
 //}
 
+void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle){
+    
+    int particle_nodes=particle.return_num_of_nodes();
+    double force=0, temp_potential_energy=0;
+    double delta_x=0, delta_y=0, delta_z=0, Node_distance=0;
+    double sigma = 0.8;
+    double epsilon = 4 * GenConst::K * GenConst::MD_T * particle.return_vesicle_interaction_strength();
+    
+    for (int i=0; i<particle_nodes; i++) {
+        if (particle.Vesicle_Node_neighbour_list[i].size() != 0) {
+            int vesicle_Node = particle.Vesicle_Node_neighbour_list[i][0];
+            
+            delta_x = particle.return_node_position(i, 0) - vesicle.return_node_position(vesicle_Node, 0);
+            delta_y = particle.return_node_position(i, 1) - vesicle.return_node_position(vesicle_Node, 1);
+            delta_z = particle.return_node_position(i, 2) - vesicle.return_node_position(vesicle_Node, 2);
+            
+            double a[3]={delta_x, delta_y, delta_z};
+            Node_distance = vector_length(a);
+    
+            double SigmaOverR= sigma/Node_distance;
+            double repulsion= pow(SigmaOverR ,12);
+            double attraction = pow(SigmaOverR , 6);
+ 
+            
+            force = -1*epsilon*( -12* repulsion + 6*attraction)/(Node_distance* Node_distance);
+            temp_potential_energy = epsilon * (repulsion- attraction );
+            
+            
+            particle.add_to_force(force*delta_x, i, 0);
+            particle.add_to_force(force*delta_y, i, 1);
+            particle.add_to_force(force*delta_z, i, 2);
+
+            vesicle.add_to_force(-force*delta_x, vesicle_Node, 0);
+            vesicle.add_to_force(-force*delta_y, vesicle_Node, 1);
+            vesicle.add_to_force(-force*delta_z, vesicle_Node, 2);
+        }
+    }
+}

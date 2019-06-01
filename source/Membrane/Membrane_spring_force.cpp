@@ -15,7 +15,7 @@ void Membrane::log_barrier (void){
     double temp_potential_energy = 0.0;
     
     int Node_A, Node_B;
-    
+    /* This part is not gonna work
     // Hoda: I set this condition to solve the problem of those kind of meshes with almost the same length for all the bonds. but we have to check this for different membranes to be sure.
     if (Max_node_pair_length-Min_node_pair_length< 0.2*Average_node_pair_length){
        lmax=Average_node_pair_length+0.5*Average_node_pair_length;
@@ -26,7 +26,18 @@ void Membrane::log_barrier (void){
     //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
     lmax=Max_node_pair_length*1.05;
     lmin=Min_node_pair_length*1.05;
+    }*/
+    double width= 0.66*Average_node_pair_length;
+    double l=Max_node_pair_length-Min_node_pair_length;
+    double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
+    if ((1+ 2*width_scaling)*l<width ){
+    width_scaling= (width-l)/(2*l);
     }
+    else{
+      width=  (1+ 2*width_scaling)*l;
+    }
+    lmin= Min_node_pair_length - width_scaling*l;
+    lmax= Max_node_pair_length +  width_scaling*l;
     
     le0=lmin+3*(lmax-lmin)/4;
     le1=lmin+(lmax-lmin)/4;
@@ -64,6 +75,7 @@ void Membrane::log_barrier (void){
                 cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
                 cout<<"Node A = "<<Node_A<<"\tNode B = "<<Node_B<<endl;
                 cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
+                cout<<"MD Step "<< Error_finding <<endl;
                 exit(EXIT_FAILURE);
             } else {
                 if(temp_force>1000  || Node_distance>lmax )

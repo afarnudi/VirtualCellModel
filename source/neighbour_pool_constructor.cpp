@@ -203,3 +203,98 @@ void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
 //
 //    add_nodes_to_neighbour_list(mem, dist_list, inde_list);
 }
+
+
+void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle){
+    bool initiate = true;
+    int vesicle_nodes = vesicle.return_num_of_nodes();
+    int particle_nodes = particle.return_num_of_nodes();
+    for (int i=0; i<particle_nodes; i++) {
+        if (particle.Vesicle_Node_neighbour_list[i].size() != 0) {
+            initiate=false;
+        }
+    }
+    
+    if (initiate) {
+        initialise_vesicle_particle_neighbour_list(particle, vesicle);
+    } else {
+        update_particle_vesicle_neighbour_list(particle, vesicle);
+    }
+    
+}
+
+
+void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &vesicle){
+    int vesicle_nodes = vesicle.return_num_of_nodes();
+    int particle_nodes = particle.return_num_of_nodes();
+    
+    particle.Vesicle_Node_neighbour_list.clear();
+    particle.Vesicle_Node_neighbour_list.resize(particle_nodes);
+    
+    double delta_x, delta_y, delta_z, distance;
+    double cut_off = particle.Average_node_pair_length;
+//    vector<vector<double> >  dist_list;
+//    vector<vector<int> >  inde_list;
+//
+    vector<vector<pair<double, int> > > neighbour_pairs;
+//    dist_list.resize(mem_nodes);
+//    inde_list.resize(mem_nodes);
+    
+    for (int i=0; i<particle_nodes; i++) {
+//        cout<<"i = "<<i<<endl;
+        
+//        map<double, int> dist;
+//        map<double, int>::iterator it, it_4, it_end;
+        neighbour_pairs.resize(i+1);
+        for (int j=0; j<vesicle_nodes; j++) {
+            
+            delta_x = particle.return_node_position(i, 0) - vesicle.return_node_position(j, 0);
+            delta_y = particle.return_node_position(i, 1) - vesicle.return_node_position(j, 1);
+            delta_z = particle.return_node_position(i, 2) - vesicle.return_node_position(j, 2);
+//            cout<<delta_x<<"\t"<<delta_y<<"\t"<<delta_z<<endl;
+            double a[3]={delta_x, delta_y, delta_z};
+            distance = vector_length(a);
+//            cout<<cut_off<<endl;
+            if (distance < cut_off) {
+//                cout<<distance<<endl;
+                neighbour_pairs[i].push_back(make_pair(distance, j));
+//                cout<<"i="<<i<<" : "<<distance<<"\t-> "<<j<<endl;
+//                dist[distance] = j;
+            }
+        }
+        
+        if (neighbour_pairs[i].size() > 1) {
+            sort(neighbour_pairs[i].begin(), neighbour_pairs[i].end());
+            if (neighbour_pairs[i].size() > 4) {
+                int size=neighbour_pairs[i].size();
+                for (int k=0; k< neighbour_pairs[i].size()-4; k++) {
+                    neighbour_pairs[i].erase(neighbour_pairs[i].begin()+4);
+                }
+            }
+        }
+        
+    }
+    
+    prune_list(particle_nodes, neighbour_pairs);
+    
+    add_nodes_to_particle_neighbour_list(particle, neighbour_pairs);
+    
+}
+
+
+void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<pair<double, int> > > neighbour_pairs){
+    
+    int particle_nodes=particle.return_num_of_nodes();
+//    double force=0, temp_potential_energy=0;
+    
+    for (int i=0; i<particle_nodes; i++) {
+        if (neighbour_pairs[i].size() != 0) {
+            particle.Vesicle_Node_neighbour_list[i].resize(1, neighbour_pairs[i][0].second);
+        }
+    }
+}
+
+void update_particle_vesicle_neighbour_list (Membrane &particle, Membrane &vesicle){
+initialise_vesicle_particle_neighbour_list (particle,vesicle);
+//..
+}

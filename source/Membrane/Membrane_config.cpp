@@ -121,7 +121,8 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Z_scale=param_value;
     }else if (param_name=="rescale"){
         rescale=param_value;
-
+    }else if (param_name=="rescale_factor"){
+        rescale_factor=param_value;
     } else if (param_name=="ECM_interaction_cut_off"){
         ECM_interaction_cut_off=param_value;
     } else if (param_name=="ECM_interaction_strength"){
@@ -131,6 +132,18 @@ void Membrane::set_map_parameter(string param_name, double param_value){
             Relaxation=false;
         } else {
             Relaxation=true;
+        }
+    } else if(param_name=="Shift"){
+        if (int(param_value) == 0){
+            Shift=false;
+        } else {
+            Shift=true;
+        }
+    }  else if(param_name=="particle_type"){
+        if (int(param_value) == 0){
+            particle_type=false;
+        } else {
+            particle_type=true;
         }
     } else if(param_name=="Relax_with_actin"){
         if (int(param_value) == 0) {

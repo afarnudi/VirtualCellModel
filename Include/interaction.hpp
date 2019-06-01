@@ -51,12 +51,19 @@ void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem);
 void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem);
 void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
 void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
-void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pairs);
 void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<pair<double, int> > > neighbour_pairs);
 void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem);
 
 
-//Particle_Membrane
-void Particle_Membrane_neighbour_finder(Membrane particle, Membrane Mem);
+//Particle_ Vesicle
+void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle);
+void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &vesicle);
+void update_particle_vesicle_neighbour_list (Membrane &particle, Membrane &vesicle);
+void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<pair<double, int> > > neighbour_pairs);
+void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle);
+
+
+//general
+void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pairs);
 
 #endif /* interaction_hpp */
