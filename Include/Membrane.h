@@ -102,32 +102,42 @@ private:
     
     
     // -----------------------------------------------------------------------------
-    //                          OpenMM
+    //                          OpenMM::  ATOM AND FORCE FIELD DATA
     // -----------------------------------------------------------------------------
     /**
      * This is a struct we can use to collect atom parameters from the config files.
      * We're going to use data already imported into the class and convert to OpenMM's
-     * internal unit system.
+     * internal unit system:
+     *
+     * pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
+     * example:
+     * {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0}
      */
     struct my_atom_info {
+        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
         const char* pdb;
         double      mass, charge, vdwRadiusInAng, vdwEnergyInKcal,
         gbsaRadiusInAng, gbsaScaleFactor;
         double      initPosInAng[3];
         double      posInAng[3]; // leave room for runtime state info
     };
-    vector<my_atom_info> atoms; //Store OpenMM atom information.
+    my_atom_info atoms; //Store OpenMM atom information.
     
-    //    atoms[] = {
-    //        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
-    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0},
-    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,    -8, 0,  0},
-    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 9,  0},
-    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0,-9,  0},
-    //        {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     0, 0,-10},
-    //        {" CL ", 35.45, -1,    2.4700, 0.1000,     1.735,   0.8,     0, 0, 10},
-    //        {""} // end of list
-    //    };
+    struct MyOpenMMData;
+    static MyOpenMMData* myInitializeOpenMM(const vector<my_atom_info> atoms,
+                                            double temperature,
+                                            double frictionInPs,
+                                            double solventDielectric,
+                                            double soluteDielectric,
+                                            double stepSizeInFs,
+                                            std::string& platformName);
+    static void          myStepWithOpenMM(MyOpenMMData*, int numSteps);
+    static void          myGetOpenMMState(MyOpenMMData*,
+                                          bool wantEnergy,
+                                          double& time,
+                                          double& energy,
+                                          vector<my_atom_info> atoms);
+    static void          myTerminateOpenMM(MyOpenMMData*);
     
     /**
      * Convert the imported node information ready to pass to the OpenMM engin.
@@ -141,6 +151,8 @@ private:
     
     
 public:
+    ///Call all initilisation members and initilise openmm handles.
+    void initilise_openmm(void);
     
     ///node-node hard sphere interaction.
     void excluded_volume(void);
