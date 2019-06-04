@@ -328,7 +328,7 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     
-    bool openmm=false;
+    bool openmm=true;
     
     if (openmm) {
         cout<<"\nBeginnig the OpenMM section:\n";

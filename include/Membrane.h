@@ -124,6 +124,9 @@ private:
     my_atom_info atoms; //Store OpenMM atom information.
     
     struct MyOpenMMData;
+    /**
+     * This is a new handle for OpenMM
+     */
     static MyOpenMMData* myInitializeOpenMM(const vector<my_atom_info> atoms,
                                             double temperature,
                                             double frictionInPs,
