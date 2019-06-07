@@ -12,7 +12,6 @@
 void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem){
     bool initiate = true;
     int mem_nodes = mem.return_num_of_nodes();
-    int ecm_nodes = ecm.return_num_of_nodes();
     for (int i=0; i<mem_nodes; i++) {
         if (mem.ECM_Node_neighbour_list[i].size() != 0) {
             initiate=false;
@@ -69,7 +68,6 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
         if (neighbour_pairs[i].size() > 1) {
             sort(neighbour_pairs[i].begin(), neighbour_pairs[i].end());
             if (neighbour_pairs[i].size() > 4) {
-                int size=neighbour_pairs[i].size();
                 for (int k=0; k< neighbour_pairs[i].size()-4; k++) {
                     neighbour_pairs[i].erase(neighbour_pairs[i].begin()+4);
                 }

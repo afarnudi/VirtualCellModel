@@ -7,19 +7,15 @@
 *.o
 *.so
 *.xyz
-*.html
 *.xml
 
-Mem/
 bin/Results/Reports/
 bin/Results/Resumes/
 bin/Results/Relaxation/
-Doc/Doxygen/Documents/html/
-Doc/Doxygen/Documents/latex/
-Doc/Doxygen/Documents/xml/
+bin/Results/Damper/
 Doc/build/doctrees
-Doc/build/html
 Doc/seqan3-doc/
+Doc/source/
 Doc/xml
 
 # Packages #

@@ -76,7 +76,7 @@ namespace GenConst {
 
 //                   MODELING AND SIMULATION PARAMETERS
 const bool   UseConstraints      = false;   // Should we constrain C-H bonds?
-const double StepSizeInFs        = 2;       // integration step size (fs)
+const double StepSizeInFs        = 0.2;       // integration step size (fs)
 const double ReportIntervalInFs  = 10;      // how often to generate PDB frame (fs)
 const double SimulationTimeInPs  = 100;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
@@ -125,23 +125,12 @@ struct MyAtomInfo
     const char* pdb;
     double initPosInAng[3];
     double posInAng[3];
-}atoms[] ={
-    // type        pdb           initPosInAng            posInAng
-    /*0*/C,       " C1 ",       { 0,   0,   0   },     {0,0,0},
-    /*1*/C,       " C2 ",       { 0,   0,   1   },     {0,0,0},
-    /*2*/C,       " C3 ",       { 0.7, 0,   0.5 },     {0,0,0},
-    /*3*/C,       " C4 ",       {-0.5, 0.5, 0.5},     {0,0,0},
-    EndOfList};
+};
 
-static struct {int type; int atoms[2];} bonds[] =
-{
-    // type  atoms[0] atoms[1]
-    CC,     0,      1,
-    CC,     0,      2,
-    CC,     0,      3,
-    CC,     1,      2,
-    CC,     1,      3,
-    EndOfList};
+struct bond_list{
+    int type;
+    int atoms[2];
+};
 
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
@@ -178,7 +167,8 @@ struct MyOpenMMData;
  */
 static MyOpenMMData* myInitializeOpenMM(const MyAtomInfo atoms[],
                                         double stepSizeInFs,
-                                        std::string& platformName);
+                                        std::string& platformName,
+                                        bond_list*      bonds);
 static void          myStepWithOpenMM(MyOpenMMData*, int numSteps);
 static void          myGetOpenMMState(MyOpenMMData*, bool wantEnergy,
                                       double& time, double& energy,
@@ -336,9 +326,60 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         try {
             std::string   platformName;
+            MyAtomInfo* atoms;
+//            const int mem_size = Membranes[0].return_num_of_nodes();
+//            atoms = new MyAtomInfo[mem_size+1];
+            atoms = new MyAtomInfo[5];
+            
+            atoms[0].type=C;
+            atoms[0].pdb=" C1 ";
+            atoms[0].initPosInAng[0]=0;
+            atoms[0].initPosInAng[1]=0;
+            atoms[0].initPosInAng[2]=0;
+            atoms[0].posInAng[0]=0;
+            atoms[0].posInAng[1]=0;
+            atoms[0].posInAng[2]=0;
+            
+            atoms[1].type=C;
+            atoms[1].pdb=" C2 ";
+            atoms[1].initPosInAng[0]=0;
+            atoms[1].initPosInAng[1]=0;
+            atoms[1].initPosInAng[2]=1;
+            atoms[1].posInAng[0]=0;
+            atoms[1].posInAng[1]=0;
+            atoms[1].posInAng[2]=0;
+            
+            atoms[2].type=C;
+            atoms[2].pdb=" C3 ";
+            atoms[2].initPosInAng[0]=0.7;
+            atoms[2].initPosInAng[1]=0;
+            atoms[2].initPosInAng[2]=0.5;
+            atoms[2].posInAng[0]=0;
+            atoms[2].posInAng[1]=0;
+            atoms[2].posInAng[2]=0;
+            
+            atoms[3].type=C;
+            atoms[3].pdb=" C4 ";
+            atoms[3].initPosInAng[0]=-0.5;
+            atoms[3].initPosInAng[1]=0.5;
+            atoms[3].initPosInAng[2]=-0.5;
+            atoms[3].posInAng[0]=0;
+            atoms[3].posInAng[1]=0;
+            atoms[3].posInAng[2]=0;
+            
+            atoms[4].type=EndOfList;
+            
+            bond_list* bonds;
+            bonds = new bond_list[6];
+            bonds[0].type = CC; bonds[0].atoms[0]=0; bonds[0].atoms[1]=1;
+            bonds[1].type = CC; bonds[1].atoms[0]=0; bonds[1].atoms[1]=2;
+            bonds[2].type = CC; bonds[2].atoms[0]=0; bonds[2].atoms[1]=3;
+            bonds[3].type = CC; bonds[3].atoms[0]=1; bonds[3].atoms[1]=2;
+            bonds[4].type = CC; bonds[4].atoms[0]=1; bonds[4].atoms[1]=3;
+            bonds[5].type = EndOfList;
             
             // Set up OpenMM data structures; returns OpenMM Platform name.
-            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName);
+            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds);
             
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
@@ -636,7 +677,8 @@ struct MyOpenMMData {
 static MyOpenMMData*
 myInitializeOpenMM( const MyAtomInfo    atoms[],
                    double              stepSizeInFs,
-                   std::string&        platformName)
+                   std::string&        platformName,
+                   bond_list*           bonds)
 {
     // Load all available OpenMM plugins from their default location.
     OpenMM::Platform::loadPluginsFromDirectory
