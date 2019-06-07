@@ -13,10 +13,10 @@ bin/Results/Reports/
 bin/Results/Resumes/
 bin/Results/Relaxation/
 bin/Results/Damper/
-Doc/build/doctrees
-Doc/seqan3-doc/
-Doc/source/
-Doc/xml
+documents/build/doctrees
+documents/seqan3-doc/
+documents/source/
+documents/xml
 
 # Packages #
 ############

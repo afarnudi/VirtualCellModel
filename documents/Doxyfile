@@ -54,7 +54,7 @@ PROJECT_LOGO           = ./Doxygen/logo_1.png
 
 OUTPUT_DIRECTORY       = 
 XML_OUTPUT             = xml
-HTML_OUTPUT	       = ./doxyhtml
+HTML_OUTPUT	       = ../doc
 INPUT                  =  ../Include \
 		          ./Doxygen/Main_Page.md \
 			  ./Doxygen/Coding_Style.md \
