@@ -76,9 +76,9 @@ namespace GenConst {
 
 //                   MODELING AND SIMULATION PARAMETERS
 const bool   UseConstraints      = false;   // Should we constrain C-H bonds?
-const double StepSizeInFs        = 0.2;       // integration step size (fs)
-const double ReportIntervalInFs  = 10;      // how often to generate PDB frame (fs)
-const double SimulationTimeInPs  = 100;     // total simulation time (ps)
+const double StepSizeInFs        = 0.1;       // integration step size (fs)
+const double ReportIntervalInFs  = 0.1;      // how often to generate PDB frame (fs)
+const double SimulationTimeInPs  = 5;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
 
 //                            FORCE FIELD DATA
@@ -94,7 +94,7 @@ struct AtomType {
     double mass, charge, vdwRadiusInAngstroms, vdwEnergyInKcal;
 } atomType[] = {
     // mass,     charge, vdwRadius, vdwEnergy
-    /*1 C*/12.011, 0.0,   1.9080,    0.1094,
+    /*1 H*/12.011, 0.0,   1.9080,    0.1094,
     /*1 C*/12.011, 0.0,   1.9080,    0.1094};
 
 const int H = 0, C = 1;
@@ -104,8 +104,8 @@ struct BondType {
     bool   canConstrain;
 } bondType[] = {
     // nominalLength  stiffness   canConstrain;
-    /*0 CC*/1.526,       310.,       false,
-    /*1 CH*/1.09 ,       340.,       true};
+    /*0 CC*/1,       310.,       false,
+};
 
 const int CC = 0, CH = 1;
 
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
             atoms = new MyAtomInfo[5];
             
             atoms[0].type=C;
-            atoms[0].pdb=" C1 ";
+            atoms[0].pdb="C";
             atoms[0].initPosInAng[0]=0;
             atoms[0].initPosInAng[1]=0;
             atoms[0].initPosInAng[2]=0;
@@ -341,7 +341,7 @@ int main(int argc, char **argv)
             atoms[0].posInAng[2]=0;
             
             atoms[1].type=C;
-            atoms[1].pdb=" C2 ";
+            atoms[1].pdb="C";
             atoms[1].initPosInAng[0]=0;
             atoms[1].initPosInAng[1]=0;
             atoms[1].initPosInAng[2]=1;
@@ -350,8 +350,8 @@ int main(int argc, char **argv)
             atoms[1].posInAng[2]=0;
             
             atoms[2].type=C;
-            atoms[2].pdb=" C3 ";
-            atoms[2].initPosInAng[0]=0.7;
+            atoms[2].pdb="H";
+            atoms[2].initPosInAng[0]=0.5*sqrt(3);
             atoms[2].initPosInAng[1]=0;
             atoms[2].initPosInAng[2]=0.5;
             atoms[2].posInAng[0]=0;
@@ -359,10 +359,10 @@ int main(int argc, char **argv)
             atoms[2].posInAng[2]=0;
             
             atoms[3].type=C;
-            atoms[3].pdb=" C4 ";
-            atoms[3].initPosInAng[0]=-0.5;
+            atoms[3].pdb="H";
+            atoms[3].initPosInAng[0]=-0.5*sqrt(2);
             atoms[3].initPosInAng[1]=0.5;
-            atoms[3].initPosInAng[2]=-0.5;
+            atoms[3].initPosInAng[2]=0.5;
             atoms[3].posInAng[0]=0;
             atoms[3].posInAng[1]=0;
             atoms[3].posInAng[2]=0;
@@ -724,10 +724,19 @@ myInitializeOpenMM( const MyAtomInfo    atoms[],
     //      otherwise, tell HarmonicBondForce the bond stretch parameters
     //      (tricky units!).
     //  (2) Create a list of bonds for generating nonbond exclusions.
-    std::vector< std::pair<int,int> > bondPairs;
+//    std::vector< std::pair<int,int> > bondPairs;
+    
+    double bending_stiffness_value;
+    
+    
+    /**
+     * Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
+     */
+    OpenMM::CustomBondForce* force2 = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
         const BondType& bond = bondType[bonds[i].type];
+        bending_stiffness_value=bond.stiffnessInKcalPerAngstrom2 * 0.2 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
         
         if (UseConstraints && bond.canConstrain) {
             system.addConstraint(atom[0], atom[1],
@@ -740,12 +749,47 @@ myInitializeOpenMM( const MyAtomInfo    atoms[],
                                 bond.nominalLengthInAngstroms
                                 * OpenMM::NmPerAngstrom,
                                 bond.stiffnessInKcalPerAngstrom2
-                                * 2 * OpenMM::KJPerKcal
+                                * 10 * OpenMM::KJPerKcal
                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
         }
         
-        bondPairs.push_back(std::make_pair(atom[0], atom[1]));
+        //        bondPairs.push_back(std::make_pair(atom[0], atom[1]));
     }
+//    for (int i=0; bonds[i].type != EndOfList; ++i) {
+//        const int*      atom = bonds[i].atoms;
+//        const BondType& bond = bondType[bonds[i].type];
+//        bending_stiffness_value=bond.stiffnessInKcalPerAngstrom2 * 40 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+//
+//        if (UseConstraints && bond.canConstrain) {
+//            system.addConstraint(atom[0], atom[1],
+//                                 bond.nominalLengthInAngstroms * OpenMM::NmPerAngstrom);
+//        } else {
+//            // Note factor of 2 for stiffness below because Amber specifies the constant
+//            // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
+//            // it as used in the force term kx, with energy kx^2/2.
+//            bondStretch.addBond(atom[0], atom[1],
+//                                bond.nominalLengthInAngstroms
+//                                * OpenMM::NmPerAngstrom,
+//                                bond.stiffnessInKcalPerAngstrom2
+//                                * 20 * OpenMM::KJPerKcal
+//                                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+//        }
+//
+////        bondPairs.push_back(std::make_pair(atom[0], atom[1]));
+//    }
+    /**
+     * Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force.
+     */
+    OpenMM::CustomCompoundBondForce* force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
+    force->addGlobalParameter("K_bend",bending_stiffness_value);
+    vector<int> diatoms{3,0,1,2};
+    force->addBond(diatoms);
+    system.addForce(force);
+    
+    
+    
+    
+    
     // Exclude 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms.
 //    nonbond.createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);
     
@@ -777,6 +821,7 @@ myInitializeOpenMM( const MyAtomInfo    atoms[],
     omm->integrator = new OpenMM::VerletIntegrator(StepSizeInFs * OpenMM::PsPerFs);
     omm->context    = new OpenMM::Context(*omm->system, *omm->integrator);
     omm->context->setPositions(initialPosInNm);
+//    omm->context->setParameter("K_bend", bending_stiffness_value);
     
     platformName = omm->context->getPlatform().getName();
     return omm;

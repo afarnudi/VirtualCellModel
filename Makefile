@@ -21,7 +21,8 @@ DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 INC=-I$(DEPFILES)
 
 all: $(BINDIR)/$(TARGET)
-	export DYLD_LIBRARY_PATH=/usr/local/openmm/lib
+	Mac: export DYLD_LIBRARY_PATH=/usr/local/openmm/lib
+	Lin: export LD_LIBRARY_PATH=/usr/local/openmm/lib 
 
 $(BINDIR)/$(TARGET): $(OBJFILES)
 	$(CXX) $(CXXFLAGS) -L$(LIB_DIR) $(LIBS) $? -o $@
