@@ -13,7 +13,7 @@ INCDIRS=-I$(INCDIR) -I$(OpenMM_INSTALL_DIR)/include
 LIB_DIR=$(OpenMM_INSTALL_DIR)/lib
 LIBS= -lOpenMM
 
-SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Chromatin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Particle/*.cpp)
+SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Chromatin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Particle/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp)
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 
