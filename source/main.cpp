@@ -36,8 +36,24 @@
 #include "interaction.hpp"
 #include "maps.hpp"
 #include "Global_functions.hpp"
+#include "OpenMM_structs.h"
+#include "OpenMM_funcs.hpp"
 
 
+/** -----------------------------------------------------------------------------
+ *                           OpenMM-USING CODE
+ * -----------------------------------------------------------------------------
+ * The OpenMM API is visible only at this point and below. Normally this would
+ * be in a separate compilation module; we're including it here for simplicity.
+ * -----------------------------------------------------------------------------
+ */
+
+// Suppress irrelevant warnings from Microsoft's compiler.
+#ifdef _MSC_VER
+#pragma warning(disable:4996)   // sprintf is unsafe
+#endif
+
+#include "OpenMM.h"
 
 
 namespace GenConst {
@@ -63,16 +79,6 @@ namespace GenConst {
 }
 
 
-// -----------------------------------------------------------------------------
-//                                 MOCK MD CODE
-// -----------------------------------------------------------------------------
-// The code starting here and through main() below is meant to represent in
-// simplified form some pre-existing molecular dynamics code, which defines its
-// own data structures for force fields, the atoms in this simulation, and the
-// simulation parameters, and takes care of recording the trajectory. All this
-// has nothing to do with OpenMM; the OpenMM-dependent code comes later and is
-// clearly marked below.
-// -----------------------------------------------------------------------------
 
 //                   MODELING AND SIMULATION PARAMETERS
 const bool   UseConstraints      = false;   // Should we constrain C-H bonds?
@@ -90,22 +96,9 @@ static const bool   WantEnergy   = true;
 //const double Coulomb14Scale      = 0.5;
 //const double LennardJones14Scale = 0.5;
 
-struct AtomType {
-    double mass, charge, vdwRadiusInAngstroms, vdwEnergyInKcal;
-} atomType[] = {
-    // mass,     charge, vdwRadius, vdwEnergy
-    /*1 H*/12.011, 0.0,   1.9080,    0.1094,
-    /*1 C*/12.011, 0.0,   1.9080,    0.1094};
+
 
 const int H = 0, C = 1;
-
-struct BondType {
-    double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2;
-    bool   canConstrain;
-} bondType[] = {
-    // nominalLength  stiffness   canConstrain;
-    /*0 CC*/1,       310.,       false,
-};
 
 const int CC = 0, CH = 1;
 
@@ -119,18 +112,18 @@ const int CC = 0, CH = 1;
  */
 const int EndOfList=-1;
 
-struct MyAtomInfo
-{
-    int type;
-    const char* pdb;
-    double initPosInAng[3];
-    double posInAng[3];
-};
+//struct MyAtomInfo
+//{
+//    int type;
+//    const char* pdb;
+//    double initPosInAng[3];
+//    double posInAng[3];
+//};
 
-struct bond_list{
-    int type;
-    int atoms[2];
-};
+//struct bond_list{
+//    int type;
+//    int atoms[2];
+//};
 
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
@@ -151,24 +144,8 @@ myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
 
 
 
-// -----------------------------------------------------------------------------
-//                           INTERFACE TO OpenMM
-// -----------------------------------------------------------------------------
-// These four functions and an opaque structure are used to interface our main
-// program with OpenMM without the main program having any direct interaction
-// with the OpenMM API. This is a clean approach for interfacing with any MD
-// code, although the details of the interface routines will differ. This is
-// still just "locally written" code and is not required by OpenMM.
-struct MyOpenMMData;
-/** This function and an opaque structure are used to interface our main
- * programme with OpenMM without the main programme having any direct interaction
- * with the OpenMM API.
- * This function initilises the openmm system + contex + forces.
- */
-static MyOpenMMData* myInitializeOpenMM(const MyAtomInfo atoms[],
-                                        double stepSizeInFs,
-                                        std::string& platformName,
-                                        bond_list*      bonds);
+
+
 static void          myStepWithOpenMM(MyOpenMMData*, int numSteps);
 static void          myGetOpenMMState(MyOpenMMData*, bool wantEnergy,
                                       double& time, double& energy,
@@ -318,69 +295,70 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     
-    bool openmm=true;
+    bool openmm_sim=true;
     
-    if (openmm) {
+    if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         try {
             std::string   platformName;
-            MyAtomInfo* atoms;
+            MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[0]);
 //            const int mem_size = Membranes[0].return_num_of_nodes();
 //            atoms = new MyAtomInfo[mem_size+1];
-            atoms = new MyAtomInfo[5];
-            
-            atoms[0].type=C;
-            atoms[0].pdb="C";
-            atoms[0].initPosInAng[0]=0;
-            atoms[0].initPosInAng[1]=0;
-            atoms[0].initPosInAng[2]=0;
-            atoms[0].posInAng[0]=0;
-            atoms[0].posInAng[1]=0;
-            atoms[0].posInAng[2]=0;
-            
-            atoms[1].type=C;
-            atoms[1].pdb="C";
-            atoms[1].initPosInAng[0]=0;
-            atoms[1].initPosInAng[1]=0;
-            atoms[1].initPosInAng[2]=1;
-            atoms[1].posInAng[0]=0;
-            atoms[1].posInAng[1]=0;
-            atoms[1].posInAng[2]=0;
-            
-            atoms[2].type=C;
-            atoms[2].pdb="H";
-            atoms[2].initPosInAng[0]=0.5*sqrt(3);
-            atoms[2].initPosInAng[1]=0;
-            atoms[2].initPosInAng[2]=0.5;
-            atoms[2].posInAng[0]=0;
-            atoms[2].posInAng[1]=0;
-            atoms[2].posInAng[2]=0;
-            
-            atoms[3].type=C;
-            atoms[3].pdb="H";
-            atoms[3].initPosInAng[0]=-0.5*sqrt(2);
-            atoms[3].initPosInAng[1]=0.5;
-            atoms[3].initPosInAng[2]=0.5;
-            atoms[3].posInAng[0]=0;
-            atoms[3].posInAng[1]=0;
-            atoms[3].posInAng[2]=0;
-            
-            atoms[4].type=EndOfList;
-            
-            bond_list* bonds;
-            bonds = new bond_list[6];
-            bonds[0].type = CC; bonds[0].atoms[0]=0; bonds[0].atoms[1]=1;
-            bonds[1].type = CC; bonds[1].atoms[0]=0; bonds[1].atoms[1]=2;
-            bonds[2].type = CC; bonds[2].atoms[0]=0; bonds[2].atoms[1]=3;
-            bonds[3].type = CC; bonds[3].atoms[0]=1; bonds[3].atoms[1]=2;
-            bonds[4].type = CC; bonds[4].atoms[0]=1; bonds[4].atoms[1]=3;
-            bonds[5].type = EndOfList;
+//            atoms = new MyAtomInfo[5];
+
+//            atoms[0].type=C;
+//            atoms[0].pdb="C";
+//            atoms[0].initPosInAng[0]=0;
+//            atoms[0].initPosInAng[1]=0;
+//            atoms[0].initPosInAng[2]=0;
+//            atoms[0].posInAng[0]=0;
+//            atoms[0].posInAng[1]=0;
+//            atoms[0].posInAng[2]=0;
+//
+//            atoms[1].type=C;
+//            atoms[1].pdb="C";
+//            atoms[1].initPosInAng[0]=0;
+//            atoms[1].initPosInAng[1]=0;
+//            atoms[1].initPosInAng[2]=1;
+//            atoms[1].posInAng[0]=0;
+//            atoms[1].posInAng[1]=0;
+//            atoms[1].posInAng[2]=0;
+//
+//            atoms[2].type=C;
+//            atoms[2].pdb="H";
+//            atoms[2].initPosInAng[0]=0.5*sqrt(3);
+//            atoms[2].initPosInAng[1]=0;
+//            atoms[2].initPosInAng[2]=0.5;
+//            atoms[2].posInAng[0]=0;
+//            atoms[2].posInAng[1]=0;
+//            atoms[2].posInAng[2]=0;
+//
+//            atoms[3].type=C;
+//            atoms[3].pdb="H";
+//            atoms[3].initPosInAng[0]=-0.5*sqrt(2);
+//            atoms[3].initPosInAng[1]=0.5;
+//            atoms[3].initPosInAng[2]=0.5;
+//            atoms[3].posInAng[0]=0;
+//            atoms[3].posInAng[1]=0;
+//            atoms[3].posInAng[2]=0;
+
+//            atoms[4].type=EndOfList;
+
+            Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[0]);
+//            bonds = new Bonds[6];
+//            bonds[0].type = CC; bonds[0].atoms[0]=0; bonds[0].atoms[1]=1;
+//            bonds[1].type = CC; bonds[1].atoms[0]=0; bonds[1].atoms[1]=2;
+//            bonds[2].type = CC; bonds[2].atoms[0]=0; bonds[2].atoms[1]=3;
+//            bonds[3].type = CC; bonds[3].atoms[0]=1; bonds[3].atoms[1]=2;
+//            bonds[4].type = CC; bonds[4].atoms[0]=1; bonds[4].atoms[1]=3;
+//            bonds[5].type = EndOfList;
             
             // Set up OpenMM data structures; returns OpenMM Platform name.
-            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds);
-            
+//            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds);
+            Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[0]);
+            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds, dihedrals);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -631,247 +609,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-//                           OpenMM-USING CODE
-// -----------------------------------------------------------------------------
-// The OpenMM API is visible only at this point and below. Normally this would
-// be in a separate compilation module; we're including it here for simplicity.
-// -----------------------------------------------------------------------------
 
-// Suppress irrelevant warnings from Microsoft's compiler.
-#ifdef _MSC_VER
-#pragma warning(disable:4996)   // sprintf is unsafe
-#endif
 
-#include "OpenMM.h"
-using OpenMM::Vec3; // so we can just say "Vec3" below
 
-// This is our opaque "handle" class containing all the OpenMM objects that
-// must persist from call to call during a simulation. The main program gets
-// a pointer to one of these but sees it as essentially a void* since it
-// doesn't know the definition of this class.
-struct MyOpenMMData {
-    MyOpenMMData() : system(0), context(0), integrator(0) {}
-    ~MyOpenMMData() {delete context; delete integrator; delete system;}
-    OpenMM::System*         system;
-    OpenMM::Integrator*     integrator;
-    OpenMM::Context*  context;
-};
-
-// -----------------------------------------------------------------------------
-//                      INITIALIZE OpenMM DATA STRUCTURES
-// -----------------------------------------------------------------------------
-// We take these actions here:
-// (1) Load any available OpenMM plugins, e.g. Cuda and Brook.
-// (2) Allocate a MyOpenMMData structure to hang on to OpenMM data structures
-//     in a manner which is opaque to the caller.
-// (3) Fill the OpenMM::System with the force field parameters we want to
-//     use and the particular set of atoms to be simulated.
-// (4) Create an Integrator and a Context associating the Integrator with
-//     the System.
-// (5) Select the OpenMM platform to be used.
-// (6) Return the MyOpenMMData struct and the name of the Platform in use.
-//
-// Note that this function must understand the calling MD code's molecule and
-// force field data structures so will need to be customized for each MD code.
-static MyOpenMMData*
-myInitializeOpenMM( const MyAtomInfo    atoms[],
-                   double              stepSizeInFs,
-                   std::string&        platformName,
-                   bond_list*           bonds)
-{
-    // Load all available OpenMM plugins from their default location.
-    OpenMM::Platform::loadPluginsFromDirectory
-    (OpenMM::Platform::getDefaultPluginsDirectory());
-    
-    // Allocate space to hold OpenMM objects while we're using them.
-    MyOpenMMData* omm = new MyOpenMMData();
-    
-    // Create a System and Force objects within the System. Retain a reference
-    // to each force object so we can fill in the forces. Note: the System owns
-    // the force objects and will take care of deleting them; don't do it yourself!
-    OpenMM::System&                 system      = *(omm->system = new OpenMM::System());
-//    OpenMM::NonbondedForce&         nonbond     = *new OpenMM::NonbondedForce();
-    OpenMM::HarmonicBondForce&      bondStretch = *new OpenMM::HarmonicBondForce();
-//    OpenMM::HarmonicAngleForce&     bondBend    = *new OpenMM::HarmonicAngleForce();
-//    OpenMM::PeriodicTorsionForce&   bondTorsion = *new OpenMM::PeriodicTorsionForce();
-//    system.addForce(&nonbond);
-    system.addForce(&bondStretch);
-//    system.addForce(&bondBend);
-//    system.addForce(&bondTorsion);
-    
-    // Specify the atoms and their properties:
-    //  (1) System needs to know the masses.
-    //  (2) NonbondedForce needs charges,van der Waals properties (in MD units!).
-    //  (3) Collect default positions for initializing the simulation later.
-    std::vector<Vec3> initialPosInNm;
-    for (int n=0; atoms[n].type != EndOfList; ++n) {
-        const AtomType& atype = atomType[atoms[n].type];
-        system.addParticle(atype.mass);
-//        nonbond.addParticle(atype.charge,
-//                            atype.vdwRadiusInAngstroms * OpenMM::NmPerAngstrom
-//                            * OpenMM::SigmaPerVdwRadius,
-//                            atype.vdwEnergyInKcal      * OpenMM::KJPerKcal);
-        // Convert the initial position to nm and append to the array.
-        const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
-                           atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
-                           atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
-        initialPosInNm.push_back(posInNm);
-    }
-    
-    // Process the bonds:
-    //  (1) If we're using constraints, tell System about constrainable bonds;
-    //      otherwise, tell HarmonicBondForce the bond stretch parameters
-    //      (tricky units!).
-    //  (2) Create a list of bonds for generating nonbond exclusions.
-//    std::vector< std::pair<int,int> > bondPairs;
-    
-    double bending_stiffness_value;
-    
-    
-    /**
-     * Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-     */
-    OpenMM::CustomBondForce* force2 = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
-    for (int i=0; bonds[i].type != EndOfList; ++i) {
-        const int*      atom = bonds[i].atoms;
-        const BondType& bond = bondType[bonds[i].type];
-        bending_stiffness_value=bond.stiffnessInKcalPerAngstrom2 * 0.2 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-        
-        if (UseConstraints && bond.canConstrain) {
-            system.addConstraint(atom[0], atom[1],
-                                 bond.nominalLengthInAngstroms * OpenMM::NmPerAngstrom);
-        } else {
-            // Note factor of 2 for stiffness below because Amber specifies the constant
-            // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
-            // it as used in the force term kx, with energy kx^2/2.
-            bondStretch.addBond(atom[0], atom[1],
-                                bond.nominalLengthInAngstroms
-                                * OpenMM::NmPerAngstrom,
-                                bond.stiffnessInKcalPerAngstrom2
-                                * 10 * OpenMM::KJPerKcal
-                                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-        }
-        
-        //        bondPairs.push_back(std::make_pair(atom[0], atom[1]));
-    }
-//    for (int i=0; bonds[i].type != EndOfList; ++i) {
-//        const int*      atom = bonds[i].atoms;
-//        const BondType& bond = bondType[bonds[i].type];
-//        bending_stiffness_value=bond.stiffnessInKcalPerAngstrom2 * 40 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-//
-//        if (UseConstraints && bond.canConstrain) {
-//            system.addConstraint(atom[0], atom[1],
-//                                 bond.nominalLengthInAngstroms * OpenMM::NmPerAngstrom);
-//        } else {
-//            // Note factor of 2 for stiffness below because Amber specifies the constant
-//            // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
-//            // it as used in the force term kx, with energy kx^2/2.
-//            bondStretch.addBond(atom[0], atom[1],
-//                                bond.nominalLengthInAngstroms
-//                                * OpenMM::NmPerAngstrom,
-//                                bond.stiffnessInKcalPerAngstrom2
-//                                * 20 * OpenMM::KJPerKcal
-//                                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-//        }
-//
-////        bondPairs.push_back(std::make_pair(atom[0], atom[1]));
-//    }
-    /**
-     * Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force.
-     */
-    OpenMM::CustomCompoundBondForce* force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
-    force->addGlobalParameter("K_bend",bending_stiffness_value);
-    vector<int> diatoms{3,0,1,2};
-    force->addBond(diatoms);
-    system.addForce(force);
-    
-    
-    
-    
-    
-    // Exclude 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms.
-//    nonbond.createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);
-    
-    // Create the 1-2-3 bond angle harmonic terms.
-//    for (int i=0; angles[i].type != EndOfList; ++i) {
-//        const int*       atom  = angles[i].atoms;
-//        const AngleType& angle = angleType[angles[i].type];
-//
-//        // See note under bond stretch above regarding the factor of 2 here.
-//        bondBend.addAngle(atom[0],atom[1],atom[2],
-//                          angle.nominalAngleInDegrees     * OpenMM::RadiansPerDegree,
-//                          angle.stiffnessInKcalPerRadian2 * 2 * OpenMM::KJPerKcal);
-//    }
-    
-    // Create the 1-2-3-4 bond torsion (dihedral) terms.
-//    for (int i=0; torsions[i].type != EndOfList; ++i) {
-//        const int*         atom = torsions[i].atoms;
-//        const TorsionType& torsion = torsionType[torsions[i].type];
-//        bondTorsion.addTorsion(atom[0],atom[1],atom[2],atom[3],
-//                               torsion.periodicity,
-//                               torsion.phaseInDegrees  * OpenMM::RadiansPerDegree,
-//                               torsion.amplitudeInKcal * OpenMM::KJPerKcal);
-//    }
-    
-    // Choose an Integrator for advancing time, and a Context connecting the
-    // System with the Integrator for simulation. Let the Context choose the
-    // best available Platform. Initialize the configuration from the default
-    // positions we collected above. Initial velocities will be zero.
-    omm->integrator = new OpenMM::VerletIntegrator(StepSizeInFs * OpenMM::PsPerFs);
-    omm->context    = new OpenMM::Context(*omm->system, *omm->integrator);
-    omm->context->setPositions(initialPosInNm);
-//    omm->context->setParameter("K_bend", bending_stiffness_value);
-    
-    platformName = omm->context->getPlatform().getName();
-    return omm;
-}
-
-// -----------------------------------------------------------------------------
-//                     COPY STATE BACK TO CPU FROM OPENMM
-// -----------------------------------------------------------------------------
-static void
-myGetOpenMMState(MyOpenMMData* omm, bool wantEnergy,
-                 double& timeInPs, double& energyInKcal,
-                 MyAtomInfo atoms[])
-{
-    int infoMask = 0;
-    infoMask = OpenMM::State::Positions;
-    if (wantEnergy) {
-        infoMask += OpenMM::State::Velocities; // for kinetic energy (cheap)
-        infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
-    }
-    // Forces are also available (and cheap).
-    
-    const OpenMM::State state = omm->context->getState(infoMask);
-    timeInPs = state.getTime(); // OpenMM time is in ps already
-    
-    // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
-    const std::vector<Vec3>& positionsInNm = state.getPositions();
-    for (int i=0; i < (int)positionsInNm.size(); ++i)
-        for (int j=0; j < 3; ++j)
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
-    
-    // If energy has been requested, obtain it and convert from kJ to kcal.
-    energyInKcal = 0;
-    if (wantEnergy)
-        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
-        * OpenMM::KcalPerKJ;
-}
-
-// -----------------------------------------------------------------------------
-//                     TAKE MULTIPLE STEPS USING OpenMM
-// -----------------------------------------------------------------------------
-static void
-myStepWithOpenMM(MyOpenMMData* omm, int numSteps) {
-    omm->integrator->step(numSteps);
-}
-
-// -----------------------------------------------------------------------------
-//                     DEALLOCATE OpenMM OBJECTS
-// -----------------------------------------------------------------------------
-static void
-myTerminateOpenMM(MyOpenMMData* omm) {
-    delete omm;
-}
 

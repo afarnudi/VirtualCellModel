@@ -27,17 +27,68 @@
 #include <iomanip>
 #include <iterator>
 
+
+#include "OpenMM_structs.h"
 #include "General_functions.hpp"
 
-using namespace std;
-
+using std::vector;
+using std::cout;
+using std::endl;
 
 class Membrane
 {
     
 private:
     /** Store the label(pdb) used to write to the trajectory file */
-    string label;
+    std::string label;
+    
+//    /** Convert the node position data to OpenMM format*/
+//    void convert_position_to_openmm(void);
+//
+//    /** Convert the bond info to OpenMM format*/
+//    void convert_bond_info_to_openmm(void);
+//
+//    //OpenMM data structures.
+//    MyAtomInfo* myatominfo;
+//    Bonds* bonds;
+//
+//    /** This is our opaque "handle" class containing all the OpenMM objects that
+//     * must persist from call to call during a simulation. The main programme gets
+//     * a pointer to one of these but sees it as essentially a void* since it
+//     * doesn't know the definition of this class.
+//     */
+//    struct MyOpenMMData {
+//        MyOpenMMData() : system(0), context(0), integrator(0) {}
+//        ~MyOpenMMData() {delete context; delete integrator; delete system;}
+//        OpenMM::System*         system;
+//        OpenMM::Integrator*     integrator;
+//        OpenMM::Context*  context;
+//    };
+//    //OpenMM platform
+//    std::string   platformName;
+//    // Allocate space to hold OpenMM objects while we're using them.
+//    MyOpenMMData* omm = new MyOpenMMData();
+//
+//    /** -----------------------------------------------------------------------------
+//     *                      INITIALIZE OpenMM DATA STRUCTURES
+//     * -----------------------------------------------------------------------------
+//     * We take these actions here:
+//     * (1) Load any available OpenMM plugins, e.g. Cuda and Brook.
+//     * (2) Allocate a MyOpenMMData structure to hang on to OpenMM data structures
+//     *     in a manner which is opaque to the caller.
+//     * (3) Fill the OpenMM::System with the force field parameters we want to
+//     *     use and the particular set of atoms to be simulated.
+//     * (4) Create an Integrator and a Context associating the Integrator with
+//     *     the System.
+//     * (5) Select the OpenMM platform to be used.
+//     * (6) Return the MyOpenMMData struct and the name of the Platform in use.
+//     *
+//     * Note that this function must understand the calling MD code's molecule and
+//     * force field data structures so will need to be customized for each MD code.
+//     */
+//     MyOpenMMData* myInitializeOpenMM();
+    
+    
     
     int index;
     /*variables*/
@@ -47,10 +98,10 @@ private:
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     int MD_num_of_Relaxation_steps=200000;
     int MD_correction_steps=2000;
-    map<string, double> param_map;
+    std::map<std::string, double> param_map;
     
-    string Mesh_file_name="None";
-    string resume_file_name="None";
+    std::string Mesh_file_name="None";
+    std::string resume_file_name="None";
     
     bool Relaxation=false;
     bool Relax_with_actin=false;
@@ -79,9 +130,9 @@ private:
     
     
     double Average_Node_Distance();
-    void read_gmesh_file (string gmesh_file);
-    void read_ply_file (string ply_file);
-    void read_membrabe_input(string input_file);
+    void read_gmesh_file (std::string gmesh_file);
+    void read_ply_file (std::string ply_file);
+    void read_membrabe_input(std::string input_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
     void node_distance_correction(void);
@@ -99,56 +150,6 @@ private:
     
     void export_relaxed(int MD_step);
     
-    
-    
-    // -----------------------------------------------------------------------------
-    //                          OpenMM::  ATOM AND FORCE FIELD DATA
-    // -----------------------------------------------------------------------------
-    /**
-     * This is a struct we can use to collect atom parameters from the config files.
-     * We're going to use data already imported into the class and convert to OpenMM's
-     * internal unit system:
-     *
-     * pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
-     * example:
-     * {" NA ", 22.99,  1,    1.8680, 0.00277,    1.992,   0.8,     8, 0,  0}
-     */
-    struct my_atom_info {
-        // pdb   mass  charge  vdwRad vdwEnergy   gbsaRad gbsaScale  initPos
-        const char* pdb;
-        double      mass, charge, vdwRadiusInAng, vdwEnergyInKcal,
-        gbsaRadiusInAng, gbsaScaleFactor;
-        double      initPosInAng[3];
-        double      posInAng[3]; // leave room for runtime state info
-    };
-    my_atom_info atoms; //Store OpenMM atom information.
-    
-    struct MyOpenMMData;
-    /**
-     * This is a new handle for OpenMM
-     */
-    static MyOpenMMData* myInitializeOpenMM(const vector<my_atom_info> atoms,
-                                            double temperature,
-                                            double frictionInPs,
-                                            double solventDielectric,
-                                            double soluteDielectric,
-                                            double stepSizeInFs,
-                                            std::string& platformName);
-    static void          myStepWithOpenMM(MyOpenMMData*, int numSteps);
-    static void          myGetOpenMMState(MyOpenMMData*,
-                                          bool wantEnergy,
-                                          double& time,
-                                          double& energy,
-                                          vector<my_atom_info> atoms);
-    static void          myTerminateOpenMM(MyOpenMMData*);
-    
-    /**
-     * Convert the imported node information ready to pass to the OpenMM engin.
-     */
-    void my_atom_info_constructor(void);
-    
-    //  double temp_damp_force[][3];
-    
     int membrane_counter;
     bool rescale=0;
     
@@ -161,8 +162,8 @@ public:
     void excluded_volume(void);
     
     double min_radius_after_relaxation;
-    string output_file_neme;
-    string file_time;
+    std::string output_file_neme;
+    std::string file_time;
     
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
@@ -189,11 +190,11 @@ public:
     void export_for_resume(int MD_step);
     
     //    void initialise(string input_file_name , string Mesh_file_name);
-    void initialise(string Mesh_file_name);
+    void initialise(std::string Mesh_file_name);
     //    void initialise(string Mesh_file_name, double x, double y, double z);
-    void import(string import_file_name);
-    void import_config(string config_file_name);
-    void set_map_parameter(string param_name, double param_value);
+    void import(std::string import_file_name);
+    void import_config(std::string config_file_name);
+    void set_map_parameter(std::string param_name, double param_value);
     void generate_report(void);
     void export_velocities(int MD_step);
     void Thermostat_2(double MD_KT);
@@ -201,13 +202,13 @@ public:
     void Thermostat_Bussi(double MD_KT);
     void calculate_mesh_properties(void);
     void relaxation_traj (void);
-    void write_traj (string traj_name);
-    void write_traj (string traj_name, string label);
+    void write_traj (std::string traj_name);
+    void write_traj (std::string traj_name, std::string label);
     void write_parameters(int MD_Step);
     void omega_calculator(void);
     void omega_calculator_2(void);
     void equilibrate (void);
-    void write_pov_traj(string traj_name, string label, int currentstep);
+    void write_pov_traj(std::string traj_name, std::string label, int currentstep);
     double Average_velocity_squared();
     double Omega[3]={0};
     
@@ -246,8 +247,12 @@ private:
     
 public:
     /** Assigns the label(pdb) used to write to the trajectory files. */
-    void set_label(string lab){
+    void set_label(std::string lab){
         label=lab;
+    }
+    /** return the label(pdb) used to write to the trajectory files. */
+    std::string return_label(void){
+        return label;
     }
     void Relax_1(void);
     void Relax_2(void);
@@ -257,6 +262,30 @@ public:
      */
     int return_num_of_nodes(void){
         return Num_of_Nodes;
+    }
+    /**Return the number of bonds between membrane nodes.*/
+    int return_num_of_node_pairs(void){
+        return Num_of_Node_Pairs;
+    }
+    /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
+    int return_node_pair(int bond_num, int node_id){
+        return Node_Bond_list[bond_num][node_id];
+    }
+    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
+    double return_node_mass(void){
+        return Node_Mass;
+    }
+    /**Return the average distance of the nodes as calculated from the mesh. */
+    double return_avg_node_dist(void){
+        return Average_node_pair_length;
+    }
+    /**Return spring stiffness coefficient. */
+    double return_spring_stiffness_coefficient(void){
+        return Spring_coefficient;
+    }
+    /**Return the node IDs of the dihedral angles.*/
+    vector<int> return_traingle_pair_nodes(int triangle_pair){
+        return Triangle_pair_list[triangle_pair];
     }
     int  return_Relaxation_Process_Model(void){
         return Relaxation_Process_Model;
@@ -357,6 +386,15 @@ public:
             return false;
         }
     }
+//    /**return OpenMM handle*/
+//    MyOpenMMData* return_OpenMM_setup(void){
+//        return omm;
+//    }
+//    /**return OpenMM platform name*/
+//    std::string return_OpenMM_platform(void){
+//        return platformName;
+//    }
+    
 };
 
 #endif // MEMBRANE_H

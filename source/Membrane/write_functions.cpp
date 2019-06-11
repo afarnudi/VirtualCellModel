@@ -10,34 +10,36 @@
 #include "General_constants.h"
 #include "General_functions.hpp"
 
+using std::ofstream;
 
-void Membrane::write_traj (string traj_name){
+
+void Membrane::write_traj (std::string traj_name){
     ofstream Trajectory;
-    Trajectory.open(traj_name.c_str(), ios::app);
+    Trajectory.open(traj_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        Trajectory << label <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
     }
 }
 
-void Membrane::write_traj (string traj_name, string label){
+void Membrane::write_traj (std::string traj_name, std::string label){
     ofstream Trajectory;
-    Trajectory.open(traj_name.c_str(), ios::app);
+    Trajectory.open(traj_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
     {
-        Trajectory << label <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        Trajectory << label <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
     }
 }
-void Membrane:: write_pov_traj(string traj_name, string label, int currentStep){
+void Membrane:: write_pov_traj(std::string traj_name, std::string label, int currentStep){
      ///=============GENRAL===============
     int w1,w2;
     //////________
-    string pov_file_name;
+    std::string pov_file_name;
     pov_file_name=traj_name;
     pov_file_name=pov_file_name+"_of_step_";
-    pov_file_name=pov_file_name+to_string((currentStep));
+    pov_file_name=pov_file_name+std::to_string((currentStep));
     pov_file_name=pov_file_name+".pov";
     
     ofstream pov;
@@ -136,21 +138,21 @@ void Membrane:: write_pov_traj(string traj_name, string label, int currentStep){
 }
 void Membrane::relaxation_traj (void)
 {
-    string energy_file_name;
-    string traj_file_name;
+    std::string energy_file_name;
+    std::string traj_file_name;
     
-    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".xyz";
+    traj_file_name="Results/Relaxation/Relaxation_"+GenConst::trajectory_file_name+"Membrane_"+std::to_string(index)+"_"+file_time+".xyz";
     //trajectory:
     
     ofstream Trajectory;
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory.open(traj_file_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     Trajectory <<Num_of_Nodes<<endl;
     Trajectory << " nodes  "<<endl;
     for(int j=0; j< Num_of_Nodes; j++) // saving trajectory
     {
-        Trajectory << "mem" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        Trajectory << "mem" <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
     }
     
 }
@@ -158,7 +160,7 @@ void Membrane::relaxation_traj (void)
 
 void Membrane::export_for_resume(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Resumes/Resume_Membrane_"+to_string(index)+"_";
+    std::string resume_file_name="Results/Resumes/Resume_Membrane_"+std::to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -193,8 +195,10 @@ void Membrane::export_for_resume(int MD_step){
 
 void Membrane::generate_report()
 {
-    string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Membrane_"+to_string(index)+"_";
+    using std::setw;
+    
+    std::string Report_file_name;
+    Report_file_name= "Results/Reports/Report_Membrane_"+std::to_string(index)+"_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
@@ -256,15 +260,15 @@ void Membrane::generate_report()
 
 void Membrane::write_parameters(int MD_Step){
     //    string energy_file_name;
-    string traj_file_name;
+    std::string traj_file_name;
 //    omega_calculator_2();
     double a[3]={Omega[0],Omega[1],Omega[2]};
     double Omega_len=vector_length(a);
     
-    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+to_string(index)+"_"+file_time+".txt";
+    traj_file_name="Results/Param_"+GenConst::trajectory_file_name+"Membrane_"+std::to_string(index)+"_"+file_time+".txt";
     ofstream Trajectory;
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory.open(traj_file_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     if (GenConst::File_header==false) {
         Trajectory<<"MD Step\t"<<"Total Kinetic Energy\t"
@@ -279,7 +283,7 @@ void Membrane::write_parameters(int MD_Step){
 
 void Membrane::export_relaxed(int MD_step){
     ofstream write_resume_file;
-    string resume_file_name="Results/Relaxation/Resume_Membrane_"+to_string(index)+"_";
+    std::string resume_file_name="Results/Relaxation/Resume_Membrane_"+std::to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -316,14 +320,14 @@ void Membrane::Damper_check(int MD_step){
     double averageSinus=0;
     ofstream average_sinus_check;
     ofstream average_damper_check;
-    string average_sinus_check_file_name="Results/Damper/averageSinus";
-    string average_damper_check_file_name="Results/Damper/average";
+    std::string average_sinus_check_file_name="Results/Damper/averageSinus";
+    std::string average_damper_check_file_name="Results/Damper/average";
     average_sinus_check_file_name+=file_time;
     average_damper_check_file_name+=file_time;
     average_sinus_check_file_name+=".txt";
     average_damper_check_file_name+=".txt";
-    average_sinus_check.open(average_sinus_check_file_name.c_str() , ios::app);
-    average_damper_check.open(average_damper_check_file_name.c_str(), ios::app);
+    average_sinus_check.open(average_sinus_check_file_name.c_str() , std::ios::app);
+    average_damper_check.open(average_damper_check_file_name.c_str(), std::ios::app);
    // damper_check << "MD Step: "<<MD_step<<"\n";
    // average_damper_check << "MD Step: "<<MD_step<<"\n";
     for (int i=0; i<Num_of_Node_Pairs; i++) { 

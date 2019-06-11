@@ -26,7 +26,7 @@ void Membrane::Triangle_pair_identifier(void){
     for(int i=0 ;i<Num_of_Triangles;i++)
     {
         int neighbour=-1;
-        int temp_triangle_node_A=Triangle_list[i][0];  // read the tree lable number of nodes  of every triangle
+        int temp_triangle_node_A=Triangle_list[i][0];
         int temp_triangle_node_B=Triangle_list[i][1];
         int temp_triangle_node_C=Triangle_list[i][2];
         int neighbour_indicator=0;
