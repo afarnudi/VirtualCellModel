@@ -225,25 +225,29 @@ int main(int argc, char **argv)
     
     
     
-    int num_of_elements=0;
+    int num_of_atoms=0;
+    int num_of_bonds=0;
+    int num_of_dihedrals=0;
     if (Include_Membrane) {
         for (int i=0; i<Membranes.size(); i++) {
-            num_of_elements+=Membranes[i].return_num_of_nodes();
+            num_of_atoms  += Membranes[i].return_num_of_nodes();
+            num_of_bonds     += Membranes[i].return_num_of_node_pairs();
+            num_of_dihedrals += Membranes[i].return_num_of_triangle();
         }
     }
     if (Include_Chromatin) {
         for (int i=0; i<Chromatins.size(); i++) {
-            num_of_elements+=Chromatins[i].return_num_of_nodes();
+            num_of_atoms+=Chromatins[i].return_num_of_nodes();
         }
     }
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
-            num_of_elements+=Actins[i].return_num_of_nodes();
+            num_of_atoms+=Actins[i].return_num_of_nodes();
         }
     }
     if (Include_ECM) {
         for (int i=0; i<ECMs.size(); i++) {
-            num_of_elements+=ECMs[i].return_num_of_nodes();
+            num_of_atoms+=ECMs[i].return_num_of_nodes();
         }
     }
     
@@ -274,14 +278,43 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         try {
             std::string   platformName;
-            MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[0]);
+            int atom_count=0;
+            int bond_count=0;
+            int dihe_count=0;
+            MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
+            Bonds* all_bonds         = new Bonds[num_of_bonds+1];
+            Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
             
-            Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[0]);
-
-//            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds);
-            Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[0]);
+            all_atoms[num_of_atoms].type         =EndOfList;
+            all_bonds[num_of_bonds].type         =EndOfList;
+            all_dihedrals[num_of_dihedrals].type =EndOfList;
             
-            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds, dihedrals);
+            if (Include_Membrane) {
+                for (int i=0; i<Membranes.size(); i++) {
+                    MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
+                    for (int j=0;j<Membranes[i].return_num_of_nodes(); j++) {
+                        all_atoms[atom_count]=atoms[j];
+                        atom_count++;
+                    }
+                    
+                    
+                    Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
+                    for (int j=0; j<Membranes[i].return_num_of_node_pairs(); j++) {
+                        all_bonds[bond_count]=bonds[j];
+                        bond_count++;
+                    }
+                    
+                    
+                    Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
+                    for (int j=0; j<Membranes[i].return_num_of_triangle(); j++) {
+                        all_dihedrals[dihe_count]=dihedrals[j];
+                        dihe_count++;
+                    }
+                }
+            }
+            
+            
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, StepSizeInFs, platformName, all_bonds, all_dihedrals);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -292,8 +325,8 @@ int main(int argc, char **argv)
             const int NumSilentSteps = (int)(ReportIntervalInFs / StepSizeInFs + 0.5);
             for (int frame=1; ; ++frame) {
                 double time, energy;
-                myGetOpenMMState(omm, WantEnergy, time, energy, atoms);
-                myWritePDBFrame(frame, time, energy, atoms, traj_name);
+                myGetOpenMMState(omm, WantEnergy, time, energy, all_atoms);
+                myWritePDBFrame(frame, time, energy, all_atoms, traj_name);
                 
                 if (time >= SimulationTimeInPs)
                     break;
@@ -490,7 +523,7 @@ int main(int argc, char **argv)
         //saving Results
         if (MD_Step%GenConst::MD_traj_save_step == 0)
         {
-            Trajectory << num_of_elements<<endl;
+            Trajectory << num_of_atoms<<endl;
             Trajectory << " nodes  "<<endl;
             
             

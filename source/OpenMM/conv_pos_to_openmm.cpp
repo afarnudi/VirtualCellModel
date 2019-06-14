@@ -5,7 +5,7 @@
 
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     const int mem_num_atom = mem.return_num_of_nodes();
-    MyAtomInfo* myatominfo = new MyAtomInfo[mem_num_atom+1];
+    MyAtomInfo* myatominfo = new MyAtomInfo[mem_num_atom];
     
     //used in openmm to specify different types of atoms. I don't know what the application is at the moment.
     int C=0;
@@ -24,7 +24,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].mass=mem.return_node_mass();
     }
     //End of list
-    myatominfo[mem_num_atom].type=-1;
+//    myatominfo[mem_num_atom].type=-1;
     
     return myatominfo;
 }

@@ -4,7 +4,7 @@
 
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     const int mem_num_tris = mem.return_num_of_triangle();
-    Dihedrals* diatoms = new Dihedrals[mem_num_tris+1];
+    Dihedrals* diatoms = new Dihedrals[mem_num_tris];
     
     
     for (int i=0; i<mem_num_tris; i++) {
@@ -20,7 +20,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         diatoms[i].bending_stiffness_value = mem.return_spring_stiffness_coefficient() * 0.2 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
     }
     //End of list
-    diatoms[mem_num_tris].type=-1;
+//    diatoms[mem_num_tris].type=-1;
     
     return diatoms;
 }
