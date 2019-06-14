@@ -12,7 +12,9 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     
     for (int i=0; i<mem_num_atom; i++) {
         myatominfo[i].type=C;
-        myatominfo[i].pdb=mem.return_label().c_str();
+        std::string str = mem.return_label();
+        myatominfo[i].pdb = new char[str.length() + 1];
+        strcpy(myatominfo[i].pdb, str.c_str());
         myatominfo[i].initPosInAng[0]=mem.return_node_position(i, 0);
         myatominfo[i].initPosInAng[1]=mem.return_node_position(i, 1);
         myatominfo[i].initPosInAng[2]=mem.return_node_position(i, 2);

@@ -3,7 +3,7 @@
 #include "OpenMM_structs.h"
 
 const int EndOfList=-1;
-
+using OpenMM::Vec3;
 /** -----------------------------------------------------------------------------
  *                      INITIALIZE OpenMM DATA STRUCTURES
  * -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     /**
      * Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
      */
-    OpenMM::CustomBondForce* force2 = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
+//    OpenMM::CustomBondForce* force2 = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
 //        const BondType& bond = bondType[bonds[i].type];
@@ -89,15 +89,23 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                 force->addBond(dihedrals[i].atoms);
                 system.addForce(force);
         
-        }
+    }
+    //Listing the names of all available platforms.
+    cout<<"OpenMM available platforms:\nPlatform name\t Speed\n";
+    for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
+        OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
+        cout<<std::to_string(i)<<"- "<<platform.getName().c_str()<<"\t\t"<<platform.getSpeed()<<endl;
+    }
+    
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(1);
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
     omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
-    omm->context    = new OpenMM::Context(*omm->system, *omm->integrator);
+    omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     omm->context->setPositions(initialPosInNm);
-    
     platformName = omm->context->getPlatform().getName();
+    
     return omm;
 }

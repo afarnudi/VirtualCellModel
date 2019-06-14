@@ -81,76 +81,46 @@ namespace GenConst {
 
 
 //                   MODELING AND SIMULATION PARAMETERS
-const bool   UseConstraints      = false;   // Should we constrain C-H bonds?
 const double StepSizeInFs        = 0.1;       // integration step size (fs)
-const double ReportIntervalInFs  = 0.1;      // how often to generate PDB frame (fs)
+const double ReportIntervalInFs  = 2;      // how often to generate PDB frame (fs)
 const double SimulationTimeInPs  = 5;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
 
-//                            FORCE FIELD DATA
-// For this example we're using a tiny subset of the Amber99 force field.
-// We want to keep the data in the original unit system to avoid conversion
-// bugs; this requires conversion on the way in and out of OpenMM.
-
-// Amber reduces nonbonded forces between 1-4 bonded atoms.
-//const double Coulomb14Scale      = 0.5;
-//const double LennardJones14Scale = 0.5;
 
 
 
-const int H = 0, C = 1;
-
-const int CC = 0, CH = 1;
-
-//                                MOLECULE DATA
-/** Now describe an ethane molecule by listing its atoms, bonds, angles, and
- * torsions. We'll provide a default configuration which centers the
- * at (0,0,0) with the C-C bond along the x axis.
- *
- * Use this as an "end of list" marker so that we do not have to count; let the
- * computer do that!
- */
 const int EndOfList=-1;
-
-//struct MyAtomInfo
-//{
-//    int type;
-//    const char* pdb;
-//    double initPosInAng[3];
-//    double posInAng[3];
-//};
-
-//struct bond_list{
-//    int type;
-//    int atoms[2];
-//};
 
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
 static void
 myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
-                const MyAtomInfo atoms[])
+                const MyAtomInfo atoms[], std::string traj_name)
 {
+    
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
     // Write out in PDB format -- printf is so much more compact than formatted cout.
-    printf("MODEL     %d\n", frameNum);
-    printf("REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-           timeInPs, energyInKcal);
-    for (int n=0; atoms[n].type != EndOfList; ++n)
-        printf("ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
-               n+1, atoms[n].pdb,
-               atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
-    printf("ENDMDL\n");
+//    printf("MODEL     %d\n", frameNum);
+    fprintf(pFile,"MODEL     %d\n", frameNum);
+//    printf("REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
+//           timeInPs, energyInKcal);
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
+                      timeInPs, energyInKcal);
+    
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+//        printf("ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
+//               n+1, atoms[n].pdb,
+//               atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
+        
+        fprintf(pFile,"ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
+                              n+1, atoms[n].pdb,
+                              atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
+    }
+//    printf("ENDMDL\n");
+    fprintf(pFile,"ENDMDL\n");
+    fclose (pFile);
 }
-
-
-
-
-
-static void          myStepWithOpenMM(MyOpenMMData*, int numSteps);
-static void          myGetOpenMMState(MyOpenMMData*, bool wantEnergy,
-                                      double& time, double& energy,
-                                      MyAtomInfo atoms[]);
-static void          myTerminateOpenMM(MyOpenMMData*);
 
 
 
@@ -159,7 +129,7 @@ int main(int argc, char **argv)
 {
     //time
     
-    clock_t tStart = clock();//Time the programme
+    
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     char buffer [80];
@@ -168,6 +138,7 @@ int main(int argc, char **argv)
     string general_file_name="general-config.txt";
     cout<<"Please enter the path (relative to the binary file) + name of the config file:\n";
     cin>>general_file_name;
+    clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
     vector<string> actin_config_list;
@@ -177,8 +148,7 @@ int main(int argc, char **argv)
     
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-    Trajectory.open(traj_file_name.c_str(), ios::app);
-    Trajectory << std:: fixed;
+    
     
     vector<Membrane> Membranes;
     vector<Chromatin> Chromatins;
@@ -195,7 +165,7 @@ int main(int argc, char **argv)
         
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-            string label="Membrane_"+to_string(i);
+            string label="MEM"+to_string(i);
             Membranes[i].set_label(label);
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
@@ -203,6 +173,7 @@ int main(int argc, char **argv)
             Membranes[i].generate_report();
         }
     }
+    
     
     if (GenConst::Num_of_Chromatins!=0) {
         Include_Chromatin = true;
@@ -296,7 +267,7 @@ int main(int argc, char **argv)
     } // End of if (Include_Membrane)
     
     bool openmm_sim=true;
-    
+    //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
@@ -304,72 +275,25 @@ int main(int argc, char **argv)
         try {
             std::string   platformName;
             MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[0]);
-//            const int mem_size = Membranes[0].return_num_of_nodes();
-//            atoms = new MyAtomInfo[mem_size+1];
-//            atoms = new MyAtomInfo[5];
-
-//            atoms[0].type=C;
-//            atoms[0].pdb="C";
-//            atoms[0].initPosInAng[0]=0;
-//            atoms[0].initPosInAng[1]=0;
-//            atoms[0].initPosInAng[2]=0;
-//            atoms[0].posInAng[0]=0;
-//            atoms[0].posInAng[1]=0;
-//            atoms[0].posInAng[2]=0;
-//
-//            atoms[1].type=C;
-//            atoms[1].pdb="C";
-//            atoms[1].initPosInAng[0]=0;
-//            atoms[1].initPosInAng[1]=0;
-//            atoms[1].initPosInAng[2]=1;
-//            atoms[1].posInAng[0]=0;
-//            atoms[1].posInAng[1]=0;
-//            atoms[1].posInAng[2]=0;
-//
-//            atoms[2].type=C;
-//            atoms[2].pdb="H";
-//            atoms[2].initPosInAng[0]=0.5*sqrt(3);
-//            atoms[2].initPosInAng[1]=0;
-//            atoms[2].initPosInAng[2]=0.5;
-//            atoms[2].posInAng[0]=0;
-//            atoms[2].posInAng[1]=0;
-//            atoms[2].posInAng[2]=0;
-//
-//            atoms[3].type=C;
-//            atoms[3].pdb="H";
-//            atoms[3].initPosInAng[0]=-0.5*sqrt(2);
-//            atoms[3].initPosInAng[1]=0.5;
-//            atoms[3].initPosInAng[2]=0.5;
-//            atoms[3].posInAng[0]=0;
-//            atoms[3].posInAng[1]=0;
-//            atoms[3].posInAng[2]=0;
-
-//            atoms[4].type=EndOfList;
-
-            Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[0]);
-//            bonds = new Bonds[6];
-//            bonds[0].type = CC; bonds[0].atoms[0]=0; bonds[0].atoms[1]=1;
-//            bonds[1].type = CC; bonds[1].atoms[0]=0; bonds[1].atoms[1]=2;
-//            bonds[2].type = CC; bonds[2].atoms[0]=0; bonds[2].atoms[1]=3;
-//            bonds[3].type = CC; bonds[3].atoms[0]=1; bonds[3].atoms[1]=2;
-//            bonds[4].type = CC; bonds[4].atoms[0]=1; bonds[4].atoms[1]=3;
-//            bonds[5].type = EndOfList;
             
-            // Set up OpenMM data structures; returns OpenMM Platform name.
+            Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[0]);
+
 //            MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds);
             Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[0]);
+            
             MyOpenMMData* omm = myInitializeOpenMM(atoms, StepSizeInFs, platformName, bonds, dihedrals);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
             //  (3) Write a PDB frame when the time comes.
             printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
+            std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
             const int NumSilentSteps = (int)(ReportIntervalInFs / StepSizeInFs + 0.5);
             for (int frame=1; ; ++frame) {
                 double time, energy;
                 myGetOpenMMState(omm, WantEnergy, time, energy, atoms);
-                myWritePDBFrame(frame, time, energy, atoms);
+                myWritePDBFrame(frame, time, energy, atoms, traj_name);
                 
                 if (time >= SimulationTimeInPs)
                     break;
@@ -379,6 +303,8 @@ int main(int argc, char **argv)
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
+            cout<<"\nDone!"<<endl;
+            printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
             return 0; // Normal return from main.
         }
         
@@ -389,6 +315,9 @@ int main(int argc, char **argv)
         }
     }
     
+    
+    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory << std:: fixed;
     int progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){

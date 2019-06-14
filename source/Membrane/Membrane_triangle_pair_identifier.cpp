@@ -162,4 +162,8 @@ void Membrane::Triangle_pair_identifier(void){
         cout<<"Triangle_pair_list.size()!=Num_of_Triangle_Pairs"<<endl;
     }
     
+//    for (int i=0; i<Num_of_Triangle_Pairs; i++) {
+//        cout<<"0 = "<<Triangle_Pair_Nodes[i][0]<<"\t1 = "<<Triangle_Pair_Nodes[i][1]<<"\t2 = "<<Triangle_Pair_Nodes[i][2]<<"\t3 = "<<Triangle_Pair_Nodes[i][3]<<std::endl;
+//    }
+    
 }

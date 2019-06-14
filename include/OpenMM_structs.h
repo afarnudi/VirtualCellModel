@@ -15,7 +15,7 @@
 struct MyAtomInfo
 {
     int type;
-    const char* pdb;
+    char* pdb;
     double initPosInAng[3];
     double posInAng[3];
     double mass;
@@ -57,65 +57,6 @@ struct MyOpenMMData {
 };
 
 
-/** This function and an opaque structure are used to interface our main
- * programme with OpenMM without the main programme having any direct interaction
- * with the OpenMM API.
- * This function initilises the openmm system + contex + forces.
- */
-MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
-                                        double          stepSizeInFs,
-                                        std::string&    platformName,
-                                        Bonds*          bonds,
-                                        Dihedrals*      dihedrals);
 
-
-using OpenMM::Vec3;
-// -----------------------------------------------------------------------------
-//                     COPY STATE BACK TO CPU FROM OPENMM
-// -----------------------------------------------------------------------------
-static void
-myGetOpenMMState(MyOpenMMData* omm, bool wantEnergy,
-                 double& timeInPs, double& energyInKcal,
-                 MyAtomInfo atoms[])
-{
-    int infoMask = 0;
-    infoMask = OpenMM::State::Positions;
-    if (wantEnergy) {
-        infoMask += OpenMM::State::Velocities; // for kinetic energy (cheap)
-        infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
-    }
-    // Forces are also available (and cheap).
-    
-    const OpenMM::State state = omm->context->getState(infoMask);
-    timeInPs = state.getTime(); // OpenMM time is in ps already
-    
-    // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
-    const std::vector<Vec3>& positionsInNm = state.getPositions();
-    for (int i=0; i < (int)positionsInNm.size(); ++i)
-        for (int j=0; j < 3; ++j)
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
-    
-    // If energy has been requested, obtain it and convert from kJ to kcal.
-    energyInKcal = 0;
-    if (wantEnergy)
-        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
-        * OpenMM::KcalPerKJ;
-}
-
-// -----------------------------------------------------------------------------
-//                     TAKE MULTIPLE STEPS USING OpenMM
-// -----------------------------------------------------------------------------
-static void
-myStepWithOpenMM(MyOpenMMData* omm, int numSteps) {
-    omm->integrator->step(numSteps);
-}
-
-// -----------------------------------------------------------------------------
-//                     DEALLOCATE OpenMM OBJECTS
-// -----------------------------------------------------------------------------
-static void
-myTerminateOpenMM(MyOpenMMData* omm) {
-    delete omm;
-}
 
 #endif /* OpenMM_structs_h */

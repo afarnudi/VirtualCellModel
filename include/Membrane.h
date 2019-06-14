@@ -167,6 +167,7 @@ public:
     
     vector<vector<double> >Node_Position;
     vector<vector<int> > Triangle_list;
+    //List that stores the IDs of triangles that are neighbours.
     vector<vector<int> > Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> > Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
@@ -284,8 +285,12 @@ public:
         return Spring_coefficient;
     }
     /**Return the node IDs of the dihedral angles.*/
-    vector<int> return_traingle_pair_nodes(int triangle_pair){
-        return Triangle_pair_list[triangle_pair];
+    vector<int> return_traingle_pair_nodes_list(int triangle_pair){
+        return Triangle_Pair_Nodes[triangle_pair];
+    }
+    /**Return the node ID of the dihedral angles member.*/
+    int return_traingle_pair_node(int triangle_pair, int index){
+        return Triangle_Pair_Nodes[triangle_pair][index];
     }
     int  return_Relaxation_Process_Model(void){
         return Relaxation_Process_Model;
