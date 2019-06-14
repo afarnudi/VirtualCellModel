@@ -91,13 +91,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         
     }
     //Listing the names of all available platforms.
-    cout<<"OpenMM available platforms:\nPlatform name\t Speed\n";
+    cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
         OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
         cout<<std::to_string(i)<<"- "<<platform.getName().c_str()<<"\t\t"<<platform.getSpeed()<<endl;
     }
-    
-    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(1);
+    int platform_id=0;
+    cout<<"Please choose a pltform (index): \n";
+    std::cin>>platform_id;
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
