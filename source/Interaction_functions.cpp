@@ -10,19 +10,19 @@
 
 void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem){
     
-    int mem_nodes=mem.return_num_of_nodes();
+    int mem_nodes=mem.get_num_of_nodes();
     double force=0, temp_potential_energy=0;
     double delta_x=0, delta_y=0, delta_z=0, Node_distance=0;
     double sigma = 0.8;
-    double epsilon = 4 * GenConst::K * GenConst::MD_T * mem.return_ECM_interaction_strength();
+    double epsilon = 4 * GenConst::K * GenConst::MD_T * mem.get_ECM_interaction_strength();
     
     for (int i=0; i<mem_nodes; i++) {
         if (mem.ECM_Node_neighbour_list[i].size() != 0) {
             int ecm_Node = mem.ECM_Node_neighbour_list[i][0];
             
-            delta_x = mem.return_node_position(i, 0) - ecm.return_node_position(ecm_Node, 0);
-            delta_y = mem.return_node_position(i, 1) - ecm.return_node_position(ecm_Node, 1);
-            delta_z = mem.return_node_position(i, 2) - ecm.return_node_position(ecm_Node, 2);
+            delta_x = mem.get_node_position(i, 0) - ecm.return_node_position(ecm_Node, 0);
+            delta_y = mem.get_node_position(i, 1) - ecm.return_node_position(ecm_Node, 1);
+            delta_z = mem.get_node_position(i, 2) - ecm.return_node_position(ecm_Node, 2);
             
             double a[3]={delta_x, delta_y, delta_z};
             Node_distance = vector_length(a);

@@ -9,7 +9,7 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
 
-void Membrane::log_barrier (void){
+void Membrane::FENE_log (void){
     double le0, le1, lmax, lmin;
     double deltax, deltay, deltaz, Node_distance, temp_force;
     double temp_potential_energy = 0.0;
@@ -18,14 +18,14 @@ void Membrane::log_barrier (void){
     
     // Hoda: I set this condition to solve the problem of those kind of meshes with almost the same length for all the bonds. but we have to check this for different membranes to be sure.
     if (Max_node_pair_length-Min_node_pair_length< 0.2*Average_node_pair_length){
-       lmax=Average_node_pair_length+0.5*Average_node_pair_length;
-       lmin=Average_node_pair_length-0.5*Average_node_pair_length;
+        lmax=Average_node_pair_length+0.5*Average_node_pair_length;
+        lmin=Average_node_pair_length-0.5*Average_node_pair_length;
     }
     else{
-    //lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
-    //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
-    lmax=Max_node_pair_length*1.05;
-    lmin=Min_node_pair_length*1.05;
+        //lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
+        //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
+        lmax=Max_node_pair_length*1.05;
+        lmin=Min_node_pair_length*1.05;
     }
     
     le0=lmin+3*(lmax-lmin)/4;
@@ -37,7 +37,7 @@ void Membrane::log_barrier (void){
     {
         Node_B=Node_Bond_list[k][0];
         Node_A=Node_Bond_list[k][1];
-//        DamperCheck[k]= 0.0;
+        //        DamperCheck[k]= 0.0;
         deltax=Node_Position[Node_A][0]-Node_Position[Node_B][0];
         deltay=Node_Position[Node_A][1]-Node_Position[Node_B][1];
         deltaz=Node_Position[Node_A][2]-Node_Position[Node_B][2];
@@ -95,7 +95,7 @@ void Membrane::log_barrier (void){
             double delta_r_2=vector_length_squared(delta_r);
             temp_damp=temp_damp/delta_r_2;
             // the following lines are written in order to find the damper bug.
-           // double temp_damp_check[3];
+            // double temp_damp_check[3];
             //double temp_damp_force[3]={Damping_coefficient*temp_damp*deltax, Damping_coefficient*temp_damp*deltay, Damping_coefficient*temp_damp*deltaz};
             //crossvector(temp_damp_check, temp_damp_force, delta_r);
             //SinusCheck[k]= vector_length(temp_damp_check)/(vector_length(temp_damp_force)*vector_length(delta_r));
@@ -175,12 +175,12 @@ void Membrane::Hookian (void){
     }
     
 }
-void Membrane::FENE(void){
+void Membrane::custom(void){
     
     double equi_point, delta_r_max, epsilon;
     double deltax,deltay,deltaz,Node_distance,temp_force;
     double temp_potential_energy = 0.0;
-   
+    
     
     /// calculate network force:
     int Node_A, Node_B;
@@ -310,30 +310,30 @@ void Membrane::Relaxation_potential (void){
         
         Total_Potential_Energy += temp_potential_energy;
         /*
-        //damper>>>>> we have a Bug here! when we turn on the Damper, the memberane will rotate after some MD steps. so it is better not to use any Damper Coeficient other than zero.
-        if (Damping_coefficient>0.00001) {
-            double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
-                Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
-                Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
-            double delta_r[3]={deltax, deltay, deltaz};
-            double temp_damp=innerproduct(delta_r, delta_v);
-            double delta_r_2=vector_length_squared(delta_r);
-            temp_damp=temp_damp/delta_r_2;
-            double temp_damp_check[3];
-            double temp_damp_force[3]={Damping_coefficient*temp_damp*deltax, Damping_coefficient*temp_damp*deltay, Damping_coefficient*temp_damp*deltaz};
-            crossvector(temp_damp_check, temp_damp_force, delta_r);
-            //DamperCheck[k]= vector_length(temp_damp_check);
-
-            
-            Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
-            Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
-            Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
-            
-            Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
-            Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
-            Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
-        }
-        */
+         //damper>>>>> we have a Bug here! when we turn on the Damper, the memberane will rotate after some MD steps. so it is better not to use any Damper Coeficient other than zero.
+         if (Damping_coefficient>0.00001) {
+         double delta_v[3] = {Node_Velocity[Node_A][0]-Node_Velocity[Node_B][0],
+         Node_Velocity[Node_A][1]-Node_Velocity[Node_B][1],
+         Node_Velocity[Node_A][2]-Node_Velocity[Node_B][2]};
+         double delta_r[3]={deltax, deltay, deltaz};
+         double temp_damp=innerproduct(delta_r, delta_v);
+         double delta_r_2=vector_length_squared(delta_r);
+         temp_damp=temp_damp/delta_r_2;
+         double temp_damp_check[3];
+         double temp_damp_force[3]={Damping_coefficient*temp_damp*deltax, Damping_coefficient*temp_damp*deltay, Damping_coefficient*temp_damp*deltaz};
+         crossvector(temp_damp_check, temp_damp_force, delta_r);
+         //DamperCheck[k]= vector_length(temp_damp_check);
+         
+         
+         Node_Force[Node_A][0] +=  - Damping_coefficient*temp_damp*deltax;
+         Node_Force[Node_A][1] +=  - Damping_coefficient*temp_damp*deltay;
+         Node_Force[Node_A][2] +=  - Damping_coefficient*temp_damp*deltaz;
+         
+         Node_Force[Node_B][0] += Damping_coefficient*temp_damp*deltax;
+         Node_Force[Node_B][1] += Damping_coefficient*temp_damp*deltay;
+         Node_Force[Node_B][2] += Damping_coefficient*temp_damp*deltaz;
+         }
+         */
         temp_force=temp_force/Node_distance;
         // implimentation of forces:
         Node_Force[Node_A][0] +=  temp_force*deltax;
@@ -344,6 +344,6 @@ void Membrane::Relaxation_potential (void){
         Node_Force[Node_B][1] += -temp_force*deltay;
         Node_Force[Node_B][2] += -temp_force*deltaz;
     }
-//    cout<<"here"<<endl;
+    //    cout<<"here"<<endl;
 }
 

@@ -249,8 +249,8 @@ void Membrane::generate_report()
     Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
     Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;
     Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
-    Report<<"# of Nodes "<< setw(20)<<return_num_of_nodes()<<endl;
-    Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
+    Report<<"# of Nodes "<< setw(20)<<get_num_of_nodes()<<endl;
+    Report<<"# of Triangles "<< setw(20)<<get_num_of_triangle()<<endl;
     
     
     

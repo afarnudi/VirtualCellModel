@@ -38,8 +38,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     // to each force object so we can fill in the forces. Note: the System owns
     // the force objects and will take care of deleting them; don't do it yourself!
     OpenMM::System&                 system      = *(omm->system = new OpenMM::System());
-    OpenMM::HarmonicBondForce&      bondStretch = *new OpenMM::HarmonicBondForce();
-    system.addForce(&bondStretch);
+//    OpenMM::HarmonicBondForce&      bondStretch = *new OpenMM::HarmonicBondForce();
+//    OpenMM::CustomBondForce&        custombond  = *new OpenMM::CustomBondForce();
+    
     
     // Specify the atoms and their properties:
     //  (1) System needs to know the masses.
@@ -58,25 +59,48 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     
     
     
-    /**
-     * Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-     */
-//    OpenMM::CustomBondForce* force2 = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
+    
+//    OpenMM::CustomBondForce* FENE = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
 //        const BondType& bond = bondType[bonds[i].type];
+        switch (bonds[i].type) {
+            case 1://FENE
+            {
+                //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
+                OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("step(r-lmin)*step(le1-r)*(k_bond*exp(1/(r-le1))/(r-lmin))+step(r-lle0)*step(lmax-r)*(k_bond*exp(1/(le0-r))/(lmax-r))");
+                custombond->addGlobalParameter("lmin",   bonds[i].FENE_lmin);
+                custombond->addGlobalParameter("lmax",   bonds[i].FENE_lmax);
+                custombond->addGlobalParameter("le0",    bonds[i].FENE_le0);
+                custombond->addGlobalParameter("le1",    bonds[i].FENE_le1);
+                custombond->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom2
+                                                         * OpenMM::KJPerKcal
+                                                         * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                
+                custombond->addBond(atom[0], atom[1]);
+                system.addForce(custombond);
+            }
+                break;
+            case 2://Harmonic
+            {
+                OpenMM::HarmonicBondForce*      bondStretch = new OpenMM::HarmonicBondForce();
+                // Note factor of 2 for stiffness below because Amber specifies the constant
+                // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
+                // it as used in the force term kx, with energy kx^2/2.
+                bondStretch->addBond(atom[0], atom[1],
+                                    bonds[i].nominalLengthInAngstroms
+                                    * OpenMM::NmPerAngstrom,
+                                    bonds[i].stiffnessInKcalPerAngstrom2
+                                    * OpenMM::KJPerKcal
+                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                system.addForce(bondStretch);
+            }
+                break;
+        }
         
         
-        // Note factor of 2 for stiffness below because Amber specifies the constant
-        // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
-        // it as used in the force term kx, with energy kx^2/2.
-        bondStretch.addBond(atom[0], atom[1],
-                            bonds[i].nominalLengthInAngstroms
-                            * OpenMM::NmPerAngstrom,
-                            bonds[i].stiffnessInKcalPerAngstrom2
-                            * 10 * OpenMM::KJPerKcal
-                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     }
+    
     
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
@@ -84,7 +108,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                  * Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
                  */
                 OpenMM::CustomCompoundBondForce* force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
-                force->addGlobalParameter("K_bend",dihedrals[i].bending_stiffness_value);
+        force->addGlobalParameter("K_bend", dihedrals[i].bending_stiffness_value
+                                            * OpenMM::KJPerKcal
+                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
         
                 force->addBond(dihedrals[i].atoms);
                 system.addForce(force);

@@ -138,9 +138,9 @@ private:
     void node_distance_correction(void);
     //    void Normal_direction_Identifier(double x, double y, double z);
     
-    void log_barrier (void);
+    void FENE_log (void);
     void Hookian (void);
-    void FENE (void);
+    void custom (void);
     void Relaxation_potential(void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
@@ -261,41 +261,57 @@ public:
     /** \brief public access to total number of membrane nodes.
      * \return integer number of nodes in the membrane
      */
-    int return_num_of_nodes(void){
+    int get_num_of_nodes(void){
         return Num_of_Nodes;
     }
     /**Return the number of bonds between membrane nodes.*/
-    int return_num_of_node_pairs(void){
+    int get_num_of_node_pairs(void){
         return Num_of_Node_Pairs;
     }
     /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
-    int return_node_pair(int bond_num, int node_id){
+    int get_node_pair(int bond_num, int node_id){
         return Node_Bond_list[bond_num][node_id];
     }
     /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
-    double return_node_mass(void){
+    double get_node_mass(void){
         return Node_Mass;
     }
     /**Return the average distance of the nodes as calculated from the mesh. */
-    double return_avg_node_dist(void){
+    double get_avg_node_dist(void){
         return Average_node_pair_length;
     }
     /**Return spring stiffness coefficient. */
-    double return_spring_stiffness_coefficient(void){
+    double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    /**Return bending stiffness coefficient. */
+    double get_bending_stiffness_coefficient(void){
+        return Bending_coefficient;
+    }
     /**Return the node IDs of the dihedral angles.*/
-    vector<int> return_traingle_pair_nodes_list(int triangle_pair){
+    vector<int> get_traingle_pair_nodes_list(int triangle_pair){
         return Triangle_Pair_Nodes[triangle_pair];
     }
     /**Return the node ID of the dihedral angles member.*/
-    int return_traingle_pair_node(int triangle_pair, int index){
+    int get_traingle_pair_node(int triangle_pair, int index){
         return Triangle_Pair_Nodes[triangle_pair][index];
     }
-    int  return_Relaxation_Process_Model(void){
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_spring_model(void){
+        return spring_model;
+    }
+    /**Set FENE calculated parameters.*/
+    void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
+        lmax=Max_node_pair_length*1.05;
+        lmin=Min_node_pair_length*1.05;
+        le0=lmin+3*(lmax-lmin)/4;
+        le1=lmin+(lmax-lmin)/4;
+    }
+    
+    int  get_Relaxation_Process_Model(void){
         return Relaxation_Process_Model;
     }
-    bool  return_Relaxation_flag(void){
+    bool  get_Relaxation_flag(void){
         return Relaxation;
     }
     void shift_position (double x, double y, double z){
@@ -312,11 +328,11 @@ public:
             Node_Velocity[i][2]+=vz;
         }
     }
-    int return_num_of_triangle(){
+    int get_num_of_triangle(){
         return Num_of_Triangles;
     }
     
-    double return_node_position(int node_number, int node_coordinate){
+    double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
     
@@ -337,13 +353,13 @@ public:
     void set_index(int ind){
         index=ind;
     }
-    double return_node_radius(void){
+    double get_node_radius(void){
         return Node_radius;
     }
-    double return_ECM_interaction_cut_off(void){
+    double get_ECM_interaction_cut_off(void){
         return ECM_interaction_cut_off;
     }
-    double return_ECM_interaction_strength(void){
+    double get_ECM_interaction_strength(void){
         return ECM_interaction_strength;
     }
     
@@ -376,13 +392,13 @@ public:
         COM_position[2]/=Num_of_Nodes;
         COM_position[1]/=Num_of_Nodes;
     }
-    double return_min_radius_after_relaxation(void){
+    double get_min_radius_after_relaxation(void){
         return min_radius_after_relaxation;
     }
-    bool return_relax_with_actin_flag(void){
+    bool get_relax_with_actin_flag(void){
         return Relax_with_actin;
     }
-    int return_correction_progress(void){
+    int get_correction_progress(void){
         return correction_progress;}
     bool bending_coefficient_status(void){
         if (Bending_coefficient !=0) {
@@ -391,14 +407,7 @@ public:
             return false;
         }
     }
-//    /**return OpenMM handle*/
-//    MyOpenMMData* return_OpenMM_setup(void){
-//        return omm;
-//    }
-//    /**return OpenMM platform name*/
-//    std::string return_OpenMM_platform(void){
-//        return platformName;
-//    }
+
     
 };
 

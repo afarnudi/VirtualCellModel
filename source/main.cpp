@@ -183,7 +183,7 @@ int main(int argc, char **argv)
             Chromatins[i].set_index(i);
             if (GenConst::Num_of_Membranes == GenConst::Num_of_Chromatins) {
                 ///put a flag for chromatin inside membrane
-                Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].return_min_radius_after_relaxation());
+                Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
             } else {
                 Chromatins[i].import_config(chromatin_config_list[i]);
             }
@@ -230,9 +230,9 @@ int main(int argc, char **argv)
     int num_of_dihedrals=0;
     if (Include_Membrane) {
         for (int i=0; i<Membranes.size(); i++) {
-            num_of_atoms  += Membranes[i].return_num_of_nodes();
-            num_of_bonds     += Membranes[i].return_num_of_node_pairs();
-            num_of_dihedrals += Membranes[i].return_num_of_triangle();
+            num_of_atoms  += Membranes[i].get_num_of_nodes();
+            num_of_bonds     += Membranes[i].get_num_of_node_pairs();
+            num_of_dihedrals += Membranes[i].get_num_of_triangle();
         }
     }
     if (Include_Chromatin) {
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
                 for (int j=0; j<Membranes.size(); j++) {
                     Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , j);
-                    if (Membranes[j].return_relax_with_actin_flag()) {
+                    if (Membranes[j].get_relax_with_actin_flag()) {
                         Membranes[j].Relax_1();
                     }
                 }
@@ -274,45 +274,44 @@ int main(int argc, char **argv)
     //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
+        std::string   platformName;
+        int atom_count=0;
+        int bond_count=0;
+        int dihe_count=0;
+        MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
+        Bonds* all_bonds         = new Bonds[num_of_bonds+1];
+        Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+        
+        all_atoms[num_of_atoms].type         =EndOfList;
+        all_bonds[num_of_bonds].type         =EndOfList;
+        all_dihedrals[num_of_dihedrals].type =EndOfList;
+        
+        if (Include_Membrane) {
+            for (int i=0; i<Membranes.size(); i++) {
+                MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
+                for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
+                    all_atoms[atom_count]=atoms[j];
+                    atom_count++;
+                }
+                
+                
+                Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
+                for (int j=0; j<Membranes[i].get_num_of_node_pairs(); j++) {
+                    all_bonds[bond_count]=bonds[j];
+                    bond_count++;
+                }
+                
+                
+                Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
+                for (int j=0; j<Membranes[i].get_num_of_triangle(); j++) {
+                    all_dihedrals[dihe_count]=dihedrals[j];
+                    dihe_count++;
+                }
+            }
+        }
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         try {
-            std::string   platformName;
-            int atom_count=0;
-            int bond_count=0;
-            int dihe_count=0;
-            MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
-            Bonds* all_bonds         = new Bonds[num_of_bonds+1];
-            Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
-            
-            all_atoms[num_of_atoms].type         =EndOfList;
-            all_bonds[num_of_bonds].type         =EndOfList;
-            all_dihedrals[num_of_dihedrals].type =EndOfList;
-            
-            if (Include_Membrane) {
-                for (int i=0; i<Membranes.size(); i++) {
-                    MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
-                    for (int j=0;j<Membranes[i].return_num_of_nodes(); j++) {
-                        all_atoms[atom_count]=atoms[j];
-                        atom_count++;
-                    }
-                    
-                    
-                    Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
-                    for (int j=0; j<Membranes[i].return_num_of_node_pairs(); j++) {
-                        all_bonds[bond_count]=bonds[j];
-                        bond_count++;
-                    }
-                    
-                    
-                    Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
-                    for (int j=0; j<Membranes[i].return_num_of_triangle(); j++) {
-                        all_dihedrals[dihe_count]=dihedrals[j];
-                        dihe_count++;
-                    }
-                }
-            }
-            
             
             MyOpenMMData* omm = myInitializeOpenMM(all_atoms, StepSizeInFs, platformName, all_bonds, all_dihedrals);
             // Run the simulation:

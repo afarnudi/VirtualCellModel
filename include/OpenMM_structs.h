@@ -25,6 +25,7 @@ struct Bonds{
     int type;
     int atoms[2];
     double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2;
+    double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     bool   canConstrain;
 };
 

@@ -16,12 +16,12 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int j){
     vector<vector<int> > Act_Mem_shared_Node_list;
     push.resize(2);
     
-    for (int mem_node_counter=0; mem_node_counter<mem.return_num_of_nodes(); mem_node_counter++) {
+    for (int mem_node_counter=0; mem_node_counter<mem.get_num_of_nodes(); mem_node_counter++) {
         for (int act_node_counter=0; act_node_counter<act.return_num_of_nodes(); act_node_counter++) {
             
-            mem_x = mem.return_node_position(mem_node_counter, 0);
-            mem_y = mem.return_node_position(mem_node_counter, 1);
-            mem_z = mem.return_node_position(mem_node_counter, 2);
+            mem_x = mem.get_node_position(mem_node_counter, 0);
+            mem_y = mem.get_node_position(mem_node_counter, 1);
+            mem_z = mem.get_node_position(mem_node_counter, 2);
             
             act_x = act.return_node_position(act_node_counter, 0);
             act_y = act.return_node_position(act_node_counter, 1);
@@ -45,7 +45,7 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int j){
     act.Num_of_Actin_Membrane_shared_Nodes.push_back(int(Act_Mem_shared_Node_list.size()));
     
     cout<<"\n# of shared nodes = "<<act.Num_of_Actin_Membrane_shared_Nodes[j]<<endl;
-    if (act.Num_of_Actin_Membrane_shared_Nodes[j] != mem.return_num_of_nodes()) {
+    if (act.Num_of_Actin_Membrane_shared_Nodes[j] != mem.get_num_of_nodes()) {
         cout<<"Not all of the Membrane node positions are compatibale with the actin nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
     }
 }
