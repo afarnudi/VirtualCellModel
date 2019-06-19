@@ -57,18 +57,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         initialPosInNm.push_back(posInNm);
     }
     
-    
-    
-    
-//    OpenMM::CustomBondForce* FENE = new OpenMM::CustomBondForce("0.5*k*(r-r0)^2");
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
-//        const BondType& bond = bondType[bonds[i].type];
         switch (bonds[i].type) {
             case 1://FENE
             {
                 //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-                OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("step(r-lmin)*step(le1-r)*(k_bond*exp(1/(r-le1))/(r-lmin))+step(r-lle0)*step(lmax-r)*(k_bond*exp(1/(le0-r))/(lmax-r))");
+                OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("step(r-lmin)*step(le1-r)*(k_bond*exp(1/(r-le1))/(r-lmin))+step(r-le0)*step(lmax-r)*(k_bond*exp(1/(le0-r))/(lmax-r))");
                 custombond->addGlobalParameter("lmin",   bonds[i].FENE_lmin);
                 custombond->addGlobalParameter("lmax",   bonds[i].FENE_lmax);
                 custombond->addGlobalParameter("le0",    bonds[i].FENE_le0);
@@ -101,6 +96,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         
     }
     
+    
+//    cout<<"stiffnessInKcalPerAngstrom2 = "<<bonds[0].stiffnessInKcalPerAngstrom2
+//                                            * OpenMM::KJPerKcal
+//                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
+//    <<"\nbending_stiffness_value = "<<dihedrals[0].bending_stiffness_value
+//                                      * OpenMM::KJPerKcal
+//                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {

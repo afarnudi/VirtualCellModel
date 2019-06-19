@@ -204,6 +204,19 @@ void Membrane::generate_report()
     
     ofstream Report;
     Report.open(Report_file_name.c_str());
+    
+    if (!Report.is_open()){
+        Report.close();
+        cout<<"Generating report in an alternative directory."<<endl;
+        Report_file_name= "bin/Results/Reports/Report_Membrane_"+std::to_string(index)+"_";
+        Report_file_name+=file_time;
+        Report_file_name+=".txt";
+        Report.open(Report_file_name.c_str());
+    }
+    
+    if (!Report.is_open()){
+        cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
+    }
     Report<< std:: fixed;
     Report<<"General MD Params:\n---------------\n";
     Report<<"MD_num_of_steps"<<setw(20)<<GenConst::MD_num_of_steps<<endl;
@@ -220,16 +233,16 @@ void Membrane::generate_report()
     Report<<"trajectory_file_name"<<setw(20)<<GenConst::trajectory_file_name<<endl;
     
     
-    Report<<"Membrane Params:\n---------------\n";
+    Report<<"\nMembrane Params:\n---------------\n";
     Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
     Report<<"Radius"<< setw(20)<<Radius<<endl;
-    Report<<"spring_model"<< setw(20)<<spring_model<<endl;
+    Report<<"spring_model"<< setw(20)<<spring_model;
     if (spring_model==1){
-        Report<<"Membrane Spring Model:"<< setw(20)<<"logarithmic barrier"<<endl;
+        Report<<"\tFENE logarithmic barrier"<<endl;
     } else if (spring_model==2) {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"Hookian"<<endl;
+        Report<<"\tHookian"<<endl;
     } else if (spring_model==3) {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
+        Report<<"\tcustom"<<endl;
     }
     Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
     Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
@@ -252,7 +265,7 @@ void Membrane::generate_report()
     Report<<"# of Nodes "<< setw(20)<<get_num_of_nodes()<<endl;
     Report<<"# of Triangles "<< setw(20)<<get_num_of_triangle()<<endl;
     
-    
+    Report.close();
     
     
     

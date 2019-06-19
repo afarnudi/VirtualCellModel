@@ -2,7 +2,7 @@ var searchData=
 [
   ['calculate_5faverage_5fforce',['calculate_average_force',['../class_chromatin.html#aa3e429b42938181fcd2fa156468c4b29',1,'Chromatin::calculate_average_force()'],['../class_membrane.html#a696ec76d17d33335f2c41aa498485e56',1,'Membrane::calculate_average_force()']]],
   ['calculate_5fmesh_5fproperties',['calculate_mesh_properties',['../class_chromatin.html#a0ac4d15d50a0f501afd70d52fdcb6208',1,'Chromatin::calculate_mesh_properties()'],['../class_membrane.html#adb71eee849f346efcd7303241a3469c2',1,'Membrane::calculate_mesh_properties()']]],
-  ['charge',['charge',['../struct_membrane_1_1my__atom__info.html#a92974796b16ebc49874727763adf38f2',1,'Membrane::my_atom_info']]],
+  ['canconstrain',['canConstrain',['../struct_bonds.html#a2bb39aa55db302247ccb0e058c03bf63',1,'Bonds']]],
   ['check',['check',['../class_chromatin.html#a0a7d1a8c7c64226db6b0e66db259d321',1,'Chromatin::check()'],['../class_membrane.html#ae67772a7835b7d550d8e832ae99842fa',1,'Membrane::check()']]],
   ['checkingforce',['checkingForce',['../write__functions_8hpp.html#a0a359c7f9b1ca0cff3d1040962e5d5cf',1,'write_functions.hpp']]],
   ['chrom_5findex',['chrom_index',['../class_chromatin.html#a045cfe6d6ba9181953acfe45294501af',1,'Chromatin']]],
@@ -18,8 +18,13 @@ var searchData=
   ['commenting_5fstyle_2emd',['Commenting_Style.md',['../_commenting___style_8md.html',1,'']]],
   ['constantsurfaceforcelocaltriangles',['ConstantSurfaceForceLocalTriangles',['../class_membrane.html#afeb736c81896f74f23e44ceaaa0d1e04',1,'Membrane']]],
   ['contact_5fmatrix',['Contact_Matrix',['../class_chromatin.html#a163b690f6c7f65a466816e5356cd9038',1,'Chromatin']]],
+  ['context',['context',['../struct_my_open_m_m_data.html#a2d94acedaa245a3fb2faa48625fa7fc1',1,'MyOpenMMData']]],
+  ['convert_5fmembrane_5fbond_5finfo_5fto_5fopenmm',['convert_membrane_bond_info_to_openmm',['../_open_m_m__funcs_8hpp.html#ab101b4adf13e5683d017921c5cd33df1',1,'OpenMM_funcs.hpp']]],
+  ['convert_5fmembrane_5fdihedral_5finfo_5fto_5fopenmm',['convert_membrane_dihedral_info_to_openmm',['../_open_m_m__funcs_8hpp.html#a1378c48fecda778c5463e6bf47dd538e',1,'OpenMM_funcs.hpp']]],
+  ['convert_5fmembrane_5fposition_5fto_5fopenmm',['convert_membrane_position_to_openmm',['../_open_m_m__funcs_8hpp.html#ab1b1fbd3be14bd9b68de8be8e71532ec',1,'OpenMM_funcs.hpp']]],
   ['correction_5fprogress',['correction_progress',['../class_membrane.html#a45dae49b1ff14a1cfaaede273abf3f3b',1,'Membrane']]],
   ['crossvector',['crossvector',['../_general__functions_8hpp.html#a2a90dbc716857a9916f0dca44c2108e8',1,'General_functions.hpp']]],
+  ['custom',['custom',['../class_membrane.html#a0e3f1109b8c3a513ebb6c824345eede7',1,'Membrane']]],
   ['c_20coding_20style',['C Coding Style',['../md__doxygen__coding__style.html',1,'']]],
   ['commenting_20style',['Commenting Style',['../md__doxygen__commenting__style.html',1,'']]]
 ];

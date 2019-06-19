@@ -28,6 +28,7 @@ var NAVTREE =
     [ "C Coding Style", "md__doxygen__coding__style.html", null ],
     [ "Commenting Style", "md__doxygen__commenting__style.html", null ],
     [ "Setting up your IDE", "md__doxygen__i_d_e__setup.html", null ],
+    [ "Installation", "_installation.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -57,7 +58,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_actin_8h.html",
-"class_membrane.html#a2877e319db184da4fb5294d372400fa0"
+"class_membrane.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

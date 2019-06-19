@@ -288,6 +288,10 @@ public:
     double get_bending_stiffness_coefficient(void){
         return Bending_coefficient;
     }
+    /**Returns the calculated number of triangles in the imported mesh file.*/
+    int get_num_of_triangle_pairs(){
+        return int(Triangle_Pair_Nodes.size());
+    }
     /**Return the node IDs of the dihedral angles.*/
     vector<int> get_traingle_pair_nodes_list(int triangle_pair){
         return Triangle_Pair_Nodes[triangle_pair];
@@ -300,6 +304,9 @@ public:
     int get_spring_model(void){
         return spring_model;
     }
+    
+    
+    
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
         lmax=Max_node_pair_length*1.05;
@@ -314,6 +321,7 @@ public:
     bool  get_Relaxation_flag(void){
         return Relaxation;
     }
+    /** This function shifts the whole membrane.*/
     void shift_position (double x, double y, double z){
         for (int i=0; i<Num_of_Nodes; i++) {
             Node_Position[i][0]+=x;
@@ -328,10 +336,10 @@ public:
             Node_Velocity[i][2]+=vz;
         }
     }
+    /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_triangle(){
         return Num_of_Triangles;
     }
-    
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
