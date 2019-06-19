@@ -8,15 +8,15 @@
 
 #include "interaction.hpp"
 
-void Actin_Membrane_shared_Node_Force_calculator(Actin &act, Membrane &mem){
+void Actin_Membrane_shared_Node_Force_calculator(Actin &act, Membrane &mem, int j){
     
     double delta_x, delta_y, delta_z, Node_distance=0, force=0;
     int mem_node, act_node;
     
-    for (int i=0 ; i< act.return_num_of_actin_membrane_shared_nodes() ; i++){
+    for (int i=0 ; i< act.return_num_of_actin_membrane_shared_nodes(j) ; i++){
         
-        act_node=act.Actin_Membrane_shared_Node_list[i][0];
-        mem_node=act.Actin_Membrane_shared_Node_list[i][1];
+        act_node=act.Actin_Membrane_shared_Node_list[j][i][0];
+        mem_node=act.Actin_Membrane_shared_Node_list[j][i][1];
         
         delta_x = mem.return_node_position(mem_node, 0) - act.return_node_position(act_node, 0);
         delta_y = mem.return_node_position(mem_node, 1) - act.return_node_position(act_node, 1);

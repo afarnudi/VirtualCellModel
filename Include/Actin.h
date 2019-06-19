@@ -66,8 +66,8 @@ private:
 
 public:
     //Shared List
-    vector<vector<int> > Actin_Membrane_shared_Node_list;
-    int Num_of_Actin_Membrane_shared_Nodes=0;
+    vector<vector<vector<int> > > Actin_Membrane_shared_Node_list;
+    vector<int> Num_of_Actin_Membrane_shared_Nodes;
     
     //Member headers
     void import_config(string config_file_name);
@@ -108,8 +108,8 @@ public:
             Node_Velocity[i][2]+=vz;
         }
     }
-    int return_num_of_actin_membrane_shared_nodes(void){
-        return Num_of_Actin_Membrane_shared_Nodes;
+    int return_num_of_actin_membrane_shared_nodes(int j){
+        return Num_of_Actin_Membrane_shared_Nodes[j];
     }
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;

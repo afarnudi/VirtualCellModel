@@ -14,6 +14,7 @@
 #include "ECM.h"
 #include "Chromatin.h"
 #include "Actin.h"
+#include "point_particle.h"
 
 //void interaction_1(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
 //void interaction_2(int MD_Step, Membrane &membrane, ECM &ecm, vector<int> &membrane_ECM_neighbour_list, bool &costume_interaction_flag);
@@ -44,8 +45,8 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
 //void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
 
 //Actin-Membrane
-void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem);
-void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem);
+void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem, int j);
+void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem, int j);
 
 //ECM-Membrane
 void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem);
@@ -62,7 +63,12 @@ void update_particle_vesicle_neighbour_list (Membrane &particle, Membrane &vesic
 void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<pair<double, int> > > neighbour_pairs);
 void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle);
 
+//pointparticle -Vesicle
+void Vesicle_pointparticle_neighbour_finder (point_particle &particle, Membrane &vesicle);
+void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane &vesicle);
 
+//pointparticle-pointparticle
+void pointparticle_pointparticle_interaction(point_particle &first,point_particle &second);
 //general
 void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pairs);
 

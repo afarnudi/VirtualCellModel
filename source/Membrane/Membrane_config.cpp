@@ -41,15 +41,11 @@ void Membrane::import_config(string config_file_name){
                     resume_file_name=split[2];
                     cout<<"Resume flag on. Membrane will resume using the '"<<resume_file_name<<"' file.\n";
                 }
-//                break;
             } else if (split[0]=="Mesh_file_name") {
                 Mesh_file_name=split[2];
                 cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
-//                break;
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
-                //                break;
-                //                cout<<split[i]<<"\t";
             }
             
         }//End of while(getline(read_config_file, line))

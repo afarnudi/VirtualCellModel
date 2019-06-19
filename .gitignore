@@ -8,14 +8,19 @@
 *.so
 *.xyz
 *.html
+*.xml
 
 Mem/
 bin/Results/Reports/
 bin/Results/Resumes/
 bin/Results/Relaxation/
-Doc/html/
-Doc/html/search/
-Doc/latex/
+Doc/Doxygen/Documents/html/
+Doc/Doxygen/Documents/latex/
+Doc/Doxygen/Documents/xml/
+Doc/build/doctrees
+Doc/build/html
+Doc/seqan3-doc/
+Doc/xml
 
 # Packages #
 ############

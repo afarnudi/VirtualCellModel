@@ -31,6 +31,7 @@ namespace GenConst {
     extern double Buffer_temperature;
     extern double Bussi_tau;
     extern double Actin_Membrane_Bond_Coefficient;
+    extern int Num_of_pointparticles;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps
