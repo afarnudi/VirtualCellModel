@@ -32,8 +32,7 @@ void Membrane::import_config(string config_file_name){
             param_map[split[0]]=stod(split[1]);
             
             if (split[0]=="Resume") {
-                //                        set_parameter(general_param_map, param_name, param_value);
-                //                general_param_map[param_name]=param_value;
+                
                 if (stoi(split[1])==0) {
                     cout<<"Resume flag off. Looking for membrane config parameters.\n";
                 } else {
@@ -66,9 +65,7 @@ void Membrane::import_config(string config_file_name){
         if(it!=param_map.end()){
             initialise(Mesh_file_name);
         }
-//        else {
-//            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
-//        }
+
     }
 }
 

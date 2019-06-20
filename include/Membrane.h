@@ -220,7 +220,7 @@ public:
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
     double Total_potential_Energy=0.0;
-    double Spring_coefficient=10.0; // streching constant
+    double Spring_coefficient=10.0*GenConst::MD_T*GenConst::K; // streching constant
     double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double K_surfaceConstant_local=100.0;
