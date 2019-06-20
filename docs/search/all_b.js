@@ -2,7 +2,7 @@ var searchData=
 [
   ['main_5fpage_2emd',['Main_Page.md',['../_main___page_8md.html',1,'']]],
   ['maps_2ehpp',['maps.hpp',['../maps_8hpp.html',1,'']]],
-  ['mass',['mass',['../struct_membrane_1_1my__atom__info.html#a486af5c04cae157c7d45ae19107838fd',1,'Membrane::my_atom_info']]],
+  ['mass',['mass',['../struct_my_atom_info.html#a9c73350529a9d3ca5693743adef8460a',1,'MyAtomInfo']]],
   ['matrix_5finverse',['matrix_inverse',['../_general__functions_8hpp.html#a15bcc8ffb38efb78d75ec8fcf9bc2e60',1,'General_functions.hpp']]],
   ['max_5fnode_5fpair_5flength',['Max_node_pair_length',['../class_chromatin.html#a7f32e9f59ff39c648f1ec6b1a75f0f21',1,'Chromatin::Max_node_pair_length()'],['../class_membrane.html#adf55fbfa96375a631b399bd7f6cb1829',1,'Membrane::Max_node_pair_length()']]],
   ['maxwell',['Maxwell',['../class_actin.html#acd328e13e76b561336f9e344b79dcfe2',1,'Actin']]],
@@ -25,14 +25,14 @@ var searchData=
   ['membrane_5fecm_5fshared_5fnode_5fforce',['Membrane_ECM_shared_node_force',['../interaction_8hpp.html#afef3c68679636c0347209cf6d77db1ec',1,'interaction.hpp']]],
   ['membrane_5fneighbour_5fnode',['Membrane_neighbour_node',['../class_chromatin.html#a8530902fd510e707484abd584b1f2992',1,'Chromatin']]],
   ['membranegeneratingreport',['MembraneGeneratingReport',['../write__functions_8hpp.html#a87c289dbb9f134a152983a3ee5d96fb1',1,'write_functions.hpp']]],
-  ['mesh_5ffile_5fname',['Mesh_file_name',['../class_membrane.html#ac06808be568da073fc07ace259102313',1,'Membrane']]],
+  ['mesh_5ffile_5fname',['Mesh_file_name',['../class_membrane.html#ae34552226041b7a608c382e12c3112d8',1,'Membrane']]],
   ['mesh_5fformat',['mesh_format',['../class_membrane.html#aa70c224c9cef71bbaa49f4c0f5a9506a',1,'Membrane']]],
   ['min_5fnode_5fpair_5flength',['Min_node_pair_length',['../class_chromatin.html#a7a8bb679fc8a5f73198c3d4b4031c8af',1,'Chromatin::Min_node_pair_length()'],['../class_membrane.html#a7abb097e17e7293dc1cf559d66a01111',1,'Membrane::Min_node_pair_length()']]],
   ['min_5fradius_5fafter_5frelaxation',['min_radius_after_relaxation',['../class_membrane.html#a78f183bfa7a6cf6a1bb1b25cdc56a0fa',1,'Membrane']]],
-  ['my_5fatom_5finfo',['my_atom_info',['../struct_membrane_1_1my__atom__info.html',1,'Membrane']]],
-  ['my_5fatom_5finfo_5fconstructor',['my_atom_info_constructor',['../class_membrane.html#aee70376646344e451125b9a5e47b2d9b',1,'Membrane']]],
-  ['mygetopenmmstate',['myGetOpenMMState',['../class_membrane.html#ad8e9382141fdfa4d737cb8d98dd1ea6f',1,'Membrane']]],
-  ['myinitializeopenmm',['myInitializeOpenMM',['../class_membrane.html#ab980d839a709f6443a7cfb4c2757e747',1,'Membrane']]],
-  ['mystepwithopenmm',['myStepWithOpenMM',['../class_membrane.html#a5ce7ed7b9d6769472c2902b2dd273081',1,'Membrane']]],
-  ['myterminateopenmm',['myTerminateOpenMM',['../class_membrane.html#ae7590005afc3b254b6504a8ff8b3c9dc',1,'Membrane']]]
+  ['myatominfo',['MyAtomInfo',['../struct_my_atom_info.html',1,'']]],
+  ['mygetopenmmstate',['myGetOpenMMState',['../_open_m_m__funcs_8hpp.html#add50ebec4f4cf8fd9d5c92e9e19d85d9',1,'OpenMM_funcs.hpp']]],
+  ['myinitializeopenmm',['myInitializeOpenMM',['../_open_m_m__funcs_8hpp.html#a3479ef69862443b72d65830bfe7a532e',1,'OpenMM_funcs.hpp']]],
+  ['myopenmmdata',['MyOpenMMData',['../struct_my_open_m_m_data.html',1,'MyOpenMMData'],['../struct_my_open_m_m_data.html#ad91ea098216e5bbee8f0199d2a7e2c7d',1,'MyOpenMMData::MyOpenMMData()']]],
+  ['mystepwithopenmm',['myStepWithOpenMM',['../_open_m_m__funcs_8hpp.html#a974e684f750bfb824a692876e40d5739',1,'OpenMM_funcs.hpp']]],
+  ['myterminateopenmm',['myTerminateOpenMM',['../_open_m_m__funcs_8hpp.html#afd4cb17ff1726f5f35f6cef4657bb4bb',1,'OpenMM_funcs.hpp']]]
 ];

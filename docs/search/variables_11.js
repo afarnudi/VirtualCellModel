@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vdwenergyinkcal',['vdwEnergyInKcal',['../struct_membrane_1_1my__atom__info.html#aa1d5866b4920ed801953b30e80c13ed8',1,'Membrane::my_atom_info']]],
-  ['vdwradiusinang',['vdwRadiusInAng',['../struct_membrane_1_1my__atom__info.html#a8232239af4cd1a7354f6e343524e419a',1,'Membrane::my_atom_info']]]
+  ['y_5fin',['Y_in',['../class_membrane.html#acc26d2997221fd33bc9302b2d3c424d3',1,'Membrane']]],
+  ['y_5fscale',['Y_scale',['../class_membrane.html#af9d272308651056c3bc48a9497a234e8',1,'Membrane']]]
 ];

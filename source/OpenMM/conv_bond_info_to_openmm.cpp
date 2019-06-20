@@ -5,7 +5,6 @@
 Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     const int mem_num_bonds = mem.get_num_of_node_pairs();
     Bonds* bonds = new Bonds[mem_num_bonds];
-    
     for (int i=0; i<mem_num_bonds; i++) {
         bonds[i].type = mem.get_spring_model();
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);

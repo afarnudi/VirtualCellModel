@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['thermostat_5f2',['Thermostat_2',['../class_chromatin.html#a0b9c6938baef5531ed325bc431e5636f',1,'Chromatin::Thermostat_2()'],['../class_membrane.html#acd87b1b9cf2c6c91a887749528c9f556',1,'Membrane::Thermostat_2()']]],
-  ['thermostat_5fbussi',['Thermostat_Bussi',['../class_actin.html#a9e73b09a4cd982adc8a4879d7960d9bf',1,'Actin::Thermostat_Bussi()'],['../class_chromatin.html#a0ab8a63487a5f0a955e0e72a67202687',1,'Chromatin::Thermostat_Bussi()'],['../class_membrane.html#afc6d859617b4fa00b316cce1e36ef9bc',1,'Membrane::Thermostat_Bussi()']]],
-  ['thermostat_5fn6',['Thermostat_N6',['../class_chromatin.html#a1bdebb39143cec34dcf0d4f9b5252a71',1,'Chromatin::Thermostat_N6()'],['../class_membrane.html#a332a06e823418b7ee30408e1fca2bdf2',1,'Membrane::Thermostat_N6()']]],
-  ['triangle_5fpair_5fand_5fnode_5fbonds_5fidentifier',['Triangle_Pair_and_Node_Bonds_Identifier',['../class_membrane.html#ad34ca5376368cc72a38b64ed6b0dd386',1,'Membrane']]],
-  ['triangle_5fpair_5fcounter',['Triangle_pair_counter',['../class_membrane.html#acac151513f5a033c4f9675003aa2aec1',1,'Membrane']]],
-  ['triangle_5fpair_5fidentifier',['Triangle_pair_identifier',['../class_membrane.html#a90c810ebe1c51fadb4b11edbfc541883',1,'Membrane']]]
+  ['update_5fcom_5fposition',['update_COM_position',['../class_actin.html#a501f81fc7093ff06593c5549afd1167b',1,'Actin::update_COM_position()'],['../class_chromatin.html#a95a89f98d688ff8ca440fbef34086199',1,'Chromatin::update_COM_position()'],['../class_e_c_m.html#a492d0690a480a0f0fdfcef3ef35bc970',1,'ECM::update_COM_position()'],['../class_membrane.html#ad7368b7721d9279f54a7dece975ee152',1,'Membrane::update_COM_position()']]],
+  ['update_5fcom_5fvelocity',['update_COM_velocity',['../class_actin.html#a2f171e0eab1ee13c538ca25c8cf69aa9',1,'Actin::update_COM_velocity()'],['../class_chromatin.html#ab732de686eb3f5db5ce402b58a5d8ea6',1,'Chromatin::update_COM_velocity()'],['../class_e_c_m.html#a7272481293ee528878aeb669343bcd4f',1,'ECM::update_COM_velocity()'],['../class_membrane.html#aa1bb3ec5f5b6c6451e2f72103fbdde08',1,'Membrane::update_COM_velocity()']]],
+  ['update_5fecm_5fmem_5fneighbour_5flist',['update_ecm_mem_neighbour_list',['../interaction_8hpp.html#a5792231911edd06b23a168f72f1dd991',1,'interaction.hpp']]]
 ];

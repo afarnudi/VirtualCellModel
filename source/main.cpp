@@ -247,7 +247,7 @@ int main(int argc, char **argv)
         for (int i=0; i<Membranes.size(); i++) {
             num_of_atoms  += Membranes[i].get_num_of_nodes();
             num_of_bonds     += Membranes[i].get_num_of_node_pairs();
-            num_of_dihedrals += Membranes[i].get_num_of_triangle();
+            num_of_dihedrals += Membranes[i].get_num_of_triangle_pairs();
         }
     }
     if (Include_Chromatin) {
@@ -321,7 +321,7 @@ int main(int argc, char **argv)
                 
                 
                 Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
-                for (int j=0; j<Membranes[i].get_num_of_triangle(); j++) {
+                for (int j=0; j<Membranes[i].get_num_of_triangle_pairs(); j++) {
                     all_dihedrals[dihe_count]=dihedrals[j];
                     dihe_count++;
                 }

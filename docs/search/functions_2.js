@@ -8,5 +8,9 @@ var searchData=
   ['chromatin_5fmembrane_5fneighbour_5ffinder',['Chromatin_Membrane_neighbour_finder',['../interaction_8hpp.html#ab54b90b85714771e74b062c83a948755',1,'interaction.hpp']]],
   ['chromatin_5fprepack',['chromatin_prepack',['../class_chromatin.html#af1707d6c3bace70a62c6da1a84083a1c',1,'Chromatin']]],
   ['constantsurfaceforcelocaltriangles',['ConstantSurfaceForceLocalTriangles',['../class_membrane.html#afeb736c81896f74f23e44ceaaa0d1e04',1,'Membrane']]],
-  ['crossvector',['crossvector',['../_general__functions_8hpp.html#a2a90dbc716857a9916f0dca44c2108e8',1,'General_functions.hpp']]]
+  ['convert_5fmembrane_5fbond_5finfo_5fto_5fopenmm',['convert_membrane_bond_info_to_openmm',['../_open_m_m__funcs_8hpp.html#ab101b4adf13e5683d017921c5cd33df1',1,'OpenMM_funcs.hpp']]],
+  ['convert_5fmembrane_5fdihedral_5finfo_5fto_5fopenmm',['convert_membrane_dihedral_info_to_openmm',['../_open_m_m__funcs_8hpp.html#a1378c48fecda778c5463e6bf47dd538e',1,'OpenMM_funcs.hpp']]],
+  ['convert_5fmembrane_5fposition_5fto_5fopenmm',['convert_membrane_position_to_openmm',['../_open_m_m__funcs_8hpp.html#ab1b1fbd3be14bd9b68de8be8e71532ec',1,'OpenMM_funcs.hpp']]],
+  ['crossvector',['crossvector',['../_general__functions_8hpp.html#a2a90dbc716857a9916f0dca44c2108e8',1,'General_functions.hpp']]],
+  ['custom',['custom',['../class_membrane.html#a0e3f1109b8c3a513ebb6c824345eede7',1,'Membrane']]]
 ];
