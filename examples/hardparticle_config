@@ -1,0 +1,22 @@
+Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
+Mesh_file_name	1	Mesh/Membrane_sep_1	Mesh/Membrane_sep_2
+mesh_format	2	//1 : gmsh file  2 : ply files
+Node_Mass	1
+Node_radius	1
+spring_model	2
+Spring_coefficient	100
+Bending_coefficient	350
+Damping_coefficient	0
+K_surfaceConstant_local	100
+Shift_in_X_direction	8
+Shift_in_Y_direction	0
+Shift_in_Z_direction	0
+Downward_speed	0
+Shift	1	// on or off shifting
+X_in_mem	0
+Y_in_mem	0
+Z_in_mem	0
+Relaxation	0
+rescale	0	// on or off rescaling
+rescale_factor	10
+
