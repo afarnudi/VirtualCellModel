@@ -1,11 +1,12 @@
 #include "Membrane.h"
+using std::ifstream;
 
-void Membrane::read_gmesh_file (string gmesh_file)
+void Membrane::read_gmesh_file (std::string gmesh_file)
 {
     ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(gmesh_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary Gmesh generated intigers. We never use these intigers in the actual programme.
-    string temp_string;
+    std::string temp_string;
     for (int i=0; i<6; i++)
     {
         read>> temp_string;
@@ -69,7 +70,7 @@ void Membrane::read_gmesh_file (string gmesh_file)
 }
 
 
-void Membrane::import(string import_file_name){
+void Membrane::import(std::string import_file_name){
     cout<<"Importing the Membrane from the resume file:"<<endl;
     cout<<import_file_name<<endl<<endl;
     ifstream read_resume_file;
@@ -146,12 +147,12 @@ void Membrane::import(string import_file_name){
 }
 
 
-void Membrane::read_ply_file (string ply_file)
+void Membrane::read_ply_file (std::string ply_file)
 {
     ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(ply_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary ply file intigers. We never use these intigers in the actual programme.
-    string temp_string;
+    std::string temp_string;
     for (int i=0; i<18; i++)
     {
         read>> temp_string;

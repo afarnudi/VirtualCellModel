@@ -8,7 +8,7 @@
 
 #include "Membrane.h"
 
-void Membrane::initialise(string Mesh_file_name){
+void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Membrane Class..."<<endl;
     if (mesh_format==1){

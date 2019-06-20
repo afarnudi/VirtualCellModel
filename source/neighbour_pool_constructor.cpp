@@ -11,8 +11,7 @@
 
 void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem){
     bool initiate = true;
-    int mem_nodes = mem.return_num_of_nodes();
-    int ecm_nodes = ecm.return_num_of_nodes();
+    int mem_nodes = mem.get_num_of_nodes();
     for (int i=0; i<mem_nodes; i++) {
         if (mem.ECM_Node_neighbour_list[i].size() != 0) {
             initiate=false;
@@ -28,14 +27,14 @@ void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem){
 }
 
 void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
-    int mem_nodes = mem.return_num_of_nodes();
+    int mem_nodes = mem.get_num_of_nodes();
     int ecm_nodes = ecm.return_num_of_nodes();
     
     mem.ECM_Node_neighbour_list.clear();
     mem.ECM_Node_neighbour_list.resize(mem_nodes);
     
     double delta_x, delta_y, delta_z, distance;
-    double cut_off = mem.return_ECM_interaction_cut_off();
+    double cut_off = mem.get_ECM_interaction_cut_off();
 //    vector<vector<double> >  dist_list;
 //    vector<vector<int> >  inde_list;
 //
@@ -51,9 +50,9 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
         neighbour_pairs.resize(i+1);
         for (int j=0; j<ecm_nodes; j++) {
             
-            delta_x = mem.return_node_position(i, 0) - ecm.return_node_position(j, 0);
-            delta_y = mem.return_node_position(i, 1) - ecm.return_node_position(j, 1);
-            delta_z = mem.return_node_position(i, 2) - ecm.return_node_position(j, 2);
+            delta_x = mem.get_node_position(i, 0) - ecm.return_node_position(j, 0);
+            delta_y = mem.get_node_position(i, 1) - ecm.return_node_position(j, 1);
+            delta_z = mem.get_node_position(i, 2) - ecm.return_node_position(j, 2);
 //            cout<<delta_x<<"\t"<<delta_y<<"\t"<<delta_z<<endl;
             double a[3]={delta_x, delta_y, delta_z};
             distance = vector_length(a);
@@ -69,7 +68,6 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
         if (neighbour_pairs[i].size() > 1) {
             sort(neighbour_pairs[i].begin(), neighbour_pairs[i].end());
             if (neighbour_pairs[i].size() > 4) {
-                int size=neighbour_pairs[i].size();
                 for (int k=0; k< neighbour_pairs[i].size()-4; k++) {
                     neighbour_pairs[i].erase(neighbour_pairs[i].begin()+4);
                 }
@@ -114,7 +112,7 @@ void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pai
 
 void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<pair<double, int> > > neighbour_pairs){
     
-    int mem_nodes=mem.return_num_of_nodes();
+    int mem_nodes=mem.get_num_of_nodes();
 //    double force=0, temp_potential_energy=0;
     
     for (int i=0; i<mem_nodes; i++) {
@@ -207,8 +205,8 @@ void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
 
 void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle){
     bool initiate = true;
-    int vesicle_nodes = vesicle.return_num_of_nodes();
-    int particle_nodes = particle.return_num_of_nodes();
+    int vesicle_nodes = vesicle.get_num_of_nodes();
+    int particle_nodes = particle.get_num_of_nodes();
     for (int i=0; i<particle_nodes; i++) {
         if (particle.Vesicle_Node_neighbour_list[i].size() != 0) {
             initiate=false;
@@ -225,8 +223,8 @@ void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle){
 
 
 void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &vesicle){
-    int vesicle_nodes = vesicle.return_num_of_nodes();
-    int particle_nodes = particle.return_num_of_nodes();
+    int vesicle_nodes = vesicle.get_num_of_nodes();
+    int particle_nodes = particle.get_num_of_nodes();
     
     particle.Vesicle_Node_neighbour_list.clear();
     particle.Vesicle_Node_neighbour_list.resize(particle_nodes);
@@ -248,9 +246,9 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
         neighbour_pairs.resize(i+1);
         for (int j=0; j<vesicle_nodes; j++) {
             
-            delta_x = particle.return_node_position(i, 0) - vesicle.return_node_position(j, 0);
-            delta_y = particle.return_node_position(i, 1) - vesicle.return_node_position(j, 1);
-            delta_z = particle.return_node_position(i, 2) - vesicle.return_node_position(j, 2);
+            delta_x = particle.get_node_position(i, 0) - vesicle.get_node_position(j, 0);
+            delta_y = particle.get_node_position(i, 1) - vesicle.get_node_position(j, 1);
+            delta_z = particle.get_node_position(i, 2) - vesicle.get_node_position(j, 2);
 //            cout<<delta_x<<"\t"<<delta_y<<"\t"<<delta_z<<endl;
             double a[3]={delta_x, delta_y, delta_z};
             distance = vector_length(a);
@@ -284,7 +282,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
 
 void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<pair<double, int> > > neighbour_pairs){
     
-    int particle_nodes=particle.return_num_of_nodes();
+    int particle_nodes=particle.get_num_of_nodes();
 //    double force=0, temp_potential_energy=0;
     
     for (int i=0; i<particle_nodes; i++) {

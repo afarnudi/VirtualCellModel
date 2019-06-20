@@ -38,7 +38,7 @@ void Membrane::Relax_1(void){
         if (Relaxation_Process_Model==2){
             node_distance_correction();
             cout<<"Level2"<<endl;
-            int Relaxation_progress=return_correction_progress();
+            int Relaxation_progress=get_correction_progress();
             double relax_temp= GenConst::MD_T;
             for(int MD_Step=0 ;MD_Step<=MD_num_of_Relaxation_steps ; MD_Step++){
                 MD_Evolution_beginning(GenConst::MD_Time_Step);
