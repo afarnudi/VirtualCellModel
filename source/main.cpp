@@ -266,7 +266,7 @@ int main(int argc, char **argv)
         }
     }
     if (Include_pointparticle){
-        num_of_elements+=GenConst::Num_of_pointparticles;
+        num_of_atoms+=GenConst::Num_of_pointparticles;
     }
     
     if (Include_Membrane){
@@ -288,7 +288,7 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     int progress=0;
-    bool openmm_sim=true;
+    bool openmm_sim=false;
     //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
