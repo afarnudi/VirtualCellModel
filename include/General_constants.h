@@ -13,8 +13,10 @@
 
 namespace GenConst {
     extern int MD_num_of_steps;
+    extern double Simulation_Time_In_Ps;
     extern int MD_traj_save_step;
-    extern double MD_Time_Step;
+    extern double Report_Interval_In_Fs;
+    extern double Step_Size_In_Fs;
     extern double MD_T;
     extern double K;
     extern int MD_thrmo_step;

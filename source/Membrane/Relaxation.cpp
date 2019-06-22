@@ -18,10 +18,10 @@ void Membrane::Relax_1(void){
         if (Relaxation_Process_Model==1){
             double relax_temp= GenConst::MD_T;
             for(int MD_Step=0 ;MD_Step<MD_num_of_Relaxation_steps ; MD_Step++){
-                MD_Evolution_beginning(GenConst::MD_Time_Step);
+                MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
                 Hookian();
                 Bending_potetial_2(0);
-                MD_Evolution_end(GenConst::MD_Time_Step);
+                MD_Evolution_end(GenConst::Step_Size_In_Fs);
                 if(MD_Step%GenConst::MD_traj_save_step==0){
                     relaxation_traj();}
                 if(MD_Step%50000==0){
@@ -41,10 +41,10 @@ void Membrane::Relax_1(void){
             int Relaxation_progress=get_correction_progress();
             double relax_temp= GenConst::MD_T;
             for(int MD_Step=0 ;MD_Step<=MD_num_of_Relaxation_steps ; MD_Step++){
-                MD_Evolution_beginning(GenConst::MD_Time_Step);
+                MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
                 Relaxation_potential();
                 Bending_potetial_2(0);
-                MD_Evolution_end(GenConst::MD_Time_Step);
+                MD_Evolution_end(GenConst::Step_Size_In_Fs);
                 if(MD_Step%GenConst::MD_traj_save_step==0){
                     relaxation_traj();
                 }
@@ -79,10 +79,10 @@ void Membrane::node_distance_correction(void){
         //Setting the min angle of triangles to 20 dgrees or pi/9
         Min_node_pair_length=slope*MD_Step+min;
         for (int i=0; i<100; i++) {
-            MD_Evolution_beginning(GenConst::MD_Time_Step);
+            MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
             Relaxation_potential();
             Bending_potetial_2(0);
-            MD_Evolution_end(GenConst::MD_Time_Step);
+            MD_Evolution_end(GenConst::Step_Size_In_Fs);
         }
         if (int(100*MD_Step/(MD_correction_steps*100 + MD_num_of_Relaxation_steps))>correction_progress){
             cout<<"Hi"<<endl;

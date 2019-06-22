@@ -111,11 +111,11 @@ void Chromatin::Pack(double min_radius){
             Sphere_Radius=slope*MD_Step+Max_dist;
             
             for (int i=0; i<100; i++) {
-                MD_Evolution_beginning(GenConst::MD_Time_Step);
+                MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
                 packing_potential(Sphere_Radius);
                 Strong_spring();
                 hard_sphere();
-                MD_Evolution_end(GenConst::MD_Time_Step);
+                MD_Evolution_end(GenConst::Step_Size_In_Fs);
             }
             if (MD_Step!=0 && MD_Step%10==0) {
                 packing_traj();
