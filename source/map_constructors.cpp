@@ -99,8 +99,10 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                 //                cout<<split[i]<<"\t";
             } // End of for (int i=0; i<split.size(); i++) {
             //            cout<<endl;
-
         } //End of while(getline(read_config_file, line)){
+        if (GenConst::Report_Interval_In_Fs==0) {
+            GenConst::Report_Interval_In_Fs = GenConst::MD_traj_save_step*GenConst::Step_Size_In_Fs;
+        }
         cout<<endl;
     } else {
         cout<<"Couldn't open the config file.\n";
@@ -133,10 +135,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::MD_traj_save_step=it->second;
         }
-    } else if (param_name=="MD_Time_Step"){
+    } else if (param_name=="Report_Interval_In_Fs"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::MD_Time_Step=it->second;
+            GenConst::Report_Interval_In_Fs=it->second;
+        }
+    } else if (param_name=="Step_Size_In_Fs"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Step_Size_In_Fs=it->second;
         }
     } else if (param_name=="MD_T"){
         it = general_param_map.find(param_name);

@@ -75,7 +75,7 @@ void point_particle::generate_report(){
     Report<<"General MD Params:\n---------------\n";
     Report<<"MD_num_of_steps"<<setw(20)<<GenConst::MD_num_of_steps<<endl;
     Report<<"MD_traj_save_step"<<setw(20)<<GenConst::MD_traj_save_step<<endl;
-    Report<<"MD_Time_Step"<<setw(20)<<GenConst::MD_Time_Step<<endl;
+    Report<<"Step_Size_In_Fs"<<setw(20)<<GenConst::Step_Size_In_Fs<<endl;
     Report<<"MD_T"<<setw(20)<<GenConst::MD_T<<endl;
     Report<<"MD_thrmo_step"<<setw(20)<<GenConst::MD_thrmo_step<<endl;
 

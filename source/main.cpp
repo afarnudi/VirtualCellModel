@@ -59,7 +59,8 @@
 namespace GenConst {
     int MD_num_of_steps;
     int MD_traj_save_step;
-    double MD_Time_Step;
+    double Report_Interval_In_Fs;
+    double Step_Size_In_Fs;
     double MD_T;
     double K;
     int MD_thrmo_step;
@@ -77,13 +78,14 @@ namespace GenConst {
     double Buffer_temperature;
     double Bussi_tau;
     double Actin_Membrane_Bond_Coefficient;
+    
 }
 
 
 
 //                   MODELING AND SIMULATION PARAMETERS
-const double StepSizeInFs        = 0.1;       // integration step size (fs)
-const double ReportIntervalInFs  = 2;      // how often to generate PDB frame (fs)
+//const double StepSizeInFs        = 0.1;       // integration step size (fs)
+//const double ReportIntervalInFs  = 2;      // how often to generate PDB frame (fs)
 const double SimulationTimeInPs  = 5;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
 
@@ -288,7 +290,7 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     int progress=0;
-    bool openmm_sim=false;
+    bool openmm_sim=true;
     //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -344,7 +346,7 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, StepSizeInFs, platformName, all_bonds, all_dihedrals);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -352,7 +354,7 @@ int main(int argc, char **argv)
             printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
-            const int NumSilentSteps = (int)(ReportIntervalInFs / StepSizeInFs + 0.5);
+            const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             for (int frame=1; ; ++frame) {
                 double time, energy;
                 myGetOpenMMState(omm, WantEnergy, time, energy, all_atoms);
@@ -420,25 +422,25 @@ int main(int argc, char **argv)
         if (Include_Membrane)
         {
             for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                Membranes[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_Chromatin)
         {
             for (int i=0; i<Chromatins.size(); i++) {
-                Chromatins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                Chromatins[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_Actin)
         {
             for (int i=0; i<Actins.size(); i++) {
-                Actins[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                Actins[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_ECM)
         {
             for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                ECMs[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
             }
         }
         
@@ -446,7 +448,7 @@ int main(int argc, char **argv)
         {   
             for (int i=0; i<pointparticles.size(); i++) {
                 if (pointparticles[i].on_or_off_MD_evolution){
-                    pointparticles[i].MD_Evolution_beginning(GenConst::MD_Time_Step);
+                    pointparticles[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
                 }
             }
         }
@@ -534,22 +536,22 @@ int main(int argc, char **argv)
         //Velocity Verlet second step
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                Membranes[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_Chromatin) {
             for (int i=0; i<Chromatins.size(); i++) {
-                Chromatins[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                Chromatins[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_Actin) {
             for (int i=0; i<Actins.size(); i++) {
-                Actins[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                Actins[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
             }
         }
         if (Include_ECM) {
             for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                ECMs[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
             }
         }
         
@@ -557,7 +559,7 @@ int main(int argc, char **argv)
         {
             for (int i=0; i<pointparticles.size(); i++) {
                 if (pointparticles[i].on_or_off_MD_evolution){
-                    pointparticles[i].MD_Evolution_end(GenConst::MD_Time_Step);
+                    pointparticles[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
                     
                 }
             }

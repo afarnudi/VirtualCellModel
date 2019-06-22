@@ -1,11 +1,14 @@
 //MD total number of steps. Default 10000
 MD_num_of_steps	3000000	 
 
-//Trajectory savinf rate in number of steps. Default 1000
+//Trajectory saving rate in number of steps. Default 1000
 MD_traj_save_step	1000
 
+//Trajectory saving rate in femtoseconds. If this parameter is 0 the interval will be calculated using the MD_traj_save_step*Step_Size_In_Fs.
+Report_Interval_In_Fs	0
+
 //MD step size in femtoseconds. Default 0.001
-MD_Time_Step	0.1
+Step_Size_In_Fs	0.1
 
 //Boltzman's constant. Default 1
 K	1
