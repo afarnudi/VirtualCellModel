@@ -44,6 +44,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     //SinusCheck.resize(Num_of_Node_Pairs);
     //check();
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
+    shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     cout<<"\nMembrane class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

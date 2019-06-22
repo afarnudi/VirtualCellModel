@@ -165,7 +165,7 @@ int main(int argc, char **argv)
         
         Membranes.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-            string label="MEM"+to_string(i);
+            string label="mem"+to_string(i);
             Membranes[i].set_label(label);
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
@@ -269,7 +269,7 @@ int main(int argc, char **argv)
             }// End of for (int i=0; i<Membranes.size(); i++)
         }//end else
     } // End of if (Include_Membrane)
-    
+    int progress=0;
     bool openmm_sim=true;
     //openmm**
     if (openmm_sim) {
@@ -278,6 +278,8 @@ int main(int argc, char **argv)
         int atom_count=0;
         int bond_count=0;
         int dihe_count=0;
+        
+        
         MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
         Bonds* all_bonds         = new Bonds[num_of_bonds+1];
         Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
@@ -288,25 +290,36 @@ int main(int argc, char **argv)
         
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
+                
                 MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
                 for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
-                    all_atoms[atom_count]=atoms[j];
-                    atom_count++;
+                    all_atoms[j+atom_count]=atoms[j];
                 }
+                
                 
                 
                 Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
                 for (int j=0; j<Membranes[i].get_num_of_node_pairs(); j++) {
-                    all_bonds[bond_count]=bonds[j];
-                    bond_count++;
+                    all_bonds[j+bond_count]=bonds[j];
+                    all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
+                    all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
+                    
                 }
                 
                 
                 Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
                 for (int j=0; j<Membranes[i].get_num_of_triangle_pairs(); j++) {
-                    all_dihedrals[dihe_count]=dihedrals[j];
-                    dihe_count++;
+                    all_dihedrals[j+dihe_count]=dihedrals[j];
+                    all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
                 }
+                
+                //These parameters are used to shift the index of the atoms/bonds/dihedrals.
+                atom_count += Membranes[i].get_num_of_nodes();
+                bond_count += Membranes[i].get_num_of_node_pairs();
+                dihe_count += Membranes[i].get_num_of_triangle_pairs();
             }
         }
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
@@ -331,12 +344,17 @@ int main(int argc, char **argv)
                     break;
                 
                 myStepWithOpenMM(omm, NumSilentSteps);
+                if (int(100*time/SimulationTimeInPs)>progress){
+                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps\r" << std::flush;
+                    progress+=5;
+                }
             }
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
+            cout<<"[ 100% ]\t time: "<<SimulationTimeInPs<<" Ps\n";
             cout<<"\nDone!"<<endl;
-            printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
+            printf("Wall clock time of the simulation: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
             return 0; // Normal return from main.
         }
         
@@ -350,7 +368,7 @@ int main(int argc, char **argv)
     
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
-    int progress=0;
+    progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
 //        cout<<Membranes[0].return_node_position(0, 0);
