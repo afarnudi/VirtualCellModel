@@ -26,7 +26,7 @@ void Membrane::import_config(string config_file_name){
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
             
             if (split[0] == comment || (split[0][0]=='/' && split[0][1]=='/')) {
-                break;
+                continue;
             }
             
             param_map[split[0]]=stod(split[1]);
