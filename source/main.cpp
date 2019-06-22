@@ -58,6 +58,7 @@
 
 namespace GenConst {
     int MD_num_of_steps;
+    double Simulation_Time_In_Ps;
     int MD_traj_save_step;
     double Report_Interval_In_Fs;
     double Step_Size_In_Fs;
@@ -86,7 +87,7 @@ namespace GenConst {
 //                   MODELING AND SIMULATION PARAMETERS
 //const double StepSizeInFs        = 0.1;       // integration step size (fs)
 //const double ReportIntervalInFs  = 2;      // how often to generate PDB frame (fs)
-const double SimulationTimeInPs  = 5;     // total simulation time (ps)
+//const double SimulationTimeInPs  = 5;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
 
 
@@ -360,11 +361,11 @@ int main(int argc, char **argv)
                 myGetOpenMMState(omm, WantEnergy, time, energy, all_atoms);
                 myWritePDBFrame(frame, time, energy, all_atoms, traj_name);
                 
-                if (time >= SimulationTimeInPs)
+                if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
                 myStepWithOpenMM(omm, NumSilentSteps);
-                if (int(100*time/SimulationTimeInPs)>progress){
+                if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps\r" << std::flush;
                     progress+=5;
                 }
@@ -372,7 +373,7 @@ int main(int argc, char **argv)
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
-            cout<<"[ 100% ]\t time: "<<SimulationTimeInPs<<" Ps\n";
+            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<" Ps\n";
             cout<<"\nDone!"<<endl;
             printf("Wall clock time of the simulation: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
             return 0; // Normal return from main.

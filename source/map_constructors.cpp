@@ -103,6 +103,9 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         if (GenConst::Report_Interval_In_Fs==0) {
             GenConst::Report_Interval_In_Fs = GenConst::MD_traj_save_step*GenConst::Step_Size_In_Fs;
         }
+        if (GenConst::Simulation_Time_In_Ps==0) {
+            GenConst::Simulation_Time_In_Ps = GenConst::MD_num_of_steps*GenConst::Step_Size_In_Fs;
+        }
         cout<<endl;
     } else {
         cout<<"Couldn't open the config file.\n";
@@ -129,6 +132,12 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::MD_num_of_steps=it->second;
+        }
+    } else if (param_name=="Simulation_Time_In_Ps"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Simulation_Time_In_Ps=it->second;
+//            cout<<"Simulation_Time_In_Ps = "<< GenConst::Simulation_Time_In_Ps<<endl;
         }
     } else if (param_name=="MD_traj_save_step"){
         it = general_param_map.find(param_name);

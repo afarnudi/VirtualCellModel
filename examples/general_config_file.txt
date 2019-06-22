@@ -1,6 +1,9 @@
 //MD total number of steps. Default 10000
 MD_num_of_steps	3000000	 
 
+//Simulation time in picoseconds. If the parameter is not set in the general config file it will be calculate using the step size and total number of steps.
+Simulation_Time_In_Ps	0
+
 //Trajectory saving rate in number of steps. Default 1000
 MD_traj_save_step	1000
 
