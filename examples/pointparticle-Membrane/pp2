@@ -1,0 +1,32 @@
+Node_Mass	1
+
+//this flag indicates that if the user wants to see the evolution of point particle trajectory in  the time or not.
+//it is helpfull for checking that if the interactions work correctly. ( 0 : MD evolution off   1: MD evolution on) 
+on_or_off_MD_evolution	1
+
+//the initial x coordinate of point particle.
+X_0	5
+
+//the initial y coordinate of point particle.
+Y_0	0
+
+//the initial z coordinate of point particle.	
+Z_0	0
+
+//the equilibrium distance of 2 interacting point particles via Lennard-Jones potential.	
+P_P_sigma	2
+
+//the strength of Lennard-Jones potential between 2 interacting point particles.
+P_P_epsilon	100
+
+//if the distance between 2 point partilce is more than this value, they will not interact with each other.
+P_P_cut_off	6
+
+//the equilibrium distance of a point particle which interacts with Membrane's nearest node via Lennard-Jones potential.	
+P_Membrane_sigma	3
+
+//the strength of Lennard-Jones potential between a point particle and Membrane's nearest node to it.	
+P_Membrane_epsilon	30
+
+//if the distance between a point partilce and  the Membrane's nearest node to it is more than this value, they will not interact with each other.
+P_Membrane_cut_off	10	

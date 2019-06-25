@@ -1,0 +1,30 @@
+//MD total number of steps. Default 10000
+MD_num_of_steps	2000000
+
+//Trajectory saving rate in number of steps. Default 1000
+MD_traj_save_step	100
+
+//MD step size in femtoseconds. Default 0.001
+Step_Size_In_Fs	0.001
+
+//Boltzman's constant. Default 1
+K	1
+
+//Tempreture. Default 1
+MD_T	0.02
+
+/Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0. 
+Num_of_Membranes	1	mem_config_2.txt
+
+//Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0. 
+Num_of_Chromatins	0	chromatin_config_1.txt
+
+/Number of point particles in the system followed by the directory of their respective configuration files. All point particles will be configured using the first configuration file if only one is provided. Default 0. 
+Num_of_pointparticles	1	pp2
+
+
+//During every 'MD_thermo_step' the thermostat will be applied to the system. Default 200
+MD_thrmo_step	200
+
+
+trajectory_file_name	1	Nucleus

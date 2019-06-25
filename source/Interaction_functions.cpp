@@ -130,16 +130,17 @@ void Vesicle_pointparticle_neighbour_finder (point_particle &particle, Membrane 
 void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane &vesicle){
     
     int vesicle_Node= particle.Neighbournumber;
-    cout<< "vesicle Node"<<particle.Neighbournumber<<endl;
+    //cout<< "vesicle Node"<<particle.Neighbournumber<<endl;
     double force=0, temp_potential_energy=0;
     double delta_x=0, delta_y=0, delta_z=0, distance=0;
-    double sigma = 0.8;
-    double epsilon = 4 *100* GenConst::K * GenConst::MD_T;
-    double cut_off= 5;
+    double sigma = particle.return_P_Membrane_sigma();
+    double epsilon = particle.return_P_Membrane_epsilon()* GenConst::K * GenConst::MD_T;
+    double cut_off=particle.return_P_Membrane_cut_off();
     double SigmaOverR,repulsion,attraction;
     distance=particle.Neighbour_dist;
+    
     if (distance < cut_off){
-            
+            //cout<<distance<<endl;
             SigmaOverR= sigma/distance;
             repulsion= pow(SigmaOverR ,12);
             attraction = pow(SigmaOverR , 6);
@@ -150,7 +151,7 @@ void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane
 
 
             
-            force = -1*epsilon*( -12* repulsion + 6*attraction)/(distance*distance);
+            force = 12*epsilon*(repulsion -attraction)/(distance*distance);
             temp_potential_energy = epsilon * (repulsion- attraction );
             
             
