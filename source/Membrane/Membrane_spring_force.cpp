@@ -16,7 +16,7 @@ void Membrane::FENE_log (void){
 
     int Node_A, Node_B;
 
-    double width= 0.66*Average_node_pair_length; // it defines a minimum limit for weil width.
+    double width= Average_node_pair_length; // it defines a minimum limit for weil width.
     double l=Max_node_pair_length-Min_node_pair_length;
     double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
     if ((1+ 2*width_scaling)*l<width ){ //this condition shows the case when the mesh is almost ordered.

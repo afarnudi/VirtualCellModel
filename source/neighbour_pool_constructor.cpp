@@ -230,7 +230,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
     particle.Vesicle_Node_neighbour_list.resize(particle_nodes);
     
     double delta_x, delta_y, delta_z, distance;
-    double cut_off = 10.0;//particle.Average_node_pair_length;
+    double cut_off = particle.get_vesicle_interaction_cut_off();//particle.Average_node_pair_length;
 //    vector<vector<double> >  dist_list;
 //    vector<vector<int> >  inde_list;
 //

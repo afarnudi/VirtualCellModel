@@ -68,8 +68,8 @@ void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle){
     int particle_nodes=particle.get_num_of_nodes();
     double force=0, temp_potential_energy=0;
     double delta_x=0, delta_y=0, delta_z=0, Node_distance=0;
-    double sigma = 0.8;
-    double epsilon = 4 * GenConst::K * GenConst::MD_T * particle.return_vesicle_interaction_strength();
+    double sigma = particle.get_vesicle_interaction_sigma();
+    double epsilon = GenConst::K * GenConst::MD_T * particle.get_vesicle_interaction_strength();
     
     for (int i=0; i<particle_nodes; i++) {
         if (particle.Vesicle_Node_neighbour_list[i].size() != 0) {
