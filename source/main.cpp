@@ -333,7 +333,7 @@ int main(int argc, char **argv)
                 
                 myStepWithOpenMM(omm, NumSilentSteps);
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
-                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps\r" << std::flush;
+                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<"\tPs     \r" << std::flush;
                     progress+=5;
                 }
             }

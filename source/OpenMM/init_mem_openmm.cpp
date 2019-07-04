@@ -34,41 +34,50 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     // Allocate space to hold OpenMM objects while we're using them.
     MyOpenMMData* omm = new MyOpenMMData();
     
-    // Create a System and Force objects within the System. Retain a reference
-    // to each force object so we can fill in the forces. Note: the System owns
-    // the force objects and will take care of deleting them; don't do it yourself!
+    // Create a System and Force objects within the System.
     OpenMM::System&                 system      = *(omm->system = new OpenMM::System());
     
     
-    //Spring force
+    // Retain a reference to each force object so we can fill in the forces.
+    // Note: the System owns the force objects and will take care of deleting them;
+    // don't do it yourself!
+    
+    // Create an array of harmonic spring force objects to add to the system.
     OpenMM::HarmonicBondForce*      bondStretch = new OpenMM::HarmonicBondForce();
     system.addForce(bondStretch);
     
-    OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+0.25)*step(lmax-r))");
-//    custombond->addGlobalParameter("lmin",   bonds[0].FENE_lmin
-//                                             * OpenMM::NmPerAngstrom);
-//    custombond->addGlobalParameter("lmax",   bonds[0].FENE_lmax
-//                                             * OpenMM::NmPerAngstrom);
-//    custombond->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
-//                                   * OpenMM::KJPerKcal
-//                                   * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    system.addForce(custombond);
+    //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
+    // Create an array of FENE spring force objects to add to the system.
+    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+0.25)*step(lmax-r))");
+    //Set the global parameters of the force. The parameters are calculated in the membrane constructor.
+    FENE->addGlobalParameter("lmin",   bonds[0].FENE_lmin
+                                       * OpenMM::NmPerAngstrom);
+    FENE->addGlobalParameter("lmax",   bonds[0].FENE_lmax
+                                       * OpenMM::NmPerAngstrom);
+    FENE->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
+                                       * OpenMM::KJPerKcal
+                                       * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    system.addForce(FENE);
     
     
+    // Create an array of FENE spring force objects to add to the system.
+    OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("10*(sigma/r)^6");
     
-   
-    OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("(sigma/r)^6");
-    
-    cout<<"num of nonbond particles on definition: "<<excluded_volume->getNumParticles()<<endl;
+    // Creat a vector of node index pairs that form a bond. This list is later used to create a list of atoms that are excluded from the excluded volume force.
     std::vector< std::pair< int, int > > excluded_bonds;
     
-    system.addForce(excluded_volume);
-    
-    //excluded volume interaction.
-    excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
+    //excluded volume interaction strength.
+    excluded_volume->addGlobalParameter("sigma",   1.5 * atoms[0].radius
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
+    system.addForce(excluded_volume);
     
+    // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
+    OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
+    dihedral_force->addGlobalParameter("K_bend", dihedrals[0].bending_stiffness_value
+                                       * OpenMM::KJPerKcal
+                                       * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    system.addForce(dihedral_force);
     
     // Specify the atoms and their properties:
     //  (1) System needs to know the masses.
@@ -90,9 +99,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     }
     
     
-    
-    cout<<"num of nonbond particles after loop: "<<excluded_volume->getNumParticles()<<endl;
-    
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
         std::pair< int, int > temp;
@@ -103,16 +109,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         switch (bonds[i].type) {
             case 1://FENE
             {
-                //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-                custombond->addGlobalParameter("lmin",   bonds[i].FENE_lmin
-                                                         * OpenMM::NmPerAngstrom);
-                custombond->addGlobalParameter("lmax",   bonds[i].FENE_lmax
-                                                         * OpenMM::NmPerAngstrom);
-                custombond->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom2
-                                               * OpenMM::KJPerKcal
-                                               * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                custombond->addBond(atom[0], atom[1]);
-                
+                FENE->addBond(atom[0], atom[1]);
             }
                 break;
             case 2://Harmonic
@@ -134,25 +131,17 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         
     }
     
-    
+    // Add the list of atom pairs that are excluded from the excluded volume force.
     excluded_volume->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
                                                                * OpenMM::NmPerAngstrom);
     
     
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
-                /**
-                 * Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
-                 */
-                OpenMM::CustomCompoundBondForce* force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
-        force->addGlobalParameter("K_bend", dihedrals[i].bending_stiffness_value
-                                            * OpenMM::KJPerKcal
-                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
         
-                force->addBond(dihedrals[i].atoms);
-                system.addForce(force);
-        
+                dihedral_force->addBond(dihedrals[i].atoms);
     }
+    
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
