@@ -318,6 +318,8 @@ int main(int argc, char **argv)
             //  (2) Run silently entirely within OpenMM between reporting intervals.
             //  (3) Write a PDB frame when the time comes.
             printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
+            //Time the programme
+            tStart = clock();
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
@@ -338,9 +340,27 @@ int main(int argc, char **argv)
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
-            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<" Ps\n";
+            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
             cout<<"\nDone!"<<endl;
-            printf("Wall clock time of the simulation: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
+            
+            double sim_duration_per_sec = (double)((clock() - tStart)/CLOCKS_PER_SEC);
+            
+            double sec_per_day      =60*60*24;
+            double sec_per_hour    =60*60;
+            double sec_per_min     =60;
+            
+            
+            double days = int( sim_duration_per_sec/sec_per_day );
+            sim_duration_per_sec -= days * sec_per_day;
+            
+            double hours = int( sim_duration_per_sec/sec_per_hour );
+            sim_duration_per_sec -= hours * sec_per_hour;
+            
+            double mins = int( sim_duration_per_sec/sec_per_min );
+            sim_duration_per_sec -= mins * sec_per_min;
+            
+            printf("Wall clock time of the simulation:\n");
+            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
             return 0; // Normal return from main.
         }
         

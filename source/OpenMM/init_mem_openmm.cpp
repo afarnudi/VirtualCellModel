@@ -45,25 +45,29 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     system.addForce(bondStretch);
     
     OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+0.25)*step(lmax-r))");
-    custombond->addGlobalParameter("lmin",   bonds[0].FENE_lmin
-                                             * OpenMM::NmPerAngstrom);
-    custombond->addGlobalParameter("lmax",   bonds[0].FENE_lmax
-                                             * OpenMM::NmPerAngstrom);
-    custombond->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
-                                   * OpenMM::KJPerKcal
-                                   * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+//    custombond->addGlobalParameter("lmin",   bonds[0].FENE_lmin
+//                                             * OpenMM::NmPerAngstrom);
+//    custombond->addGlobalParameter("lmax",   bonds[0].FENE_lmax
+//                                             * OpenMM::NmPerAngstrom);
+//    custombond->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
+//                                   * OpenMM::KJPerKcal
+//                                   * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     system.addForce(custombond);
     
     
     
+   
     OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("(sigma/r)^6");
-    excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
-                                                   * OpenMM::NmPerAngstrom);
-    excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
     
+    cout<<"num of nonbond particles on definition: "<<excluded_volume->getNumParticles()<<endl;
     std::vector< std::pair< int, int > > excluded_bonds;
     
     system.addForce(excluded_volume);
+    
+    //excluded volume interaction.
+    excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
+                                        * OpenMM::NmPerAngstrom);
+    excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
     
     
     // Specify the atoms and their properties:
@@ -80,8 +84,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                            atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
         initialPosInNm.push_back(posInNm);
         
+        //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
+        excluded_volume->addParticle();
+        
     }
-
+    
+    
+    
+    cout<<"num of nonbond particles after loop: "<<excluded_volume->getNumParticles()<<endl;
+    
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
         std::pair< int, int > temp;
