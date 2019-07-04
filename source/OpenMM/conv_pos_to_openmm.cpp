@@ -23,6 +23,8 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].posInAng[1]=mem.get_node_position(i, 1);
         myatominfo[i].posInAng[2]=mem.get_node_position(i, 2);
         myatominfo[i].mass=mem.get_node_mass();
+        myatominfo[i].radius=mem.get_node_radius();
+        
     }
     //End of list
 //    myatominfo[mem_num_atom].type=-1;

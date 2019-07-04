@@ -19,6 +19,7 @@ struct MyAtomInfo
     double initPosInAng[3];
     double posInAng[3];
     double mass;
+    double radius;
 };
 
 struct Bonds{

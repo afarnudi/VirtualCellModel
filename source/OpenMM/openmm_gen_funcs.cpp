@@ -1,6 +1,7 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
+#include "OpenMM_funcs.hpp"
 
 void myStepWithOpenMM(MyOpenMMData* omm, int numSteps) {
     omm->integrator->step(numSteps);
@@ -37,4 +38,26 @@ void myGetOpenMMState(MyOpenMMData* omm, bool wantEnergy,
     if (wantEnergy)
         energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
         * OpenMM::KcalPerKJ;
+}
+
+//                               PDB FILE WRITER
+// Given state data, output a single frame (pdb "model") of the trajectory.
+void myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
+                const MyAtomInfo atoms[], std::string traj_name)
+{
+    int EndOfList=-1;
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile,"MODEL     %d\n", frameNum);
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
+            timeInPs, energyInKcal);
+    
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+        
+        fprintf(pFile,"ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
+                n+1, atoms[n].pdb,
+                atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
+    }
+    fprintf(pFile,"ENDMDL\n");
+    fclose (pFile);
 }

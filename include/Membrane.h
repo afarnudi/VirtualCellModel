@@ -318,7 +318,7 @@ public:
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
         lmax=Max_node_pair_length*1.05;
-        lmin=Min_node_pair_length*1.05;
+        lmin=Min_node_pair_length*0.95;
         le0=lmin+3*(lmax-lmin)/4;
         le1=lmin+(lmax-lmin)/4;
     }

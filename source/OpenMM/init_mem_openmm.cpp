@@ -38,8 +38,32 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     // to each force object so we can fill in the forces. Note: the System owns
     // the force objects and will take care of deleting them; don't do it yourself!
     OpenMM::System&                 system      = *(omm->system = new OpenMM::System());
-//    OpenMM::HarmonicBondForce&      bondStretch = *new OpenMM::HarmonicBondForce();
-//    OpenMM::CustomBondForce&        custombond  = *new OpenMM::CustomBondForce();
+    
+    
+    //Spring force
+    OpenMM::HarmonicBondForce*      bondStretch = new OpenMM::HarmonicBondForce();
+    system.addForce(bondStretch);
+    
+    OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+0.25)*step(lmax-r))");
+    custombond->addGlobalParameter("lmin",   bonds[0].FENE_lmin
+                                             * OpenMM::NmPerAngstrom);
+    custombond->addGlobalParameter("lmax",   bonds[0].FENE_lmax
+                                             * OpenMM::NmPerAngstrom);
+    custombond->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
+                                   * OpenMM::KJPerKcal
+                                   * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    system.addForce(custombond);
+    
+    
+    
+    OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("(sigma/r)^6");
+    excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
+                                                   * OpenMM::NmPerAngstrom);
+    excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
+    
+    std::vector< std::pair< int, int > > excluded_bonds;
+    
+    system.addForce(excluded_volume);
     
     
     // Specify the atoms and their properties:
@@ -55,30 +79,33 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                            atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
         initialPosInNm.push_back(posInNm);
+        
     }
-    
+
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
+        std::pair< int, int > temp;
+        temp.first=bonds[i].atoms[0];
+        temp.second=bonds[i].atoms[1];
+        excluded_bonds.push_back(temp);
+        
         switch (bonds[i].type) {
             case 1://FENE
             {
                 //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-                OpenMM::CustomBondForce*        custombond  = new OpenMM::CustomBondForce("step(r-lmin)*step(le1-r)*(k_bond*exp(1/(r-le1))/(r-lmin))+step(r-le0)*step(lmax-r)*(k_bond*exp(1/(le0-r))/(lmax-r))");
-                custombond->addGlobalParameter("lmin",   bonds[i].FENE_lmin);
-                custombond->addGlobalParameter("lmax",   bonds[i].FENE_lmax);
-                custombond->addGlobalParameter("le0",    bonds[i].FENE_le0);
-                custombond->addGlobalParameter("le1",    bonds[i].FENE_le1);
+                custombond->addGlobalParameter("lmin",   bonds[i].FENE_lmin
+                                                         * OpenMM::NmPerAngstrom);
+                custombond->addGlobalParameter("lmax",   bonds[i].FENE_lmax
+                                                         * OpenMM::NmPerAngstrom);
                 custombond->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom2
-                                                         * OpenMM::KJPerKcal
-                                                         * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                
+                                               * OpenMM::KJPerKcal
+                                               * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
                 custombond->addBond(atom[0], atom[1]);
-                system.addForce(custombond);
+                
             }
                 break;
             case 2://Harmonic
             {
-                OpenMM::HarmonicBondForce*      bondStretch = new OpenMM::HarmonicBondForce();
                 // Note factor of 2 for stiffness below because Amber specifies the constant
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
@@ -88,7 +115,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                                     bonds[i].stiffnessInKcalPerAngstrom2
                                     * OpenMM::KJPerKcal
                                     * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                system.addForce(bondStretch);
+                
             }
                 break;
         }
@@ -97,12 +124,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     }
     
     
-//    cout<<"stiffnessInKcalPerAngstrom2 = "<<bonds[0].stiffnessInKcalPerAngstrom2
-//                                            * OpenMM::KJPerKcal
-//                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
-//    <<"\nbending_stiffness_value = "<<dihedrals[0].bending_stiffness_value
-//                                      * OpenMM::KJPerKcal
-//                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    excluded_volume->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
+                                                               * OpenMM::NmPerAngstrom);
+    
     
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {

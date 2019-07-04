@@ -46,7 +46,11 @@ void          myGetOpenMMState(MyOpenMMData*, bool wantEnergy,
  */
 void          myTerminateOpenMM(MyOpenMMData*);
 
-
+/**                               PDB FILE WRITER
+ * Given state data, output a single frame (pdb "model") of the trajectory.
+ */
+void myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
+                const MyAtomInfo atoms[], std::string traj_name);
 
 /**Relay the position information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);

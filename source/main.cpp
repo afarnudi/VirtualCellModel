@@ -74,8 +74,7 @@ namespace GenConst {
     int Num_of_Actins;
     int Num_of_ECMs;
     int Num_of_pointparticles;
-    string trajectory_file_name;
-    bool File_header;
+    string trajectory_file_name;;
     double Buffer_temperature;
     double Bussi_tau;
     double Actin_Membrane_Bond_Coefficient;
@@ -84,10 +83,6 @@ namespace GenConst {
 
 
 
-//                   MODELING AND SIMULATION PARAMETERS
-//const double StepSizeInFs        = 0.1;       // integration step size (fs)
-//const double ReportIntervalInFs  = 2;      // how often to generate PDB frame (fs)
-//const double SimulationTimeInPs  = 5;     // total simulation time (ps)
 static const bool   WantEnergy   = true;
 
 
@@ -95,46 +90,15 @@ static const bool   WantEnergy   = true;
 
 const int EndOfList=-1;
 
-//                               PDB FILE WRITER
-// Given state data, output a single frame (pdb "model") of the trajectory.
-static void
-myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
-                const MyAtomInfo atoms[], std::string traj_name)
-{
-    
-    FILE* pFile;
-    pFile = fopen (traj_name.c_str(),"a");
-    // Write out in PDB format -- printf is so much more compact than formatted cout.
-//    printf("MODEL     %d\n", frameNum);
-    fprintf(pFile,"MODEL     %d\n", frameNum);
-//    printf("REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-//           timeInPs, energyInKcal);
-    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-                      timeInPs, energyInKcal);
-    
-    for (int n=0; atoms[n].type != EndOfList; ++n){
-//        printf("ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
-//               n+1, atoms[n].pdb,
-//               atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
-        
-        fprintf(pFile,"ATOM  %5d %4s ETH     1    %8.3f%8.3f%8.3f  1.00  0.00\n",
-                              n+1, atoms[n].pdb,
-                              atoms[n].posInAng[0], atoms[n].posInAng[1], atoms[n].posInAng[2]);
-    }
-//    printf("ENDMDL\n");
-    fprintf(pFile,"ENDMDL\n");
-    fclose (pFile);
-}
+
 
 
 
 
 int main(int argc, char **argv)
 {
-    //time
-    
-    
-    time_t t = time(0);   // get time now
+    // get the current time.
+    time_t t = time(0);
     struct tm * now = localtime( & t );
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
@@ -345,6 +309,7 @@ int main(int argc, char **argv)
         }
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
+        
         try {
             
             MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals);

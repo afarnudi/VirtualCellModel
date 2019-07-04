@@ -40,7 +40,6 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
             istringstream iss(line);
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
 
-            GenConst::File_header=false;
             for (int i=0; i<split.size(); i++) {
                 if (split[i] == comment || (split[i][0]=='/' && split[i][1]=='/')) {
                     break;

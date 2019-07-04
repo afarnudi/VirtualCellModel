@@ -26,6 +26,10 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
        
         
     }
+    cout<<"spring  ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    cout<<"bending ="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    cout<<"lmin\tlmax\tle0\tle1\n"<<bonds[0].FENE_lmin<<"\t"<<bonds[0].FENE_lmax<<"\t"<<bonds[0].FENE_le0<<"\t"<<bonds[0].FENE_le1<<endl;
+    
     
     return bonds;
 }
