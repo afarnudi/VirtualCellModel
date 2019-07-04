@@ -15,19 +15,6 @@ void Membrane::FENE_log (void){
     double temp_potential_energy = 0.0;
 
     int Node_A, Node_B;
-<<<<<<< HEAD
-    
-    // Hoda: I set this condition to solve the problem of those kind of meshes with almost the same length for all the bonds. but we have to check this for different membranes to be sure.
-    if (Max_node_pair_length-Min_node_pair_length< 0.2*Average_node_pair_length){
-        lmax=Average_node_pair_length+0.5*Average_node_pair_length;
-        lmin=Average_node_pair_length-0.5*Average_node_pair_length;
-    }
-    else{
-        //lmax=Max_node_pair_length - 0.08*Max_node_pair_length;
-        //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
-        lmax=Max_node_pair_length*1.05;
-        lmin=Min_node_pair_length*0.95;
-=======
 
     double width= Average_node_pair_length; // it defines a minimum limit for weil width.
     double l=Max_node_pair_length-Min_node_pair_length;
@@ -36,8 +23,7 @@ void Membrane::FENE_log (void){
         width_scaling= (width-l)/(2*l); //in this case the width tuned in a way that the weil width becomes exactly 0.66*Average_node_pair_lenght
     }
     else{
-        width=  (1+ 2*width_scaling)*l; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the weil width may become larger than 0.66Average which was the minimum limit. 
->>>>>>> master
+        width=  (1+ 2*width_scaling)*l; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the weil width may become larger than 0.66Average which was the minimum limit.
     }
 //    double width= 0.66*Average_node_pair_length;
 //    double l=Max_node_pair_length-Min_node_pair_length;
@@ -92,7 +78,7 @@ void Membrane::FENE_log (void){
                 cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
                 cout<<"Node A = "<<Node_A<<"\tNode B = "<<Node_B<<endl;
                 cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";
-            
+
                 exit(EXIT_FAILURE);
             } else {
                 if(temp_force>1000  || Node_distance>lmax )
