@@ -1,0 +1,55 @@
+Resume	0	Resume_2018_10_14_21_31.txt 
+//if the flag is on, the membrane will be initiatied from the resume file  saved in the written directory.
+
+Mesh_file_name	1	vesicle.ply	
+//the mesh file which is used to initiate the Membrane class.
+
+mesh_format	2	
+// this flag indicates the format of mesh file. (1 : gmsh file  2 : ply file)
+
+Node_Mass	1
+
+Node_radius	1	
+
+spring_model	1	
+//this flag indicates the spring model between nodes (1 :Fene-log  2 :Harmonic)
+
+Spring_coefficient	10
+
+Bending_coefficient	35
+
+Damping_coefficient	0
+
+K_surfaceConstant_local	100
+
+Shift	0	
+//this flag indicates that if the whole Membrane has to be shifted or not. (0: shifting off  1: shifting on)
+
+Shift_in_X_direction	0	
+//the amount of shifting in x direction
+
+Shift_in_Y_direction	0	
+//the amount of shifting in y direction	
+
+Shift_in_Z_direction	0	
+//the amount of shifting in z direction
+
+Downward_speed	0
+
+X_in_mem	0	
+//the x coordinate of initial center of mass 
+
+Y_in_mem	0	
+//the y coordinate of initial center of mass 
+
+Z_in_mem	0	
+//the z coordinate of initial center of mass 
+
+Relaxation	0	
+//this flag indicates that if the  Membrane has to go through the relaxation process or not. (0: relaxation off  1:relaxation on)
+
+rescale		1	
+//this flag indicates that if the whole Membrane has to be rescaled or not. (0: rescaling off  1:rescaling on)
+
+rescale_factor	10	
+//the amount of rescaling

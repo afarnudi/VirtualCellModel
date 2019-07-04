@@ -41,6 +41,12 @@ void Membrane::import_config(string config_file_name){
                     cout<<"Resume flag on. Membrane will resume using the '"<<resume_file_name<<"' file.\n";
                 }
             } else if (split[0]=="Mesh_file_name") {
+                if (split[1]=="1"){
+                    mesh_format=1;
+                }else if (split[1]=="2"){
+                    mesh_format=2;
+                }
+                cout<<"Mesh format"<<mesh_format;
                 Mesh_file_name=split[2];
                 cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
             } else {
@@ -74,8 +80,11 @@ void Membrane::set_map_parameter(string param_name, double param_value){
 //    map<string, double>::iterator it;
     if (param_name=="Node_Mass") {
         Node_Mass=param_value;
+<<<<<<< HEAD
     } else if (param_name=="c"){
         mesh_format=param_value;
+=======
+>>>>>>> master
     }else if (param_name=="Node_radius"){
         Node_radius=param_value;
     } else if (param_name=="spring_model"){
@@ -120,7 +129,13 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         ECM_interaction_cut_off=param_value;
     } else if (param_name=="ECM_interaction_strength"){
         ECM_interaction_strength=param_value;
-    } else if(param_name=="Relaxation"){
+    }else if (param_name=="vesicle_interaction_cut_off"){
+        vesicle_interaction_cut_off=param_value;
+    }else if (param_name=="vesicle_interaction_sigma"){
+        vesicle_interaction_sigma=param_value;
+    }else if (param_name=="vesicle_interaction_strength"){
+        vesicle_interaction_strength=param_value;
+    }else if(param_name=="Relaxation"){
         if (int(param_value) == 0){
             Relaxation=false;
         } else {

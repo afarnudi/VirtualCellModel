@@ -15,6 +15,7 @@ void Membrane::FENE_log (void){
     double temp_potential_energy = 0.0;
 
     int Node_A, Node_B;
+<<<<<<< HEAD
     
     // Hoda: I set this condition to solve the problem of those kind of meshes with almost the same length for all the bonds. but we have to check this for different membranes to be sure.
     if (Max_node_pair_length-Min_node_pair_length< 0.2*Average_node_pair_length){
@@ -26,6 +27,17 @@ void Membrane::FENE_log (void){
         //lmin=Min_node_pair_length + 0.16*Min_node_pair_length;
         lmax=Max_node_pair_length*1.05;
         lmin=Min_node_pair_length*0.95;
+=======
+
+    double width= Average_node_pair_length; // it defines a minimum limit for weil width.
+    double l=Max_node_pair_length-Min_node_pair_length;
+    double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
+    if ((1+ 2*width_scaling)*l<width ){ //this condition shows the case when the mesh is almost ordered.
+        width_scaling= (width-l)/(2*l); //in this case the width tuned in a way that the weil width becomes exactly 0.66*Average_node_pair_lenght
+    }
+    else{
+        width=  (1+ 2*width_scaling)*l; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the weil width may become larger than 0.66Average which was the minimum limit. 
+>>>>>>> master
     }
 //    double width= 0.66*Average_node_pair_length;
 //    double l=Max_node_pair_length-Min_node_pair_length;

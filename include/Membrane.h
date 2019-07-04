@@ -110,7 +110,7 @@ private:
     int Relaxation_Process_Model=1; /// 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
     double ECM_interaction_cut_off=0;
-    double vesicle_interaction_cut_off=0;
+    double vesicle_interaction_cut_off=10;
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     double Total_Kinetic_Energy;
@@ -131,7 +131,8 @@ private:
     double ECM_interaction_strength=1;
 
 
-    double vesicle_interaction_strength=100;
+    double vesicle_interaction_strength=30;
+    double vesicle_interaction_sigma=3;
     double Average_Node_Distance();
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
@@ -374,10 +375,13 @@ public:
     double get_ECM_interaction_strength(void){
         return ECM_interaction_strength;
     }
-    double return_vesicle_interaction_cut_off(void){
+    double get_vesicle_interaction_cut_off(void){
         return vesicle_interaction_cut_off;
+    } 
+    double get_vesicle_interaction_sigma(void){
+        return vesicle_interaction_sigma;
     }
-    double return_vesicle_interaction_strength(void){
+    double get_vesicle_interaction_strength(void){
         return vesicle_interaction_strength;
     }
     void add_to_force(double force,int index, int coor){

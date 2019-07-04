@@ -221,6 +221,13 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         } else {
             GenConst::Num_of_ECMs=0;
         }
+    }else if (param_name=="Num_of_pointparticles"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Num_of_pointparticles=it->second;
+        } else {
+            GenConst::Num_of_pointparticles=0;
+        }
     } else if (param_name=="Bussi_tau"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
