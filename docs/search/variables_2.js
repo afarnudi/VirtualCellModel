@@ -7,5 +7,6 @@ var searchData=
   ['com_5fvelocity',['COM_velocity',['../class_actin.html#a8da4a0429095385a6c28d8a9fcd59d01',1,'Actin::COM_velocity()'],['../class_chromatin.html#ae2f34981e33be9eb23851d9515f42b9f',1,'Chromatin::COM_velocity()'],['../class_e_c_m.html#a0251608c58b75696c267c5221355565a',1,'ECM::COM_velocity()'],['../class_membrane.html#a28862d2e7b5be2dd802375ed9c2bd489',1,'Membrane::COM_velocity()']]],
   ['contact_5fmatrix',['Contact_Matrix',['../class_chromatin.html#a163b690f6c7f65a466816e5356cd9038',1,'Chromatin']]],
   ['context',['context',['../struct_my_open_m_m_data.html#a2d94acedaa245a3fb2faa48625fa7fc1',1,'MyOpenMMData']]],
-  ['correction_5fprogress',['correction_progress',['../class_membrane.html#a45dae49b1ff14a1cfaaede273abf3f3b',1,'Membrane']]]
+  ['correction_5fprogress',['correction_progress',['../class_membrane.html#a45dae49b1ff14a1cfaaede273abf3f3b',1,'Membrane']]],
+  ['cut_5foff',['cut_off',['../classpoint__particle.html#ab6a87fce5a3b85ca0b2037066fa31e63',1,'point_particle']]]
 ];

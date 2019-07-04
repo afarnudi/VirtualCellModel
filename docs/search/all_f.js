@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['radius',['Radius',['../class_membrane.html#a6d1611097b82cabb54fd45b85faf56cd',1,'Membrane']]],
-  ['read_5fgeneral_5fparameters',['read_general_parameters',['../maps_8hpp.html#ad3c65efea69994a89fbd4252e410a244',1,'maps.hpp']]],
+  ['radius',['radius',['../struct_my_atom_info.html#a712bfc36655e20c672039e77c382cb75',1,'MyAtomInfo::radius()'],['../class_membrane.html#a6d1611097b82cabb54fd45b85faf56cd',1,'Membrane::Radius()']]],
+  ['read_5fgeneral_5fparameters',['read_general_parameters',['../maps_8hpp.html#add045e395f416c2662083b8729b7f5ab',1,'maps.hpp']]],
   ['read_5fgmesh_5ffile',['read_gmesh_file',['../class_actin.html#aec97a1b58eb61a6a741101338eb6b9a3',1,'Actin::read_gmesh_file()'],['../class_membrane.html#a7436b083228f1fd4a5af25915448ad4c',1,'Membrane::read_gmesh_file()']]],
   ['read_5fgmesh_5ffile_5f2d',['read_gmesh_file_2D',['../class_e_c_m.html#aa1694b9de077128bbdc3e5e2982c9890',1,'ECM']]],
   ['read_5fgmesh_5ffile_5f3d',['read_gmesh_file_3D',['../class_e_c_m.html#a11f1307b17a2becc9cbf2478b7b34aa5',1,'ECM']]],
@@ -14,8 +14,10 @@ var searchData=
   ['relaxation_5fpotential',['Relaxation_potential',['../class_membrane.html#a658651387cb8721529cd44ac39aede0d',1,'Membrane']]],
   ['relaxation_5fprocess_5fmodel',['Relaxation_Process_Model',['../class_membrane.html#a88d2b8d743fc647e4396dfbd32b8a183',1,'Membrane']]],
   ['relaxation_5ftraj',['relaxation_traj',['../class_membrane.html#aa4286fd20ae452585ec5d19c67268eed',1,'Membrane']]],
+  ['report_5finterval_5fin_5ffs',['Report_Interval_In_Fs',['../namespace_gen_const.html#accb4df9604e3e9efe42479d91e6bbb55',1,'GenConst']]],
   ['resamplekin',['resamplekin',['../_bussi___thermostat_8hpp.html#ab7d72fbfcaec8d07801ab57d221cb22e',1,'Bussi_Thermostat.hpp']]],
   ['rescale',['Rescale',['../class_membrane.html#aa5cf85b2e165cb704323067c6ac03afb',1,'Membrane::Rescale(double rescale_factor)'],['../class_membrane.html#adc339c4c1db611ace38403b5b54647f3',1,'Membrane::rescale()']]],
+  ['rescale_5ffactor',['rescale_factor',['../class_membrane.html#a34400db3895f0e440d6f75d52c2a1167',1,'Membrane']]],
   ['rescale_5fvelocities',['rescale_velocities',['../class_chromatin.html#a1e9513e6a1b6324571ca94c0e43bd47e',1,'Chromatin']]],
   ['reset_5fcom_5fvelocity',['reset_com_velocity',['../class_chromatin.html#a8d5bc55a928fd266115680c47872633f',1,'Chromatin']]],
   ['results',['Results',['../class_chromatin.html#a93559682020c26033dc0b4cdbff774f9',1,'Chromatin::Results()'],['../write__functions_8hpp.html#a6cd9c3f257c8acf45702531133b77d63',1,'Results(ECM ecm, string label, char *buffer):&#160;write_functions.hpp'],['../write__functions_8hpp.html#a9defae664741952a456805712cdc0794',1,'Results(Membrane membrane, string label, char *buffer):&#160;write_functions.hpp']]],
@@ -29,6 +31,13 @@ var searchData=
   ['return_5fnum_5fof_5factin_5fmembrane_5fshared_5fnodes',['return_num_of_actin_membrane_shared_nodes',['../class_actin.html#ad6b6cfbc32c772aa024eafa5caea16ab',1,'Actin']]],
   ['return_5fnum_5fof_5fnodes',['return_num_of_nodes',['../class_actin.html#a6314819374bc3801b7cbf8648aeee3cc',1,'Actin::return_num_of_nodes()'],['../class_chromatin.html#adaea32233fd4347b7ba86fb9df18ed18',1,'Chromatin::return_num_of_nodes()'],['../class_e_c_m.html#afcc6d59c0f53f0e1482a3c8cf86339a6',1,'ECM::return_num_of_nodes()']]],
   ['return_5fnum_5fof_5ftriangles',['return_num_of_triangles',['../class_e_c_m.html#a9eb609680ff7d1d42add41371c770fc2',1,'ECM']]],
+  ['return_5fp_5fmembrane_5fcut_5foff',['return_P_Membrane_cut_off',['../classpoint__particle.html#ae2d18d929b1558333ecd86b17f7caa6d',1,'point_particle']]],
+  ['return_5fp_5fmembrane_5fepsilon',['return_P_Membrane_epsilon',['../classpoint__particle.html#ac2e3983a015b533b30209283a3692cc1',1,'point_particle']]],
+  ['return_5fp_5fmembrane_5fsigma',['return_P_Membrane_sigma',['../classpoint__particle.html#a51f76ba04a942622d54fb4e5388518a6',1,'point_particle']]],
+  ['return_5fp_5fp_5fcut_5foff',['return_P_P_cut_off',['../classpoint__particle.html#a02ada7bba125dc701f5c8a4d067dc8c0',1,'point_particle']]],
+  ['return_5fp_5fp_5fepsilon',['return_P_P_epsilon',['../classpoint__particle.html#acbec3803b347d96c064862102b059209',1,'point_particle']]],
+  ['return_5fp_5fp_5fsigma',['return_P_P_sigma',['../classpoint__particle.html#afebd9502e8c8106f2b5274378045965c',1,'point_particle']]],
+  ['return_5fposition',['return_position',['../classpoint__particle.html#a3785ab52126a3b9f4f9a38bd35378771',1,'point_particle']]],
   ['return_5fsigma',['return_sigma',['../class_e_c_m.html#acf88481683c751ded1fb1818a1379990',1,'ECM']]],
   ['return_5ftriangle_5fmembrane_5fdistance',['return_triangle_membrane_distance',['../interaction_8hpp.html#a04fec42b185e44beda7ac8fde1edeca0',1,'interaction.hpp']]]
 ];

@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Membrane &mdash; The Virtual Cell Model  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/main_stylesheet.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="The Virtual Cell Model  documentation" href="index.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> The Virtual Cell Model
+          
+
+          
+            
+            <img src="_static/logo_1.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">INSTALLATION</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">The Membrane</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-membrane">Class Membrane</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">The Virtual Cell Model</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>The Membrane</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Membrane.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-membrane">
+<h1>The Membrane<a class="headerlink" href="#the-membrane" title="Permalink to this headline">¶</a></h1>
+<p><cite>The Virtual Cell Model</cite> can adapt one-dimensional containers in place, and provide them a tensor interface.
+Only random access containers can be adapted.</p>
+<div class="section" id="class-membrane">
+<h2>Class Membrane<a class="headerlink" href="#class-membrane" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv28Membrane">
+<span id="Membrane"></span><span class="target" id="project0class_membrane"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">Membrane</code><a class="headerlink" href="#_CPPv28Membrane" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class &#8216;<a class="reference internal" href="#project0class_membrane"><span>Membrane</span></a>&#8216; manages the required enviroment (system, forces, etc) of coordinates on a triangular mesh. </p>
+<p>The <a class="reference internal" href="#project0class_membrane"><span>Membrane</span></a> class deciphers the mesh coordinates from the input mesh file provided in the configuration file. The bond information is also extracted from the mesh file and stored in the class. The various interactions of membrane nodes and all the membrane node info is also stored in this class.</p>
+<p>
+Contact: <a class="reference external" href="mailto:a&#46;farnudi&#37;&#52;&#48;gmail&#46;com">a<span>&#46;</span>farnudi<span>&#64;</span>gmail<span>&#46;</span>com</a> <dl class="docutils">
+<dt><strong>Note</strong></dt>
+<dd>Work in progress.</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N8Membrane16initilise_openmmEv">
+<span id="Membrane::initilise_openmm__void"></span><span class="target" id="project0class_membrane_1a8ffb572d8b3b2cf07b2cb5e487fbc3b9"></span>void <code class="descname">initilise_openmm</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane16initilise_openmmEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call all initilisation members and initilise openmm handles. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane15excluded_volumeEv">
+<span id="Membrane::excluded_volume__void"></span><span class="target" id="project0class_membrane_1a917057b75f5a7f766eb747daf40a1ef4"></span>void <code class="descname">excluded_volume</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane15excluded_volumeEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>node-node hard sphere interaction. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane9set_labelENSt6stringE">
+<span id="Membrane::set_label__ss"></span><span class="target" id="project0class_membrane_1a5d37c481f978d04a64ea0fd10f5e7708"></span>void <code class="descname">set_label</code><span class="sig-paren">(</span>std::string <em>lab</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane9set_labelENSt6stringE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the label(pdb) used to write to the trajectory files. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane12return_labelEv">
+<span id="Membrane::return_label__void"></span><span class="target" id="project0class_membrane_1a9894d303af1b82471b222d7ef82b5e9e"></span>std::string <code class="descname">return_label</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane12return_labelEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the label(pdb) used to write to the trajectory files. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane16get_num_of_nodesEv">
+<span id="Membrane::get_num_of_nodes__void"></span><span class="target" id="project0class_membrane_1a7ab07bf9d307d2e2b8e457a9167fff78"></span>int <code class="descname">get_num_of_nodes</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane16get_num_of_nodesEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>public access to total number of membrane nodes. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>integer number of nodes in the membrane </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane21get_num_of_node_pairsEv">
+<span id="Membrane::get_num_of_node_pairs__void"></span><span class="target" id="project0class_membrane_1a8dba8af8f79eeb588edfea309e530368"></span>int <code class="descname">get_num_of_node_pairs</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane21get_num_of_node_pairsEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of bonds between membrane nodes. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane13get_node_pairEii">
+<span id="Membrane::get_node_pair__i.i"></span><span class="target" id="project0class_membrane_1a522229db4c05a0a927c1c9ac3bf29915"></span>int <code class="descname">get_node_pair</code><span class="sig-paren">(</span>int <em>bond_num</em>, int <em>node_id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane13get_node_pairEii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the id(int) of the nodes in the bonds. </p>
+<p>The id of each node in the bond list is stored in the first (0) and the second (1) id slot. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane13get_node_massEv">
+<span id="Membrane::get_node_mass__void"></span><span class="target" id="project0class_membrane_1a7b6e284f4bba349da2ddc1c14f914dc7"></span>double <code class="descname">get_node_mass</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane13get_node_massEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node mass. </p>
+<p>At the current stage of this code all membrane nodes have the same mass. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane17get_avg_node_distEv">
+<span id="Membrane::get_avg_node_dist__void"></span><span class="target" id="project0class_membrane_1a32ed30019d57e8d4e51341709a8997f2"></span>double <code class="descname">get_avg_node_dist</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane17get_avg_node_distEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the average distance of the nodes as calculated from the mesh. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane32get_spring_stiffness_coefficientEv">
+<span id="Membrane::get_spring_stiffness_coefficient__void"></span><span class="target" id="project0class_membrane_1a7076d2f0d0e1d39e74d35f6dbb193103"></span>double <code class="descname">get_spring_stiffness_coefficient</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane32get_spring_stiffness_coefficientEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return spring stiffness coefficient. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane33get_bending_stiffness_coefficientEv">
+<span id="Membrane::get_bending_stiffness_coefficient__void"></span><span class="target" id="project0class_membrane_1ae1e3082fdde5dbef11fb6c3b7cc97c0a"></span>double <code class="descname">get_bending_stiffness_coefficient</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane33get_bending_stiffness_coefficientEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return bending stiffness coefficient. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane25get_num_of_triangle_pairsEv">
+<span id="Membrane::get_num_of_triangle_pairs"></span><span class="target" id="project0class_membrane_1a7aefd8327b0c02828efc321fd1ae7f07"></span>int <code class="descname">get_num_of_triangle_pairs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane25get_num_of_triangle_pairsEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the calculated number of triangles in the imported mesh file. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane28get_traingle_pair_nodes_listEi">
+<span id="Membrane::get_traingle_pair_nodes_list__i"></span><span class="target" id="project0class_membrane_1a6aaf6705d45dcc224eceace9670c15f9"></span>vector&lt;int&gt; <code class="descname">get_traingle_pair_nodes_list</code><span class="sig-paren">(</span>int <em>triangle_pair</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane28get_traingle_pair_nodes_listEi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node IDs of the dihedral angles. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane22get_traingle_pair_nodeEii">
+<span id="Membrane::get_traingle_pair_node__i.i"></span><span class="target" id="project0class_membrane_1a30add8aa4bd6a4f03cdb3fd3e1b68ff9"></span>int <code class="descname">get_traingle_pair_node</code><span class="sig-paren">(</span>int <em>triangle_pair</em>, int <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane22get_traingle_pair_nodeEii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the node ID of the dihedral angles member. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane16get_spring_modelEv">
+<span id="Membrane::get_spring_model__void"></span><span class="target" id="project0class_membrane_1aa567e00a8c4c4b4a57547b84e80e418e"></span>int <code class="descname">get_spring_model</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane16get_spring_modelEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return input spring model, used to setup the openmm system for the bonds. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane14set_FENE_paramERdRdRdRd">
+<span id="Membrane::set_FENE_param__doubleR.doubleR.doubleR.doubleR"></span><span class="target" id="project0class_membrane_1ae240d9a481d914b7e5092bb9183aa0fa"></span>void <code class="descname">set_FENE_param</code><span class="sig-paren">(</span>double &amp;<em>le0</em>, double &amp;<em>le1</em>, double &amp;<em>lmin</em>, double &amp;<em>lmax</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane14set_FENE_paramERdRdRdRd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set FENE calculated parameters. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane19get_num_of_triangleEv">
+<span id="Membrane::get_num_of_triangle"></span><span class="target" id="project0class_membrane_1a2ab5e9ec0ae823cfa224be4db90e11c5"></span>int <code class="descname">get_num_of_triangle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane19get_num_of_triangleEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the calculated number of triangles in the imported mesh file. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Membrane32get_vesicle_interaction_strengthEv">
+<span id="Membrane::get_vesicle_interaction_strength__void"></span><span class="target" id="project0class_membrane_1a77171793ae4115a603f57f3472868ff8"></span>double <code class="descname">get_vesicle_interaction_strength</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Membrane32get_vesicle_interaction_strengthEv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns epsilon for lennard-Jones interaction between the nodes of 2 membranes. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Mohammad Reza Ejtehadi, Morteza Mahmoudi, Maziar Heidari,Tiam Heydari, Ali Farnudi.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

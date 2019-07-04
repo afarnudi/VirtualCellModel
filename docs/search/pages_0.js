@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['c_20coding_20style',['C Coding Style',['../md__doxygen__coding__style.html',1,'']]],
-  ['commenting_20style',['Commenting Style',['../md__doxygen__commenting__style.html',1,'']]]
+  ['c_20coding_20style',['C Coding Style',['../md_Doxygen_Coding_Style.html',1,'']]],
+  ['commenting_20style',['Commenting Style',['../md_Doxygen_Commenting_Style.html',1,'']]]
 ];

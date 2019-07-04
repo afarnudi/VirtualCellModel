@@ -3,7 +3,7 @@ var searchData=
   ['genconst',['GenConst',['../namespace_gen_const.html',1,'']]],
   ['general_5fconstants_2eh',['General_constants.h',['../_general__constants_8h.html',1,'']]],
   ['general_5ffunctions_2ehpp',['General_functions.hpp',['../_general__functions_8hpp.html',1,'']]],
-  ['generate_5freport',['generate_report',['../class_actin.html#a89a64e474276cba5062fb45013deda78',1,'Actin::generate_report()'],['../class_chromatin.html#a0c988a3b80895ed2c070625646d8ccd3',1,'Chromatin::generate_report()'],['../class_e_c_m.html#ab6d157d62196d68af2437ffb3edc19fe',1,'ECM::generate_report()'],['../class_membrane.html#a36462fa0881cf8ee5a0c7268ae4fdd30',1,'Membrane::generate_report()']]],
+  ['generate_5freport',['generate_report',['../class_actin.html#a89a64e474276cba5062fb45013deda78',1,'Actin::generate_report()'],['../class_chromatin.html#a0c988a3b80895ed2c070625646d8ccd3',1,'Chromatin::generate_report()'],['../class_e_c_m.html#ab6d157d62196d68af2437ffb3edc19fe',1,'ECM::generate_report()'],['../class_membrane.html#a36462fa0881cf8ee5a0c7268ae4fdd30',1,'Membrane::generate_report()'],['../classpoint__particle.html#a8a89ec34d7dc2e1a54c3e0b58d23ff06',1,'point_particle::generate_report()']]],
   ['get_5favg_5fnode_5fdist',['get_avg_node_dist',['../class_membrane.html#a32ed30019d57e8d4e51341709a8997f2',1,'Membrane']]],
   ['get_5fbending_5fstiffness_5fcoefficient',['get_bending_stiffness_coefficient',['../class_membrane.html#ae1e3082fdde5dbef11fb6c3b7cc97c0a',1,'Membrane']]],
   ['get_5fcorrection_5fprogress',['get_correction_progress',['../class_membrane.html#ad3960f87e60282211a1266f4d3318dc0',1,'Membrane']]],
@@ -25,5 +25,8 @@ var searchData=
   ['get_5fspring_5fstiffness_5fcoefficient',['get_spring_stiffness_coefficient',['../class_membrane.html#a7076d2f0d0e1d39e74d35f6dbb193103',1,'Membrane']]],
   ['get_5ftraingle_5fpair_5fnode',['get_traingle_pair_node',['../class_membrane.html#a30add8aa4bd6a4f03cdb3fd3e1b68ff9',1,'Membrane']]],
   ['get_5ftraingle_5fpair_5fnodes_5flist',['get_traingle_pair_nodes_list',['../class_membrane.html#a6aaf6705d45dcc224eceace9670c15f9',1,'Membrane']]],
+  ['get_5fvesicle_5finteraction_5fcut_5foff',['get_vesicle_interaction_cut_off',['../class_membrane.html#ac8de522542c4c2c68ea489ce13a79bb5',1,'Membrane']]],
+  ['get_5fvesicle_5finteraction_5fsigma',['get_vesicle_interaction_sigma',['../class_membrane.html#a42b4b787240cc27329218909bf790409',1,'Membrane']]],
+  ['get_5fvesicle_5finteraction_5fstrength',['get_vesicle_interaction_strength',['../class_membrane.html#a77171793ae4115a603f57f3472868ff8',1,'Membrane']]],
   ['global_5ffunctions_2ehpp',['Global_functions.hpp',['../_global__functions_8hpp.html',1,'']]]
 ];

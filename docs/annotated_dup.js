@@ -7,5 +7,6 @@ var annotated_dup =
     [ "ECM", "class_e_c_m.html", "class_e_c_m" ],
     [ "Membrane", "class_membrane.html", "class_membrane" ],
     [ "MyAtomInfo", "struct_my_atom_info.html", "struct_my_atom_info" ],
-    [ "MyOpenMMData", "struct_my_open_m_m_data.html", "struct_my_open_m_m_data" ]
+    [ "MyOpenMMData", "struct_my_open_m_m_data.html", "struct_my_open_m_m_data" ],
+    [ "point_particle", "classpoint__particle.html", "classpoint__particle" ]
 ];

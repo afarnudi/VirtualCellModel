@@ -25,5 +25,8 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
       [ "Dihedrals", "struct_dihedrals.html", "struct_dihedrals" ],
       [ "MyOpenMMData", "struct_my_open_m_m_data.html", "struct_my_open_m_m_data" ]
     ] ],
+    [ "point_particle.h", "point__particle_8h.html", [
+      [ "point_particle", "classpoint__particle.html", "classpoint__particle" ]
+    ] ],
     [ "write_functions.hpp", "write__functions_8hpp.html", "write__functions_8hpp" ]
 ];

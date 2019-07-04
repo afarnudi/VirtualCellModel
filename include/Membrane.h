@@ -380,7 +380,7 @@ public:
     } 
     double get_vesicle_interaction_sigma(void){
         return vesicle_interaction_sigma;
-    }
+    }/**Returns epsilon for lennard-Jones interaction between the nodes of  2 membranes.*/
     double get_vesicle_interaction_strength(void){
         return vesicle_interaction_strength;
     }
