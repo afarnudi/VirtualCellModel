@@ -46,7 +46,7 @@ void Membrane::import_config(string config_file_name){
                 }else if (split[1]=="2"){
                     mesh_format=2;
                 }
-                cout<<"Mesh format"<<mesh_format;
+//                cout<<"Mesh format"<<mesh_format;
                 Mesh_file_name=split[2];
                 cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
             } else {
