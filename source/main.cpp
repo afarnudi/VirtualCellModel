@@ -263,7 +263,7 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     int progress=0;
-    bool openmm_sim=false;
+    bool openmm_sim=true;
     //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -344,8 +344,8 @@ int main(int argc, char **argv)
                 
                 myStepWithOpenMM(omm, NumSilentSteps);
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
-                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<"\tPs     \r" << std::flush;
-                    progress+=5;
+                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
+                    progress+=1;
                 }
             }
             

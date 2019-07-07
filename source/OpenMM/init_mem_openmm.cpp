@@ -73,13 +73,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     system.addForce(excluded_volume);
-    
+    excluded_volume->addInteractionGroup(membrane_set[0], membrane_set[0]);
+    excluded_volume->addInteractionGroup(membrane_set[1], membrane_set[1]);
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
     OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
-    LJ_12_6_interaction->addGlobalParameter("sigma",   2
+    LJ_12_6_interaction->addGlobalParameter("sigma",   3
                                                        * OpenMM::NmPerAngstrom);
-    LJ_12_6_interaction->addGlobalParameter("epsilon",   0.1
+    LJ_12_6_interaction->addGlobalParameter("epsilon",   0.01
                                             * OpenMM::KJPerKcal
                                             * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
