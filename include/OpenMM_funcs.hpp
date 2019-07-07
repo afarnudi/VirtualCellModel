@@ -18,11 +18,12 @@
  * with the OpenMM API.
  * This function initilises the openmm system + contex + forces.
  */
-MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
-                                 double          stepSizeInFs,
-                                 std::string&    platformName,
-                                 Bonds*          bonds,
-                                 Dihedrals*      dihedrals);
+MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
+                                 double                         stepSizeInFs,
+                                 std::string&                   platformName,
+                                 Bonds*                         bonds,
+                                 Dihedrals*                     dihedrals,
+                                 std::vector<std::set<int> >    &membrane_set);
 
 
 

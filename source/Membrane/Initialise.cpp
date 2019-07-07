@@ -17,10 +17,10 @@ void Membrane::initialise(std::string Mesh_file_name){
         read_ply_file(Mesh_file_name);
     }
     output_file_neme=Mesh_file_name;
-    if (rescale==true){
-        Rescale(rescale_factor);
-        cout<<"mesh rescaled by factor"<< rescale_factor <<endl;
-    }
+//    if (rescale==true){
+//        Rescale(rescale_factor);
+//        cout<<"mesh rescaled by factor"<< rescale_factor <<endl;
+//    }
     
     if(Shift==true){
     shift_position ( Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);

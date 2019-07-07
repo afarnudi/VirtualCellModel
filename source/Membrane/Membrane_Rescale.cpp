@@ -1,11 +1,11 @@
 #include "Membrane.h"
 
-void Membrane::Rescale(double rescale_factor){
-    for(int j=0 ; j<Num_of_Nodes ; j++){
-        for(int i=0; i<3; i++){
-            Node_Position[j][i]*=rescale_factor;}
-            }
-}
+//void Membrane::Rescale(double rescale_factor){
+//    for(int j=0 ; j<Num_of_Nodes ; j++){
+//        for(int i=0; i<3; i++){
+//            Node_Position[j][i]*=rescale_factor;}
+//            }
+//}
 
 void Membrane::shift_position (double x, double y, double z) {
       for (int i=0; i<Num_of_Nodes; i++) {

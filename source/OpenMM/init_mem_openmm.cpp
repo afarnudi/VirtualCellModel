@@ -4,6 +4,8 @@
 
 const int EndOfList=-1;
 using OpenMM::Vec3;
+using std::vector;
+using std::set;
 /** -----------------------------------------------------------------------------
  *                      INITIALIZE OpenMM DATA STRUCTURES
  * -----------------------------------------------------------------------------
@@ -21,11 +23,12 @@ using OpenMM::Vec3;
  * Note that this function must understand the calling MD code's molecule and
  * force field data structures so will need to be customized for each MD code.
  */
-MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
-                                 double              stepSizeInFs,
-                                 std::string&        platformName,
-                                 Bonds*              bonds,
-                                 Dihedrals*          dihedrals)
+MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
+                                 double             stepSizeInFs,
+                                 std::string&       platformName,
+                                 Bonds*             bonds,
+                                 Dihedrals*         dihedrals,
+                                 vector<set<int> >  &membrane_set)
 {
     // Load all available OpenMM plugins from their default location.
     OpenMM::Platform::loadPluginsFromDirectory
@@ -36,7 +39,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     
     // Create a System and Force objects within the System.
     OpenMM::System&                 system      = *(omm->system = new OpenMM::System());
-    
     
     // Retain a reference to each force object so we can fill in the forces.
     // Note: the System owns the force objects and will take care of deleting them;
@@ -60,7 +62,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     system.addForce(FENE);
     
     
-    // Create an array of FENE spring force objects to add to the system.
+    // Create a handle for FENE spring force objects to add to the system.
     OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("10*(sigma/r)^6");
     
     // Creat a vector of node index pairs that form a bond. This list is later used to create a list of atoms that are excluded from the excluded volume force.
@@ -71,6 +73,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
     system.addForce(excluded_volume);
+    
+    
+    // Create a handle for 12 6 LJ inter class object interactions to add to the system.
+    OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
+    LJ_12_6_interaction->addGlobalParameter("sigma",   1.5 * atoms[0].radius
+                                                       * OpenMM::NmPerAngstrom);
+    
+    
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
     OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
@@ -94,10 +104,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
         initialPosInNm.push_back(posInNm);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
+        
         excluded_volume->addParticle();
         
+        
     }
-    
     
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
@@ -142,6 +153,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
                 dihedral_force->addBond(dihedrals[i].atoms);
     }
     
+    
+    
+    
+    
+    
+    
+    
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
@@ -156,6 +174,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo    atoms[],
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
+    
+    
+    
     omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
     omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     omm->context->setPositions(initialPosInNm);

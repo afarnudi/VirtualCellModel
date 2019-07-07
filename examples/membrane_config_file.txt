@@ -1,19 +1,52 @@
+//Set to 1 if you want to continue an finished/interrupted simulation. Followed by the directory of the resume file. The resume file is automatically generated during specific steps of the simulation that may be adjusted in the general configuration file.
 Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
-Mesh_file_name	2	Mesh/Membrane_sep_1	Mesh/Membrane_sep_2
+
+//Set 1 for mesh files produced with gmsh V2, and 2 for .ply files (blender). Followed by the directory of the mesh file relative to the executable.
+Mesh_file_name	1	Mesh/Membrane_sep_1
+
+//The mass of each membrane node. Default 1
 Node_Mass	1
+
+//Radius of each membrane node. Default 1
 Node_radius	1
+
+//Energy of membrane nodes. 1) FENE with a log barrier. 2) Harmonic spring. Default 2
 spring_model	2
+
+//Harmonic spring coefficient in KJ per nanometre squared. Default 10*KT
 Spring_coefficient	.20
+
+//Dihedral bending energy coefficent of triangle pairs. Default 20*KT
 Bending_coefficient	.8
+
+//Viscosity coefficient of the membrane. Default 0
 Damping_coefficient	0
+
+
 K_surfaceConstant_local	100
+
+//Shift membrane position in the x direction in nanometers. Default 0
 Shift_in_X_direction	0
+
+//Shift membrane position in the y direction in nanometers. Default 0
 Shift_in_Y_direction	0
+
+//Shift membrane position in the z direction in nanometers. Default 0
 Shift_in_Z_direction	0
+
+//Set an initial speed in the -y direction. Default 0
 Downward_speed	0
+
+//An X coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
 X_in_mem	0
+
+//An Y coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
 Y_in_mem	0
+
+//An Z coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
 Z_in_mem	0
+
+
 Relaxation	0
 Relax_with_actin	0
 ECM_interaction_cut_off	2.5

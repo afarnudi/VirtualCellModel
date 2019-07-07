@@ -184,6 +184,9 @@ void Membrane::read_ply_file (std::string ply_file)
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
+        temp_node_position[0]*=rescale_factor;
+        temp_node_position[1]*=rescale_factor;
+        temp_node_position[2]*=rescale_factor;
         Node_Position.push_back(temp_node_position);
     }
     

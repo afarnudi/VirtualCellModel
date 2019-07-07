@@ -120,6 +120,8 @@ int main(int argc, char **argv)
     
     
     vector<Membrane> Membranes;
+    vector<std::set<int> > membrane_set;
+    
     vector<Chromatin> Chromatins;
     vector<Actin> Actins;
     vector<ECM> ECMs;
@@ -135,6 +137,7 @@ int main(int argc, char **argv)
         Include_Membrane = true;
         
         Membranes.resize(GenConst::Num_of_Membranes);
+        membrane_set.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
             string label="mem"+to_string(i);
             Membranes[i].set_label(label);
@@ -281,9 +284,12 @@ int main(int argc, char **argv)
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 
+                //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
+                
                 MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
                 for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
                     all_atoms[j+atom_count]=atoms[j];
+                    membrane_set[i].insert(j+atom_count);
                 }
                 
                 
@@ -317,7 +323,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
