@@ -1,15 +1,49 @@
-MD_num_of_steps	3000000
+//MD total number of steps. Default 10000
+MD_num_of_steps	3000000	 
+
+Simulation_Time_In_Ps	5
+
+//Trajectory savinf rate in number of steps. Default 1000
 MD_traj_save_step	1000
-MD_Time_Step	0.0001
+
+Report_Interval_In_Fs	2
+
+//MD step size in femtoseconds. Default 0.001
+Step_Size_In_Fs	0.1
+
+//Boltzman's constant. Default 1
 K	1
-MD_T	0.01
-Num_of_Membranes	1	mem_config_3.txt
+
+//Tempreture. Default 1
+MD_T	1
+
+//Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0. 
+Num_of_Membranes	2	configs/omm/mem_config_3.txt configs/omm/mem_config_4.txt
+
+
+//Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0. 
 Num_of_Chromatins	0	chromatin_config_1.txt
+
+
+//Number of actins in the system followed by the directory of their respective configuration files. All actins will be configured using the first configuration file if only one is provided. Default 0. 
 Num_of_Actins		0	actin_config.txt
+
+
+//Number of ECMs in the system followed by the directory of their respective configuration files. All ECMs will be configured using the first configuration file if only one is provided. Default 0. 
 Num_of_ECMs		0	ECM_config_1.txt	
+
+//Actin-membrane LJ-like interaction strength. Default 400
 Actin_Membrane_Bond_Coefficient	400
+
+//During every 'MD_thermo_step' the thermostat will be applied to the system. Default 200
 MD_thrmo_step	200
+
+//Bussi tau will controll the fluctuation of the kinetic energy in the Bussi et. al. thermostat. Default 10  
 Bussi_tau	30
+
+//During every 'MC_step' the MC step will be applied to the membrane mesh. Default 100
 MC_step	200
+
+// Name of the output file. Please note that the date and time the file is generated will be attached to this name.
 trajectory_file_name	1	Cell
 

@@ -71,16 +71,20 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
     //excluded volume interaction strength.
     excluded_volume->addGlobalParameter("sigma",   1.5 * atoms[0].radius
                                         * OpenMM::NmPerAngstrom);
-    excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
+    excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     system.addForce(excluded_volume);
     
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
     OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
-    LJ_12_6_interaction->addGlobalParameter("sigma",   1.5 * atoms[0].radius
+    LJ_12_6_interaction->addGlobalParameter("sigma",   2
                                                        * OpenMM::NmPerAngstrom);
-    
-    
+    LJ_12_6_interaction->addGlobalParameter("epsilon",   0.1
+                                            * OpenMM::KJPerKcal
+                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    LJ_12_6_interaction->addInteractionGroup(membrane_set[0], membrane_set[1]);
+    system.addForce(LJ_12_6_interaction);
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
     OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
@@ -106,9 +110,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         
         excluded_volume->addParticle();
+        LJ_12_6_interaction->addParticle();
         
         
     }
+    
+    
+    
     
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
@@ -146,18 +154,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
     excluded_volume->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
                                                                * OpenMM::NmPerAngstrom);
     
+    LJ_12_6_interaction->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
+                                                                   * OpenMM::NmPerAngstrom);
     
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
         
                 dihedral_force->addBond(dihedrals[i].atoms);
     }
-    
-    
-    
-    
-    
-    
     
     
     //Listing the names of all available platforms.
