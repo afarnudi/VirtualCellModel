@@ -155,7 +155,7 @@ private:
 
     void export_relaxed(int MD_step);
     int membrane_counter;
-    bool rescale=0;
+//    bool rescale=0;
     
     
 public:
@@ -248,14 +248,14 @@ private:
     int mem_index;
     /*variables*/
     //    void Normal_direction_Identifier(double x, double y, double z);
-    void Rescale(double rescale_factor);
+//    void Rescale(double rescale_factor);
     void potential_1 (void);
     void potential_2 (void);
 
     /** This function shifts the whole membrane.*/
     void shift_position (double x , double y, double z);  
 public:
-    double rescale_factor;
+    double rescale_factor=1;
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
         label=lab;
