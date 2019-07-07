@@ -208,7 +208,12 @@ int main(int argc, char **argv)
         }
     }
     
-    
+    if (Include_Membrane && Membranes.size()>1) {
+        for (int i=1; i<GenConst::Num_of_Membranes; i++) {
+                Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
+        }
+    }
+
     
     int num_of_atoms=0;
     int num_of_bonds=0;
@@ -258,7 +263,7 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     int progress=0;
-    bool openmm_sim=true;
+    bool openmm_sim=false;
     //openmm**
     if (openmm_sim) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -494,6 +499,17 @@ int main(int argc, char **argv)
             }
         }
         
+        
+        if (Include_Membrane && Membranes.size()>1) {
+            for (int i=1; i<Membranes.size(); i++) {
+                    particle_vesicle_shared_node_force (Membranes[i] , Membranes[0]);
+                    if (MD_Step%2000==0) {
+                        update_particle_vesicle_neighbour_list (Membranes[i] , Membranes[0]);
+                    }
+            }
+        }
+        
+        
         if (Include_Membrane && Include_ECM) {
             for (int i=0; i<Membranes.size(); i++) {
                 for (int j=0; j<ECMs.size(); j++) {
@@ -640,8 +656,3 @@ int main(int argc, char **argv)
     printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }
-
-
-
-
-
