@@ -23,12 +23,13 @@ using std::set;
  * Note that this function must understand the calling MD code's molecule and
  * force field data structures so will need to be customized for each MD code.
  */
-MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
-                                 double             stepSizeInFs,
-                                 std::string&       platformName,
-                                 Bonds*             bonds,
-                                 Dihedrals*         dihedrals,
-                                 vector<set<int> >  &membrane_set)
+MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
+                                 double                 stepSizeInFs,
+                                 std::string&           platformName,
+                                 Bonds*                 bonds,
+                                 Dihedrals*             dihedrals,
+                                 vector<set<int> >      &membrane_set,
+                                 vector<vector<int> >   interaction_map)
 {
     // Load all available OpenMM plugins from their default location.
     OpenMM::Platform::loadPluginsFromDirectory
@@ -72,9 +73,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
     excluded_volume->addGlobalParameter("sigma",   1.5 * atoms[0].radius
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-    system.addForce(excluded_volume);
-    excluded_volume->addInteractionGroup(membrane_set[0], membrane_set[0]);
-    excluded_volume->addInteractionGroup(membrane_set[1], membrane_set[1]);
+    
+    if (GenConst::Excluded_volume_interaction) {
+        system.addForce(excluded_volume);
+    }
+    
+    for (int i=0; i<membrane_set.size(); i++) {
+        excluded_volume->addInteractionGroup(membrane_set[i], membrane_set[i]);
+    }
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
     OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
@@ -84,7 +90,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo   atoms[],
                                             * OpenMM::KJPerKcal
                                             * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-    LJ_12_6_interaction->addInteractionGroup(membrane_set[0], membrane_set[1]);
+    
+    if (GenConst::Num_of_Membranes !=0) {
+        for (int i=0; i< GenConst::Num_of_Membranes; i++) {
+            for (int j=i+1; j< GenConst::Num_of_Membranes; j++) {
+                LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
+            }
+        }
+    }
+    
     system.addForce(LJ_12_6_interaction);
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.

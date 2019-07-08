@@ -1,16 +1,16 @@
 //MD total number of steps. Default 10000
 MD_num_of_steps	3000000	 
 
-//Simulation time in picoseconds. If the parameter is not set in the general config file it will be calculate using the step size and total number of steps.
+//Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.
 Simulation_Time_In_Ps	0
 
 //Trajectory saving rate in number of steps. Default 1000
 MD_traj_save_step	1000
 
-//Trajectory saving rate in femtoseconds. If this parameter is 0 the interval will be calculated using the MD_traj_save_step*Step_Size_In_Fs.
+//Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.
 Report_Interval_In_Fs	0
 
-//MD step size in femtoseconds. Default 0.001
+//Integration step size (fs).  Default 0.001
 Step_Size_In_Fs	0.1
 
 //Boltzman's constant. Default 1
@@ -49,3 +49,8 @@ MC_step	200
 // Name of the output file. Please note that the date and time the file is generated will be attached to this name.
 trajectory_file_name	1	Cell
 
+//Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".
+Interaction_map	1	interaction_map.txt
+
+//Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 1.
+excluded_volume_interaction	1

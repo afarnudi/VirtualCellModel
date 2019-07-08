@@ -3,6 +3,30 @@
 
 using namespace std;
 
+void read_interaction_map(vector<vector<int> > &inter_map){
+    
+    int map_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins + GenConst::Num_of_pointparticles;
+    inter_map.resize(map_size);
+    for (int i=0; i<map_size; i++) {
+        inter_map[i].resize(map_size,0);
+    }
+    
+    if (GenConst::Interaction_map) {
+        ifstream read_map(GenConst::Interaction_map_file_name.c_str());
+        string interaction_type;
+        for (int i=1; i<map_size+1; i++) {
+            read_map>>interaction_type;
+            for (int j=0; j<int( (i-1)*i*0.5 + 0.1); j++) {
+                read_map>>interaction_type;
+//                cout<<interaction_type<<endl;
+                inter_map[i-1][j]=stoi(interaction_type);
+                inter_map[j][i-1]=stoi(interaction_type);
+            }
+        }
+    }
+    
+}
+
 void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list, vector<string> &actin_config_list, vector<string> &ecm_config_list, vector<string> &pointparticle_config_list){
     ifstream read_map("General_param_map.txt");
     map<string, double> general_param_map;
@@ -77,20 +101,30 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                             ecm_config_list.push_back(split[i+2+j]);
                         }
                         continue;
-                    }  else if (it->first=="Num_of_pointparticles") {
+                    } else if (it->first=="Num_of_pointparticles") {
 
                         for (int j=0; j<it->second; j++) {
                             cout<<"\t"<<split[i+2+j]<<endl;
                             pointparticle_config_list.push_back(split[i+2+j]);
                         }
                         continue;
-                    }else if (it->first=="trajectory_file_name") {
+                    } else if (it->first=="trajectory_file_name") {
                         if (it->second!=0) {
                             GenConst::trajectory_file_name=split[i+2];
                         } else {
                             GenConst::trajectory_file_name="VCProject_";
                         }
 
+                        continue;
+                    } else if (it->first=="Interaction_map") {
+                        if (it->second!=0) {
+                            GenConst::Interaction_map = false;
+                            GenConst::Interaction_map_file_name="interaction_map.txt";
+                        } else {
+                            GenConst::Interaction_map = true;
+                            GenConst::Interaction_map_file_name=split[i+2];
+                        }
+                        
                         continue;
                     }
                     break;
@@ -136,7 +170,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Simulation_Time_In_Ps=it->second;
-//            cout<<"Simulation_Time_In_Ps = "<< GenConst::Simulation_Time_In_Ps<<endl;
         }
     } else if (param_name=="MD_traj_save_step"){
         it = general_param_map.find(param_name);
@@ -237,6 +270,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Actin_Membrane_Bond_Coefficient=it->second;
+        }
+    } else if (param_name=="excluded_volume_interaction"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::Excluded_volume_interaction= false;
+            } else {
+                GenConst::Excluded_volume_interaction= true;
+            }
         }
     }
 

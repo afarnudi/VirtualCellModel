@@ -78,7 +78,9 @@ namespace GenConst {
     double Buffer_temperature;
     double Bussi_tau;
     double Actin_Membrane_Bond_Coefficient;
-    
+    bool Interaction_map;
+    string Interaction_map_file_name;
+    bool Excluded_volume_interaction;
 }
 
 
@@ -114,6 +116,9 @@ int main(int argc, char **argv)
     vector<string> pointparticle_config_list;
     
     read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+    
+    vector<vector<int> > interaction_map;
+    read_interaction_map(interaction_map);
     
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
@@ -323,7 +328,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, interaction_map);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.

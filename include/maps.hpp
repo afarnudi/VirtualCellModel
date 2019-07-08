@@ -21,4 +21,6 @@ using namespace std;
 void read_general_parameters(string input_file_name, vector<string> &membrane_config_list, vector<string> &chromatin_config_list, vector<string> &actin_config_list, vector<string> &ecm_config_list, vector<string> &pointparticle_config_list);
 void set_parameter(map<string, double> &general_param_map, string param_name, double param_value);
 
+void read_interaction_map(vector<vector<int> > &inter_map);
+
 #endif /* maps_hpp */

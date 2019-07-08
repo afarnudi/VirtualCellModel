@@ -23,7 +23,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  std::string&                   platformName,
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
-                                 std::vector<std::set<int> >    &membrane_set);
+                                 std::vector<std::set<int> >    &membrane_set,
+                                 std::vector<std::vector<int> > interaction_map);
 
 
 
