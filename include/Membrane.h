@@ -105,7 +105,7 @@ private:
     std::string resume_file_name="None";
     
     bool Relaxation=false;
-    bool Shift= false;
+//    bool Shift= false;
     bool Relax_with_actin=false;
     int Relaxation_Process_Model=1; /// 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;

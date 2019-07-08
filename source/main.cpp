@@ -119,6 +119,7 @@ int main(int argc, char **argv)
     
     vector<vector<int> > interaction_map;
     read_interaction_map(interaction_map);
+    cout<<"\ninteraction_map is set.\n";
     
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
@@ -260,8 +261,7 @@ int main(int argc, char **argv)
                 }
                 
             } //for (int i=0; i<GenConst::Num_of_Actins; i++)
-        } //if (Include_Actin)
-        else{
+        } else { //if (Include_Actin){
             for (int i=0; i<Membranes.size(); i++){
                 Membranes[i].Relax_1();
             }// End of for (int i=0; i<Membranes.size(); i++)

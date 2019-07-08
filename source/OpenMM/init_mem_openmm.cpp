@@ -84,7 +84,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
     OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
-    LJ_12_6_interaction->addGlobalParameter("sigma",   3
+    LJ_12_6_interaction->addGlobalParameter("sigma",   2
                                                        * OpenMM::NmPerAngstrom);
     LJ_12_6_interaction->addGlobalParameter("epsilon",   0.01
                                             * OpenMM::KJPerKcal
@@ -92,14 +92,28 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
     if (GenConst::Num_of_Membranes !=0) {
+        
         for (int i=0; i< GenConst::Num_of_Membranes; i++) {
+            
             for (int j=i+1; j< GenConst::Num_of_Membranes; j++) {
-                LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
+//                cout<<"\n\nhere!!!!!!!!!!!!!!!!!!!!!!!\n";
+//                cout<<interaction_map[i][j]<<"\n\n";
+                switch (interaction_map[i][j]) {
+                    case 1:
+//                        cout<<"i = "<<i<<" j = "<<j<<"set interaction.\n";
+                        LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
+                        break;
+                        
+                    default:
+                        break;
+                }
             }
         }
     }
     
-    system.addForce(LJ_12_6_interaction);
+    if (GenConst::Interaction_map) {
+        system.addForce(LJ_12_6_interaction);
+    }
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
     OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");

@@ -11,6 +11,7 @@ void read_interaction_map(vector<vector<int> > &inter_map){
         inter_map[i].resize(map_size,0);
     }
     
+//    cout<<"GenConst::Interaction_map = "<<GenConst::Interaction_map<<endl;
     if (GenConst::Interaction_map) {
         ifstream read_map(GenConst::Interaction_map_file_name.c_str());
         string interaction_type;
@@ -117,7 +118,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
 
                         continue;
                     } else if (it->first=="Interaction_map") {
-                        if (it->second!=0) {
+                        if (it->second==0) {
                             GenConst::Interaction_map = false;
                             GenConst::Interaction_map_file_name="interaction_map.txt";
                         } else {

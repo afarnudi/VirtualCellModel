@@ -134,13 +134,7 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         } else {
             Relaxation=true;
         }
-    } else if(param_name=="Shift"){
-        if (int(param_value) == 0){
-            Shift=false;
-        } else {
-            Shift=true;
-        }
-    }  else if(param_name=="particle_type"){
+    } else if(param_name=="particle_type"){
         if (int(param_value) == 0){
             particle_type=false;
         } else {

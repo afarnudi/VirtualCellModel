@@ -22,13 +22,13 @@ void Membrane::initialise(std::string Mesh_file_name){
 //        cout<<"mesh rescaled by factor"<< rescale_factor <<endl;
 //    }
     
-    if(Shift==true){
-    shift_position ( Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
-    cout<<"The Whole Membrane is Shifted"<<endl;
-    cout<<"Shift in X direction = "<< Shift_in_X_direction<<endl;
-    cout<<"Shift in Y direction = "<< Shift_in_Y_direction<<endl;
-    cout<<"Shift in Z direction = "<< Shift_in_Z_direction<<endl;
-    }
+//    if(Shift==true){
+//    shift_position ( Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+////    cout<<"The Whole Membrane is Shifted"<<endl;
+////    cout<<"Shift in X direction = "<< Shift_in_X_direction<<endl;
+////    cout<<"Shift in Y direction = "<< Shift_in_Y_direction<<endl;
+////    cout<<"Shift in Z direction = "<< Shift_in_Z_direction<<endl;
+//    }
     
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     cout<<"\nRadius="<<Radius<<endl;
@@ -39,7 +39,6 @@ void Membrane::initialise(std::string Mesh_file_name){
     cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
-        
     }
     //        Triangle_Pair_and_Node_Bonds_Identifier();
     Node_Bonds_identifier();
