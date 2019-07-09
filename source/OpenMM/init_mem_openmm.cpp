@@ -51,15 +51,25 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
     // Create an array of FENE spring force objects to add to the system.
-    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+0.25)*step(lmax-r))");
+//    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*5*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+lmin)*step(lmax-r))");
+//    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*k_bond*((1/(r+lmin/1.2))^12+lmin/6)*step(lmax-r))");
+    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("k_bond*(((lmin/2)/(r-(lmin/2)))^6)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax))+0.5*k_bond*lmax*lmax*log(1-(le0*le0/lmax*lmax)))");
     //Set the global parameters of the force. The parameters are calculated in the membrane constructor.
     FENE->addGlobalParameter("lmin",   bonds[0].FENE_lmin
                                        * OpenMM::NmPerAngstrom);
+    FENE->addGlobalParameter("le0",   bonds[0].FENE_le0
+                                       * OpenMM::NmPerAngstrom);
+//    FENE->addGlobalParameter("lmin",   0.86
+//                             * OpenMM::NmPerAngstrom);
     FENE->addGlobalParameter("lmax",   bonds[0].FENE_lmax
                                        * OpenMM::NmPerAngstrom);
+//    FENE->addGlobalParameter("k_bond", 0.1
+//                                        * OpenMM::KJPerKcal
+//                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     FENE->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
                                        * OpenMM::KJPerKcal
                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    cout<<"unit = "<<OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     system.addForce(FENE);
     
     
@@ -75,6 +85,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
     if (GenConst::Excluded_volume_interaction) {
+        cout<<"excluded_volume!"<<endl;
         system.addForce(excluded_volume);
     }
     
@@ -96,8 +107,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         for (int i=0; i< GenConst::Num_of_Membranes; i++) {
             
             for (int j=i+1; j< GenConst::Num_of_Membranes; j++) {
-//                cout<<"\n\nhere!!!!!!!!!!!!!!!!!!!!!!!\n";
-//                cout<<interaction_map[i][j]<<"\n\n";
+                cout<<"\n\nhere!!!!!!!!!!!!!!!!!!!!!!!\n";
+                cout<<interaction_map[i][j]<<"\n\n";
                 switch (interaction_map[i][j]) {
                     case 1:
 //                        cout<<"i = "<<i<<" j = "<<j<<"set interaction.\n";

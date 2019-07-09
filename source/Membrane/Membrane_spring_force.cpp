@@ -21,16 +21,20 @@ void Membrane::FENE_log (void){
     double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
     if ((1+ 2*width_scaling)*delta_length < width ){ //this condition shows the case when the mesh is almost ordered.
         width_scaling= (width-delta_length)/(2*delta_length); //in this case the width tuned in a way that the weil width becomes exactly 0.66*Average_node_pair_lenght
+//        cout<<"\n\nif == true\n\n";
     }
     else{
         width=  (1+ 2*width_scaling)*delta_length; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the width may become larger than 0.66Average which was the minimum limit.
+//        cout<<"\n\nif == false\n\n";
     }
     lmin= Min_node_pair_length - width_scaling*delta_length;
     lmax= Max_node_pair_length +  width_scaling*delta_length;
 
     le0 = lmin + 3*(lmax-lmin)/4;
     le1 = lmin +   (lmax-lmin)/4;
-
+    
+//    cout<<"\nlmin = "<<lmin<<"lmax = "<<lmax<<"le0 = "<<le0<<"le1 = "<<le1<<endl<<endl;
+    
     Total_Potential_Energy=0.0;
 
     for (int k=0 ; k< Num_of_Node_Pairs ; k++)
