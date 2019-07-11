@@ -11,6 +11,7 @@
 
 #include "OpenMM_structs.h"
 #include "Membrane.h"
+#include "ECM.h"
 
 
 /** This function and an opaque structure are used to interface our main
@@ -60,5 +61,11 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);
 Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
 /**Relay the dihedral angle (triangle-triangle angle) information of the membrane triangle to other data structures ready to pass to OpenMM handles.*/
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
+
+
+/**Relay the position information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
+MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
+/**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
+Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
 #endif

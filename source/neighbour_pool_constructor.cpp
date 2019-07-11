@@ -28,7 +28,7 @@ void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem){
 
 void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
     int mem_nodes = mem.get_num_of_nodes();
-    int ecm_nodes = ecm.return_num_of_nodes();
+    int ecm_nodes = ecm.get_num_of_nodes();
     
     mem.ECM_Node_neighbour_list.clear();
     mem.ECM_Node_neighbour_list.resize(mem_nodes);
@@ -50,9 +50,9 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
         neighbour_pairs.resize(i+1);
         for (int j=0; j<ecm_nodes; j++) {
             
-            delta_x = mem.get_node_position(i, 0) - ecm.return_node_position(j, 0);
-            delta_y = mem.get_node_position(i, 1) - ecm.return_node_position(j, 1);
-            delta_z = mem.get_node_position(i, 2) - ecm.return_node_position(j, 2);
+            delta_x = mem.get_node_position(i, 0) - ecm.get_node_position(j, 0);
+            delta_y = mem.get_node_position(i, 1) - ecm.get_node_position(j, 1);
+            delta_z = mem.get_node_position(i, 2) - ecm.get_node_position(j, 2);
 //            cout<<delta_x<<"\t"<<delta_y<<"\t"<<delta_z<<endl;
             double a[3]={delta_x, delta_y, delta_z};
             distance = vector_length(a);

@@ -22,3 +22,4 @@ MD_correction_steps	2000
 MD_num_of_Relaxation_steps	20000
 Interaction_map	0	interaction_map.txt
 excluded_volume_interaction	1
+OpenMM	1

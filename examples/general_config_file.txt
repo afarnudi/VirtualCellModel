@@ -54,3 +54,6 @@ Interaction_map	1	interaction_map.txt
 
 //Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 1.
 excluded_volume_interaction	1
+
+//Set to 1 for the programme to use the OpenMM engine or to 0 to use the internal simple engine. Default 1 (true).
+OpenMM	1

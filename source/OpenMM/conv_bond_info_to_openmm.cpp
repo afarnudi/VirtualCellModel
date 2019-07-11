@@ -1,6 +1,4 @@
-#include "Membrane.h"
-#include "General_functions.hpp"
-#include "OpenMM_structs.h"
+#include "OpenMM_funcs.hpp"
 
 Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     const int mem_num_bonds = mem.get_num_of_node_pairs();

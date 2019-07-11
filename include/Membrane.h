@@ -42,52 +42,7 @@ private:
     /** Store the label(pdb) used to write to the trajectory file */
 
     std::string label;
-    
-//    /** Convert the node position data to OpenMM format*/
-//    void convert_position_to_openmm(void);
-//
-//    /** Convert the bond info to OpenMM format*/
-//    void convert_bond_info_to_openmm(void);
-//
-//    //OpenMM data structures.
-//    MyAtomInfo* myatominfo;
-//    Bonds* bonds;
-//
-//    /** This is our opaque "handle" class containing all the OpenMM objects that
-//     * must persist from call to call during a simulation. The main programme gets
-//     * a pointer to one of these but sees it as essentially a void* since it
-//     * doesn't know the definition of this class.
-//     */
-//    struct MyOpenMMData {
-//        MyOpenMMData() : system(0), context(0), integrator(0) {}
-//        ~MyOpenMMData() {delete context; delete integrator; delete system;}
-//        OpenMM::System*         system;
-//        OpenMM::Integrator*     integrator;
-//        OpenMM::Context*  context;
-//    };
-//    //OpenMM platform
-//    std::string   platformName;
-//    // Allocate space to hold OpenMM objects while we're using them.
-//    MyOpenMMData* omm = new MyOpenMMData();
-//
-//    /** -----------------------------------------------------------------------------
-//     *                      INITIALIZE OpenMM DATA STRUCTURES
-//     * -----------------------------------------------------------------------------
-//     * We take these actions here:
-//     * (1) Load any available OpenMM plugins, e.g. Cuda and Brook.
-//     * (2) Allocate a MyOpenMMData structure to hang on to OpenMM data structures
-//     *     in a manner which is opaque to the caller.
-//     * (3) Fill the OpenMM::System with the force field parameters we want to
-//     *     use and the particular set of atoms to be simulated.
-//     * (4) Create an Integrator and a Context associating the Integrator with
-//     *     the System.
-//     * (5) Select the OpenMM platform to be used.
-//     * (6) Return the MyOpenMMData struct and the name of the Platform in use.
-//     *
-//     * Note that this function must understand the calling MD code's molecule and
-//     * force field data structures so will need to be customized for each MD code.
-//     */
-//     MyOpenMMData* myInitializeOpenMM();
+
     
     
     int index;
@@ -261,7 +216,7 @@ public:
         label=lab;
     }
     /** return the label(pdb) used to write to the trajectory files. */
-    std::string return_label(void){
+    std::string get_label(void){
         return label;
     }
     void Relax_1(void);
@@ -333,8 +288,8 @@ public:
         lmin= Min_node_pair_length - width_scaling*delta_length;
         lmax= Max_node_pair_length +  width_scaling*delta_length;
         
-        le0 = lmin + 3*(lmax-lmin)/4;
-        le1 = lmin +   (lmax-lmin)/4;
+        le0 = lmin + 3.0*(lmax-lmin)/4.0;
+        le1 = lmin +   (lmax-lmin)/4.0;
         
 //        lmax=Max_node_pair_length*1.05;
 //        lmin=Min_node_pair_length*0.95;

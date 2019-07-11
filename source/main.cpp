@@ -81,6 +81,7 @@ namespace GenConst {
     bool Interaction_map;
     string Interaction_map_file_name;
     bool Excluded_volume_interaction;
+    bool OpenMM;
 }
 
 
@@ -130,7 +131,10 @@ int main(int argc, char **argv)
     
     vector<Chromatin> Chromatins;
     vector<Actin> Actins;
+    
     vector<ECM> ECMs;
+    vector<std::set<int> > ecm_set;
+    
     vector<point_particle> pointparticles;
     
     bool Include_Membrane  = false;
@@ -185,11 +189,16 @@ int main(int argc, char **argv)
     
     if (GenConst::Num_of_ECMs!=0){
         Include_ECM=true;
+        
         ECMs.resize(GenConst::Num_of_ECMs);
+        ecm_set.resize(GenConst::Num_of_ECMs);
         for (int i=0; i<GenConst::Num_of_ECMs; i++) {
+            string label="ecm"+to_string(i);
+            ECMs[i].set_label(label);
             ECMs[i].set_file_time(buffer);
             ECMs[i].set_index(i);
             ECMs[i].import_config(ecm_config_list[i]);
+            ECMs[i].generate_report();
         }
         
     }
@@ -243,7 +252,7 @@ int main(int argc, char **argv)
     }
     if (Include_ECM) {
         for (int i=0; i<ECMs.size(); i++) {
-            num_of_atoms+=ECMs[i].return_num_of_nodes();
+            num_of_atoms+=ECMs[i].get_num_of_nodes();
         }
     }
     if (Include_pointparticle){
@@ -268,9 +277,8 @@ int main(int argc, char **argv)
         }//end else
     } // End of if (Include_Membrane)
     int progress=0;
-    bool openmm_sim=true;
     //openmm**
-    if (openmm_sim) {
+    if (GenConst::OpenMM) {
         cout<<"\nBeginnig the OpenMM section:\n";
         std::string   platformName;
         int atom_count=0;
@@ -323,6 +331,45 @@ int main(int argc, char **argv)
                 dihe_count += Membranes[i].get_num_of_triangle_pairs();
             }
         }
+        if (Include_ECM) {
+            for (int i=0; i<ECMs.size(); i++) {
+                
+                //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
+                
+                MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
+                for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
+                    all_atoms[j+atom_count]=atoms[j];
+                    membrane_set[i].insert(j+atom_count);
+                }
+                
+                
+                
+                Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
+                for (int j=0; j<Membranes[i].get_num_of_node_pairs(); j++) {
+                    all_bonds[j+bond_count]=bonds[j];
+                    all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
+                    all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
+                    
+                }
+                
+                
+                Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
+                for (int j=0; j<Membranes[i].get_num_of_triangle_pairs(); j++) {
+                    all_dihedrals[j+dihe_count]=dihedrals[j];
+                    all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
+                    all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
+                }
+                
+                //These parameters are used to shift the index of the atoms/bonds/dihedrals.
+                atom_count += Membranes[i].get_num_of_nodes();
+                bond_count += Membranes[i].get_num_of_node_pairs();
+                dihe_count += Membranes[i].get_num_of_triangle_pairs();
+            }
+        }
+        
+        
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         

@@ -45,31 +45,26 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Note: the System owns the force objects and will take care of deleting them;
     // don't do it yourself!
     
+    //Define forces
+    cout<<"Defining interactions...\n";
     // Create an array of harmonic spring force objects to add to the system.
     OpenMM::HarmonicBondForce*      bondStretch = new OpenMM::HarmonicBondForce();
     system.addForce(bondStretch);
     
-    //Here we use the OpenMM's "CustomBondForce" to implament the FENE spring.
-    // Create an array of FENE spring force objects to add to the system.
-//    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*5*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*((1/(r+lmin))^12-(1/(r+lmin))^6+lmin)*step(lmax-r))");
-//    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(0.99*lmax-r)+(4*k_bond*((1/(r+lmin/1.2))^12+lmin/6)*step(lmax-r))");
-    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("k_bond*(((lmin/2)/(r-(lmin/2)))^6)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax))+0.5*k_bond*lmax*lmax*log(1-(le0*le0/lmax*lmax)))");
+    
+    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("k_bond*(((lmin/2)/(r-(lmin/2)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0)");
     //Set the global parameters of the force. The parameters are calculated in the membrane constructor.
     FENE->addGlobalParameter("lmin",   bonds[0].FENE_lmin
                                        * OpenMM::NmPerAngstrom);
     FENE->addGlobalParameter("le0",   bonds[0].FENE_le0
-                                       * OpenMM::NmPerAngstrom);
-//    FENE->addGlobalParameter("lmin",   0.86
-//                             * OpenMM::NmPerAngstrom);
+                                      * OpenMM::NmPerAngstrom);
+    FENE->addGlobalParameter("le1",   bonds[0].FENE_le1
+                                      * OpenMM::NmPerAngstrom);
     FENE->addGlobalParameter("lmax",   bonds[0].FENE_lmax
                                        * OpenMM::NmPerAngstrom);
-//    FENE->addGlobalParameter("k_bond", 0.1
-//                                        * OpenMM::KJPerKcal
-//                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     FENE->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
                                        * OpenMM::KJPerKcal
                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    cout<<"unit = "<<OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     system.addForce(FENE);
     
     
@@ -80,18 +75,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     std::vector< std::pair< int, int > > excluded_bonds;
     
     //excluded volume interaction strength.
-    excluded_volume->addGlobalParameter("sigma",   1.5 * atoms[0].radius
+    excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
-    if (GenConst::Excluded_volume_interaction) {
-        cout<<"excluded_volume!"<<endl;
-        system.addForce(excluded_volume);
-    }
-    
-    for (int i=0; i<membrane_set.size(); i++) {
-        excluded_volume->addInteractionGroup(membrane_set[i], membrane_set[i]);
-    }
+    system.addForce(excluded_volume);
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
     OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
@@ -101,30 +89,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                             * OpenMM::KJPerKcal
                                             * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-    
-    if (GenConst::Num_of_Membranes !=0) {
-        
-        for (int i=0; i< GenConst::Num_of_Membranes; i++) {
-            
-            for (int j=i+1; j< GenConst::Num_of_Membranes; j++) {
-                cout<<"\n\nhere!!!!!!!!!!!!!!!!!!!!!!!\n";
-                cout<<interaction_map[i][j]<<"\n\n";
-                switch (interaction_map[i][j]) {
-                    case 1:
-//                        cout<<"i = "<<i<<" j = "<<j<<"set interaction.\n";
-                        LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-    
-    if (GenConst::Interaction_map) {
-        system.addForce(LJ_12_6_interaction);
-    }
+    system.addForce(LJ_12_6_interaction);
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
     OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
@@ -132,6 +97,26 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        * OpenMM::KJPerKcal
                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     system.addForce(dihedral_force);
+    
+    if (GenConst::Num_of_Membranes !=0) {
+        
+        for (int i=0; i< GenConst::Num_of_Membranes; i++) {
+            
+            for (int j=i; j< GenConst::Num_of_Membranes; j++) {
+                
+                switch (interaction_map[i][j]) {
+                    case 1:
+                        LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
+                        break;
+                    case 2:
+                        excluded_volume->addInteractionGroup(membrane_set[i], membrane_set[j]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
     
     // Specify the atoms and their properties:
     //  (1) System needs to know the masses.
@@ -196,7 +181,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     LJ_12_6_interaction->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
                                                                    * OpenMM::NmPerAngstrom);
-    
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
         

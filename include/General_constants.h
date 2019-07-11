@@ -50,22 +50,14 @@ namespace GenConst {
     /**Actin-membrane LJ-like interaction strength. Default 400*/
     extern double Actin_Membrane_Bond_Coefficient;
     extern int Num_of_pointparticles;
-    /**The interaction map specifies the class instances that are allowed to interact with one another and their nature of interaction. The map is a text file that lists the class member instances of the enviroment followed by the interaction specifier that is represented with an integer. example:
-     * For a simple cell that contains an outer layer of membrane, an actin network, a nucleus membrane, 1 chromatin, and an ECM substrait the interaction will be:
-     * mem0
-     * mem1 0
-     * act0 1   1
-     * ecm0 1   0   0
-     * chr0 0   1   0   0
-     *
-     * Here we assume that mem0 is the outer membrane. The class instance indecies are set during runtime in the order in which the respective configuration file directory is written in the general configuration file. the list on the left (mem0, mem1, etc) is ignored by the programme and its function is for the user to keep track of the columens. It should be noted that the programme expects to come across a word in each line (which is ignored) so the user must not delete the labels altogether. But the actual label written in the interaction map is up to the user as long as it is declared in a single word, for example 'abcdef1234ghi and not 'abc 12 def'.
-     * The programme sets the interaction between the class instances in the following order: Membranes, Actins, ECMs, Chromatins, Point Particles. The order in which these interactions are specified in the map is important.
-     */
+    /**Specifies if an interaction map is provided by the user or not. deafult false.*/
     extern bool Interaction_map;
     /**Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".*/
     extern std::string Interaction_map_file_name;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 1.*/
     extern bool Excluded_volume_interaction;
+    /**Set to 1 for the programme to use the OpenMM engine or to 0 to use the internal simple engine. Default 1 (true).*/
+    extern bool OpenMM;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps
