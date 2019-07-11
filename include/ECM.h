@@ -62,8 +62,10 @@ private:
     double COM_velocity[3]={0};
     double COM_position[3]={0};
     
+    double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
+    
     vector<vector<double> > Node_Velocity;
-    vector<vector<int> > Node_Pair_list;
+    vector<vector<int> > Node_Bond_list;
     vector<vector<int> > Node_neighbour_list;
     void Node_Bond_identifier(void);
     
@@ -76,7 +78,7 @@ private:
     void read_gmesh_file_3D (std::string gmesh_file);
     void normal_direction_Identifier (double x, double y, double z);
     void normal_direction_Identifier (void);
-    
+    void check(void);
     
 public:
     
@@ -104,7 +106,10 @@ public:
     void set_index(int ind){
         index=ind;
     }
-    
+    /**Return spring stiffness coefficient. */
+    double get_spring_stiffness_coefficient(void){
+        return Spring_coefficient;
+    }
     /** \brief public access to total number of ECM nodes.
      * \return integer number of nodes in the ECM.
      */
@@ -119,9 +124,26 @@ public:
     double get_node_mass(void){
         return Node_Mass;
     }
+    /**Return the number of bonds between membrane nodes.*/
+    int get_num_of_node_pairs(void){
+        return Num_of_Node_Pairs;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_spring_model(void){
+        return spring_model;
+    }
+    /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
+    int get_node_pair(int bond_num, int node_id){
+        return Node_Bond_list[bond_num][node_id];
+    }
+    /**Return the average distance of the nodes as calculated from the mesh. */
+    double get_avg_node_dist(void){
+        return Average_node_pair_length;
+    }
     double get_node_radius(void){
         return Node_radius;
     }
+    
     double get_interaction_range(void){
         return interaction_range;
     }
@@ -173,6 +195,31 @@ public:
         COM_position[0]/=Num_of_Nodes;
         COM_position[2]/=Num_of_Nodes;
         COM_position[1]/=Num_of_Nodes;
+    }
+    /**Set FENE calculated parameters.*/
+    void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
+        
+        double width= Average_node_pair_length; // it defines a minimum limit for weil width.
+        double delta_length=Max_node_pair_length-Min_node_pair_length;
+        double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
+        if ((1+ 2*width_scaling)*delta_length < width ){ //this condition shows the case when the mesh is almost ordered.
+            width_scaling= (width-delta_length)/(2*delta_length); //in this case the width tuned in a way that the weil width becomes exactly 0.66*Average_node_pair_lenght
+            //            cout<<"\n\nif == true\n\n";
+        }
+        else{
+            width=  (1+ 2*width_scaling)*delta_length; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the width may become larger than 0.66Average which was the minimum limit.
+            //            cout<<"\n\nif == false\n\n";
+        }
+        lmin= Min_node_pair_length - width_scaling*delta_length;
+        lmax= Max_node_pair_length +  width_scaling*delta_length;
+        
+        le0 = lmin + 3.0*(lmax-lmin)/4.0;
+        le1 = lmin +   (lmax-lmin)/4.0;
+        
+        //        lmax=Max_node_pair_length*1.05;
+        //        lmin=Min_node_pair_length*0.95;
+        //        le0=lmin+3*(lmax-lmin)/4;
+        //        le1=lmin+(lmax-lmin)/4;
     }
 };
 

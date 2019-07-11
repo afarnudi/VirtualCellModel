@@ -25,6 +25,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
                                  std::vector<std::set<int> >    &membrane_set,
+                                 std::vector<std::set<int> >    &ecm_set,
                                  std::vector<std::vector<int> > interaction_map);
 
 
@@ -55,6 +56,8 @@ void          myTerminateOpenMM(MyOpenMMData*);
 void myWritePDBFrame(int frameNum, double timeInPs, double energyInKcal,
                 const MyAtomInfo atoms[], std::string traj_name);
 
+/**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
+void OpenMM_membrane_info_relay (vector<Membrane> membranes, vector<std::set<int> > &membrane_set, MyAtomInfo* all_atoms, Bonds* all_bonds, Dihedrals* all_dihedrals, int &atom_count, int &bond_count, int &dihe_count);
 /**Relay the position information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);
 /**Relay the bond information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
@@ -62,7 +65,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
 /**Relay the dihedral angle (triangle-triangle angle) information of the membrane triangle to other data structures ready to pass to OpenMM handles.*/
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
 
-
+/**Relay ECM class's atom information to other data structures ready to pass to OpenMM handles.*/
+void OpenMM_ECM_info_relay (vector<ECM> ecms, vector<std::set<int> > &ecm_set, MyAtomInfo* all_atoms, Bonds* all_bonds, Dihedrals* all_dihedrals, int &atom_count, int &bond_count, int &dihe_count);
 /**Relay the position information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/

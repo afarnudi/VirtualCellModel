@@ -17,18 +17,6 @@ void Membrane::initialise(std::string Mesh_file_name){
         read_ply_file(Mesh_file_name);
     }
     output_file_neme=Mesh_file_name;
-//    if (rescale==true){
-//        Rescale(rescale_factor);
-//        cout<<"mesh rescaled by factor"<< rescale_factor <<endl;
-//    }
-    
-//    if(Shift==true){
-//    shift_position ( Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
-////    cout<<"The Whole Membrane is Shifted"<<endl;
-////    cout<<"Shift in X direction = "<< Shift_in_X_direction<<endl;
-////    cout<<"Shift in Y direction = "<< Shift_in_Y_direction<<endl;
-////    cout<<"Shift in Z direction = "<< Shift_in_Z_direction<<endl;
-//    }
     
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     cout<<"\nRadius="<<Radius<<endl;
@@ -46,9 +34,10 @@ void Membrane::initialise(std::string Mesh_file_name){
     Triangle_pair_identifier();
     //DamperCheck.resize(Num_of_Node_Pairs);
     //SinusCheck.resize(Num_of_Node_Pairs);
-    //check();
+
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
     shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    check();
     cout<<"\nMembrane class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

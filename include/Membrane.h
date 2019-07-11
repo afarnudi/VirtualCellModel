@@ -207,8 +207,7 @@ private:
     void potential_1 (void);
     void potential_2 (void);
 
-    /** This function shifts the whole membrane.*/
-    void shift_position (double x , double y, double z);  
+    
 public:
     double rescale_factor=1;
     /** Assigns the label(pdb) used to write to the trajectory files. */
@@ -400,6 +399,17 @@ public:
         } else {
             return false;
         }
+    }
+    /** This function shifts the whole membrane.*/
+    void shift_position (double x, double y, double z) {
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]+=x;
+            Node_Position[i][1]+=y;
+            Node_Position[i][2]+=z;
+        }
+        X_in+=x;
+        Y_in+=y;
+        Z_in+=z;
     }
 
     

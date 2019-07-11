@@ -16,7 +16,7 @@ void read_interaction_map(vector<vector<int> > &inter_map){
         
         ifstream read_map(GenConst::Interaction_map_file_name.c_str());
         if (read_map.is_open()) {
-            cout<<"interaction map file opened successfully.\n";
+            cout<<"\""<<GenConst::Interaction_map_file_name<<"\" interaction map file opened successfully.\n";
             string line;
             int line_num=0;
             string comment="//";
@@ -38,11 +38,14 @@ void read_interaction_map(vector<vector<int> > &inter_map){
                         if (split[i] == comment || (split[i][0]=='/' && split[i][1]=='/')) {
                             break;
                         }
-                        cout<<split[i]<<"\t";
+//                        cout<<split[i]<<"\t";
                         if (i<line_num+1) {
-                            cout<<split[i+1]<<endl;
+//                            cout<<split[i+1]<<endl;
                             inter_map[line_num][i]=stoi(split[i+1]);
                             inter_map[i][line_num]=stoi(split[i+1]);
+                            if (stoi(split[i+1])==2) {
+                                GenConst::Excluded_volume_interaction=true;
+                            }
                         }
                         
                     } // End of for (int i=0; i<split.size(); i++) {

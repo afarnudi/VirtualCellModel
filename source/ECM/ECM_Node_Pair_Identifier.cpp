@@ -31,22 +31,22 @@ void ECM::Node_Bond_identifier(void){
         triangle_Node_B= Triangle_List[i][1];
         triangle_Node_C= Triangle_List[i][2];
         
-        for(int j=0;j<Node_Pair_list.size();j++)
+        for(int j=0;j<Node_Bond_list.size();j++)
         {
-            if(  ( Node_Pair_list[j][0]==triangle_Node_A &&  Node_Pair_list[j][1]==triangle_Node_B )  ||
-                 ( Node_Pair_list[j][0]==triangle_Node_B &&  Node_Pair_list[j][1]==triangle_Node_A )    )
+            if(  ( Node_Bond_list[j][0]==triangle_Node_A &&  Node_Bond_list[j][1]==triangle_Node_B )  ||
+                 ( Node_Bond_list[j][0]==triangle_Node_B &&  Node_Bond_list[j][1]==triangle_Node_A )    )
             {
                 repeatednumber1=1;
             }
             
-            if(  ( Node_Pair_list[j][0]==triangle_Node_B &&  Node_Pair_list[j][1]==triangle_Node_C )  ||
-                 ( Node_Pair_list[j][0]==triangle_Node_C &&  Node_Pair_list[j][1]==triangle_Node_B )    )
+            if(  ( Node_Bond_list[j][0]==triangle_Node_B &&  Node_Bond_list[j][1]==triangle_Node_C )  ||
+                 ( Node_Bond_list[j][0]==triangle_Node_C &&  Node_Bond_list[j][1]==triangle_Node_B )    )
             {
                 repeatednumber2=1;
             }
             
-            if(  ( Node_Pair_list[j][0]==triangle_Node_A &&  Node_Pair_list[j][1]==triangle_Node_C )  ||
-                 ( Node_Pair_list[j][0]==triangle_Node_C &&  Node_Pair_list[j][1]==triangle_Node_A )    )
+            if(  ( Node_Bond_list[j][0]==triangle_Node_A &&  Node_Bond_list[j][1]==triangle_Node_C )  ||
+                 ( Node_Bond_list[j][0]==triangle_Node_C &&  Node_Bond_list[j][1]==triangle_Node_A )    )
             {
                 repeatednumber3=1;
             }
@@ -57,7 +57,7 @@ void ECM::Node_Bond_identifier(void){
             Node_Pairs[0]=triangle_Node_A;
             Node_Pairs[1]=triangle_Node_B;
             
-            Node_Pair_list.push_back(Node_Pairs);
+            Node_Bond_list.push_back(Node_Pairs);
         }
         
         if(repeatednumber2==0)
@@ -65,7 +65,7 @@ void ECM::Node_Bond_identifier(void){
             Node_Pairs[0]=triangle_Node_B;
             Node_Pairs[1]=triangle_Node_C;
             
-            Node_Pair_list.push_back(Node_Pairs);
+            Node_Bond_list.push_back(Node_Pairs);
         }
         
         if(repeatednumber3==0)
@@ -73,7 +73,7 @@ void ECM::Node_Bond_identifier(void){
             Node_Pairs[0]=triangle_Node_A;
             Node_Pairs[1]=triangle_Node_C;
             
-            Node_Pair_list.push_back(Node_Pairs);
+            Node_Bond_list.push_back(Node_Pairs);
         }
         
         repeatednumber1=0;
@@ -81,7 +81,7 @@ void ECM::Node_Bond_identifier(void){
         repeatednumber3=0;
     }
     
-    Num_of_Node_Pairs=int(Node_Pair_list.size());
-    cout<<"ECM # of node pairs: "<<Node_Pair_list.size()<<endl;
+    Num_of_Node_Pairs=int(Node_Bond_list.size());
+    cout<<"ECM # of node pairs: "<<Node_Bond_list.size()<<endl;
 }
 

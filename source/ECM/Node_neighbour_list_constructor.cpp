@@ -16,8 +16,8 @@ void ECM::Node_neighbour_list_constructor(void){
     
     for (int i=0; i<Num_of_Node_Pairs; i++) {
         
-        Node_A=Node_Pair_list[i][0];
-        Node_B=Node_Pair_list[i][1];
+        Node_A=Node_Bond_list[i][0];
+        Node_B=Node_Bond_list[i][1];
         
         Node_neighbour_list[Node_A].push_back(Node_B);
         Node_neighbour_list[Node_B].push_back(Node_A);

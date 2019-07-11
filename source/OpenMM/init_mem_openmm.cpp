@@ -29,8 +29,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  Bonds*                 bonds,
                                  Dihedrals*             dihedrals,
                                  vector<set<int> >      &membrane_set,
+                                 vector<set<int> >      &ecm_set,
                                  vector<vector<int> >   interaction_map)
 {
+    
+    //======================================! Begin !======================================
+    //                                  Force definitions
+    //=====================================================================================
     // Load all available OpenMM plugins from their default location.
     OpenMM::Platform::loadPluginsFromDirectory
     (OpenMM::Platform::getDefaultPluginsDirectory());
@@ -78,16 +83,19 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     excluded_volume->addGlobalParameter("sigma",   atoms[0].radius
                                         * OpenMM::NmPerAngstrom);
     excluded_volume->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    if (GenConst::Excluded_volume_interaction) {
+        system.addForce(excluded_volume);
+    }
     
-    system.addForce(excluded_volume);
     
     // Create a handle for 12 6 LJ inter class object interactions to add to the system.
-    OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("4*epsilon*((sigma/r)^12-(sigma/r)^6)");
-    LJ_12_6_interaction->addGlobalParameter("sigma",   2
+    OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("epsilon*((sigma/r)^12-2*(sigma/r)^6)");
+//    cout<<"GenConst::sigma_LJ_12_6  "<<GenConst::sigma_LJ_12_6<<endl;
+    LJ_12_6_interaction->addGlobalParameter("sigma",   GenConst::sigma_LJ_12_6
                                                        * OpenMM::NmPerAngstrom);
-    LJ_12_6_interaction->addGlobalParameter("epsilon",   0.01
-                                            * OpenMM::KJPerKcal
-                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    LJ_12_6_interaction->addGlobalParameter("epsilon",   GenConst::epsilon_LJ_12_6
+                                                         * OpenMM::KJPerKcal
+                                                         * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     system.addForce(LJ_12_6_interaction);
     
@@ -98,18 +106,67 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     system.addForce(dihedral_force);
     
+    //======================================! End !======================================
+    //                                  Force definitions
+    //===================================================================================
+    
+    
+    int interaction_count=0;
+    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     if (GenConst::Num_of_Membranes !=0) {
         
         for (int i=0; i< GenConst::Num_of_Membranes; i++) {
             
-            for (int j=i; j< GenConst::Num_of_Membranes; j++) {
+            for (int j=0; j < i+1; j++) {
                 
                 switch (interaction_map[i][j]) {
                     case 1:
+//                        cout<<"mem-mem: LJ_12_6_interaction->(membrane_set[i], membrane_set[j]) = "<<i<<"\t"<<j<<endl;
                         LJ_12_6_interaction->addInteractionGroup(membrane_set[i], membrane_set[j]);
                         break;
                     case 2:
                         excluded_volume->addInteractionGroup(membrane_set[i], membrane_set[j]);
+//                        cout<<"mem-mem: excluded_volume->(membrane_set[i], membrane_set[j]) = "<<i<<"\t"<<j<<endl;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    interaction_count += GenConst::Num_of_Membranes;
+    
+    if (GenConst::Num_of_ECMs !=0) {
+        
+        for (int i=0; i < GenConst::Num_of_ECMs; i++) {
+            int class_count=0;
+            for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+//                cout<<"interaction_map[i + interaction_count][j]"<<interaction_map[i + interaction_count][j]<<endl;
+                switch (interaction_map[i + interaction_count][j]) {
+                    case 1:
+//                        cout<<"ecm-mem: LJ_12_6_interaction->(ecm_set[i], membrane_set[j]) = "<<i<<"\t"<<j<<endl;
+                        LJ_12_6_interaction->addInteractionGroup(ecm_set[i], membrane_set[j]);
+                        break;
+                    case 2:
+//                        cout<<"ecm-mem: excluded_volume->(ecm_set[i], membrane_set[j]) = "<<i<<"\t"<<j<<endl;
+                        excluded_volume->addInteractionGroup(ecm_set[i], membrane_set[j]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            class_count += GenConst::Num_of_Membranes;
+            for (int j=class_count; j < class_count+GenConst::Num_of_ECMs; j++) {
+//                cout<<"interaction_map[i + interaction_count][j]"<<interaction_map[i + interaction_count][j]<<endl;
+                switch (interaction_map[i+ interaction_count][j]) {
+                    case 1:
+//                        cout<<"ecm-ecm: LJ_12_6_interaction->(ecm_set[i], ecm_set[j]) = "<<i<<"\t"<<j-class_count<<endl;
+                        LJ_12_6_interaction->addInteractionGroup(ecm_set[i], ecm_set[j-class_count]);
+                        break;
+                    case 2:
+//                        cout<<"ecm-ecm: excluded_volume->(ecm_set[i], ecm_set[j]) = "<<i<<"\t"<<j-class_count<<endl;
+                        excluded_volume->addInteractionGroup(ecm_set[i], ecm_set[j-class_count]);
                         break;
                     default:
                         break;
@@ -118,6 +175,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
     
+    
     // Specify the atoms and their properties:
     //  (1) System needs to know the masses.
     //  (2) NonbondedForce needs charges,van der Waals properties (in MD units!).
@@ -125,7 +183,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     std::vector<Vec3> initialPosInNm;
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
-        system.addParticle(atoms[0].mass);
+        system.addParticle(atoms[n].mass);
         // Convert the initial position to nm and append to the array.
         const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
@@ -176,11 +234,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     }
     
     // Add the list of atom pairs that are excluded from the excluded volume force.
-    excluded_volume->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
-                                                               * OpenMM::NmPerAngstrom);
+    excluded_volume->createExclusionsFromBonds(excluded_bonds, 1);
     
-    LJ_12_6_interaction->createExclusionsFromBonds(excluded_bonds, atoms[0].radius
-                                                                   * OpenMM::NmPerAngstrom);
+    LJ_12_6_interaction->createExclusionsFromBonds(excluded_bonds, 1);
     
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
         

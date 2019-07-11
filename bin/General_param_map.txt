@@ -20,6 +20,8 @@ Actin_Membrane_Bond_Coefficient	400
 Relaxation	1
 MD_correction_steps	2000
 MD_num_of_Relaxation_steps	20000
-Interaction_map	0	interaction_map.txt
-excluded_volume_interaction	1
+Interaction_map	0
+excluded_volume_interaction	0
 OpenMM	1
+sigma_LJ_12_6   2
+epsilon_LJ_12_6 0.01

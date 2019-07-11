@@ -30,6 +30,7 @@ void ECM::initialise(std::string Mesh_file_name, int dimension){
     }
     
     shift_node_positions();
+    check();
 //
 //    Triangle_pair_counter();
 //    cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;

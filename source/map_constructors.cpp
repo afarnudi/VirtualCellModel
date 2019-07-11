@@ -25,7 +25,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
 
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        cout<<"General Parameter file opened successfully.\nList of config-file:\n";
+        cout<<"\nGeneral Parameter file opened successfully.\nList of config-file:\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -256,6 +256,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
                 GenConst::Excluded_volume_interaction= true;
             }
         }
+    } else if (param_name=="Interaction_map"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::Interaction_map= false;
+            } else {
+                GenConst::Interaction_map= true;
+            }
+        }
     } else if (param_name=="OpenMM"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
@@ -264,6 +273,16 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             } else {
                 GenConst::OpenMM= true;
             }
+        }
+    } else if (param_name=="sigma_LJ_12_6"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::sigma_LJ_12_6=it->second;
+        }
+    } else if (param_name=="epsilon_LJ_12_6"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::epsilon_LJ_12_6=it->second;
         }
     }
 

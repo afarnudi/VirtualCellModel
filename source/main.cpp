@@ -82,6 +82,8 @@ namespace GenConst {
     string Interaction_map_file_name;
     bool Excluded_volume_interaction;
     bool OpenMM;
+    double sigma_LJ_12_6;
+    double epsilon_LJ_12_6;
 }
 
 
@@ -120,7 +122,6 @@ int main(int argc, char **argv)
     
     vector<vector<int> > interaction_map;
     read_interaction_map(interaction_map);
-    cout<<"\ninteraction_map is set.\n";
     
     ofstream Trajectory;
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
@@ -225,10 +226,10 @@ int main(int argc, char **argv)
     
     if (Include_Membrane && Membranes.size()>1) {
         for (int i=1; i<GenConst::Num_of_Membranes; i++) {
-                Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
+            Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
         }
     }
-
+    
     
     int num_of_atoms=0;
     int num_of_bonds=0;
@@ -252,7 +253,8 @@ int main(int argc, char **argv)
     }
     if (Include_ECM) {
         for (int i=0; i<ECMs.size(); i++) {
-            num_of_atoms+=ECMs[i].get_num_of_nodes();
+            num_of_atoms += ECMs[i].get_num_of_nodes();
+            num_of_bonds += ECMs[i].get_num_of_node_pairs();
         }
     }
     if (Include_pointparticle){
@@ -295,78 +297,11 @@ int main(int argc, char **argv)
         all_dihedrals[num_of_dihedrals].type =EndOfList;
         
         if (Include_Membrane) {
-            for (int i=0; i<Membranes.size(); i++) {
-                
-                //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
-                
-                MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
-                for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
-                    all_atoms[j+atom_count]=atoms[j];
-                    membrane_set[i].insert(j+atom_count);
-                }
-                
-                
-                
-                Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
-                for (int j=0; j<Membranes[i].get_num_of_node_pairs(); j++) {
-                    all_bonds[j+bond_count]=bonds[j];
-                    all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
-                    all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
-                    
-                }
-                
-                
-                Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
-                for (int j=0; j<Membranes[i].get_num_of_triangle_pairs(); j++) {
-                    all_dihedrals[j+dihe_count]=dihedrals[j];
-                    all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
-                }
-                
-                //These parameters are used to shift the index of the atoms/bonds/dihedrals.
-                atom_count += Membranes[i].get_num_of_nodes();
-                bond_count += Membranes[i].get_num_of_node_pairs();
-                dihe_count += Membranes[i].get_num_of_triangle_pairs();
-            }
+            OpenMM_membrane_info_relay(Membranes, membrane_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
+//        cout<<"\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n";
         if (Include_ECM) {
-            for (int i=0; i<ECMs.size(); i++) {
-                
-                //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
-                
-                MyAtomInfo* atoms = convert_membrane_position_to_openmm(Membranes[i]);
-                for (int j=0;j<Membranes[i].get_num_of_nodes(); j++) {
-                    all_atoms[j+atom_count]=atoms[j];
-                    membrane_set[i].insert(j+atom_count);
-                }
-                
-                
-                
-                Bonds* bonds = convert_membrane_bond_info_to_openmm(Membranes[i]);
-                for (int j=0; j<Membranes[i].get_num_of_node_pairs(); j++) {
-                    all_bonds[j+bond_count]=bonds[j];
-                    all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
-                    all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
-                    
-                }
-                
-                
-                Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(Membranes[i]);
-                for (int j=0; j<Membranes[i].get_num_of_triangle_pairs(); j++) {
-                    all_dihedrals[j+dihe_count]=dihedrals[j];
-                    all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
-                    all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
-                }
-                
-                //These parameters are used to shift the index of the atoms/bonds/dihedrals.
-                atom_count += Membranes[i].get_num_of_nodes();
-                bond_count += Membranes[i].get_num_of_node_pairs();
-                dihe_count += Membranes[i].get_num_of_triangle_pairs();
-            }
+            OpenMM_ECM_info_relay(ECMs, ecm_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
         
         
@@ -375,7 +310,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, interaction_map);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, ecm_set, interaction_map);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -440,7 +375,7 @@ int main(int argc, char **argv)
     progress=0;
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
-//        cout<<Membranes[0].return_node_position(0, 0);
+        //        cout<<Membranes[0].return_node_position(0, 0);
         
         //Thermostat step first step
         if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
@@ -494,7 +429,7 @@ int main(int argc, char **argv)
         }
         
         if (Include_pointparticle)
-        {   
+        {
             for (int i=0; i<pointparticles.size(); i++) {
                 if (pointparticles[i].on_or_off_MD_evolution){
                     pointparticles[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
@@ -554,10 +489,10 @@ int main(int argc, char **argv)
         
         if (Include_Membrane && Membranes.size()>1) {
             for (int i=1; i<Membranes.size(); i++) {
-                    particle_vesicle_shared_node_force (Membranes[i] , Membranes[0]);
-                    if (MD_Step%2000==0) {
-                        update_particle_vesicle_neighbour_list (Membranes[i] , Membranes[0]);
-                    }
+                particle_vesicle_shared_node_force (Membranes[i] , Membranes[0]);
+                if (MD_Step%2000==0) {
+                    update_particle_vesicle_neighbour_list (Membranes[i] , Membranes[0]);
+                }
             }
         }
         
@@ -659,7 +594,7 @@ int main(int argc, char **argv)
             
             if (Include_Membrane) {
                 for (int i=0; i<Membranes.size(); i++) {
-//                    string label="Membrane_"+to_string(i);
+                    //                    string label="Membrane_"+to_string(i);
                     Membranes[i].write_traj(traj_file_name);
                     Membranes[i].export_for_resume(MD_Step);
                 }
@@ -691,7 +626,7 @@ int main(int argc, char **argv)
                 for (int i=0; i<pointparticles.size(); i++) {
                     
                     pointparticles[i].write_traj(traj_file_name);
-                 
+                    
                 }
             }
         }// End of if (MD_Step%100==0)

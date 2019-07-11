@@ -9,7 +9,6 @@
 #include "Membrane.h"
 
 void Membrane::Relax_1(void){
-    check();
     if (Relaxation){
         cout<<"\nBeginnig the Relaxation\nProgress:\n";
         double temp_Bending_coefficient=Bending_coefficient;
