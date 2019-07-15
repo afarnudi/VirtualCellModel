@@ -9,10 +9,10 @@ import numpy as np
 #import matplotlib.pyplot as plt
 
 
-s=2
+s=1
 a=np.sqrt(3)
 d=a*np.sqrt(3)/2
-N=4
+N=10
 n=int(N/2)
 l=n*a
 w=n*d
@@ -29,10 +29,10 @@ with open("membrane_lattice.geo","w") as file:
             file.write("\n")
         for j in range(N+1):
             if line==0:
-                file.write("Point({})={{ {:2.2f},{:2.2f},0,{:2.0f} }};\n".format(index,-l+j*a,-w+i*d,s))
+                file.write("Point({})={{ {:2.2f},0,{:2.2f},{} }};\n".format(index,-l+j*a,-w+i*d,s))
                 index+=1
             else:
-                file.write("Point({})={{ {:2.2f},{:2.2f},0,{:2.0f} }};\n".format(index,-l+j*a+0.5*a,-w+i*d,s))
+                file.write("Point({})={{ {:2.2f},0,{:2.2f},{} }};\n".format(index,-l+j*a+0.5*a,-w+i*d,s))
                 index+=1
     file.write("\n")
     index=1

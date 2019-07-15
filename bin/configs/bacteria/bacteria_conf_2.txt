@@ -1,0 +1,21 @@
+//MD_num_of_steps	1000000
+Simulation_Time_In_Ps	30
+//MD_traj_save_step	1000
+Report_Interval_In_Fs	20
+//Step_Size_In_Fs	0.0001
+Step_Size_In_Fs	0.1
+K	1
+MD_T	0.1
+Num_of_Membranes	1	configs/bacteria/bacteria_mem_config.txt
+Num_of_Chromatins	0	chromatin_config_1.txt
+Num_of_Actins		0	actin_config.txt
+Num_of_ECMs		5	configs/bacteria/bacteria_ecm_config_1.txt configs/bacteria/bacteria_ecm_config_2.txt configs/bacteria/bacteria_ecm_config_3.txt configs/bacteria/bacteria_ecm_config_4.txt configs/bacteria/bacteria_ecm_config_5.txt	
+Actin_Membrane_Bond_Coefficient	400
+MD_thrmo_step	200
+Bussi_tau	30
+MC_step	200
+trajectory_file_name	1	bacteria
+excluded_volume_interactio	0
+Interaction_map	1	bacteria_interaction_map_2.txt
+sigma_LJ_12_6	1
+epsilon_LJ_12_6	0.01

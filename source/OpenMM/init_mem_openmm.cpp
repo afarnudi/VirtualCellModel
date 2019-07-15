@@ -97,6 +97,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                          * OpenMM::KJPerKcal
                                                          * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    LJ_12_6_interaction->setCutoffDistance(2 * GenConst::sigma_LJ_12_6
+                                             * OpenMM::NmPerAngstrom);
     system.addForce(LJ_12_6_interaction);
     
     // Here we use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
