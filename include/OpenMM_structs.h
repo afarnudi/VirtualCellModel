@@ -25,6 +25,7 @@ struct MyAtomInfo
 struct Bonds{
     int type;
     int atoms[2];
+    std::string class_label;
     double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2;
     double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     bool   canConstrain;
@@ -32,6 +33,7 @@ struct Bonds{
 
 struct Dihedrals{
     int type;
+    std::string class_label;
     std::vector<int> atoms;
     double bending_stiffness_value;
 };

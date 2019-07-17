@@ -273,7 +273,7 @@ public:
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
         
-        double width= Average_node_pair_length; // it defines a minimum limit for weil width.
+        double width= 0.66*Average_node_pair_length; // it defines a minimum limit for weil width.
         double delta_length=Max_node_pair_length-Min_node_pair_length;
         double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
         if ((1+ 2*width_scaling)*delta_length < width ){ //this condition shows the case when the mesh is almost ordered.
