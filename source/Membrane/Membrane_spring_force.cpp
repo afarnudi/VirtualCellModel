@@ -16,7 +16,7 @@ void Membrane::FENE_log (void){
 
     int Node_A, Node_B;
 
-    double width= Average_node_pair_length; // it defines a minimum limit for weil width.
+    double width= 2*Average_node_pair_length/3; // it defines a minimum limit for weil width. 2/3 is an important factor: it dose not let the bondes to go beyond the allowed zone for bending force.
     double delta_length=Max_node_pair_length-Min_node_pair_length;
     double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
     if ((1+ 2*width_scaling)*delta_length < width ){ //this condition shows the case when the mesh is almost ordered.
@@ -27,6 +27,7 @@ void Membrane::FENE_log (void){
         width=  (1+ 2*width_scaling)*delta_length; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the width may become larger than 0.66Average which was the minimum limit.
 //        cout<<"\n\nif == false\n\n";
     }
+ 
     lmin= Min_node_pair_length - width_scaling*delta_length;
     lmax= Max_node_pair_length +  width_scaling*delta_length;
 
