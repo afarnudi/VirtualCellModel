@@ -57,7 +57,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     system.addForce(bondStretch);
     
     
-    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("k_bond*(((lmin/2)/(r-(lmin/2)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0)");
+    OpenMM::CustomBondForce*        FENE  = new OpenMM::CustomBondForce("k_bond*0.01*(((lmin/2)/(r-(lmin/2)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0)");
     //Set the global parameters of the force. The parameters are calculated in the membrane constructor.
     FENE->addGlobalParameter("lmin",   bonds[0].FENE_lmin
                                        * OpenMM::NmPerAngstrom);
@@ -71,7 +71,21 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        * OpenMM::KJPerKcal
                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     system.addForce(FENE);
-    
+   
+    OpenMM::CustomBondForce*        FENE_2  = new OpenMM::CustomBondForce("((k_bond*exp(1/(r-le1)))/(r-lmin))*step(le1-r)+ ((k_bond*exp(1/(le0-r)))/(lmax-r))*step(r-le0)");
+    //Set the global parameters of the force. The parameters are calculated in the membrane constructor.
+    FENE_2->addGlobalParameter("lmin",   bonds[0].FENE_lmin
+                                       * OpenMM::NmPerAngstrom);
+    FENE_2->addGlobalParameter("le0",   bonds[0].FENE_le0
+                                      * OpenMM::NmPerAngstrom);
+    FENE_2->addGlobalParameter("le1",   bonds[0].FENE_le1
+                                      * OpenMM::NmPerAngstrom);
+    FENE_2->addGlobalParameter("lmax",   bonds[0].FENE_lmax
+                                       * OpenMM::NmPerAngstrom);
+    FENE_2->addGlobalParameter("k_bond", bonds[0].stiffnessInKcalPerAngstrom2
+                                       * OpenMM::KJPerKcal
+                                       * OpenMM::AngstromsPerNm );
+    system.addForce(FENE_2);   
     
     // Create a handle for FENE spring force objects to add to the system.
     OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("10*(sigma/r)^6");
