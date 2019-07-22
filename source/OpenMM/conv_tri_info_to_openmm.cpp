@@ -19,6 +19,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         diatoms[i].atoms[3]=tri_pair_nodes[3];
 
         diatoms[i].bending_stiffness_value = mem.get_bending_stiffness_coefficient();
+        diatoms[i].class_label = mem.get_label();
     }
     //End of list
 //    diatoms[mem_num_tris].type=-1;

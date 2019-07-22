@@ -42,6 +42,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].type = mem.get_spring_model();
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
+        bonds[i].class_label = mem.get_label();
+        bonds[i].nominalLengthInAngstroms=mem.get_avg_node_dist();
         switch (bonds[i].type) {
             //FENE
             case 1:
@@ -50,19 +52,34 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
                 break;
             //Harmonic
             case 2:
-                bonds[i].nominalLengthInAngstroms=mem.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
                 break;
+            //HarmonicX4
+            case 3:
+                bonds[i].stiffnessInKcalPerAngstrom4=mem.get_spring_stiffness_coefficient();
                 
             
         }
        
         
     }
-    cout<<"spring  ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-    cout<<"bending ="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    if(bonds[0].type==2){
+    cout<<"bond potential: Harmonic "<<endl;
+    cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    }
+
     if (bonds[0].type == 1) {
-        cout<<"lmin\tlmax\tle0\tle1\n"<<bonds[0].FENE_lmin * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_lmax * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_le0 * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_le1 * OpenMM::NmPerAngstrom<<endl;
+        cout<< "bond potential: FENE"<<endl;
+        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;        
+        cout<<"lmin(nm)\tlmax(nm)\tle0(nm)   \tle1(nm)\n"<<bonds[0].FENE_lmin * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_lmax * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_le0 * OpenMM::NmPerAngstrom<<"\t"<<bonds[0].FENE_le1 * OpenMM::NmPerAngstrom<<endl;
+    }
+    
+    if(bonds[0].type == 3){
+        cout<<"bond potential: X4Harmonic "<<endl;
+        cout<<"spring coeficient (KJ per Nanometer4) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     cout<<endl;
     

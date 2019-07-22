@@ -63,7 +63,7 @@ private:
     double COM_position[3]={0};
     
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
-    
+    double rescale_factor;
     vector<vector<double> > Node_Velocity;
     vector<vector<int> > Node_Bond_list;
     vector<vector<int> > Node_neighbour_list;
