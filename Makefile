@@ -21,7 +21,10 @@ DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 INC=-I$(DEPFILES)
 
 all: $(BINDIR)/$(TARGET)
-	@mkdir $(BINDIR)/Results $(BINDIR)/Results/Relaxation $(BINDIR)/Results/Reports $(BINDIR)/Results/Resumes
+	@mkdir $(BINDIR)/Results; true
+	@mkdir $(BINDIR)/Results/Relaxation; true
+	@mkdir $(BINDIR)/Results/Reports; true
+	@mkdir $(BINDIR)/Results/Resumes; true
 	@echo Finished!
 	@echo 
 	@echo Don't forget to export OpenMM's Dynamic Library before running the executable. 
