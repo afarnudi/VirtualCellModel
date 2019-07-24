@@ -20,6 +20,8 @@ struct MyAtomInfo
     double posInAng[3];
     double mass;
     double radius;
+    double sigma_LJ_12_6;
+    double epsilon_LJ_12_6;
 };
 
 struct Bonds{

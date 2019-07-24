@@ -24,6 +24,8 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].posInAng[2]=mem.get_node_position(i, 2);
         myatominfo[i].mass=mem.get_node_mass();
         myatominfo[i].radius=mem.get_node_radius();
+        myatominfo[i].sigma_LJ_12_6=mem.get_sigma_LJ_12_6();
+        myatominfo[i].epsilon_LJ_12_6=mem.get_epsilon_LJ_12_6();
         
     }
     //End of list
@@ -52,6 +54,8 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].posInAng[2]=ecm.get_node_position(i, 2);
         myatominfo[i].mass=ecm.get_node_mass();
         myatominfo[i].radius=ecm.get_node_radius();
+        myatominfo[i].sigma_LJ_12_6=ecm.get_sigma_LJ_12_6();
+        myatominfo[i].epsilon_LJ_12_6=ecm.get_epsilon_LJ_12_6();
         
     }
     //End of list

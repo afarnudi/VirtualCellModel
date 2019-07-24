@@ -59,6 +59,9 @@ private:
     std::string Mesh_file_name="None";
     std::string resume_file_name="None";
     
+    double sigma_LJ_12_6=0;
+    double epsilon_LJ_12_6=0;
+    
     bool Relaxation=false;
 //    bool Shift= false;
     bool Relax_with_actin=false;
@@ -267,7 +270,14 @@ public:
     int get_spring_model(void){
         return spring_model;
     }
-    
+    /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
+    double get_sigma_LJ_12_6(void){
+        return sigma_LJ_12_6;
+    }
+    /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
+    double get_epsilon_LJ_12_6(void){
+        return epsilon_LJ_12_6;
+    }
     
     
     /**Set FENE calculated parameters.*/
@@ -409,7 +419,6 @@ public:
         Y_in+=y;
         Z_in+=z;
     }
-
     
 };
 
