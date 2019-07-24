@@ -84,6 +84,10 @@ namespace GenConst {
     bool OpenMM;
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
+    string Membrane_label;
+    string Actin_label;
+    string Chromatin_label;
+    string ECM_label;
 }
 
 
@@ -150,7 +154,7 @@ int main(int argc, char **argv)
         Membranes.resize(GenConst::Num_of_Membranes);
         membrane_set.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-            string label="mem"+to_string(i);
+            string label=GenConst::Membrane_label+to_string(i);
             Membranes[i].set_label(label);
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
@@ -194,7 +198,7 @@ int main(int argc, char **argv)
         ECMs.resize(GenConst::Num_of_ECMs);
         ecm_set.resize(GenConst::Num_of_ECMs);
         for (int i=0; i<GenConst::Num_of_ECMs; i++) {
-            string label="ecm"+to_string(i);
+            string label=GenConst::ECM_label+to_string(i);
             ECMs[i].set_label(label);
             ECMs[i].set_file_time(buffer);
             ECMs[i].set_index(i);

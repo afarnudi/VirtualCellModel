@@ -1,6 +1,7 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
+#include "OpenMM_funcs.hpp"
 
 const int EndOfList=-1;
 using OpenMM::Vec3;
@@ -32,10 +33,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  vector<set<int> >      &ecm_set,
                                  vector<vector<int> >   interaction_map)
 {
-    
-    //======================================! Begin !======================================
-    //                                  Force definitions
-    //=====================================================================================
     // Load all available OpenMM plugins from their default location.
     OpenMM::Platform::loadPluginsFromDirectory
     (OpenMM::Platform::getDefaultPluginsDirectory());
@@ -49,6 +46,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Retain a reference to each force object so we can fill in the forces.
     // Note: the System owns the force objects and will take care of deleting them;
     // don't do it yourself!
+    
+    
     
     cout<<"Defining interactions...\n";
     
@@ -68,39 +67,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 
     std::vector< std::pair< int, int > > excluded_bonds;
     
-    
-    
-    // Create a handle for 12 6 LJ inter class object interactions to add to the system.
-//    OpenMM::CustomNonbondedForce* LJ_12_6_interaction = new OpenMM::CustomNonbondedForce("epsilon*((sigma/r)^12-2*(sigma/r)^6)");
-    //    cout<<"GenConst::sigma_LJ_12_6  "<<GenConst::sigma_LJ_12_6<<endl;
-//    LJ_12_6_interaction->addGlobalParameter("sigma",   GenConst::sigma_LJ_12_6
-//                                            * OpenMM::NmPerAngstrom);
-//    LJ_12_6_interaction->addGlobalParameter("epsilon",   GenConst::epsilon_LJ_12_6
-//                                            * OpenMM::KJPerKcal
-//                                            * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-//    LJ_12_6_interaction->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-//    LJ_12_6_interaction->setCutoffDistance(2 * GenConst::sigma_LJ_12_6
-//                                           * OpenMM::NmPerAngstrom);
-    // system.addForce(LJ_12_6_interaction);
-    
-    
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;
-    // We use the OpenMM's "CustomCompoundBondForce" to difine the bending force between two neighbouring membrane trinagles.
-    //    OpenMM::CustomCompoundBondForce* dihedral_force = new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))");
-    //    dihedral_force->addGlobalParameter("K_bend", dihedrals[0].bending_stiffness_value
-    //                                       * OpenMM::KJPerKcal
-    //                                       * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    //    system.addForce(dihedral_force);
     
-    //======================================! End !======================================
-    //                                  Force definitions
-    //===================================================================================
-    
-    
-    
-    //EV: Excluded Volume
-//    set <std::string> EV_classes;
-//    int EV_index = -1;
     
     int interaction_count=0;
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
@@ -110,58 +78,17 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             for (int j=0; j < i+1; j++) {
                 
-                std::string class_label_i="mem"+std::to_string(i);
-                std::string class_label_j="mem"+std::to_string(j);
+                std::string class_label_i=GenConst::Membrane_label+std::to_string(i);
+                std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
                 
-                set<int> :: iterator it_1 = membrane_set[i].begin();
-                set<int> :: iterator it_2 = membrane_set[j].begin();
-                
-                std::vector< std::pair< int, int > > exclude_bonds;
-
-                for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
-                    
-                    if (bonds[i_b].class_label == class_label_i) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    if (bonds[i_b].class_label == class_label_j) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    
-                }
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
                 
                 int index;
                 
                 switch (interaction_map[i][j]) {
                     case 1:
-                        
-                        LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce("epsilon*((sigma/r)^12-2*(sigma/r)^6)"));
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, membrane_set, membrane_set, i, j);
                         index = LJ_12_6_interactions.size()-1;
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                                                      + atoms[*it_2].sigma_LJ_12_6 )
-                                                                                      * OpenMM::NmPerAngstrom);
-                        
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("epsilon",  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                                          * atoms[*it_2].epsilon_LJ_12_6)
-                                                                                    * OpenMM::KJPerKcal
-                                                                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                        LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-                        LJ_12_6_interactions[index]->setCutoffDistance(1.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                                            + atoms[*it_2].sigma_LJ_12_6 )
-                                                                            * OpenMM::NmPerAngstrom);
-                        
-                        
-                        
-                        LJ_12_6_interactions[index]->addInteractionGroup(membrane_set[i], membrane_set[j]);
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
@@ -171,18 +98,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         
                         break;
                     case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j);
                         
-                        ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce("10*(sigma/r)^6"));
                         index = ExcludedVolumes.size()-1;
-                        
-                        ExcludedVolumes[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].radius
-                                                                                                 + atoms[*it_2].radius )
-                                                                                                 * OpenMM::NmPerAngstrom);
-                        ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-                        ExcludedVolumes[index]->setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                                          + atoms[*it_2].radius )
-                                                                                          * OpenMM::NmPerAngstrom);
-                        ExcludedVolumes[index]->addInteractionGroup(membrane_set[i], membrane_set[j]);
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
@@ -203,32 +121,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         for (int i=0; i < GenConst::Num_of_ECMs; i++) {
             int class_count=0;
             for (int j=0; j < GenConst::Num_of_Membranes; j++) {
-                std::string class_label_i="ecm"+std::to_string(i);
-                std::string class_label_j="mem"+std::to_string(j);
+                std::string class_label_i=GenConst::ECM_label+std::to_string(i);
+                std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
                 
-                set<int> :: iterator it_1 = ecm_set[i].begin();
-                set<int> :: iterator it_2 = membrane_set[j].begin();
-                
-                std::vector< std::pair< int, int > > exclude_bonds;
-                
-                for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
-                    
-                    if (bonds[i_b].class_label == class_label_i) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    if (bonds[i_b].class_label == class_label_j) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    
-                }
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
                 
                 int index;
                 
@@ -236,27 +132,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 switch (interaction_map[i + interaction_count][j]) {
                     case 1:
                         
-                        LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce("epsilon*((sigma/r)^12-2*(sigma/r)^6)"));
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j);
                         index = LJ_12_6_interactions.size()-1;
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                                        + atoms[*it_2].sigma_LJ_12_6 )
-                                                                        * OpenMM::NmPerAngstrom);
-                        
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("epsilon",  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                                         * atoms[*it_2].epsilon_LJ_12_6)
-                                                                        * OpenMM::KJPerKcal
-                                                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                        LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-                        LJ_12_6_interactions[index]->setCutoffDistance(1.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                                              + atoms[*it_2].sigma_LJ_12_6 )
-                                                                       * OpenMM::NmPerAngstrom);
-                        
-                        
-                        
-                        LJ_12_6_interactions[index]->addInteractionGroup(ecm_set[i], membrane_set[j]);
-                        
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
@@ -266,15 +143,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         
                         break;
                     case 2:
-                        ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce("10*(sigma/r)^6"));
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, membrane_set, i, j);
+                        
                         index = ExcludedVolumes.size()-1;
-                        ExcludedVolumes[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].radius
-                                                                              + atoms[*it_2].radius )
-                                                                              * OpenMM::NmPerAngstrom);
-                        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-                        ExcludedVolumes[index]->setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                        + atoms[*it_2].radius )
-                                                                     * OpenMM::NmPerAngstrom);
+                        
                         ExcludedVolumes[index]->addInteractionGroup(ecm_set[i], membrane_set[j]);
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
@@ -290,58 +162,19 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             class_count += GenConst::Num_of_Membranes;
             for (int j=class_count; j < class_count+GenConst::Num_of_ECMs; j++) {
                 
-                std::string class_label_i="ecm"+std::to_string(i);
-                std::string class_label_j="ecm"+std::to_string(j-class_count);
+                std::string class_label_i=GenConst::ECM_label+std::to_string(i);
+                std::string class_label_j=GenConst::ECM_label+std::to_string(j-class_count);
                 
-                set<int> :: iterator it_1 = ecm_set[i].begin();
-                set<int> :: iterator it_2 = ecm_set[j-class_count].begin();
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
                 
-                std::vector< std::pair< int, int > > exclude_bonds;
-                
-                for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
-                    
-                    if (bonds[i_b].class_label == class_label_i) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    if (bonds[i_b].class_label == class_label_j) {
-                        std::pair< int, int > temp;
-                        temp.first=bonds[i_b].atoms[0];
-                        temp.second=bonds[i_b].atoms[1];
-                        exclude_bonds.push_back(temp);
-                    }
-                    
-                    
-                }
                 
                 int index;
                 
                 
                 switch (interaction_map[i+ interaction_count][j]) {
                     case 1:
-                        LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce("epsilon*((sigma/r)^12-2*(sigma/r)^6)"));
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j-class_count);
                         index = LJ_12_6_interactions.size()-1;
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                                        + atoms[*it_2].sigma_LJ_12_6 )
-                                                                        * OpenMM::NmPerAngstrom);
-                        
-                        
-                        LJ_12_6_interactions[index]->addGlobalParameter("epsilon",  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                                         * atoms[*it_2].epsilon_LJ_12_6)
-                                                                        * OpenMM::KJPerKcal
-                                                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                        LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-                        LJ_12_6_interactions[index]->setCutoffDistance(1.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                                              + atoms[*it_2].sigma_LJ_12_6 )
-                                                                       * OpenMM::NmPerAngstrom);
-                        
-                        
-                        
-                        LJ_12_6_interactions[index]->addInteractionGroup(ecm_set[i], ecm_set[j-class_count]);
                         
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -351,17 +184,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         system.addForce(LJ_12_6_interactions[index]);
                         break;
                     case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, ecm_set, i, j-class_count);
                         
-                        ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce("10*(sigma/r)^6"));
                         index = ExcludedVolumes.size()-1;
-                        ExcludedVolumes[index]->addGlobalParameter("sigma",   0.5*( atoms[*it_1].radius
-                                                                                                      + atoms[*it_2].radius )
-                                                                                      * OpenMM::NmPerAngstrom);
-                        ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-                        ExcludedVolumes[index]->setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                        + atoms[*it_2].radius )
-                                                                        * OpenMM::NmPerAngstrom);
-                        ExcludedVolumes[index]->addInteractionGroup(ecm_set[i], ecm_set[j-class_count]);
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".

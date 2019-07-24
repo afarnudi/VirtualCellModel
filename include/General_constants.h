@@ -62,6 +62,15 @@ namespace GenConst {
     extern double sigma_LJ_12_6;
     /**Set Lennard-Jones 12 6 epsilon.*/
     extern double epsilon_LJ_12_6;
+    /**Set Membrane class label. An index will be assigned during runtime. Default mem*/
+    extern std::string Membrane_label;
+    /**Set Actin class label. An index will be assigned during runtime. Default act*/
+    extern std::string Actin_label;
+    /**Set Chromatin class label. An index will be assigned during runtime. Default chr*/
+    extern std::string Chromatin_label;
+    /**Set ECM class label. An index will be assigned during runtime. Default ecm*/
+    extern std::string ECM_label;
+    
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

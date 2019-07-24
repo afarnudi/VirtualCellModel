@@ -72,4 +72,24 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
+/**Creates a vector of node pairs (excluded bonds) from the system bond list using class labels.*/
+std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
+                                                              std::string label_1,
+                                                              std::string label_2);
+
+/**Initiate the Lenard Jones 12 6 interaction for sets of class atoms.*/
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<std::set<int> >                set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index);
+
+void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                      atoms[],
+                                      vector<std::set<int> >                set_1,
+                                      vector<std::set<int> >                set_2,
+                                      int                                   set_1_index,
+                                      int                                   set_2_index);
+
 #endif

@@ -102,6 +102,38 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         }
                         
                         continue;
+                    } else if (it->first=="Membrane_label") {
+                        if (it->second==0) {
+                            GenConst::Membrane_label="mem";
+                        } else {
+                            GenConst::Membrane_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="Actin_label") {
+                        if (it->second==0) {
+                            GenConst::Actin_label="act";
+                        } else {
+                            GenConst::Actin_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="Chromatin_label") {
+                        if (it->second==0) {
+                            GenConst::Chromatin_label="chr";
+                        } else {
+                            GenConst::Chromatin_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="ECM_label") {
+                        if (it->second==0) {
+                            GenConst::ECM_label="ecm";
+                        } else {
+                            GenConst::ECM_label=split[i+2];
+                        }
+                        
+                        continue;
                     }
                     break;
                 }
@@ -264,6 +296,26 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             } else {
                 GenConst::Interaction_map= true;
             }
+        }
+    } else if (param_name=="Membrane_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Membrane_label="mem";
+        }
+    } else if (param_name=="Actin_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Actin_label="act";
+        }
+    } else if (param_name=="Chromatin_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Chromatin_label="chr";
+        }
+    } else if (param_name=="ECM_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::ECM_label="ecm";
         }
     } else if (param_name=="OpenMM"){
         it = general_param_map.find(param_name);
