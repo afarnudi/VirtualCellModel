@@ -56,17 +56,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     bool HarmonicBondForce=false;
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     
+    // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     
     vector<OpenMM::CustomBondForce*>X4harmonics;
     
-    
-    // Create a vector of handles for the FENE spring force object. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomBondForce*> FENEs;
 
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
-//    OpenMM::CustomNonbondedForce* excluded_volume = new OpenMM::CustomNonbondedForce("10*(sigma/r)^6");
-    
-    // Creat a vector of node index pairs that form a bond. This list is later used to create a list of atoms that are excluded from the excluded volume force.
+
     std::vector< std::pair< int, int > > excluded_bonds;
     
     //excluded volume interaction strength.
@@ -203,6 +200,33 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                                                      * OpenMM::NmPerAngstrom);
                         ExcludedVolumes[ExcludedVolumes.size()-1]->addInteractionGroup(ecm_set[i], membrane_set[j]);
                         
+                        std::vector< std::pair< int, int > > exclude_bonds;
+                        
+                        std::string class_label_i="ecm"+std::to_string(i);
+                        std::string class_label_j="mem"+std::to_string(j);
+                        
+                        for (int i=0; bonds[i].type != EndOfList; ++i) {
+                            
+                            if (bonds[i].class_label == class_label_i) {
+                                std::pair< int, int > temp;
+                                temp.first=bonds[i].atoms[0];
+                                temp.second=bonds[i].atoms[1];
+                                exclude_bonds.push_back(temp);
+                            }
+                            
+                            if (bonds[i].class_label == class_label_j) {
+                                std::pair< int, int > temp;
+                                temp.first=bonds[i].atoms[0];
+                                temp.second=bonds[i].atoms[1];
+                                exclude_bonds.push_back(temp);
+                            }
+                            
+                            
+                        }
+                        
+                        ExcludedVolumes[ExcludedVolumes.size()-1]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
+                        
                         system.addForce(ExcludedVolumes[ExcludedVolumes.size()-1]);
                         break;
                 }
@@ -229,6 +253,33 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                                                            + atoms[*it_2].radius )
                                                                                      * OpenMM::NmPerAngstrom);
                         ExcludedVolumes[ExcludedVolumes.size()-1]->addInteractionGroup(ecm_set[i], ecm_set[j]);
+                        
+                        std::vector< std::pair< int, int > > exclude_bonds;
+                        
+                        std::string class_label_i="ecm"+std::to_string(i);
+                        std::string class_label_j="ecm"+std::to_string(j);
+                        
+                        for (int i=0; bonds[i].type != EndOfList; ++i) {
+                            
+                            if (bonds[i].class_label == class_label_i) {
+                                std::pair< int, int > temp;
+                                temp.first=bonds[i].atoms[0];
+                                temp.second=bonds[i].atoms[1];
+                                exclude_bonds.push_back(temp);
+                            }
+                            
+                            if (bonds[i].class_label == class_label_j) {
+                                std::pair< int, int > temp;
+                                temp.first=bonds[i].atoms[0];
+                                temp.second=bonds[i].atoms[1];
+                                exclude_bonds.push_back(temp);
+                            }
+                            
+                            
+                        }
+                        
+                        ExcludedVolumes[ExcludedVolumes.size()-1]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
                         
                         system.addForce(ExcludedVolumes[ExcludedVolumes.size()-1]);
                         
