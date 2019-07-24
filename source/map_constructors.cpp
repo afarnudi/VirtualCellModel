@@ -25,7 +25,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
 
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        cout<<"\nGeneral Parameter file opened successfully.\nList of config-file:\n";
+        cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -73,7 +73,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     } else if (it->first=="Num_of_ECMs") {
                         
                         for (int j=0; j<it->second; j++) {
-//                            cout<<"\t"<<split[i+2+j]<<endl;
+                            cout<<"\t"<<split[i+2+j]<<endl;
                             ecm_config_list.push_back(split[i+2+j]);
                         }
                         continue;

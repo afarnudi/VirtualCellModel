@@ -11,20 +11,27 @@
 
 #include "General_functions.hpp"
 
-using namespace std;
+using std::vector;
+using std::string;
 
 class Actin
 {
 private:
-    string file_time;
+    std::string file_time;
     int index;
     
-    map<string, double> param_map;
+    
+    
+    std::string label;
+    
+    std::map<std::string, double> param_map;
     
     double Node_Mass=1;
     double Node_radius=1;
     int spring_model=2;
     double Spring_coefficient=100;
+    
+    double rescale_factor;
 //    double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
@@ -36,7 +43,7 @@ private:
     vector<vector<double> >Node_Force;
     vector<vector<int> > Pyramid_Nodes;
     
-    string output_file_neme;
+    std::string output_file_neme;
     
     vector<vector<int> > Node_Bond_list;
     int Num_of_Node_Pairs=0;
@@ -51,11 +58,14 @@ private:
     double Dashpot_Viscosity;
     double tau_Maxwell_relax=0;
     double exp_tau=0;
+    double Min_node_pair_length=1000;
+    double Max_node_pair_length=0;
+    double Average_node_pair_length=0;
     
     
     //Private members:
-    void initialise(string Mesh_file_name);
-    void read_gmesh_file (string gmesh_file);
+    void initialise(std::string Mesh_file_name);
+    void read_gmesh_file (std::string gmesh_file);
     void Node_Bond_identifier(void);
     void Node_Bond_relaxed_length_initialiser(void);
     double Hookian(double distance, double initial_distance);
@@ -70,14 +80,67 @@ public:
     vector<int> Num_of_Actin_Membrane_shared_Nodes;
     
     //Member headers
-    void import_config(string config_file_name);
-    void set_map_parameter(string param_name, double param_value);
+    void import_config(std::string config_file_name);
+    void set_map_parameter(std::string param_name, double param_value);
     void Elastic_Force_Calculator(void);
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
     void Thermostat_Bussi(double MD_T);
-    void write_traj (string traj_name, string label);
+    void write_traj (std::string traj_name, std::string label);
     void generate_report();
+    
+    /** Assigns the label(pdb) used to write to the trajectory files. It is also used to identify the class object throught the programme */
+    void set_label(std::string lab){
+        label=lab;
+    }
+    /** \brief public access to total number of ECM nodes.
+     * \return integer number of nodes in the ECM.
+     */
+    int get_num_of_nodes(void){
+        return Num_of_Nodes;
+    }
+    /** return the label(pdb) used to write to the trajectory files. */
+    std::string get_label(void){
+        return label;
+    }
+    double get_node_position(int node_number, int node_coordinate){
+        return Node_Position[node_number][node_coordinate];
+    }
+    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
+    double get_node_mass(void){
+        return Node_Mass;
+    }
+    double get_node_radius(void){
+        return Node_radius;
+    }
+    void shift_node_positions(void){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]+=Shift_in_X_direction;
+            Node_Position[i][1]+=Shift_in_Y_direction;
+            Node_Position[i][2]+=Shift_in_Z_direction;
+        }
+    }
+    /**Return the number of bonds between membrane nodes.*/
+    int get_num_of_node_pairs(void){
+        return Num_of_Node_Pairs;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_spring_model(void){
+        return spring_model;
+    }
+    /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
+    int get_node_pair(int bond_num, int node_id){
+        return Node_Bond_list[bond_num][node_id];
+    }
+    /**Return the average distance of the nodes as calculated from the mesh. */
+    double get_avg_node_dist(void){
+        return Average_node_pair_length;
+    }
+    /**Return spring stiffness coefficient. */
+    double get_spring_stiffness_coefficient(void){
+        return Spring_coefficient;
+    }
+    void check(void);
     
     //General members:
     void set_file_time(char* buffer){
@@ -85,12 +148,6 @@ public:
     }
     void set_index(int ind){
         index=ind;
-    }
-    int return_num_of_nodes(void){
-        return Num_of_Nodes;
-    }
-    double return_node_position(int node_number, int node_coordinate){
-        return Node_Position[node_number][node_coordinate];
     }
     
     

@@ -131,6 +131,6 @@ void Actin::Node_Bond_identifier(void){
     }
     
     Num_of_Node_Pairs=int(Node_Bond_list.size());
-    cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl;
+//    cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl;
 }
 

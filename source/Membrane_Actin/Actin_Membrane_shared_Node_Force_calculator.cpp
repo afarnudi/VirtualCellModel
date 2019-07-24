@@ -18,9 +18,9 @@ void Actin_Membrane_shared_Node_Force_calculator(Actin &act, Membrane &mem, int 
         act_node=act.Actin_Membrane_shared_Node_list[j][i][0];
         mem_node=act.Actin_Membrane_shared_Node_list[j][i][1];
         
-        delta_x = mem.get_node_position(mem_node, 0) - act.return_node_position(act_node, 0);
-        delta_y = mem.get_node_position(mem_node, 1) - act.return_node_position(act_node, 1);
-        delta_z = mem.get_node_position(mem_node, 2) - act.return_node_position(act_node, 2);
+        delta_x = mem.get_node_position(mem_node, 0) - act.get_node_position(act_node, 0);
+        delta_y = mem.get_node_position(mem_node, 1) - act.get_node_position(act_node, 1);
+        delta_z = mem.get_node_position(mem_node, 2) - act.get_node_position(act_node, 2);
         
         double a[3]={delta_x, delta_y, delta_z};
         Node_distance = vector_length(a);

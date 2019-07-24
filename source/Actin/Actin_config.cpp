@@ -99,5 +99,7 @@ void Actin::set_map_parameter(string param_name, double param_value){
         Kelvin_Damping_Coefficient=param_value;
     } else if (param_name=="Dashpot_Viscosity"){
         Dashpot_Viscosity=param_value;
+    } else if (param_name=="rescale_factor"){
+        rescale_factor=param_value;
     }
 }

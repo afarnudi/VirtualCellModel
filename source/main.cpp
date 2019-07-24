@@ -135,7 +135,9 @@ int main(int argc, char **argv)
     vector<std::set<int> > membrane_set;
     
     vector<Chromatin> Chromatins;
+    
     vector<Actin> Actins;
+    vector<std::set<int> > actin_set;
     
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
@@ -183,12 +185,16 @@ int main(int argc, char **argv)
     
     if (GenConst::Num_of_Actins!=0) {
         Include_Actin = true;
+        
         Actins.resize(GenConst::Num_of_Actins);
+        actin_set.resize(GenConst::Num_of_Actins);
         for (int i=0; i<GenConst::Num_of_Actins; i++) {
+            string label=GenConst::Actin_label+to_string(i);
+            Actins[i].set_label(label);
             Actins[i].set_file_time(buffer);
             Actins[i].set_index(i);
             Actins[i].import_config(actin_config_list[i]);
-            //            Actins[i].generate_report();
+            Actins[i].generate_report();
         }
     }
     
@@ -252,7 +258,8 @@ int main(int argc, char **argv)
     }
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
-            num_of_atoms+=Actins[i].return_num_of_nodes();
+            num_of_atoms+=Actins[i].get_num_of_nodes();
+            num_of_bonds+=Actins[i].get_num_of_node_pairs();
         }
     }
     if (Include_ECM) {
@@ -303,10 +310,16 @@ int main(int argc, char **argv)
         if (Include_Membrane) {
             OpenMM_membrane_info_relay(Membranes, membrane_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
-//        cout<<"\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n";
+        
+        if (Include_Actin) {
+            OpenMM_Actin_info_relay(Actins, actin_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+        }
+
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs, ecm_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
+        
+       
         
         
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
@@ -314,7 +327,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, ecm_set, interaction_map);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, interaction_map);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
