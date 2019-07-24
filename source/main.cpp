@@ -343,7 +343,7 @@ int main(int argc, char **argv)
             
             double sim_duration_per_sec = (double)((clock() - tStart)/CLOCKS_PER_SEC);
             
-            double sec_per_day      =60*60*24;
+            double sec_per_day     =60*60*24;
             double sec_per_hour    =60*60;
             double sec_per_min     =60;
             

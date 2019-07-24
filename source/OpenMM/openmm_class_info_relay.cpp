@@ -1,6 +1,14 @@
 #include "OpenMM_funcs.hpp"
 
-void OpenMM_membrane_info_relay (vector<Membrane> membranes, vector<std::set<int> > &membrane_set, MyAtomInfo* all_atoms, Bonds* all_bonds, Dihedrals* all_dihedrals, int &atom_count, int &bond_count, int &dihe_count){
+void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
+                                 vector<std::set<int> > &membrane_set,
+                                 MyAtomInfo*            all_atoms,
+                                 Bonds*                 all_bonds,
+                                 Dihedrals*             all_dihedrals,
+                                 int                    &atom_count,
+                                 int                    &bond_count,
+                                 int                    &dihe_count){
+    
     for (int i=0; i<membranes.size(); i++) {
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
