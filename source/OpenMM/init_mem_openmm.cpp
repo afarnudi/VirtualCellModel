@@ -56,7 +56,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
-    system.addForce(HarmonicBond);
+   // system.addForce(HarmonicBond);
     vector<OpenMM::CustomBondForce*>X4harmonics;
     // Create a vector of handles for the FENE spring force object. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomBondForce*> FENEs;
@@ -199,15 +199,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     set <std::string> FENE_classes;
     int FENE_index = -1;
     
+    set <std::string> X4harmonic_classes;
+    int X4harmonic_index = -1;
+    
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
         std::pair< int, int > temp;
         temp.first=bonds[i].atoms[0];
         temp.second=bonds[i].atoms[1];
-    
-    set <std::string> X4harmonic_classes;
-    int X4harmonic_index = -1;
-    
+
         
         
         
@@ -265,11 +265,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     X4harmonic_index++;
                     
                     X4harmonics.push_back( new OpenMM::CustomBondForce("0.25*k_bond*((r/r_rest)-1)^4"));
+                   
                     X4harmonics[X4harmonic_index]->addGlobalParameter("r_rest",   bonds[i].nominalLengthInAngstroms
                                                  * OpenMM::NmPerAngstrom);
                     X4harmonics[X4harmonic_index]->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom4
-                                                 * OpenMM::KJPerKcal//);
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm*  OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                                 * OpenMM::KJPerKcal
+                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm *  OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
                     system.addForce(X4harmonics[X4harmonic_index]);
                 }
                 X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1]);
@@ -304,7 +305,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             DihedralForces[DFs_index]->addGlobalParameter("K_bend", dihedrals[i].bending_stiffness_value
                                                           * OpenMM::KJPerKcal
                                                           * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-            system.addForce(DihedralForces[DFs_index]);
+          //  system.addForce(DihedralForces[DFs_index]);
         }
             DihedralForces[DFs_index]->addBond(dihedrals[i].atoms);
     }
