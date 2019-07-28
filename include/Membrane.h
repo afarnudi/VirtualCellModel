@@ -324,7 +324,7 @@ public:
     int get_num_of_triangle(){
         return Num_of_Triangles;
     }
-
+    /**Returns the x (0), y (1), and z (2) coordinate of the node index (number).*/
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
