@@ -79,6 +79,8 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].initPosInAng[0]=act.get_node_position(i, 0);
         myatominfo[i].initPosInAng[1]=act.get_node_position(i, 1);
         myatominfo[i].initPosInAng[2]=act.get_node_position(i, 2);
+//        cout<<act.get_node_position(i, 0)<<"\t"<<act.get_node_position(i, 1)<<"\t"<<act.get_node_position(i, 2)<<"\n";
+//        cout<<myatominfo[i].initPosInAng[0]<<"\t"<<myatominfo[i].initPosInAng[1]<<"\t"<<myatominfo[i].initPosInAng[2]<<"\n";
         myatominfo[i].posInAng[0]=act.get_node_position(i, 0);
         myatominfo[i].posInAng[1]=act.get_node_position(i, 1);
         myatominfo[i].posInAng[2]=act.get_node_position(i, 2);

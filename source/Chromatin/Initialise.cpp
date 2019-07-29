@@ -10,6 +10,9 @@
 #include <algorithm>
 //void build_random_chain(void);
 
+using std::cout;
+using std::endl;
+
 void Chromatin::initialise(void){
     vector<vector<double> > zero_vec(Num_of_Nodes, vector<double> (Num_of_Nodes));
     Contact_Matrix=zero_vec;
@@ -23,7 +26,7 @@ void Chromatin::initialise(void){
     build_random_chain();
     Pack(7);
     cout<<"Chromatin class initiated.\n";
-
+    
 }
 
 void Chromatin::initialise(double min_radius){
@@ -145,8 +148,8 @@ void Chromatin::Pack(double min_radius){
         velocity_COM[0]/=Num_of_Nodes;
         velocity_COM[1]/=Num_of_Nodes;
         velocity_COM[2]/=Num_of_Nodes;
-//        cout<<"Chromatin com velocity after packing:\n";
-//        cout<<velocity_COM[0]<<"\t"<<velocity_COM[1]<<"\t"<<velocity_COM[2]<<endl;
+        //        cout<<"Chromatin com velocity after packing:\n";
+        //        cout<<velocity_COM[0]<<"\t"<<velocity_COM[1]<<"\t"<<velocity_COM[2]<<endl;
         //    position_COM[0]/=Num_of_Nodes;
         //    position_COM[1]/=Num_of_Nodes;
         //    position_COM[2]/=Num_of_Nodes;
@@ -189,7 +192,7 @@ void Chromatin::packing_potential(double Sphere_Radius){
         } else if(Node_distance < le1   &&  Node_distance > lmin  ) {
             double exp_le1=exp(1.0/(Node_distance-le1));
             force = ( (interaction_strength*exp_le1)/(Node_distance-lmin) )*( 1.0/(Node_distance-lmin)+1.0/( (Node_distance-le1)*(Node_distance-le1) ) );
-        
+            
             force /= pos;
             
             Node_Force[i][0] += -force*deltax;
@@ -255,18 +258,18 @@ double Chromatin::chromatin_prepack(void){
 }
 
 void Chromatin::export_pack(int MD_step){
-        ofstream write_resume_file;
-        string resume_file_name="Results/Relaxation/Resume_Chromatin_"+to_string(chrom_index)+"_";
-        resume_file_name+=file_time;
-        resume_file_name+=".txt";
-        write_resume_file.open(resume_file_name.c_str());
-        
-        write_resume_file<<MD_step<<endl;
-        write_resume_file<<Num_of_Nodes<<endl;
-        for (int i=0; i<Num_of_Nodes; i++) {
-            write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
-            write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
-            write_resume_file<<AB_index[i]<<"\n";
-            //Node_force=0
-        }
+    std::ofstream write_resume_file;
+    string resume_file_name="Results/Relaxation/Resume_Chromatin_"+std::to_string(chrom_index)+"_";
+    resume_file_name+=file_time;
+    resume_file_name+=".txt";
+    write_resume_file.open(resume_file_name.c_str());
+    
+    write_resume_file<<MD_step<<endl;
+    write_resume_file<<Num_of_Nodes<<endl;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
+        write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
+        write_resume_file<<AB_index[i]<<"\n";
+        //Node_force=0
+    }
 }

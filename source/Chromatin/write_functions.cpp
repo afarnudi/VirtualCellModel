@@ -8,13 +8,16 @@
 
 #include "Chromatin.h"
 
+using std::string;
+using std::endl;
+
 void Chromatin::write_parameters(int MD_Step){
     string traj_file_name;
     
-    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+to_string(chrom_index)+"_"+file_time+".txt";
-    ofstream Trajectory;
+    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(chrom_index)+"_"+file_time+".txt";
+    std::ofstream Trajectory;
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory.open(traj_file_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     
     for (int i=0; i<Num_of_Nodes-2; i++) {
@@ -30,41 +33,41 @@ void Chromatin::packing_traj (void)
     string energy_file_name;
     string traj_file_name;
     
-    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+to_string(chrom_index)+"_"+file_time+".xyz";
+    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(chrom_index)+"_"+file_time+".xyz";
     
-    ofstream Trajectory;
+    std::ofstream Trajectory;
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
+    Trajectory.open(traj_file_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     Trajectory <<Num_of_Nodes<<endl;
     Trajectory << " nodes  "<<endl;
     for(int j=0; j< Num_of_Nodes; j++) // saving trajectory
     {
-        Trajectory << "chem" <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+        Trajectory << "chem" <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<<std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
     }
     
 }
 
 void Chromatin::write_traj (string traj_name, string label){
-    ofstream Trajectory;
-    Trajectory.open(traj_name.c_str(), ios::app);
+    std::ofstream Trajectory;
+    Trajectory.open(traj_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
     string label_A =label+"_A";
     string label_B =label+"_B";
     for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
     {
         if (AB_index[j]!=0) {
-            Trajectory << label_A <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+            Trajectory << label_A <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
         } else {
-            Trajectory << label_B <<setprecision(5)<< setw(20)<<Node_Position[j][0]<< setw(20)<<Node_Position[j][1]<< setw(20)<<Node_Position[j][2]<<endl;
+            Trajectory << label_B <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
         }
         
     }
 }
 
 void Chromatin::export_for_resume(int MD_step){
-    ofstream write_resume_file;
-    string resume_file_name="Results/Resumes/Resume_Chromatin_"+to_string(chrom_index)+"_";
+    std::ofstream write_resume_file;
+    string resume_file_name="Results/Resumes/Resume_Chromatin_"+std::to_string(chrom_index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -82,32 +85,32 @@ void Chromatin::export_for_resume(int MD_step){
 void Chromatin::generate_report(void)
 {
     string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Chromatin_"+to_string(chrom_index)+"_";
+    Report_file_name= "Results/Reports/Report_Chromatin_"+std::to_string(chrom_index)+"_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
-    ofstream Report;
+    std::ofstream Report;
     Report.open(Report_file_name.c_str());
     Report<< std:: fixed;
-    Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
+    Report<<"Node Mass"<< std::setw(20)<<Node_Mass<<endl;
 //    Report<<"Radius"<< setw(20)<<Radius<<endl;
-    Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
-    Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;
-    Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
-    Report<<"# of Nodes "<< setw(20)<<return_num_of_nodes()<<endl;
+    Report<<"Minimum node pair length"<< std::setw(20)<<Min_node_pair_length<<endl;
+    Report<<"Maximum node pair length"<< std::setw(20)<<Max_node_pair_length<<endl;
+    Report<<"Average node pair length"<< std::setw(20)<<Average_node_pair_length<<endl;
+    Report<<"# of Nodes "<< std::setw(20)<<return_num_of_nodes()<<endl;
 //    Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
-    Report<<"Spring model"<< setw(20)<<spring_model<<endl;
-    Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
+    Report<<"Spring model"<< std::setw(20)<<spring_model<<endl;
+    Report<<"Spring coefficient"<< std::setw(20)<<Spring_coefficient<<endl;
 //    Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
-    Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;
+    Report<<"Damping coefficient"<< std::setw(20)<<Damping_coefficient<<endl;
     if (spring_model==1)
     {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"FENE"<<endl;
+        Report<<"Membrane Spring Model:"<< std::setw(20)<<"FENE"<<endl;
         
     }
     if (spring_model==2)
     {
-        Report<<"Membrane Spring Model:"<< setw(20)<<"Houkian"<<endl;
+        Report<<"Membrane Spring Model:"<< std::setw(20)<<"Houkian"<<endl;
         
     }
     

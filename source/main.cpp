@@ -100,10 +100,6 @@ static const bool   WantEnergy   = true;
 const int EndOfList=-1;
 
 
-
-
-
-
 int main(int argc, char **argv)
 {
     // get the current time.
@@ -135,6 +131,7 @@ int main(int argc, char **argv)
     vector<std::set<int> > membrane_set;
     
     vector<Chromatin> Chromatins;
+    vector<std::set<int> > chromatin_set;
     
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;

@@ -8,6 +8,8 @@
 
 #include "Chromatin.h"
 
+using std::cout;
+using std::endl;
 
 void Chromatin::potential_1 (void){
     double le0,le1,lmax,lmin;

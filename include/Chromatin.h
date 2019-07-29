@@ -11,7 +11,8 @@
 
 #include "General_functions.hpp"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 class Chromatin
 {
@@ -81,7 +82,7 @@ private: //(if we define these constants as private members of the class, we can
     int Num_of_Nodes=0;
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
-    map<string, double> param_map;
+    std::map<string, double> param_map;
     
     double Average_Node_Distance();
     void read_membrabe_input(string input_file);
@@ -133,7 +134,7 @@ public:
             average_force_z+=Node_Force[j][2];
             
         }
-        cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
+//        cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
     void set_file_time(char* buffer){
         file_time=buffer;
