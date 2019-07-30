@@ -1,0 +1,196 @@
+\hypertarget{classpoint__particle}{}\section{point\+\_\+particle Class Reference}
+\label{classpoint__particle}\index{point\_particle@{point\_particle}}
+
+
+{\ttfamily \#include $<$point\+\_\+particle.\+h$>$}
+
+
+
+Collaboration diagram for point\+\_\+particle\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classpoint__particle_a8019c456768e1fbe70d56bd3821b2906}{initialize\+\_\+point\+\_\+particle}} (double x, double y, double z)
+\item 
+void \mbox{\hyperlink{classpoint__particle_a584056fafe834e7346e266d1a950e731}{write\+\_\+traj}} (string traj\+\_\+name)
+\item 
+void \mbox{\hyperlink{classpoint__particle_a2dae1b70a2fbfdf4f95abeb086e90d23}{M\+D\+\_\+\+Evolution\+\_\+beginning}} (double M\+D\+\_\+\+Time\+\_\+\+Step)
+\item 
+void \mbox{\hyperlink{classpoint__particle_a9e5a00664604811b19ead1af25cdcb21}{M\+D\+\_\+\+Evolution\+\_\+end}} (double M\+D\+\_\+\+Time\+\_\+\+Step)
+\item 
+void \mbox{\hyperlink{classpoint__particle_a8a89ec34d7dc2e1a54c3e0b58d23ff06}{generate\+\_\+report}} ()
+\item 
+void \mbox{\hyperlink{classpoint__particle_a40db3a07bcbe9888fc538a469f8b0708}{import\+\_\+config}} (string config\+\_\+file\+\_\+name)
+\item 
+void \mbox{\hyperlink{classpoint__particle_a4bbc110dabefccd51143ed68d4d7ba3f}{set\+\_\+index}} (int ind)
+\item 
+void \mbox{\hyperlink{classpoint__particle_aba09dcc4858f07bb455e8de1a7423734}{set\+\_\+file\+\_\+time}} (char $\ast$buffer)
+\item 
+double \mbox{\hyperlink{classpoint__particle_afebd9502e8c8106f2b5274378045965c}{return\+\_\+\+P\+\_\+\+P\+\_\+sigma}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_acbec3803b347d96c064862102b059209}{return\+\_\+\+P\+\_\+\+P\+\_\+epsilon}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_a02ada7bba125dc701f5c8a4d067dc8c0}{return\+\_\+\+P\+\_\+\+P\+\_\+cut\+\_\+off}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_a51f76ba04a942622d54fb4e5388518a6}{return\+\_\+\+P\+\_\+\+Membrane\+\_\+sigma}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_ac2e3983a015b533b30209283a3692cc1}{return\+\_\+\+P\+\_\+\+Membrane\+\_\+epsilon}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_ae2d18d929b1558333ecd86b17f7caa6d}{return\+\_\+\+P\+\_\+\+Membrane\+\_\+cut\+\_\+off}} (void)
+\item 
+double \mbox{\hyperlink{classpoint__particle_a3785ab52126a3b9f4f9a38bd35378771}{return\+\_\+position}} (int node\+\_\+coordinate)
+\item 
+void \mbox{\hyperlink{classpoint__particle_aee14a82e8900194e3858fe19822725cd}{add\+\_\+to\+\_\+force}} (double force, int coor)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{classpoint__particle_a00cb25fd2627593ac107a232efbdb65d}{Neighbour}}
+\item 
+int \mbox{\hyperlink{classpoint__particle_a434dc5e0503b9c29546dd906b57288fd}{Neighbournumber}}
+\item 
+double \mbox{\hyperlink{classpoint__particle_a0d5ac2e186afd64b4d50ec2835fe9706}{Neighbour\+\_\+dist}}
+\item 
+double \mbox{\hyperlink{classpoint__particle_ab6a87fce5a3b85ca0b2037066fa31e63}{cut\+\_\+off}}
+\item 
+bool \mbox{\hyperlink{classpoint__particle_afee389a618e3c3c64e255329b1985ae3}{on\+\_\+or\+\_\+off\+\_\+\+M\+D\+\_\+evolution}} =1
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classpoint__particle_aee14a82e8900194e3858fe19822725cd}\label{classpoint__particle_aee14a82e8900194e3858fe19822725cd}} 
+\index{point\_particle@{point\_particle}!add\_to\_force@{add\_to\_force}}
+\index{add\_to\_force@{add\_to\_force}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{add\_to\_force()}{add\_to\_force()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::add\+\_\+to\+\_\+force (\begin{DoxyParamCaption}\item[{double}]{force,  }\item[{int}]{coor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a8a89ec34d7dc2e1a54c3e0b58d23ff06}\label{classpoint__particle_a8a89ec34d7dc2e1a54c3e0b58d23ff06}} 
+\index{point\_particle@{point\_particle}!generate\_report@{generate\_report}}
+\index{generate\_report@{generate\_report}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{generate\_report()}{generate\_report()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::generate\+\_\+report (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpoint__particle_a40db3a07bcbe9888fc538a469f8b0708}\label{classpoint__particle_a40db3a07bcbe9888fc538a469f8b0708}} 
+\index{point\_particle@{point\_particle}!import\_config@{import\_config}}
+\index{import\_config@{import\_config}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{import\_config()}{import\_config()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::import\+\_\+config (\begin{DoxyParamCaption}\item[{string}]{config\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpoint__particle_a8019c456768e1fbe70d56bd3821b2906}\label{classpoint__particle_a8019c456768e1fbe70d56bd3821b2906}} 
+\index{point\_particle@{point\_particle}!initialize\_point\_particle@{initialize\_point\_particle}}
+\index{initialize\_point\_particle@{initialize\_point\_particle}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{initialize\_point\_particle()}{initialize\_point\_particle()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::initialize\+\_\+point\+\_\+particle (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y,  }\item[{double}]{z }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpoint__particle_a2dae1b70a2fbfdf4f95abeb086e90d23}\label{classpoint__particle_a2dae1b70a2fbfdf4f95abeb086e90d23}} 
+\index{point\_particle@{point\_particle}!MD\_Evolution\_beginning@{MD\_Evolution\_beginning}}
+\index{MD\_Evolution\_beginning@{MD\_Evolution\_beginning}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{MD\_Evolution\_beginning()}{MD\_Evolution\_beginning()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::\+M\+D\+\_\+\+Evolution\+\_\+beginning (\begin{DoxyParamCaption}\item[{double}]{M\+D\+\_\+\+Time\+\_\+\+Step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpoint__particle_a9e5a00664604811b19ead1af25cdcb21}\label{classpoint__particle_a9e5a00664604811b19ead1af25cdcb21}} 
+\index{point\_particle@{point\_particle}!MD\_Evolution\_end@{MD\_Evolution\_end}}
+\index{MD\_Evolution\_end@{MD\_Evolution\_end}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{MD\_Evolution\_end()}{MD\_Evolution\_end()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::\+M\+D\+\_\+\+Evolution\+\_\+end (\begin{DoxyParamCaption}\item[{double}]{M\+D\+\_\+\+Time\+\_\+\+Step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpoint__particle_ae2d18d929b1558333ecd86b17f7caa6d}\label{classpoint__particle_ae2d18d929b1558333ecd86b17f7caa6d}} 
+\index{point\_particle@{point\_particle}!return\_P\_Membrane\_cut\_off@{return\_P\_Membrane\_cut\_off}}
+\index{return\_P\_Membrane\_cut\_off@{return\_P\_Membrane\_cut\_off}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_Membrane\_cut\_off()}{return\_P\_Membrane\_cut\_off()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+Membrane\+\_\+cut\+\_\+off (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_ac2e3983a015b533b30209283a3692cc1}\label{classpoint__particle_ac2e3983a015b533b30209283a3692cc1}} 
+\index{point\_particle@{point\_particle}!return\_P\_Membrane\_epsilon@{return\_P\_Membrane\_epsilon}}
+\index{return\_P\_Membrane\_epsilon@{return\_P\_Membrane\_epsilon}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_Membrane\_epsilon()}{return\_P\_Membrane\_epsilon()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+Membrane\+\_\+epsilon (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a51f76ba04a942622d54fb4e5388518a6}\label{classpoint__particle_a51f76ba04a942622d54fb4e5388518a6}} 
+\index{point\_particle@{point\_particle}!return\_P\_Membrane\_sigma@{return\_P\_Membrane\_sigma}}
+\index{return\_P\_Membrane\_sigma@{return\_P\_Membrane\_sigma}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_Membrane\_sigma()}{return\_P\_Membrane\_sigma()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+Membrane\+\_\+sigma (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a02ada7bba125dc701f5c8a4d067dc8c0}\label{classpoint__particle_a02ada7bba125dc701f5c8a4d067dc8c0}} 
+\index{point\_particle@{point\_particle}!return\_P\_P\_cut\_off@{return\_P\_P\_cut\_off}}
+\index{return\_P\_P\_cut\_off@{return\_P\_P\_cut\_off}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_P\_cut\_off()}{return\_P\_P\_cut\_off()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+P\+\_\+cut\+\_\+off (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_acbec3803b347d96c064862102b059209}\label{classpoint__particle_acbec3803b347d96c064862102b059209}} 
+\index{point\_particle@{point\_particle}!return\_P\_P\_epsilon@{return\_P\_P\_epsilon}}
+\index{return\_P\_P\_epsilon@{return\_P\_P\_epsilon}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_P\_epsilon()}{return\_P\_P\_epsilon()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+P\+\_\+epsilon (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_afebd9502e8c8106f2b5274378045965c}\label{classpoint__particle_afebd9502e8c8106f2b5274378045965c}} 
+\index{point\_particle@{point\_particle}!return\_P\_P\_sigma@{return\_P\_P\_sigma}}
+\index{return\_P\_P\_sigma@{return\_P\_P\_sigma}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_P\_P\_sigma()}{return\_P\_P\_sigma()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+\+P\+\_\+\+P\+\_\+sigma (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a3785ab52126a3b9f4f9a38bd35378771}\label{classpoint__particle_a3785ab52126a3b9f4f9a38bd35378771}} 
+\index{point\_particle@{point\_particle}!return\_position@{return\_position}}
+\index{return\_position@{return\_position}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{return\_position()}{return\_position()}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::return\+\_\+position (\begin{DoxyParamCaption}\item[{int}]{node\+\_\+coordinate }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_aba09dcc4858f07bb455e8de1a7423734}\label{classpoint__particle_aba09dcc4858f07bb455e8de1a7423734}} 
+\index{point\_particle@{point\_particle}!set\_file\_time@{set\_file\_time}}
+\index{set\_file\_time@{set\_file\_time}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{set\_file\_time()}{set\_file\_time()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::set\+\_\+file\+\_\+time (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a4bbc110dabefccd51143ed68d4d7ba3f}\label{classpoint__particle_a4bbc110dabefccd51143ed68d4d7ba3f}} 
+\index{point\_particle@{point\_particle}!set\_index@{set\_index}}
+\index{set\_index@{set\_index}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{set\_index()}{set\_index()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::set\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{ind }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classpoint__particle_a584056fafe834e7346e266d1a950e731}\label{classpoint__particle_a584056fafe834e7346e266d1a950e731}} 
+\index{point\_particle@{point\_particle}!write\_traj@{write\_traj}}
+\index{write\_traj@{write\_traj}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{write\_traj()}{write\_traj()}}
+{\footnotesize\ttfamily void point\+\_\+particle\+::write\+\_\+traj (\begin{DoxyParamCaption}\item[{string}]{traj\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+\subsection{Field Documentation}
+\mbox{\Hypertarget{classpoint__particle_ab6a87fce5a3b85ca0b2037066fa31e63}\label{classpoint__particle_ab6a87fce5a3b85ca0b2037066fa31e63}} 
+\index{point\_particle@{point\_particle}!cut\_off@{cut\_off}}
+\index{cut\_off@{cut\_off}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{cut\_off}{cut\_off}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::cut\+\_\+off}
+
+\mbox{\Hypertarget{classpoint__particle_a00cb25fd2627593ac107a232efbdb65d}\label{classpoint__particle_a00cb25fd2627593ac107a232efbdb65d}} 
+\index{point\_particle@{point\_particle}!Neighbour@{Neighbour}}
+\index{Neighbour@{Neighbour}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{Neighbour}{Neighbour}}
+{\footnotesize\ttfamily vector$<$double$>$ point\+\_\+particle\+::\+Neighbour}
+
+\mbox{\Hypertarget{classpoint__particle_a0d5ac2e186afd64b4d50ec2835fe9706}\label{classpoint__particle_a0d5ac2e186afd64b4d50ec2835fe9706}} 
+\index{point\_particle@{point\_particle}!Neighbour\_dist@{Neighbour\_dist}}
+\index{Neighbour\_dist@{Neighbour\_dist}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{Neighbour\_dist}{Neighbour\_dist}}
+{\footnotesize\ttfamily double point\+\_\+particle\+::\+Neighbour\+\_\+dist}
+
+\mbox{\Hypertarget{classpoint__particle_a434dc5e0503b9c29546dd906b57288fd}\label{classpoint__particle_a434dc5e0503b9c29546dd906b57288fd}} 
+\index{point\_particle@{point\_particle}!Neighbournumber@{Neighbournumber}}
+\index{Neighbournumber@{Neighbournumber}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{Neighbournumber}{Neighbournumber}}
+{\footnotesize\ttfamily int point\+\_\+particle\+::\+Neighbournumber}
+
+\mbox{\Hypertarget{classpoint__particle_afee389a618e3c3c64e255329b1985ae3}\label{classpoint__particle_afee389a618e3c3c64e255329b1985ae3}} 
+\index{point\_particle@{point\_particle}!on\_or\_off\_MD\_evolution@{on\_or\_off\_MD\_evolution}}
+\index{on\_or\_off\_MD\_evolution@{on\_or\_off\_MD\_evolution}!point\_particle@{point\_particle}}
+\subsubsection{\texorpdfstring{on\_or\_off\_MD\_evolution}{on\_or\_off\_MD\_evolution}}
+{\footnotesize\ttfamily bool point\+\_\+particle\+::on\+\_\+or\+\_\+off\+\_\+\+M\+D\+\_\+evolution =1}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/\mbox{\hyperlink{point__particle_8h}{point\+\_\+particle.\+h}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\mbox{\hyperlink{point__particle_8cpp}{point\+\_\+particle.\+cpp}}\end{DoxyCompactItemize}

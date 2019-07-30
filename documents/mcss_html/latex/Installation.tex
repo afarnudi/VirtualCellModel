@@ -1,0 +1,13 @@
+\section*{Open\+MM}
+
+The Vertual Cell software package takes advantage of the Open\+MM as its main molecular dynamics engine. Please use the instructions on the \href{http://openmm.org}{\texttt{ Open\+MM}} webpage to install Open\+MM.
+
+Note\+: Please install the C++ A\+PI. Also note that if you have installed Open\+MM with \textquotesingle{}Conda\textquotesingle{} you still need to install the C++ A\+PI from the source code (or a install.\+sh if one is provided by the developer for your OS).During the Open\+MM installation you may need to install additional software packages (Open\+CL, F\+F\+TW,S\+W\+IG, etc) depending on your choice of platforms (G\+PU, C\+PU) to run the package.
+
+\section*{Generating Mesh files}
+
+The Vertual Cell software package can import particle position and bond information from meshfiles created by \href{http://gmsh.info}{\texttt{ Gmsh}} (export set to version 2) and \href{https://www.blender.org}{\texttt{ blender}}. You can also generate your own mesh information in one of the two supported formats.
+
+\section*{The vertual Cell Package}
+
+You can clone the Vertual Cell package from our \href{https://github.com/afarnudi/Membrane_OBJ}{\texttt{ github}} and use the makefile to build the package. Please note that you may need to modify the make file depending on the openmm installation directory on your machine. 

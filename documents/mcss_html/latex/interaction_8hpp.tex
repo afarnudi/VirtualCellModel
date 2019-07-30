@@ -1,0 +1,186 @@
+\hypertarget{interaction_8hpp}{}\section{/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/interaction.hpp File Reference}
+\label{interaction_8hpp}\index{/Users/sajjad/virtual cell/Membrane\_OBJ/include/interaction.hpp@{/Users/sajjad/virtual cell/Membrane\_OBJ/include/interaction.hpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Membrane.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}E\+C\+M.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Chromatin.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Actin.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}point\+\_\+particle.\+h\char`\"{}}\newline
+Include dependency graph for interaction.\+hpp\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{interaction_8hpp_a3e6a676881b44fb7b7591d592cbab05f}{return\+\_\+ecm\+\_\+membrane\+\_\+node\+\_\+distance}} (\mbox{\hyperlink{classMembrane}{Membrane}} mem, int mem\+\_\+node, \mbox{\hyperlink{classECM}{E\+CM}} ecm, int ecm\+\_\+node)
+\item 
+double \mbox{\hyperlink{interaction_8hpp_a04fec42b185e44beda7ac8fde1edeca0}{return\+\_\+triangle\+\_\+membrane\+\_\+distance}} (\mbox{\hyperlink{classMembrane}{Membrane}} mem, int mem\+\_\+node, \mbox{\hyperlink{classECM}{E\+CM}} ecm, int tri\+\_\+index, double tri\+\_\+com\mbox{[}3\mbox{]})
+\item 
+bool \mbox{\hyperlink{interaction_8hpp_a98404db97a79cc27690c55da0b758a65}{barrier\+\_\+2}} (\mbox{\hyperlink{classMembrane}{Membrane}} mem, int mem\+\_\+index)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_ab54b90b85714771e74b062c83a948755}{Chromatin\+\_\+\+Membrane\+\_\+neighbour\+\_\+finder}} (\mbox{\hyperlink{classChromatin}{Chromatin}} \&chromo, \mbox{\hyperlink{classMembrane}{Membrane}} Mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_adb66d7cebbf7f01c18664bba1dd98e7d}{Chromatin\+\_\+\+Membrane\+\_\+hard\+\_\+sphere}} (\mbox{\hyperlink{classChromatin}{Chromatin}} \&chromo, \mbox{\hyperlink{classMembrane}{Membrane}} \&Mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_ac1c05c2767026fb29f7512e2139f99f2}{Actin\+\_\+\+Membrane\+\_\+shared\+\_\+\+Node\+\_\+\+Identifier}} (\mbox{\hyperlink{classActin}{Actin}} \&actin, \mbox{\hyperlink{classMembrane}{Membrane}} Mem, int j)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_ac6e9dace50cab886e8a1b0c4ca27f064}{Actin\+\_\+\+Membrane\+\_\+shared\+\_\+\+Node\+\_\+\+Force\+\_\+calculator}} (\mbox{\hyperlink{classActin}{Actin}} \&actin, \mbox{\hyperlink{classMembrane}{Membrane}} \&Mem, int j)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_ae3119b64a8f83433722f1b137b626f8a}{Membrane\+\_\+\+E\+C\+M\+\_\+neighbour\+\_\+finder}} (\mbox{\hyperlink{classECM}{E\+CM}} \&ecm, \mbox{\hyperlink{classMembrane}{Membrane}} \&mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_acbf398a1f943366c50d49af14714a0fe}{initialise\+\_\+ecm\+\_\+mem\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classECM}{E\+CM}} \&ecm, \mbox{\hyperlink{classMembrane}{Membrane}} \&mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a5792231911edd06b23a168f72f1dd991}{update\+\_\+ecm\+\_\+mem\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classECM}{E\+CM}} \&ecm, \mbox{\hyperlink{classMembrane}{Membrane}} \&mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a1a52b44f8a2f629ba642676e06b0b70d}{add\+\_\+nodes\+\_\+to\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&mem, vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$ neighbour\+\_\+pairs)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_afef3c68679636c0347209cf6d77db1ec}{Membrane\+\_\+\+E\+C\+M\+\_\+shared\+\_\+node\+\_\+force}} (\mbox{\hyperlink{classECM}{E\+CM}} \&ecm, \mbox{\hyperlink{classMembrane}{Membrane}} \&mem)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a989584a13f2b6c37fedc4c60add73d7d}{Vesicle\+\_\+particle\+\_\+neighbour\+\_\+finder}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a18095a829e721ec5526af7c56058688d}{initialise\+\_\+vesicle\+\_\+particle\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a31647f1e5a456e2702fd210d6f49ec1e}{update\+\_\+particle\+\_\+vesicle\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_ac82f17a35963479ddead12e43db0dda6}{add\+\_\+nodes\+\_\+to\+\_\+particle\+\_\+neighbour\+\_\+list}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&particle, vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$ neighbour\+\_\+pairs)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a75e70693cf499e3b7787e23a57038e6e}{particle\+\_\+vesicle\+\_\+shared\+\_\+node\+\_\+force}} (\mbox{\hyperlink{classMembrane}{Membrane}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a236de9961742fdfdda2f62329038ca1e}{Vesicle\+\_\+pointparticle\+\_\+neighbour\+\_\+finder}} (\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a148174b2536b2a5783879ff93b558ed1}{pointparticle\+\_\+vesicle\+\_\+shared\+\_\+node\+\_\+force}} (\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&particle, \mbox{\hyperlink{classMembrane}{Membrane}} \&vesicle)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a4017bc61cb6d41509368c894c13c85e8}{pointparticle\+\_\+pointparticle\+\_\+interaction}} (\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&first, \mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&second)
+\item 
+void \mbox{\hyperlink{interaction_8hpp_a7fc864b3c170f8c46cf3f4252835a7dc}{prune\+\_\+list}} (int mem\+\_\+nodes, vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$ neighbour\+\_\+pairs)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{interaction_8hpp_ac6e9dace50cab886e8a1b0c4ca27f064}\label{interaction_8hpp_ac6e9dace50cab886e8a1b0c4ca27f064}} 
+\index{interaction.hpp@{interaction.hpp}!Actin\_Membrane\_shared\_Node\_Force\_calculator@{Actin\_Membrane\_shared\_Node\_Force\_calculator}}
+\index{Actin\_Membrane\_shared\_Node\_Force\_calculator@{Actin\_Membrane\_shared\_Node\_Force\_calculator}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Actin\_Membrane\_shared\_Node\_Force\_calculator()}{Actin\_Membrane\_shared\_Node\_Force\_calculator()}}
+{\footnotesize\ttfamily void Actin\+\_\+\+Membrane\+\_\+shared\+\_\+\+Node\+\_\+\+Force\+\_\+calculator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classActin}{Actin}} \&}]{actin,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{Mem,  }\item[{int}]{j }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_ac1c05c2767026fb29f7512e2139f99f2}\label{interaction_8hpp_ac1c05c2767026fb29f7512e2139f99f2}} 
+\index{interaction.hpp@{interaction.hpp}!Actin\_Membrane\_shared\_Node\_Identifier@{Actin\_Membrane\_shared\_Node\_Identifier}}
+\index{Actin\_Membrane\_shared\_Node\_Identifier@{Actin\_Membrane\_shared\_Node\_Identifier}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Actin\_Membrane\_shared\_Node\_Identifier()}{Actin\_Membrane\_shared\_Node\_Identifier()}}
+{\footnotesize\ttfamily void Actin\+\_\+\+Membrane\+\_\+shared\+\_\+\+Node\+\_\+\+Identifier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classActin}{Actin}} \&}]{actin,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}}}]{Mem,  }\item[{int}]{j }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a1a52b44f8a2f629ba642676e06b0b70d}\label{interaction_8hpp_a1a52b44f8a2f629ba642676e06b0b70d}} 
+\index{interaction.hpp@{interaction.hpp}!add\_nodes\_to\_neighbour\_list@{add\_nodes\_to\_neighbour\_list}}
+\index{add\_nodes\_to\_neighbour\_list@{add\_nodes\_to\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{add\_nodes\_to\_neighbour\_list()}{add\_nodes\_to\_neighbour\_list()}}
+{\footnotesize\ttfamily void add\+\_\+nodes\+\_\+to\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{mem,  }\item[{vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$}]{neighbour\+\_\+pairs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_ac82f17a35963479ddead12e43db0dda6}\label{interaction_8hpp_ac82f17a35963479ddead12e43db0dda6}} 
+\index{interaction.hpp@{interaction.hpp}!add\_nodes\_to\_particle\_neighbour\_list@{add\_nodes\_to\_particle\_neighbour\_list}}
+\index{add\_nodes\_to\_particle\_neighbour\_list@{add\_nodes\_to\_particle\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{add\_nodes\_to\_particle\_neighbour\_list()}{add\_nodes\_to\_particle\_neighbour\_list()}}
+{\footnotesize\ttfamily void add\+\_\+nodes\+\_\+to\+\_\+particle\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{particle,  }\item[{vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$}]{neighbour\+\_\+pairs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a98404db97a79cc27690c55da0b758a65}\label{interaction_8hpp_a98404db97a79cc27690c55da0b758a65}} 
+\index{interaction.hpp@{interaction.hpp}!barrier\_2@{barrier\_2}}
+\index{barrier\_2@{barrier\_2}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{barrier\_2()}{barrier\_2()}}
+{\footnotesize\ttfamily bool barrier\+\_\+2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}}}]{mem,  }\item[{int}]{mem\+\_\+index }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_adb66d7cebbf7f01c18664bba1dd98e7d}\label{interaction_8hpp_adb66d7cebbf7f01c18664bba1dd98e7d}} 
+\index{interaction.hpp@{interaction.hpp}!Chromatin\_Membrane\_hard\_sphere@{Chromatin\_Membrane\_hard\_sphere}}
+\index{Chromatin\_Membrane\_hard\_sphere@{Chromatin\_Membrane\_hard\_sphere}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Chromatin\_Membrane\_hard\_sphere()}{Chromatin\_Membrane\_hard\_sphere()}}
+{\footnotesize\ttfamily void Chromatin\+\_\+\+Membrane\+\_\+hard\+\_\+sphere (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classChromatin}{Chromatin}} \&}]{chromo,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{Mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_ab54b90b85714771e74b062c83a948755}\label{interaction_8hpp_ab54b90b85714771e74b062c83a948755}} 
+\index{interaction.hpp@{interaction.hpp}!Chromatin\_Membrane\_neighbour\_finder@{Chromatin\_Membrane\_neighbour\_finder}}
+\index{Chromatin\_Membrane\_neighbour\_finder@{Chromatin\_Membrane\_neighbour\_finder}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Chromatin\_Membrane\_neighbour\_finder()}{Chromatin\_Membrane\_neighbour\_finder()}}
+{\footnotesize\ttfamily void Chromatin\+\_\+\+Membrane\+\_\+neighbour\+\_\+finder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classChromatin}{Chromatin}} \&}]{chromo,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}}}]{Mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_acbf398a1f943366c50d49af14714a0fe}\label{interaction_8hpp_acbf398a1f943366c50d49af14714a0fe}} 
+\index{interaction.hpp@{interaction.hpp}!initialise\_ecm\_mem\_neighbour\_list@{initialise\_ecm\_mem\_neighbour\_list}}
+\index{initialise\_ecm\_mem\_neighbour\_list@{initialise\_ecm\_mem\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{initialise\_ecm\_mem\_neighbour\_list()}{initialise\_ecm\_mem\_neighbour\_list()}}
+{\footnotesize\ttfamily void initialise\+\_\+ecm\+\_\+mem\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classECM}{E\+CM}} \&}]{ecm,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a18095a829e721ec5526af7c56058688d}\label{interaction_8hpp_a18095a829e721ec5526af7c56058688d}} 
+\index{interaction.hpp@{interaction.hpp}!initialise\_vesicle\_particle\_neighbour\_list@{initialise\_vesicle\_particle\_neighbour\_list}}
+\index{initialise\_vesicle\_particle\_neighbour\_list@{initialise\_vesicle\_particle\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{initialise\_vesicle\_particle\_neighbour\_list()}{initialise\_vesicle\_particle\_neighbour\_list()}}
+{\footnotesize\ttfamily void initialise\+\_\+vesicle\+\_\+particle\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_ae3119b64a8f83433722f1b137b626f8a}\label{interaction_8hpp_ae3119b64a8f83433722f1b137b626f8a}} 
+\index{interaction.hpp@{interaction.hpp}!Membrane\_ECM\_neighbour\_finder@{Membrane\_ECM\_neighbour\_finder}}
+\index{Membrane\_ECM\_neighbour\_finder@{Membrane\_ECM\_neighbour\_finder}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Membrane\_ECM\_neighbour\_finder()}{Membrane\_ECM\_neighbour\_finder()}}
+{\footnotesize\ttfamily void Membrane\+\_\+\+E\+C\+M\+\_\+neighbour\+\_\+finder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classECM}{E\+CM}} \&}]{ecm,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_afef3c68679636c0347209cf6d77db1ec}\label{interaction_8hpp_afef3c68679636c0347209cf6d77db1ec}} 
+\index{interaction.hpp@{interaction.hpp}!Membrane\_ECM\_shared\_node\_force@{Membrane\_ECM\_shared\_node\_force}}
+\index{Membrane\_ECM\_shared\_node\_force@{Membrane\_ECM\_shared\_node\_force}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Membrane\_ECM\_shared\_node\_force()}{Membrane\_ECM\_shared\_node\_force()}}
+{\footnotesize\ttfamily void Membrane\+\_\+\+E\+C\+M\+\_\+shared\+\_\+node\+\_\+force (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classECM}{E\+CM}} \&}]{ecm,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a75e70693cf499e3b7787e23a57038e6e}\label{interaction_8hpp_a75e70693cf499e3b7787e23a57038e6e}} 
+\index{interaction.hpp@{interaction.hpp}!particle\_vesicle\_shared\_node\_force@{particle\_vesicle\_shared\_node\_force}}
+\index{particle\_vesicle\_shared\_node\_force@{particle\_vesicle\_shared\_node\_force}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{particle\_vesicle\_shared\_node\_force()}{particle\_vesicle\_shared\_node\_force()}}
+{\footnotesize\ttfamily void particle\+\_\+vesicle\+\_\+shared\+\_\+node\+\_\+force (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a4017bc61cb6d41509368c894c13c85e8}\label{interaction_8hpp_a4017bc61cb6d41509368c894c13c85e8}} 
+\index{interaction.hpp@{interaction.hpp}!pointparticle\_pointparticle\_interaction@{pointparticle\_pointparticle\_interaction}}
+\index{pointparticle\_pointparticle\_interaction@{pointparticle\_pointparticle\_interaction}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{pointparticle\_pointparticle\_interaction()}{pointparticle\_pointparticle\_interaction()}}
+{\footnotesize\ttfamily void pointparticle\+\_\+pointparticle\+\_\+interaction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&}]{first,  }\item[{\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&}]{second }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a148174b2536b2a5783879ff93b558ed1}\label{interaction_8hpp_a148174b2536b2a5783879ff93b558ed1}} 
+\index{interaction.hpp@{interaction.hpp}!pointparticle\_vesicle\_shared\_node\_force@{pointparticle\_vesicle\_shared\_node\_force}}
+\index{pointparticle\_vesicle\_shared\_node\_force@{pointparticle\_vesicle\_shared\_node\_force}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{pointparticle\_vesicle\_shared\_node\_force()}{pointparticle\_vesicle\_shared\_node\_force()}}
+{\footnotesize\ttfamily void pointparticle\+\_\+vesicle\+\_\+shared\+\_\+node\+\_\+force (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a7fc864b3c170f8c46cf3f4252835a7dc}\label{interaction_8hpp_a7fc864b3c170f8c46cf3f4252835a7dc}} 
+\index{interaction.hpp@{interaction.hpp}!prune\_list@{prune\_list}}
+\index{prune\_list@{prune\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{prune\_list()}{prune\_list()}}
+{\footnotesize\ttfamily void prune\+\_\+list (\begin{DoxyParamCaption}\item[{int}]{mem\+\_\+nodes,  }\item[{vector$<$ vector$<$ pair$<$ double, int $>$ $>$ $>$}]{neighbour\+\_\+pairs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a3e6a676881b44fb7b7591d592cbab05f}\label{interaction_8hpp_a3e6a676881b44fb7b7591d592cbab05f}} 
+\index{interaction.hpp@{interaction.hpp}!return\_ecm\_membrane\_node\_distance@{return\_ecm\_membrane\_node\_distance}}
+\index{return\_ecm\_membrane\_node\_distance@{return\_ecm\_membrane\_node\_distance}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{return\_ecm\_membrane\_node\_distance()}{return\_ecm\_membrane\_node\_distance()}}
+{\footnotesize\ttfamily double return\+\_\+ecm\+\_\+membrane\+\_\+node\+\_\+distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}}}]{mem,  }\item[{int}]{mem\+\_\+node,  }\item[{\mbox{\hyperlink{classECM}{E\+CM}}}]{ecm,  }\item[{int}]{ecm\+\_\+node }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a04fec42b185e44beda7ac8fde1edeca0}\label{interaction_8hpp_a04fec42b185e44beda7ac8fde1edeca0}} 
+\index{interaction.hpp@{interaction.hpp}!return\_triangle\_membrane\_distance@{return\_triangle\_membrane\_distance}}
+\index{return\_triangle\_membrane\_distance@{return\_triangle\_membrane\_distance}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{return\_triangle\_membrane\_distance()}{return\_triangle\_membrane\_distance()}}
+{\footnotesize\ttfamily double return\+\_\+triangle\+\_\+membrane\+\_\+distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}}}]{mem,  }\item[{int}]{mem\+\_\+node,  }\item[{\mbox{\hyperlink{classECM}{E\+CM}}}]{ecm,  }\item[{int}]{tri\+\_\+index,  }\item[{double}]{tri\+\_\+com\mbox{[}3\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a5792231911edd06b23a168f72f1dd991}\label{interaction_8hpp_a5792231911edd06b23a168f72f1dd991}} 
+\index{interaction.hpp@{interaction.hpp}!update\_ecm\_mem\_neighbour\_list@{update\_ecm\_mem\_neighbour\_list}}
+\index{update\_ecm\_mem\_neighbour\_list@{update\_ecm\_mem\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{update\_ecm\_mem\_neighbour\_list()}{update\_ecm\_mem\_neighbour\_list()}}
+{\footnotesize\ttfamily void update\+\_\+ecm\+\_\+mem\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classECM}{E\+CM}} \&}]{ecm,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{mem }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a31647f1e5a456e2702fd210d6f49ec1e}\label{interaction_8hpp_a31647f1e5a456e2702fd210d6f49ec1e}} 
+\index{interaction.hpp@{interaction.hpp}!update\_particle\_vesicle\_neighbour\_list@{update\_particle\_vesicle\_neighbour\_list}}
+\index{update\_particle\_vesicle\_neighbour\_list@{update\_particle\_vesicle\_neighbour\_list}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{update\_particle\_vesicle\_neighbour\_list()}{update\_particle\_vesicle\_neighbour\_list()}}
+{\footnotesize\ttfamily void update\+\_\+particle\+\_\+vesicle\+\_\+neighbour\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a989584a13f2b6c37fedc4c60add73d7d}\label{interaction_8hpp_a989584a13f2b6c37fedc4c60add73d7d}} 
+\index{interaction.hpp@{interaction.hpp}!Vesicle\_particle\_neighbour\_finder@{Vesicle\_particle\_neighbour\_finder}}
+\index{Vesicle\_particle\_neighbour\_finder@{Vesicle\_particle\_neighbour\_finder}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Vesicle\_particle\_neighbour\_finder()}{Vesicle\_particle\_neighbour\_finder()}}
+{\footnotesize\ttfamily void Vesicle\+\_\+particle\+\_\+neighbour\+\_\+finder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{interaction_8hpp_a236de9961742fdfdda2f62329038ca1e}\label{interaction_8hpp_a236de9961742fdfdda2f62329038ca1e}} 
+\index{interaction.hpp@{interaction.hpp}!Vesicle\_pointparticle\_neighbour\_finder@{Vesicle\_pointparticle\_neighbour\_finder}}
+\index{Vesicle\_pointparticle\_neighbour\_finder@{Vesicle\_pointparticle\_neighbour\_finder}!interaction.hpp@{interaction.hpp}}
+\subsubsection{\texorpdfstring{Vesicle\_pointparticle\_neighbour\_finder()}{Vesicle\_pointparticle\_neighbour\_finder()}}
+{\footnotesize\ttfamily void Vesicle\+\_\+pointparticle\+\_\+neighbour\+\_\+finder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classpoint__particle}{point\+\_\+particle}} \&}]{particle,  }\item[{\mbox{\hyperlink{classMembrane}{Membrane}} \&}]{vesicle }\end{DoxyParamCaption})}
+
