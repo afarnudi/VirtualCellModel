@@ -32,6 +32,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  vector<set<int> >      &membrane_set,
                                  vector<set<int> >      &actin_set,
                                  vector<set<int> >      &ecm_set,
+                                 vector<set<int> >      &chromatin_set,
                                  vector<vector<int> >   interaction_map)
 {
     // Load all available OpenMM plugins from their default location.
@@ -231,10 +232,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         break;
                     case 2:
                         init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, membrane_set, i, j);
-                        
                         index = ExcludedVolumes.size()-1;
                         
-                        ExcludedVolumes[index]->addInteractionGroup(ecm_set[i], membrane_set[j]);
                         // Add the list of atom pairs that are excluded from the excluded volume force.
                         // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
                         ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
@@ -273,7 +272,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         break;
                     case 2:
                         init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, actin_set, i, j-class_count_j);
-                        
                         index = ExcludedVolumes.size()-1;
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -315,7 +313,176 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         break;
                     case 2:
                         init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, ecm_set, i, j-class_count_j);
+                        index = ExcludedVolumes.size()-1;
                         
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                        
+                        
+                        break;
+                }
+            }
+        }
+    }
+    
+    if (GenConst::Num_of_Chromatins !=0) {
+        
+        int class_count_i = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs;
+        int class_count_j = 0;
+        
+        for (int i=0; i < GenConst::Num_of_Chromatins; i++) {
+            
+            for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+                
+                std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
+                std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
+                
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                int index;
+                
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j);
+                        index = LJ_12_6_interactions.size()-1;
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                        
+                        break;
+                    case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j);
+                        index = ExcludedVolumes.size()-1;
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                        break;
+                }
+                
+            }
+            
+            class_count_j = GenConst::Num_of_Membranes;
+            for (int j=class_count_j; j < class_count_j+GenConst::Num_of_Actins; j++) {
+                
+                
+                std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
+                std::string class_label_j=GenConst::Actin_label+std::to_string(j-class_count_j);
+                
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                
+                int index;
+                
+                
+                switch (interaction_map[i+ class_count_j][j]) {
+                    case 1:
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j);
+                        index = LJ_12_6_interactions.size()-1;
+                        
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                        break;
+                    case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j);
+                        
+                        index = ExcludedVolumes.size()-1;
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                        
+                        
+                        break;
+                }
+            }
+            
+            
+            class_count_j = GenConst::Num_of_Membranes + GenConst::Num_of_Actins;
+            for (int j=class_count_j; j < i + class_count_i; j++) {
+                
+                std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
+                std::string class_label_j=GenConst::ECM_label+std::to_string(j-class_count_j);
+                
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                
+                int index;
+                
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j);
+                        index = LJ_12_6_interactions.size()-1;
+                        
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                        break;
+                    case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j);
+                        index = ExcludedVolumes.size()-1;
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                        
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                        
+                        
+                        break;
+                }
+            }
+            
+            class_count_j = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs;
+            for (int j=class_count_j; j < i + class_count_i; j++) {
+                
+                std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
+                std::string class_label_j=GenConst::Chromatin_label+std::to_string(j-class_count_j);
+                
+                std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                
+                int index;
+                
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j);
+                        index = LJ_12_6_interactions.size()-1;
+                        
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                        break;
+                    case 2:
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j);
                         index = ExcludedVolumes.size()-1;
                         
                         // Add the list of atom pairs that are excluded from the excluded volume force.

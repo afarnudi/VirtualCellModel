@@ -13,6 +13,7 @@
 #include "Membrane.h"
 #include "ECM.h"
 #include "Actin.h"
+#include "Chromatin.h"
 
 
 /** This function and an opaque structure are used to interface our main
@@ -28,6 +29,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
+                                 std::vector<std::set<int> >    &chromatin_set,
                                  std::vector<std::vector<int> > interaction_map);
 
 
@@ -80,6 +82,21 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
 /**Relay the dihedral angle (triangle-triangle angle) information of the membrane triangle to other data structures ready to pass to OpenMM handles.*/
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
 
+/**Relay Actin class's atom information to other data structures ready to pass to OpenMM handles.*/
+void OpenMM_Actin_info_relay (vector<Actin>          acts,
+                              vector<std::set<int> > &act_set,
+                              MyAtomInfo*            all_atoms,
+                              Bonds*                 all_bonds,
+                              Dihedrals*             all_dihedrals,
+                              int                    &atom_count,
+                              int                    &bond_count,
+                              int                    &dihe_coun);
+/**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
+MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
+/**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
+Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+
+
 /**Relay ECM class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_ECM_info_relay (vector<ECM>             ecms,
                             vector<std::set<int> >  &ecm_set,
@@ -94,19 +111,18 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
-/**Relay Actin class's atom information to other data structures ready to pass to OpenMM handles.*/
-void OpenMM_Actin_info_relay (vector<Actin>          acts,
-                              vector<std::set<int> > &act_set,
-                              MyAtomInfo*            all_atoms,
-                              Bonds*                 all_bonds,
-                              Dihedrals*             all_dihedrals,
-                              int                    &atom_count,
-                              int                    &bond_count,
-                              int                    &dihe_coun);
+void OpenMM_Chromatin_info_relay (vector<Chromatin>         chromos,
+                                  vector<std::set<int> >    &chromo_set,
+                                  MyAtomInfo*               all_atoms,
+                                  Bonds*                    all_bonds,
+                                  Dihedrals*                all_dihedrals,
+                                  int                       &atom_count,
+                                  int                       &bond_count,
+                                  int                       &dihe_coun);
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
-MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
+MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo);
 /**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
-Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo);
 
 
 

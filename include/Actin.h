@@ -31,7 +31,7 @@ private:
     int spring_model=2;
     double Spring_coefficient=100;
     
-    double rescale_factor;
+    double rescale_factor=1;
 //    double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;

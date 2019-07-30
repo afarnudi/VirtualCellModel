@@ -10,7 +10,7 @@ Mesh_file_name	2	Mesh/blender/1.ply
 Node_Mass	1
 
 //Radius of each membrane node. Default 1
-Node_radius	1.5
+Node_radius	2
 
 //Energy of membrane nodes. 1) FENE with a log barrier. 2) Harmonic spring. Default 2 
 spring_model	2
@@ -52,7 +52,12 @@ Z_in_mem	0
 
 rescale_factor	10
 
+sigma_LJ_12_6	2
+epsilon_LJ_12_6	0.01
+
 Relaxation	0
 Relax_with_actin	0
 ECM_interaction_cut_off	2.5
 ECM_interaction_strength	20
+
+//excluded_volume_interaction	0

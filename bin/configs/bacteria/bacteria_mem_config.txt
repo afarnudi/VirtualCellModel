@@ -1,8 +1,8 @@
 Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
 //Mesh_file_name	1	Mesh/bacteria/Membrane_Bacteria
-Mesh_file_name	1	Mesh/bacteria/membrane_lattice
+Mesh_file_name	1	Mesh/bacteria/membrane_lattice_20_2
 Node_Mass	1
-Node_radius	1.4
+Node_radius	0.8
 spring_model	2
 //Spring_coefficient	.20
 Spring_coefficient	2.0
@@ -11,7 +11,7 @@ Damping_coefficient	0
 K_surfaceConstant_local	100
 Shift_in_X_direction	0
 Shift_in_Y_direction	0
-Shift_in_Z_direction	0
+Shift_in_Z_direction	-1
 Downward_speed	0
 X_in_mem	0
 Y_in_mem	0
@@ -20,5 +20,8 @@ Relaxation	0
 Relax_with_actin	0
 ECM_interaction_cut_off	2.5
 ECM_interaction_strength	20
-rescale_factor	4
+rescale_factor	2
 //Relaxation	1
+
+sigma_LJ_12_6   2
+epsilon_LJ_12_6 0.01
