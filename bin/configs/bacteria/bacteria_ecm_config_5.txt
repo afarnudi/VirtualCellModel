@@ -1,5 +1,5 @@
 Resume	0	Results/Relaxation/Resume_Chromatin_0_2019_02_27_time_14_39.txt
-Mesh_file_name	3	Mesh/bacteria/membrane_lattice
+Mesh_file_name	2	Mesh/bacteria/membrane_lattice_20
 Node_Mass	0
 Node_radius	1
 spring_model	2
@@ -9,4 +9,7 @@ Shift_in_Y_direction	-17.5
 Shift_in_Z_direction	0
 Kelvin_Damping_Coefficient	100
 Dashpot_Viscosity	0.02
-rescale_factor  4
+rescale_factor  3
+
+sigma_LJ_12_6   2
+epsilon_LJ_12_6 0.01

@@ -56,7 +56,7 @@ void Chromatin::import_config(string config_file_name, double min_radius){
         import(resume_file_name);
     } else {
         if (Num_of_Nodes==0) {
-            cout<< "Error. \nPlease specify the number of Chromatin chain nodes in the "<<config_file_name<< " file.\n";
+            cout<< "Error. \nPlease specify the number of Chromatin nodes in the "<<config_file_name<< " file.\n";
             exit(EXIT_FAILURE);
         }
         initialise(min_radius);
@@ -119,7 +119,7 @@ void Chromatin::import_config(string config_file_name){
         import(resume_file_name);
     } else {
         if (Num_of_Nodes==0) {
-            cout<< "Error. \nPlease specify the number of Chromatin chain nodes in the "<<config_file_name<< " file.\n";
+            cout<< "Error. \nPlease specify the number of Chromatin nodes in the "<<config_file_name<< " file.\n";
             exit(EXIT_FAILURE);
         }
         initialise();

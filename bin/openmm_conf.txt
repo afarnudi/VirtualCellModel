@@ -26,7 +26,7 @@ Num_of_Chromatins	0	chromatin_config_1.txt
 
 
 //Number of actins in the system followed by the directory of their respective configuration files. All actins will be configured using the first configuration file if only one is provided. Default 0. 
-Num_of_Actins		0	actin_config.txt
+Num_of_Actins		1	configs/omm/actin_config.txt
 
 
 //Number of ECMs in the system followed by the directory of their respective configuration files. All ECMs will be configured using the first configuration file if only one is provided. Default 0. 
@@ -47,3 +47,5 @@ MC_step	200
 // Name of the output file. Please note that the date and time the file is generated will be attached to this name.
 trajectory_file_name	1	Cell
 
+//Path to the interaction map. if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".
+Interaction_map	1	omm_interaction_map.txt

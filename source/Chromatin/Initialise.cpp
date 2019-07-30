@@ -24,7 +24,7 @@ void Chromatin::initialise(void){
     
     cout<<"\nInitialising the Chromatin Class..."<<endl;
     build_random_chain();
-    Pack(7);
+//    Pack(7);
     cout<<"Chromatin class initiated.\n";
     
 }
@@ -51,6 +51,9 @@ void Chromatin::build_random_chain(void){
     Node_Position.resize(Num_of_Nodes);
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
+    
+    
+    double velocity_COM[3]={0};
     
     for(int i=0;i<Num_of_Nodes;i++)
     {
@@ -93,8 +96,21 @@ void Chromatin::build_random_chain(void){
             Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
             Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
             Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
+            velocity_COM[0] += Node_Velocity[i][0];
+            velocity_COM[1] += Node_Velocity[i][1];
+            velocity_COM[2] += Node_Velocity[i][2];
         }
     } // for (int i=1; i<Num_of_Nodes; i++)
+    
+    velocity_COM[0]/=Num_of_Nodes;
+    velocity_COM[1]/=Num_of_Nodes;
+    velocity_COM[2]/=Num_of_Nodes;
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        for (int j=0; j<3; j++) {
+            Node_Velocity[i][j] -= velocity_COM[j];
+        }
+    }
 }
 
 void Chromatin::Pack(double min_radius){

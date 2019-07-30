@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
     string general_file_name="general-config.txt";
-    cout<<"Please enter the path (relative to the binary file) + name of the config file:\n";
+    cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\nexample:\t../../myconfigfile.txt\n\nPath to configuration file: ";
     cin>>general_file_name;
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
@@ -130,14 +130,14 @@ int main(int argc, char **argv)
     vector<Membrane> Membranes;
     vector<std::set<int> > membrane_set;
     
-    vector<Chromatin> Chromatins;
-    vector<std::set<int> > chromatin_set;
-    
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
     
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
+    
+    vector<Chromatin> Chromatins;
+    vector<std::set<int> > chromatin_set;
     
     vector<point_particle> pointparticles;
     
@@ -162,23 +162,6 @@ int main(int argc, char **argv)
         }
     }
     
-    
-    if (GenConst::Num_of_Chromatins!=0) {
-        Include_Chromatin = true;
-        Chromatins.resize(GenConst::Num_of_Chromatins);
-        for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
-            Chromatins[i].set_file_time(buffer);
-            Chromatins[i].set_index(i);
-            if (GenConst::Num_of_Membranes == GenConst::Num_of_Chromatins) {
-                ///put a flag for chromatin inside membrane
-                Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
-            } else {
-                Chromatins[i].import_config(chromatin_config_list[i]);
-            }
-            
-            Chromatins[i].generate_report();
-        }
-    }
     
     if (GenConst::Num_of_Actins!=0) {
         Include_Actin = true;
@@ -211,6 +194,29 @@ int main(int argc, char **argv)
         
     }
     
+    
+    if (GenConst::Num_of_Chromatins!=0) {
+        Include_Chromatin = true;
+        
+        Chromatins.resize(GenConst::Num_of_Chromatins);
+        chromatin_set.resize(GenConst::Num_of_Chromatins);
+        for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
+            string label=GenConst::Chromatin_label+to_string(i);
+            Chromatins[i].set_label(label);
+            Chromatins[i].set_file_time(buffer);
+            Chromatins[i].set_index(i);
+            
+            if (GenConst::Num_of_Membranes !=0 && !GenConst::OpenMM) {
+                ///put a flag for chromatin inside membrane
+                Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
+            } else {
+                Chromatins[i].import_config(chromatin_config_list[i]);
+            }
+            
+            Chromatins[i].generate_report();
+        }
+    }
+    
     if (GenConst::Num_of_pointparticles!=0){
         Include_pointparticle=true;
         pointparticles.resize(GenConst::Num_of_pointparticles);
@@ -223,19 +229,24 @@ int main(int argc, char **argv)
         
     }
     
-    if (Include_Membrane && Include_ECM) {
-        for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-            for (int j=0; j<GenConst::Num_of_ECMs; j++) {
-                Membrane_ECM_neighbour_finder(ECMs[j], Membranes[i]);
+    //Used in the old code (no OpenMM engine)
+    if (!GenConst::OpenMM) {
+        if (Include_Membrane && Include_ECM) {
+            for (int i=0; i<GenConst::Num_of_Membranes; i++) {
+                for (int j=0; j<GenConst::Num_of_ECMs; j++) {
+                    Membrane_ECM_neighbour_finder(ECMs[j], Membranes[i]);
+                }
+            }
+        }
+        if (Include_Membrane && Membranes.size()>1) {
+            for (int i=1; i<GenConst::Num_of_Membranes; i++) {
+                Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
             }
         }
     }
     
-    if (Include_Membrane && Membranes.size()>1) {
-        for (int i=1; i<GenConst::Num_of_Membranes; i++) {
-            Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
-        }
-    }
+    
+    
     
     
     int num_of_atoms=0;
@@ -248,11 +259,7 @@ int main(int argc, char **argv)
             num_of_dihedrals += Membranes[i].get_num_of_triangle_pairs();
         }
     }
-    if (Include_Chromatin) {
-        for (int i=0; i<Chromatins.size(); i++) {
-            num_of_atoms+=Chromatins[i].return_num_of_nodes();
-        }
-    }
+    
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
             num_of_atoms+=Actins[i].get_num_of_nodes();
@@ -265,6 +272,14 @@ int main(int argc, char **argv)
             num_of_bonds += ECMs[i].get_num_of_node_pairs();
         }
     }
+    if (Include_Chromatin) {
+        for (int i=0; i<Chromatins.size(); i++) {
+            num_of_atoms    += Chromatins[i].get_num_of_nodes();
+            num_of_bonds    += Chromatins[i].get_num_of_nodes()-1;
+        }
+    }
+    
+    
     if (Include_pointparticle){
         num_of_atoms+=GenConst::Num_of_pointparticles;
     }
@@ -295,7 +310,7 @@ int main(int argc, char **argv)
         int bond_count=0;
         int dihe_count=0;
         
-        
+        //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
         MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
         Bonds* all_bonds         = new Bonds[num_of_bonds+1];
         Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
@@ -315,7 +330,9 @@ int main(int argc, char **argv)
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs, ecm_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
-        
+        if (Include_Chromatin) {
+            OpenMM_Chromatin_info_relay(Chromatins, chromatin_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+        }
        
         
         
@@ -324,7 +341,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, interaction_map);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.

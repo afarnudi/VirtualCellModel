@@ -27,6 +27,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 
     string output_file_neme;
     string file_time;
+    string label;
     
     vector<vector<double> >Node_Position;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -103,8 +104,31 @@ private: //(if we define these constants as private members of the class, we can
     void rescale_velocities(double scale);
     
 public:
-    
-    int return_num_of_nodes(void){
+    /** Assigns the label(pdb) used to write to the trajectory files. */
+    void set_label(std::string lab){
+        label=lab;
+    }
+    /** return the label(pdb) used to write to the trajectory files. */
+    std::string get_label(void){
+        return label;
+    }
+    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
+    double get_node_mass(void){
+        return Node_Mass;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_spring_model(void){
+        return spring_model;
+    }
+    /**Return node type. node types: A (0), B (1)*/
+    int get_node_type(int index){
+        return AB_index[index];
+    }
+    /**Return spring stiffness coefficient. */
+    double get_spring_stiffness_coefficient(void){
+        return Spring_coefficient;
+    }
+    int get_num_of_nodes(void){
         return Num_of_Nodes;
     }
     void shift_position (double x, double y, double z){
@@ -122,7 +146,7 @@ public:
         }
     }
     
-    double return_node_position(int node_number, int node_coordinate){
+    double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
     
@@ -143,7 +167,7 @@ public:
         chrom_index=index;
     }
     
-    double return_node_radius(void){
+    double get_node_radius(void){
         return Node_radius;
     }
     

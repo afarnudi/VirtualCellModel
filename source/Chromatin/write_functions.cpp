@@ -97,7 +97,7 @@ void Chromatin::generate_report(void)
     Report<<"Minimum node pair length"<< std::setw(20)<<Min_node_pair_length<<endl;
     Report<<"Maximum node pair length"<< std::setw(20)<<Max_node_pair_length<<endl;
     Report<<"Average node pair length"<< std::setw(20)<<Average_node_pair_length<<endl;
-    Report<<"# of Nodes "<< std::setw(20)<<return_num_of_nodes()<<endl;
+    Report<<"# of Nodes "<< std::setw(20)<<get_num_of_nodes()<<endl;
 //    Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
     Report<<"Spring model"<< std::setw(20)<<spring_model<<endl;
     Report<<"Spring coefficient"<< std::setw(20)<<Spring_coefficient<<endl;
