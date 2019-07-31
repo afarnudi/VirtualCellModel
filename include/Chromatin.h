@@ -128,6 +128,13 @@ public:
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    void shift_node_positions(void){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]+=Shift_in_X_direction;
+            Node_Position[i][1]+=Shift_in_Y_direction;
+            Node_Position[i][2]+=Shift_in_Z_direction;
+        }
+    }
     int get_num_of_nodes(void){
         return Num_of_Nodes;
     }

@@ -25,6 +25,7 @@ void Chromatin::initialise(void){
     cout<<"\nInitialising the Chromatin Class..."<<endl;
     build_random_chain();
 //    Pack(7);
+    shift_node_positions();
     cout<<"Chromatin class initiated.\n";
     
 }
@@ -41,6 +42,7 @@ void Chromatin::initialise(double min_radius){
     cout<<"\nInitialising the Chromatin Class..."<<endl;
     build_random_chain();
     Pack(min_radius-2);
+    shift_node_positions();
     cout<<"Chromatin class initiated.\n";
     
 }
