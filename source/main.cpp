@@ -254,16 +254,16 @@ int main(int argc, char **argv)
     int num_of_dihedrals=0;
     if (Include_Membrane) {
         for (int i=0; i<Membranes.size(); i++) {
-            num_of_atoms  += Membranes[i].get_num_of_nodes();
-            num_of_bonds     += Membranes[i].get_num_of_node_pairs();
-            num_of_dihedrals += Membranes[i].get_num_of_triangle_pairs();
+            num_of_atoms        += Membranes[i].get_num_of_nodes();
+            num_of_bonds        += Membranes[i].get_num_of_node_pairs();
+            num_of_dihedrals    += Membranes[i].get_num_of_triangle_pairs();
         }
     }
     
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
-            num_of_atoms+=Actins[i].get_num_of_nodes();
-            num_of_bonds+=Actins[i].get_num_of_node_pairs();
+            num_of_atoms        += Actins[i].get_num_of_nodes();
+            num_of_bonds        += Actins[i].get_num_of_node_pairs();
         }
     }
     if (Include_ECM) {
@@ -320,21 +320,48 @@ int main(int argc, char **argv)
         all_dihedrals[num_of_dihedrals].type =EndOfList;
         
         if (Include_Membrane) {
-            OpenMM_membrane_info_relay(Membranes, membrane_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+            OpenMM_membrane_info_relay(Membranes,
+                                       membrane_set,
+                                       all_atoms,
+                                       all_bonds,
+                                       all_dihedrals,
+                                       atom_count,
+                                       bond_count,
+                                       dihe_count);
         }
         
         if (Include_Actin) {
-            OpenMM_Actin_info_relay(Actins, actin_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+            OpenMM_Actin_info_relay(Actins,
+                                    actin_set,
+                                    all_atoms,
+                                    all_bonds,
+                                    all_dihedrals,
+                                    atom_count,
+                                    bond_count,
+                                    dihe_count);
         }
 
         if (Include_ECM) {
-            OpenMM_ECM_info_relay(ECMs, ecm_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+            OpenMM_ECM_info_relay(ECMs,
+                                  ecm_set,
+                                  all_atoms,
+                                  all_bonds,
+                                  all_dihedrals,
+                                  atom_count,
+                                  bond_count,
+                                  dihe_count);
         }
         if (Include_Chromatin) {
-            OpenMM_Chromatin_info_relay(Chromatins, chromatin_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+            OpenMM_Chromatin_info_relay(Chromatins,
+                                        chromatin_set,
+                                        all_atoms,
+                                        all_bonds,
+                                        all_dihedrals,
+                                        atom_count,
+                                        bond_count,
+                                        dihe_count);
         }
        
-        
         
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
