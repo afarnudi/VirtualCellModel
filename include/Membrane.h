@@ -328,6 +328,10 @@ public:
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
+    /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
+    double get_node_velocity(int node_number, int node_coordinate){
+        return Node_Velocity[node_number][node_coordinate];
+    }
 
 
     void calculate_average_force(void){

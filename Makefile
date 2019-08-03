@@ -27,10 +27,10 @@ all: $(BINDIR)/$(TARGET)
 	@mkdir $(BINDIR)/Results/Resumes; true
 	@echo Finished!
 	@echo 
-	@echo Don't forget to export OpenMM's Dynamic Library before running the executable. 
+	@echo Don\'t forget to export OpenMM\'s Dynamic Library before running the executable. 
 	@echo Default paths are:
-	@echo Mac: export DYLD_LIBRARY_PATH=/usr/local/openmm/lib
-	@echo Lin: export LD_LIBRARY_PATH=/usr/local/openmm/lib 
+	@echo \tMac: export DYLD_LIBRARY_PATH=/usr/local/openmm/lib
+	@echo \tLin: export LD_LIBRARY_PATH=/usr/local/openmm/lib 
 	@echo
 
 $(BINDIR)/$(TARGET): $(OBJFILES)

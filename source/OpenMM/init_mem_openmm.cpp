@@ -498,6 +498,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     //  (2) NonbondedForce needs charges,van der Waals properties (in MD units!).
     //  (3) Collect default positions for initializing the simulation later.
     std::vector<Vec3> initialPosInNm;
+    std::vector<Vec3> initialVelInNmperPs;
     std::vector<double> sigma_ev;
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
@@ -506,7 +507,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
+        const Vec3 velocityInNmperPs(atoms[n].velocityInAngperPs[0] * OpenMM::NmPerAngstrom,
+                                     atoms[n].velocityInAngperPs[1] * OpenMM::NmPerAngstrom,
+                                     atoms[n].velocityInAngperPs[2] * OpenMM::NmPerAngstrom);
         initialPosInNm.push_back(posInNm);
+        initialVelInNmperPs.push_back(velocityInNmperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         std::vector<double> sigma_ev;
@@ -611,6 +616,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     if (HarmonicBondForce) {
         system.addForce(HarmonicBond);
+        omm->harmonic = HarmonicBond;
     }
     
     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -657,11 +663,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
     
+    double temperature      = 300*GenConst::K*GenConst::MD_T;
+    double frictionInPs     = 5.;
     
-    
-    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    omm->integrator = new OpenMM::LangevinIntegrator(temperature, frictionInPs,
+                                                     stepSizeInFs * OpenMM::PsPerFs);
+//    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
     omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     omm->context->setPositions(initialPosInNm);
+    omm->context->setVelocities(initialVelInNmperPs);
     platformName = omm->context->getPlatform().getName();
     
     return omm;
