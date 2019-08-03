@@ -205,7 +205,7 @@ void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
 
 void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle){
     bool initiate = true;
-    int vesicle_nodes = vesicle.get_num_of_nodes();
+//    int vesicle_nodes = vesicle.get_num_of_nodes();
     int particle_nodes = particle.get_num_of_nodes();
     for (int i=0; i<particle_nodes; i++) {
         if (particle.Vesicle_Node_neighbour_list[i].size() != 0) {
@@ -264,7 +264,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
         if (neighbour_pairs[i].size() > 1) {
             sort(neighbour_pairs[i].begin(), neighbour_pairs[i].end());
             if (neighbour_pairs[i].size() > 4) {
-                int size=neighbour_pairs[i].size();
+//                int size=neighbour_pairs[i].size();
                 for (int k=0; k< neighbour_pairs[i].size()-4; k++) {
                     neighbour_pairs[i].erase(neighbour_pairs[i].begin()+4);
                 }

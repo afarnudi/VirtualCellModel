@@ -31,18 +31,7 @@ void ECM::initialise(std::string Mesh_file_name, int dimension){
     
     shift_node_positions();
     check();
-//
-//    Triangle_pair_counter();
-//    cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
-//    if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
-//        cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
-//        
-//    }
-//    //        Triangle_Pair_and_Node_Bonds_Identifier();
     
-//    Triangle_pair_identifier();
-
-//    
     cout<<"\nECM class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

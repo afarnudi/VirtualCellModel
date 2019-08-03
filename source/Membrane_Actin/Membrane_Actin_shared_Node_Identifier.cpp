@@ -17,15 +17,15 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int j){
     push.resize(2);
     
     for (int mem_node_counter=0; mem_node_counter<mem.get_num_of_nodes(); mem_node_counter++) {
-        for (int act_node_counter=0; act_node_counter<act.return_num_of_nodes(); act_node_counter++) {
+        for (int act_node_counter=0; act_node_counter<act.get_num_of_nodes(); act_node_counter++) {
             
             mem_x = mem.get_node_position(mem_node_counter, 0);
             mem_y = mem.get_node_position(mem_node_counter, 1);
             mem_z = mem.get_node_position(mem_node_counter, 2);
             
-            act_x = act.return_node_position(act_node_counter, 0);
-            act_y = act.return_node_position(act_node_counter, 1);
-            act_z = act.return_node_position(act_node_counter, 2);
+            act_x = act.get_node_position(act_node_counter, 0);
+            act_y = act.get_node_position(act_node_counter, 1);
+            act_z = act.get_node_position(act_node_counter, 2);
             
             
             if( mem_x == act_x &&  mem_y == act_y &&  mem_z == act_z   )

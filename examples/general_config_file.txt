@@ -63,3 +63,15 @@ sigma_LJ_12_6   1.7
 
 //Set Lennard-Jones 12 6 epsilon.
 epsilon_LJ_12_6 0.01
+
+//Set Membrane class label. An index will be assigned during runtime. Default mem
+Membrane_label	0
+
+//Set Actin class label. An index will be assigned during runtime. Default act
+Actin_label	0
+
+//Set Chromatin class label. An index will be assigned during runtime. Default chr
+Chromatin_label	0
+
+//Set ECM class label. An index will be assigned during runtime. Default ecm
+ECM_label	0

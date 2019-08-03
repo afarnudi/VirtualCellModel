@@ -25,7 +25,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
 
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        cout<<"\nGeneral Parameter file opened successfully.\nList of config-file:\n";
+        cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -73,7 +73,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     } else if (it->first=="Num_of_ECMs") {
                         
                         for (int j=0; j<it->second; j++) {
-//                            cout<<"\t"<<split[i+2+j]<<endl;
+                            cout<<"\t"<<split[i+2+j]<<endl;
                             ecm_config_list.push_back(split[i+2+j]);
                         }
                         continue;
@@ -99,6 +99,38 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         } else {
                             GenConst::Interaction_map = true;
                             GenConst::Interaction_map_file_name=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="Membrane_label") {
+                        if (it->second==0) {
+                            GenConst::Membrane_label="mem";
+                        } else {
+                            GenConst::Membrane_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="Actin_label") {
+                        if (it->second==0) {
+                            GenConst::Actin_label="act";
+                        } else {
+                            GenConst::Actin_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="Chromatin_label") {
+                        if (it->second==0) {
+                            GenConst::Chromatin_label="chr";
+                        } else {
+                            GenConst::Chromatin_label=split[i+2];
+                        }
+                        
+                        continue;
+                    } else if (it->first=="ECM_label") {
+                        if (it->second==0) {
+                            GenConst::ECM_label="ecm";
+                        } else {
+                            GenConst::ECM_label=split[i+2];
                         }
                         
                         continue;
@@ -264,6 +296,26 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             } else {
                 GenConst::Interaction_map= true;
             }
+        }
+    } else if (param_name=="Membrane_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Membrane_label="mem";
+        }
+    } else if (param_name=="Actin_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Actin_label="act";
+        }
+    } else if (param_name=="Chromatin_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Chromatin_label="chr";
+        }
+    } else if (param_name=="ECM_label"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::ECM_label="ecm";
         }
     } else if (param_name=="OpenMM"){
         it = general_param_map.find(param_name);

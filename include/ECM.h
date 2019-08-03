@@ -64,6 +64,10 @@ private:
     
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     double rescale_factor;
+    
+    double sigma_LJ_12_6=0;
+    double epsilon_LJ_12_6=0;
+    
     vector<vector<double> > Node_Velocity;
     vector<vector<int> > Node_Bond_list;
     vector<vector<int> > Node_neighbour_list;
@@ -79,6 +83,8 @@ private:
     void normal_direction_Identifier (double x, double y, double z);
     void normal_direction_Identifier (void);
     void check(void);
+    
+    
     
 public:
     
@@ -140,6 +146,15 @@ public:
     double get_avg_node_dist(void){
         return Average_node_pair_length;
     }
+    /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
+    double get_sigma_LJ_12_6(void){
+        return sigma_LJ_12_6;
+    }
+    /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
+    double get_epsilon_LJ_12_6(void){
+        return epsilon_LJ_12_6;
+    }
+    
     double get_node_radius(void){
         return Node_radius;
     }

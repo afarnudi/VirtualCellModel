@@ -84,6 +84,10 @@ namespace GenConst {
     bool OpenMM;
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
+    string Membrane_label;
+    string Actin_label;
+    string Chromatin_label;
+    string ECM_label;
 }
 
 
@@ -131,7 +135,9 @@ int main(int argc, char **argv)
     vector<std::set<int> > membrane_set;
     
     vector<Chromatin> Chromatins;
+    
     vector<Actin> Actins;
+    vector<std::set<int> > actin_set;
     
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
@@ -150,7 +156,7 @@ int main(int argc, char **argv)
         Membranes.resize(GenConst::Num_of_Membranes);
         membrane_set.resize(GenConst::Num_of_Membranes);
         for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-            string label="mem"+to_string(i);
+            string label=GenConst::Membrane_label+to_string(i);
             Membranes[i].set_label(label);
             Membranes[i].set_file_time(buffer);
             Membranes[i].set_index(i);
@@ -179,12 +185,16 @@ int main(int argc, char **argv)
     
     if (GenConst::Num_of_Actins!=0) {
         Include_Actin = true;
+        
         Actins.resize(GenConst::Num_of_Actins);
+        actin_set.resize(GenConst::Num_of_Actins);
         for (int i=0; i<GenConst::Num_of_Actins; i++) {
+            string label=GenConst::Actin_label+to_string(i);
+            Actins[i].set_label(label);
             Actins[i].set_file_time(buffer);
             Actins[i].set_index(i);
             Actins[i].import_config(actin_config_list[i]);
-            //            Actins[i].generate_report();
+            Actins[i].generate_report();
         }
     }
     
@@ -194,7 +204,7 @@ int main(int argc, char **argv)
         ECMs.resize(GenConst::Num_of_ECMs);
         ecm_set.resize(GenConst::Num_of_ECMs);
         for (int i=0; i<GenConst::Num_of_ECMs; i++) {
-            string label="ecm"+to_string(i);
+            string label=GenConst::ECM_label+to_string(i);
             ECMs[i].set_label(label);
             ECMs[i].set_file_time(buffer);
             ECMs[i].set_index(i);
@@ -248,7 +258,8 @@ int main(int argc, char **argv)
     }
     if (Include_Actin) {
         for (int i=0; i<Actins.size(); i++) {
-            num_of_atoms+=Actins[i].return_num_of_nodes();
+            num_of_atoms+=Actins[i].get_num_of_nodes();
+            num_of_bonds+=Actins[i].get_num_of_node_pairs();
         }
     }
     if (Include_ECM) {
@@ -299,10 +310,16 @@ int main(int argc, char **argv)
         if (Include_Membrane) {
             OpenMM_membrane_info_relay(Membranes, membrane_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
-//        cout<<"\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n";
+        
+        if (Include_Actin) {
+            OpenMM_Actin_info_relay(Actins, actin_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
+        }
+
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs, ecm_set, all_atoms, all_bonds, all_dihedrals, atom_count, bond_count, dihe_count);
         }
+        
+       
         
         
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
@@ -310,7 +327,7 @@ int main(int argc, char **argv)
         
         try {
             
-            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, ecm_set, interaction_map);
+            MyOpenMMData* omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, interaction_map);
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -343,7 +360,7 @@ int main(int argc, char **argv)
             
             double sim_duration_per_sec = (double)((clock() - tStart)/CLOCKS_PER_SEC);
             
-            double sec_per_day      =60*60*24;
+            double sec_per_day     =60*60*24;
             double sec_per_hour    =60*60;
             double sec_per_min     =60;
             

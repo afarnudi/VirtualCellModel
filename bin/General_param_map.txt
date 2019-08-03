@@ -25,3 +25,7 @@ excluded_volume_interaction	0
 OpenMM	1
 sigma_LJ_12_6   2
 epsilon_LJ_12_6 0.01
+Membrane_label	0
+Actin_label	0
+Chromatin_label	0
+ECM_label	0

@@ -107,5 +107,9 @@ void ECM::set_map_parameter(string param_name, double param_value){
         Dashpot_Viscosity=param_value;
     } else if (param_name=="rescale_factor"){
         rescale_factor=param_value;
+    } else if (param_name=="sigma_LJ_12_6"){
+        sigma_LJ_12_6=param_value;
+    } else if (param_name=="epsilon_LJ_12_6"){
+        epsilon_LJ_12_6=param_value;
     }
 }
