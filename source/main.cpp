@@ -92,7 +92,8 @@ namespace GenConst {
 
 
 
-static const bool   WantEnergy   = true;
+static const bool   WantEnergy   = false;
+static const bool   WantForce    = true;
 
 
 
@@ -381,8 +382,13 @@ int main(int argc, char **argv)
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             for (int frame=1; ; ++frame) {
                 double time, energy;
-                myGetOpenMMState(omm, WantEnergy, time, energy, all_atoms);
-                myWritePDBFrame(frame, time, energy, all_atoms, traj_name);
+                
+                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
+                if (WantForce) {
+                    calc_energy_2(Membranes, all_atoms);
+                }
+                
+                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;

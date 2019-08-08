@@ -557,13 +557,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     FENE_classes.insert(bonds[i].class_label);
                     FENE_index++;
                     
-                    FENEs.push_back(new OpenMM::CustomBondForce("k_bond*lmin*lmin*(((lmin/1.5)/(r-(lmin/1.5)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0);"));
+                    FENEs.push_back(new OpenMM::CustomBondForce("(k_bond/(r-lmin))"));
                     FENEs[FENE_index]->addGlobalParameter("lmin",   bonds[i].FENE_lmin
                                                           * OpenMM::NmPerAngstrom);
                     FENEs[FENE_index]->addGlobalParameter("le0",   bonds[i].FENE_le0//);
                                                           * OpenMM::NmPerAngstrom);
-                    FENEs[FENE_index]->addGlobalParameter("le1",   bonds[i].FENE_le1
+//                    FENEs[FENE_index]->addGlobalParameter("le1",   bonds[i].FENE_le1
+//                                                          * OpenMM::NmPerAngstrom);
+                    FENEs[FENE_index]->addGlobalParameter("le1",   1.7
                                                           * OpenMM::NmPerAngstrom);
+
                     //    cout<<"bonds[0].FENE_lmax = "<<bonds[0].FENE_lmax<<endl;
                     FENEs[FENE_index]->addGlobalParameter("lmax",   bonds[i].FENE_lmax//);
                                                           * OpenMM::AngstromsPerNm);
@@ -638,7 +641,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             DFs_classes.insert(dihedrals[i].class_label);
             DFs_index++;
             
-            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))"));
+            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)*0.5))"));
             DihedralForces[DFs_index]->addGlobalParameter("K_bend", dihedrals[i].bending_stiffness_value
                                                           * OpenMM::KJPerKcal
                                                           * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);

@@ -48,6 +48,7 @@ void          myStepWithOpenMM(MyOpenMMData*,
  */
 void          myGetOpenMMState(MyOpenMMData*,
                                bool         wantEnergy,
+                               bool         wantForce,
                                double&      time,
                                double&      energy,
                                MyAtomInfo   atoms[]);
@@ -57,10 +58,25 @@ void          myGetOpenMMState(MyOpenMMData*,
  */
 void          myTerminateOpenMM(MyOpenMMData*);
 
+/**
+ * Calculate the energy for the membrane bacteria problem using the surface equation.
+ */
+void calc_energy(vector<Membrane>     mem,
+                 MyAtomInfo           atoms[]);
+
+/**
+ * Calculate the energy for the membrane bacteria problem usinf perpendicular vectors.
+ */
+void calc_energy_2(vector<Membrane>     mem,
+                   MyAtomInfo           atoms[]);
+
+
+
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.
  */
 void myWritePDBFrame(int                frameNum,
+                     bool               wantforce,
                      double             timeInPs,
                      double             energyInKcal,
                      const MyAtomInfo   atoms[],

@@ -21,4 +21,7 @@ double sign_function(double x);
 double periodiccondition(double dx );
 void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]);
 void matrix_inverse (double mat[3][3]);
+
+//Calculate the A, B, C coefficeints for the surface equation: Ax + By + Cz = -1
+void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C);
 #endif /* General_functions_hpp */

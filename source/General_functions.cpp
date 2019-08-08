@@ -85,3 +85,21 @@ void matrix_inverse (double mat[3][3]){
         
     }
 }
+
+void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C){
+    
+    double  x1 = points[0][0],
+            x2 = points[1][0],
+            x3 = points[2][0],
+            y1 = points[0][1],
+            y2 = points[1][1],
+            y3 = points[2][1],
+            z1 = points[0][2],
+            z2 = points[1][2],
+            z3 = points[2][2];
+    
+    C = ( (x2-x1)*(x3*y1-y3*x1) + (x3-x1)*(x1*y2-y1*x2) )/( (z1*x2-x1*z2)*(x1*y3-y1*x3) + (z3*x1-x3*z1)*(x1*y2-y1*x2) );
+    B = ( x2-x1 + C*(z1*x2-x1*z2) )/( x1*y2-x2*y1 );
+    A = -( 1 + B*y1 + C*z1 )/x1;
+    
+}

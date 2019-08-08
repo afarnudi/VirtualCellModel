@@ -36,83 +36,83 @@ void Membrane::Triangle_pair_identifier(void){
         {
             //************************** finding neighbours **************************
             // neibours of temp_triangle_node_A-temp_triangle_node_B:
-            if ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]!=temp_triangle_node_C ){
+            if ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]!=temp_triangle_node_C ){
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=1;
             }
-            if     ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]!=temp_triangle_node_C )
+            if     ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]!=temp_triangle_node_C )
             {
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=1;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]!=temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_B ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=1;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]!=temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_A ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=1;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_B ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=1;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_A ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=1;
             }
             // neibors of temp_triangle_node_B-temp_triangle_node_C :
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]!=temp_triangle_node_A ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_A ){
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=2;
             }
-            if     ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]!=temp_triangle_node_A ){
+            if     ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]!=temp_triangle_node_A ){
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=2;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_B  &  Triangle_list[j][1]!=temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_C ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_B  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=2;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]!=temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_B )
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_B )
             {
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=2;
                 
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_C ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=2;
                 
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_B ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_B ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=2;
             }
             // neibors of temp_triangle_node_C-temp_triangle_node_A :
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]!=temp_triangle_node_B ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]!=temp_triangle_node_B ){
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=3;
                 
             }
-            if     ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]!=temp_triangle_node_B ){
+            if     ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]!=temp_triangle_node_B ){
                 neighbour=Triangle_list[j][2];
                 neighbour_indicator=3;
                 
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_C  &  Triangle_list[j][1]!=temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_A ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_C  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_A ){
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=3;
             }
-            if      ( Triangle_list[j][0]==temp_triangle_node_A  &  Triangle_list[j][1]!=temp_triangle_node_B  & Triangle_list[j][2]==temp_triangle_node_C ){
+            if      ( Triangle_list[j][0]==temp_triangle_node_A  &&  Triangle_list[j][1]!=temp_triangle_node_B  && Triangle_list[j][2]==temp_triangle_node_C ){
                 neighbour=Triangle_list[j][1];
                 neighbour_indicator=3;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_C  & Triangle_list[j][2]==temp_triangle_node_A ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_C  && Triangle_list[j][2]==temp_triangle_node_A ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=3;
             }
-            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &  Triangle_list[j][1]==temp_triangle_node_A  & Triangle_list[j][2]==temp_triangle_node_C ){
+            if      ( Triangle_list[j][0]!=temp_triangle_node_B  &&  Triangle_list[j][1]==temp_triangle_node_A  && Triangle_list[j][2]==temp_triangle_node_C ){
                 neighbour=Triangle_list[j][0];
                 neighbour_indicator=3;
             }

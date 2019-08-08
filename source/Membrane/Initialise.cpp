@@ -25,6 +25,9 @@ void Membrane::initialise(std::string Mesh_file_name){
     Normal_direction_Identifier();
     Triangle_pair_counter();
     cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
+    if (Triangle_pair_list.size()!=Triangle_Pair_Nodes.size()) {
+        cout<<"Triangle_pair_list = "<<Triangle_pair_list.size()<<"\nTriangle_Pair_Nodes = "<<Triangle_Pair_Nodes.size()<<endl;
+    }
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
     }

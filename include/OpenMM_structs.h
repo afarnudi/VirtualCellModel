@@ -16,12 +16,16 @@ struct MyAtomInfo
 {
     int type;
     char* pdb;
+    char symbol;
     double initPosInAng[3];
     double posInAng[3];
+    double velocityInAngperPs[3];
     double mass;
     double radius;
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
+    double force[3];
+    double energy;
 };
 
 struct Bonds{
@@ -60,6 +64,7 @@ struct MyOpenMMData {
     OpenMM::System*         system;
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
+    OpenMM::HarmonicBondForce*  harmonic;
 };
 
 
