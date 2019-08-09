@@ -666,12 +666,26 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
     
-    double temperature      = 300*GenConst::K*GenConst::MD_T;
-    double frictionInPs     = 5.;
     
-    omm->integrator = new OpenMM::LangevinIntegrator(temperature, frictionInPs,
-                                                     stepSizeInFs * OpenMM::PsPerFs);
-//    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    switch (GenConst::Integrator_type) {
+        case 0:
+            omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+            break;
+            
+        case 1:
+            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+                                                             GenConst::frictionInPs,
+                                                             stepSizeInFs * OpenMM::PsPerFs);
+            break;
+        case 2:
+            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
+                                                             GenConst::frictionInPs,
+                                                             stepSizeInFs * OpenMM::PsPerFs);
+            break;
+    }
+    
+    
+
     omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);

@@ -88,6 +88,9 @@ namespace GenConst {
     string Actin_label;
     string Chromatin_label;
     string ECM_label;
+    int Integrator_type;
+    double frictionInPs;
+    double temperature;
 }
 
 

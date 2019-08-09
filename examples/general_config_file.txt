@@ -13,6 +13,19 @@ Report_Interval_In_Fs	0
 //Integration step size (fs).  Default 0.001
 Step_Size_In_Fs	0.1
 
+//Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
+// Type 0 : Verlet
+// Type 1 : Brownian, temperature and frictionCoeff need to be set as well.
+// Type 1 : Langevin, temperature and frictionCoeff need to be set as well.
+// Default 0*/
+Integrator_type	0
+    
+//Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5
+frictionInPs	5
+    
+//Set the temperature of the heat bath (in Kelvin). Default 300
+temperature	300
+
 //Boltzman's constant. Default 1
 K	1
 

@@ -2,6 +2,9 @@ MD_num_of_steps	10000
 Simulation_Time_In_Ps	0
 MD_traj_save_step	1000
 Step_Size_In_Fs	0.001
+Integrator_type	0
+frictionInPs	5
+temperature	300
 MD_T	1
 K	1
 Num_of_Membranes	0

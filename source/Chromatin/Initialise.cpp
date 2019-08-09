@@ -277,7 +277,7 @@ double Chromatin::chromatin_prepack(void){
 
 void Chromatin::export_pack(int MD_step){
     std::ofstream write_resume_file;
-    string resume_file_name="Results/Relaxation/Resume_Chromatin_"+std::to_string(chrom_index)+"_";
+    string resume_file_name="Results/Relaxation/Resume_Chromatin_"+std::to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
