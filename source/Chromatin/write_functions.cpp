@@ -8,6 +8,7 @@
 
 #include "Chromatin.h"
 
+
 using std::string;
 using std::endl;
 using std::cout;
@@ -15,7 +16,7 @@ using std::cout;
 void Chromatin::write_parameters(int MD_Step){
     string traj_file_name;
     
-    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(chrom_index)+"_"+file_time+".txt";
+    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(index)+"_"+file_time+".txt";
     std::ofstream Trajectory;
     
     Trajectory.open(traj_file_name.c_str(), std::ios::app);
@@ -34,7 +35,7 @@ void Chromatin::packing_traj (void)
     string energy_file_name;
     string traj_file_name;
     
-    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(chrom_index)+"_"+file_time+".xyz";
+    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(index)+"_"+file_time+".xyz";
     
     std::ofstream Trajectory;
     
@@ -68,7 +69,7 @@ void Chromatin::write_traj (string traj_name, string label){
 
 void Chromatin::export_for_resume(int MD_step){
     std::ofstream write_resume_file;
-    string resume_file_name="Results/Resumes/Resume_Chromatin_"+std::to_string(chrom_index)+"_";
+    string resume_file_name="Results/Resumes/Resume_Chromatin_"+std::to_string(index)+"_";
     resume_file_name+=file_time;
     resume_file_name+=".txt";
     write_resume_file.open(resume_file_name.c_str());
@@ -86,7 +87,7 @@ void Chromatin::export_for_resume(int MD_step){
 void Chromatin::generate_report(void)
 {
     std::string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Chromatin_"+std::to_string(index)+"_";
+    Report_file_name= "Results/Reports/Report_Chromatin_" + std::to_string(index) + "_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
@@ -97,7 +98,7 @@ void Chromatin::generate_report(void)
         cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
         Report.close();
         cout<<"Generating report in an alternative directory:\nbin/Results/Reports/"<<endl;
-        Report_file_name= "bin/Results/Reports/Report_Chromatin_"+std::to_string(index)+"_";
+        Report_file_name= "bin/Results/Reports/Report_Chromatin_" + std::to_string(index) + "_";
         Report_file_name+=file_time;
         Report_file_name+=".txt";
         Report.open(Report_file_name.c_str());

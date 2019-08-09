@@ -63,7 +63,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void export_pack(int MD_step);
     
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
-    int chrom_index;
+    int index;
     int spring_model=0;
     
     double Total_Kinetic_Energy;
@@ -171,7 +171,7 @@ public:
         file_time=buffer;
     }
     void set_index(int index){
-        chrom_index=index;
+        index=index;
     }
     
     double get_node_radius(void){
