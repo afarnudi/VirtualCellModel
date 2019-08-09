@@ -9,7 +9,7 @@
 #include "ECM.h"
 
 
-void ECM::initialise(std::string Mesh_file_name, int dimension){
+void ECM::initialise(int dimension){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the ECM Class..."<<endl;
     if (dimension == 2) {

@@ -27,6 +27,7 @@ class ECM {
 private:
     
     std::string label;
+    std::string Mesh_file_name;
     
     std::string file_time;
     int index;
@@ -73,7 +74,7 @@ private:
     vector<vector<int> > Node_neighbour_list;
     void Node_Bond_identifier(void);
     
-    void initialise(std::string Mesh_file_name, int dimension);
+    void initialise(int dimension);
     void set_map_parameter(std::string param_name, double param_value);
     void Node_neighbour_list_constructor(void);
     
@@ -93,7 +94,7 @@ public:
     void MD_Evolution_end (double MD_Time_Step);
     void write_traj (std::string traj_name, std::string label);
     void generate_report(void);
-    
+    void export_for_resume(int MD_step);
     
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){

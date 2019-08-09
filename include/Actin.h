@@ -23,7 +23,7 @@ private:
     
     
     std::string label;
-    
+    std::string Mesh_file_name;
     std::map<std::string, double> param_map;
     
     double Node_Mass=1;
@@ -64,7 +64,7 @@ private:
     
     
     //Private members:
-    void initialise(std::string Mesh_file_name);
+    void initialise();
     void read_gmesh_file (std::string gmesh_file);
     void Node_Bond_identifier(void);
     void Node_Bond_relaxed_length_initialiser(void);
@@ -88,7 +88,7 @@ public:
     void Thermostat_Bussi(double MD_T);
     void write_traj (std::string traj_name, std::string label);
     void generate_report();
-    
+    void export_for_resume(int MD_step);
     /** Assigns the label(pdb) used to write to the trajectory files. It is also used to identify the class object throught the programme */
     void set_label(std::string lab){
         label=lab;

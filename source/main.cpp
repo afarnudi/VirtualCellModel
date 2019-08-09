@@ -384,11 +384,30 @@ int main(int argc, char **argv)
                 double time, energy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
+                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
+                
                 if (WantForce) {
                     calc_energy_2(Membranes, all_atoms);
                 }
                 
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
+                //Begin: Exporting congiguration of classes for simulation resume.
+                for (int i=0; i<Membranes.size(); i++) {
+                    Membranes[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Membranes[i].generate_report();
+                }
+                for (int i=0; i<Actins.size(); i++) {
+                    Actins[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Actins[i].generate_report();
+                }
+                for (int i=0; i<ECMs.size(); i++) {
+                    ECMs[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    ECMs[i].generate_report();
+                }
+                for (int i=0; i<Chromatins.size(); i++) {
+                    Chromatins[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Chromatins[i].generate_report();
+                }
+                //End: Exporting congiguration of classes for simulation resume.
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;

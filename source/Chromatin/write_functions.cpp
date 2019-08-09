@@ -10,6 +10,7 @@
 
 using std::string;
 using std::endl;
+using std::cout;
 
 void Chromatin::write_parameters(int MD_Step){
     string traj_file_name;
@@ -84,34 +85,61 @@ void Chromatin::export_for_resume(int MD_step){
 
 void Chromatin::generate_report(void)
 {
-    string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Chromatin_"+std::to_string(chrom_index)+"_";
+    std::string Report_file_name;
+    Report_file_name= "Results/Reports/Report_Chromatin_"+std::to_string(index)+"_";
     Report_file_name+=file_time;
     Report_file_name+=".txt";
     
     std::ofstream Report;
     Report.open(Report_file_name.c_str());
+    
+    if (!Report.is_open()){
+        cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
+        Report.close();
+        cout<<"Generating report in an alternative directory:\nbin/Results/Reports/"<<endl;
+        Report_file_name= "bin/Results/Reports/Report_Chromatin_"+std::to_string(index)+"_";
+        Report_file_name+=file_time;
+        Report_file_name+=".txt";
+        Report.open(Report_file_name.c_str());
+    }
+    
     Report<< std:: fixed;
-    Report<<"Node Mass"<< std::setw(20)<<Node_Mass<<endl;
-//    Report<<"Radius"<< setw(20)<<Radius<<endl;
-    Report<<"Minimum node pair length"<< std::setw(20)<<Min_node_pair_length<<endl;
-    Report<<"Maximum node pair length"<< std::setw(20)<<Max_node_pair_length<<endl;
-    Report<<"Average node pair length"<< std::setw(20)<<Average_node_pair_length<<endl;
-    Report<<"# of Nodes "<< std::setw(20)<<get_num_of_nodes()<<endl;
-//    Report<<"# of Triangles "<< setw(20)<<return_num_of_triangle()<<endl;
-    Report<<"Spring model"<< std::setw(20)<<spring_model<<endl;
-    Report<<"Spring coefficient"<< std::setw(20)<<Spring_coefficient<<endl;
-//    Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
-    Report<<"Damping coefficient"<< std::setw(20)<<Damping_coefficient<<endl;
+    Report<<"MD Params in the general configuration file:\n---------------\n";
+    Report<<"Simulation_Time_In_Ps\t"<<GenConst::Simulation_Time_In_Ps<<endl;
+    Report<<"Step_Size_In_Fs\t"<<GenConst::Step_Size_In_Fs<<endl;
+    Report<<"Report_Interval_In_Fs\t"<<GenConst::Report_Interval_In_Fs<<endl;
+    Report<<"MD_num_of_steps\t"<<GenConst::MD_num_of_steps<<endl;
+    Report<<"MD_traj_save_step\t"<<GenConst::MD_traj_save_step<<endl;
+    Report<<"K\t"<<GenConst::K<<endl;
+    Report<<"MD_T\t"<<GenConst::MD_T<<endl;
+    Report<<"MD_thrmo_step\t"<<GenConst::MD_thrmo_step<<endl;
+    Report<<"Bussi_tau\t"<<GenConst::Bussi_tau<<endl;
+    Report<<"MC_step\t"<<GenConst::MC_step<<endl;
+    Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
+    Report<<"Lbox\t"<<GenConst::Lbox<<endl;
+    Report<<"Periodic_condtion_status\t"<<GenConst::Periodic_condtion_status<<endl;
+    Report<<"trajectory_file_name\t"<<GenConst::trajectory_file_name<<endl;
+    
+    
+    Report<<"Chromatin Params:\n---------------\n";
+    Report<<"Num_of_Nodes\t"<<Num_of_Nodes<<endl;
+    Report<<"Node_Mass\t"<<Node_Mass<<endl;
+    Report<<"Node_radius\t"<<Node_radius<<endl;
+    Report<<"Spring model\t"<<spring_model<<endl;
+    Report<<"Spring coefficient\t"<<Spring_coefficient<<endl;
+    Report<<"Damping coefficient\t"<<Damping_coefficient<<endl;
     if (spring_model==1)
     {
-        Report<<"Membrane Spring Model:"<< std::setw(20)<<"FENE"<<endl;
+        Report<<"Membrane Spring Model:\tFENE"<<endl;
         
     }
     if (spring_model==2)
     {
-        Report<<"Membrane Spring Model:"<< std::setw(20)<<"Houkian"<<endl;
+        Report<<"Membrane Spring Model:\tHoukian"<<endl;
         
     }
+    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
+    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
+    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
     
 }

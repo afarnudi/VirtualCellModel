@@ -170,7 +170,6 @@ void Membrane::export_for_resume(int MD_step){
     for (int i=0; i<Num_of_Nodes; i++) {
         write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
         write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
-        //Node_force=0
     }
     
     write_resume_file<<Num_of_Triangles<<endl;
@@ -189,14 +188,11 @@ void Membrane::export_for_resume(int MD_step){
         write_resume_file<<Triangle_Pair_Nodes[i][0]<<"\t"<<Triangle_Pair_Nodes[i][1]<<"\t"<<Triangle_Pair_Nodes[i][2]<<"\t"<<Triangle_Pair_Nodes[i][3]<<"\t"<<"\n";
     }
     write_resume_file<<Max_node_pair_length<<"\t"<<Min_node_pair_length<<"\t"<<Average_node_pair_length<<endl;
-    //run_check_ for max and min node distances
 }
 
 
 void Membrane::generate_report()
 {
-    using std::setw;
-    
     std::string Report_file_name;
     Report_file_name= "Results/Reports/Report_Membrane_"+std::to_string(index)+"_";
     Report_file_name+=file_time;
@@ -206,37 +202,40 @@ void Membrane::generate_report()
     Report.open(Report_file_name.c_str());
     
     if (!Report.is_open()){
+        cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
         Report.close();
-        cout<<"Generating report in an alternative directory."<<endl;
+        cout<<"Generating report in an alternative directory:\nbin/Results/Reports/"<<endl;
         Report_file_name= "bin/Results/Reports/Report_Membrane_"+std::to_string(index)+"_";
         Report_file_name+=file_time;
         Report_file_name+=".txt";
         Report.open(Report_file_name.c_str());
     }
     
-    if (!Report.is_open()){
-        cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
-    }
     Report<< std:: fixed;
-    Report<<"General MD Params:\n---------------\n";
-    Report<<"MD_num_of_steps"<<setw(20)<<GenConst::MD_num_of_steps<<endl;
-    Report<<"MD_traj_save_step"<<setw(20)<<GenConst::MD_traj_save_step<<endl;
-    Report<<"Step_Size_In_Fs"<<setw(20)<<GenConst::Step_Size_In_Fs<<endl;
-    Report<<"MD_T"<<setw(20)<<GenConst::MD_T<<endl;
-    Report<<"MD_thrmo_step"<<setw(20)<<GenConst::MD_thrmo_step<<endl;
-    Report<<"Bussi_tau"<<setw(20)<<GenConst::Bussi_tau<<endl;
-    Report<<"MC_step"<<setw(20)<<GenConst::MC_step<<endl;
-    Report<<"Mem_fluidity"<<setw(20)<<GenConst::Mem_fluidity<<endl;
-    Report<<"Lbox"<<setw(20)<<GenConst::Lbox<<endl;
-    Report<<"Periodic_condtion_status"<<setw(20)<<GenConst::Periodic_condtion_status<<endl;
-    Report<<"Num_of_Membranes"<<setw(20)<<GenConst::Num_of_Membranes<<endl;
-    Report<<"trajectory_file_name"<<setw(20)<<GenConst::trajectory_file_name<<endl;
+    Report<<"MD Params in the general configuration file:\n---------------\n";
+    Report<<"Simulation_Time_In_Ps\t"<<GenConst::Simulation_Time_In_Ps<<endl;
+    Report<<"Step_Size_In_Fs\t"<<GenConst::Step_Size_In_Fs<<endl;
+    Report<<"Report_Interval_In_Fs\t"<<GenConst::Report_Interval_In_Fs<<endl;
+    Report<<"MD_num_of_steps\t"<<GenConst::MD_num_of_steps<<endl;
+    Report<<"MD_traj_save_step\t"<<GenConst::MD_traj_save_step<<endl;
+    Report<<"K\t"<<GenConst::K<<endl;
+    Report<<"MD_T\t"<<GenConst::MD_T<<endl;
+    Report<<"MD_thrmo_step\t"<<GenConst::MD_thrmo_step<<endl;
+    Report<<"Bussi_tau\t"<<GenConst::Bussi_tau<<endl;
+    Report<<"MC_step\t"<<GenConst::MC_step<<endl;
+    Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
+    Report<<"Lbox\t"<<GenConst::Lbox<<endl;
+    Report<<"Periodic_condtion_status\t"<<GenConst::Periodic_condtion_status<<endl;
+    Report<<"Num_of_Membranes\t"<<GenConst::Num_of_Membranes<<endl;
+    Report<<"trajectory_file_name\t"<<GenConst::trajectory_file_name<<endl;
     
     
     Report<<"\nMembrane Params:\n---------------\n";
-    Report<<"Node Mass"<< setw(20)<<Node_Mass<<endl;
-    Report<<"Radius"<< setw(20)<<Radius<<endl;
-    Report<<"spring_model"<< setw(20)<<spring_model;
+    Report<<"Mesh_file_name\t"<<Mesh_file_name<<endl;
+    Report<<"Node_Mass\t"<<Node_Mass<<endl;
+    Report<<"Node_radius\t"<<Node_radius<<endl;
+    Report<<"Membrane Radius\t"<<Radius<<endl;
+    Report<<"spring_model\t"<<spring_model;
     if (spring_model==1){
         Report<<"\tFENE logarithmic barrier"<<endl;
     } else if (spring_model==2) {
@@ -244,26 +243,30 @@ void Membrane::generate_report()
     } else if (spring_model==3) {
         Report<<"\tcustom"<<endl;
     }
-    Report<<"Spring coefficient"<< setw(20)<<Spring_coefficient<<endl;
-    Report<<"Bending coefficient"<< setw(20)<<Bending_coefficient<<endl;
-    Report<<"Damping coefficient"<< setw(20)<<Damping_coefficient<<endl;
-    Report<<"K_surfaceConstant_local"<< setw(20)<<K_surfaceConstant_local<<endl;
-    Report<<"Shift_in_X_direction"<< setw(20)<<Shift_in_X_direction<<endl;
-    Report<<"Shift_in_Y_direction"<< setw(20)<<Shift_in_Y_direction<<endl;
-    Report<<"Shift_in_Z_direction"<< setw(20)<<Shift_in_Z_direction<<endl;
-    Report<<"Downward_speed"<< setw(20)<<Downward_speed<<endl;
-    Report<<"X_in_mem"<< setw(20)<<X_in<<endl;
-    Report<<"Y_in_mem"<< setw(20)<<Y_in<<endl;
-    Report<<"Z_in_mem"<< setw(20)<<Z_in<<endl;
-    Report<<"position_scale_x"<< setw(20)<<X_scale<<endl;
-    Report<<"position_scale_y"<< setw(20)<<Y_scale<<endl;
-    Report<<"position_scale_z"<< setw(20)<<Z_scale<<endl;
+    Report<<"Spring coefficient\t"<<Spring_coefficient<<endl;
+    Report<<"Bending coefficient\t"<<Bending_coefficient<<endl;
+    Report<<"Damping coefficient\t"<<Damping_coefficient<<endl;
+    Report<<"K_surfaceConstant_local\t"<<K_surfaceConstant_local<<endl;
+    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
+    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
+    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
+    Report<<"Downward_speed\t"<<Downward_speed<<endl;
+    Report<<"X_in_mem\t"<<X_in<<endl;
+    Report<<"Y_in_mem\t"<<Y_in<<endl;
+    Report<<"Z_in_mem\t"<<Z_in<<endl;
+    Report<<"position_scale_x\t"<<X_scale<<endl;
+    Report<<"position_scale_y\t"<<Y_scale<<endl;
+    Report<<"position_scale_z\t"<<Z_scale<<endl;
+    Report<<"rescale_factor\t"<<rescale_factor<<endl;
+    Report<<"sigma_LJ_12_6\t"<<sigma_LJ_12_6<<endl;
+    Report<<"epsilon_LJ_12_6\t"<<epsilon_LJ_12_6<<endl;
     
-    Report<<"Minimum node pair length"<< setw(20)<<Min_node_pair_length<<endl;
-    Report<<"Maximum node pair length"<< setw(20)<<Max_node_pair_length<<endl;
-    Report<<"Average node pair length"<< setw(20)<<Average_node_pair_length<<endl;
-    Report<<"# of Nodes "<< setw(20)<<get_num_of_nodes()<<endl;
-    Report<<"# of Triangles "<< setw(20)<<get_num_of_triangle()<<endl;
+    Report<<"Minimum node pair length\t"<<Min_node_pair_length<<endl;
+    Report<<"Maximum node pair length\t"<<Max_node_pair_length<<endl;
+    Report<<"Average node pair length\t"<<Average_node_pair_length<<endl;
+    Report<<"# of Nodes\t"<<get_num_of_nodes()<<endl;
+    Report<<"# of Triangles\t"<<get_num_of_triangle()<<endl;
+    Report<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
     
     Report.close();
     

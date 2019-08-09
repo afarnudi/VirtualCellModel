@@ -6,7 +6,8 @@ using namespace std;
 void Actin::import_config(string config_file_name){
     
     map<string, double>::iterator it;
-    string resume_file_name, Mesh_file_name="non";
+    string resume_file_name;
+    Mesh_file_name="non";
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
     
@@ -68,7 +69,7 @@ void Actin::import_config(string config_file_name){
     } else {
         it=param_map.find("Mesh_file_name");
         if(it!=param_map.end()){
-            initialise(Mesh_file_name);
+            initialise();
         }
 //        else {
 //            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
