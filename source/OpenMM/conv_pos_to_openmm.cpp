@@ -56,8 +56,9 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].initPosInAng[0]=act.get_node_position(i, 0);
         myatominfo[i].initPosInAng[1]=act.get_node_position(i, 1);
         myatominfo[i].initPosInAng[2]=act.get_node_position(i, 2);
-        //        cout<<act.get_node_position(i, 0)<<"\t"<<act.get_node_position(i, 1)<<"\t"<<act.get_node_position(i, 2)<<"\n";
-        //        cout<<myatominfo[i].initPosInAng[0]<<"\t"<<myatominfo[i].initPosInAng[1]<<"\t"<<myatominfo[i].initPosInAng[2]<<"\n";
+        myatominfo[i].velocityInAngperPs[0]=act.get_node_velocity(i, 0);
+        myatominfo[i].velocityInAngperPs[1]=act.get_node_velocity(i, 1);
+        myatominfo[i].velocityInAngperPs[2]=act.get_node_velocity(i, 2);
         myatominfo[i].posInAng[0]=act.get_node_position(i, 0);
         myatominfo[i].posInAng[1]=act.get_node_position(i, 1);
         myatominfo[i].posInAng[2]=act.get_node_position(i, 2);
@@ -91,6 +92,9 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].posInAng[0]=ecm.get_node_position(i, 0);
         myatominfo[i].posInAng[1]=ecm.get_node_position(i, 1);
         myatominfo[i].posInAng[2]=ecm.get_node_position(i, 2);
+        myatominfo[i].velocityInAngperPs[0]=ecm.get_node_velocity(i, 0);
+        myatominfo[i].velocityInAngperPs[1]=ecm.get_node_velocity(i, 1);
+        myatominfo[i].velocityInAngperPs[2]=ecm.get_node_velocity(i, 2);
         myatominfo[i].mass=ecm.get_node_mass();
         myatominfo[i].radius=ecm.get_node_radius();
         myatominfo[i].sigma_LJ_12_6=ecm.get_sigma_LJ_12_6();
@@ -120,6 +124,9 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         myatominfo[i].posInAng[0]=chromo.get_node_position(i, 0);
         myatominfo[i].posInAng[1]=chromo.get_node_position(i, 1);
         myatominfo[i].posInAng[2]=chromo.get_node_position(i, 2);
+        myatominfo[i].velocityInAngperPs[0]=chromo.get_node_velocity(i, 0);
+        myatominfo[i].velocityInAngperPs[1]=chromo.get_node_velocity(i, 1);
+        myatominfo[i].velocityInAngperPs[2]=chromo.get_node_velocity(i, 2);
         myatominfo[i].mass=chromo.get_node_mass();
         myatominfo[i].radius=chromo.get_node_radius();
         

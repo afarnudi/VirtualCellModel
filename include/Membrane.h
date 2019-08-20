@@ -30,6 +30,7 @@
 
 #include "OpenMM_structs.h"
 #include "General_functions.hpp"
+#include "OpenMM_structs.h"
 
 using std::vector;
 using std::cout;
@@ -332,7 +333,8 @@ public:
     double get_node_velocity(int node_number, int node_coordinate){
         return Node_Velocity[node_number][node_coordinate];
     }
-
+    /**Set the current state (OpenMM) of the class.*/
+    void set_state(MyAtomInfo all_atoms[], int atom_count);
 
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;

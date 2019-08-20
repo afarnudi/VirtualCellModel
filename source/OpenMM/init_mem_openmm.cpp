@@ -101,7 +101,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j);
                     
                     index = ExcludedVolumes.size()-1;
-                    cout<<"EV index = "<<index<<endl;
+//                    cout<<"EV index = "<<index<<endl;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
                     ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
@@ -507,11 +507,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
-        const Vec3 velocityInNmperPs(atoms[n].velocityInAngperPs[0] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[1] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[2] * OpenMM::NmPerAngstrom);
+        const Vec3 velocityInAngperPs(atoms[n].velocityInAngperPs[0],
+                                      atoms[n].velocityInAngperPs[1],
+                                      atoms[n].velocityInAngperPs[2]);
+//        cout<<atoms[n].velocityInAngperPs[0]<<"\t"<<
+//              atoms[n].velocityInAngperPs[1]<<"\t"<<
+//              atoms[n].velocityInAngperPs[2]<<endl;
         initialPosInNm.push_back(posInNm);
-        initialVelInNmperPs.push_back(velocityInNmperPs);
+        initialVelInNmperPs.push_back(velocityInAngperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         std::vector<double> sigma_ev;
@@ -673,12 +676,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
             
         case 1:
-            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
         case 2:
-            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
+            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;

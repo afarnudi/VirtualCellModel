@@ -21,8 +21,8 @@ void myGetOpenMMState(MyOpenMMData* omm,
 {
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
+    infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheap)
     if (wantEnergy) {
-        infoMask += OpenMM::State::Velocities; // for kinetic energy (cheap)
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
     if (wantForce) {
@@ -35,10 +35,12 @@ void myGetOpenMMState(MyOpenMMData* omm,
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = state.getPositions();
+    const std::vector<Vec3>& velInAngperPs  = state.getVelocities();
     const std::vector<Vec3>& Forces        = state.getForces();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
             atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
+            atoms[i].velocityInAngperPs[j] = velInAngperPs[i][j];
             if (wantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
             }

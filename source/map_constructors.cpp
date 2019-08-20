@@ -134,6 +134,16 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         }
                         
                         continue;
+                    } else if (it->first=="Load_from_checkpoint") {
+                        if (it->second==0) {
+                            GenConst::Load_from_checkpoint = false;
+                            GenConst::Checkpoint_path="/Results/Resumes/OpenMM/";
+                        } else {
+                            GenConst::Load_from_checkpoint = true;
+                            GenConst::Checkpoint_path=split[i+2];
+                        }
+                        
+                        continue;
                     }
                     break;
                 }
@@ -339,18 +349,24 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
     } else if (param_name=="Integrator_type"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::Integrator_type=it->second;
         }
     } else if (param_name=="frictionInPs"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::frictionInPs=it->second;
         }
     } else if (param_name=="temperature"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::temperature=it->second;
         }
+    } else if (param_name=="Load_from_checkpoint"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Load_from_checkpoint=it->second;
+        }
+        GenConst::Checkpoint_path = "/Results/Resumes/OpenMM/";
     }
 
 }
