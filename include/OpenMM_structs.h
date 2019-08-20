@@ -49,7 +49,7 @@ struct Dihedrals{
  * -----------------------------------------------------------------------------
  * These four functions and an opaque structure are used to interface our main
  * program with OpenMM without the main program having any direct interaction
- * with the OpenMM API. This is a clean approach for interfacing with any MD
+/Users/sajjad/virtual cell/Membrane_OBJ/source/neighbour_pool_constructor.cpp * with the OpenMM API. This is a clean approach for interfacing with any MD
  * code, although the details of the interface routines will differ. This is
  * still just "locally written" code and is not required by OpenMM.
  *
@@ -65,6 +65,9 @@ struct MyOpenMMData {
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
     OpenMM::HarmonicBondForce*  harmonic;
+    OpenMM::HarmonicBondForce*  VoigtBond;
+    bool Voigt = false;
+    double Voigt_damp = 100 ;
 };
 
 

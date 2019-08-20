@@ -52,6 +52,14 @@ void          myGetOpenMMState(MyOpenMMData*,
                                double&      time,
                                double&      energy,
                                MyAtomInfo   atoms[]);
+
+/** -----------------------------------------------------------------------------
+ *                     Update System parameters
+ * -----------------------------------------------------------------------------
+ */
+void          my_system_update(MyOpenMMData*,
+                      MyAtomInfo atoms[]);
+
 /** -----------------------------------------------------------------------------
  *                     DEALLOCATE OpenMM OBJECTS
  * -----------------------------------------------------------------------------

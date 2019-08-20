@@ -195,3 +195,29 @@ void calc_energy_2(vector<Membrane>    mem,
         mem_count += mem[i].get_num_of_nodes();
     }
 }
+
+
+void my_system_update(MyOpenMMData* omm,
+                      MyAtomInfo atoms[])
+{
+    if (omm->Voigt)
+    {
+        const int Num_Bonds = omm->VoigtBond->getNumBonds();
+        int atom1, atom2 ;
+        double length, stiffness , dist;
+        for(int i=0; i<Num_Bonds ; ++i)
+        {
+            omm->VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
+            
+            dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
+            
+            //length +=  ((dist - length)/dist) * (GenConst::Step_Size_In_Fs /omm->Voigt_damp) ;
+            //length = length * 1.0035;
+            stiffness = stiffness * 1.0044;
+            
+            omm->VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
+        }
+        
+        omm->VoigtBond->updateParametersInContext(*omm->context);
+    }
+}

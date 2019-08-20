@@ -57,6 +57,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     bool HarmonicBondForce=false;
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     
+    bool VoigtBondForce=false;
+    OpenMM::HarmonicBondForce*      VoigtBond = new OpenMM::HarmonicBondForce();
+    
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     
     vector<OpenMM::CustomBondForce*>X4harmonics;
@@ -615,6 +618,25 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1]);
             }
                 break;
+                
+            
+            case 4://Voigt
+            {
+                //omm->Voigt = true;
+                VoigtBondForce=true;
+                // Note factor of 2 for stiffness below because Amber specifies the constant
+                // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
+                // it as used in the force term kx, with energy kx^2/2.
+                VoigtBond->addBond(atom[0], atom[1],
+                                   bonds[i].nominalLengthInAngstroms
+                                   * OpenMM::NmPerAngstrom,
+                                   bonds[i].stiffnessInKcalPerAngstrom2
+                                   * OpenMM::KJPerKcal
+                                   * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                
+            }
+                break;
+                
         }
         
         
@@ -623,6 +645,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     if (HarmonicBondForce) {
         system.addForce(HarmonicBond);
         omm->harmonic = HarmonicBond;
+    }
+    
+    if (VoigtBondForce) {
+        system.addForce(VoigtBond);
+        omm->VoigtBond = VoigtBond;
+        omm->Voigt = true;
     }
     
     // Add the list of atom pairs that are excluded from the excluded volume force.

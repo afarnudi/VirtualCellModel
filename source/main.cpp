@@ -408,6 +408,7 @@ int main(int argc, char **argv)
                 double time, energy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
+                my_system_update(omm, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (WantForce) {
