@@ -507,11 +507,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
                            atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
-        const Vec3 velocityInNmperPs(atoms[n].velocityInAngperPs[0] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[1] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[2] * OpenMM::NmPerAngstrom);
+        const Vec3 velocityInAngperPs(atoms[n].velocityInAngperPs[0],
+                                      atoms[n].velocityInAngperPs[1],
+                                      atoms[n].velocityInAngperPs[2]);
+//        cout<<atoms[n].velocityInAngperPs[0]<<"\t"<<
+//              atoms[n].velocityInAngperPs[1]<<"\t"<<
+//              atoms[n].velocityInAngperPs[2]<<endl;
         initialPosInNm.push_back(posInNm);
-        initialVelInNmperPs.push_back(velocityInNmperPs);
+        initialVelInNmperPs.push_back(velocityInAngperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         std::vector<double> sigma_ev;

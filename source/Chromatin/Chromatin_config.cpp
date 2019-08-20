@@ -11,14 +11,16 @@ void Chromatin::import_config(string config_file_name, double min_radius){
     bool resume=false;
     
     if (read_config_file.is_open()) {
-        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+        cout<<"'"<<config_file_name<<"' file opened successfully.";
         string line;
         int line_num=0;
         string comment="//";
         //        char delimiter=' ';
         while(getline(read_config_file, line)){
             line_num++;
+            
             if(line.empty()){
+                
                 continue;
             }
             
@@ -26,7 +28,7 @@ void Chromatin::import_config(string config_file_name, double min_radius){
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
             
             if (split[0] == comment || (split[0][0]=='/' && split[0][1]=='/')) {
-                break;
+                continue;
             }
             
             param_map[split[0]]=stod(split[1]);
@@ -89,7 +91,7 @@ void Chromatin::import_config(string config_file_name){
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
             
             if (split[0] == comment || (split[0][0]=='/' && split[0][1]=='/')) {
-                break;
+                continue;
             }
             
             param_map[split[0]]=stod(split[1]);

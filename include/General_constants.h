@@ -83,6 +83,10 @@ namespace GenConst {
     extern std::string Chromatin_label;
     /**Set ECM class label. An index will be assigned during runtime. Default ecm*/
     extern std::string ECM_label;
+    /**Load the context from OpenMM checkpoint (binary file). Default flase*/
+    extern bool Load_from_checkpoint;
+    /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
+    extern std::string Checkpoint_path;
     
 }
 

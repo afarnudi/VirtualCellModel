@@ -10,6 +10,7 @@
 #include <iterator>
 
 #include "General_functions.hpp"
+#include "OpenMM_structs.h"
 
 using std::string;
 using std::vector;
@@ -61,6 +62,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void Strong_spring(void);
     void write_parameters(int MD_Step);
     void export_pack(int MD_step);
+    /**Set the current state (OpenMM) of the class.*/
+    void set_state(MyAtomInfo all_atoms[], int atom_count);
     
 private: //(if we define these constants as private members of the class, we can't put them in the final report)
     int index;
@@ -152,7 +155,10 @@ public:
             Node_Velocity[i][2]+=vz;
         }
     }
-    
+    /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
+    double get_node_velocity(int node_number, int node_coordinate){
+        return Node_Velocity[node_number][node_coordinate];
+    }
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }

@@ -13,6 +13,9 @@ Report_Interval_In_Fs	0
 //Integration step size (fs).  Default 0.001
 Step_Size_In_Fs	0.1
 
+//Load the context from OpenMM checkpoint (binary file). Default flase
+Load_from_checkpoint	0	/Results/Resumes/OpenMM/
+
 //Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
 // Type 0 : Verlet
 // Type 1 : Brownian, temperature and frictionCoeff need to be set as well.

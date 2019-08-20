@@ -17,7 +17,9 @@
 #include <map>
 #include <iomanip>
 #include <iterator>
+
 #include "General_functions.hpp"
+#include "OpenMM_structs.h"
 
 using std::vector;
 using std::cout;
@@ -96,6 +98,8 @@ public:
     void generate_report(void);
     void export_for_resume(int MD_step);
     
+    /**Set the current state (OpenMM) of the class.*/
+    void set_state(MyAtomInfo all_atoms[], int atom_count);
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
         label=lab;
@@ -185,6 +189,10 @@ public:
             Node_Position[i][1]+=Shift_in_Y_direction;
             Node_Position[i][2]+=Shift_in_Z_direction;
         }
+    }
+    /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
+    double get_node_velocity(int node_number, int node_coordinate){
+        return Node_Velocity[node_number][node_coordinate];
     }
     void update_COM_velocity(void){
         COM_velocity[0]=0;
