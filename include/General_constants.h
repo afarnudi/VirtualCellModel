@@ -47,7 +47,7 @@ namespace GenConst {
     /**Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
      * Type 0 : Verlet
      * Type 1 : Brownian, temperature and frictionCoeff need to be set as well.
-     * Type 1 : Langevin, temperature and frictionCoeff need to be set as well.
+     * Type 2 : Langevin, temperature and frictionCoeff need to be set as well.
      *Default 0*/
     extern int Integrator_type;
     

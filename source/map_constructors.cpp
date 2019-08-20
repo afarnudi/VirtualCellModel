@@ -349,17 +349,17 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
     } else if (param_name=="Integrator_type"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::Integrator_type=it->second;
         }
     } else if (param_name=="frictionInPs"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::frictionInPs=it->second;
         }
     } else if (param_name=="temperature"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
+            GenConst::temperature=it->second;
         }
     } else if (param_name=="Load_from_checkpoint"){
         it = general_param_map.find(param_name);

@@ -101,7 +101,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j);
                     
                     index = ExcludedVolumes.size()-1;
-                    cout<<"EV index = "<<index<<endl;
+//                    cout<<"EV index = "<<index<<endl;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
                     ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
@@ -676,12 +676,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
             
         case 1:
-            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
         case 2:
-            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
+            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
