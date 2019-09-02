@@ -97,6 +97,7 @@ public:
     void write_traj (std::string traj_name, std::string label);
     void generate_report(void);
     void export_for_resume(int MD_step);
+    void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
     
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
