@@ -411,7 +411,7 @@ int main(int argc, char **argv)
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (WantForce) {
-                    calc_energy_2(Membranes, all_atoms);
+                    calc_energy(Membranes, all_atoms);
                 }
                 
                 atom_count=0;
@@ -419,7 +419,7 @@ int main(int argc, char **argv)
                 dihe_count=0;
                 //Begin: Exporting congiguration of classes for simulation resume.
                 for (int i=0; i<Membranes.size(); i++) {
-                    Membranes[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Membranes[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
                     Membranes[i].generate_report();
                     atom_count += Membranes[i].get_num_of_nodes();
                     bond_count += Membranes[i].get_num_of_node_pairs();

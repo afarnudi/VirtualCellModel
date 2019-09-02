@@ -71,15 +71,18 @@ void myWritePDBFrame(int frameNum,
     int index=1;
     string hist = atoms[0].pdb;
     
+    char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+    
     double occ=1;
     for (int n=0; atoms[n].type != EndOfList; ++n){
         if (hist != atoms[n].pdb) {
             index++;
             hist = atoms[n].pdb;
         }
-        fprintf(pFile,"ATOM  %5d %4s ETH     %4.0f%8.3f%8.3f%8.3f%6.2f%7.1f %c\n",
+        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
                 n+1,
                 atoms[n].pdb,
+                chain[index],
                 double(index),
                 atoms[n].posInAng[0],
                 atoms[n].posInAng[1],
