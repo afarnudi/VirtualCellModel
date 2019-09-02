@@ -426,20 +426,20 @@ int main(int argc, char **argv)
                     dihe_count += Membranes[i].get_num_of_triangle_pairs();
                 }
                 for (int i=0; i<Actins.size(); i++) {
-                    Actins[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Actins[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
                     Actins[i].generate_report();
                     atom_count += Actins[i].get_num_of_nodes();
                     bond_count += Actins[i].get_num_of_node_pairs();
                 }
                 for (int i=0; i<ECMs.size(); i++) {
-                    ECMs[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    ECMs[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
                     ECMs[i].generate_report();
                     atom_count += ECMs[i].get_num_of_nodes();
                     bond_count += ECMs[i].get_num_of_node_pairs();
                 }
                 for (int i=0; i<Chromatins.size(); i++) {
                     Chromatins[i].set_state(all_atoms, atom_count);
-                    Chromatins[i].export_for_resume(time/GenConst::Step_Size_In_Fs);
+                    Chromatins[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
                     Chromatins[i].generate_report();
                     atom_count += Chromatins[i].get_num_of_nodes();
                     bond_count += Chromatins[i].get_num_of_nodes()-1;
