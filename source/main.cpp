@@ -493,7 +493,7 @@ int main(int argc, char **argv)
             
             printf("Wall clock time of the simulation:\n");
 //            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
-            printf("%4i\tHours,\n%2i\tMinutes,\n%2i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
+            printf("%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
             
             auto chrono_clock_end = chrono::steady_clock::now();
             auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
@@ -506,7 +506,7 @@ int main(int argc, char **argv)
             mins  = chrono::duration_cast<chrono::minutes>(chromo_clock_diff).count();
             cout << mins - hours * 60 << "\tMinutes\n";
             secs  = chrono::duration_cast<chrono::seconds>(chromo_clock_diff).count();
-            cout << secs - mins * 3600 << "\tSeconds\n";
+            cout << secs - mins * 60 << "\tSeconds\n";
             
             
             
