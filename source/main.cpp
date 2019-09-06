@@ -25,6 +25,7 @@
 #include <random>
 #include <string>
 #include <math.h>
+#include <chrono>
 
 #include "Membrane.h"
 #include "Chromatin.h"
@@ -110,6 +111,8 @@ int main(int argc, char **argv)
 {
     // get the current time.
     time_t t = time(0);
+    auto chrono_clock_start = chrono::steady_clock::now();
+    
     struct tm * now = localtime( & t );
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
@@ -399,8 +402,11 @@ int main(int argc, char **argv)
             std::filebuf wfb;
             wfb.open (ckeckpoint_name.c_str(),std::ios::out);
             std::ostream wcheckpoint(&wfb);
+            
             //Time the programme
             tStart = clock();
+            chrono_clock_start = chrono::steady_clock::now();
+            
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
@@ -447,6 +453,13 @@ int main(int argc, char **argv)
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
+                for (int k=0; k<Membranes[0].get_num_of_node_pairs(); k++) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
+                    omm->harmonic->setBondParameters(k, atom1, atom2, length*0.999, stiffness);
+                }
+                omm->harmonic->updateParametersInContext(*omm->context);
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
@@ -469,17 +482,39 @@ int main(int argc, char **argv)
             double sec_per_min     =60;
             
             
-            double days = int( sim_duration_per_sec/sec_per_day );
+            int days =  sim_duration_per_sec/sec_per_day;
             sim_duration_per_sec -= days * sec_per_day;
             
-            double hours = int( sim_duration_per_sec/sec_per_hour );
+            int hours = sim_duration_per_sec/sec_per_hour;
             sim_duration_per_sec -= hours * sec_per_hour;
             
-            double mins = int( sim_duration_per_sec/sec_per_min );
+            int mins = sim_duration_per_sec/sec_per_min ;
             sim_duration_per_sec -= mins * sec_per_min;
             
             printf("Wall clock time of the simulation:\n");
-            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
+//            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
+            printf("%4i\tHours,\n%2i\tMinutes,\n%2i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
+            
+            auto chrono_clock_end = chrono::steady_clock::now();
+            auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
+            
+            int secs;
+            
+            cout << "Real elapsed time: \n";
+            hours = chrono::duration_cast<chrono::hours>(chromo_clock_diff).count();
+            cout << hours << "\tHours\n";
+            mins  = chrono::duration_cast<chrono::minutes>(chromo_clock_diff).count();
+            cout << mins - hours * 60 << "\tMinutes\n";
+            secs  = chrono::duration_cast<chrono::seconds>(chromo_clock_diff).count();
+            cout << secs - mins * 3600 << "\tSeconds\n";
+            
+            
+            
+            
+            
+            
+            
+            
             return 0; // Normal return from main.
         }
         
