@@ -65,6 +65,7 @@ struct MyOpenMMData {
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
     OpenMM::HarmonicBondForce*  harmonic;
+    std::vector<OpenMM::CustomNonbondedForce*> EV;
 };
 
 
