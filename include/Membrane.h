@@ -155,6 +155,7 @@ public:
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
 
     //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(std::string Mesh_file_name);

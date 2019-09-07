@@ -43,6 +43,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void MD_Evolution_end (double MD_Time_Step);
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
     void write_traj (string traj_name, string label);
     
     void import(string import_file_name);

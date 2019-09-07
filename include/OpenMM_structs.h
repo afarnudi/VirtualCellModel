@@ -76,6 +76,7 @@ struct MyOpenMMData {
     std::vector<std::vector<double>> Custom_Kelvin_Voigt_distInAng;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
     std::vector<double> Custom_Kelvin_Voigt_initNominal_length_InNm;
+    std::vector<OpenMM::CustomNonbondedForce*> EV;
 };
 
 
