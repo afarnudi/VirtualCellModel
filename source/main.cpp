@@ -352,7 +352,9 @@ int main(int argc, char **argv)
                                     bond_count,
                                     dihe_count);
         }
-
+        
+        //if (Include Membrane  && Include Actine)
+        //bond_count++
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs,
                                   ecm_set,

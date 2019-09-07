@@ -8,7 +8,7 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 /** -----------------------------------------------------------------------------
- *                      INITIALIZE OpenMM DATA STRUCTURES
+ *                      INITIALISE OpenMM DATA STRUCTURES
  * -----------------------------------------------------------------------------
  * We take these actions here:
  * (1) Load any available OpenMM plugins, e.g. Cuda and Brook.
