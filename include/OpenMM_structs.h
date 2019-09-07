@@ -33,6 +33,7 @@ struct Bonds{
     int atoms[2];
     std::string class_label;
     double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
+    double dampInKcalPsPerAngstrom2;
     double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     bool   canConstrain;
 };
@@ -65,9 +66,16 @@ struct MyOpenMMData {
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
     OpenMM::HarmonicBondForce*  harmonic;
-    OpenMM::HarmonicBondForce*  VoigtBond;
-    bool Voigt = false;
-    double Voigt_damp = 100 ;
+    OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
+    bool Kelvin_Voigt = false;
+    std::vector<OpenMM::CustomBondForce*> Custom_Kelvin_VoigtBond;
+    bool Custom_Kelvin_Voigt = false;
+    double damp = 1000 ;
+    
+    std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
+    std::vector<std::vector<double>> Custom_Kelvin_Voigt_distInAng;
+    std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
+    std::vector<double> Custom_Kelvin_Voigt_initNominal_length_InNm;
 };
 
 

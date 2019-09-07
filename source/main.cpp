@@ -97,7 +97,7 @@ namespace GenConst {
 
 
 
-static const bool   WantEnergy   = false;
+static const bool   WantEnergy   = true;
 static const bool   WantForce    = true;
 
 
@@ -404,11 +404,19 @@ int main(int argc, char **argv)
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+            
+            if(omm->Kelvin_Voigt)
+            {
+                omm->Kelvin_Voigt_initNominal_length_InNm = Nominal_length_calc(omm, 0);
+            }
+            if(omm->Custom_Kelvin_Voigt)
+            {
+               omm->Custom_Kelvin_Voigt_initNominal_length_InNm = Nominal_length_calc(omm, 1);
+            }
             for (int frame=1; ; ++frame) {
                 double time, energy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
-                my_system_update(omm, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (WantForce) {
@@ -451,7 +459,7 @@ int main(int argc, char **argv)
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
-                myStepWithOpenMM(omm, NumSilentSteps);
+                myStepWithOpenMM(omm,all_atoms,NumSilentSteps);
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;

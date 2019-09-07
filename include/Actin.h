@@ -33,7 +33,7 @@ private:
     double Spring_coefficient=100;
     
     double rescale_factor=1;
-//    double Damping_coefficient=0.5;
+    double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
     double Downward_speed=0;
@@ -61,7 +61,7 @@ private:
     double exp_tau=0;
     double Min_node_pair_length=1000;
     double Max_node_pair_length=0;
-    double Average_node_pair_length=0;
+    double Average_node_pair_length=10;
     
     
     //Private members:
@@ -146,6 +146,10 @@ public:
     /**Return spring stiffness coefficient. */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
+    }
+    /**Return damping coefficient. */
+    double get_damping_coefficient(void){
+        return Damping_coefficient;
     }
     void check(void);
     

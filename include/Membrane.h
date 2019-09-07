@@ -251,6 +251,10 @@ public:
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    /**Return damp coefficient. */
+    double get_damping_coefficient(void){
+        return Damping_coefficient;
+    }
     /**Return bending stiffness coefficient. */
     double get_bending_stiffness_coefficient(void){
         return Bending_coefficient;

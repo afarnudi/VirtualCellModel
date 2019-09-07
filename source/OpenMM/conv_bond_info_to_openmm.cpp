@@ -23,9 +23,14 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
             case 3:
                 bonds[i].stiffnessInKcalPerAngstrom4=mem.get_spring_stiffness_coefficient();
                 break;
-                //Voigt
+                //Kelvin-Voigt
             case 4:
                 bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
+                break;
+                //Kelvin-Voigt
+            case 5:
+                bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
+                bonds[i].dampInKcalPsPerAngstrom2=mem.get_damping_coefficient();
                 break;
                 
         }
@@ -52,8 +57,15 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     }
     
     if(bonds[0].type == 4){
-        cout<<"Membrane bond potential: Voigt "<<endl;
+        cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
         cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
+        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    }
+    
+    if(bonds[0].type == 5){
+        cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
+        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
+        cout<<"damping coeficient (KJ Ps per Nanometer2) ="<<mem.get_damping_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
         cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     
@@ -86,11 +98,17 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
                 break;
                 
-                //Voigt
+                //Kelvin-Voigt
             case 4:
                 bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                //bonds[i].damp = act.get_kelvin_damping_coefficient();
+                break;
+                
+                //Kelvin-Voigt
+            case 5:
+                bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
+                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                bonds[i].dampInKcalPsPerAngstrom2=act.get_damping_coefficient();
                 break;
                 
                 
@@ -99,12 +117,21 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
         
     }
     
+    if(bonds[0].type==2){
+        cout<<"bond potential: Harmonic "<<endl;
+    }
+    
     if(bonds[0].type == 4){
-        cout<<"Actin bond potential: Voigt "<<endl;
+        cout<<"Actin bond potential: Kelvin-Voigt "<<endl;
         //cout<<"spring coeficient (KJ per Nanometer4) ="<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
         //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     
+    if(bonds[0].type == 5){
+        cout<<"Actin bond potential: Kelvin-Voigt "<<endl;
+        //cout<<"spring coeficient (KJ per Nanometer4) ="<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    }
     
     cout<<endl;
     
