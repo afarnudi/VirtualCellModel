@@ -75,6 +75,9 @@ private:
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
+//    double New_node_radius=-1;
+//    double Begin_update_time_in_Ps=0;
+//    double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
 
@@ -144,6 +147,7 @@ public:
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
     void check(void);
+    void check_radius_update_values(void);
     vector<vector<int> > ECM_Node_neighbour_list;
     vector<vector<int> > Vesicle_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.

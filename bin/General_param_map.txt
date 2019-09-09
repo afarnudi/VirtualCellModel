@@ -33,3 +33,6 @@ Membrane_label	0
 Actin_label	0
 Chromatin_label	0
 ECM_label	0
+Membrane_new_node_radius	-1
+Begin_membrane_radius_update_time_in_Ps	0
+End_membrane_radius_update_time_in_Ps	0
