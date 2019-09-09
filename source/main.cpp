@@ -39,6 +39,7 @@
 #include "Global_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include "General_class_functions.h"
 
 
 /** -----------------------------------------------------------------------------
@@ -94,6 +95,9 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+    double Membrane_new_node_radius;
+    double Begin_membrane_radius_update_time_in_Ps;
+    double End_membrane_radius_update_time_in_Ps;
 }
 
 
@@ -435,32 +439,16 @@ int main(int argc, char **argv)
                 bond_count=0;
                 dihe_count=0;
                 //Begin: Exporting congiguration of classes for simulation resume.
-                for (int i=0; i<Membranes.size(); i++) {
-                    Membranes[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
-                    Membranes[i].generate_report();
-                    atom_count += Membranes[i].get_num_of_nodes();
-                    bond_count += Membranes[i].get_num_of_node_pairs();
-                    dihe_count += Membranes[i].get_num_of_triangle_pairs();
-                }
-                for (int i=0; i<Actins.size(); i++) {
-                    Actins[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
-                    Actins[i].generate_report();
-                    atom_count += Actins[i].get_num_of_nodes();
-                    bond_count += Actins[i].get_num_of_node_pairs();
-                }
-                for (int i=0; i<ECMs.size(); i++) {
-                    ECMs[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
-                    ECMs[i].generate_report();
-                    atom_count += ECMs[i].get_num_of_nodes();
-                    bond_count += ECMs[i].get_num_of_node_pairs();
-                }
-                for (int i=0; i<Chromatins.size(); i++) {
-                    Chromatins[i].set_state(all_atoms, atom_count);
-                    Chromatins[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
-                    Chromatins[i].generate_report();
-                    atom_count += Chromatins[i].get_num_of_nodes();
-                    bond_count += Chromatins[i].get_num_of_nodes()-1;
-                }
+                Export_classes_for_resume(Membranes,
+                                          Actins,
+                                          ECMs,
+                                          Chromatins,
+                                          time,
+                                          all_atoms,
+                                          atom_count,
+                                          bond_count,
+                                          dihe_count);
+                
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
