@@ -397,7 +397,7 @@ int main(int argc, char **argv)
                 std::istream rcheckpoint(&rfb);
                 omm->context->loadCheckpoint(rcheckpoint);
                 //wrok in progress.
-                //Need retrive all information from the checkpoint
+                //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
             
             // Run the simulation:
@@ -452,13 +452,28 @@ int main(int argc, char **argv)
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
-                for (int k=0; k<Membranes[0].get_num_of_node_pairs(); k++) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
-                    omm->harmonic->setBondParameters(k, atom1, atom2, length*0.999, stiffness);
+                if (Membranes.size() != 0) {
+                    bool update_mem = false;
+                    for (int mem_index=0; mem_index<Membranes.size(); mem_index++) {
+                        if (Membranes[mem_index].get_num_of_nodes() != -1) {
+                            update_mem = true;
+                        }
+                    }
+                    if (update_mem) {
+                        updateOpenMMforces(Membranes,
+                                           omm,
+                                           time,
+                                           all_atoms,
+                                           all_bonds,
+                                           membrane_set,
+                                           actin_set,
+                                           ecm_set,
+                                           chromatin_set,
+                                           interaction_map);
+                    }
                 }
-                omm->harmonic->updateParametersInContext(*omm->context);
+                
+                
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 

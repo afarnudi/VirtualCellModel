@@ -18,4 +18,18 @@ void Export_classes_for_resume(std::vector<Membrane>  &membranes,
                                int                    &bond_count,
                                int                    &dihe_count);
 
+
+using std::set;
+
+void updateOpenMMforces(vector<Membrane>       &membranes,
+                        MyOpenMMData*          omm,
+                        double                 time,
+                        MyAtomInfo             atoms[],
+                        Bonds*                 bonds,
+                        vector<set<int> >      &membrane_set,
+                        vector<set<int> >      &actin_set,
+                        vector<set<int> >      &ecm_set,
+                        vector<set<int> >      &chromatin_set,
+                        vector<vector<int> >   interaction_map);
+
 #endif // GENERAL_CLASS_FUNCTIONS_H

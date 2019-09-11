@@ -152,15 +152,15 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         }
     }  else if(param_name=="Update_radius"){
         
-        GenConst::Membrane_new_node_radius = param_value;
+        New_node_radius = param_value;
         
     } else if(param_name=="Begin_update_time_in_Ps"){
         
-        GenConst::Begin_membrane_radius_update_time_in_Ps = param_value;
+        Begin_update_time_in_Ps = param_value;
         
     } else if(param_name=="End_update_time_in_Ps"){
         
-        GenConst::End_membrane_radius_update_time_in_Ps = param_value;
+        End_update_time_in_Ps = param_value;
     }
     
 }

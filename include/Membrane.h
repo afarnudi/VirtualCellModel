@@ -75,9 +75,9 @@ private:
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
-//    double New_node_radius=-1;
-//    double Begin_update_time_in_Ps=0;
-//    double End_update_time_in_Ps=0;
+    double New_node_radius=-1;
+    double Begin_update_time_in_Ps=0;
+    double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
 
@@ -121,6 +121,10 @@ private:
     
     
 public:
+    /**Returns the node radius update value (set value in the configuration file). */
+    double get_new_node_radius(void){
+        return New_node_radius;
+    }
     ///Call all initilisation members and initilise openmm handles.
     void initilise_openmm(void);
     
@@ -218,6 +222,15 @@ private:
 
     
 public:
+    /**Return the new node radius 'end update time' in Ps.*/
+    double get_End_update_time_in_Ps(void){
+        return End_update_time_in_Ps;
+    }
+    /**Return the new node radius 'begin update time' in Ps.*/
+    double get_Begin_update_time_in_Ps(void){
+        return Begin_update_time_in_Ps;
+    }
+    
     double rescale_factor=1;
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
