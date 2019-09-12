@@ -417,7 +417,7 @@ int main(int argc, char **argv)
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (WantForce) {
-                    calc_energy(Membranes, all_atoms);
+                    calc_energy_2(Membranes, all_atoms);
                 }
                 
                 atom_count=0;

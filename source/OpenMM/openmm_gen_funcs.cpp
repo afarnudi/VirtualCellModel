@@ -138,11 +138,11 @@ void calc_energy(vector<Membrane>    mem,
             
             //shift the value between 0 and 2 only for representation purposes.
             cosine += 1;
-            double scale=5;
-            atoms[node_A+mem_count].energy += scale*cosine/4;
-            atoms[node_B+mem_count].energy += scale*cosine/4;
-            atoms[node_C+mem_count].energy += scale*cosine/4;
-            atoms[node_D+mem_count].energy += scale*cosine/4;
+//            double scale=5;
+            atoms[node_A+mem_count].energy += cosine/2.0;
+            atoms[node_B+mem_count].energy += cosine/2.0;
+//            atoms[node_C+mem_count].energy += scale*cosine;
+//            atoms[node_D+mem_count].energy += scale*cosine;
             
         }
         mem_count += mem[i].get_num_of_nodes();
@@ -188,11 +188,11 @@ void calc_energy_2(vector<Membrane>    mem,
             
             sine = sqrt(sine);
             
-            double scale=5;
-            atoms[node_A+mem_count].energy += scale*sine/4;
-            atoms[node_B+mem_count].energy += scale*sine/4;
-            atoms[node_C+mem_count].energy += scale*sine/4;
-            atoms[node_D+mem_count].energy += scale*sine/4;
+//            double scale=5;
+            atoms[node_A+mem_count].energy += sine/2;
+            atoms[node_B+mem_count].energy += sine/2;
+//            atoms[node_C+mem_count].energy += scale*sine/4;
+//            atoms[node_D+mem_count].energy += scale*sine/4;
             
         }
         mem_count += mem[i].get_num_of_nodes();
