@@ -32,3 +32,4 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                                     * OpenMM::NmPerAngstrom);
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
 }
+

@@ -40,7 +40,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
  * -----------------------------------------------------------------------------
  */
 void          myStepWithOpenMM(MyOpenMMData*,
-                               int numSteps);
+                               MyAtomInfo atoms[],
+                               int        numSteps);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE BACK TO CPU FROM OPENMM
@@ -52,6 +53,35 @@ void          myGetOpenMMState(MyOpenMMData*,
                                double&      time,
                                double&      energy,
                                MyAtomInfo   atoms[]);
+
+/** -----------------------------------------------------------------------------
+ *                     COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM
+ * -----------------------------------------------------------------------------
+ */
+void Cheap_GetOpenMMState(MyOpenMMData*,
+                          MyAtomInfo atoms[]);
+
+/** -----------------------------------------------------------------------------
+ *                     Update System parameters
+ * -----------------------------------------------------------------------------
+ */
+void my_system_update(MyOpenMMData*,
+                      int   bondtype,
+                      bool  WantUpdate);
+
+
+/** -----------------------------------------------------------------------------
+ *                     BOND LENGTH
+ * -----------------------------------------------------------------------------
+ */
+std::vector<double> dist_calc(MyOpenMMData*,
+                              MyAtomInfo atoms[],
+                              int        bondtype);
+
+
+std::vector<double> Nominal_length_calc(MyOpenMMData*,
+                                        int bondtype);
+
 /** -----------------------------------------------------------------------------
  *                     DEALLOCATE OpenMM OBJECTS
  * -----------------------------------------------------------------------------

@@ -88,6 +88,7 @@ namespace GenConst {
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
     extern std::string Checkpoint_path;
     
+    
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

@@ -1,20 +1,17 @@
 //MD total number of steps. Default 10000
-MD_num_of_steps	3000000	 
+MD_num_of_steps	200 
 
 //Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.
 Simulation_Time_In_Ps	0
 
 //Trajectory saving rate in number of steps. Default 1000
-MD_traj_save_step	1000
+MD_traj_save_step	200
 
 //Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.
 Report_Interval_In_Fs	0
 
 //Integration step size (fs).  Default 0.001
 Step_Size_In_Fs	0.1
-
-//Load the context from OpenMM checkpoint (binary file). Default flase
-Load_from_checkpoint	0	/Results/Resumes/OpenMM/
 
 //Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
 // Type 0 : Verlet
@@ -24,10 +21,10 @@ Load_from_checkpoint	0	/Results/Resumes/OpenMM/
 Integrator_type	0
     
 //Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5
-frictionInPs	5
+frictionInPs	10
     
 //Set the temperature of the heat bath (in Kelvin). Default 300
-temperature	300
+temperature	30
 
 //Boltzman's constant. Default 1
 K	1
@@ -36,7 +33,7 @@ K	1
 MD_T	1
 
 //Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0. 
-Num_of_Membranes	2	configs/omm/mem_config_3.txt configs/omm/mem_config_4.txt
+Num_of_Membranes	0	configs/ViscoTest/Membranes/mem_config1.txt  configs/ViscoTest/Membranes/mem_config2.txt
 
 
 //Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0. 
@@ -44,11 +41,11 @@ Num_of_Chromatins	0	chromatin_config_1.txt
 
 
 //Number of actins in the system followed by the directory of their respective configuration files. All actins will be configured using the first configuration file if only one is provided. Default 0. 
-Num_of_Actins		0	actin_config.txt
+Num_of_Actins		1	configs/ViscoTest/Actins/actin_config.txt
 
 
 //Number of ECMs in the system followed by the directory of their respective configuration files. All ECMs will be configured using the first configuration file if only one is provided. Default 0. 
-Num_of_ECMs		0	ECM_config_1.txt	
+Num_of_ECMs		0	configs/ViscoTest/ECMs/ecm_config1.txt	
 
 //Actin-membrane LJ-like interaction strength. Default 400
 Actin_Membrane_Bond_Coefficient	400
@@ -66,7 +63,7 @@ MC_step	200
 trajectory_file_name	1	Cell
 
 //Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".
-Interaction_map	1
+Interaction_map	1 configs/ViscoTest/interaction_map.txt
 
 //Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.
 excluded_volume_interaction	0

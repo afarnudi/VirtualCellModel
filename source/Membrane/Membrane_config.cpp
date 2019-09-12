@@ -150,6 +150,17 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         } else{
             Relax_with_actin=true;
         }
+    }  else if(param_name=="Update_radius"){
+        
+        New_node_radius = param_value;
+        
+    } else if(param_name=="Begin_update_time_in_Ps"){
+        
+        Begin_update_time_in_Ps = param_value;
+        
+    } else if(param_name=="End_update_time_in_Ps"){
+        
+        End_update_time_in_Ps = param_value;
     }
     
 }

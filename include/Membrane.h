@@ -75,6 +75,9 @@ private:
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
+    double New_node_radius=-1;
+    double Begin_update_time_in_Ps=0;
+    double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
 
@@ -118,6 +121,10 @@ private:
     
     
 public:
+    /**Returns the node radius update value (set value in the configuration file). */
+    double get_new_node_radius(void){
+        return New_node_radius;
+    }
     ///Call all initilisation members and initilise openmm handles.
     void initilise_openmm(void);
     
@@ -144,6 +151,7 @@ public:
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
     void check(void);
+    void check_radius_update_values(void);
     vector<vector<int> > ECM_Node_neighbour_list;
     vector<vector<int> > Vesicle_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
@@ -214,6 +222,15 @@ private:
 
     
 public:
+    /**Return the new node radius 'end update time' in Ps.*/
+    double get_End_update_time_in_Ps(void){
+        return End_update_time_in_Ps;
+    }
+    /**Return the new node radius 'begin update time' in Ps.*/
+    double get_Begin_update_time_in_Ps(void){
+        return Begin_update_time_in_Ps;
+    }
+    
     double rescale_factor=1;
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
@@ -251,6 +268,10 @@ public:
     /**Return spring stiffness coefficient. */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
+    }
+    /**Return damp coefficient. */
+    double get_damping_coefficient(void){
+        return Damping_coefficient;
     }
     /**Return bending stiffness coefficient. */
     double get_bending_stiffness_coefficient(void){
