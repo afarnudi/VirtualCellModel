@@ -10,6 +10,7 @@
 #ifndef General_functions_hpp
 #define General_functions_hpp
 #include <stdio.h>
+#include <chrono>
 #include "General_constants.h"
 
 
@@ -24,4 +25,10 @@ void matrix_inverse (double mat[3][3]);
 
 //Calculate the A, B, C coefficeints for the surface equation: Ax + By + Cz = -1
 void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C);
+
+
+
+void print_wall_clock_time(double sim_duration_per_sec);
+void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
+                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end);
 #endif /* General_functions_hpp */
