@@ -31,4 +31,6 @@ void calc_surface_coefficeints (double points[3][3], double &A, double &B, doubl
 void print_wall_clock_time(double sim_duration_per_sec);
 void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
                      std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end);
+void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
+                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end);
 #endif /* General_functions_hpp */

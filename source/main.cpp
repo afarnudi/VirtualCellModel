@@ -113,6 +113,7 @@ int main(int argc, char **argv)
     // get the current time.
     time_t t = time(0);
     auto chrono_clock_start = chrono::steady_clock::now();
+    auto chrono_sys_clock_start = chrono::system_clock::now();
     
     struct tm * now = localtime( & t );
     char buffer [80];
@@ -409,6 +410,7 @@ int main(int argc, char **argv)
             //Time the programme
             tStart = clock();
             chrono_clock_start = chrono::steady_clock::now();
+            chrono_sys_clock_start = chrono::system_clock::now();
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             
@@ -453,15 +455,17 @@ int main(int argc, char **argv)
                     progress+=1;
                 }
             }
+            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
+            
             
             print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
             print_real_time(chrono_clock_start, chrono::steady_clock::now());
+            print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
-            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
-            cout<<"\nDone!"<<endl;
             
+            cout<<"\nDone!"<<endl;
             return 0; // Normal return from main.
         }
         

@@ -39,7 +39,23 @@ void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_c
     int secs;
     int hours;
     int mins;
-    cout << "Real elapsed time: \n";
+    cout << "\nReal elapsed time: \n";
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
+    cout << hours << "\tHours\n";
+    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
+    cout << mins - hours * 60 << "\tMinutes\n";
+    secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
+    cout << secs - mins * 60 << "\tSeconds\n";
+}
+
+void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
+                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end){
+    
+    auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
+    int secs;
+    int hours;
+    int mins;
+    cout << "\nSystem elapsed time: \n";
     hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
     cout << hours << "\tHours\n";
     mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
