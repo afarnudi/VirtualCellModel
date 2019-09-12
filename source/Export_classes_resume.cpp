@@ -6,11 +6,12 @@ void Export_classes_for_resume(std::vector<Membrane>   &membranes,
                                std::vector<ECM>        &ecms,
                                std::vector<Chromatin>  &chromatins,
                                double                   time,
-                               MyAtomInfo*              all_atoms,
-                               int                     &atom_count,
-                               int                     &bond_count,
-                               int                     &dihe_count)
+                               MyAtomInfo*              all_atoms)
 {
+    int atom_count=0;
+    int bond_count=0;
+    int dihe_count=0;
+    
     for (int i=0; i<membranes.size(); i++) {
         membranes[i].export_for_resume(time/GenConst::Step_Size_In_Fs, all_atoms, atom_count);
         membranes[i].generate_report();

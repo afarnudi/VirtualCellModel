@@ -95,9 +95,6 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
-    double Membrane_new_node_radius;
-    double Begin_membrane_radius_update_time_in_Ps;
-    double End_membrane_radius_update_time_in_Ps;
 }
 
 
@@ -435,99 +432,35 @@ int main(int argc, char **argv)
                     calc_energy(Membranes, all_atoms);
                 }
                 
-                atom_count=0;
-                bond_count=0;
-                dihe_count=0;
                 //Begin: Exporting congiguration of classes for simulation resume.
-                Export_classes_for_resume(Membranes,
-                                          Actins,
-                                          ECMs,
-                                          Chromatins,
-                                          time,
-                                          all_atoms,
-                                          atom_count,
-                                          bond_count,
-                                          dihe_count);
+                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
-                if (Membranes.size() != 0) {
-                    bool update_mem = false;
-                    for (int mem_index=0; mem_index<Membranes.size(); mem_index++) {
-                        if (Membranes[mem_index].get_num_of_nodes() != -1) {
-                            update_mem = true;
-                        }
-                    }
-                    if (update_mem) {
-                        updateOpenMMforces(Membranes,
-                                           omm,
-                                           time,
-                                           all_atoms,
-                                           all_bonds,
-                                           membrane_set,
-                                           actin_set,
-                                           ecm_set,
-                                           chromatin_set,
-                                           interaction_map);
-                    }
+                if (check_for_membrane_update(Membranes, time)) {
+                    updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
                 }
                 
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
-                myStepWithOpenMM(omm,all_atoms,NumSilentSteps);
+                myStepWithOpenMM(omm, all_atoms, NumSilentSteps);
+                
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
             }
             
+            print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
+            print_real_time(chrono_clock_start, chrono::steady_clock::now());
+            
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm);
             cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
             cout<<"\nDone!"<<endl;
-            
-            double sim_duration_per_sec = (double)((clock() - tStart)/CLOCKS_PER_SEC);
-            
-            double sec_per_day     =60*60*24;
-            double sec_per_hour    =60*60;
-            double sec_per_min     =60;
-            
-            
-            int days =  sim_duration_per_sec/sec_per_day;
-            sim_duration_per_sec -= days * sec_per_day;
-            
-            int hours = sim_duration_per_sec/sec_per_hour;
-            sim_duration_per_sec -= hours * sec_per_hour;
-            
-            int mins = sim_duration_per_sec/sec_per_min ;
-            sim_duration_per_sec -= mins * sec_per_min;
-            
-            printf("Wall clock time of the simulation:\n");
-//            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
-            printf("%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
-            
-            auto chrono_clock_end = chrono::steady_clock::now();
-            auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
-            
-            int secs;
-            
-            cout << "Real elapsed time: \n";
-            hours = chrono::duration_cast<chrono::hours>(chromo_clock_diff).count();
-            cout << hours << "\tHours\n";
-            mins  = chrono::duration_cast<chrono::minutes>(chromo_clock_diff).count();
-            cout << mins - hours * 60 << "\tMinutes\n";
-            secs  = chrono::duration_cast<chrono::seconds>(chromo_clock_diff).count();
-            cout << secs - mins * 60 << "\tSeconds\n";
-            
-            
-            
-            
-            
-            
-            
             
             return 0; // Normal return from main.
         }

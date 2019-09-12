@@ -677,6 +677,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->harmonic = HarmonicBond;
     }
     
+    omm->EV = ExcludedVolumes;
+    
     if (Kelvin_VoigtBondForce) {
         system.addForce(Kelvin_VoigtBond);
         omm->Kelvin_VoigtBond = Kelvin_VoigtBond;

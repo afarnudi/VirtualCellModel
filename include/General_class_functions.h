@@ -13,13 +13,13 @@ void Export_classes_for_resume(std::vector<Membrane>  &membranes,
                                std::vector<ECM>       &ecms,
                                std::vector<Chromatin> &chromatins,
                                double                  time,
-                               MyAtomInfo*             all_atoms,
-                               int                    &atom_count,
-                               int                    &bond_count,
-                               int                    &dihe_count);
+                               MyAtomInfo*             all_atoms);
 
 
 using std::set;
+
+bool check_for_membrane_update(vector<Membrane>    &membranes,
+                               double               time);
 
 void updateOpenMMforces(vector<Membrane>       &membranes,
                         MyOpenMMData*          omm,

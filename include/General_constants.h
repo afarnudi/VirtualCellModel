@@ -87,17 +87,6 @@ namespace GenConst {
     extern bool Load_from_checkpoint;
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
     extern std::string Checkpoint_path;
-    /**the the radius of the Membrane node. The membrane harmonic spring force's nominal length  is calculated using the membrane node radius:
-     *
-     * Nominallength = 2 x NodeRadius
-     *
-     * The value can be updated during the simulation by setting a value for the 'Update_radius' parameter in the membrane configuration file. The update will begin and end acourding to the 'Begin_update_time_in_Ps' and 'End_update_time_in_Ps' set in the membrane configuration file.
-     */
-    extern double Membrane_new_node_radius;
-    /**Begin the linear update of the node radius in the simulation.*/
-    extern double Begin_membrane_radius_update_time_in_Ps;
-    /**End time of the linear update of the node radius in the simulation. The linear update will achive the new node radius during the set times.*/
-    extern double End_membrane_radius_update_time_in_Ps;
     
     
 }

@@ -8,6 +8,23 @@ const int EndOfList=-1;
 using OpenMM::Vec3;
 using std::vector;
 using std::set;
+
+bool check_for_membrane_update(vector<Membrane>    &membranes,
+                               double               time)
+{
+    bool update_mem = false;
+    for (int mem_index=0; mem_index<membranes.size(); mem_index++) {
+        if (membranes[mem_index].get_num_of_nodes() != -1 &&
+            time > membranes[mem_index].get_Begin_update_time_in_Ps()   ) {
+            if (time < membranes[mem_index].get_End_update_time_in_Ps()) {
+                update_mem = true;
+            }
+        }
+    }
+    return update_mem;
+}
+
+
 /** -----------------------------------------------------------------------------
  */
 void updateOpenMMforces(vector<Membrane>      &membranes,
@@ -21,10 +38,6 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                         vector<set<int> >      &chromatin_set,
                         vector<vector<int> >   interaction_map)
 {
-    
-    
-    
-    
     
     
     int mem_count=0;
@@ -41,20 +54,20 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                 t2   = membranes[i].get_End_update_time_in_Ps()*1000;
                 r    = membranes[i].get_node_radius();
                 rnew = membranes[i].get_new_node_radius();
-                dt   = (t2-t1)/GenConst::Step_Size_In_Fs;
+                dt   = t2-t1;
                 // sigma_ev = a * time + b
                 a    = (rnew - r)/dt;
                 b    = (r*t2 - rnew* t1)/dt;
                 
                 vector<double> sigma_ev;
                 
-                sigma_ev.push_back( (a * time * 1000 + b)
-                                   * OpenMM::NmPerAngstrom);
-                
+                sigma_ev.push_back( a * time * 1000 + b);
+//                cout<<"\ntime = "<<time<<"\n--------\nr\t\t= "<<r<<"\nrnew\t\t= "<<rnew<<"\nsigma_ev\t= "<<(a * time * 1000 + b)<<endl;
                 
                 for (int node_index = mem_count; node_index < membranes[i].get_num_of_nodes() + mem_count; node_index++) {
                     
-                    atoms[node_index].radius = sigma_ev[0] * OpenMM::AngstromsPerNm;
+                    atoms[node_index].radius = sigma_ev[0];
+                    sigma_ev[0] *= OpenMM::NmPerAngstrom;
                     
                     for (int j=0; j<omm->EV.size(); j++) {
                         omm->EV[j]->setParticleParameters(node_index, sigma_ev);
@@ -66,6 +79,7 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
         
         mem_count += membranes[i].get_num_of_nodes();
     }
+    
     
     
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
@@ -87,8 +101,8 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                     set<int> :: iterator it_2 = membrane_set[j].begin();
                     
                     omm->EV[EV_index]-> setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                            + atoms[*it_2].radius )
-                                                          * OpenMM::NmPerAngstrom
+                                                               + atoms[*it_2].radius )
+                                                               * OpenMM::NmPerAngstrom
                                                        );
                     
                     EV_index++;
@@ -97,6 +111,7 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
             }
         }
     }
+    
     
     int class_count_i, class_count_j;
     
@@ -187,6 +202,8 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
         
         
     }
+    
+    
     
     for (int i=0; i< omm->EV.size(); i++) {
         omm->EV[i]->updateParametersInContext(*omm->context);
