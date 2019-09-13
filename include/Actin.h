@@ -148,9 +148,9 @@ public:
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
-    /**Return damping coefficient. */
-    double get_damping_coefficient(void){
-        return Damping_coefficient;
+    /**Return kelvin damping coefficient. */
+    double get_kelvin_damping_coefficient(void){
+        return Kelvin_Damping_Coefficient;
     }
     void check(void);
     

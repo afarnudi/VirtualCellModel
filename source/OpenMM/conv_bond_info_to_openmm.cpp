@@ -90,6 +90,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
             case 4:
                 bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                bonds[i].dampInKcalPsPerAngstrom2=act.get_kelvin_damping_coefficient();
                 break;
                 
         }

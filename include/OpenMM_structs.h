@@ -83,7 +83,7 @@ struct MyOpenMMData {
 struct TimeDependantData {
     OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
     bool Kelvin_Voigt = false;
-    double Kelvin_Voigt_damp = 100 ;
+    std::vector<double> Kelvin_Voigt_damp;
     std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
     

@@ -623,7 +623,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             case 4://Kelvin-Voigt
             {
-                //omm->Voigt = true;
                 Kelvin_VoigtBondForce=true;
                 // Note factor of 2 for stiffness below because Amber specifies the constant
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
@@ -634,6 +633,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                    bonds[i].stiffnessInKcalPerAngstrom2
                                    * OpenMM::KJPerKcal
                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                
+                tdd->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2);
                 
             }
                 break;

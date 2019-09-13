@@ -252,7 +252,7 @@ void Kelvin_Voigt_update(MyOpenMMData* omm,
     {
         tdd->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = tdd->Kelvin_Voigt_initNominal_length_InNm[i] - (tdd->Kelvin_Voigt_distInAng[1][i] - tdd->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (tdd->Kelvin_Voigt_damp * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
+        length = tdd->Kelvin_Voigt_initNominal_length_InNm[i] - (tdd->Kelvin_Voigt_distInAng[1][i] - tdd->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (tdd->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
         
         tdd->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
