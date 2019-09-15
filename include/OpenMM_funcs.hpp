@@ -145,6 +145,17 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
 Bonds* convert_Actin_bond_info_to_openmm(Actin act);
 
 
+void OpenMM_ActMem_info_relay (vector<Actin>          acts,
+                               vector<Membrane>       membranes,
+                               Bonds*                 all_bonds,
+                               int                    mem_atom_count,
+                               int                    &bond_count);
+
+
+Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k);
+
+
+
 /**Relay ECM class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_ECM_info_relay (vector<ECM>             ecms,
                             vector<std::set<int> >  &ecm_set,

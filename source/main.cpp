@@ -304,6 +304,7 @@ int main(int argc, char **argv)
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
                     for (int j=0; j<Membranes.size(); j++) {
                         Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , j);
+                        num_of_bonds        += Actins[i].Actin_Membrane_shared_Node_list[j].size();
                         if (Membranes[j].get_relax_with_actin_flag()) {
                             Membranes[j].Relax_1();
                         }
@@ -327,6 +328,9 @@ int main(int argc, char **argv)
         int bond_count=0;
         int dihe_count=0;
         
+        int mem_atom_count=0;
+        //int act_atom_count=0;
+        
         //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
         MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
         Bonds* all_bonds         = new Bonds[num_of_bonds+1];
@@ -347,6 +351,9 @@ int main(int argc, char **argv)
                                        dihe_count);
         }
         
+        mem_atom_count = atom_count;
+        
+        
         if (Include_Actin) {
             OpenMM_Actin_info_relay(Actins,
                                     actin_set,
@@ -358,8 +365,16 @@ int main(int argc, char **argv)
                                     dihe_count);
         }
         
-        //if (Include Membrane  && Include Actine)
-        //bond_count++
+        
+        if (Include_Membrane  && Include_Actin) {
+            OpenMM_ActMem_info_relay(Actins,
+                                     Membranes,
+                                    all_bonds,
+                                    mem_atom_count,
+                                    bond_count);
+
+        }
+        
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs,
                                   ecm_set,

@@ -66,16 +66,7 @@ struct MyOpenMMData {
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
     OpenMM::HarmonicBondForce*  harmonic;
-    /* OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
-     bool Kelvin_Voigt = false;
-     std::vector<OpenMM::CustomBondForce*> Custom_Kelvin_VoigtBond;
-     bool Custom_Kelvin_Voigt = false;
-     double damp = 1000 ;
-     
-     std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
-     std::vector<std::vector<double>> Custom_Kelvin_Voigt_distInAng;
-     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
-     std::vector<double> Custom_Kelvin_Voigt_initNominal_length_InNm;*/
+
     std::vector<OpenMM::CustomNonbondedForce*> EV;
 };
 

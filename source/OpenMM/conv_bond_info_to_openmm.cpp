@@ -113,6 +113,28 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
     return bonds;
 }
 
+
+
+Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
+    const int act_num_bonds = act.Actin_Membrane_shared_Node_list[k].size();
+    Bonds* bonds = new Bonds[act_num_bonds];
+    double stiffness = 1000000;
+    double nominal_length = 0;
+    int type = 2;
+    //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
+    //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
+    for (int i=0; i<act_num_bonds; i++) {
+        bonds[i].type = type;
+        bonds[i].atoms[0]=act.Actin_Membrane_shared_Node_list[k][i][0];
+        bonds[i].atoms[1]=act.Actin_Membrane_shared_Node_list[k][i][1];
+        bonds[i].nominalLengthInAngstroms=nominal_length;
+        bonds[i].stiffnessInKcalPerAngstrom2=stiffness;
+    }
+    
+    return bonds;
+}
+
+
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
     const int ecm_num_bonds = ecm.get_num_of_node_pairs();
     Bonds* bonds = new Bonds[ecm_num_bonds];
