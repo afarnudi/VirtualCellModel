@@ -26,6 +26,7 @@ struct MyAtomInfo
     double epsilon_LJ_12_6;
     double force[3];
     double energy;
+    double stretching_energy;
 };
 
 struct Bonds{

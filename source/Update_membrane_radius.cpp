@@ -39,7 +39,6 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                         vector<vector<int> >   interaction_map)
 {
     
-    
     int mem_count=0;
     
     double t1, t2, r, rnew, dt, a, b;

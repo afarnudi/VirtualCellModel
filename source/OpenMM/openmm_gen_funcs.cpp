@@ -125,7 +125,7 @@ void myWritePDBFrame(int frameNum,
     
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     
-    double occ=1;
+//    double occ=1;
     for (int n=0; atoms[n].type != EndOfList; ++n){
         if (hist != atoms[n].pdb) {
             index++;
@@ -139,7 +139,7 @@ void myWritePDBFrame(int frameNum,
                 atoms[n].posInAng[0],
                 atoms[n].posInAng[1],
                 atoms[n].posInAng[2],
-                occ,
+                atoms[n].stretching_energy,
                 atoms[n].energy,
                 atoms[n].symbol);
     }
@@ -205,15 +205,34 @@ void calc_energy_2(vector<Membrane>    mem,
                    MyAtomInfo          atoms[]){
     
     int node_A, node_B, node_C, node_D;
+    double deltax, deltay, deltaz, Node_distance;
     
-    double points[3][3];
+//    double points[3][3];
     
     int mem_count=0;
     
     for (int i=0; i<mem.size(); i++) {
         for (int j=0; j<mem[i].get_num_of_nodes(); j++) {
             atoms[j+mem_count].energy = 0;
+            atoms[j+mem_count].stretching_energy = 0;
         }
+        for (int j=0; j<mem[i].get_num_of_node_pairs(); j++) {
+            node_B = mem[i].get_node_pair(j, 0);
+            node_A = mem[i].get_node_pair(j, 1);
+            
+            deltax = atoms[node_A + mem_count].posInAng[0]-atoms[node_B + mem_count].posInAng[0];
+            deltay = atoms[node_A + mem_count].posInAng[1]-atoms[node_B + mem_count].posInAng[1];
+            deltaz = atoms[node_A + mem_count].posInAng[2]-atoms[node_B + mem_count].posInAng[2];
+            
+            Node_distance=deltax*deltax+deltay*deltay+deltaz*deltaz;
+            
+            double scale = 1;
+            atoms[node_A + mem_count].stretching_energy += scale * 0.5*Node_distance;
+            atoms[node_B + mem_count].stretching_energy += scale * 0.5*Node_distance;
+            
+        }
+        
+        
         for (int j=0; j<mem[i].Triangle_Pair_Nodes.size(); j++) {
             
             double AB[3], BA[3], AC[3], BD[3], ABxAC[3], BAxBD[3];
@@ -240,9 +259,9 @@ void calc_energy_2(vector<Membrane>    mem,
             
             sine = sqrt(sine);
             
-//            double scale=5;
-            atoms[node_A+mem_count].energy += sine/2;
-            atoms[node_B+mem_count].energy += sine/2;
+            double scale=100;
+            atoms[node_A+mem_count].energy += scale*sine/2;
+            atoms[node_B+mem_count].energy += scale*sine/2;
 //            atoms[node_C+mem_count].energy += scale*sine/4;
 //            atoms[node_D+mem_count].energy += scale*sine/4;
             
