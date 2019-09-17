@@ -27,6 +27,7 @@ using std::set;
 MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  double                 stepSizeInFs,
                                  std::string&           platformName,
+                                 TimeDependantData*     tdd,
                                  Bonds*                 bonds,
                                  Dihedrals*             dihedrals,
                                  vector<set<int> >      &membrane_set,
@@ -63,8 +64,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     
     vector<OpenMM::CustomBondForce*>X4harmonics;
-    
-    vector<OpenMM::CustomBondForce*>Custom_Kelvin_VoigtBond;
     
     vector<OpenMM::CustomBondForce*> FENEs;
 
@@ -544,9 +543,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     set <std::string> X4harmonic_classes;
     int X4harmonic_index = -1;
     
-    set <std::string> Custom_Kelvin_Voigt_classes;
-    int Custom_Kelvin_Voigt_index = -1;
-    
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
         std::pair< int, int > temp;
@@ -627,7 +623,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             case 4://Kelvin-Voigt
             {
-                //omm->Voigt = true;
                 Kelvin_VoigtBondForce=true;
                 // Note factor of 2 for stiffness below because Amber specifies the constant
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
@@ -639,33 +634,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                    * OpenMM::KJPerKcal
                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
                 
+                tdd->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2);
+                
             }
                 break;
                 
-            case 5:// Custom Kelvin-Voigt
-            {
-                auto Custom_Kelvin_Voigt_item = Custom_Kelvin_Voigt_classes.find(bonds[i].class_label);
-                if (Custom_Kelvin_Voigt_item == Custom_Kelvin_Voigt_classes.end()) {
-                    
-                    Custom_Kelvin_Voigt_classes.insert(bonds[i].class_label);
-                    Custom_Kelvin_Voigt_index++;
-                    
-                    Custom_Kelvin_VoigtBond.push_back( new OpenMM::CustomBondForce("0.5*k_bond*(r-r_rest)^2"));
-                    Custom_Kelvin_VoigtBond[Custom_Kelvin_Voigt_index]->addGlobalParameter("r_rest",   bonds[i].nominalLengthInAngstroms
-                                                                      * OpenMM::NmPerAngstrom);
-                    Custom_Kelvin_VoigtBond[Custom_Kelvin_Voigt_index]->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom2
-                                                                      * OpenMM::KJPerKcal//);
-                                                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                    Custom_Kelvin_VoigtBond[Custom_Kelvin_Voigt_index]->addGlobalParameter("damp", bonds[i].dampInKcalPsPerAngstrom2
-                                                                         * OpenMM::KJPerKcal//);
-                                                                         * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                    system.addForce(Custom_Kelvin_VoigtBond[Custom_Kelvin_Voigt_index]);
-                }
-                Custom_Kelvin_VoigtBond[Custom_Kelvin_Voigt_index]->addBond(atom[0], atom[1]);
-                omm->Custom_Kelvin_VoigtBond = Custom_Kelvin_VoigtBond;
-                omm->Custom_Kelvin_Voigt = true;
-            }
-                break;
+            
                 
         }
         
@@ -681,8 +655,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     if (Kelvin_VoigtBondForce) {
         system.addForce(Kelvin_VoigtBond);
-        omm->Kelvin_VoigtBond = Kelvin_VoigtBond;
-        omm->Kelvin_Voigt = true;
+        tdd->Kelvin_VoigtBond = Kelvin_VoigtBond;
+        tdd->Kelvin_Voigt = true;
+        tdd->Kelvin_Nominal_length_calc();
     }
     
     // Add the list of atom pairs that are excluded from the excluded volume force.
