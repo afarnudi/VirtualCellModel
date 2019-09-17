@@ -85,127 +85,132 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     int EV_index = 0;
     
+    bool dist_update =false;
     
-    for (int i=0; i< GenConst::Num_of_Membranes; i++) {
-        for (int j=0; j < i+1; j++) {
-            
-            switch (interaction_map[i][j]) {
-                    
-                case 1:
-                    
-                    break;
-                    
-                case 2:
-                    
-                    set<int> :: iterator it_1 = membrane_set[i].begin();
-                    set<int> :: iterator it_2 = membrane_set[j].begin();
-                    
-                    omm->EV[EV_index]-> setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                               + atoms[*it_2].radius )
-                                                               * OpenMM::NmPerAngstrom
-                                                       );
-                    
-                    EV_index++;
-                    break;
-                    
+    
+    if (dist_update) {
+        for (int i=0; i< GenConst::Num_of_Membranes; i++) {
+            for (int j=0; j < i+1; j++) {
+                
+                switch (interaction_map[i][j]) {
+                        
+                    case 1:
+                        
+                        break;
+                        
+                    case 2:
+                        
+                        set<int> :: iterator it_1 = membrane_set[i].begin();
+                        set<int> :: iterator it_2 = membrane_set[j].begin();
+                        
+                        omm->EV[EV_index]-> setCutoffDistance( 1.5 * ( atoms[*it_1].radius
+                                                                      + atoms[*it_2].radius )
+                                                              * OpenMM::NmPerAngstrom
+                                                              );
+                        
+                        EV_index++;
+                        break;
+                        
+                }
             }
         }
-    }
-    
-    
-    int class_count_i, class_count_j;
-    
-    for (int i=0; i < GenConst::Num_of_Actins; i++) {
         
-        class_count_i = GenConst::Num_of_Membranes;
+        
+        int class_count_i, class_count_j;
+        
+        for (int i=0; i < GenConst::Num_of_Actins; i++) {
+            
+            class_count_i = GenConst::Num_of_Membranes;
+            class_count_j = 0;
+            for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        
+                        
+                        break;
+                    case 2:
+                        set<int> :: iterator it_1 = actin_set[i].begin();
+                        set<int> :: iterator it_2 = membrane_set[j].begin();
+                        
+                        omm->EV[EV_index]-> setCutoffDistance( 1.5 * ( atoms[*it_1].radius
+                                                                      + atoms[*it_2].radius )
+                                                              * OpenMM::NmPerAngstrom
+                                                              );
+                        
+                        EV_index++;
+                        break;
+                }
+                
+            }
+            
+        }
+        
+        
+        class_count_i = GenConst::Num_of_Membranes + GenConst::Num_of_Actins;
         class_count_j = 0;
-        for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+        
+        for (int i=0; i < GenConst::Num_of_ECMs; i++) {
             
-            switch (interaction_map[i + class_count_i][j]) {
-                case 1:
-                    
-                    
-                    break;
-                case 2:
-                    set<int> :: iterator it_1 = actin_set[i].begin();
-                    set<int> :: iterator it_2 = membrane_set[j].begin();
-                    
-                    omm->EV[EV_index]-> setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                + atoms[*it_2].radius )
-                                                          * OpenMM::NmPerAngstrom
-                                                          );
-                    
-                    EV_index++;
-                    break;
+            for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+                
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        set<int> :: iterator it_1 = ecm_set[i].begin();
+                        set<int> :: iterator it_2 = membrane_set[j].begin();
+                        
+                        omm->EV[EV_index]-> setCutoffDistance( 1.5 * ( atoms[*it_1].radius
+                                                                      + atoms[*it_2].radius )
+                                                              * OpenMM::NmPerAngstrom
+                                                              );
+                        
+                        EV_index++;
+                        break;
+                }
+                
             }
             
         }
         
-    }
-    
-    
-    class_count_i = GenConst::Num_of_Membranes + GenConst::Num_of_Actins;
-    class_count_j = 0;
-    
-    for (int i=0; i < GenConst::Num_of_ECMs; i++) {
+        class_count_i = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs;
+        class_count_j = 0;
         
-        for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+        for (int i=0; i < GenConst::Num_of_Chromatins; i++) {
             
-            
-            switch (interaction_map[i + class_count_i][j]) {
-                case 1:
-                    
-                    break;
-                case 2:
-                    set<int> :: iterator it_1 = ecm_set[i].begin();
-                    set<int> :: iterator it_2 = membrane_set[j].begin();
-                    
-                    omm->EV[EV_index]-> setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                + atoms[*it_2].radius )
-                                                          * OpenMM::NmPerAngstrom
-                                                          );
-                    
-                    EV_index++;
-                    break;
+            for (int j=0; j < GenConst::Num_of_Membranes; j++) {
+                
+                switch (interaction_map[i + class_count_i][j]) {
+                    case 1:
+                        
+                        
+                        break;
+                    case 2:
+                        set<int> :: iterator it_1 = chromatin_set[i].begin();
+                        set<int> :: iterator it_2 = membrane_set[j].begin();
+                        
+                        omm->EV[EV_index]-> setCutoffDistance( 1.5 * ( atoms[*it_1].radius
+                                                                      + atoms[*it_2].radius )
+                                                              * OpenMM::NmPerAngstrom
+                                                              );
+                        
+                        EV_index++;
+                        break;
+                }
+                
             }
             
-        }
-        
-    }
-    
-    class_count_i = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs;
-    class_count_j = 0;
-    
-    for (int i=0; i < GenConst::Num_of_Chromatins; i++) {
-        
-        for (int j=0; j < GenConst::Num_of_Membranes; j++) {
-            
-            switch (interaction_map[i + class_count_i][j]) {
-                case 1:
-                    
-                    
-                    break;
-                case 2:
-                    set<int> :: iterator it_1 = chromatin_set[i].begin();
-                    set<int> :: iterator it_2 = membrane_set[j].begin();
-                    
-                    omm->EV[EV_index]-> setCutoffDistance(1.5* ( atoms[*it_1].radius
-                                                                + atoms[*it_2].radius )
-                                                          * OpenMM::NmPerAngstrom
-                                                          );
-                    
-                    EV_index++;
-                    break;
-            }
             
         }
-        
-        
     }
     
     
     
-    for (int i=0; i< omm->EV.size(); i++) {
+//    cout<<"EV_index = "<<EV_index<<endl;
+    for (int i=0; i< EV_index; i++) {
         omm->EV[i]->updateParametersInContext(*omm->context);
     }
     

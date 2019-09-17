@@ -424,6 +424,9 @@ int main(int argc, char **argv)
             {
                omm->Custom_Kelvin_Voigt_initNominal_length_InNm = Nominal_length_calc(omm, 1);
             }
+            
+//            cout<<"EV size = "<<omm->EV.size()<<endl;
+            
             for (int frame=1; ; ++frame) {
                 double time, energy;
                 
