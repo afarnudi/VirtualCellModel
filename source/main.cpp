@@ -303,7 +303,8 @@ int main(int argc, char **argv)
             if (Include_Actin){
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
                     for (int j=0; j<Membranes.size(); j++) {
-                        Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , j);
+                        Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , i, j);
+                        num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
                         if (Membranes[j].get_relax_with_actin_flag()) {
                             Membranes[j].Relax_1();
                         }
@@ -327,6 +328,9 @@ int main(int argc, char **argv)
         int bond_count=0;
         int dihe_count=0;
         
+        int mem_atom_count=0;
+        //int act_atom_count=0;
+        
         //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
         MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
         Bonds* all_bonds         = new Bonds[num_of_bonds+1];
@@ -347,6 +351,9 @@ int main(int argc, char **argv)
                                        dihe_count);
         }
         
+        mem_atom_count = atom_count;
+        
+        
         if (Include_Actin) {
             OpenMM_Actin_info_relay(Actins,
                                     actin_set,
@@ -358,8 +365,16 @@ int main(int argc, char **argv)
                                     dihe_count);
         }
         
-        //if (Include Membrane  && Include Actine)
-        //bond_count++
+        
+        if (Include_Membrane  && Include_Actin) {
+            OpenMM_ActMem_info_relay(Actins,
+                                     Membranes,
+                                    all_bonds,
+                                    mem_atom_count,
+                                    bond_count);
+
+        }
+        
         if (Include_ECM) {
             OpenMM_ECM_info_relay(ECMs,
                                   ecm_set,
@@ -387,8 +402,9 @@ int main(int argc, char **argv)
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
+            TimeDependantData* tdd = new TimeDependantData();
             if (!GenConst::Load_from_checkpoint) {
-                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, tdd, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             } else {
                 std::filebuf rfb;
                 rfb.open (GenConst::Checkpoint_path.c_str(),std::ios::in);
@@ -416,17 +432,6 @@ int main(int argc, char **argv)
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
-            if(omm->Kelvin_Voigt)
-            {
-                omm->Kelvin_Voigt_initNominal_length_InNm = Nominal_length_calc(omm, 0);
-            }
-            if(omm->Custom_Kelvin_Voigt)
-            {
-               omm->Custom_Kelvin_Voigt_initNominal_length_InNm = Nominal_length_calc(omm, 1);
-            }
-            
-            
-            
             for (int frame=1; ; ++frame) {
                 double time, energy;
                 
@@ -451,7 +456,7 @@ int main(int argc, char **argv)
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
-                myStepWithOpenMM(omm, all_atoms, NumSilentSteps);
+                myStepWithOpenMM(omm,tdd, all_atoms, NumSilentSteps);
                 
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
@@ -466,7 +471,7 @@ int main(int argc, char **argv)
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
             
             // Clean up OpenMM data structures.
-            myTerminateOpenMM(omm);
+            myTerminateOpenMM(omm,tdd);
             
             cout<<"\nDone!"<<endl;
             return 0; // Normal return from main.

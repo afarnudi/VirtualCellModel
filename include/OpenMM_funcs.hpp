@@ -24,6 +24,7 @@
 MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  double                         stepSizeInFs,
                                  std::string&                   platformName,
+                                 TimeDependantData*             tdd,
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
                                  std::vector<std::set<int> >    &membrane_set,
@@ -40,6 +41,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
  * -----------------------------------------------------------------------------
  */
 void          myStepWithOpenMM(MyOpenMMData*,
+                               TimeDependantData*,
                                MyAtomInfo atoms[],
                                int        numSteps);
 
@@ -65,28 +67,28 @@ void Cheap_GetOpenMMState(MyOpenMMData*,
  *                     Update System parameters
  * -----------------------------------------------------------------------------
  */
-void my_system_update(MyOpenMMData*,
-                      int   bondtype,
-                      bool  WantUpdate);
+void Kelvin_Voigt_update(MyOpenMMData*,
+                      TimeDependantData*);
 
 
 /** -----------------------------------------------------------------------------
  *                     BOND LENGTH
  * -----------------------------------------------------------------------------
  */
-std::vector<double> dist_calc(MyOpenMMData*,
+std::vector<double> dist_calc(TimeDependantData*,
                               MyAtomInfo atoms[],
                               int        bondtype);
 
 
-std::vector<double> Nominal_length_calc(MyOpenMMData*,
+std::vector<double> Nominal_length_calc(TimeDependantData*,
                                         int bondtype);
 
 /** -----------------------------------------------------------------------------
  *                     DEALLOCATE OpenMM OBJECTS
  * -----------------------------------------------------------------------------
  */
-void          myTerminateOpenMM(MyOpenMMData*);
+void          myTerminateOpenMM(MyOpenMMData*,
+                                TimeDependantData*);
 
 /**
  * Calculate the energy for the membrane bacteria problem using the surface equation.
@@ -141,6 +143,17 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
 MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
 /**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+
+
+void OpenMM_ActMem_info_relay (vector<Actin>          acts,
+                               vector<Membrane>       membranes,
+                               Bonds*                 all_bonds,
+                               int                    mem_atom_count,
+                               int                    &bond_count);
+
+
+Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k);
+
 
 
 /**Relay ECM class's atom information to other data structures ready to pass to OpenMM handles.*/

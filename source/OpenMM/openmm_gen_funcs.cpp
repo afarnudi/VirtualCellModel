@@ -3,34 +3,22 @@
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 
-void myStepWithOpenMM(MyOpenMMData* omm, MyAtomInfo atoms[], int numSteps) {
-    if((omm->Kelvin_Voigt || omm->Custom_Kelvin_Voigt))
+void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms[], int numSteps) {
+    if(tdd->Kelvin_Voigt)
     {
         for (int i=0; i<numSteps; i++)
         {
             Cheap_GetOpenMMState(omm,atoms);
-    
-                omm->Kelvin_Voigt_distInAng.push_back(dist_calc(omm, atoms, 0));
-                if(omm->Kelvin_Voigt_distInAng.size()>1)
-                {
-                    //mys_state_update
-                    my_system_update(omm, 0, omm->Kelvin_Voigt);
-                    omm->Kelvin_Voigt_distInAng.erase(omm->Kelvin_Voigt_distInAng.begin());
-                }
-            
-            
-                omm->Custom_Kelvin_Voigt_distInAng.push_back(dist_calc(omm, atoms, 1));
-                if(omm->Custom_Kelvin_Voigt_distInAng.size()>1)
-                {
-                    //my_system_update
-                    my_system_update(omm, 1, omm->Custom_Kelvin_Voigt);
-                    omm->Custom_Kelvin_Voigt_distInAng.erase(omm->Custom_Kelvin_Voigt_distInAng.begin());
-                }
-            
+            tdd->Kelvin_dist_calc(atoms);
+            if(tdd->Kelvin_Voigt_distInAng.size()>1)
+            {
+                //mys_state_update
+                Kelvin_Voigt_update(omm,tdd);
+                tdd->Kelvin_Voigt_distInAng.erase(tdd->Kelvin_Voigt_distInAng.begin());
+            }
             omm->integrator->step(1);
-            
         }
-            
+        
     }
     
     else
@@ -40,8 +28,9 @@ void myStepWithOpenMM(MyOpenMMData* omm, MyAtomInfo atoms[], int numSteps) {
     
 }
 
-void myTerminateOpenMM(MyOpenMMData* omm) {
+void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* tdd) {
     delete omm;
+    delete tdd;
 }
 
 using OpenMM::Vec3;
@@ -88,7 +77,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
 
 
 void Cheap_GetOpenMMState(MyOpenMMData* omm,
-                      MyAtomInfo atoms[])
+                          MyAtomInfo atoms[])
 {
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
@@ -149,7 +138,7 @@ void myWritePDBFrame(int frameNum,
 
 
 void calc_energy(vector<Membrane>    mem,
-                MyAtomInfo          atoms[]){
+                 MyAtomInfo          atoms[]){
     
     int node_A, node_B, node_C, node_D;
     
@@ -169,7 +158,7 @@ void calc_energy(vector<Membrane>    mem,
             node_A=mem[i].Triangle_Pair_Nodes[j][1];
             node_B=mem[i].Triangle_Pair_Nodes[j][2];
             node_D=mem[i].Triangle_Pair_Nodes[j][3];
- 
+            
             for (int k=0; k<3; k++) {
                 points[0][k]=atoms[node_A+mem_count].posInAng[k];
                 points[1][k]=atoms[node_B+mem_count].posInAng[k];
@@ -190,11 +179,11 @@ void calc_energy(vector<Membrane>    mem,
             
             //shift the value between 0 and 2 only for representation purposes.
             cosine += 1;
-//            double scale=5;
+            //            double scale=5;
             atoms[node_A+mem_count].energy += cosine/2.0;
             atoms[node_B+mem_count].energy += cosine/2.0;
-//            atoms[node_C+mem_count].energy += scale*cosine;
-//            atoms[node_D+mem_count].energy += scale*cosine;
+            //            atoms[node_C+mem_count].energy += scale*cosine;
+            //            atoms[node_D+mem_count].energy += scale*cosine;
             
         }
         mem_count += mem[i].get_num_of_nodes();
@@ -248,7 +237,7 @@ void calc_energy_2(vector<Membrane>    mem,
                 AC[k]=atoms[node_C+mem_count].posInAng[k]-atoms[node_A+mem_count].posInAng[k];
                 BD[k]=atoms[node_D+mem_count].posInAng[k]-atoms[node_B+mem_count].posInAng[k];
             }
-
+            
             crossvector(ABxAC, AB, AC);
             crossvector(BAxBD, BA, BD);
             
@@ -263,182 +252,28 @@ void calc_energy_2(vector<Membrane>    mem,
             atoms[node_A+mem_count].energy += scale*sine/2;
             atoms[node_B+mem_count].energy += scale*sine/2;
 //            atoms[node_C+mem_count].energy += scale*sine/4;
-//            atoms[node_D+mem_count].energy += scale*sine/4;
-            
+//            atoms[node_D+mem_count].energy += scale*sine/4;            
         }
         mem_count += mem[i].get_num_of_nodes();
     }
 }
 
 
-void my_system_update(MyOpenMMData* omm,
-                      int bondtype,
-                      bool WantUpdate)
+void Kelvin_Voigt_update(MyOpenMMData* omm,
+                      TimeDependantData* tdd)
 {
-    if (WantUpdate)
+    const int Num_Bonds = tdd->Kelvin_VoigtBond->getNumBonds();
+    int atom1, atom2 ;
+    double length, stiffness;
+    
+    for(int i=0; i<Num_Bonds ; i++)
     {
-        switch (bondtype) {
-            //Kelvin-Voigt
-            case 0:
-            {
-                const int Num_Bonds = omm->Kelvin_VoigtBond->getNumBonds();
-                int atom1, atom2 ;
-                double length, stiffness;
-                
-                for(int i=0; i<Num_Bonds ; ++i)
-                {
-                    omm->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
-                    
-                    length = omm->Kelvin_Voigt_initNominal_length_InNm[i] - (omm->Kelvin_Voigt_distInAng[1][i] - omm->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (omm->damp * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
-                    
-                    omm->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
-                }
-                omm->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
-
-            }
-            
-                break;
-                
-                //Custom Kelvin-Voigt
-            case 1:
-            {
-                for(int j=0; j< omm->Custom_Kelvin_VoigtBond.size(); j++)
-                {
-                    
-                    const int Num_Bonds = omm->Custom_Kelvin_VoigtBond[j]->getNumBonds();
-                    int atom1, atom2 ;
-                    // parameters{nominal length, stiffness, damp}
-                    std::vector<double> parameters;
-                    
-                    for(int i=0; i<Num_Bonds ; ++i)
-                    {
-                        omm->Custom_Kelvin_VoigtBond[j]->getBondParameters(i, atom1, atom2, parameters);
-                        
-                        parameters[0] = omm->Custom_Kelvin_Voigt_initNominal_length_InNm[i] - (omm->Custom_Kelvin_Voigt_distInAng[1][i] - omm->Custom_Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (parameters[2] * OpenMM::FsPerPs / parameters[1])/(GenConst::Step_Size_In_Fs) ;
-                        
-                        omm->Custom_Kelvin_VoigtBond[j]->setBondParameters(i, atom1, atom2, parameters);
-                    }
-                    omm->Custom_Kelvin_VoigtBond[j]->updateParametersInContext(*omm->context);
-                    
-                }
-                
-            }
-                
-                break;
-                
-            default:
-                break;
-        }
+        tdd->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
+        length = tdd->Kelvin_Voigt_initNominal_length_InNm[i] - (tdd->Kelvin_Voigt_distInAng[1][i] - tdd->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (tdd->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
+        
+        tdd->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
-}
-
-
-// calculate distance InAng
-std::vector<double> dist_calc(MyOpenMMData* omm,
-                              MyAtomInfo atoms[],
-                              int bondtype)
-{
-    std::vector<double> distInAng ;
+    tdd->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
     
-    switch (bondtype) {
-        //Kelvin-Voigt
-        case 0:
-        {
-            if(omm->Kelvin_Voigt)
-            {
-                const int Num_Bonds = omm->Kelvin_VoigtBond->getNumBonds();
-                int atom1, atom2 ;
-                double length, stiffness , dist;
-                
-                for(int i=0; i<Num_Bonds; i++)
-                {
-                    omm->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
-                    dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
-                    
-                    distInAng.push_back(dist);
-                }
-            }
-        }
-            break;
-            
-            //Custom Kelvin-Voigt
-        case 1:
-        {
-            if(omm->Custom_Kelvin_Voigt)
-            {
-                for(int j=0; j< omm->Custom_Kelvin_VoigtBond.size(); j++)
-                {
-                    const int Num_Bonds = omm->Custom_Kelvin_VoigtBond[j]->getNumBonds();
-                    int atom1, atom2 ;
-                    double dist;
-                    // parameters{nominal length, stiffness, damp}
-                    std::vector<double> parameters;
-                    
-                    for(int i=0; i<Num_Bonds; i++)
-                    {
-                        omm->Custom_Kelvin_VoigtBond[j]->getBondParameters(i, atom1, atom2, parameters);
-                        dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
-                        
-                        distInAng.push_back(dist);
-                    }
-                }
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    
-    return distInAng;
-}
-// Nominal length in nm
-std::vector<double> Nominal_length_calc(MyOpenMMData* omm, int bondtype)
-{
-    std::vector<double> Nominal_Length_InNm ;
-    
-    switch (bondtype) {
-        //Kelvin-Voigt
-        case 0:
-        {
-            const int Num_Bonds = omm->Kelvin_VoigtBond->getNumBonds();
-            int atom1, atom2 ;
-            double length, stiffness;
-            
-            for(int i=0; i<Num_Bonds ; ++i)
-            {
-                omm->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
-                Nominal_Length_InNm.push_back(length);
-            }
-            
-        }
-            
-            break;
-            
-        //Custom Kelvin-Voigt
-        case 1:
-        {
-            for(int j=0; j< omm->Custom_Kelvin_VoigtBond.size(); j++)
-            {
-                const int Num_Bonds = omm->Custom_Kelvin_VoigtBond[j]->getNumBonds();
-                int atom1, atom2 ;
-                // parameters{nominal length, stiffness, damp}
-                std::vector<double> parameters;
-                
-                for(int i=0; i<Num_Bonds; i++)
-                {
-                    omm->Custom_Kelvin_VoigtBond[j]->getBondParameters(i, atom1, atom2, parameters);
-                    Nominal_Length_InNm.push_back(parameters[0]);
-                }
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    return Nominal_Length_InNm;
 }

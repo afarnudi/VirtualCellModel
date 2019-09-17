@@ -27,11 +27,6 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
             case 4:
                 bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
                 break;
-                //Kelvin-Voigt
-            case 5:
-                bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
-                bonds[i].dampInKcalPsPerAngstrom2=mem.get_damping_coefficient();
-                break;
                 
         }
         
@@ -59,13 +54,6 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     if(bonds[0].type == 4){
         cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
         cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-    }
-    
-    if(bonds[0].type == 5){
-        cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
-        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
-        cout<<"damping coeficient (KJ Ps per Nanometer2) ="<<mem.get_damping_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
         cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     
@@ -102,15 +90,8 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
             case 4:
                 bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                bonds[i].dampInKcalPsPerAngstrom2=act.get_kelvin_damping_coefficient();
                 break;
-                
-                //Kelvin-Voigt
-            case 5:
-                bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
-                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                bonds[i].dampInKcalPsPerAngstrom2=act.get_damping_coefficient();
-                break;
-                
                 
         }
         
@@ -127,16 +108,32 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
         //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     
-    if(bonds[0].type == 5){
-        cout<<"Actin bond potential: Kelvin-Voigt "<<endl;
-        //cout<<"spring coeficient (KJ per Nanometer4) ="<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-    }
-    
     cout<<endl;
     
     return bonds;
 }
+
+
+
+Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
+    const int act_num_bonds = act.return_num_of_actin_membrane_shared_nodes(k);
+    Bonds* bonds = new Bonds[act_num_bonds];
+    double stiffness = 1000000;
+    double nominal_length = 0;
+    int type = 2;
+    //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
+    //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
+    for (int i=0; i<act_num_bonds; i++) {
+        bonds[i].type = type;
+        bonds[i].atoms[0]=act.return_ActMem_shared_act_atom(k, i);
+        bonds[i].atoms[1]=act.return_ActMem_shared_mem_atom(k, i);
+        bonds[i].nominalLengthInAngstroms=nominal_length;
+        bonds[i].stiffnessInKcalPerAngstrom2=stiffness;
+    }
+    
+    return bonds;
+}
+
 
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
     const int ecm_num_bonds = ecm.get_num_of_node_pairs();
