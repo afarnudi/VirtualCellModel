@@ -180,6 +180,15 @@ public:
     int return_num_of_actin_membrane_shared_nodes(int j){
         return Num_of_Actin_Membrane_shared_Nodes[j];
     }
+    
+    int return_ActMem_shared_act_atom(int mem, int bond)
+    {
+        return Actin_Membrane_shared_Node_list[mem][bond][0];
+    }
+    int return_ActMem_shared_mem_atom(int mem, int bond)
+    {
+        return Actin_Membrane_shared_Node_list[mem][bond][1];
+    }
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }

@@ -303,8 +303,8 @@ int main(int argc, char **argv)
             if (Include_Actin){
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
                     for (int j=0; j<Membranes.size(); j++) {
-                        Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , j);
-                        num_of_bonds        += Actins[i].Actin_Membrane_shared_Node_list[j].size();
+                        Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , i, j);
+                        num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
                         if (Membranes[j].get_relax_with_actin_flag()) {
                             Membranes[j].Relax_1();
                         }

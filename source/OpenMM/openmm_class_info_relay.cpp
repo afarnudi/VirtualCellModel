@@ -96,21 +96,18 @@ void OpenMM_ActMem_info_relay (vector<Actin>          acts,
     for (int i=0; i<acts.size(); i++) {
         for (int k=0; k<membranes.size(); k++) {
             
-            if( acts[i].Actin_Membrane_shared_Node_list[k].size() > 0 )
-            {
             
             Bonds* bonds = convert_ActMem_bond_info_to_openmm(acts[i], k);
-            for (int j=0; j<acts[i].Actin_Membrane_shared_Node_list[k].size(); j++) {
+            for (int j=0; j<acts[i].return_num_of_actin_membrane_shared_nodes(k); j++) {
                 all_bonds[j+bond_count]=bonds[j];
                 //atom 0 == actin       atom 1 == membrane
                 all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+mem_atom_count+act_atom_counter;
                 all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+mem_atom_counter;
                 
             }
-            }
             
             mem_atom_counter += membranes[k].get_num_of_nodes();
-            bond_count += acts[i].Actin_Membrane_shared_Node_list[k].size();
+            bond_count += acts[i].return_num_of_actin_membrane_shared_nodes(k);
             
         }
         

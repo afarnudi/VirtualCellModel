@@ -116,7 +116,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
 
 
 Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
-    const int act_num_bonds = act.Actin_Membrane_shared_Node_list[k].size();
+    const int act_num_bonds = act.return_num_of_actin_membrane_shared_nodes(k);
     Bonds* bonds = new Bonds[act_num_bonds];
     double stiffness = 1000000;
     double nominal_length = 0;
@@ -125,8 +125,8 @@ Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
     //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
     for (int i=0; i<act_num_bonds; i++) {
         bonds[i].type = type;
-        bonds[i].atoms[0]=act.Actin_Membrane_shared_Node_list[k][i][0];
-        bonds[i].atoms[1]=act.Actin_Membrane_shared_Node_list[k][i][1];
+        bonds[i].atoms[0]=act.return_ActMem_shared_act_atom(k, i);
+        bonds[i].atoms[1]=act.return_ActMem_shared_mem_atom(k, i);
         bonds[i].nominalLengthInAngstroms=nominal_length;
         bonds[i].stiffnessInKcalPerAngstrom2=stiffness;
     }
