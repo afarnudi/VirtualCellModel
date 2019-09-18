@@ -454,7 +454,9 @@ int main(int argc, char **argv)
                 
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
-                    break;
+                    break;  
+    
+                    
                 
                 myStepWithOpenMM(omm,tdd, all_atoms, NumSilentSteps);
                 
@@ -462,6 +464,13 @@ int main(int argc, char **argv)
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
+                /*this part is for checking the monte_carlo
+                if (progress ==50){
+                    myreinitializeOpenMMState(omm, all_bonds , all_dihedrals);
+                    //setNewState(omm,wantEnergy, energyInKcal, atoms[], wantforce);
+                    
+               }*/
+
             }
             cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
             

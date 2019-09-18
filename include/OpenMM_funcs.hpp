@@ -84,6 +84,13 @@ std::vector<double> Nominal_length_calc(TimeDependantData*,
                                         int bondtype);
 
 /** -----------------------------------------------------------------------------
+ *                    reinitialize the openMM
+ * -----------------------------------------------------------------------------
+ */
+void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
+
+                               
+/** -----------------------------------------------------------------------------
  *                     DEALLOCATE OpenMM OBJECTS
  * -----------------------------------------------------------------------------
  */
@@ -207,5 +214,13 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       vector<std::set<int> >                set_2,
                                       int                                   set_1_index,
                                       int                                   set_2_index);
-
+OpenMM::State getCurrentState(MyOpenMMData*  omm,
+                        bool        wantEnergy,
+                        double&     timeInPs,
+                        bool        wantforce);
+                        
+void setNewState(MyOpenMMData*      omm,
+                    bool            wantEnergy,
+                    double&         energyInKcal,
+                    MyAtomInfo      atoms[]);
 #endif

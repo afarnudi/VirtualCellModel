@@ -2,6 +2,7 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include <vector>
 
 void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms[], int numSteps) {
     if(tdd->Kelvin_Voigt)
@@ -51,7 +52,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
         infoMask += OpenMM::State::Forces;
     }
     // Forces are also available (and cheap).
-    
+
     const OpenMM::State state = omm->context->getState(infoMask);
     timeInPs = state.getTime(); // OpenMM time is in ps already
     
@@ -76,6 +77,78 @@ void myGetOpenMMState(MyOpenMMData* omm,
 }
 
 
+using OpenMM::Vec3;
+OpenMM::State getCurrentState(MyOpenMMData* omm, bool wantEnergy,
+                 double& timeInPs,  bool wantforce)
+{
+    int infoMask = 0;
+    infoMask = OpenMM::State::Positions;
+    if (wantEnergy) {
+        infoMask += OpenMM::State::Velocities; // for kinetic energy (cheap)
+        infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
+    }
+    // Forces are also available (and cheap).
+    if (wantforce){
+        infoMask+=OpenMM::State::Forces;
+    }
+    OpenMM::State currentstate = omm->context->getState(infoMask);
+    timeInPs = currentstate.getTime(); // OpenMM time is in ps already
+    return(currentstate);
+}
+
+void setNewState(MyOpenMMData* omm, bool wantEnergy,
+                 double& energyInKcal,
+                 MyAtomInfo atoms[], bool wantforce)
+{   
+    double timeInPs;
+    const OpenMM::State newstate= getCurrentState(omm, wantEnergy,timeInPs,  wantforce);
+        // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
+    const std::vector<Vec3>& positionsInNm = newstate.getPositions();
+    for (int i=0; i < (int)positionsInNm.size(); ++i){
+        for (int j=0; j < 3; ++j){
+    atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;}}
+    
+    // If energy has been requested, obtain it and convert from kJ to kcal.
+    energyInKcal = 0;
+    if (wantEnergy)
+        energyInKcal = (newstate.getPotentialEnergy() + newstate.getKineticEnergy())
+        * OpenMM::KcalPerKJ;
+}
+using OpenMM::Vec3;
+void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
+    bool preservestate=1;
+    
+    //OpenMM::HarmonicBondForce*   HarmonicBond = omm->system->getForce(0);
+    vector<double> parameters;
+    vector<double> bendingparameter ;
+    vector<int>particles ={2 ,  1, 3, 0};
+    parameters.resize(2);
+    
+    int bond_index=2;
+    int particle1=1;
+    int particle2=3;
+    double r_rest= bonds[0].nominalLengthInAngstroms*OpenMM::NmPerAngstrom;
+    double k_bond= bonds[0].stiffnessInKcalPerAngstrom4
+                                                 * OpenMM::KJPerKcal
+                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    double K_bend=dihedrals[0].bending_stiffness_value* OpenMM::KJPerKcal
+                                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    parameters[0]=r_rest;
+    parameters[1]=k_bond;
+    bendingparameter.push_back(K_bend);
+    //omm->x4harmonic->setBondParameters(bond_index,particle1, particle2, parameters);
+    omm->Dihedral->setBondParameters(0,particles, bendingparameter);
+    double lenght= bonds[0].nominalLengthInAngstroms* OpenMM::NmPerAngstrom;
+    double k= bonds[0].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
+    //bond_index=2;
+    //particle1=1;
+    //particle2=2;
+    //omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
+    omm->context->reinitialize(preservestate);
+    
+}
+
 void Cheap_GetOpenMMState(MyOpenMMData* omm,
                           MyAtomInfo atoms[])
 {
@@ -92,7 +165,6 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
         }
     }
 }
-
 
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.

@@ -66,7 +66,10 @@ struct MyOpenMMData {
     OpenMM::System*         system;
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
-    OpenMM::HarmonicBondForce*  harmonic;
+
+    OpenMM::HarmonicBondForce* harmonic;
+    OpenMM::CustomBondForce* x4harmonic;
+    OpenMM::CustomCompoundBondForce* Dihedral;
 
     std::vector<OpenMM::CustomNonbondedForce*> EV;
 };
@@ -122,7 +125,6 @@ struct TimeDependantData {
             Kelvin_Voigt_distInAng.push_back(distInAng);
         }
     }
-    
     
     
 };
