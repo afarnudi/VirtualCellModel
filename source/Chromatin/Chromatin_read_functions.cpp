@@ -1,16 +1,19 @@
 #include "Chromatin.h"
 
+using std::cout;
+using std::endl;
 
 void Chromatin::import(string import_file_name){
     cout<<"Importing the Chromatin from the resume file:"<<endl;
     cout<<import_file_name<<endl<<endl;
-    ifstream read_resume_file;
+    std::ifstream read_resume_file;
     
     read_resume_file.open(import_file_name.c_str());
-    if (read_resume_file) {
-        cout << "Managed to read file successfully. \n\n";
+    if ( read_resume_file.is_open() ) {
+        cout << "Resume file opened successfully successfully. \n\n";
     }else{
-        cout << "Unable to read file.";
+        cout << "Unable to read file.\n";
+        exit(EXIT_FAILURE);
     }
     int temp;
     read_resume_file>>temp;

@@ -44,6 +44,19 @@ namespace GenConst {
     /**Name of the output file. Please note that the date and time the file is generated will be attached to this name.*/
     extern std::string trajectory_file_name;
     
+    /**Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
+     * Type 0 : Verlet
+     * Type 1 : Brownian, temperature and frictionCoeff need to be set as well.
+     * Type 2 : Langevin, temperature and frictionCoeff need to be set as well.
+     *Default 0*/
+    extern int Integrator_type;
+    
+    /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
+    extern double frictionInPs;
+    
+    /**Set the temperature of the heat bath (in Kelvin). Default 300*/
+    extern double temperature;
+    
     extern double Buffer_temperature;
     /**Bussi tau will controll the fluctuation of the kinetic energy in the Bussi et. al. thermostat. Default 10*/
     extern double Bussi_tau;
@@ -70,6 +83,11 @@ namespace GenConst {
     extern std::string Chromatin_label;
     /**Set ECM class label. An index will be assigned during runtime. Default ecm*/
     extern std::string ECM_label;
+    /**Load the context from OpenMM checkpoint (binary file). Default flase*/
+    extern bool Load_from_checkpoint;
+    /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
+    extern std::string Checkpoint_path;
+    
     
 }
 

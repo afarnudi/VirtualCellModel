@@ -10,6 +10,7 @@
 #include <iterator>
 
 #include "General_functions.hpp"
+#include "OpenMM_structs.h"
 
 using std::vector;
 using std::string;
@@ -23,7 +24,7 @@ private:
     
     
     std::string label;
-    
+    std::string Mesh_file_name;
     std::map<std::string, double> param_map;
     
     double Node_Mass=1;
@@ -31,8 +32,8 @@ private:
     int spring_model=2;
     double Spring_coefficient=100;
     
-    double rescale_factor;
-//    double Damping_coefficient=0.5;
+    double rescale_factor=1;
+    double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
     double Downward_speed=0;
@@ -60,11 +61,11 @@ private:
     double exp_tau=0;
     double Min_node_pair_length=1000;
     double Max_node_pair_length=0;
-    double Average_node_pair_length=0;
+    double Average_node_pair_length=10;
     
     
     //Private members:
-    void initialise(std::string Mesh_file_name);
+    void initialise();
     void read_gmesh_file (std::string gmesh_file);
     void Node_Bond_identifier(void);
     void Node_Bond_relaxed_length_initialiser(void);
@@ -88,7 +89,10 @@ public:
     void Thermostat_Bussi(double MD_T);
     void write_traj (std::string traj_name, std::string label);
     void generate_report();
-    
+    void export_for_resume(int MD_step);
+    void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
+    /**Set the current state (OpenMM) of the class.*/
+    void set_state(MyAtomInfo all_atoms[], int atom_count);
     /** Assigns the label(pdb) used to write to the trajectory files. It is also used to identify the class object throught the programme */
     void set_label(std::string lab){
         label=lab;
@@ -120,6 +124,10 @@ public:
             Node_Position[i][2]+=Shift_in_Z_direction;
         }
     }
+    /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
+    double get_node_velocity(int node_number, int node_coordinate){
+        return Node_Velocity[node_number][node_coordinate];
+    }
     /**Return the number of bonds between membrane nodes.*/
     int get_num_of_node_pairs(void){
         return Num_of_Node_Pairs;
@@ -139,6 +147,10 @@ public:
     /**Return spring stiffness coefficient. */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
+    }
+    /**Return kelvin damping coefficient. */
+    double get_kelvin_damping_coefficient(void){
+        return Kelvin_Damping_Coefficient;
     }
     void check(void);
     
@@ -167,6 +179,15 @@ public:
     }
     int return_num_of_actin_membrane_shared_nodes(int j){
         return Num_of_Actin_Membrane_shared_Nodes[j];
+    }
+    
+    int return_ActMem_shared_act_atom(int mem, int bond)
+    {
+        return Actin_Membrane_shared_Node_list[mem][bond][0];
+    }
+    int return_ActMem_shared_mem_atom(int mem, int bond)
+    {
+        return Actin_Membrane_shared_Node_list[mem][bond][1];
     }
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;

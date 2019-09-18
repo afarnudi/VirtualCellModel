@@ -45,7 +45,7 @@ void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
 //void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
 
 //Actin-Membrane
-void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem, int j);
+void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem, int i, int j);
 void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem, int j);
 
 //ECM-Membrane

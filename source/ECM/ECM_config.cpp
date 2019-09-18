@@ -6,7 +6,8 @@ using namespace std;
 void ECM::import_config(string config_file_name){
     
     map<string, double>::iterator it;
-    string resume_file_name, Mesh_file_name="non";
+    string resume_file_name;
+    Mesh_file_name="non";
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
     int dimension=2;
@@ -28,7 +29,7 @@ void ECM::import_config(string config_file_name){
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
             
             if (split[0] == comment || (split[0][0]=='/' && split[0][1]=='/')) {
-                break;
+                continue;
             }
             
             param_map[split[0]]=stod(split[1]);
@@ -74,7 +75,7 @@ void ECM::import_config(string config_file_name){
     } else {
         it=param_map.find("Mesh_file_name");
         if(it!=param_map.end()){
-            initialise(Mesh_file_name, dimension);
+            initialise(dimension);
         }
 //        else {
 //            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";

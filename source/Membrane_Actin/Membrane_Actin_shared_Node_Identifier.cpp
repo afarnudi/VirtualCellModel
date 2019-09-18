@@ -8,7 +8,7 @@
 
 #include "interaction.hpp"
 
-void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int j){
+void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int i, int j){
     
     double mem_x, mem_y, mem_z, act_x, act_y, act_z;
     
@@ -44,8 +44,8 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int j){
     }
     act.Num_of_Actin_Membrane_shared_Nodes.push_back(int(Act_Mem_shared_Node_list.size()));
     
-    cout<<"\n# of shared nodes = "<<act.Num_of_Actin_Membrane_shared_Nodes[j]<<endl;
+    cout<<"\n# of shared nodes between actin " << i << " and membrane " << j << " = "<<act.Num_of_Actin_Membrane_shared_Nodes[j]<<endl;
     if (act.Num_of_Actin_Membrane_shared_Nodes[j] != mem.get_num_of_nodes()) {
-        cout<<"Not all of the Membrane node positions are compatibale with the actin nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
+        cout<<"Not all of the Membrane" << j << " node positions are compatibale with the actin " << i << " nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
     }
 }

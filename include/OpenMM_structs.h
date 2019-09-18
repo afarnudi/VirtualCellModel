@@ -16,12 +16,17 @@ struct MyAtomInfo
 {
     int type;
     char* pdb;
+    char symbol;
     double initPosInAng[3];
     double posInAng[3];
+    double velocityInAngperPs[3];
     double mass;
     double radius;
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
+    double force[3];
+    double energy;
+    double stretching_energy;
 };
 
 struct Bonds{
@@ -29,6 +34,7 @@ struct Bonds{
     int atoms[2];
     std::string class_label;
     double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
+    double dampInKcalPsPerAngstrom2;
     double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     bool   canConstrain;
 };
@@ -45,7 +51,7 @@ struct Dihedrals{
  * -----------------------------------------------------------------------------
  * These four functions and an opaque structure are used to interface our main
  * program with OpenMM without the main program having any direct interaction
- * with the OpenMM API. This is a clean approach for interfacing with any MD
+ /Users/sajjad/virtual cell/Membrane_OBJ/source/neighbour_pool_constructor.cpp * with the OpenMM API. This is a clean approach for interfacing with any MD
  * code, although the details of the interface routines will differ. This is
  * still just "locally written" code and is not required by OpenMM.
  *
@@ -60,10 +66,67 @@ struct MyOpenMMData {
     OpenMM::System*         system;
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
+
     OpenMM::HarmonicBondForce* harmonic;
     OpenMM::CustomBondForce* x4harmonic;
     OpenMM::CustomCompoundBondForce* Dihedral;
 
+    std::vector<OpenMM::CustomNonbondedForce*> EV;
+};
+
+
+struct TimeDependantData {
+    OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
+    bool Kelvin_Voigt = false;
+    std::vector<double> Kelvin_Voigt_damp;
+    std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
+    std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
+    
+  
+    void Kelvin_Nominal_length_calc()
+    {
+        if(Kelvin_Voigt)
+        {
+            std::vector<double> Nominal_Length_InNm ;
+            
+            const int Num_Bonds = Kelvin_VoigtBond->getNumBonds();
+            int atom1, atom2 ;
+            double length, stiffness;
+            
+            for(int i=0; i<Num_Bonds ; ++i)
+            {
+                Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
+                Nominal_Length_InNm.push_back(length);
+            }
+            Kelvin_Voigt_initNominal_length_InNm = Nominal_Length_InNm;
+        }
+    }
+    
+    
+    
+    void Kelvin_dist_calc(MyAtomInfo atoms[])
+    {
+        if(Kelvin_Voigt)
+        {
+            std::vector<double> distInAng ;
+            const int Num_Bonds = Kelvin_VoigtBond->getNumBonds();
+            int atom1, atom2 ;
+            double length, stiffness , dist;
+            
+            for(int i=0; i<Num_Bonds; i++)
+            {
+                Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
+                dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
+                
+                distInAng.push_back(dist);
+            }
+            
+            
+            Kelvin_Voigt_distInAng.push_back(distInAng);
+        }
+    }
+    
+    
 };
 
 

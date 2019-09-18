@@ -13,6 +13,7 @@
 #include "Membrane.h"
 #include "ECM.h"
 #include "Actin.h"
+#include "Chromatin.h"
 
 
 /** This function and an opaque structure are used to interface our main
@@ -23,11 +24,13 @@
 MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  double                         stepSizeInFs,
                                  std::string&                   platformName,
+                                 TimeDependantData*             tdd,
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
+                                 std::vector<std::set<int> >    &chromatin_set,
                                  std::vector<std::vector<int> > interaction_map);
 
 
@@ -38,7 +41,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
  * -----------------------------------------------------------------------------
  */
 void          myStepWithOpenMM(MyOpenMMData*,
-                               int numSteps);
+                               TimeDependantData*,
+                               MyAtomInfo atoms[],
+                               int        numSteps);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE BACK TO CPU FROM OPENMM
@@ -46,9 +51,38 @@ void          myStepWithOpenMM(MyOpenMMData*,
  */
 void          myGetOpenMMState(MyOpenMMData*,
                                bool         wantEnergy,
+                               bool         wantForce,
                                double&      time,
                                double&      energy,
                                MyAtomInfo   atoms[]);
+
+/** -----------------------------------------------------------------------------
+ *                     COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM
+ * -----------------------------------------------------------------------------
+ */
+void Cheap_GetOpenMMState(MyOpenMMData*,
+                          MyAtomInfo atoms[]);
+
+/** -----------------------------------------------------------------------------
+ *                     Update System parameters
+ * -----------------------------------------------------------------------------
+ */
+void Kelvin_Voigt_update(MyOpenMMData*,
+                      TimeDependantData*);
+
+
+/** -----------------------------------------------------------------------------
+ *                     BOND LENGTH
+ * -----------------------------------------------------------------------------
+ */
+std::vector<double> dist_calc(TimeDependantData*,
+                              MyAtomInfo atoms[],
+                              int        bondtype);
+
+
+std::vector<double> Nominal_length_calc(TimeDependantData*,
+                                        int bondtype);
+
 /** -----------------------------------------------------------------------------
  *                    reinitialize the openMM
  * -----------------------------------------------------------------------------
@@ -60,12 +94,28 @@ void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedra
  *                     DEALLOCATE OpenMM OBJECTS
  * -----------------------------------------------------------------------------
  */
-void          myTerminateOpenMM(MyOpenMMData*);
+void          myTerminateOpenMM(MyOpenMMData*,
+                                TimeDependantData*);
+
+/**
+ * Calculate the energy for the membrane bacteria problem using the surface equation.
+ */
+void calc_energy(vector<Membrane>     mem,
+                 MyAtomInfo           atoms[]);
+
+/**
+ * Calculate the energy for the membrane bacteria problem usinf perpendicular vectors.
+ */
+void calc_energy_2(vector<Membrane>     mem,
+                   MyAtomInfo           atoms[]);
+
+
 
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.
  */
 void myWritePDBFrame(int                frameNum,
+                     bool               wantforce,
                      double             timeInPs,
                      double             energyInKcal,
                      const MyAtomInfo   atoms[],
@@ -87,6 +137,32 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
 /**Relay the dihedral angle (triangle-triangle angle) information of the membrane triangle to other data structures ready to pass to OpenMM handles.*/
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
 
+/**Relay Actin class's atom information to other data structures ready to pass to OpenMM handles.*/
+void OpenMM_Actin_info_relay (vector<Actin>          acts,
+                              vector<std::set<int> > &act_set,
+                              MyAtomInfo*            all_atoms,
+                              Bonds*                 all_bonds,
+                              Dihedrals*             all_dihedrals,
+                              int                    &atom_count,
+                              int                    &bond_count,
+                              int                    &dihe_coun);
+/**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
+MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
+/**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
+Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+
+
+void OpenMM_ActMem_info_relay (vector<Actin>          acts,
+                               vector<Membrane>       membranes,
+                               Bonds*                 all_bonds,
+                               int                    mem_atom_count,
+                               int                    &bond_count);
+
+
+Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k);
+
+
+
 /**Relay ECM class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_ECM_info_relay (vector<ECM>             ecms,
                             vector<std::set<int> >  &ecm_set,
@@ -101,19 +177,18 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
-/**Relay Actin class's atom information to other data structures ready to pass to OpenMM handles.*/
-void OpenMM_Actin_info_relay (vector<Actin>          acts,
-                              vector<std::set<int> > &act_set,
-                              MyAtomInfo*            all_atoms,
-                              Bonds*                 all_bonds,
-                              Dihedrals*             all_dihedrals,
-                              int                    &atom_count,
-                              int                    &bond_count,
-                              int                    &dihe_coun);
+void OpenMM_Chromatin_info_relay (vector<Chromatin>         chromos,
+                                  vector<std::set<int> >    &chromo_set,
+                                  MyAtomInfo*               all_atoms,
+                                  Bonds*                    all_bonds,
+                                  Dihedrals*                all_dihedrals,
+                                  int                       &atom_count,
+                                  int                       &bond_count,
+                                  int                       &dihe_coun);
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
-MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
+MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo);
 /**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
-Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo);
 
 
 

@@ -38,6 +38,20 @@ void Membrane::check(void){
         }
     }
 }
+
+void Membrane::check_radius_update_values(void){
+    if (Node_radius != New_node_radius && New_node_radius != -1)  {
+        if (Begin_update_time_in_Ps == End_update_time_in_Ps) {
+            cout<<"The beginning and end of the membrane node radius update time are equal. Please set different values for the paprameters.\n";
+            exit(EXIT_FAILURE);
+        }
+        if (Begin_update_time_in_Ps > End_update_time_in_Ps) {
+            cout<<"The beginning and end time of the membrane node radius update times are not in chronological order.\n";
+            exit(EXIT_FAILURE);
+        }
+    }
+}
+
 /*
 void Membrane::node_distance_correction(void){
     cout<<"\nBeginnig the Relaxation\nProgress:\n";

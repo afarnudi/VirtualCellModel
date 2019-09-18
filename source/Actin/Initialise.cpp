@@ -11,11 +11,10 @@
 using std::cout;
 using std::endl;
 
-void Actin::initialise(string Mesh_file_name){
+void Actin::initialise(){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Actin Class..."<<endl;
     read_gmesh_file(Mesh_file_name);
-    output_file_neme=Mesh_file_name;
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;
     Node_Bond_identifier();
     cout<<"# of bonds = "<<Num_of_Node_Pairs<<endl;

@@ -9,10 +9,10 @@ import numpy as np
 #import matplotlib.pyplot as plt
 
 
-s=1
+s=2
 a=np.sqrt(3)
 d=a*np.sqrt(3)/2
-N=10
+N=20
 n=int(N/2)
 l=n*a
 w=n*d

@@ -11,7 +11,7 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
                                                               std::string label_2){
     
     std::vector< std::pair< int, int > > exclude_bonds;
-    
+    //if shared node --> acin or membrane label
     for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
         
         if (bonds[i_b].class_label == label_1) {

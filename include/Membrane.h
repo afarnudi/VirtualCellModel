@@ -30,6 +30,7 @@
 
 #include "OpenMM_structs.h"
 #include "General_functions.hpp"
+#include "OpenMM_structs.h"
 
 using std::vector;
 using std::cout;
@@ -74,6 +75,9 @@ private:
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
+    double New_node_radius=-1;
+    double Begin_update_time_in_Ps=0;
+    double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
 
@@ -117,6 +121,10 @@ private:
     
     
 public:
+    /**Returns the node radius update value (set value in the configuration file). */
+    double get_new_node_radius(void){
+        return New_node_radius;
+    }
     ///Call all initilisation members and initilise openmm handles.
     void initilise_openmm(void);  
     ///node-node hard sphere interaction.
@@ -143,6 +151,7 @@ public:
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
     void check(void);
+    void check_radius_update_values(void);
     vector<vector<int> > ECM_Node_neighbour_list;
     vector<vector<int> > Vesicle_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
@@ -154,9 +163,14 @@ public:
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+
     //monte carlo flip functions
     void monte_carlo_flip();
     double calculating_the_bond_energy(int index, bool initial_or_final);
+    //end of monte carlo flip functions
+    
+    void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
+
 
     //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(std::string Mesh_file_name);
@@ -215,6 +229,15 @@ private:
 
     
 public:
+    /**Return the new node radius 'end update time' in Ps.*/
+    double get_End_update_time_in_Ps(void){
+        return End_update_time_in_Ps;
+    }
+    /**Return the new node radius 'begin update time' in Ps.*/
+    double get_Begin_update_time_in_Ps(void){
+        return Begin_update_time_in_Ps;
+    }
+    
     double rescale_factor=1;
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
@@ -252,6 +275,10 @@ public:
     /**Return spring stiffness coefficient. */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
+    }
+    /**Return damp coefficient. */
+    double get_damping_coefficient(void){
+        return Damping_coefficient;
     }
     /**Return bending stiffness coefficient. */
     double get_bending_stiffness_coefficient(void){
@@ -327,11 +354,16 @@ public:
     int get_num_of_triangle(){
         return Num_of_Triangles;
     }
-
+    /**Returns the x (0), y (1), and z (2) coordinate of the node index (number).*/
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
     }
-
+    /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
+    double get_node_velocity(int node_number, int node_coordinate){
+        return Node_Velocity[node_number][node_coordinate];
+    }
+    /**Set the current state (OpenMM) of the class.*/
+    void set_state(MyAtomInfo all_atoms[], int atom_count);
 
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;

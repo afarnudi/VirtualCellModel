@@ -10,3 +10,6 @@ Shift_in_Z_direction	-20
 Kelvin_Damping_Coefficient	100
 Dashpot_Viscosity	0.02
 rescale_factor  2
+
+sigma_LJ_12_6   2
+epsilon_LJ_12_6 0.01
