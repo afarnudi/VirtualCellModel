@@ -61,7 +61,7 @@ private:
     double exp_tau=0;
     double Min_node_pair_length=1000;
     double Max_node_pair_length=0;
-    double Average_node_pair_length=10;
+    double Average_node_pair_length=14;
     
     
     //Private members:
