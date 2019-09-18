@@ -7,7 +7,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].type = mem.get_spring_model();
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
-        bonds[i].class_label = mem.get_label();
+        bonds[i].class_label = mem.get_label() + mem.get_label();
         bonds[i].nominalLengthInAngstroms=mem.get_avg_node_dist();
         switch (bonds[i].type) {
                 //FENE
@@ -74,7 +74,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
         bonds[i].type = act.get_spring_model();
         bonds[i].atoms[0]=act.get_node_pair(i, 0);
         bonds[i].atoms[1]=act.get_node_pair(i, 1);
-        bonds[i].class_label = act.get_label();
+        bonds[i].class_label = act.get_label() + act.get_label();
         switch (bonds[i].type) {
                 //FENE
             case 1:
