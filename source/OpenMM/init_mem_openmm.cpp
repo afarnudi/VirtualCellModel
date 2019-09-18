@@ -71,7 +71,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
 
-    std::vector< std::pair< int, int > > excluded_bonds;
+//    std::vector< std::pair< int, int > > excluded_bonds;
     
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;
     
@@ -108,7 +108,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 //                    cout<<"EV index = "<<index<<endl;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     system.addForce(ExcludedVolumes[index]);
                     
@@ -151,7 +151,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     index = ExcludedVolumes.size()-1;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -191,7 +191,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     system.addForce(ExcludedVolumes[index]);
                     
@@ -235,7 +235,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -275,7 +275,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -316,7 +316,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -361,7 +361,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -402,7 +402,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -443,7 +443,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -483,7 +483,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 //                    cout<<"EV index = "<<index<<endl;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
-                    ExcludedVolumes[index]->createExclusionsFromBonds(excluded_bonds, 0);
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     
                     system.addForce(ExcludedVolumes[index]);
@@ -545,10 +545,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         const int*      atom = bonds[i].atoms;
-        std::pair< int, int > temp;
-        temp.first=bonds[i].atoms[0];
-        temp.second=bonds[i].atoms[1];
-        excluded_bonds.push_back(temp);
+//        std::pair< int, int > temp;
+//        temp.first=bonds[i].atoms[0];
+//        temp.second=bonds[i].atoms[1];
+//        excluded_bonds.push_back(temp);
         
         
         
