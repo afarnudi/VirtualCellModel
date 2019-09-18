@@ -105,7 +105,7 @@ private:
     void Hookian (void);
     void custom (void);
     void Relaxation_potential(void);
-    void Node_Bonds_identifier(void);
+   void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);
     //    void Bending_potetial_2(void);
@@ -118,10 +118,10 @@ private:
     
 public:
     ///Call all initilisation members and initilise openmm handles.
-    void initilise_openmm(void);
-    
+    void initilise_openmm(void);  
     ///node-node hard sphere interaction.
     void excluded_volume(void);
+    
 
     double min_radius_after_relaxation;
 
@@ -154,6 +154,9 @@ public:
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    //monte carlo flip functions
+    void monte_carlo_flip();
+    double calculating_the_bond_energy(int index, bool initial_or_final);
 
     //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(std::string Mesh_file_name);

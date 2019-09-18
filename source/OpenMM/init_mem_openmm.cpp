@@ -398,21 +398,37 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     FENE_index++;
 
                     FENEs.push_back(new OpenMM::CustomBondForce("k_bond*lmin*lmin*(((lmin/1.5)/(r-(lmin/1.5)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0);"));
-                    FENEs[FENE_index]->addGlobalParameter("lmin",   bonds[i].FENE_lmin
-                                                          * OpenMM::NmPerAngstrom);
-                    FENEs[FENE_index]->addGlobalParameter("le0",   bonds[i].FENE_le0//);
-                                                          * OpenMM::NmPerAngstrom);
-                    FENEs[FENE_index]->addGlobalParameter("le1",   bonds[i].FENE_le1
-                                                          * OpenMM::NmPerAngstrom);
-                    //    cout<<"bonds[0].FENE_lmax = "<<bonds[0].FENE_lmax<<endl;
-                    FENEs[FENE_index]->addGlobalParameter("lmax",   bonds[i].FENE_lmax//);
-                                                          * OpenMM::AngstromsPerNm);
-                    FENEs[FENE_index]->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom2
-                                                          * OpenMM::KJPerKcal//);
-                                                          * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+
+                    FENEs[FENE_index]->addPerBondParameter("lmin");
+                                                          
+                    
+                    FENEs[FENE_index]->addPerBondParameter("le0");
+                    
+                    
+                    FENEs[FENE_index]->addPerBondParameter("le1");
+                   
+                   
+                    FENEs[FENE_index]->addPerBondParameter("lmax");
+
+
+                    FENEs[FENE_index]->addPerBondParameter("k_bond");
+                                                  
                     system.addForce(FENEs[FENE_index]);
                 }
-                FENEs[FENE_index]->addBond(atom[0], atom[1]);
+                vector<double> parameters;
+                double lmin=bonds[i].FENE_lmin* OpenMM::NmPerAngstrom;
+                parameters.push_back(lmin);
+                double le0=bonds[i].FENE_le0* OpenMM::NmPerAngstrom;
+                parameters.push_back(le0);
+                double le1= bonds[i].FENE_le1* OpenMM::NmPerAngstrom;
+                parameters.push_back(le1);
+                double lmax=bonds[i].FENE_lmax* OpenMM::AngstromsPerNm;
+                parameters.push_back(lmax);
+                double k_bond=bonds[i].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal
+                                                                  * OpenMM::AngstromsPerNm 
+                                                                  * OpenMM::AngstromsPerNm;
+                parameters.push_back(k_bond);
+                FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);
             }
                 break;
             case 2://Harmonic
@@ -438,25 +454,30 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     X4harmonic_classes.insert(bonds[i].class_label);
                     X4harmonic_index++;
 
-                    X4harmonics.push_back( new OpenMM::CustomBondForce("k_bond*((r/r_rest)-1)^12"));
+                    X4harmonics.push_back( new OpenMM::CustomBondForce("k_bond*((r/r_rest)-1)^4"));
 
-                    X4harmonics[X4harmonic_index]->addGlobalParameter("r_rest",   bonds[i].nominalLengthInAngstroms
-                                                                      * OpenMM::NmPerAngstrom);
-                    X4harmonics[X4harmonic_index]->addGlobalParameter("k_bond", bonds[i].stiffnessInKcalPerAngstrom4
-                                                 * OpenMM::KJPerKcal
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm *  OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm *  OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm *  OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                    X4harmonics[X4harmonic_index]->addPerBondParameter("r_rest");
+                    X4harmonics[X4harmonic_index]->addPerBondParameter("k_bond");
                     system.addForce(X4harmonics[X4harmonic_index]);
-                }
-                X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1]);
+                    }
+                double r_rest =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
+                double k_bond=bonds[i].stiffnessInKcalPerAngstrom4
+                                                 * OpenMM::KJPerKcal
+                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
+                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                vector<double> parameters;
+                parameters.resize(2);
+                parameters[0]=r_rest;
+                parameters[1]=k_bond;
+                X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1], parameters);
             }
-                break;
+            omm->x4harmonic=X4harmonics[0];
+            break;
         }
 
 
     }
-
+    
     if (HarmonicBondForce) {
         system.addForce(HarmonicBond);
         omm->harmonic = HarmonicBond;
@@ -482,13 +503,20 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             DFs_index++;
 
             DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))"));
-            DihedralForces[DFs_index]->addGlobalParameter("K_bend", dihedrals[i].bending_stiffness_value
-                                                          * OpenMM::KJPerKcal
-                                                          * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-          //  system.addForce(DihedralForces[DFs_index]);
+            DihedralForces[DFs_index]->addPerBondParameter("K_bend");
+            
+            system.addForce(DihedralForces[DFs_index]);
+            
         }
-        DihedralForces[DFs_index]->addBond(dihedrals[i].atoms);
+        
+        vector<double> parameters;
+        parameters.resize(1);
+        double K_bend=dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal
+                                                           * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+        parameters[0]=K_bend;
+        DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
+    omm->Dihedral= DihedralForces[0];
 
 
     //Listing the names of all available platforms.

@@ -53,7 +53,7 @@ void          myGetOpenMMState(MyOpenMMData*,
  *                    reinitialize the openMM
  * -----------------------------------------------------------------------------
  */
-void          myreinitializeOpenMMState(MyOpenMMData*);
+void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
 
                                
 /** -----------------------------------------------------------------------------

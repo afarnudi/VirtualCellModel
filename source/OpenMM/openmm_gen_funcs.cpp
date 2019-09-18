@@ -2,6 +2,7 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include <vector>
 
 void myStepWithOpenMM(MyOpenMMData* omm, int numSteps) {
     omm->integrator->step(numSteps);
@@ -78,21 +79,37 @@ void setNewState(MyOpenMMData* omm, bool wantEnergy,
         energyInKcal = (newstate.getPotentialEnergy() + newstate.getKineticEnergy())
         * OpenMM::KcalPerKJ;
 }
-
-void          myreinitializeOpenMMState(MyOpenMMData* omm){
+using OpenMM::Vec3;
+void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
     bool preservestate=1;
     
     //OpenMM::HarmonicBondForce*   HarmonicBond = omm->system->getForce(0);
-    int bond_index=0;
-    int particle1=3;
-    int particle2=2;
-    double lenght=0.1;
-    double k=50;
+    vector<double> parameters;
+    vector<double> bendingparameter ;
+    vector<int>particles ={2 ,  1, 3, 0};
+    parameters.resize(2);
+    
+    int bond_index=2;
+    int particle1=1;
+    int particle2=3;
+    double r_rest= bonds[0].nominalLengthInAngstroms*OpenMM::NmPerAngstrom;
+    double k_bond= bonds[0].stiffnessInKcalPerAngstrom4
+                                                 * OpenMM::KJPerKcal
+                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    double K_bend=dihedrals[0].bending_stiffness_value* OpenMM::KJPerKcal
+                                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    parameters[0]=r_rest;
+    parameters[1]=k_bond;
+    bendingparameter.push_back(K_bend);
+    //omm->x4harmonic->setBondParameters(bond_index,particle1, particle2, parameters);
+    omm->Dihedral->setBondParameters(0,particles, bendingparameter);
+    double lenght= bonds[0].nominalLengthInAngstroms* OpenMM::NmPerAngstrom;
+    double k= bonds[0].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
     omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
-    bond_index=2;
-    particle1=1;
-    particle2=2;
-    omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
+    //bond_index=2;
+    //particle1=1;
+    //particle2=2;
+    //omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
     omm->context->reinitialize(preservestate);
     
 }

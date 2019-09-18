@@ -344,13 +344,22 @@ int main(int argc, char **argv)
                 myWritePDBFrame(frame, time, energy, all_atoms, traj_name);
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
-                    break;
+                    break;  
+    
+                    
                 
                 myStepWithOpenMM(omm, NumSilentSteps);
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
+                /*this part is for checking the monte_carlo
+                if (progress ==50){
+                    myreinitializeOpenMMState(omm, all_bonds , all_dihedrals);
+                    //setNewState(omm,wantEnergy, energyInKcal, atoms[], wantforce);
+                    
+               }*/
+
             }
             
             // Clean up OpenMM data structures.

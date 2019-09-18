@@ -61,7 +61,8 @@ struct MyOpenMMData {
     OpenMM::Integrator*     integrator;
     OpenMM::Context*  context;
     OpenMM::HarmonicBondForce* harmonic;
-    
+    OpenMM::CustomBondForce* x4harmonic;
+    OpenMM::CustomCompoundBondForce* Dihedral;
 
 };
 
