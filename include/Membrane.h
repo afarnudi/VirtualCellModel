@@ -167,6 +167,7 @@ public:
     //monte carlo flip functions
     void monte_carlo_flip();
     double calculating_the_bond_energy(int index, bool initial_or_final);
+    double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4);
     //end of monte carlo flip functions
     
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);

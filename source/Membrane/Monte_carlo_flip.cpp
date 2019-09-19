@@ -30,6 +30,7 @@ void Membrane::monte_carlo_flip(){
     //calculating the bond energy
     bool initial_or_final=0;
     double initial_bond_energy=calculating_the_bond_energy(initial_pair, initial_or_final);
+   
     //calculating the bend energy
     
  
@@ -74,4 +75,50 @@ double Membrane::calculating_the_bond_energy(int index, bool initial_or_final){
         }
     }
     return(bond_energy);
+}
+
+double Membrane::calculating_the_bend_energy(int uncommon1, int common2, int common3, int uncommon4){
+    double p1[3],p2[3],p3[3],p4[3];
+    double p3p4[3],p2p4[3],p3p1[3],p2p1[3];
+    double outward_vector[3];
+    double N1[3], N2[3];
+    double N1_length,N2_length;
+    double cosine=1;
+    double bending_energy;
+    for (int index=0; index<3; index++){
+        p1[index]=Node_Position[uncommon1][index];
+        p2[index]=Node_Position[common2][index];
+        p3[index]=Node_Position[common3][index];
+        p4[index]=Node_Position[uncommon4][index];
+        
+        p3p4[index]=p4[index]-p3[index];
+        p2p4[index]=p4[index]-p2[index];
+        p3p1[index]=p1[index]-p3[index];
+        p2p1[index]=p1[index]-p2[index];
+        
+        outward_vector[index]=p1[index]- COM_position[index];
+    }
+    crossvector(N1, p3p1, p2p1);
+    crossvector(N2, p3p4, p2p4);
+    if (innerproduct(N1,outward_vector)<0){
+        N1[0]=-N1[0];
+        N1[1]=-N1[1];
+        N1[2]=-N1[2];
+    }
+    if (innerproduct(N2,outward_vector)<0){
+        N2[0]=-N2[0];
+        N2[1]=-N2[1];
+        N2[2]=-N2[2];
+    }
+    N1_length=vector_length(N1);
+    N2_length=vector_length(N2);
+    if(N1_length !=0 and N2_length !=0){
+    cosine= innerproduct(N1, N2)/(vector_length(N1)*vector_length(N2));}
+    else{
+        cout<<"warning! The trianglur mesh messed up. its impossible to calculate the bending energy." <<endl;
+        EXIT_FAILURE;
+    }
+    bending_energy= Bending_coefficient * OpenMM::KJPerKcal
+                                        *(1.00001-cosine);
+    return(bending_energy);
 }
