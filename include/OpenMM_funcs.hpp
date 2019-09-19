@@ -196,6 +196,9 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo);
 std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
                                                               std::string label_1,
                                                               std::string label_2);
+/**Add excluded bonds to Custom non bonded force from exclude_list.*/
+void add_exclusion(OpenMM::CustomNonbondedForce* custom_bond,
+                   std::vector< std::pair< int, int > > exclude_list);
 
 /**Initiate the Lenard Jones 12 6 interaction for sets of class atoms.*/
 void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
