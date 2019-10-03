@@ -146,6 +146,7 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
         bonds[i].type = ecm.get_spring_model();
         bonds[i].atoms[0]=ecm.get_node_pair(i, 0);
         bonds[i].atoms[1]=ecm.get_node_pair(i, 1);
+        bonds[i].class_label=ecm.get_label()+ecm.get_label();
         switch (bonds[i].type) {
                 //FENE
             case 1:

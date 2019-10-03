@@ -402,9 +402,9 @@ int main(int argc, char **argv)
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
-            TimeDependantData* tdd = new TimeDependantData();
+            TimeDependantData* time_dependant_data = new TimeDependantData();
             if (!GenConst::Load_from_checkpoint) {
-                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, tdd, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             } else {
                 std::filebuf rfb;
                 rfb.open (GenConst::Checkpoint_path.c_str(),std::ios::in);
@@ -432,10 +432,12 @@ int main(int argc, char **argv)
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
+            int total_step_num = 0;
+            
             for (int frame=1; ; ++frame) {
-                double time, energy;
+                double time, energy, potential_energy;
                 
-                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
+                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
                 
                 if (WantForce) {
@@ -458,7 +460,7 @@ int main(int argc, char **argv)
     
                     
                 
-                myStepWithOpenMM(omm,tdd, all_atoms, NumSilentSteps);
+                myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
@@ -480,7 +482,7 @@ int main(int argc, char **argv)
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
             
             // Clean up OpenMM data structures.
-            myTerminateOpenMM(omm,tdd);
+            myTerminateOpenMM(omm,time_dependant_data);
             
             cout<<"\nDone!"<<endl;
             return 0; // Normal return from main.

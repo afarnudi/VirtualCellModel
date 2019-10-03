@@ -24,7 +24,7 @@
 MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  double                         stepSizeInFs,
                                  std::string&                   platformName,
-                                 TimeDependantData*             tdd,
+                                 TimeDependantData*             time_dependant_data,
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
                                  std::vector<std::set<int> >    &membrane_set,
@@ -43,7 +43,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
 void          myStepWithOpenMM(MyOpenMMData*,
                                TimeDependantData*,
                                MyAtomInfo atoms[],
-                               int        numSteps);
+                               int        numSteps,
+                               int&        total_step);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE BACK TO CPU FROM OPENMM
@@ -54,6 +55,7 @@ void          myGetOpenMMState(MyOpenMMData*,
                                bool         wantForce,
                                double&      time,
                                double&      energy,
+                               double&      potential_energy,
                                MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------
@@ -69,6 +71,9 @@ void Cheap_GetOpenMMState(MyOpenMMData*,
  */
 void Kelvin_Voigt_update(MyOpenMMData*,
                       TimeDependantData*);
+
+void force_update(MyOpenMMData*,
+                         TimeDependantData*);
 
 
 /** -----------------------------------------------------------------------------
@@ -207,6 +212,18 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               vector<std::set<int> >                set_2,
                               int                                   set_1_index,
                               int                                   set_2_index);
+/**Initiate External force for a set of class atoms.*/
+bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
+                              const MyAtomInfo                      atoms[],
+                              vector<std::set<int> >                set_1,
+                              int                                   set_1_index);
+
+//void init_LJ_12_6_double(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+//                              const MyAtomInfo                      atoms[],
+//                              vector<std::set<int> >                set_1,
+//                              vector<std::set<int> >                set_2,
+//                              int                                   set_1_index,
+//                              int                                   set_2_index);
 
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                      atoms[],

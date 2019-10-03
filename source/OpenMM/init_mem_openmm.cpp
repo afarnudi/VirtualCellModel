@@ -27,7 +27,7 @@ using std::set;
 MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  double                 stepSizeInFs,
                                  std::string&           platformName,
-                                 TimeDependantData*     tdd,
+                                 TimeDependantData*     time_dependant_data,
                                  Bonds*                 bonds,
                                  Dihedrals*             dihedrals,
                                  vector<set<int> >      &membrane_set,
@@ -69,7 +69,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
 
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
-
+    
+    vector<OpenMM::CustomExternalForce*> ext_force;
 
 //    std::vector< std::pair< int, int > > excluded_bonds;
     
@@ -80,6 +81,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
+        //initialize external force for membrane i
+        int ext_force_index;
+        bool is_force = init_ext_force(ext_force, atoms, membrane_set, i);
+        ext_force_index=ext_force.size()-1;
+        if(is_force)
+        {
+            system.addForce(ext_force[ext_force_index]);
+        }
+        
         for (int j=0; j < i+1; j++) {
             
             std::string class_label_i=GenConst::Membrane_label+std::to_string(i);
@@ -133,6 +143,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     int class_count_i, class_count_j;
     
     for (int i=0; i < GenConst::Num_of_Actins; i++) {
+        
+        //initialize external force for actin i
+        int ext_force_index;
+        bool is_force = init_ext_force(ext_force, atoms, actin_set, i);
+        ext_force_index=ext_force.size()-1;
+        if(is_force)
+        {
+            system.addForce(ext_force[ext_force_index]);
+        }
         
         class_count_i = GenConst::Num_of_Membranes;
         class_count_j = 0;
@@ -241,6 +260,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     class_count_j = 0;
     
     for (int i=0; i < GenConst::Num_of_ECMs; i++) {
+        
+        //initialize external force for ecm i
+        int ext_force_index;
+        bool is_force = init_ext_force(ext_force, atoms, ecm_set, i);
+        ext_force_index=ext_force.size()-1;
+        if(is_force)
+        {
+            system.addForce(ext_force[ext_force_index]);
+        }
         
         for (int j=0; j < GenConst::Num_of_Membranes; j++) {
             
@@ -719,7 +747,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                    * OpenMM::KJPerKcal
                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
                 
-                tdd->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2);
+                time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2);
                 
             }
                 break;
@@ -737,9 +765,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     if (Kelvin_VoigtBondForce) {
         system.addForce(Kelvin_VoigtBond);
-        tdd->Kelvin_VoigtBond = Kelvin_VoigtBond;
-        tdd->Kelvin_Voigt = true;
-        tdd->Kelvin_Nominal_length_calc();
+        time_dependant_data->Kelvin_VoigtBond = Kelvin_VoigtBond;
+        time_dependant_data->Kelvin_Voigt = true;
+        time_dependant_data->Kelvin_Nominal_length_calc();
     }
 
     // Add the list of atom pairs that are excluded from the excluded volume force.

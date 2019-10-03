@@ -31,6 +31,10 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].radius=mem.get_node_radius();
         myatominfo[i].sigma_LJ_12_6=mem.get_sigma_LJ_12_6();
         myatominfo[i].epsilon_LJ_12_6=mem.get_epsilon_LJ_12_6();
+        myatominfo[i].ext_force_model=mem.get_ext_force_model();
+        myatominfo[i].ext_force_constants[0]=mem.get_kx();
+        myatominfo[i].ext_force_constants[1]=mem.get_ky();
+        myatominfo[i].ext_force_constants[2]=mem.get_kz();
         
     }
     //End of list
@@ -64,6 +68,10 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].posInAng[2]=act.get_node_position(i, 2);
         myatominfo[i].mass=act.get_node_mass();
         myatominfo[i].radius=act.get_node_radius();
+        myatominfo[i].ext_force_model=act.get_ext_force_model();
+        myatominfo[i].ext_force_constants[0]=act.get_kx();
+        myatominfo[i].ext_force_constants[1]=act.get_ky();
+        myatominfo[i].ext_force_constants[2]=act.get_kz();
         
     }
     //End of list
@@ -99,6 +107,10 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].radius=ecm.get_node_radius();
         myatominfo[i].sigma_LJ_12_6=ecm.get_sigma_LJ_12_6();
         myatominfo[i].epsilon_LJ_12_6=ecm.get_epsilon_LJ_12_6();
+        myatominfo[i].ext_force_model=ecm.get_ext_force_model();
+        myatominfo[i].ext_force_constants[0]=ecm.get_kx();
+        myatominfo[i].ext_force_constants[1]=ecm.get_ky();
+        myatominfo[i].ext_force_constants[2]=ecm.get_kz();
         
     }
     //End of list

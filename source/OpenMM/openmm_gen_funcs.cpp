@@ -4,20 +4,27 @@
 #include "OpenMM_funcs.hpp"
 #include <vector>
 
-void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms[], int numSteps) {
-    if(tdd->Kelvin_Voigt)
+void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, MyAtomInfo atoms[], int numSteps , int& total_step) {
+    if(time_dependant_data->Kelvin_Voigt)
     {
         for (int i=0; i<numSteps; i++)
         {
-            Cheap_GetOpenMMState(omm,atoms);
-            tdd->Kelvin_dist_calc(atoms);
-            if(tdd->Kelvin_Voigt_distInAng.size()>1)
+            if(time_dependant_data->Kelvin_Voigt)
             {
-                //mys_state_update
-                Kelvin_Voigt_update(omm,tdd);
-                tdd->Kelvin_Voigt_distInAng.erase(tdd->Kelvin_Voigt_distInAng.begin());
+                if (total_step % time_dependant_data->Kelvin_stepnum ==0)
+                {
+                    Cheap_GetOpenMMState(omm,atoms);
+                    time_dependant_data->Kelvin_dist_calc(atoms);
+                    if(time_dependant_data->Kelvin_Voigt_distInAng.size()>1)
+                    {
+                        //mys_state_update
+                        Kelvin_Voigt_update(omm,time_dependant_data);
+                        time_dependant_data->Kelvin_Voigt_distInAng.erase(time_dependant_data->Kelvin_Voigt_distInAng.begin());
+                    }
+                }
             }
             omm->integrator->step(1);
+            total_step++;
         }
         
     }
@@ -25,13 +32,14 @@ void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms
     else
     {
         omm->integrator->step(numSteps);
+        total_step += numSteps;
     }
     
 }
 
-void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* tdd) {
+void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* time_dependant_data) {
     delete omm;
-    delete tdd;
+    delete time_dependant_data;
 }
 
 using OpenMM::Vec3;
@@ -40,6 +48,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
                       bool wantForce,
                       double& timeInPs,
                       double& energyInKcal,
+                      double& potential_energyInKcal,
                       MyAtomInfo atoms[])
 {
     int infoMask = 0;
@@ -72,14 +81,16 @@ void myGetOpenMMState(MyOpenMMData* omm,
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
     if (wantEnergy)
-        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+    energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+     * OpenMM::KcalPerKJ;
+        potential_energyInKcal = (state.getPotentialEnergy())
         * OpenMM::KcalPerKJ;
 }
 
 
 using OpenMM::Vec3;
 OpenMM::State getCurrentState(MyOpenMMData* omm, bool wantEnergy,
-                 double& timeInPs,  bool wantforce)
+                              double& timeInPs,  bool wantforce)
 {
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
@@ -102,11 +113,11 @@ void setNewState(MyOpenMMData* omm, bool wantEnergy,
 {   
     double timeInPs;
     const OpenMM::State newstate= getCurrentState(omm, wantEnergy,timeInPs,  wantforce);
-        // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
+    // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = newstate.getPositions();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
-    atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;}}
+            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;}}
     
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
@@ -129,10 +140,10 @@ void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedra
     int particle2=3;
     double r_rest= bonds[0].nominalLengthInAngstroms*OpenMM::NmPerAngstrom;
     double k_bond= bonds[0].stiffnessInKcalPerAngstrom4
-                                                 * OpenMM::KJPerKcal
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    * OpenMM::KJPerKcal
+    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
     double K_bend=dihedrals[0].bending_stiffness_value* OpenMM::KJPerKcal
-                                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
     parameters[0]=r_rest;
     parameters[1]=k_bond;
     bendingparameter.push_back(K_bend);
@@ -186,7 +197,7 @@ void myWritePDBFrame(int frameNum,
     
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     
-//    double occ=1;
+    //    double occ=1;
     for (int n=0; atoms[n].type != EndOfList; ++n){
         if (hist != atoms[n].pdb) {
             index++;
@@ -268,7 +279,7 @@ void calc_energy_2(vector<Membrane>    mem,
     int node_A, node_B, node_C, node_D;
     double deltax, deltay, deltaz, Node_distance;
     
-//    double points[3][3];
+    //    double points[3][3];
     
     int mem_count=0;
     
@@ -323,8 +334,8 @@ void calc_energy_2(vector<Membrane>    mem,
             double scale=100;
             atoms[node_A+mem_count].energy += scale*sine/2;
             atoms[node_B+mem_count].energy += scale*sine/2;
-//            atoms[node_C+mem_count].energy += scale*sine/4;
-//            atoms[node_D+mem_count].energy += scale*sine/4;            
+            //            atoms[node_C+mem_count].energy += scale*sine/4;
+            //            atoms[node_D+mem_count].energy += scale*sine/4;
         }
         mem_count += mem[i].get_num_of_nodes();
     }
@@ -332,20 +343,20 @@ void calc_energy_2(vector<Membrane>    mem,
 
 
 void Kelvin_Voigt_update(MyOpenMMData* omm,
-                      TimeDependantData* tdd)
+                         TimeDependantData* time_dependant_data)
 {
-    const int Num_Bonds = tdd->Kelvin_VoigtBond->getNumBonds();
+    const int Num_Bonds = time_dependant_data->Kelvin_VoigtBond->getNumBonds();
     int atom1, atom2 ;
     double length, stiffness;
     
     for(int i=0; i<Num_Bonds ; i++)
     {
-        tdd->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
+        time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = tdd->Kelvin_Voigt_initNominal_length_InNm[i] - (tdd->Kelvin_Voigt_distInAng[1][i] - tdd->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (tdd->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
         
-        tdd->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
+        time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
-    tdd->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
+    time_dependant_data->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
     
 }

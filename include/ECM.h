@@ -51,7 +51,15 @@ private:
     int Num_of_Node_Pairs=0;
     int Num_of_Triangles=0;
     
-    double Downward_speed=0;
+    double x_speed=0.0; //???
+    double y_speed=0.0;
+    double z_speed=0.0;
+    
+    int ext_force_model=0;
+    double kx=10;
+    double ky=10;
+    double kz=10;
+    
     double Kelvin_Damping_Coefficient=100;
     double Dashpot_Viscosity=0.02;
     
@@ -177,6 +185,19 @@ public:
     double get_sigma(void){
         return sigma;
     }
+    /**Return external force model. */
+    int get_ext_force_model(void){
+        return ext_force_model;
+    }
+    double get_kx(void){
+        return kx;
+    }
+    double get_ky(void){
+        return ky;
+    }
+    double get_kz(void){
+        return kz;
+    }
     
     double get_node_position(int node_number, int node_coordinate){
         return Node_Position[node_number][node_coordinate];
@@ -191,6 +212,15 @@ public:
             Node_Position[i][2]+=Shift_in_Z_direction;
         }
     }
+    
+    void shift_velocity (double vx, double vy, double vz){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Velocity[i][0]+=vx;
+            Node_Velocity[i][1]+=vy;
+            Node_Velocity[i][2]+=vz;
+        }
+    }
+    
     /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
     double get_node_velocity(int node_number, int node_coordinate){
         return Node_Velocity[node_number][node_coordinate];
