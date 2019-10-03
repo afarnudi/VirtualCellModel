@@ -799,8 +799,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         vector<double> parameters;
         parameters.resize(1);
-        double K_bend=dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal
-                                                           * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+        double K_bend=dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal;
         parameters[0]=K_bend;
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
