@@ -76,13 +76,36 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     bool DihedralForces_flag=false;
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;
 
+    //actin binding proteins
+    //for test
+//    OpenMM::CustomBondForce* abp = new OpenMM::CustomBondForce("0.5* k * (r-r0)^2");
+//    abp->addGlobalParameter("k", 500);
+//    abp->addGlobalParameter("r0", 0.23);
+    
+//    int ii=0;
+//    for(set<int>::iterator it1=actin_set[0].begin(); it1 != actin_set[0].end(); ++it1){
+//        for(set<int>::iterator it2=it1; it2 != actin_set[0].end(); ++it2){
+//              //abp->addBond(*it1, *it2);
+////            cout<< atoms[*it1].initPosInAng[0];
+//            double dist = sqrt((atoms[*it1].initPosInAng[0]-atoms[*it2].initPosInAng[0])*(atoms[*it1].initPosInAng[0]-atoms[*it2].initPosInAng[0]) + (atoms[*it1].initPosInAng[1]-atoms[*it2].initPosInAng[1])*(atoms[*it1].initPosInAng[1]-atoms[*it2].initPosInAng[1]) + (atoms[*it1].initPosInAng[2]-atoms[*it2].initPosInAng[2])*(atoms[*it1].initPosInAng[2]-atoms[*it2].initPosInAng[2])) ;
+//
+//            if(dist<3)
+//            {
+//                abp->addBond(*it1, *it2);
+//                ii++;
+//            }
+//        }
+//
+//    }
+//    cout<<"ABP number is "<< ii << '\n' ;
+//    system.addForce(abp);
 
     
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
         //initialize external force for membrane i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, membrane_set, i);
+        bool is_force = init_ext_force(ext_force, atoms, membrane_set, i , "mem");
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -101,7 +124,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             switch (interaction_map[i][j]) {
                 
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, membrane_set, membrane_set, i, j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, membrane_set, membrane_set, i, j , "mem" , "mem");
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -145,7 +168,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         //initialize external force for actin i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, actin_set, i);
+        bool is_force = init_ext_force(ext_force, atoms, actin_set, i , "act");
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -164,8 +187,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, membrane_set, i, j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, membrane_set, i, j , "act" , "mem");
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -216,7 +238,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i+ class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, actin_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, actin_set, i, j-class_count_j , "act" , "act");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -262,7 +284,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         //initialize external force for ecm i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, ecm_set, i);
+        bool is_force = init_ext_force(ext_force, atoms, ecm_set, i , "ecm");
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -282,7 +304,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
                     
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j , "ecm" , "mem");
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -333,7 +355,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i+ class_count_j][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, actin_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, actin_set, i, j-class_count_j,"ecm","act");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -386,7 +408,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ecm_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ecm_set, i, j-class_count_j, "ecm" , "ecm");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -441,8 +463,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j , "chrom" , "mem");
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -482,7 +503,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i+ class_count_j][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , "chrom" , "act");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -524,7 +545,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j , "chrom" , "ecm");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -565,7 +586,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             switch (interaction_map[i + class_count_i][j]) {
                     
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j);
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j , "chrom" , "chrom");
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -592,6 +613,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
     
+    
+    //for time-dependant external force
+    time_dependant_data->ext_force = ext_force;
     
     // Specify the atoms and their properties:
     //  (1) System needs to know the masses.

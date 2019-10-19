@@ -124,6 +124,7 @@ void myWritePDBFrame(int                frameNum,
                      double             timeInPs,
                      double             energyInKcal,
                      const MyAtomInfo   atoms[],
+                     const Bonds        bonds[],
                      std::string        traj_name);
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
@@ -211,12 +212,15 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               vector<std::set<int> >                set_1,
                               vector<std::set<int> >                set_2,
                               int                                   set_1_index,
-                              int                                   set_2_index);
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name);
 /**Initiate External force for a set of class atoms.*/
 bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
                               const MyAtomInfo                      atoms[],
                               vector<std::set<int> >                set_1,
-                              int                                   set_1_index);
+                              int                                   set_1_index,
+                              string                                set_name);
 
 //void init_LJ_12_6_double(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
 //                              const MyAtomInfo                      atoms[],

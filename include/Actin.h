@@ -50,6 +50,7 @@ private:
     vector<vector<double> >Node_Velocity;
     vector<vector<double> >Node_Force;
     vector<vector<int> > Pyramid_Nodes;
+    vector<vector<int>> filaments;
     
     std::string output_file_neme;
     
@@ -68,7 +69,7 @@ private:
     double exp_tau=0;
     double Min_node_pair_length=1000;
     double Max_node_pair_length=0;
-    double Average_node_pair_length=12;
+    double Average_node_pair_length=0;
     
     
     //Private members:
