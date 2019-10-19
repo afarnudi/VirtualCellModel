@@ -223,12 +223,12 @@ int main(int argc, char **argv)
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
                 
-                if (GenConst::Num_of_Membranes !=0 && !GenConst::OpenMM) {
-                    ///put a flag for chromatin inside membrane
-                    Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
-                } else {
+//                if (GenConst::Num_of_Membranes !=0 && !GenConst::OpenMM) {
+//                    ///put a flag for chromatin inside membrane
+//                    Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
+//                } else {
                     Chromatins[i].import_config(chromatin_config_list[i]);
-                }
+//                }
                 
                 Chromatins[i].generate_report();
             }

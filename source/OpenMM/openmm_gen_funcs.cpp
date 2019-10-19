@@ -88,7 +88,6 @@ void myGetOpenMMState(MyOpenMMData* omm,
 }
 
 
-using OpenMM::Vec3;
 OpenMM::State getCurrentState(MyOpenMMData* omm, bool wantEnergy,
                               double& timeInPs,  bool wantforce)
 {
@@ -125,7 +124,7 @@ void setNewState(MyOpenMMData* omm, bool wantEnergy,
         energyInKcal = (newstate.getPotentialEnergy() + newstate.getKineticEnergy())
         * OpenMM::KcalPerKJ;
 }
-using OpenMM::Vec3;
+
 void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
     bool preservestate=1;
     
@@ -148,7 +147,8 @@ void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedra
     parameters[1]=k_bond;
     bendingparameter.push_back(K_bend);
     //omm->x4harmonic->setBondParameters(bond_index,particle1, particle2, parameters);
-    omm->Dihedral->setBondParameters(0,particles, bendingparameter);
+    //Ali: talk to me before you uncomment.
+//    omm->Dihedral->setBondParameters(0,particles, bendingparameter);
     double lenght= bonds[0].nominalLengthInAngstroms* OpenMM::NmPerAngstrom;
     double k= bonds[0].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
     omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );

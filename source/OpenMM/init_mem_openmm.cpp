@@ -73,13 +73,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomExternalForce*> ext_force;
 
 //    std::vector< std::pair< int, int > > excluded_bonds;
-    
+    bool DihedralForces_flag=false;
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;
 
 
     
     //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
-    
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
         //initialize external force for membrane i
         int ext_force_index;
@@ -552,7 +551,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         
         class_count_j = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs;
+        
         for (int j=class_count_j; j < class_count_j + i +1; j++) {
+            
             std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
             std::string class_label_j=GenConst::Chromatin_label+std::to_string(j-class_count_j);
             
@@ -560,7 +561,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             
             int index;
-            
             
             switch (interaction_map[i + class_count_i][j]) {
                     
@@ -585,7 +585,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     
                     
                     system.addForce(ExcludedVolumes[index]);
-                    
+                    cout<<"exclusion complete\n";
                     
                     break;
             }
@@ -631,7 +631,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 
     }
 
-
+    
     set <std::string> FENE_classes;
     int FENE_index = -1;
 
@@ -774,7 +774,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
 
 
-    
     //DFs = DihedralForces
     set <std::string> DFs_classes;
     int DFs_index = -1;
@@ -782,13 +781,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
 
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
-
+        DihedralForces_flag=true;
         auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
         if (DFs_item == DFs_classes.end()) {
 
             DFs_classes.insert(dihedrals[i].class_label);
             DFs_index++;
-
 
             DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))"));
             DihedralForces[DFs_index]->addPerBondParameter("K_bend");
@@ -797,16 +795,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
         }
         
-        vector<double> parameters;
-        parameters.resize(1);
-        double K_bend=dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal;
-        parameters[0]=K_bend;
+        vector<double> parameters(1, dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal);
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
+
     if (dihedrals[0].type != EndOfList) {
-        omm->Dihedral= DihedralForces[0];
+        omm->Dihedral = DihedralForces;
     }
-    
 
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";

@@ -24,7 +24,6 @@ void Chromatin::initialise(void){
     
     cout<<"\nInitialising the Chromatin Class..."<<endl;
     build_random_chain();
-//    Pack(7);
     shift_node_positions();
     cout<<"Chromatin class initiated.\n\n";
     
