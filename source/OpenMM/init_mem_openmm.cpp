@@ -798,12 +798,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
 
 
-
+    
     //DFs = DihedralForces
     set <std::string> DFs_classes;
     int DFs_index = -1;
 
-    //    cout<<"Here!!!!\n\n";
+    
 
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
 
@@ -827,8 +827,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         parameters[0]=K_bend;
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
-    omm->Dihedral= DihedralForces[0];
-
+    if (dihedrals[0].type != EndOfList) {
+        omm->Dihedral= DihedralForces[0];
+    }
+    
 
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
