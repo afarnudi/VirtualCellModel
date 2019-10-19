@@ -85,6 +85,7 @@ struct TimeDependantData {
     std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
     
+    std::vector<OpenMM::CustomExternalForce*> ext_force;
     //OpenMM::CustomExternalForce* ext_force;
     //bool force_update = false;
     //int force_stepnum = 100000;

@@ -24,6 +24,7 @@ void Actin::initialise(){
     initialise_node_bond_relaxed_length();
     tau_Maxwell_relax=Dashpot_Viscosity/Spring_coefficient;
     exp_tau=exp(-GenConst::Step_Size_In_Fs/tau_Maxwell_relax);
+    check();
     
     cout<<"\nActin class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
