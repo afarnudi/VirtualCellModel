@@ -438,7 +438,7 @@ int main(int argc, char **argv)
                 double time, energy, potential_energy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
+                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
                 
                 if (WantForce) {
                     calc_energy_2(Membranes, all_atoms);
