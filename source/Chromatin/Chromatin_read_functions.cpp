@@ -22,8 +22,19 @@ void Chromatin::import(string import_file_name){
     read_resume_file>>Num_of_Nodes;
     cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
     
+    read_resume_file>>num_of_node_types;
+    cout<<"Number of Node types: "<<num_of_node_types<<endl;
+    
+    epsilon_LJ.resize(num_of_node_types);
+    sigma_LJ.resize(num_of_node_types);
+    for (int i=0; i<<num_of_node_types; i++) {
+        read_resume_file>>epsilon_LJ[i];
+        read_resume_file>>sigma_LJ[i];
+    }
+    
+    
     Node_Force.resize(Num_of_Nodes);
-    AB_index.resize(Num_of_Nodes);
+    ABC_index.resize(Num_of_Nodes);
     Contact_Matrix.resize(Num_of_Nodes);
     
     vector<double> read_double;
@@ -37,7 +48,7 @@ void Chromatin::import(string import_file_name){
         read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
         Node_Velocity.push_back(read_double);
         
-        read_resume_file>>AB_index[i];
+        read_resume_file>>ABC_index[i];
         
         Node_Force[i].resize(3,0);
         Contact_Matrix[i].resize(Num_of_Nodes,0);

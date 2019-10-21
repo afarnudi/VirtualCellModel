@@ -17,9 +17,9 @@ void Chromatin::initialise(void){
     vector<vector<double> > zero_vec(Num_of_Nodes, vector<double> (Num_of_Nodes));
     Contact_Matrix=zero_vec;
     
-    AB_index.resize(Num_of_Nodes);
-    generate(AB_index.begin(), AB_index.end(), []() {
-        return rand() % 2;
+    ABC_index.resize(Num_of_Nodes);
+    generate(ABC_index.begin(), ABC_index.end(), [&r=num_of_node_types]() {
+        return rand() % r;
     });
     
     cout<<"\nInitialising the Chromatin Class..."<<endl;
@@ -33,9 +33,9 @@ void Chromatin::initialise(double min_radius){
     vector<vector<double> > zero_vec(Num_of_Nodes, vector<double> (Num_of_Nodes));
     Contact_Matrix=zero_vec;
     
-    AB_index.resize(Num_of_Nodes);
-    generate(AB_index.begin(), AB_index.end(), []() {
-        return rand() % 2;
+    ABC_index.resize(Num_of_Nodes);
+    generate(ABC_index.begin(), ABC_index.end(), [&r=num_of_node_types]() {
+        return rand() % r;
     });
     
     cout<<"\nInitialising the Chromatin Class..."<<endl;
@@ -286,7 +286,7 @@ void Chromatin::export_pack(int MD_step){
     for (int i=0; i<Num_of_Nodes; i++) {
         write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
         write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
-        write_resume_file<<AB_index[i]<<"\n";
+        write_resume_file<<ABC_index[i]<<"\n";
         //Node_force=0
     }
 }
