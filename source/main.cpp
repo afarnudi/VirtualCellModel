@@ -441,10 +441,6 @@ int main(int argc, char **argv)
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
                 
-                if (WantForce) {
-                    calc_energy_2(Membranes, all_atoms);
-                }
-                
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 

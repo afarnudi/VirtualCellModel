@@ -102,18 +102,6 @@ void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedra
 void          myTerminateOpenMM(MyOpenMMData*,
                                 TimeDependantData*);
 
-/**
- * Calculate the energy for the membrane bacteria problem using the surface equation.
- */
-void calc_energy(vector<Membrane>     mem,
-                 MyAtomInfo           atoms[]);
-
-/**
- * Calculate the energy for the membrane bacteria problem usinf perpendicular vectors.
- */
-void calc_energy_2(vector<Membrane>     mem,
-                   MyAtomInfo           atoms[]);
-
 
 
 /**                               PDB FILE WRITER
