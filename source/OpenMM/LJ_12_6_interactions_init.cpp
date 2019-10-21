@@ -1,4 +1,3 @@
-#include "Membrane.h"
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"

@@ -150,6 +150,7 @@ int main(int argc, char **argv)
     
     vector<Chromatin> Chromatins;
     vector<std::set<int> > chromatin_set;
+//    vector<vector<std::set<int> > > chromatin_set;
     
     vector<point_particle> pointparticles;
     

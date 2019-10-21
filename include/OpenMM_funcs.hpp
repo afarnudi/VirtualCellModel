@@ -183,14 +183,15 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
-void OpenMM_Chromatin_info_relay (vector<Chromatin>         chromos,
-                                  vector<std::set<int> >    &chromo_set,
-                                  MyAtomInfo*               all_atoms,
-                                  Bonds*                    all_bonds,
-                                  Dihedrals*                all_dihedrals,
-                                  int                       &atom_count,
-                                  int                       &bond_count,
-                                  int                       &dihe_coun);
+void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
+                                  vector<std::set<int> >  &chromo_set,
+//                                  vector<vector<std::set<int> > >  &chromo_set,
+                                  MyAtomInfo*                       all_atoms,
+                                  Bonds*                            all_bonds,
+                                  Dihedrals*                        all_dihedrals,
+                                  int                              &atom_count,
+                                  int                              &bond_count,
+                                  int                              &dihe_coun);
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo);
 /**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
@@ -244,4 +245,21 @@ void setNewState(MyOpenMMData*      omm,
                     bool            wantEnergy,
                     double&         energyInKcal,
                     MyAtomInfo      atoms[]);
+
+/**Set the interaction map inputs to forces in the OpenMM system.*/
+void set_interactions(vector<OpenMM::CustomExternalForce*> &ext_force,
+                      const MyAtomInfo       atoms[],
+                      vector<std::set<int> >      &membrane_set,
+                      vector<std::set<int> >      &actin_set,
+                      vector<std::set<int> >      &ecm_set,
+                      vector<std::set<int> >      &chromatin_set,
+                      vector<vector<int> >   interaction_map,
+                      OpenMM::System            &system,
+                      Bonds*                 bonds,
+                      vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes
+                      );
+
+
+
 #endif

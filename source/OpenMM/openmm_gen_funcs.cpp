@@ -193,7 +193,7 @@ void myWritePDBFrame(int frameNum,
     fprintf(pFile,"MODEL     %d\n", frameNum);
     fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
             timeInPs, energyInKcal);
-    int index=1;
+    int index=0;
     string hist = atoms[0].pdb;
     
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
