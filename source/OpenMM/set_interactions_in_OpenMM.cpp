@@ -8,17 +8,17 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
-void set_interactions(vector<OpenMM::CustomExternalForce*> &ext_force,
-                      const MyAtomInfo       atoms[],
-                      vector<set<int> >      &membrane_set,
-                      vector<set<int> >      &actin_set,
-                      vector<set<int> >      &ecm_set,
-                      vector<set<int> >      &chromatin_set,
-                      vector<vector<int> >   interaction_map,
-                      OpenMM::System            &system,
-                      Bonds*                 bonds,
+void set_interactions(const MyAtomInfo                       atoms[],
+                      Bonds*                                 bonds,
+                      vector<std::set<int> >                &membrane_set,
+                      vector<std::set<int> >                &actin_set,
+                      vector<std::set<int> >                &ecm_set,
+                      vector<std::set<int> >                &chromatin_set,
+                      vector<vector<int> >                   interaction_map,
+                      vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
-                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes
+                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                      OpenMM::System                        &system
                       ){
    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {

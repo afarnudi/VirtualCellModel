@@ -235,19 +235,44 @@ void setNewState(MyOpenMMData*      omm,
                     MyAtomInfo      atoms[]);
 
 /**Set the interaction map inputs to forces in the OpenMM system.*/
-void set_interactions(vector<OpenMM::CustomExternalForce*> &ext_force,
-                      const MyAtomInfo       atoms[],
-                      vector<std::set<int> >      &membrane_set,
-                      vector<std::set<int> >      &actin_set,
-                      vector<std::set<int> >      &ecm_set,
-                      vector<std::set<int> >      &chromatin_set,
-                      vector<vector<int> >   interaction_map,
-                      OpenMM::System            &system,
-                      Bonds*                 bonds,
+void set_interactions(const MyAtomInfo                       atoms[],
+                      Bonds*                                 bonds,
+                      vector<std::set<int> >                &membrane_set,
+                      vector<std::set<int> >                &actin_set,
+                      vector<std::set<int> >                &ecm_set,
+                      vector<std::set<int> >                &chromatin_set,
+                      vector<vector<int> >                   interaction_map,
+                      vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
-                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes
+                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                      OpenMM::System                        &system
                       );
-
-
-
+/**Add particles to the system and forces.
+ *Specify the atoms and their properties:
+ *(1) System needs to know the masses.
+ *(2) NonbondedForce needs charges,van der Waals properties (in MD units!).
+ *(3) Collect default positions for initializing the simulation later.
+ */
+void add_particles_to_system_and_forces(const MyAtomInfo                       atoms[],
+                                        vector<OpenMM::Vec3>                  &initialPosInNm,
+                                        vector<OpenMM::Vec3>                  &initialVelInNmperPs,
+                                        vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                                        vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                        OpenMM::System                        &system);
+/**Define bonded forces and specify the involved atoms.
+ */
+void set_bonded_forces(Bonds*                                 bonds,
+                       OpenMM::HarmonicBondForce*            &HarmonicBond,
+                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
+                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
+                       vector<OpenMM::CustomBondForce*>      &FENEs,
+                       TimeDependantData*                    &time_dependant_data,
+                       OpenMM::System                        &system
+                       );
+/**Set dihedral forces for triangle pair interactions.
+ */
+void set_dihedral_forces(Dihedrals*                                 dihedrals,
+                         vector<OpenMM::CustomCompoundBondForce*>  &DihedralForces,
+                         OpenMM::System                            &system
+                         );
 #endif
