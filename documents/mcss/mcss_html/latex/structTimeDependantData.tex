@@ -1,0 +1,95 @@
+\hypertarget{structTimeDependantData}{}\section{Time\+Dependant\+Data Struct Reference}
+\label{structTimeDependantData}\index{TimeDependantData@{TimeDependantData}}
+
+
+{\ttfamily \#include $<$Open\+M\+M\+\_\+structs.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{structTimeDependantData_ad7b99aa4390460f002e776d797445152}{Kelvin\+\_\+\+Nominal\+\_\+length\+\_\+calc}} ()
+\item 
+void \mbox{\hyperlink{structTimeDependantData_a9720506496756bf0604cc83ed1540dcd}{Kelvin\+\_\+dist\+\_\+calc}} (\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} atoms\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+Open\+M\+M\+::\+Harmonic\+Bond\+Force $\ast$ \mbox{\hyperlink{structTimeDependantData_a534577fc9ff214a2c1fa07a7215db475}{Kelvin\+\_\+\+Voigt\+Bond}}
+\item 
+bool \mbox{\hyperlink{structTimeDependantData_a04750d565dc20a250924f250e77da152}{Kelvin\+\_\+\+Voigt}} = false
+\item 
+int \mbox{\hyperlink{structTimeDependantData_a8e5d4009bbba02bfeabb746393b9d3e3}{Kelvin\+\_\+stepnum}} = 100
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{structTimeDependantData_a47ce75a249b06cfb26bf61f120baa661}{Kelvin\+\_\+\+Voigt\+\_\+damp}}
+\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{structTimeDependantData_a2363a9e42a755919f2babda29d61087c}{Kelvin\+\_\+\+Voigt\+\_\+dist\+In\+Ang}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{structTimeDependantData_ad3e49324aa777171e42e56281a100071}{Kelvin\+\_\+\+Voigt\+\_\+init\+Nominal\+\_\+length\+\_\+\+In\+Nm}}
+\item 
+std\+::vector$<$ Open\+M\+M\+::\+Custom\+External\+Force $\ast$ $>$ \mbox{\hyperlink{structTimeDependantData_a0ab0b03e54635a5bab1e050fa0fc9abc}{ext\+\_\+force}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structTimeDependantData_a9720506496756bf0604cc83ed1540dcd}\label{structTimeDependantData_a9720506496756bf0604cc83ed1540dcd}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_dist\_calc@{Kelvin\_dist\_calc}}
+\index{Kelvin\_dist\_calc@{Kelvin\_dist\_calc}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_dist\_calc()}{Kelvin\_dist\_calc()}}
+{\footnotesize\ttfamily void Time\+Dependant\+Data\+::\+Kelvin\+\_\+dist\+\_\+calc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}}}]{atoms\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structTimeDependantData_ad7b99aa4390460f002e776d797445152}\label{structTimeDependantData_ad7b99aa4390460f002e776d797445152}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_Nominal\_length\_calc@{Kelvin\_Nominal\_length\_calc}}
+\index{Kelvin\_Nominal\_length\_calc@{Kelvin\_Nominal\_length\_calc}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_Nominal\_length\_calc()}{Kelvin\_Nominal\_length\_calc()}}
+{\footnotesize\ttfamily void Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Nominal\+\_\+length\+\_\+calc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Field Documentation}
+\mbox{\Hypertarget{structTimeDependantData_a0ab0b03e54635a5bab1e050fa0fc9abc}\label{structTimeDependantData_a0ab0b03e54635a5bab1e050fa0fc9abc}} 
+\index{TimeDependantData@{TimeDependantData}!ext\_force@{ext\_force}}
+\index{ext\_force@{ext\_force}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{ext\_force}{ext\_force}}
+{\footnotesize\ttfamily std\+::vector$<$Open\+M\+M\+::\+Custom\+External\+Force$\ast$$>$ Time\+Dependant\+Data\+::ext\+\_\+force}
+
+\mbox{\Hypertarget{structTimeDependantData_a8e5d4009bbba02bfeabb746393b9d3e3}\label{structTimeDependantData_a8e5d4009bbba02bfeabb746393b9d3e3}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_stepnum@{Kelvin\_stepnum}}
+\index{Kelvin\_stepnum@{Kelvin\_stepnum}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_stepnum}{Kelvin\_stepnum}}
+{\footnotesize\ttfamily int Time\+Dependant\+Data\+::\+Kelvin\+\_\+stepnum = 100}
+
+\mbox{\Hypertarget{structTimeDependantData_a04750d565dc20a250924f250e77da152}\label{structTimeDependantData_a04750d565dc20a250924f250e77da152}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_Voigt@{Kelvin\_Voigt}}
+\index{Kelvin\_Voigt@{Kelvin\_Voigt}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_Voigt}{Kelvin\_Voigt}}
+{\footnotesize\ttfamily bool Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Voigt = false}
+
+\mbox{\Hypertarget{structTimeDependantData_a47ce75a249b06cfb26bf61f120baa661}\label{structTimeDependantData_a47ce75a249b06cfb26bf61f120baa661}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_Voigt\_damp@{Kelvin\_Voigt\_damp}}
+\index{Kelvin\_Voigt\_damp@{Kelvin\_Voigt\_damp}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_Voigt\_damp}{Kelvin\_Voigt\_damp}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Voigt\+\_\+damp}
+
+\mbox{\Hypertarget{structTimeDependantData_a2363a9e42a755919f2babda29d61087c}\label{structTimeDependantData_a2363a9e42a755919f2babda29d61087c}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_Voigt\_distInAng@{Kelvin\_Voigt\_distInAng}}
+\index{Kelvin\_Voigt\_distInAng@{Kelvin\_Voigt\_distInAng}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_Voigt\_distInAng}{Kelvin\_Voigt\_distInAng}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$double$>$ $>$ Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Voigt\+\_\+dist\+In\+Ang}
+
+\mbox{\Hypertarget{structTimeDependantData_ad3e49324aa777171e42e56281a100071}\label{structTimeDependantData_ad3e49324aa777171e42e56281a100071}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_Voigt\_initNominal\_length\_InNm@{Kelvin\_Voigt\_initNominal\_length\_InNm}}
+\index{Kelvin\_Voigt\_initNominal\_length\_InNm@{Kelvin\_Voigt\_initNominal\_length\_InNm}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_Voigt\_initNominal\_length\_InNm}{Kelvin\_Voigt\_initNominal\_length\_InNm}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Voigt\+\_\+init\+Nominal\+\_\+length\+\_\+\+In\+Nm}
+
+\mbox{\Hypertarget{structTimeDependantData_a534577fc9ff214a2c1fa07a7215db475}\label{structTimeDependantData_a534577fc9ff214a2c1fa07a7215db475}} 
+\index{TimeDependantData@{TimeDependantData}!Kelvin\_VoigtBond@{Kelvin\_VoigtBond}}
+\index{Kelvin\_VoigtBond@{Kelvin\_VoigtBond}!TimeDependantData@{TimeDependantData}}
+\subsubsection{\texorpdfstring{Kelvin\_VoigtBond}{Kelvin\_VoigtBond}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+Harmonic\+Bond\+Force$\ast$ Time\+Dependant\+Data\+::\+Kelvin\+\_\+\+Voigt\+Bond}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/\mbox{\hyperlink{OpenMM__structs_8h}{Open\+M\+M\+\_\+structs.\+h}}\end{DoxyCompactItemize}

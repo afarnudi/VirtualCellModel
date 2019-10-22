@@ -1,0 +1,48 @@
+\hypertarget{init__openmm_8cpp}{}\section{/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+Open\+M\+M/init\+\_\+openmm.cpp File Reference}
+\label{init__openmm_8cpp}\index{/Users/sajjad/virtual cell/Membrane\_OBJ/source/OpenMM/init\_openmm.cpp@{/Users/sajjad/virtual cell/Membrane\_OBJ/source/OpenMM/init\_openmm.cpp}}
+{\ttfamily \#include \char`\"{}Membrane.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}General\+\_\+functions.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Open\+M\+M\+\_\+structs.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Open\+M\+M\+\_\+funcs.\+hpp\char`\"{}}\newline
+Include dependency graph for init\+\_\+openmm.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{init__openmm_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}} $\ast$ \mbox{\hyperlink{init__openmm_8cpp_a4328315825b93cfd3415bc355af57508}{my\+Initialize\+Open\+MM}} (const \mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} atoms\mbox{[}$\,$\mbox{]}, double step\+Size\+In\+Fs, std\+::string \&platform\+Name, \mbox{\hyperlink{structTimeDependantData}{Time\+Dependant\+Data}} $\ast$time\+\_\+dependant\+\_\+data, \mbox{\hyperlink{structBonds}{Bonds}} $\ast$bonds, \mbox{\hyperlink{structDihedrals}{Dihedrals}} $\ast$dihedrals, vector$<$ set$<$ int $>$ $>$ \&membrane\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&actin\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&ecm\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&chromatin\+\_\+set, vector$<$ vector$<$ int $>$ $>$ interaction\+\_\+map)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{init__openmm_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}{End\+Of\+List}} =-\/1
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{init__openmm_8cpp_a4328315825b93cfd3415bc355af57508}\label{init__openmm_8cpp_a4328315825b93cfd3415bc355af57508}} 
+\index{init\_openmm.cpp@{init\_openmm.cpp}!myInitializeOpenMM@{myInitializeOpenMM}}
+\index{myInitializeOpenMM@{myInitializeOpenMM}!init\_openmm.cpp@{init\_openmm.cpp}}
+\subsubsection{\texorpdfstring{myInitializeOpenMM()}{myInitializeOpenMM()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}}$\ast$ my\+Initialize\+Open\+MM (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}}}]{atoms\mbox{[}$\,$\mbox{]},  }\item[{double}]{step\+Size\+In\+Fs,  }\item[{std\+::string \&}]{platform\+Name,  }\item[{\mbox{\hyperlink{structTimeDependantData}{Time\+Dependant\+Data}} $\ast$}]{time\+\_\+dependant\+\_\+data,  }\item[{\mbox{\hyperlink{structBonds}{Bonds}} $\ast$}]{bonds,  }\item[{\mbox{\hyperlink{structDihedrals}{Dihedrals}} $\ast$}]{dihedrals,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{membrane\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{actin\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{ecm\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{chromatin\+\_\+set,  }\item[{vector$<$ vector$<$ int $>$ $>$}]{interaction\+\_\+map }\end{DoxyParamCaption})}
+
+
+
+ \subsubsection*{I\+N\+I\+T\+I\+A\+L\+I\+SE Open\+MM D\+A\+TA S\+T\+R\+U\+C\+T\+U\+R\+ES }
+
+We take these actions here\+: (1) Load any available Open\+MM plugins, e.\+g. Cuda and Brook. (2) Allocate a \mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}} structure to hang on to Open\+MM data structures in a manner which is opaque to the caller. (3) Fill the Open\+M\+M\+::\+System with the force field parameters we want to use and the particular set of atoms to be simulated. (4) Create an Integrator and a Context associating the Integrator with the System. (5) Select the Open\+MM platform to be used. (6) Return the \mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}} struct and the name of the Platform in use.
+
+Note that this function must understand the calling MD code\textquotesingle{}s molecule and force field data structures so will need to be customized for each MD code. 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{init__openmm_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}\label{init__openmm_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}} 
+\index{init\_openmm.cpp@{init\_openmm.cpp}!EndOfList@{EndOfList}}
+\index{EndOfList@{EndOfList}!init\_openmm.cpp@{init\_openmm.cpp}}
+\subsubsection{\texorpdfstring{EndOfList}{EndOfList}}
+{\footnotesize\ttfamily const int End\+Of\+List =-\/1}
+

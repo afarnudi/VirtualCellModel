@@ -1,0 +1,50 @@
+\hypertarget{create__exclusion__list_8cpp}{}\section{/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+Open\+M\+M/create\+\_\+exclusion\+\_\+list.cpp File Reference}
+\label{create__exclusion__list_8cpp}\index{/Users/sajjad/virtual cell/Membrane\_OBJ/source/OpenMM/create\_exclusion\_list.cpp@{/Users/sajjad/virtual cell/Membrane\_OBJ/source/OpenMM/create\_exclusion\_list.cpp}}
+{\ttfamily \#include \char`\"{}Membrane.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}General\+\_\+functions.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Open\+M\+M\+\_\+structs.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Open\+M\+M\+\_\+funcs.\+hpp\char`\"{}}\newline
+Include dependency graph for create\+\_\+exclusion\+\_\+list.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{create__exclusion__list_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ \mbox{\hyperlink{create__exclusion__list_8cpp_ac89ed1b4e3238e68c23c5442ecdeb223}{exclusion\+\_\+list\+\_\+generator}} (\mbox{\hyperlink{structBonds}{Bonds}} $\ast$bonds, std\+::string label\+\_\+1, std\+::string label\+\_\+2)
+\item 
+void \mbox{\hyperlink{create__exclusion__list_8cpp_a307b247edbcc22a2950bfa82f992c565}{add\+\_\+exclusion}} (Open\+M\+M\+::\+Custom\+Nonbonded\+Force $\ast$custom\+\_\+bond, std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ exclude\+\_\+list)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{create__exclusion__list_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}{End\+Of\+List}} =-\/1
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{create__exclusion__list_8cpp_a307b247edbcc22a2950bfa82f992c565}\label{create__exclusion__list_8cpp_a307b247edbcc22a2950bfa82f992c565}} 
+\index{create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}!add\_exclusion@{add\_exclusion}}
+\index{add\_exclusion@{add\_exclusion}!create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}}
+\subsubsection{\texorpdfstring{add\_exclusion()}{add\_exclusion()}}
+{\footnotesize\ttfamily void add\+\_\+exclusion (\begin{DoxyParamCaption}\item[{Open\+M\+M\+::\+Custom\+Nonbonded\+Force $\ast$}]{custom\+\_\+bond,  }\item[{std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$}]{exclude\+\_\+list }\end{DoxyParamCaption})}
+
+Add excluded bonds to Custom non bonded force from exclude\+\_\+list. \mbox{\Hypertarget{create__exclusion__list_8cpp_ac89ed1b4e3238e68c23c5442ecdeb223}\label{create__exclusion__list_8cpp_ac89ed1b4e3238e68c23c5442ecdeb223}} 
+\index{create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}!exclusion\_list\_generator@{exclusion\_list\_generator}}
+\index{exclusion\_list\_generator@{exclusion\_list\_generator}!create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}}
+\subsubsection{\texorpdfstring{exclusion\_list\_generator()}{exclusion\_list\_generator()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ exclusion\+\_\+list\+\_\+generator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBonds}{Bonds}} $\ast$}]{bonds,  }\item[{std\+::string}]{label\+\_\+1,  }\item[{std\+::string}]{label\+\_\+2 }\end{DoxyParamCaption})}
+
+Creates a vector of node pairs (excluded bonds) from the system bond list using class labels. 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{create__exclusion__list_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}\label{create__exclusion__list_8cpp_a7e2c1a47aa955cc9ffb83b9258852cfc}} 
+\index{create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}!EndOfList@{EndOfList}}
+\index{EndOfList@{EndOfList}!create\_exclusion\_list.cpp@{create\_exclusion\_list.cpp}}
+\subsubsection{\texorpdfstring{EndOfList}{EndOfList}}
+{\footnotesize\ttfamily const int End\+Of\+List =-\/1}
+

@@ -1,0 +1,370 @@
+\hypertarget{classECM}{}\section{E\+CM Class Reference}
+\label{classECM}\index{ECM@{ECM}}
+
+
+{\ttfamily \#include $<$E\+C\+M.\+h$>$}
+
+
+
+Collaboration diagram for E\+CM\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{classECM__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classECM_ad0f4b70c1e02703565ae0fc6428eaf22}{import\+\_\+config}} (std\+::string config\+\_\+file\+\_\+name)
+\item 
+void \mbox{\hyperlink{classECM_ace592138fc9af4c5c4717c682924fdbe}{M\+D\+\_\+\+Evolution\+\_\+beginning}} (double M\+D\+\_\+\+Time\+\_\+\+Step)
+\item 
+void \mbox{\hyperlink{classECM_a797a29a087e5aefdb2f14352259df371}{M\+D\+\_\+\+Evolution\+\_\+end}} (double M\+D\+\_\+\+Time\+\_\+\+Step)
+\item 
+void \mbox{\hyperlink{classECM_acf7ff0e1b7a7631eff70c8584d01c050}{write\+\_\+traj}} (std\+::string traj\+\_\+name, std\+::string label)
+\item 
+void \mbox{\hyperlink{classECM_ab6d157d62196d68af2437ffb3edc19fe}{generate\+\_\+report}} (void)
+\item 
+void \mbox{\hyperlink{classECM_ae6164ca0ddd7fa532b2a64fd763d34ff}{export\+\_\+for\+\_\+resume}} (int M\+D\+\_\+step)
+\item 
+void \mbox{\hyperlink{classECM_a1f9ee2b79c7cf98efe72a4e74ff7916f}{export\+\_\+for\+\_\+resume}} (int M\+D\+\_\+step, \mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} atoms\mbox{[}$\,$\mbox{]}, int atom\+\_\+count)
+\item 
+void \mbox{\hyperlink{classECM_aa668c3991fcee9ac12c78383f0c0b0aa}{set\+\_\+state}} (\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} all\+\_\+atoms\mbox{[}$\,$\mbox{]}, int atom\+\_\+count)
+\item 
+void \mbox{\hyperlink{classECM_aa2f9122b1b849ab31856464889d328f4}{set\+\_\+label}} (std\+::string lab)
+\item 
+std\+::string \mbox{\hyperlink{classECM_a2979fbe785c15c43932ba9f6590fd4ef}{get\+\_\+label}} (void)
+\item 
+void \mbox{\hyperlink{classECM_ae637a880979bf8ea181b09b41a575fd1}{set\+\_\+file\+\_\+time}} (char $\ast$buffer)
+\item 
+void \mbox{\hyperlink{classECM_a78e54e27714f2ed310b75296eaba5495}{set\+\_\+index}} (int ind)
+\item 
+double \mbox{\hyperlink{classECM_ad3602738d7ce353dea8dc7c957080815}{get\+\_\+spring\+\_\+stiffness\+\_\+coefficient}} (void)
+\item 
+int \mbox{\hyperlink{classECM_a6890f319e54f20f6090dff58b95f4459}{get\+\_\+num\+\_\+of\+\_\+nodes}} (void)
+\begin{DoxyCompactList}\small\item\em public access to total number of \mbox{\hyperlink{classECM}{E\+CM}} nodes. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classECM_a7e30f13a497b78851fa165609c20344b}{get\+\_\+num\+\_\+of\+\_\+triangles}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a5ae07f6f6a367dc6ebac42387ad8edd2}{get\+\_\+node\+\_\+mass}} (void)
+\item 
+int \mbox{\hyperlink{classECM_aadeaefad8e0e1ca296249ed4c8a5ade9}{get\+\_\+num\+\_\+of\+\_\+node\+\_\+pairs}} (void)
+\item 
+int \mbox{\hyperlink{classECM_ab45a4d7d1d71a4bd6ca1403f9d794203}{get\+\_\+spring\+\_\+model}} (void)
+\item 
+int \mbox{\hyperlink{classECM_a97b1c4fbfa1158752369ed3e1c8f2f59}{get\+\_\+node\+\_\+pair}} (int bond\+\_\+num, int node\+\_\+id)
+\item 
+double \mbox{\hyperlink{classECM_ab8d8c6f37cbbf963cad176bfd5c45658}{get\+\_\+avg\+\_\+node\+\_\+dist}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a9116e5b74b658291d070c03f0a74715c}{get\+\_\+sigma\+\_\+\+L\+J\+\_\+12\+\_\+6}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a740df2034bc69bb26c6ba1780f644329}{get\+\_\+epsilon\+\_\+\+L\+J\+\_\+12\+\_\+6}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a59c396242e1f2a7992bcb3744c27d280}{get\+\_\+node\+\_\+radius}} (void)
+\item 
+double \mbox{\hyperlink{classECM_af36525691755fc391410e3784fe44113}{get\+\_\+interaction\+\_\+range}} (void)
+\item 
+void \mbox{\hyperlink{classECM_a9c4ea9febf2771ef222cd1430c3bf136}{set\+\_\+interaction\+\_\+range}} (double range)
+\item 
+double \mbox{\hyperlink{classECM_a0ce08b5de6aebfe790a0a6a9967d832c}{get\+\_\+epsilon}} (void)
+\item 
+double \mbox{\hyperlink{classECM_ab955084115d90d0410add1906b4efe85}{get\+\_\+sigma}} (void)
+\item 
+int \mbox{\hyperlink{classECM_a574b314f8234976b729ba5cc75b8c29c}{get\+\_\+ext\+\_\+force\+\_\+model}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a61ec0379672113efba08c9b946e42c8a}{get\+\_\+kx}} (void)
+\item 
+double \mbox{\hyperlink{classECM_ae33002f6f6203246cce7ad05c160e051}{get\+\_\+ky}} (void)
+\item 
+double \mbox{\hyperlink{classECM_ad1cc47474c4e005570073d3be0504724}{get\+\_\+kz}} (void)
+\item 
+double \mbox{\hyperlink{classECM_a7c17fccf4d4f8165a7dceee20c81433d}{get\+\_\+node\+\_\+position}} (int node\+\_\+number, int node\+\_\+coordinate)
+\item 
+void \mbox{\hyperlink{classECM_a5ecaa9b089745b130c510aedbaea18e0}{add\+\_\+to\+\_\+force}} (double force, int index, int coor)
+\item 
+void \mbox{\hyperlink{classECM_a27b1c92c5a5d332698d7ae7cad1c36e4}{shift\+\_\+node\+\_\+positions}} (void)
+\item 
+void \mbox{\hyperlink{classECM_ae65e79751887e704a963f66e240057fe}{shift\+\_\+velocity}} (double vx, double vy, double vz)
+\item 
+double \mbox{\hyperlink{classECM_af327509a64d2220a505c16e9997e78c1}{get\+\_\+node\+\_\+velocity}} (int node\+\_\+number, int node\+\_\+coordinate)
+\item 
+void \mbox{\hyperlink{classECM_a7272481293ee528878aeb669343bcd4f}{update\+\_\+\+C\+O\+M\+\_\+velocity}} (void)
+\item 
+void \mbox{\hyperlink{classECM_a492d0690a480a0f0fdfcef3ef35bc970}{update\+\_\+\+C\+O\+M\+\_\+position}} (void)
+\item 
+void \mbox{\hyperlink{classECM_a434a26d9e696995b20642a5e87c2f0c2}{set\+\_\+\+F\+E\+N\+E\+\_\+param}} (double \&le0, double \&le1, double \&lmin, double \&lmax)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classECM_a14bf2404f3c94c4e4e372c5eb9fd70cf}{output\+\_\+file\+\_\+neme}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classECM_a5ecaa9b089745b130c510aedbaea18e0}\label{classECM_a5ecaa9b089745b130c510aedbaea18e0}} 
+\index{ECM@{ECM}!add\_to\_force@{add\_to\_force}}
+\index{add\_to\_force@{add\_to\_force}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{add\_to\_force()}{add\_to\_force()}}
+{\footnotesize\ttfamily void E\+C\+M\+::add\+\_\+to\+\_\+force (\begin{DoxyParamCaption}\item[{double}]{force,  }\item[{int}]{index,  }\item[{int}]{coor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_ae6164ca0ddd7fa532b2a64fd763d34ff}\label{classECM_ae6164ca0ddd7fa532b2a64fd763d34ff}} 
+\index{ECM@{ECM}!export\_for\_resume@{export\_for\_resume}}
+\index{export\_for\_resume@{export\_for\_resume}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{export\_for\_resume()}{export\_for\_resume()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void E\+C\+M\+::export\+\_\+for\+\_\+resume (\begin{DoxyParamCaption}\item[{int}]{M\+D\+\_\+step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_a1f9ee2b79c7cf98efe72a4e74ff7916f}\label{classECM_a1f9ee2b79c7cf98efe72a4e74ff7916f}} 
+\index{ECM@{ECM}!export\_for\_resume@{export\_for\_resume}}
+\index{export\_for\_resume@{export\_for\_resume}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{export\_for\_resume()}{export\_for\_resume()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void E\+C\+M\+::export\+\_\+for\+\_\+resume (\begin{DoxyParamCaption}\item[{int}]{M\+D\+\_\+step,  }\item[{\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}}}]{atoms\mbox{[}$\,$\mbox{]},  }\item[{int}]{atom\+\_\+count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_ab6d157d62196d68af2437ffb3edc19fe}\label{classECM_ab6d157d62196d68af2437ffb3edc19fe}} 
+\index{ECM@{ECM}!generate\_report@{generate\_report}}
+\index{generate\_report@{generate\_report}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{generate\_report()}{generate\_report()}}
+{\footnotesize\ttfamily void E\+C\+M\+::generate\+\_\+report (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_ab8d8c6f37cbbf963cad176bfd5c45658}\label{classECM_ab8d8c6f37cbbf963cad176bfd5c45658}} 
+\index{ECM@{ECM}!get\_avg\_node\_dist@{get\_avg\_node\_dist}}
+\index{get\_avg\_node\_dist@{get\_avg\_node\_dist}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_avg\_node\_dist()}{get\_avg\_node\_dist()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+avg\+\_\+node\+\_\+dist (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the average distance of the nodes as calculated from the mesh. \mbox{\Hypertarget{classECM_a0ce08b5de6aebfe790a0a6a9967d832c}\label{classECM_a0ce08b5de6aebfe790a0a6a9967d832c}} 
+\index{ECM@{ECM}!get\_epsilon@{get\_epsilon}}
+\index{get\_epsilon@{get\_epsilon}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_epsilon()}{get\_epsilon()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+epsilon (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a740df2034bc69bb26c6ba1780f644329}\label{classECM_a740df2034bc69bb26c6ba1780f644329}} 
+\index{ECM@{ECM}!get\_epsilon\_LJ\_12\_6@{get\_epsilon\_LJ\_12\_6}}
+\index{get\_epsilon\_LJ\_12\_6@{get\_epsilon\_LJ\_12\_6}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_epsilon\_LJ\_12\_6()}{get\_epsilon\_LJ\_12\_6()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+epsilon\+\_\+\+L\+J\+\_\+12\+\_\+6 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction. \mbox{\Hypertarget{classECM_a574b314f8234976b729ba5cc75b8c29c}\label{classECM_a574b314f8234976b729ba5cc75b8c29c}} 
+\index{ECM@{ECM}!get\_ext\_force\_model@{get\_ext\_force\_model}}
+\index{get\_ext\_force\_model@{get\_ext\_force\_model}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_ext\_force\_model()}{get\_ext\_force\_model()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+ext\+\_\+force\+\_\+model (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return external force model. \mbox{\Hypertarget{classECM_af36525691755fc391410e3784fe44113}\label{classECM_af36525691755fc391410e3784fe44113}} 
+\index{ECM@{ECM}!get\_interaction\_range@{get\_interaction\_range}}
+\index{get\_interaction\_range@{get\_interaction\_range}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_interaction\_range()}{get\_interaction\_range()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+interaction\+\_\+range (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a61ec0379672113efba08c9b946e42c8a}\label{classECM_a61ec0379672113efba08c9b946e42c8a}} 
+\index{ECM@{ECM}!get\_kx@{get\_kx}}
+\index{get\_kx@{get\_kx}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_kx()}{get\_kx()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+kx (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_ae33002f6f6203246cce7ad05c160e051}\label{classECM_ae33002f6f6203246cce7ad05c160e051}} 
+\index{ECM@{ECM}!get\_ky@{get\_ky}}
+\index{get\_ky@{get\_ky}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_ky()}{get\_ky()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+ky (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_ad1cc47474c4e005570073d3be0504724}\label{classECM_ad1cc47474c4e005570073d3be0504724}} 
+\index{ECM@{ECM}!get\_kz@{get\_kz}}
+\index{get\_kz@{get\_kz}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_kz()}{get\_kz()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+kz (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a2979fbe785c15c43932ba9f6590fd4ef}\label{classECM_a2979fbe785c15c43932ba9f6590fd4ef}} 
+\index{ECM@{ECM}!get\_label@{get\_label}}
+\index{get\_label@{get\_label}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_label()}{get\_label()}}
+{\footnotesize\ttfamily std\+::string E\+C\+M\+::get\+\_\+label (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+return the label(pdb) used to write to the trajectory files. \mbox{\Hypertarget{classECM_a5ae07f6f6a367dc6ebac42387ad8edd2}\label{classECM_a5ae07f6f6a367dc6ebac42387ad8edd2}} 
+\index{ECM@{ECM}!get\_node\_mass@{get\_node\_mass}}
+\index{get\_node\_mass@{get\_node\_mass}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_node\_mass()}{get\_node\_mass()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+node\+\_\+mass (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the node mass. At the current stage of this code all membrane nodes have the same mass. \mbox{\Hypertarget{classECM_a97b1c4fbfa1158752369ed3e1c8f2f59}\label{classECM_a97b1c4fbfa1158752369ed3e1c8f2f59}} 
+\index{ECM@{ECM}!get\_node\_pair@{get\_node\_pair}}
+\index{get\_node\_pair@{get\_node\_pair}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_node\_pair()}{get\_node\_pair()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+node\+\_\+pair (\begin{DoxyParamCaption}\item[{int}]{bond\+\_\+num,  }\item[{int}]{node\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot. \mbox{\Hypertarget{classECM_a7c17fccf4d4f8165a7dceee20c81433d}\label{classECM_a7c17fccf4d4f8165a7dceee20c81433d}} 
+\index{ECM@{ECM}!get\_node\_position@{get\_node\_position}}
+\index{get\_node\_position@{get\_node\_position}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_node\_position()}{get\_node\_position()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+node\+\_\+position (\begin{DoxyParamCaption}\item[{int}]{node\+\_\+number,  }\item[{int}]{node\+\_\+coordinate }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a59c396242e1f2a7992bcb3744c27d280}\label{classECM_a59c396242e1f2a7992bcb3744c27d280}} 
+\index{ECM@{ECM}!get\_node\_radius@{get\_node\_radius}}
+\index{get\_node\_radius@{get\_node\_radius}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_node\_radius()}{get\_node\_radius()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+node\+\_\+radius (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_af327509a64d2220a505c16e9997e78c1}\label{classECM_af327509a64d2220a505c16e9997e78c1}} 
+\index{ECM@{ECM}!get\_node\_velocity@{get\_node\_velocity}}
+\index{get\_node\_velocity@{get\_node\_velocity}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_node\_velocity()}{get\_node\_velocity()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+node\+\_\+velocity (\begin{DoxyParamCaption}\item[{int}]{node\+\_\+number,  }\item[{int}]{node\+\_\+coordinate }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the x (0), y (1), and z (2) velocities of the node index (number). \mbox{\Hypertarget{classECM_aadeaefad8e0e1ca296249ed4c8a5ade9}\label{classECM_aadeaefad8e0e1ca296249ed4c8a5ade9}} 
+\index{ECM@{ECM}!get\_num\_of\_node\_pairs@{get\_num\_of\_node\_pairs}}
+\index{get\_num\_of\_node\_pairs@{get\_num\_of\_node\_pairs}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_num\_of\_node\_pairs()}{get\_num\_of\_node\_pairs()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+num\+\_\+of\+\_\+node\+\_\+pairs (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the number of bonds between membrane nodes. \mbox{\Hypertarget{classECM_a6890f319e54f20f6090dff58b95f4459}\label{classECM_a6890f319e54f20f6090dff58b95f4459}} 
+\index{ECM@{ECM}!get\_num\_of\_nodes@{get\_num\_of\_nodes}}
+\index{get\_num\_of\_nodes@{get\_num\_of\_nodes}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_num\_of\_nodes()}{get\_num\_of\_nodes()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+num\+\_\+of\+\_\+nodes (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+public access to total number of \mbox{\hyperlink{classECM}{E\+CM}} nodes. 
+
+\begin{DoxyReturn}{Returns}
+integer number of nodes in the \mbox{\hyperlink{classECM}{E\+CM}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classECM_a7e30f13a497b78851fa165609c20344b}\label{classECM_a7e30f13a497b78851fa165609c20344b}} 
+\index{ECM@{ECM}!get\_num\_of\_triangles@{get\_num\_of\_triangles}}
+\index{get\_num\_of\_triangles@{get\_num\_of\_triangles}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_num\_of\_triangles()}{get\_num\_of\_triangles()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+num\+\_\+of\+\_\+triangles (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+public access to the total number of triangles in the \mbox{\hyperlink{classECM}{E\+CM}}. \mbox{\Hypertarget{classECM_ab955084115d90d0410add1906b4efe85}\label{classECM_ab955084115d90d0410add1906b4efe85}} 
+\index{ECM@{ECM}!get\_sigma@{get\_sigma}}
+\index{get\_sigma@{get\_sigma}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_sigma()}{get\_sigma()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+sigma (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a9116e5b74b658291d070c03f0a74715c}\label{classECM_a9116e5b74b658291d070c03f0a74715c}} 
+\index{ECM@{ECM}!get\_sigma\_LJ\_12\_6@{get\_sigma\_LJ\_12\_6}}
+\index{get\_sigma\_LJ\_12\_6@{get\_sigma\_LJ\_12\_6}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_sigma\_LJ\_12\_6()}{get\_sigma\_LJ\_12\_6()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+sigma\+\_\+\+L\+J\+\_\+12\+\_\+6 (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction. \mbox{\Hypertarget{classECM_ab45a4d7d1d71a4bd6ca1403f9d794203}\label{classECM_ab45a4d7d1d71a4bd6ca1403f9d794203}} 
+\index{ECM@{ECM}!get\_spring\_model@{get\_spring\_model}}
+\index{get\_spring\_model@{get\_spring\_model}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_spring\_model()}{get\_spring\_model()}}
+{\footnotesize\ttfamily int E\+C\+M\+::get\+\_\+spring\+\_\+model (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return input spring model, used to setup the openmm system for the bonds. \mbox{\Hypertarget{classECM_ad3602738d7ce353dea8dc7c957080815}\label{classECM_ad3602738d7ce353dea8dc7c957080815}} 
+\index{ECM@{ECM}!get\_spring\_stiffness\_coefficient@{get\_spring\_stiffness\_coefficient}}
+\index{get\_spring\_stiffness\_coefficient@{get\_spring\_stiffness\_coefficient}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{get\_spring\_stiffness\_coefficient()}{get\_spring\_stiffness\_coefficient()}}
+{\footnotesize\ttfamily double E\+C\+M\+::get\+\_\+spring\+\_\+stiffness\+\_\+coefficient (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return spring stiffness coefficient. \mbox{\Hypertarget{classECM_ad0f4b70c1e02703565ae0fc6428eaf22}\label{classECM_ad0f4b70c1e02703565ae0fc6428eaf22}} 
+\index{ECM@{ECM}!import\_config@{import\_config}}
+\index{import\_config@{import\_config}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{import\_config()}{import\_config()}}
+{\footnotesize\ttfamily void E\+C\+M\+::import\+\_\+config (\begin{DoxyParamCaption}\item[{std\+::string}]{config\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_ace592138fc9af4c5c4717c682924fdbe}\label{classECM_ace592138fc9af4c5c4717c682924fdbe}} 
+\index{ECM@{ECM}!MD\_Evolution\_beginning@{MD\_Evolution\_beginning}}
+\index{MD\_Evolution\_beginning@{MD\_Evolution\_beginning}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{MD\_Evolution\_beginning()}{MD\_Evolution\_beginning()}}
+{\footnotesize\ttfamily void E\+C\+M\+::\+M\+D\+\_\+\+Evolution\+\_\+beginning (\begin{DoxyParamCaption}\item[{double}]{M\+D\+\_\+\+Time\+\_\+\+Step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_a797a29a087e5aefdb2f14352259df371}\label{classECM_a797a29a087e5aefdb2f14352259df371}} 
+\index{ECM@{ECM}!MD\_Evolution\_end@{MD\_Evolution\_end}}
+\index{MD\_Evolution\_end@{MD\_Evolution\_end}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{MD\_Evolution\_end()}{MD\_Evolution\_end()}}
+{\footnotesize\ttfamily void E\+C\+M\+::\+M\+D\+\_\+\+Evolution\+\_\+end (\begin{DoxyParamCaption}\item[{double}]{M\+D\+\_\+\+Time\+\_\+\+Step }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classECM_a434a26d9e696995b20642a5e87c2f0c2}\label{classECM_a434a26d9e696995b20642a5e87c2f0c2}} 
+\index{ECM@{ECM}!set\_FENE\_param@{set\_FENE\_param}}
+\index{set\_FENE\_param@{set\_FENE\_param}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_FENE\_param()}{set\_FENE\_param()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+\+F\+E\+N\+E\+\_\+param (\begin{DoxyParamCaption}\item[{double \&}]{le0,  }\item[{double \&}]{le1,  }\item[{double \&}]{lmin,  }\item[{double \&}]{lmax }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Set F\+E\+NE calculated parameters. \mbox{\Hypertarget{classECM_ae637a880979bf8ea181b09b41a575fd1}\label{classECM_ae637a880979bf8ea181b09b41a575fd1}} 
+\index{ECM@{ECM}!set\_file\_time@{set\_file\_time}}
+\index{set\_file\_time@{set\_file\_time}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_file\_time()}{set\_file\_time()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+file\+\_\+time (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a78e54e27714f2ed310b75296eaba5495}\label{classECM_a78e54e27714f2ed310b75296eaba5495}} 
+\index{ECM@{ECM}!set\_index@{set\_index}}
+\index{set\_index@{set\_index}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_index()}{set\_index()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{ind }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a9c4ea9febf2771ef222cd1430c3bf136}\label{classECM_a9c4ea9febf2771ef222cd1430c3bf136}} 
+\index{ECM@{ECM}!set\_interaction\_range@{set\_interaction\_range}}
+\index{set\_interaction\_range@{set\_interaction\_range}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_interaction\_range()}{set\_interaction\_range()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+interaction\+\_\+range (\begin{DoxyParamCaption}\item[{double}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_aa2f9122b1b849ab31856464889d328f4}\label{classECM_aa2f9122b1b849ab31856464889d328f4}} 
+\index{ECM@{ECM}!set\_label@{set\_label}}
+\index{set\_label@{set\_label}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_label()}{set\_label()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+label (\begin{DoxyParamCaption}\item[{std\+::string}]{lab }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Assigns the label(pdb) used to write to the trajectory files. \mbox{\Hypertarget{classECM_aa668c3991fcee9ac12c78383f0c0b0aa}\label{classECM_aa668c3991fcee9ac12c78383f0c0b0aa}} 
+\index{ECM@{ECM}!set\_state@{set\_state}}
+\index{set\_state@{set\_state}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{set\_state()}{set\_state()}}
+{\footnotesize\ttfamily void E\+C\+M\+::set\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}}}]{all\+\_\+atoms\mbox{[}$\,$\mbox{]},  }\item[{int}]{atom\+\_\+count }\end{DoxyParamCaption})}
+
+Set the current state (Open\+MM) of the class. \mbox{\Hypertarget{classECM_a27b1c92c5a5d332698d7ae7cad1c36e4}\label{classECM_a27b1c92c5a5d332698d7ae7cad1c36e4}} 
+\index{ECM@{ECM}!shift\_node\_positions@{shift\_node\_positions}}
+\index{shift\_node\_positions@{shift\_node\_positions}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{shift\_node\_positions()}{shift\_node\_positions()}}
+{\footnotesize\ttfamily void E\+C\+M\+::shift\+\_\+node\+\_\+positions (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_ae65e79751887e704a963f66e240057fe}\label{classECM_ae65e79751887e704a963f66e240057fe}} 
+\index{ECM@{ECM}!shift\_velocity@{shift\_velocity}}
+\index{shift\_velocity@{shift\_velocity}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{shift\_velocity()}{shift\_velocity()}}
+{\footnotesize\ttfamily void E\+C\+M\+::shift\+\_\+velocity (\begin{DoxyParamCaption}\item[{double}]{vx,  }\item[{double}]{vy,  }\item[{double}]{vz }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a492d0690a480a0f0fdfcef3ef35bc970}\label{classECM_a492d0690a480a0f0fdfcef3ef35bc970}} 
+\index{ECM@{ECM}!update\_COM\_position@{update\_COM\_position}}
+\index{update\_COM\_position@{update\_COM\_position}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{update\_COM\_position()}{update\_COM\_position()}}
+{\footnotesize\ttfamily void E\+C\+M\+::update\+\_\+\+C\+O\+M\+\_\+position (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_a7272481293ee528878aeb669343bcd4f}\label{classECM_a7272481293ee528878aeb669343bcd4f}} 
+\index{ECM@{ECM}!update\_COM\_velocity@{update\_COM\_velocity}}
+\index{update\_COM\_velocity@{update\_COM\_velocity}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{update\_COM\_velocity()}{update\_COM\_velocity()}}
+{\footnotesize\ttfamily void E\+C\+M\+::update\+\_\+\+C\+O\+M\+\_\+velocity (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classECM_acf7ff0e1b7a7631eff70c8584d01c050}\label{classECM_acf7ff0e1b7a7631eff70c8584d01c050}} 
+\index{ECM@{ECM}!write\_traj@{write\_traj}}
+\index{write\_traj@{write\_traj}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{write\_traj()}{write\_traj()}}
+{\footnotesize\ttfamily void E\+C\+M\+::write\+\_\+traj (\begin{DoxyParamCaption}\item[{std\+::string}]{traj\+\_\+name,  }\item[{std\+::string}]{label }\end{DoxyParamCaption})}
+
+
+
+\subsection{Field Documentation}
+\mbox{\Hypertarget{classECM_a14bf2404f3c94c4e4e372c5eb9fd70cf}\label{classECM_a14bf2404f3c94c4e4e372c5eb9fd70cf}} 
+\index{ECM@{ECM}!output\_file\_neme@{output\_file\_neme}}
+\index{output\_file\_neme@{output\_file\_neme}!ECM@{ECM}}
+\subsubsection{\texorpdfstring{output\_file\_neme}{output\_file\_neme}}
+{\footnotesize\ttfamily std\+::string E\+C\+M\+::output\+\_\+file\+\_\+neme}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/\mbox{\hyperlink{ECM_8h}{E\+C\+M.\+h}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM_2check_8cpp}{check.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM__config_8cpp}{E\+C\+M\+\_\+config.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM__MD__Evolution_8cpp}{E\+C\+M\+\_\+\+M\+D\+\_\+\+Evolution.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM__Node__Pair__Identifier_8cpp}{E\+C\+M\+\_\+\+Node\+\_\+\+Pair\+\_\+\+Identifier.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM__OpenMM_8cpp}{E\+C\+M\+\_\+\+Open\+M\+M.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM__read__functions_8cpp}{E\+C\+M\+\_\+read\+\_\+functions.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM_2Initialise_8cpp}{Initialise.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{Node__neighbour__list__constructor_8cpp}{Node\+\_\+neighbour\+\_\+list\+\_\+constructor.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\+E\+C\+M/\mbox{\hyperlink{ECM_2write__functions_8cpp}{write\+\_\+functions.\+cpp}}\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/source/\mbox{\hyperlink{ECM__Normal__direction__Identifier_8cpp}{E\+C\+M\+\_\+\+Normal\+\_\+direction\+\_\+\+Identifier.\+cpp}}\end{DoxyCompactItemize}

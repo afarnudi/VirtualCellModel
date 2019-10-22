@@ -1,0 +1,104 @@
+\hypertarget{structMyOpenMMData}{}\section{My\+Open\+M\+M\+Data Struct Reference}
+\label{structMyOpenMMData}\index{MyOpenMMData@{MyOpenMMData}}
+
+
+{\ttfamily \#include $<$Open\+M\+M\+\_\+structs.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structMyOpenMMData_ad91ea098216e5bbee8f0199d2a7e2c7d}{My\+Open\+M\+M\+Data}} ()
+\item 
+\mbox{\hyperlink{structMyOpenMMData_a8b18e9a40611765e2c966495e2a339bb}{$\sim$\+My\+Open\+M\+M\+Data}} ()
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+Open\+M\+M\+::\+System $\ast$ \mbox{\hyperlink{structMyOpenMMData_ad14c08e4c616766db92ae52e57b44480}{system}}
+\item 
+Open\+M\+M\+::\+Integrator $\ast$ \mbox{\hyperlink{structMyOpenMMData_a471489f3c9bd1e5a54fc5202b71b6b96}{integrator}}
+\item 
+Open\+M\+M\+::\+Context $\ast$ \mbox{\hyperlink{structMyOpenMMData_a2d94acedaa245a3fb2faa48625fa7fc1}{context}}
+\item 
+Open\+M\+M\+::\+Harmonic\+Bond\+Force $\ast$ \mbox{\hyperlink{structMyOpenMMData_af2fef800bec4dda8e074aa6167624a2f}{harmonic}}
+\item 
+Open\+M\+M\+::\+Custom\+Bond\+Force $\ast$ \mbox{\hyperlink{structMyOpenMMData_ac7bcf8c5273a640f7f606bda799fba37}{x4harmonic}}
+\item 
+std\+::vector$<$ Open\+M\+M\+::\+Custom\+Compound\+Bond\+Force $\ast$ $>$ \mbox{\hyperlink{structMyOpenMMData_af6d21883ce573f7555a5161514eb9fbf}{Dihedral}}
+\item 
+std\+::vector$<$ Open\+M\+M\+::\+Custom\+Nonbonded\+Force $\ast$ $>$ \mbox{\hyperlink{structMyOpenMMData_a5284fe93e3178234282fdbad2d80c07e}{EV}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+ \subsubsection*{I\+N\+T\+E\+R\+F\+A\+CE TO Open\+MM }
+
+These four functions and an opaque structure are used to interface our main program with Open\+MM without the main program having any direct interaction /\+Users/sajjad/virtual \mbox{\hyperlink{neighbour__pool__constructor_8cpp}{cell/\+Membrane\+\_\+\+O\+B\+J/source/neighbour\+\_\+pool\+\_\+constructor.\+cpp}} $\ast$ with the Open\+MM A\+PI. This is a clean approach for interfacing with any MD code, although the details of the interface routines will differ. This is still just \char`\"{}locally written\char`\"{} code and is not required by Open\+MM.
+
+This is our opaque \char`\"{}handle\char`\"{} class containing all the Open\+MM objects that must persist from call to call during a simulation. The main program gets a pointer to one of these but sees it as essentially a void$\ast$ since it doesn\textquotesingle{}t know the definition of this class. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structMyOpenMMData_ad91ea098216e5bbee8f0199d2a7e2c7d}\label{structMyOpenMMData_ad91ea098216e5bbee8f0199d2a7e2c7d}} 
+\index{MyOpenMMData@{MyOpenMMData}!MyOpenMMData@{MyOpenMMData}}
+\index{MyOpenMMData@{MyOpenMMData}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{MyOpenMMData()}{MyOpenMMData()}}
+{\footnotesize\ttfamily My\+Open\+M\+M\+Data\+::\+My\+Open\+M\+M\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structMyOpenMMData_a8b18e9a40611765e2c966495e2a339bb}\label{structMyOpenMMData_a8b18e9a40611765e2c966495e2a339bb}} 
+\index{MyOpenMMData@{MyOpenMMData}!````~MyOpenMMData@{$\sim$MyOpenMMData}}
+\index{````~MyOpenMMData@{$\sim$MyOpenMMData}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{$\sim$MyOpenMMData()}{~MyOpenMMData()}}
+{\footnotesize\ttfamily My\+Open\+M\+M\+Data\+::$\sim$\+My\+Open\+M\+M\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Field Documentation}
+\mbox{\Hypertarget{structMyOpenMMData_a2d94acedaa245a3fb2faa48625fa7fc1}\label{structMyOpenMMData_a2d94acedaa245a3fb2faa48625fa7fc1}} 
+\index{MyOpenMMData@{MyOpenMMData}!context@{context}}
+\index{context@{context}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{context}{context}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+Context$\ast$ My\+Open\+M\+M\+Data\+::context}
+
+\mbox{\Hypertarget{structMyOpenMMData_af6d21883ce573f7555a5161514eb9fbf}\label{structMyOpenMMData_af6d21883ce573f7555a5161514eb9fbf}} 
+\index{MyOpenMMData@{MyOpenMMData}!Dihedral@{Dihedral}}
+\index{Dihedral@{Dihedral}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{Dihedral}{Dihedral}}
+{\footnotesize\ttfamily std\+::vector$<$Open\+M\+M\+::\+Custom\+Compound\+Bond\+Force$\ast$$>$ My\+Open\+M\+M\+Data\+::\+Dihedral}
+
+\mbox{\Hypertarget{structMyOpenMMData_a5284fe93e3178234282fdbad2d80c07e}\label{structMyOpenMMData_a5284fe93e3178234282fdbad2d80c07e}} 
+\index{MyOpenMMData@{MyOpenMMData}!EV@{EV}}
+\index{EV@{EV}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{EV}{EV}}
+{\footnotesize\ttfamily std\+::vector$<$Open\+M\+M\+::\+Custom\+Nonbonded\+Force$\ast$$>$ My\+Open\+M\+M\+Data\+::\+EV}
+
+\mbox{\Hypertarget{structMyOpenMMData_af2fef800bec4dda8e074aa6167624a2f}\label{structMyOpenMMData_af2fef800bec4dda8e074aa6167624a2f}} 
+\index{MyOpenMMData@{MyOpenMMData}!harmonic@{harmonic}}
+\index{harmonic@{harmonic}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{harmonic}{harmonic}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+Harmonic\+Bond\+Force$\ast$ My\+Open\+M\+M\+Data\+::harmonic}
+
+\mbox{\Hypertarget{structMyOpenMMData_a471489f3c9bd1e5a54fc5202b71b6b96}\label{structMyOpenMMData_a471489f3c9bd1e5a54fc5202b71b6b96}} 
+\index{MyOpenMMData@{MyOpenMMData}!integrator@{integrator}}
+\index{integrator@{integrator}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{integrator}{integrator}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+Integrator$\ast$ My\+Open\+M\+M\+Data\+::integrator}
+
+\mbox{\Hypertarget{structMyOpenMMData_ad14c08e4c616766db92ae52e57b44480}\label{structMyOpenMMData_ad14c08e4c616766db92ae52e57b44480}} 
+\index{MyOpenMMData@{MyOpenMMData}!system@{system}}
+\index{system@{system}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{system}{system}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+System$\ast$ My\+Open\+M\+M\+Data\+::system}
+
+\mbox{\Hypertarget{structMyOpenMMData_ac7bcf8c5273a640f7f606bda799fba37}\label{structMyOpenMMData_ac7bcf8c5273a640f7f606bda799fba37}} 
+\index{MyOpenMMData@{MyOpenMMData}!x4harmonic@{x4harmonic}}
+\index{x4harmonic@{x4harmonic}!MyOpenMMData@{MyOpenMMData}}
+\subsubsection{\texorpdfstring{x4harmonic}{x4harmonic}}
+{\footnotesize\ttfamily Open\+M\+M\+::\+Custom\+Bond\+Force$\ast$ My\+Open\+M\+M\+Data\+::x4harmonic}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/\mbox{\hyperlink{OpenMM__structs_8h}{Open\+M\+M\+\_\+structs.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,56 @@
+\hypertarget{General__class__functions_8h}{}\section{/\+Users/sajjad/virtual cell/\+Membrane\+\_\+\+O\+B\+J/include/\+General\+\_\+class\+\_\+functions.h File Reference}
+\label{General__class__functions_8h}\index{/Users/sajjad/virtual cell/Membrane\_OBJ/include/General\_class\_functions.h@{/Users/sajjad/virtual cell/Membrane\_OBJ/include/General\_class\_functions.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}Membrane.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Actin.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}E\+C\+M.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Chromatin.\+h\char`\"{}}\newline
+Include dependency graph for General\+\_\+class\+\_\+functions.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{General__class__functions_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{General__class__functions_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{General__class__functions_8h_a06aa1ddfa009b8b468042b99317988b5}{Export\+\_\+classes\+\_\+for\+\_\+resume}} (std\+::vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&membranes, std\+::vector$<$ \mbox{\hyperlink{classActin}{Actin}} $>$ \&actins, std\+::vector$<$ \mbox{\hyperlink{classECM}{E\+CM}} $>$ \&ecms, std\+::vector$<$ \mbox{\hyperlink{classChromatin}{Chromatin}} $>$ \&chromatins, double time, \mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} $\ast$all\+\_\+atoms)
+\item 
+bool \mbox{\hyperlink{General__class__functions_8h_a05cf847cb1c92a16b50fdef103853203}{check\+\_\+for\+\_\+membrane\+\_\+update}} (vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&membranes, double time)
+\item 
+void \mbox{\hyperlink{General__class__functions_8h_a4e368b90462454c0d604ea65a10d6ccd}{update\+Open\+M\+Mforces}} (vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&membranes, \mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}} $\ast$omm, double time, \mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} atoms\mbox{[}$\,$\mbox{]}, \mbox{\hyperlink{structBonds}{Bonds}} $\ast$bonds, vector$<$ set$<$ int $>$ $>$ \&membrane\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&actin\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&ecm\+\_\+set, vector$<$ set$<$ int $>$ $>$ \&chromatin\+\_\+set, vector$<$ vector$<$ int $>$ $>$ interaction\+\_\+map)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{General__class__functions_8h_a05cf847cb1c92a16b50fdef103853203}\label{General__class__functions_8h_a05cf847cb1c92a16b50fdef103853203}} 
+\index{General\_class\_functions.h@{General\_class\_functions.h}!check\_for\_membrane\_update@{check\_for\_membrane\_update}}
+\index{check\_for\_membrane\_update@{check\_for\_membrane\_update}!General\_class\_functions.h@{General\_class\_functions.h}}
+\subsubsection{\texorpdfstring{check\_for\_membrane\_update()}{check\_for\_membrane\_update()}}
+{\footnotesize\ttfamily bool check\+\_\+for\+\_\+membrane\+\_\+update (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&}]{membranes,  }\item[{double}]{time }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{General__class__functions_8h_a06aa1ddfa009b8b468042b99317988b5}\label{General__class__functions_8h_a06aa1ddfa009b8b468042b99317988b5}} 
+\index{General\_class\_functions.h@{General\_class\_functions.h}!Export\_classes\_for\_resume@{Export\_classes\_for\_resume}}
+\index{Export\_classes\_for\_resume@{Export\_classes\_for\_resume}!General\_class\_functions.h@{General\_class\_functions.h}}
+\subsubsection{\texorpdfstring{Export\_classes\_for\_resume()}{Export\_classes\_for\_resume()}}
+{\footnotesize\ttfamily void Export\+\_\+classes\+\_\+for\+\_\+resume (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&}]{membranes,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classActin}{Actin}} $>$ \&}]{actins,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classECM}{E\+CM}} $>$ \&}]{ecms,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classChromatin}{Chromatin}} $>$ \&}]{chromatins,  }\item[{double}]{time,  }\item[{\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}} $\ast$}]{all\+\_\+atoms }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{General__class__functions_8h_a4e368b90462454c0d604ea65a10d6ccd}\label{General__class__functions_8h_a4e368b90462454c0d604ea65a10d6ccd}} 
+\index{General\_class\_functions.h@{General\_class\_functions.h}!updateOpenMMforces@{updateOpenMMforces}}
+\index{updateOpenMMforces@{updateOpenMMforces}!General\_class\_functions.h@{General\_class\_functions.h}}
+\subsubsection{\texorpdfstring{updateOpenMMforces()}{updateOpenMMforces()}}
+{\footnotesize\ttfamily void update\+Open\+M\+Mforces (\begin{DoxyParamCaption}\item[{vector$<$ \mbox{\hyperlink{classMembrane}{Membrane}} $>$ \&}]{membranes,  }\item[{\mbox{\hyperlink{structMyOpenMMData}{My\+Open\+M\+M\+Data}} $\ast$}]{omm,  }\item[{double}]{time,  }\item[{\mbox{\hyperlink{structMyAtomInfo}{My\+Atom\+Info}}}]{atoms\mbox{[}$\,$\mbox{]},  }\item[{\mbox{\hyperlink{structBonds}{Bonds}} $\ast$}]{bonds,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{membrane\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{actin\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{ecm\+\_\+set,  }\item[{vector$<$ set$<$ int $>$ $>$ \&}]{chromatin\+\_\+set,  }\item[{vector$<$ vector$<$ int $>$ $>$}]{interaction\+\_\+map }\end{DoxyParamCaption})}
+
+
+
+ 
