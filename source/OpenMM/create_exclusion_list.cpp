@@ -28,7 +28,7 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
             exclude_bonds.push_back(temp);
         } */
         
-        if (bonds[i_b].class_label == label_1 + label_2) {
+        if ( (bonds[i_b].class_label == label_1 + label_2)  || (bonds[i_b].class_label == label_2 + label_1) ) {
             std::pair< int, int > temp;
             temp.first=bonds[i_b].atoms[0];
             temp.second=bonds[i_b].atoms[1];
