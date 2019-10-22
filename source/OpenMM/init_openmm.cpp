@@ -101,11 +101,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                       time_dependant_data,
                       system);
     
+    
     omm->harmonic = HarmonicBond;
-    omm->x4harmonic=X4harmonics[0];
+    omm->x4harmonic=X4harmonics;
     time_dependant_data->Kelvin_VoigtBond = Kelvin_VoigtBond;
     time_dependant_data->Kelvin_Nominal_length_calc();
-
+    
     // Add the list of atom pairs that are excluded from the excluded volume force.
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
 
@@ -116,7 +117,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     set_dihedral_forces(dihedrals,
                         DihedralForces,
                         system);
-
+    
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
     }

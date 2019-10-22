@@ -70,7 +70,7 @@ struct MyOpenMMData {
     OpenMM::Context*  context;
 
     OpenMM::HarmonicBondForce* harmonic;
-    OpenMM::CustomBondForce* x4harmonic;
+    std::vector<OpenMM::CustomBondForce*> x4harmonic;
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
 
     std::vector<OpenMM::CustomNonbondedForce*> EV;
