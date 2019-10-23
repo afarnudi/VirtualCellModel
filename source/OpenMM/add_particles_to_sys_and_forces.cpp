@@ -32,7 +32,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         sigma_ev.push_back(atoms[n].radius
                            * OpenMM::NmPerAngstrom);
         for (int i=0; i<ExcludedVolumes.size(); i++) {
-            ExcludedVolumes[i]->addParticle(sigma_ev);
+            ExcludedVolumes[i]->addParticle();
         }
         for (int i=0; i<LJ_12_6_interactions.size(); i++) {
             LJ_12_6_interactions[i]->addParticle();
