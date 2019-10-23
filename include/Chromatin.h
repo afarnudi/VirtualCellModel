@@ -43,7 +43,7 @@ private: //(if we define these constants as private members of the class, we can
     string file_time;
     string label;
     
-    vector<vector<double> >Node_Position;
+    vector<vector<double> > Node_Position;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     /*variables*/
@@ -120,27 +120,49 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //=========================================================================================================
     //Function definitions:
     //=========================================================================================================
-    /** Assigns the label(pdb) used to write to the trajectory files. */
+    
+    /**return the assigned sigma to the provided node type.*/
+    double get_sigma_LJ_12_6(int node_type){
+        return sigma_LJ[node_type];
+    }
+    /**return the assigned sigma to the provided node type.*/
+    double get_epsilon_LJ_12_6(int node_type){
+        return epsilon_LJ[node_type];
+    }
+    
+    
+    /** Assigns the label(pdb) used to write to the trajectory files.
+     */
     void set_label(std::string lab){
         label=lab;
     }
-    /** return the label(pdb) used to write to the trajectory files. */
+    /** return the label(pdb) used to write to the trajectory files.
+     */
     std::string get_label(void){
         return label;
     }
-    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
+    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass.
+     */
     double get_node_mass(void){
         return Node_Mass;
     }
-    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    /**Return input spring model, used to setup the openmm system for the bonds.
+     */
     int get_spring_model(void){
         return spring_model;
     }
-    /**Return node type. node types: A (0), B (1)*/
+    /**Return the number of node types in a chromatin chain.
+     */
+    int get_num_of_node_types(){
+        return num_of_node_types;
+    }
+    /**Return node type. node types: A (0), B (1)
+     */
     int get_node_type(int index){
         return ABC_index[index];
     }
-    /**Return spring stiffness coefficient. */
+    /**Return spring stiffness coefficient.
+     */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }

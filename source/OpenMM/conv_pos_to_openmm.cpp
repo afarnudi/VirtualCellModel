@@ -130,6 +130,8 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         strcpy(myatominfo[i].pdb, str.c_str());
         myatominfo[i].energy = 0;
         myatominfo[i].symbol = 'C';
+        myatominfo[i].sigma_LJ_12_6=chromo.get_sigma_LJ_12_6(chromo.get_node_type(i));
+        myatominfo[i].epsilon_LJ_12_6=chromo.get_epsilon_LJ_12_6(chromo.get_node_type(i));
         myatominfo[i].initPosInAng[0]=chromo.get_node_position(i, 0);
         myatominfo[i].initPosInAng[1]=chromo.get_node_position(i, 1);
         myatominfo[i].initPosInAng[2]=chromo.get_node_position(i, 2);

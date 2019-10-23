@@ -149,8 +149,8 @@ int main(int argc, char **argv)
     vector<std::set<int> > ecm_set;
     
     vector<Chromatin> Chromatins;
-    vector<std::set<int> > chromatin_set;
-//    vector<vector<std::set<int> > > chromatin_set;
+//    vector<std::set<int> > chromatin_set;
+    vector<vector<std::set<int> > > chromatin_set;
     
     vector<point_particle> pointparticles;
     
@@ -223,14 +223,8 @@ int main(int argc, char **argv)
                 Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
-                
-//                if (GenConst::Num_of_Membranes !=0 && !GenConst::OpenMM) {
-//                    ///put a flag for chromatin inside membrane
-//                    Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
-//                } else {
-                    Chromatins[i].import_config(chromatin_config_list[i]);
-//                }
-                
+                Chromatins[i].import_config(chromatin_config_list[i]);
+                chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
                 Chromatins[i].generate_report();
             }
         }

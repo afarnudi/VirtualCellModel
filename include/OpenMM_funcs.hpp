@@ -30,7 +30,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
-                                 std::vector<std::set<int> >    &chromatin_set,
+//                                 std::vector<std::set<int> >    &chromatin_set,
+                                 std::vector<std::vector<std::set<int> >  >    &chromatin_set,
                                  std::vector<std::vector<int> > interaction_map);
 
 
@@ -172,8 +173,8 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
 
 void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
-                                  vector<std::set<int> >  &chromo_set,
-//                                  vector<vector<std::set<int> > >  &chromo_set,
+//                                  vector<std::set<int> >  &chromo_set,
+                                  vector<vector<std::set<int> > >  &chromo_set,
                                   MyAtomInfo*                       all_atoms,
                                   Bonds*                            all_bonds,
                                   Dihedrals*                        all_dihedrals,
@@ -204,6 +205,25 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               int                                   set_2_index,
                               string                                set_1_name,
                               string                                set_2_name);
+//overload for chromatin class interactions contatining different node types with other classes.
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<vector<std::set<int> > >       set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name);
+//overload for inter chromatin class interactions contatining different node types.
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<vector<std::set<int> > >       set_1,
+                              vector<vector<std::set<int> > >       set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name);
+
 /**Initiate External force for a set of class atoms.*/
 bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
                               const MyAtomInfo                      atoms[],
@@ -211,28 +231,43 @@ bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
                               int                                   set_1_index,
                               string                                set_name);
 
-//void init_LJ_12_6_double(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
-//                              const MyAtomInfo                      atoms[],
-//                              vector<std::set<int> >                set_1,
-//                              vector<std::set<int> >                set_2,
-//                              int                                   set_1_index,
-//                              int                                   set_2_index);
-
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                      atoms[],
                                       vector<std::set<int> >                set_1,
                                       vector<std::set<int> >                set_2,
                                       int                                   set_1_index,
-                                      int                                   set_2_index);
+                                      int                                   set_2_index,
+                                      string                                set_1_name,
+                                      string                                set_2_name);
+
+//overload for chromatin class interactions contatining different node types with other classes.
+void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                      atoms[],
+                                      vector<vector<std::set<int> > >       set_1,
+                                      vector<std::set<int> >                set_2,
+                                      int                                   set_1_index,
+                                      int                                   set_2_index,
+                                      string                                set_1_name,
+                                      string                                set_2_name);
+//overload for inter chromatin class interactions contatining different node types.
+void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                       atoms[],
+                                      vector<vector<std::set<int> > >        set_1,
+                                      vector<vector<std::set<int> > >        set_2,
+                                      int                                    set_1_index,
+                                      int                                    set_2_index,
+                                      string                                 set_1_name,
+                                      string                                 set_2_name);
+
 OpenMM::State getCurrentState(MyOpenMMData*  omm,
-                        bool        wantEnergy,
-                        double&     timeInPs,
-                        bool        wantforce);
+                              bool        wantEnergy,
+                              double&     timeInPs,
+                              bool        wantforce);
                         
 void setNewState(MyOpenMMData*      omm,
-                    bool            wantEnergy,
-                    double&         energyInKcal,
-                    MyAtomInfo      atoms[]);
+                 bool            wantEnergy,
+                 double&         energyInKcal,
+                 MyAtomInfo      atoms[]);
 
 /**Set the interaction map inputs to forces in the OpenMM system.*/
 void set_interactions(const MyAtomInfo                       atoms[],
@@ -240,7 +275,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<std::set<int> >                &membrane_set,
                       vector<std::set<int> >                &actin_set,
                       vector<std::set<int> >                &ecm_set,
-                      vector<std::set<int> >                &chromatin_set,
+                      vector<vector<std::set<int> > >       &chromatin_set,
                       vector<vector<int> >                   interaction_map,
                       vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,

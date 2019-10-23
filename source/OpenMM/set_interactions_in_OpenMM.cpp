@@ -13,7 +13,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<std::set<int> >                &membrane_set,
                       vector<std::set<int> >                &actin_set,
                       vector<std::set<int> >                &ecm_set,
-                      vector<std::set<int> >                &chromatin_set,
+                      vector<vector<set<int> > >            &chromatin_set,
                       vector<vector<int> >                   interaction_map,
                       vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
@@ -24,7 +24,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
         //initialize external force for membrane i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, membrane_set, i , "mem");
+        bool is_force = init_ext_force(ext_force, atoms, membrane_set, i , GenConst::Membrane_label);
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -43,7 +43,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             switch (interaction_map[i][j]) {
                 
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, membrane_set, membrane_set, i, j , "mem" , "mem");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, membrane_set, membrane_set, i, j , GenConst::Membrane_label , GenConst::Membrane_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -60,7 +60,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
                     
                     index = ExcludedVolumes.size()-1;
 //                    cout<<"EV index = "<<index<<endl;
@@ -87,7 +87,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         //initialize external force for actin i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, actin_set, i , "act");
+        bool is_force = init_ext_force(ext_force, atoms, actin_set, i , GenConst::Actin_label);
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -106,7 +106,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, membrane_set, i, j , "act" , "mem");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, membrane_set, i, j , GenConst::Actin_label , GenConst::Membrane_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -123,7 +123,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, membrane_set, i, j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, membrane_set, i, j, GenConst::Actin_label , GenConst::Membrane_label);
                     
                     index = ExcludedVolumes.size()-1;
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -157,7 +157,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i+ class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, actin_set, i, j-class_count_j , "act" , "act");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, actin_set, actin_set, i, j-class_count_j , GenConst::Actin_label , GenConst::Actin_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -174,7 +174,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, actin_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, actin_set, i, j-class_count_j, GenConst::Actin_label , GenConst::Actin_label);
                     
                     index = ExcludedVolumes.size()-1;
                     
@@ -203,7 +203,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         //initialize external force for ecm i
         int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, ecm_set, i , "ecm");
+        bool is_force = init_ext_force(ext_force, atoms, ecm_set, i , GenConst::ECM_label);
         ext_force_index=ext_force.size()-1;
         if(is_force)
         {
@@ -223,7 +223,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
                     
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j , "ecm" , "mem");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -240,7 +240,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, membrane_set, i, j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, membrane_set, i, j, GenConst::ECM_label , GenConst::Membrane_label);
                     index = ExcludedVolumes.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -274,7 +274,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i+ class_count_j][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, actin_set, i, j-class_count_j,"ecm","act");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, actin_set, i, j-class_count_j, GenConst::ECM_label, GenConst::Actin_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -291,7 +291,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, actin_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, actin_set, i, j-class_count_j, GenConst::ECM_label, GenConst::Actin_label);
                     index = ExcludedVolumes.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -327,7 +327,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ecm_set, i, j-class_count_j, "ecm" , "ecm");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ecm_set, i, j-class_count_j, GenConst::ECM_label , GenConst::ECM_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -344,7 +344,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, ecm_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, ecm_set, i, j-class_count_j, GenConst::ECM_label , GenConst::ECM_label);
                     index = ExcludedVolumes.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -382,7 +382,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j , "chrom" , "mem");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j , GenConst::Chromatin_label , GenConst::Membrane_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -393,7 +393,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, GenConst::Chromatin_label , GenConst::Membrane_label);
                     index = ExcludedVolumes.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -422,7 +422,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i+ class_count_j][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , "chrom" , "act");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , GenConst::Chromatin_label , GenConst::Actin_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -433,7 +433,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Actin_label);
                     
                     index = ExcludedVolumes.size()-1;
                     
@@ -464,7 +464,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j , "chrom" , "ecm");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j , GenConst::Chromatin_label , GenConst::ECM_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -475,7 +475,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::ECM_label);
                     index = ExcludedVolumes.size()-1;
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -505,7 +505,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             switch (interaction_map[i + class_count_i][j]) {
                     
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j , "chrom" , "chrom");
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j , GenConst::Chromatin_label , GenConst::Chromatin_label);
                     index = LJ_12_6_interactions.size()-1;
                     
                     
@@ -516,7 +516,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(LJ_12_6_interactions[index]);
                     break;
                 case 2:
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j);
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Chromatin_label);
                     index = ExcludedVolumes.size()-1;
 //                    cout<<"EV index = "<<index<<endl;
                     // Add the list of atom pairs that are excluded from the excluded volume force.

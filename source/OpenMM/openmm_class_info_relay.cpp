@@ -155,8 +155,8 @@ void OpenMM_ECM_info_relay (vector<ECM>            ecms,
 }
 
 void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
-                                  vector <std::set<int> > &chromatin_set,
-//                                  vector<vector <std::set<int> > > &chromatin_set,
+//                                  vector <std::set<int> > &chromatin_set,
+                                  vector<vector <std::set<int> > > &chromatin_set,
                                   MyAtomInfo*            	        all_atoms,
                                   Bonds*                            all_bonds,
                                   Dihedrals*                        all_dihedrals,
@@ -168,9 +168,11 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
         
         MyAtomInfo* atoms = convert_Chromatin_position_to_openmm(chromos[i]);
-        for (int j=0;j<chromos[i].get_num_of_nodes(); j++) {
+        
+        
+        for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
-            chromatin_set[i].insert(j+atom_count);
+            chromatin_set[i][chromos[i].get_node_type(j)].insert(j+atom_count);
         }
         
         
