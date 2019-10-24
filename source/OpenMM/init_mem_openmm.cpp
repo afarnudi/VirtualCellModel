@@ -55,10 +55,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     cout<<"Defining interactions...\n";
 
     // Create an array of harmonic spring force objects to add to the system.
-    bool HarmonicBondForce=false;
-    OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();    
+    bool harmonicBondForce=false;
+    bool RealHarmonicForce=false;
+    OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     bool Kelvin_VoigtBondForce=false;
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
+    OpenMM::CustomBondForce* RealharmonicForce;
     
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
 
@@ -244,6 +246,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         for (int j=0; j < GenConst::Num_of_Membranes; j++) {
             
+            
             std::string class_label_i=GenConst::ECM_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
@@ -253,6 +256,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             
             
             switch (interaction_map[i + class_count_i][j]) {
+                
                 case 1:
                     
                     init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j);
@@ -611,13 +615,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     int X4harmonic_index = -1;
 
     for (int i=0; bonds[i].type != EndOfList; ++i) {
+       
         const int*      atom = bonds[i].atoms;
-//        std::pair< int, int > temp;
-//        temp.first=bonds[i].atoms[0];
-//        temp.second=bonds[i].atoms[1];
-//        excluded_bonds.push_back(temp);
         
-
         switch (bonds[i].type) {
             case 1://FENE
             {
@@ -663,16 +663,19 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 break;
             case 2://Harmonic
             {
-                HarmonicBondForce=true;
+                harmonicBondForce=true;
                 // Note factor of 2 for stiffness below because Amber specifies the constant
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
+                
                 HarmonicBond->addBond(atom[0], atom[1],
                                       bonds[i].nominalLengthInAngstroms
                                       * OpenMM::NmPerAngstrom,
                                       bonds[i].stiffnessInKcalPerAngstrom2
                                       * OpenMM::KJPerKcal
                                       * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                      
+            
 
             }
                 break;
@@ -684,16 +687,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     X4harmonic_classes.insert(bonds[i].class_label);
                     X4harmonic_index++;
 
-                    X4harmonics.push_back( new OpenMM::CustomBondForce("k_bond*((r/r_rest)-1)^4"));
+                    X4harmonics.push_back( new OpenMM::CustomBondForce("0.5*k_bond*(r-r_rest)^2"));
 
                     X4harmonics[X4harmonic_index]->addPerBondParameter("r_rest");
                     X4harmonics[X4harmonic_index]->addPerBondParameter("k_bond");
                     system.addForce(X4harmonics[X4harmonic_index]);
                     }
                 double r_rest =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                double k_bond=bonds[i].stiffnessInKcalPerAngstrom4
+                double k_bond=bonds[i].stiffnessInKcalPerAngstrom2
                                                  * OpenMM::KJPerKcal
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
                                                  * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
                 vector<double> parameters;
                 parameters.resize(2);
@@ -702,7 +704,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1], parameters);
             }
 
-            omm->x4harmonic=X4harmonics[0];
+            //omm->x4harmonic=X4harmonics[0];
             break;
                 
             
@@ -723,13 +725,37 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 
             }
                 break;
+            case 5://realharmonic
+            {
+            RealHarmonicForce=true;
+            
+            RealharmonicForce= new OpenMM::CustomBondForce ("0.5*k_bond*(r-r_rest)^2");
 
-        }
-
+            
+            RealharmonicForce->addPerBondParameter("k_bond");
+            RealharmonicForce->addPerBondParameter("r_rest");
+            
+            double r_rest =0.6;//bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
+            double k_bond=1000;//bonds[i].stiffnessInKcalPerAngstrom2
+                                                 //* OpenMM::KJPerKcal
+                                                 //* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+            vector<double> parameters;
+            parameters.resize(2);
+            parameters[0]=k_bond;
+            parameters[1]=r_rest;
+            
+            RealharmonicForce->addBond(atom[0], atom[1], parameters);
+            }
+            
+                break;
+        
+        } 
+        
+        
 
     }
-    
-    if (HarmonicBondForce) {
+
+    if (harmonicBondForce) {
         system.addForce(HarmonicBond);
         omm->harmonic = HarmonicBond;}
     
@@ -741,6 +767,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         tdd->Kelvin_Voigt = true;
         tdd->Kelvin_Nominal_length_calc();
     }
+    
+    if(RealHarmonicForce){
+        system.addForce(RealharmonicForce);
+    } 
 
     // Add the list of atom pairs that are excluded from the excluded volume force.
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
@@ -762,7 +792,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             DFs_index++;
 
 
-            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))"));
+            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1 + cos(dihedral(p1,p2,p3,p4)))"));
             DihedralForces[DFs_index]->addPerBondParameter("K_bend");
             
             system.addForce(DihedralForces[DFs_index]);
@@ -776,6 +806,19 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
     omm->Dihedral= DihedralForces[0];
+    
+    /*
+    //defining external forces
+    OpenMM::CustomExternalForce*    ConstantRight= new OpenMM::CustomExternalForce("-k*x");
+    OpenMM::CustomExternalForce*    ConstantLeft= new OpenMM::CustomExternalForce("k*x");
+    ConstantRight->addGlobalParameter("k", 50.0);
+    ConstantLeft->addGlobalParameter("k", 50.0);
+    system.addForce(ConstantRight);
+    system.addForce(ConstantLeft);
+    ConstantRight->addParticle(112);
+    ConstantLeft->addParticle(111);
+     */ 
+    
 
 
     //Listing the names of all available platforms.

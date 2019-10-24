@@ -110,6 +110,8 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
+
+    
     // get the current time.
     time_t t = time(0);
     auto chrono_clock_start = chrono::steady_clock::now();
@@ -135,6 +137,14 @@ int main(int argc, char **argv)
     read_interaction_map(interaction_map);
     
     ofstream Trajectory;
+    ofstream bondenergycheck1;
+    ofstream bondenergycheck2;
+    ofstream bondlengthcheck;
+    ofstream bondlengthcheck2;
+    bondenergycheck1.open("memBond", ios::app);
+    bondenergycheck2.open("openmmBond", ios::app);
+    bondlengthcheck.open("L_bondlength", ios::app);
+    bondlengthcheck2.open("R_bondlength", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     string ckeckpoint_name="Results/Resumes/OpenMM/"+GenConst::trajectory_file_name+buffer;
     
@@ -433,10 +443,10 @@ int main(int argc, char **argv)
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
             for (int frame=1; ; ++frame) {
-                double time, energy;
+                double time, energy, potentialenergy;
                 
-                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, all_atoms);
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, traj_name);
+                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy,potentialenergy, all_atoms);
+                myWritePDBFrame(frame, WantForce, time, energy, all_atoms,all_bonds, traj_name);
                 
                 if (WantForce) {
                     calc_energy_2(Membranes, all_atoms);
@@ -448,9 +458,11 @@ int main(int argc, char **argv)
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
-                if (check_for_membrane_update(Membranes, time)) {
-                    updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
-                }
+              //  if (check_for_membrane_update(Membranes, time)) {
+                //    cout<<"o my God... :/"<<endl;
+                  //  updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+                //}
+                
                 
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
@@ -464,14 +476,17 @@ int main(int argc, char **argv)
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
-                /*this part is for checking the monte_carlo
-                if (progress ==50){
-                    myreinitializeOpenMMState(omm, all_bonds , all_dihedrals);
-                    //setNewState(omm,wantEnergy, energyInKcal, atoms[], wantforce);
-                    
-               }*/
+                //the monte_carlo part
 
+                if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
+                   
+
+                    Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
+               }
+
+             
             }
+            
             cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
             
             
@@ -767,3 +782,4 @@ int main(int argc, char **argv)
     printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
     return 0;
 }
+

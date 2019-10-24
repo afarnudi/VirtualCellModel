@@ -21,13 +21,16 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
                 break;
                 //HarmonicX4
             case 3:
-                bonds[i].stiffnessInKcalPerAngstrom4=mem.get_spring_stiffness_coefficient();
+                bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
                 break;
                 //Kelvin-Voigt
             case 4:
                 bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
                 break;
                 
+            case 5:
+                bonds[i].stiffnessInKcalPerAngstrom2=mem.get_spring_stiffness_coefficient();
+                break;
         }
         
         
@@ -35,7 +38,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     if(bonds[0].type==2){
         cout<<"bond potential: Harmonic "<<endl;
         cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal <<endl;
     }
     
     if (bonds[0].type == 1) {
@@ -54,6 +57,11 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     if(bonds[0].type == 4){
         cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
         cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
+        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    }
+    if(bonds[0].type==5){
+        cout<<"bond potential: realHarmonic "<<endl;
+        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
         cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     

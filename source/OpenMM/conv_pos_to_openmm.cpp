@@ -33,6 +33,11 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].epsilon_LJ_12_6=mem.get_epsilon_LJ_12_6();
         
     }
+   // myatominfo[0].mass=0;
+   // myatominfo[1].mass=0;
+    //myatominfo[2].mass=0;
+    //myatominfo[3].mass=1;
+    //myatominfo[2].mass=1;
     //End of list
 //    myatominfo[mem_num_atom].type=-1;
     

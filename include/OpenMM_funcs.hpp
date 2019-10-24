@@ -54,6 +54,7 @@ void          myGetOpenMMState(MyOpenMMData*,
                                bool         wantForce,
                                double&      time,
                                double&      energy,
+                               double&      potentialenergy,
                                MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------
@@ -84,10 +85,10 @@ std::vector<double> Nominal_length_calc(TimeDependantData*,
                                         int bondtype);
 
 /** -----------------------------------------------------------------------------
- *                    reinitialize the openMM
+ *                   Monte_Carlo
  * -----------------------------------------------------------------------------
  */
-void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
+void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[]);
 
                                
 /** -----------------------------------------------------------------------------
@@ -119,6 +120,7 @@ void myWritePDBFrame(int                frameNum,
                      double             timeInPs,
                      double             energyInKcal,
                      const MyAtomInfo   atoms[],
+                     const Bonds        bonds[],
                      std::string        traj_name);
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/

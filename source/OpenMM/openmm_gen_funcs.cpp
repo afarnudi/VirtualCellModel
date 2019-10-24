@@ -40,11 +40,12 @@ void myGetOpenMMState(MyOpenMMData* omm,
                       bool wantForce,
                       double& timeInPs,
                       double& energyInKcal,
+                      double& potentialenergy,
                       MyAtomInfo atoms[])
 {
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
-    infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheap)
+    infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
     if (wantEnergy) {
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
@@ -71,83 +72,18 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
-    if (wantEnergy)
+    if (wantEnergy){
+        potentialenergy=state.getPotentialEnergy()*OpenMM::KcalPerKJ;
         energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
         * OpenMM::KcalPerKJ;
+    }
+
 }
+
 
 
 using OpenMM::Vec3;
-OpenMM::State getCurrentState(MyOpenMMData* omm, bool wantEnergy,
-                 double& timeInPs,  bool wantforce)
-{
-    int infoMask = 0;
-    infoMask = OpenMM::State::Positions;
-    if (wantEnergy) {
-        infoMask += OpenMM::State::Velocities; // for kinetic energy (cheap)
-        infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
-    }
-    // Forces are also available (and cheap).
-    if (wantforce){
-        infoMask+=OpenMM::State::Forces;
-    }
-    OpenMM::State currentstate = omm->context->getState(infoMask);
-    timeInPs = currentstate.getTime(); // OpenMM time is in ps already
-    return(currentstate);
-}
 
-void setNewState(MyOpenMMData* omm, bool wantEnergy,
-                 double& energyInKcal,
-                 MyAtomInfo atoms[], bool wantforce)
-{   
-    double timeInPs;
-    const OpenMM::State newstate= getCurrentState(omm, wantEnergy,timeInPs,  wantforce);
-        // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
-    const std::vector<Vec3>& positionsInNm = newstate.getPositions();
-    for (int i=0; i < (int)positionsInNm.size(); ++i){
-        for (int j=0; j < 3; ++j){
-    atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;}}
-    
-    // If energy has been requested, obtain it and convert from kJ to kcal.
-    energyInKcal = 0;
-    if (wantEnergy)
-        energyInKcal = (newstate.getPotentialEnergy() + newstate.getKineticEnergy())
-        * OpenMM::KcalPerKJ;
-}
-using OpenMM::Vec3;
-void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
-    bool preservestate=1;
-    
-    //OpenMM::HarmonicBondForce*   HarmonicBond = omm->system->getForce(0);
-    vector<double> parameters;
-    vector<double> bendingparameter ;
-    vector<int>particles ={2 ,  1, 3, 0};
-    parameters.resize(2);
-    
-    int bond_index=2;
-    int particle1=1;
-    int particle2=3;
-    double r_rest= bonds[0].nominalLengthInAngstroms*OpenMM::NmPerAngstrom;
-    double k_bond= bonds[0].stiffnessInKcalPerAngstrom4
-                                                 * OpenMM::KJPerKcal
-                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-    double K_bend=dihedrals[0].bending_stiffness_value* OpenMM::KJPerKcal
-                                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-    parameters[0]=r_rest;
-    parameters[1]=k_bond;
-    bendingparameter.push_back(K_bend);
-    //omm->x4harmonic->setBondParameters(bond_index,particle1, particle2, parameters);
-    omm->Dihedral->setBondParameters(0,particles, bendingparameter);
-    double lenght= bonds[0].nominalLengthInAngstroms* OpenMM::NmPerAngstrom;
-    double k= bonds[0].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-    omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
-    //bond_index=2;
-    //particle1=1;
-    //particle2=2;
-    //omm->harmonic->setBondParameters(bond_index,particle1, particle2, lenght, k );
-    omm->context->reinitialize(preservestate);
-    
-}
 
 void Cheap_GetOpenMMState(MyOpenMMData* omm,
                           MyAtomInfo atoms[])
@@ -173,6 +109,7 @@ void myWritePDBFrame(int frameNum,
                      double timeInPs,
                      double energyInKcal,
                      const MyAtomInfo atoms[],
+                     const Bonds bonds[],
                      std::string traj_name)
 {
     int EndOfList=-1;
@@ -203,6 +140,18 @@ void myWritePDBFrame(int frameNum,
                 atoms[n].stretching_energy,
                 atoms[n].energy,
                 atoms[n].symbol);
+    }
+    
+        // visualize bonds in pdb file
+    for (int n=0; bonds[n].type != EndOfList; ++n){
+        if(bonds[n].atoms[0] < bonds[n].atoms[1])
+        {
+            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
+        }
+        if(bonds[n].atoms[0] > bonds[n].atoms[1])
+        {
+            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
+        }
     }
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);

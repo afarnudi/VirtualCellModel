@@ -196,6 +196,7 @@ void Membrane::read_ply_file (std::string ply_file)
     }
     
     // In this section the Node list that make up triangles on the outer membrane and nucleus are read from the  ply file.
+   
     vector<int> push;
     push.resize(3);
     for(int i=0;i<Num_of_Triangles;i++)
