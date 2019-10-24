@@ -36,13 +36,21 @@ private:
     double Damping_coefficient=0.5;
     
     double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
-    double Downward_speed=0;
+    double x_speed=0.0; //???
+    double y_speed=0.0;
+    double z_speed=0.0;
+    
+    int ext_force_model=0;
+    double kx=10;
+    double ky=10;
+    double kz=10;
     
     int Num_of_Nodes=0;
     vector<vector<double> >Node_Position;
     vector<vector<double> >Node_Velocity;
     vector<vector<double> >Node_Force;
     vector<vector<int> > Pyramid_Nodes;
+    vector<vector<int>> filaments;
     
     std::string output_file_neme;
     
@@ -61,7 +69,7 @@ private:
     double exp_tau=0;
     double Min_node_pair_length=1000;
     double Max_node_pair_length=0;
-    double Average_node_pair_length=14;
+    double Average_node_pair_length=0;
     
     
     //Private members:
@@ -151,6 +159,19 @@ public:
     /**Return kelvin damping coefficient. */
     double get_kelvin_damping_coefficient(void){
         return Kelvin_Damping_Coefficient;
+    }
+    /**Return external force model. */
+    int get_ext_force_model(void){
+        return ext_force_model;
+    }
+    double get_kx(void){
+        return kx;
+    }
+    double get_ky(void){
+        return ky;
+    }
+    double get_kz(void){
+        return kz;
     }
     void check(void);
     

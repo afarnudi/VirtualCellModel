@@ -500,12 +500,12 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
     dihedrals[initial_pair].atoms[1]=u1;
     dihedrals[initial_pair].atoms[2]=u4;
     dihedrals[initial_pair].atoms[3]=c3;
-    omm->Dihedral->setBondParameters(initial_pair,Triangle_Pair_Nodes[initial_pair], bendingparameter); //I must check the bond index in case of having other objects
+    omm->Dihedral[0]->setBondParameters(initial_pair,Triangle_Pair_Nodes[initial_pair], bendingparameter); //I must check the bond index in case of having other objects
     for(int i=0; i<4; i++){
         int index= new_neighbour_dihedrals[i][4];
         for (int j=0; j<4; j++){
             Triangle_Pair_Nodes[index][j]=new_neighbour_dihedrals[i][j];}
-       omm->Dihedral->setBondParameters(index,Triangle_Pair_Nodes[index], bendingparameter); //I must check the bond index in case of having other objects
+       omm->Dihedral[0]->setBondParameters(index,Triangle_Pair_Nodes[index], bendingparameter); //I must check the bond index in case of having other objects
     //updating Triangle_Pair_list
         if(new_neighbour_dihedrals[i][5]==1){
             if(Triangle_pair_list[index][0]==triangle_A){

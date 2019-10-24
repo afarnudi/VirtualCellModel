@@ -97,7 +97,7 @@ void Chromatin::import_config(string config_file_name){
             param_map[split[0]]=stod(split[1]);
             
             if (split[0]=="Resume") {
-        
+                
                 if (stoi(split[1])==0) {
                     cout<<"Resume flag off. The Chromatins will be initiated using the config parameters.\n";
                 } else {
@@ -105,13 +105,54 @@ void Chromatin::import_config(string config_file_name){
                     resume_file_name=split[2];
                     cout<<"Resume flag on. Chromatin will resume using the '"<<resume_file_name<<" file.\n";
                 }
+            } else if(split[0]=="epsilon"){
+                if (split.size()<num_of_node_types + 1) {
+                    cout<<"Too few arguments for the Lenard Jones epsilon interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 0\n";
+                    
+                    for (int i=0; i<split.size(); i++) {
+                        epsilon_LJ[i]=stod(split[i+1]);
+                    }
+                } else {
+                    for (int i=0; i<num_of_node_types; i++) {
+                        epsilon_LJ[i]=stod(split[i+1]);
+                    }
+                }
+            } else if(split[0]=="sigma"){
+                if (split.size()<num_of_node_types + 1) {
+                    cout<<"Too few arguments for the Lenard Jones sigma interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 1.5x node_radius \n";
+                    for (int i=0; i<split.size(); i++) {
+                        sigma_LJ[i]=stod(split[i+1]);
+                    }
+                } else {
+                    for (int i=0; i<num_of_node_types; i++) {
+                        sigma_LJ[i]=stod(split[i+1]);
+                    }
+                }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
-
+                
             }
             
         }//End of while(getline(read_config_file, line))
         
+        if (epsilon_LJ.size() != num_of_node_types and num_of_node_types>1) {
+            cout<<"error: You need so specify an epsilon interaction value for chromatin chains with more than one node type. (set in the chromatin configuration file)\n";
+            exit(EXIT_FAILURE);
+        }
+        
+        if (sigma_LJ.size() != num_of_node_types and num_of_node_types>1) {
+            cout<<"All Lenard Jones 12 6 sigmas set to default value (1.5 x Node Radius)\n";
+            sigma_LJ.resize(num_of_node_types, 1.5*Node_radius);
+        }
+        
+        if (num_of_node_types == 1) {
+            if (epsilon_LJ.size() == 0) {
+                epsilon_LJ.resize(1,0);
+            }
+            if (sigma_LJ.size() == 0) {
+                sigma_LJ.resize(1, 1.5*Node_radius);
+            }
+        }
         
     } else {//End of if (read_config_file.is_open())
         cout<<"Couldn't open the '"<<config_file_name<<"' file.\n";
@@ -126,15 +167,15 @@ void Chromatin::import_config(string config_file_name){
         }
         initialise();
     }
-//        else {
-//            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
-//        }
+    //        else {
+    //            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
+    //        }
 }
 
 
 void Chromatin::set_map_parameter(string param_name, double param_value){
     
-//    map<string, double>::iterator it;
+    //    map<string, double>::iterator it;
     if (param_name=="Node_Mass") {
         Node_Mass=param_value;
     } else if (param_name=="Node_radius"){
@@ -153,5 +194,9 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
         Shift_in_Z_direction=param_value;
     } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
         Num_of_Nodes=param_value;
+    } else if (param_name=="num_of_node_types"){
+        num_of_node_types=param_value;
+        epsilon_LJ.resize(num_of_node_types,0);
+        sigma_LJ.resize(num_of_node_types,1.5*Node_radius);
     }
 }

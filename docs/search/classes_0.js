@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['actin',['Actin',['../class_actin.html',1,'']]]
+  ['actin',['Actin',['../classActin.html',1,'']]]
 ];

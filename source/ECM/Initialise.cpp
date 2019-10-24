@@ -30,6 +30,7 @@ void ECM::initialise(int dimension){
     }
     
     shift_node_positions();
+    shift_velocity(x_speed, y_speed, z_speed);
     check();
     
     cout<<"\nECM class initiated.\n******************************\n\n";

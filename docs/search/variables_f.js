@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['tau_5fmaxwell_5frelax',['tau_Maxwell_relax',['../class_actin.html#ab1b70aeb68277eb0d31834dc691c145f',1,'Actin']]],
-  ['total_5fkinetic_5fenergy',['Total_Kinetic_Energy',['../class_actin.html#a357e7c45b6d0a8894659172e0ea6c145',1,'Actin::Total_Kinetic_Energy()'],['../class_chromatin.html#ae14296f83397b886d7933d981693eb0c',1,'Chromatin::Total_Kinetic_Energy()'],['../class_membrane.html#ace96624cf2fada1f08fc9c17ce2e1051',1,'Membrane::Total_Kinetic_Energy()']]],
-  ['total_5fpotential_5fenergy',['Total_Potential_Energy',['../class_actin.html#af9ae520029657ec6be9de6324c9231cd',1,'Actin::Total_Potential_Energy()'],['../class_chromatin.html#a6230e21b70b3d66a4108dbad1dc6298f',1,'Chromatin::Total_Potential_Energy()'],['../class_membrane.html#a75960354fe00e218f119830036810935',1,'Membrane::Total_Potential_Energy()'],['../class_chromatin.html#a78e2fbc7c22aa6fb893edbd6f90be7a2',1,'Chromatin::Total_potential_Energy()'],['../class_membrane.html#a44386c31326522dc000f7d88edde2c4b',1,'Membrane::Total_potential_Energy()']]],
-  ['trajectory_5ffile_5fname',['trajectory_file_name',['../namespace_gen_const.html#a134267f7e8482eb2a6e0f87335a809e6',1,'GenConst']]],
-  ['triangle_5flist',['Triangle_list',['../class_membrane.html#ad61d1fbb53ef3a3fb7b4670581327051',1,'Membrane::Triangle_list()'],['../class_e_c_m.html#a2cd39dd2c3c5685372f4e5739c0600be',1,'ECM::Triangle_List()']]],
-  ['triangle_5fpair_5flist',['Triangle_pair_list',['../class_membrane.html#ad4f0d5f17a9f50e1505e4264ba6e139a',1,'Membrane']]],
-  ['triangle_5fpair_5fnodes',['Triangle_Pair_Nodes',['../class_membrane.html#a16c7d8283b2b53178f1c0c8c8a3fe0cf',1,'Membrane']]],
-  ['type',['type',['../struct_my_atom_info.html#aed11c9319e0ba5fd5d1d853393e5ca2a',1,'MyAtomInfo::type()'],['../struct_bonds.html#a888b86b64e111ca2c1cdc57ab3f1e575',1,'Bonds::type()'],['../struct_dihedrals.html#aec015ae7812fd13d61a9ff90645c104b',1,'Dihedrals::type()']]]
+  ['shell',['shell',['../namespaceconf.html#a332f430461432dc465213f884a1e4967',1,'conf']]],
+  ['shift_5fin_5fx_5fdirection',['Shift_in_X_direction',['../classMembrane.html#a3c9d4f24bc0e38e0a18aeb771e3d4386',1,'Membrane']]],
+  ['shift_5fin_5fy_5fdirection',['Shift_in_Y_direction',['../classMembrane.html#a73b22fb2ebda65accee05510303249ae',1,'Membrane']]],
+  ['shift_5fin_5fz_5fdirection',['Shift_in_Z_direction',['../classMembrane.html#a2fa88fd7d9832ef58e63b10208a7ccae',1,'Membrane']]],
+  ['sigma_5flj_5f12_5f6',['sigma_LJ_12_6',['../structMyAtomInfo.html#a7a7974ff22785c7eb048f2e2f0a73ee8',1,'MyAtomInfo::sigma_LJ_12_6()'],['../namespaceGenConst.html#a34375d0ec9af3672f5fcbe624044ad8d',1,'GenConst::sigma_LJ_12_6()']]],
+  ['simulation_5ftime_5fin_5fps',['Simulation_Time_In_Ps',['../namespaceGenConst.html#a42400cc3781a5ee575ddafe4dcc2403f',1,'GenConst']]],
+  ['sinuscheck',['SinusCheck',['../classMembrane.html#a593abb7d67c62b99eba2b0d15dcb0c19',1,'Membrane']]],
+  ['source_5fsuffix',['source_suffix',['../namespaceconf.html#a10af2a769eb3bd3322e874f677e435b1',1,'conf']]],
+  ['spring_5fcoefficient',['Spring_coefficient',['../classMembrane.html#a51536477e359a874919d08dc7a97c7fa',1,'Membrane']]],
+  ['spring_5fforce_5fcutt_5foff',['Spring_force_cutt_off',['../classMembrane.html#aa83ec44fdb8de36286e6f4b35af460f3',1,'Membrane']]],
+  ['spring_5fmodel',['spring_model',['../classMembrane.html#abda57a1da212a2a1fc36e0faa5e6baf4',1,'Membrane']]],
+  ['step_5fsize_5fin_5ffs',['Step_Size_In_Fs',['../namespaceGenConst.html#a555432eb109df9dc1cf430bd6eccef30',1,'GenConst']]],
+  ['stiffnessinkcalperangstrom2',['stiffnessInKcalPerAngstrom2',['../structBonds.html#a9b3712d34cadf4b451349b0ac76597d5',1,'Bonds']]],
+  ['stiffnessinkcalperangstrom4',['stiffnessInKcalPerAngstrom4',['../structBonds.html#a0780dfadea7787128aca962f5e5c57a1',1,'Bonds']]],
+  ['stretching_5fenergy',['stretching_energy',['../structMyAtomInfo.html#ac77461c452fb1aeb00ea6b021356bcbf',1,'MyAtomInfo']]],
+  ['symbol',['symbol',['../structMyAtomInfo.html#a89b16d994ac86606e6d73cf9fabe2b95',1,'MyAtomInfo']]],
+  ['system',['system',['../structMyOpenMMData.html#ad14c08e4c616766db92ae52e57b44480',1,'MyOpenMMData']]]
 ];

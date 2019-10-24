@@ -219,7 +219,14 @@ public:
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
-    double Downward_speed=0.0; //???
+    double x_speed=0.0; //???
+    double y_speed=0.0;
+    double z_speed=0.0;
+    
+    int ext_force_model=0;
+    double kx=10;
+    double ky=10;
+    double kz=10;
     //bool =0;
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -316,6 +323,19 @@ public:
     /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
     double get_epsilon_LJ_12_6(void){
         return epsilon_LJ_12_6;
+    }
+    /**Return external force model. */
+    int get_ext_force_model(void){
+        return ext_force_model;
+    }
+    double get_kx(void){
+        return kx;
+    }
+    double get_ky(void){
+        return ky;
+    }
+    double get_kz(void){
+        return kz;
     }
     
     

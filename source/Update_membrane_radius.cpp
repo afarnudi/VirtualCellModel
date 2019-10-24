@@ -27,16 +27,16 @@ bool check_for_membrane_update(vector<Membrane>    &membranes,
 
 /** -----------------------------------------------------------------------------
  */
-void updateOpenMMforces(vector<Membrane>      &membranes,
-                        MyOpenMMData*          omm,
-                        double                 time,
-                        MyAtomInfo             atoms[],
-                        Bonds*                 bonds,
-                        vector<set<int> >      &membrane_set,
-                        vector<set<int> >      &actin_set,
-                        vector<set<int> >      &ecm_set,
-                        vector<set<int> >      &chromatin_set,
-                        vector<vector<int> >   interaction_map)
+void updateOpenMMforces(vector<Membrane>                &membranes,
+                        MyOpenMMData*                    omm,
+                        double                           time,
+                        MyAtomInfo                       atoms[],
+                        Bonds*                           bonds,
+                        vector<set<int> >               &membrane_set,
+                        vector<set<int> >               &actin_set,
+                        vector<set<int> >               &ecm_set,
+                        vector<vector<set<int> > >      &chromatin_set,
+                        vector<vector<int> >             interaction_map)
 {
     
     int mem_count=0;
@@ -61,8 +61,6 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                 vector<double> sigma_ev;
                 
                 sigma_ev.push_back( a * time * 1000 + b);
-//                cout<<"\ntime = "<<time<<"\n--------\nr\t\t= "<<r<<"\nrnew\t\t= "<<rnew<<"\nsigma_ev\t= "<<(a * time * 1000 + b)<<endl;
-                
                 for (int node_index = mem_count; node_index < membranes[i].get_num_of_nodes() + mem_count; node_index++) {
                     
                     atoms[node_index].radius = sigma_ev[0];
@@ -188,8 +186,10 @@ void updateOpenMMforces(vector<Membrane>      &membranes,
                         
                         break;
                     case 2:
-                        set<int> :: iterator it_1 = chromatin_set[i].begin();
+                        set<int> :: iterator it_1 = chromatin_set[i][0].begin();
                         set<int> :: iterator it_2 = membrane_set[j].begin();
+//                        set<int> :: iterator it_1 = chromatin_set[i].begin();
+//                        set<int> :: iterator it_2 = membrane_set[j].begin();
                         
                         omm->EV[EV_index]-> setCutoffDistance( 1.5 * ( atoms[*it_1].radius
                                                                       + atoms[*it_2].radius )

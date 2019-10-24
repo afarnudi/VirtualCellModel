@@ -27,6 +27,8 @@ struct MyAtomInfo
     double force[3];
     double energy;
     double stretching_energy;
+    int ext_force_model;
+    double ext_force_constants[3];
 };
 
 struct Bonds{
@@ -68,8 +70,8 @@ struct MyOpenMMData {
     OpenMM::Context*  context;
 
     OpenMM::HarmonicBondForce* harmonic;
-    OpenMM::CustomBondForce* x4harmonic;
-    OpenMM::CustomCompoundBondForce* Dihedral;
+    std::vector<OpenMM::CustomBondForce*> x4harmonic;
+    std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
 
     std::vector<OpenMM::CustomNonbondedForce*> EV;
 };
@@ -78,10 +80,15 @@ struct MyOpenMMData {
 struct TimeDependantData {
     OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
     bool Kelvin_Voigt = false;
+    int Kelvin_stepnum = 100;
     std::vector<double> Kelvin_Voigt_damp;
     std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
     
+    std::vector<OpenMM::CustomExternalForce*> ext_force;
+    //OpenMM::CustomExternalForce* ext_force;
+    //bool force_update = false;
+    //int force_stepnum = 100000;
   
     void Kelvin_Nominal_length_calc()
     {

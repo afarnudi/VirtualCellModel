@@ -100,8 +100,20 @@ void ECM::set_map_parameter(string param_name, double param_value){
         Shift_in_Y_direction=param_value;
     } else if (param_name=="Shift_in_Z_direction"){
         Shift_in_Z_direction=param_value;
-    } else if (param_name=="Downward_speed"){
-        Downward_speed=param_value;
+    } else if (param_name=="x_speed"){
+        x_speed=param_value;
+    } else if (param_name=="y_speed"){
+        y_speed=param_value;
+    } else if (param_name=="z_speed"){
+        z_speed=param_value;
+    } else if (param_name=="ext_force"){
+        ext_force_model=param_value;
+    } else if (param_name=="x_force_constant"){
+        kx=param_value;
+    } else if (param_name=="y_force_constant"){
+        ky=param_value;
+    } else if (param_name=="z_force_constant"){
+        kz=param_value;
     } else if (param_name=="Kelvin_Damping_Coefficient"){
         Kelvin_Damping_Coefficient=param_value;
     } else if (param_name=="Dashpot_Viscosity"){

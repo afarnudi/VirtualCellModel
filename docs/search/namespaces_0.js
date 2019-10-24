@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['genconst',['GenConst',['../namespace_gen_const.html',1,'']]]
+  ['conf',['conf',['../namespaceconf.html',1,'']]]
 ];

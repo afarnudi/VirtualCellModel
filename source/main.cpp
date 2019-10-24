@@ -159,7 +159,8 @@ int main(int argc, char **argv)
     vector<std::set<int> > ecm_set;
     
     vector<Chromatin> Chromatins;
-    vector<std::set<int> > chromatin_set;
+//    vector<std::set<int> > chromatin_set;
+    vector<vector<std::set<int> > > chromatin_set;
     
     vector<point_particle> pointparticles;
     
@@ -232,14 +233,8 @@ int main(int argc, char **argv)
                 Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
-                
-                if (GenConst::Num_of_Membranes !=0 && !GenConst::OpenMM) {
-                    ///put a flag for chromatin inside membrane
-                    Chromatins[i].import_config(chromatin_config_list[i], Membranes[i].get_min_radius_after_relaxation());
-                } else {
-                    Chromatins[i].import_config(chromatin_config_list[i]);
-                }
-                
+                Chromatins[i].import_config(chromatin_config_list[i]);
+                chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
                 Chromatins[i].generate_report();
             }
         }
@@ -312,7 +307,7 @@ int main(int argc, char **argv)
         if (Include_Membrane){
             if (Include_Actin){
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
-                    for (int j=0; j<Membranes.size(); j++) {
+                    for (int j=0; j<GenConst::Num_of_Membranes; j++) {
                         Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , i, j);
                         num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
                         if (Membranes[j].get_relax_with_actin_flag()) {
@@ -412,9 +407,9 @@ int main(int argc, char **argv)
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
-            TimeDependantData* tdd = new TimeDependantData();
+            TimeDependantData* time_dependant_data = new TimeDependantData();
             if (!GenConst::Load_from_checkpoint) {
-                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, tdd, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             } else {
                 std::filebuf rfb;
                 rfb.open (GenConst::Checkpoint_path.c_str(),std::ios::in);
@@ -442,15 +437,20 @@ int main(int argc, char **argv)
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
+            int total_step_num = 0;
+            
             for (int frame=1; ; ++frame) {
+<<<<<<< HEAD
                 double time, energy, potentialenergy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy,potentialenergy, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms,all_bonds, traj_name);
+=======
+                double time, energy, potential_energy;
+>>>>>>> 0ef445bf8508adca7ef4e93a3acc187e3a100f82
                 
-                if (WantForce) {
-                    calc_energy_2(Membranes, all_atoms);
-                }
+                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
+                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
@@ -470,7 +470,7 @@ int main(int argc, char **argv)
     
                     
                 
-                myStepWithOpenMM(omm,tdd, all_atoms, NumSilentSteps);
+                myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
                 if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
             
             // Clean up OpenMM data structures.
-            myTerminateOpenMM(omm,tdd);
+            myTerminateOpenMM(omm,time_dependant_data);
             
             cout<<"\nDone!"<<endl;
             return 0; // Normal return from main.

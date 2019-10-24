@@ -1,5 +1,5 @@
 TARGET=VCM
-CXXFLAGS=-std=c++11 -O2
+CXXFLAGS=-std=c++14 -O2
 CXX=g++
 
 OpenMM_INSTALL_DIR=/usr/local/openmm

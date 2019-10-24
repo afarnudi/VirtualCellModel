@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dihedrals',['Dihedrals',['../struct_dihedrals.html',1,'']]]
+  ['dihedrals',['Dihedrals',['../structDihedrals.html',1,'']]]
 ];

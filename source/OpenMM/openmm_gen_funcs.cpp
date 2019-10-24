@@ -4,20 +4,27 @@
 #include "OpenMM_funcs.hpp"
 #include <vector>
 
-void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms[], int numSteps) {
-    if(tdd->Kelvin_Voigt)
+void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, MyAtomInfo atoms[], int numSteps , int& total_step) {
+    if(time_dependant_data->Kelvin_Voigt)
     {
         for (int i=0; i<numSteps; i++)
         {
-            Cheap_GetOpenMMState(omm,atoms);
-            tdd->Kelvin_dist_calc(atoms);
-            if(tdd->Kelvin_Voigt_distInAng.size()>1)
+            if(time_dependant_data->Kelvin_Voigt)
             {
-                //mys_state_update
-                Kelvin_Voigt_update(omm,tdd);
-                tdd->Kelvin_Voigt_distInAng.erase(tdd->Kelvin_Voigt_distInAng.begin());
+                if (total_step % time_dependant_data->Kelvin_stepnum ==0)
+                {
+                    Cheap_GetOpenMMState(omm,atoms);
+                    time_dependant_data->Kelvin_dist_calc(atoms);
+                    if(time_dependant_data->Kelvin_Voigt_distInAng.size()>1)
+                    {
+                        //mys_state_update
+                        Kelvin_Voigt_update(omm,time_dependant_data);
+                        time_dependant_data->Kelvin_Voigt_distInAng.erase(time_dependant_data->Kelvin_Voigt_distInAng.begin());
+                    }
+                }
             }
             omm->integrator->step(1);
+            total_step++;
         }
         
     }
@@ -25,13 +32,14 @@ void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* tdd, MyAtomInfo atoms
     else
     {
         omm->integrator->step(numSteps);
+        total_step += numSteps;
     }
     
 }
 
-void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* tdd) {
+void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* time_dependant_data) {
     delete omm;
-    delete tdd;
+    delete time_dependant_data;
 }
 
 using OpenMM::Vec3;
@@ -40,7 +48,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
                       bool wantForce,
                       double& timeInPs,
                       double& energyInKcal,
-                      double& potentialenergy,
+                      double& potential_energyInKcal,
                       MyAtomInfo atoms[])
 {
     int infoMask = 0;
@@ -72,18 +80,17 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
+
     if (wantEnergy){
-        potentialenergy=state.getPotentialEnergy()*OpenMM::KcalPerKJ;
-        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+    energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+     * OpenMM::KcalPerKJ;
+        potential_energyInKcal = (state.getPotentialEnergy())
         * OpenMM::KcalPerKJ;
     }
 
 }
 
-
-
 using OpenMM::Vec3;
-
 
 void Cheap_GetOpenMMState(MyOpenMMData* omm,
                           MyAtomInfo atoms[])
@@ -118,12 +125,12 @@ void myWritePDBFrame(int frameNum,
     fprintf(pFile,"MODEL     %d\n", frameNum);
     fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
             timeInPs, energyInKcal);
-    int index=1;
+    int index=0;
     string hist = atoms[0].pdb;
     
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     
-//    double occ=1;
+    //    double occ=1;
     for (int n=0; atoms[n].type != EndOfList; ++n){
         if (hist != atoms[n].pdb) {
             index++;
@@ -142,7 +149,7 @@ void myWritePDBFrame(int frameNum,
                 atoms[n].symbol);
     }
     
-        // visualize bonds in pdb file
+    // visualize bonds in pdb file
     for (int n=0; bonds[n].type != EndOfList; ++n){
         if(bonds[n].atoms[0] < bonds[n].atoms[1])
         {
@@ -153,148 +160,27 @@ void myWritePDBFrame(int frameNum,
             fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
         }
     }
+    
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);
 }
 
 
-void calc_energy(vector<Membrane>    mem,
-                 MyAtomInfo          atoms[]){
-    
-    int node_A, node_B, node_C, node_D;
-    
-    double points[3][3];
-    
-    int mem_count=0;
-    
-    for (int i=0; i<mem.size(); i++) {
-        for (int j=0; j<mem[i].get_num_of_nodes(); j++) {
-            atoms[j+mem_count].energy = 0;
-        }
-        for (int j=0; j<mem[i].Triangle_Pair_Nodes.size(); j++) {
-            
-            double A, B, C, E, F, G;
-            
-            node_C=mem[i].Triangle_Pair_Nodes[j][0];
-            node_A=mem[i].Triangle_Pair_Nodes[j][1];
-            node_B=mem[i].Triangle_Pair_Nodes[j][2];
-            node_D=mem[i].Triangle_Pair_Nodes[j][3];
-            
-            for (int k=0; k<3; k++) {
-                points[0][k]=atoms[node_A+mem_count].posInAng[k];
-                points[1][k]=atoms[node_B+mem_count].posInAng[k];
-                points[2][k]=atoms[node_C+mem_count].posInAng[k];
-            }
-            calc_surface_coefficeints(points, A, B, C);
-            
-            for (int k=0; k<3; k++) {
-                points[2][k]=atoms[node_D+mem_count].posInAng[k];
-            }
-            calc_surface_coefficeints(points, E, F, G);
-            double cosine=0;
-            double denominator = sqrt(A*A + B*B + C*C) * sqrt(E*E + F*F + G*G);
-            if (denominator > 0.001) {
-                cosine = ( A*E + B*F + C*G )/denominator;
-            }
-            
-            
-            //shift the value between 0 and 2 only for representation purposes.
-            cosine += 1;
-            //            double scale=5;
-            atoms[node_A+mem_count].energy += cosine/2.0;
-            atoms[node_B+mem_count].energy += cosine/2.0;
-            //            atoms[node_C+mem_count].energy += scale*cosine;
-            //            atoms[node_D+mem_count].energy += scale*cosine;
-            
-        }
-        mem_count += mem[i].get_num_of_nodes();
-    }
-}
-
-void calc_energy_2(vector<Membrane>    mem,
-                   MyAtomInfo          atoms[]){
-    
-    int node_A, node_B, node_C, node_D;
-    double deltax, deltay, deltaz, Node_distance;
-    
-//    double points[3][3];
-    
-    int mem_count=0;
-    
-    for (int i=0; i<mem.size(); i++) {
-        for (int j=0; j<mem[i].get_num_of_nodes(); j++) {
-            atoms[j+mem_count].energy = 0;
-            atoms[j+mem_count].stretching_energy = 0;
-        }
-        for (int j=0; j<mem[i].get_num_of_node_pairs(); j++) {
-            node_B = mem[i].get_node_pair(j, 0);
-            node_A = mem[i].get_node_pair(j, 1);
-            
-            deltax = atoms[node_A + mem_count].posInAng[0]-atoms[node_B + mem_count].posInAng[0];
-            deltay = atoms[node_A + mem_count].posInAng[1]-atoms[node_B + mem_count].posInAng[1];
-            deltaz = atoms[node_A + mem_count].posInAng[2]-atoms[node_B + mem_count].posInAng[2];
-            
-            Node_distance=deltax*deltax+deltay*deltay+deltaz*deltaz;
-            
-            double scale = 1;
-            atoms[node_A + mem_count].stretching_energy += scale * 0.5*Node_distance;
-            atoms[node_B + mem_count].stretching_energy += scale * 0.5*Node_distance;
-            
-        }
-        
-        
-        for (int j=0; j<mem[i].Triangle_Pair_Nodes.size(); j++) {
-            
-            double AB[3], BA[3], AC[3], BD[3], ABxAC[3], BAxBD[3];
-            
-            node_C=mem[i].Triangle_Pair_Nodes[j][0];
-            node_A=mem[i].Triangle_Pair_Nodes[j][1];
-            node_B=mem[i].Triangle_Pair_Nodes[j][2];
-            node_D=mem[i].Triangle_Pair_Nodes[j][3];
-            
-            for (int k=0; k<3; k++) {
-                AB[k]=atoms[node_B+mem_count].posInAng[k]-atoms[node_A+mem_count].posInAng[k];
-                BA[k]=-AB[k];
-                AC[k]=atoms[node_C+mem_count].posInAng[k]-atoms[node_A+mem_count].posInAng[k];
-                BD[k]=atoms[node_D+mem_count].posInAng[k]-atoms[node_B+mem_count].posInAng[k];
-            }
-            
-            crossvector(ABxAC, AB, AC);
-            crossvector(BAxBD, BA, BD);
-            
-            double dot =innerproduct(ABxAC, BAxBD), lABxACl=vector_length(ABxAC), lBAxBDl=vector_length(BAxBD);
-            
-            double cosine=(dot)/(lABxACl*lBAxBDl);
-            double sine = (1.00001 - cosine)*0.5;
-            
-            sine = sqrt(sine);
-            
-            double scale=100;
-            atoms[node_A+mem_count].energy += scale*sine/2;
-            atoms[node_B+mem_count].energy += scale*sine/2;
-//            atoms[node_C+mem_count].energy += scale*sine/4;
-//            atoms[node_D+mem_count].energy += scale*sine/4;            
-        }
-        mem_count += mem[i].get_num_of_nodes();
-    }
-}
-
-
 void Kelvin_Voigt_update(MyOpenMMData* omm,
-                      TimeDependantData* tdd)
+                         TimeDependantData* time_dependant_data)
 {
-    const int Num_Bonds = tdd->Kelvin_VoigtBond->getNumBonds();
+    const int Num_Bonds = time_dependant_data->Kelvin_VoigtBond->getNumBonds();
     int atom1, atom2 ;
     double length, stiffness;
     
     for(int i=0; i<Num_Bonds ; i++)
     {
-        tdd->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
+        time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = tdd->Kelvin_Voigt_initNominal_length_InNm[i] - (tdd->Kelvin_Voigt_distInAng[1][i] - tdd->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (tdd->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
         
-        tdd->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
+        time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
-    tdd->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
+    time_dependant_data->Kelvin_VoigtBond->updateParametersInContext(*omm->context);
     
 }
