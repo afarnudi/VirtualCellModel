@@ -23,7 +23,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "10*(" + sigma + "/r)^6";
+    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     int index = ExcludedVolumes.size()-1;
@@ -34,7 +34,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
 //    cout<<"sigma = 0.5*("<<atoms[*it_1].radius<<" + "<<atoms[*it_2].radius<<") = "<<0.5*( atoms[*it_1].radius
 //                                                                                       + atoms[*it_2].radius )<<endl;
     ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-    ExcludedVolumes[index]-> setCutoffDistance( 3 * ( atoms[*it_1].radius
+    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
                                                     + atoms[*it_2].radius )
                                                     * OpenMM::NmPerAngstrom);
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
@@ -60,7 +60,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "10*(" + sigma + "/r)^6";
+    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
@@ -70,7 +70,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                                                  + atoms[*it_2].radius )
                                                                 * OpenMM::NmPerAngstrom);
         ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-        ExcludedVolumes[index]-> setCutoffDistance( 3 * ( atoms[*it_1].radius
+        ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
                                                          + atoms[*it_2].radius )
                                                         * OpenMM::NmPerAngstrom);
     
@@ -101,7 +101,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index);
-    string potential = "10*(" + sigma + "/r)^6";
+    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
@@ -111,7 +111,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                                                  + atoms[*it_2].radius )
                                                                 * OpenMM::NmPerAngstrom);
     ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-    ExcludedVolumes[index]-> setCutoffDistance( 3 * ( atoms[*it_1].radius
+    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
                                                          + atoms[*it_2].radius )
                                                         * OpenMM::NmPerAngstrom);
     
@@ -136,7 +136,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + std::to_string(sub_set_1) + set_2_name + std::to_string(set_2_index) + std::to_string(sub_set_2);
-    string potential = "10*(" + sigma + "/r)^6";
+    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
@@ -146,7 +146,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                                                  + atoms[*it_2].radius )
                                                                 * OpenMM::NmPerAngstrom);
     ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-    ExcludedVolumes[index]-> setCutoffDistance( 3 * ( atoms[*it_1].radius
+    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
                                                          + atoms[*it_2].radius )
                                                         * OpenMM::NmPerAngstrom);
     
