@@ -90,10 +90,10 @@ std::vector<double> Nominal_length_calc(TimeDependantData*,
                                         int bondtype);
 
 /** -----------------------------------------------------------------------------
- *                    reinitialize the openMM
+ *                   Monte_Carlo
  * -----------------------------------------------------------------------------
  */
-void          myreinitializeOpenMMState(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
+void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[]);
 
                                
 /** -----------------------------------------------------------------------------

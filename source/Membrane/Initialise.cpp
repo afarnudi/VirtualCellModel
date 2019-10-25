@@ -11,6 +11,8 @@
 void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     cout<<"Initialising the Membrane Class..."<<endl;
+   
+
     if (mesh_format==1){
         read_gmesh_file(Mesh_file_name);
     }else if (mesh_format==2){
@@ -22,28 +24,39 @@ void Membrane::initialise(std::string Mesh_file_name){
     cout<<"\nRadius="<<Radius<<endl;
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;
     cout<<"# of triangles="<<Num_of_Triangles<<endl;
+   
+
+    //this part is for testing  just one bond (be carful to pass a mesh with just 2 nodes to the programm in case of using it)
+/*
+    Node_Bond_list.resize(1);
+    Node_Bond_list[0].resize(2);
+    Node_Bond_list[0][0]=0;
+    Node_Bond_list[0][1]=1;
+    
+    Num_of_Node_Pairs=1;
+    Num_of_Triangle_Pairs=0;
+    cout<<"\nMembrane class initiated.\n******************************\n\n";
+*/
     Normal_direction_Identifier();
     Triangle_pair_counter();
     cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
-    if (Triangle_pair_list.size()!=Triangle_Pair_Nodes.size()) {
-        cout<<"Triangle_pair_list = "<<Triangle_pair_list.size()<<"\nTriangle_Pair_Nodes = "<<Triangle_Pair_Nodes.size()<<endl;
-    }
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
     }
-    //        Triangle_Pair_and_Node_Bonds_Identifier();
     Node_Bonds_identifier();
     Node_neighbour_list_constructor();
     Triangle_pair_identifier();
-    //DamperCheck.resize(Num_of_Node_Pairs);
-    //SinusCheck.resize(Num_of_Node_Pairs);
+  
 
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
-    shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    //shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     check();
+
     check_radius_update_values();
     shift_velocity(x_speed, y_speed, z_speed);
     
+    
+    //limiting the labels to 4 charachters for use in the pdb writer
     while (label.length()>3) {
         label.pop_back();
     }
@@ -57,5 +70,8 @@ void Membrane::initialise(std::string Mesh_file_name){
         label += std::to_string(index);
     }
     cout<<"\nMembrane class initiated.\n******************************\n\n";
+
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
+
+
 }

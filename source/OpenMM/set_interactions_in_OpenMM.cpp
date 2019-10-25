@@ -7,6 +7,7 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
+
 void set_interactions(const MyAtomInfo                       atoms[],
                       Bonds*                                 bonds,
                       vector<std::set<int> >                &membrane_set,
@@ -169,6 +170,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         for (int j=0; j < GenConst::Num_of_Membranes; j++) {
             
+            
             std::string class_label_i=GenConst::ECM_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
@@ -178,6 +180,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             
             switch (interaction_map[i + class_count_i][j]) {
+                
                 case 1:
                     
                     init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
@@ -522,6 +525,5 @@ void set_interactions(const MyAtomInfo                       atoms[],
             }
         }
     }
-    
     
 }

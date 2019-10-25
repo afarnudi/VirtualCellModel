@@ -25,6 +25,7 @@ void matrix_inverse (double mat[3][3]);
 
 //Calculate the A, B, C coefficeints for the surface equation: Ax + By + Cz = -1
 void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C);
+void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C);
 
 
 
