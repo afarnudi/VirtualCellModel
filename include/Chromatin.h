@@ -212,8 +212,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void set_file_time(char* buffer){
         file_time=buffer;
     }
-    void set_index(int index){
-        index=index;
+    void set_index(int ind){
+        index=ind;
     }
     
     double get_node_radius(void){
