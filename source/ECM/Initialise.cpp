@@ -33,6 +33,19 @@ void ECM::initialise(int dimension){
     shift_velocity(x_speed, y_speed, z_speed);
     check();
     
+    while (label.length()>3) {
+        label.pop_back();
+    }
+    while (label.length()<3) {
+        label += "0";
+    }
+    if (index>=10){
+        label.pop_back();
+        label += std::to_string(index);
+    } else {
+        label += std::to_string(index);
+    }
+    
     cout<<"\nECM class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

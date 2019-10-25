@@ -13,6 +13,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     
     for (int i=0; i<mem_num_atom; i++) {
         myatominfo[i].type=C;
+        myatominfo[i].class_label="Membrane";
         std::string str = mem.get_label();
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
@@ -52,6 +53,7 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
     
     for (int i=0; i<act_num_atom; i++) {
         myatominfo[i].type=C;
+        myatominfo[i].class_label="Actin";
         std::string str = act.get_label();
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
@@ -89,6 +91,7 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
     
     for (int i=0; i<ecm_num_atom; i++) {
         myatominfo[i].type=C;
+        myatominfo[i].class_label="ECM";
         std::string str = ecm.get_label();
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
@@ -125,7 +128,8 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
     
     for (int i=0; i<chromo_num_atom; i++) {
         myatominfo[i].type=chromo.get_node_type(i);
-        std::string str = chromo.get_label();
+        myatominfo[i].class_label="Chromatin";
+        std::string str = chromo.get_label() + std::to_string(chromo.get_node_type(i));
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
         myatominfo[i].energy = 0;

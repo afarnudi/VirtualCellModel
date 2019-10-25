@@ -136,6 +136,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void set_label(std::string lab){
         label=lab;
     }
+    
     /** return the label(pdb) used to write to the trajectory files.
      */
     std::string get_label(void){

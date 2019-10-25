@@ -29,6 +29,7 @@ struct MyAtomInfo
     double stretching_energy;
     int ext_force_model;
     double ext_force_constants[3];
+    std::string class_label;
 };
 
 struct Bonds{

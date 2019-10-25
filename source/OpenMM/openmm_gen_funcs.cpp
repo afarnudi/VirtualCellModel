@@ -195,14 +195,20 @@ void myWritePDBFrame(int frameNum,
             timeInPs, energyInKcal);
     int index=0;
     string hist = atoms[0].pdb;
-    
+    if (atoms[0].class_label == "Chromatin") {
+        hist.pop_back();
+    }
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     
     //    double occ=1;
     for (int n=0; atoms[n].type != EndOfList; ++n){
-        if (hist != atoms[n].pdb) {
+        string new_label = atoms[n].pdb;
+        if (atoms[n].class_label == "Chromatin") {
+            new_label.pop_back();
+        }
+        if (hist != new_label) {
             index++;
-            hist = atoms[n].pdb;
+            hist = new_label;
         }
         fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
                 n+1,
