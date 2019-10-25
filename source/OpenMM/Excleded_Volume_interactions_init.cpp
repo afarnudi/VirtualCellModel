@@ -23,7 +23,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
+    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     int index = ExcludedVolumes.size()-1;
@@ -60,7 +60,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
+    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
@@ -101,7 +101,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index);
-    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
+    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
@@ -136,7 +136,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + std::to_string(sub_set_1) + set_2_name + std::to_string(set_2_index) + std::to_string(sub_set_2);
-    string potential = "(" + sigma + "/(r-" + sigma + ")^12";
+    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
