@@ -54,7 +54,6 @@ void Chromatin::initialise(void){
             label += std::to_string(index);
         }
     }
-    
     cout<<"Chromatin class initiated.\n\n";
     
 }

@@ -221,6 +221,8 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               vector<vector<std::set<int> > >       set_2,
                               int                                   set_1_index,
                               int                                   set_2_index,
+                              int                                   sub_set_1,
+                              int                                   sub_set_2,
                               string                                set_1_name,
                               string                                set_2_name);
 
@@ -252,10 +254,22 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
 //overload for inter chromatin class interactions contatining different node types.
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                       atoms[],
+                                      vector<vector<std::set<int> > >             set_1,
+                                      vector<vector<std::set<int> > >             set_2,
+                                      int                                    set_1_index,
+                                      int                                    set_2_index,
+                                      string                                 set_1_name,
+                                      string                                 set_2_name);
+
+//overload for inter chromatin class interactions contatining different node types.
+void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                       atoms[],
                                       vector<vector<std::set<int> > >        set_1,
                                       vector<vector<std::set<int> > >        set_2,
                                       int                                    set_1_index,
                                       int                                    set_2_index,
+                                      int                                    sub_set_1,
+                                      int                                    sub_set_2,
                                       string                                 set_1_name,
                                       string                                 set_2_name);
 

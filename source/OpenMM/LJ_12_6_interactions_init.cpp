@@ -106,82 +106,57 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               vector<vector<set<int> > >            set_2,
                               int                                   set_1_index,
                               int                                   set_2_index,
+                              int                                   sub_set_1,
+                              int                                   sub_set_2,
                               string                                set_1_name,
                               string                                set_2_name){
     
     
-    if (set_1_index == set_2_index) {
-        for (int i=0; i<set_1[set_1_index].size(); i++) {
-            for (int j=i; j<set_2[set_2_index].size(); j++) {
-                
-                set<int> :: iterator it_1 = set_1[set_1_index][i].begin();
-                set<int> :: iterator it_2 = set_2[set_2_index][j].begin();
-                
-                string epsilon = "epsilon" + set_1_name + std::to_string(set_1_index) + std::to_string(atoms[*it_1].type) + set_2_name + std::to_string(set_2_index) + std::to_string(atoms[*it_2].type);
-                string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + std::to_string(atoms[*it_1].type) + set_2_name + std::to_string(set_2_index) + std::to_string(atoms[*it_2].type);
-                string potential = epsilon + "*((" + sigma + "/r)^12-2*(" + sigma + "/r)^6)" ;
-                
-                LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
-                int index = LJ_12_6_interactions.size()-1;
-                
-                
-                LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                              + atoms[*it_2].sigma_LJ_12_6 )
-                                                                            * OpenMM::NmPerAngstrom);
-                LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                             * atoms[*it_2].epsilon_LJ_12_6)
-                                                                             * OpenMM::KJPerKcal
-                                                                             * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                LJ_12_6_interactions[index]->setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-                
-                LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                                      + atoms[*it_2].sigma_LJ_12_6 )
-                                                                   * OpenMM::NmPerAngstrom);
-                
-                
-                
-                LJ_12_6_interactions[index]->addInteractionGroup(set_1[set_1_index][i], set_2[set_2_index][j]);
-            }
-        }
-    } else {
-        for (int i=0; i<set_1[set_1_index].size(); i++) {
-            for (int j=0; j<set_2[set_2_index].size(); j++) {
-                
-                set<int> :: iterator it_1 = set_1[set_1_index][i].begin();
-                set<int> :: iterator it_2 = set_2[set_2_index][j].begin();
-                
-                string epsilon = "epsilon" + set_1_name + std::to_string(set_1_index) + std::to_string(atoms[*it_1].type) + set_2_name + std::to_string(set_2_index) + std::to_string(atoms[*it_2].type);
-                string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + std::to_string(atoms[*it_1].type) + set_2_name + std::to_string(set_2_index) + std::to_string(atoms[*it_2].type);
-                string potential = epsilon + "*((" + sigma + "/r)^12-2*(" + sigma + "/r)^6)" ;
-                
-                LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
-                int index = LJ_12_6_interactions.size()-1;
-                
-                
-                LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                              + atoms[*it_2].sigma_LJ_12_6 )
-                                                                            * OpenMM::NmPerAngstrom);
-                LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                             * atoms[*it_2].epsilon_LJ_12_6)
-                                                                             * OpenMM::KJPerKcal
-                                                                             * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                LJ_12_6_interactions[index]->setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-                
-                LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                                      + atoms[*it_2].sigma_LJ_12_6 )
-                                                                   * OpenMM::NmPerAngstrom);
-                
-                
-                
-                LJ_12_6_interactions[index]->addInteractionGroup(set_1[set_1_index][i], set_2[set_2_index][j]);
-            }
-        }
-    }
+    set<int> :: iterator it_1 = set_1[set_1_index][sub_set_1].begin();
+    set<int> :: iterator it_2 = set_2[set_2_index][sub_set_2].begin();
+    
+    string epsilon = "epsilon" + set_1_name + std::to_string(set_1_index) + std::to_string(sub_set_1) + set_2_name + std::to_string(set_2_index) + std::to_string(sub_set_2) ;
+    string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + std::to_string(sub_set_1) + set_2_name + std::to_string(set_2_index) + std::to_string(sub_set_2) ;
+    string potential = epsilon + "*((" + sigma + "/r)^12-2*(" + sigma + "/r)^6)" ;
+    
+    LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
+    
+    int index = LJ_12_6_interactions.size()-1;
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
+                                                                    + atoms[*it_2].sigma_LJ_12_6 )
+                                                    * OpenMM::NmPerAngstrom);
+    
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
+                                                                     * atoms[*it_2].epsilon_LJ_12_6)
+                                                    * OpenMM::KJPerKcal
+                                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
+                                                          + atoms[*it_2].sigma_LJ_12_6 )
+                                                   * OpenMM::NmPerAngstrom);
     
     
     
+    LJ_12_6_interactions[index]->addInteractionGroup(set_1[set_1_index][sub_set_1], set_2[set_2_index][sub_set_2]);
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
                               const MyAtomInfo                      atoms[],
