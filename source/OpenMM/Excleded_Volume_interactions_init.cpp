@@ -89,6 +89,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     set<int> compined_set_1;
     set<int> compined_set_2;
+    
     for (int i=0; i<set_1.size(); i++) {
         compined_set_1.insert(set_1[set_1_index][i].begin(),set_1[set_1_index][i].end());
     }

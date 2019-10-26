@@ -40,8 +40,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6)
-                                                    * OpenMM::KJPerKcal
-                                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                                    * OpenMM::KJPerKcal);
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
                                                           + atoms[*it_2].sigma_LJ_12_6 )
@@ -86,8 +85,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                                                                 * OpenMM::NmPerAngstrom);
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                  * atoms[*it_2].epsilon_LJ_12_6)
-                                                                 * OpenMM::KJPerKcal
-                                                                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                                                 * OpenMM::KJPerKcal);
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
@@ -130,8 +128,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6)
-                                                    * OpenMM::KJPerKcal
-                                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                                    * OpenMM::KJPerKcal);
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
                                                           + atoms[*it_2].sigma_LJ_12_6 )
