@@ -67,12 +67,12 @@ void myGetOpenMMState(MyOpenMMData* omm,
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = state.getPositions();
-    const std::vector<Vec3>& velInAngperPs  = state.getVelocities();
+    const std::vector<Vec3>& velInNmperPs  = state.getVelocities();
     const std::vector<Vec3>& Forces        = state.getForces();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
             atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
-            atoms[i].velocityInAngperPs[j] = velInAngperPs[i][j];
+            atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
             if (wantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
             }
