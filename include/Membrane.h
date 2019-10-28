@@ -167,14 +167,18 @@ public:
     //monte carlo flip functions
     bool check_monte_carlo=0;
     void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
-    void monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter);
+    void monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter);
     double calculating_the_bond_energy(int index, bool initial_or_final, MyAtomInfo  atoms[],int number_of_privious_mem_nodes);
     double calculating_the_bond_energy_check(int p1, int p2, MyAtomInfo atoms[]);
     double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4, bool initial_or_final, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);
     double calculating_the_bend_energy_2(int uncommon1, int common2, int common3, int uncommon4, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);
     double calculating_the_bond_length_check(int p1, int p2, MyAtomInfo atoms[]);
+    void check_before_update(int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6],int& pyramid_counter, bool& accept);
     void update_Membrane_class_and_openmm(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
-    
+    void Update_Membrane(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], int& bond_index);
+    bool check_Pyramid(vector <int> A_neighbors, vector <int> B_neighbors);
+    bool check_Pyramid_2(int initial_pair, vector<int> A_neighbours_dihedral_index, vector<int> B_neighbours_dihedral_index);
+    void check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
     
     //end of monte carlo flip functions
     
