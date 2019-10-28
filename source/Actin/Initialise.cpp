@@ -26,6 +26,19 @@ void Actin::initialise(){
     exp_tau=exp(-GenConst::Step_Size_In_Fs/tau_Maxwell_relax);
     check();
     
+    while (label.length()>3) {
+        label.pop_back();
+    }
+    while (label.length()<3) {
+        label += "0";
+    }
+    if (index>=10){
+        label.pop_back();
+        label += std::to_string(index);
+    } else {
+        label += std::to_string(index);
+    }
+    
     cout<<"\nActin class initiated.\n******************************\n\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

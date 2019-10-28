@@ -181,8 +181,7 @@ int main(int argc, char **argv)
             Membranes.resize(GenConst::Num_of_Membranes);
             membrane_set.resize(GenConst::Num_of_Membranes);
             for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-                string label=GenConst::Membrane_label+to_string(i);
-                Membranes[i].set_label(label);
+                Membranes[i].set_label(GenConst::Membrane_label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
                 Membranes[i].import_config(membrane_config_list[i]);
@@ -197,8 +196,7 @@ int main(int argc, char **argv)
             Actins.resize(GenConst::Num_of_Actins);
             actin_set.resize(GenConst::Num_of_Actins);
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
-                string label=GenConst::Actin_label+to_string(i);
-                Actins[i].set_label(label);
+                Actins[i].set_label(GenConst::Actin_label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
                 Actins[i].import_config(actin_config_list[i]);
@@ -212,8 +210,7 @@ int main(int argc, char **argv)
             ECMs.resize(GenConst::Num_of_ECMs);
             ecm_set.resize(GenConst::Num_of_ECMs);
             for (int i=0; i<GenConst::Num_of_ECMs; i++) {
-                string label=GenConst::ECM_label+to_string(i);
-                ECMs[i].set_label(label);
+                ECMs[i].set_label(GenConst::ECM_label);
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
                 ECMs[i].import_config(ecm_config_list[i]);
@@ -229,8 +226,7 @@ int main(int argc, char **argv)
             Chromatins.resize(GenConst::Num_of_Chromatins);
             chromatin_set.resize(GenConst::Num_of_Chromatins);
             for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
-                string label=GenConst::Chromatin_label+to_string(i);
-                Chromatins[i].set_label(label);
+                Chromatins[i].set_label(GenConst::Chromatin_label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
                 Chromatins[i].import_config(chromatin_config_list[i]);
@@ -440,14 +436,8 @@ int main(int argc, char **argv)
             int total_step_num = 0;
             
             for (int frame=1; ; ++frame) {
-<<<<<<< HEAD
-                double time, energy, potentialenergy;
-                
-                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy,potentialenergy, all_atoms);
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms,all_bonds, traj_name);
-=======
+
                 double time, energy, potential_energy;
->>>>>>> 0ef445bf8508adca7ef4e93a3acc187e3a100f82
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);

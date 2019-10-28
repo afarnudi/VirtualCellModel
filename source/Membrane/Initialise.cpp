@@ -54,6 +54,22 @@ void Membrane::initialise(std::string Mesh_file_name){
 
     check_radius_update_values();
     shift_velocity(x_speed, y_speed, z_speed);
+    
+    
+    //limiting the labels to 4 charachters for use in the pdb writer
+    while (label.length()>3) {
+        label.pop_back();
+    }
+    while (label.length()<3) {
+        label += "0";
+    }
+    if (index>=10){
+        label.pop_back();
+        label += std::to_string(index);
+    } else {
+        label += std::to_string(index);
+    }
+    cout<<"\nMembrane class initiated.\n******************************\n\n";
 
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 
