@@ -367,6 +367,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             GenConst::Load_from_checkpoint=it->second;
         }
         GenConst::Checkpoint_path = "/Results/Resumes/OpenMM/";
-    }
+    } else if (param_name=="write_bonds_to_PDB"){
+           it = general_param_map.find(param_name);
+           if (it != general_param_map.end()){
+               if (it->second == 0) {
+                   GenConst::write_bonds_to_PDB= false;
+               } else {
+                   GenConst::write_bonds_to_PDB= true;
+               }
+           }
+       }
 
 }

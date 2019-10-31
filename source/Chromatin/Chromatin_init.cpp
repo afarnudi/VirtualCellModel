@@ -54,6 +54,12 @@ void Chromatin::initialise(void){
             label += std::to_string(index);
         }
     }
+    
+    CM.resize(Num_of_Nodes);
+    for (int i=0; i<Num_of_Nodes; i++) {
+        CM[i].resize(Num_of_Nodes, 0);
+    }
+    
     cout<<"Chromatin class initiated.\n\n";
     
 }

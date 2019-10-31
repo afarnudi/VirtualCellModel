@@ -74,6 +74,9 @@ excluded_volume_interaction	0
 //Set to 1 for the programme to use the OpenMM engine or to 0 to use the internal simple engine. Default 1 (true).
 OpenMM	1
 
+//Write bonds to PDB. Default 1
+write_bonds_to_PDB	1
+
 //Set Lennard-Jones 12 6 sigma.
 sigma_LJ_12_6   1.7
 

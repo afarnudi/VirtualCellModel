@@ -1,10 +1,16 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
+#include "Global_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 #include <vector>
 
-void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, MyAtomInfo atoms[], int numSteps , int& total_step) {
+void myStepWithOpenMM(MyOpenMMData* omm,
+                      TimeDependantData* time_dependant_data,
+                      MyAtomInfo atoms[],
+                      int numSteps ,
+                      int& total_step) {
+    
     if(time_dependant_data->Kelvin_Voigt)
     {
         for (int i=0; i<numSteps; i++)
@@ -37,7 +43,8 @@ void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, 
     
 }
 
-void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* time_dependant_data) {
+void myTerminateOpenMM(MyOpenMMData* omm,
+                       TimeDependantData* time_dependant_data) {
     delete omm;
     delete time_dependant_data;
 }
@@ -78,6 +85,10 @@ void myGetOpenMMState(MyOpenMMData* omm,
             }
         }
     }
+    
+    
+    
+    
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
 
@@ -143,6 +154,7 @@ void myWritePDBFrame(int frameNum,
             hist = new_label;
         }
         fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
+//        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f %8.3f%8.3f%8.3f%6.2f%6.1f\n",
                 n+1,
                 atoms[n].pdb,
                 chain[index],
@@ -156,14 +168,16 @@ void myWritePDBFrame(int frameNum,
     }
     
     // visualize bonds in pdb file
-    for (int n=0; bonds[n].type != EndOfList; ++n){
-        if(bonds[n].atoms[0] < bonds[n].atoms[1])
-        {
-            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
-        }
-        if(bonds[n].atoms[0] > bonds[n].atoms[1])
-        {
-            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
+    if (GenConst::write_bonds_to_PDB) {
+        for (int n=0; bonds[n].type != EndOfList; ++n){
+            if(bonds[n].atoms[0] < bonds[n].atoms[1])
+            {
+                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
+            }
+            if(bonds[n].atoms[0] > bonds[n].atoms[1])
+            {
+                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
+            }
         }
     }
     

@@ -95,6 +95,13 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+    bool write_bonds_to_PDB;
+
+
+
+
+    std::vector<std::vector<std::vector<double> > > velocity_save;
+    std::vector<double> vel_times;
 }
 
 
@@ -398,6 +405,11 @@ int main(int argc, char **argv)
         }
        
         
+        
+        //autocorrelation calculations:
+        GenConst::velocity_save.resize(6);
+        
+        
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         
@@ -440,25 +452,23 @@ int main(int argc, char **argv)
                 double time, energy, potential_energy;
                 
                 myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
+                
+                collect_data(all_atoms, time);
+    
                 myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
+                for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
+                    Chromatins[chr_c].contact_matrix_update();
+                }
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
-              //  if (check_for_membrane_update(Membranes, time)) {
-                //    cout<<"o my God... :/"<<endl;
-                  //  updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
-                //}
-                
-                
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
-                    break;  
-    
-                    
+                    break;
                 
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
@@ -483,6 +493,13 @@ int main(int argc, char **argv)
             print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
             print_real_time(chrono_clock_start, chrono::steady_clock::now());
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
+            
+            if (Include_Chromatin) {
+                analysis(buffer,
+                         Chromatins);
+            }
+            
+            
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm,time_dependant_data);

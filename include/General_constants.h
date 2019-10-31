@@ -88,6 +88,13 @@ namespace GenConst {
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
     extern std::string Checkpoint_path;
     
+    extern bool write_bonds_to_PDB;
+
+
+
+    //non config file parameters
+    extern std::vector<std::vector<std::vector<double> > > velocity_save;
+    extern std::vector<double> vel_times;
     
 }
 
