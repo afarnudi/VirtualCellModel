@@ -30,7 +30,7 @@ void Membrane::Triangle_pair_identifier(void){
         int temp_triangle_node_B=Triangle_list[i][1];
         int temp_triangle_node_C=Triangle_list[i][2];
         int neighbour_indicator=0;
-        //        Indicates the existence of Node neighbour for a node pair (other than the membrane of the triangle):
+        //        Indicates the existence of Node neighbour for a node pair (other than the other node of triangle):
         //        neighbour_indicator=0 No Node Pairs; neighbour_indicator=1, for temp_triangle_node_A-temp_triangle_node_B; neighbour_indicator=2, for temp_triangle_node_B-temp_triangle_node_C; And neighbour_indicator=3 for temp_triangle_node_C-temp_triangle_node_A.
         for(int j=i+1;j<Num_of_Triangles;j++)
         {
@@ -129,7 +129,7 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
                     temp_triangle_pair[0]=i;
-                    temp_triangle_pair[0]=j;
+                    temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
                     
                     
@@ -140,7 +140,7 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
                     temp_triangle_pair[0]=i;
-                    temp_triangle_pair[0]=j;
+                    temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
                     
                 } else if (neighbour_indicator==3)
@@ -150,7 +150,7 @@ void Membrane::Triangle_pair_identifier(void){
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_A;
                     Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
                     temp_triangle_pair[0]=i;
-                    temp_triangle_pair[0]=j;
+                    temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
                 }
                 temp_int_Triangle_Pair_index++;

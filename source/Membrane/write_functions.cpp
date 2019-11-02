@@ -293,7 +293,9 @@ void Membrane::generate_report()
     Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
     Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
     Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
-    Report<<"Downward_speed\t"<<Downward_speed<<endl;
+    Report<<"x_speed\t"<<x_speed<<endl;
+    Report<<"y_speed\t"<<y_speed<<endl;
+    Report<<"z_speed\t"<<z_speed<<endl;
     Report<<"X_in_mem\t"<<X_in<<endl;
     Report<<"Y_in_mem\t"<<Y_in<<endl;
     Report<<"Z_in_mem\t"<<Z_in<<endl;

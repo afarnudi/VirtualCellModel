@@ -170,9 +170,21 @@ public:
     void export_for_resume(int MD_step);
 
     //monte carlo flip functions
-    void monte_carlo_flip();
-    double calculating_the_bond_energy(int index, bool initial_or_final);
-    double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4);
+    bool check_monte_carlo=0;
+    void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
+    void monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter);
+    double calculating_the_bond_energy(int index, bool initial_or_final, MyAtomInfo  atoms[],int number_of_privious_mem_nodes);
+    double calculating_the_bond_energy_check(int p1, int p2, MyAtomInfo atoms[]);
+    double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4, bool initial_or_final, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);
+    double calculating_the_bend_energy_2(int uncommon1, int common2, int common3, int uncommon4, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);
+    double calculating_the_bond_length_check(int p1, int p2, MyAtomInfo atoms[]);
+    void check_before_update(int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6],int& pyramid_counter, bool& accept);
+    void update_Membrane_class_and_openmm(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
+    void Update_Membrane(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], int& bond_index);
+    bool check_Pyramid(vector <int> A_neighbors, vector <int> B_neighbors);
+    bool check_Pyramid_2(int initial_pair, vector<int> A_neighbours_dihedral_index, vector<int> B_neighbours_dihedral_index);
+    void check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
+    
     //end of monte carlo flip functions
     
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
@@ -216,7 +228,14 @@ public:
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
-    double Downward_speed=0.0; //???
+    double x_speed=0.0; //???
+    double y_speed=0.0;
+    double z_speed=0.0;
+    
+    int ext_force_model=0;
+    double kx=10;
+    double ky=10;
+    double kz=10;
     //bool =0;
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -313,6 +332,19 @@ public:
     /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
     double get_epsilon_LJ_12_6(void){
         return epsilon_LJ_12_6;
+    }
+    /**Return external force model. */
+    int get_ext_force_model(void){
+        return ext_force_model;
+    }
+    double get_kx(void){
+        return kx;
+    }
+    double get_ky(void){
+        return ky;
+    }
+    double get_kz(void){
+        return kz;
     }
     
     

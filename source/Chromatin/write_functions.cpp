@@ -54,16 +54,10 @@ void Chromatin::write_traj (string traj_name, string label){
     std::ofstream Trajectory;
     Trajectory.open(traj_name.c_str(), std::ios::app);
     Trajectory << std:: fixed;
-    string label_A =label+"_A";
-    string label_B =label+"_B";
+    vector<string> ABC = {"_A", "_B", "_C", "_D", "_E", "_F", "_G"};
     for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
     {
-        if (AB_index[j]!=0) {
-            Trajectory << label_A <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
-        } else {
-            Trajectory << label_B <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
-        }
-        
+        Trajectory << label + ABC[ABC_index[j]] <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
     }
 }
 
@@ -76,10 +70,16 @@ void Chromatin::export_for_resume(int MD_step){
     
     write_resume_file<<MD_step<<endl;
     write_resume_file<<Num_of_Nodes<<endl;
+    
+    write_resume_file<<num_of_node_types<<endl;
+    for (int i=0; i<num_of_node_types; i++) {
+        write_resume_file<<epsilon_LJ[i]<<"\t"<<sigma_LJ[i]<<endl;
+    }
+    
     for (int i=0; i<Num_of_Nodes; i++) {
         write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
         write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
-        write_resume_file<<AB_index[i]<<"\n";
+        write_resume_file<<ABC_index[i]<<"\n";
         //Node_force=0
     }
 }
@@ -94,6 +94,11 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
     write_resume_file<<MD_step<<endl;
     write_resume_file<<Num_of_Nodes<<endl;
     
+    write_resume_file<<num_of_node_types<<endl;
+    for (int i=0; i<num_of_node_types; i++) {
+        write_resume_file<<epsilon_LJ[i]<<"\t"<<sigma_LJ[i]<<endl;
+    }
+    
     for (int i=atom_count; i<atom_count+Num_of_Nodes; i++) {
         Node_Position[i-atom_count][0] = atoms[i].posInAng[0];
         Node_Position[i-atom_count][1] = atoms[i].posInAng[1];
@@ -107,7 +112,7 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
     for (int i=0; i<Num_of_Nodes; i++) {
         write_resume_file<<Node_Position[i][0]<<"\t"<<Node_Position[i][1]<<"\t"<<Node_Position[i][2]<<"\n";
         write_resume_file<<Node_Velocity[i][0]<<"\t"<<Node_Velocity[i][1]<<"\t"<<Node_Velocity[i][2]<<"\n";
-        write_resume_file<<AB_index[i]<<"\n";
+        write_resume_file<<ABC_index[i]<<"\n";
         //Node_force=0
     }
 }
@@ -170,5 +175,11 @@ void Chromatin::generate_report(void)
     Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
     Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
     Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
+    
+    Report<<"num of node types = "<<num_of_node_types<<endl;
+    Report<<"epsilon_LJ\tsigma_LJ\n--------------------\n";
+    for (int i=0; i<num_of_node_types; i++) {
+        Report<<std::to_string(i)<<" "<<epsilon_LJ[i]<<"\t"<<sigma_LJ[i]<<endl;
+    }
     
 }

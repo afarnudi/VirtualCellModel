@@ -11,6 +11,7 @@ void Chromatin::Force_Calculator(void)
     hard_sphere();
 }
 
+// This is the old code and it is designed to work with a chromatin chain with only 2 node types.
 void Chromatin::Force_Calculator_2(void)
 {
     Total_Potential_Energy=0.0;
@@ -48,7 +49,7 @@ void Chromatin::Force_Calculator_2(void)
                 if (Node_distance<2.5) {
                     Contact_Matrix[k][j]++;
                 }
-                if (AB_index[k]*AB_index[j] != 0) {
+                if (ABC_index[k]*ABC_index[j] != 0) {
                     double sigma = 0.35;
                     double r_1 = (Node_distance -2.0)/sigma;
                     double r_3 = r_1*r_1*r_1;

@@ -1,0 +1,11 @@
+Resume	0	Results/Relaxation/Resume_Chromatin_0_2019_02_27_time_14_39.txt
+Mesh_file_name	1	configs/ViscoTest/Mesh/act_sphere_lr.msh
+Node_Mass	1
+Node_radius	1
+spring_model	4
+Spring_coefficient	1
+Shift_in_X_direction	200
+Shift_in_Y_direction	0
+Shift_in_Z_direction	0
+Kelvin_Damping_Coefficient	10
+Dashpot_Viscosity	0.02

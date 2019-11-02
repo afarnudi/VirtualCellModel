@@ -1,0 +1,15 @@
+Resume	0	Results/Relaxation/Resume_Chromatin_0_2019_02_27_time_14_39.txt
+Mesh_file_name	2	configs/ViscoTest/Mesh/membrane_lattice_60
+Node_Mass	0
+Node_radius	1
+spring_model	2
+Spring_coefficient	10
+Shift_in_X_direction	0
+Shift_in_Y_direction	-20
+Shift_in_Z_direction	-30
+Kelvin_Damping_Coefficient	100
+Dashpot_Viscosity	0.02
+rescale_factor  2
+
+sigma_LJ_12_6   5
+epsilon_LJ_12_6 0.02

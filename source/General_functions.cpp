@@ -8,7 +8,7 @@
 
 #include "General_functions.hpp"
 #include <math.h>
-
+#include <iostream>
 
 void crossvector( double c[3], double a[3],double b[3] ) // cross porduct
 {
@@ -102,4 +102,28 @@ void calc_surface_coefficeints (double points[3][3], double &A, double &B, doubl
     B = ( x2-x1 + C*(z1*x2-x1*z2) )/( x1*y2-x2*y1 );
     A = -( 1 + B*y1 + C*z1 )/x1;
     
+}
+
+void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C){
+    double p1p2[3], p1p3[3], n[3], D;
+    for(int i=0; i<3; i++){
+        p1p2[i]=points[0][i]-points[1][i];
+        p1p3[i]=points[0][i]-points[2][i];
+        }
+    
+        crossvector( n,p1p2,p1p3);
+        A=n[0];
+        B=n[1];
+        C=n[2];
+        /*
+        D= A*points[0][0]+B*points[0][1]+C*points[0][2];
+        if(D!=0){
+            A=-A/D;
+            B=-B/D;
+            C=-C/D;
+        }
+        check_1= A*points[0][0]+B*points[0][1]+C*points[0][2];
+        check_2=A*points[1][0]+B*points[1][1]+C*points[1][2];
+        check3=A*points[2][0]+B*points[2][1]+C*points[2][2];
+         */
 }

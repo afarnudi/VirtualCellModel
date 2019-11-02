@@ -21,15 +21,15 @@ using std::set;
 bool check_for_membrane_update(vector<Membrane>    &membranes,
                                double               time);
 
-void updateOpenMMforces(vector<Membrane>       &membranes,
-                        MyOpenMMData*          omm,
-                        double                 time,
-                        MyAtomInfo             atoms[],
-                        Bonds*                 bonds,
-                        vector<set<int> >      &membrane_set,
-                        vector<set<int> >      &actin_set,
-                        vector<set<int> >      &ecm_set,
-                        vector<set<int> >      &chromatin_set,
-                        vector<vector<int> >   interaction_map);
+void updateOpenMMforces(vector<Membrane>                &membranes,
+                        MyOpenMMData*                    omm,
+                        double                           time,
+                        MyAtomInfo                       atoms[],
+                        Bonds*                           bonds,
+                        vector<set<int> >               &membrane_set,
+                        vector<set<int> >               &actin_set,
+                        vector<set<int> >               &ecm_set,
+                        vector<vector<set<int> > >      &chromatin_set,
+                        vector<vector<int> >             interaction_map);
 
 #endif // GENERAL_CLASS_FUNCTIONS_H

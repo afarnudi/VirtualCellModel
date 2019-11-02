@@ -1,5 +1,6 @@
 #ifndef CHROMATIN_H
 #define CHROMATIN_H
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -17,26 +18,76 @@ using std::vector;
 
 class Chromatin
 {
-    
-public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+private: //(if we define these constants as private members of the class, we can't put them in the final report)
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
     double Node_radius=1;
-    double COM_velocity[3];
-    double COM_position[3];
-
+    
+    int index;
+    int spring_model=0;
+    
+    double Total_Kinetic_Energy;
+    double Total_potential_Energy=0.0;
+    double Spring_coefficient=10.0; // streching constant
+    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Spring_force_cutt_off=1000.0;
+    double Shift_in_X_direction=0.0; //???
+    double Shift_in_Z_direction=0.0; //???
+    double Shift_in_Y_direction=0.0; //???
+    
+    double com[3]; //center of mass
+    double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
+    
     string output_file_neme;
     string file_time;
     string label;
     
-    vector<vector<double> >Node_Position;
+    vector<vector<double> > Node_Position;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    /*variables*/
+    
+    vector<int> ABC_index;
+    
+    /**Different node types may reside on a chain with customised interactions. Default 1.*/
+    int num_of_node_types=1;
+    /**The Lenard Jones 12 6 epsilon for different node types*/
+    vector<double> epsilon_LJ;
+    /**The Lenard Jones 12 6 sigma for different node types*/
+    vector<double> sigma_LJ;
+    
+    int Num_of_Nodes=0;
+    /*constants*/
+    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
+    std::map<string, double> param_map;
+    
+    double Average_Node_Distance();
+    void read_membrabe_input(string input_file);
+
+    void potential_1 (void);
+    void potential_2 (void);
+//    void FENE (void);
+    void check(void);
+    void calculate_mesh_properties(void);
+    void node_distance_correction(void);
+    void initialise(void);
+    void initialise(double min_radius);
+    void Pack(double min_radius);
+    double chromatin_prepack(void);
+    void packing_potential(double Sphere_Radius);
+    void packing_traj (void);
+    void reset_com_velocity(void);
+    void rescale_velocities(double scale);
+public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+    
+    double COM_velocity[3];
+    double COM_position[3];
+
     vector<vector<int> > Node_neighbour_list;
     vector<vector<int> > Membrane_neighbour_node;
     vector<vector<double> > Contact_Matrix;
-    vector<int> AB_index;
+    
     
     
     void MD_Evolution_beginning (double MD_Time_Step);
@@ -66,69 +117,53 @@ public: //these are using in monte carlo flip function. for defining them as pri
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
     
-private: //(if we define these constants as private members of the class, we can't put them in the final report)
-    int index;
-    int spring_model=0;
+    //=========================================================================================================
+    //Function definitions:
+    //=========================================================================================================
     
-    double Total_Kinetic_Energy;
-    double Total_potential_Energy=0.0;
-    double Spring_coefficient=10.0; // streching constant
-    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
-    double Spring_force_cutt_off=1000.0;
-    double Shift_in_X_direction=0.0; //???
-    double Shift_in_Z_direction=0.0; //???
-    double Shift_in_Y_direction=0.0; //???
+    /**return the assigned sigma to the provided node type.*/
+    double get_sigma_LJ_12_6(int node_type){
+        return sigma_LJ[node_type];
+    }
+    /**return the assigned sigma to the provided node type.*/
+    double get_epsilon_LJ_12_6(int node_type){
+        return epsilon_LJ[node_type];
+    }
     
-    double com[3]; //center of mass
-    double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
-    private:
-    /*variables*/
-    int Num_of_Nodes=0;
-    /*constants*/
-    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
-    std::map<string, double> param_map;
-    
-    double Average_Node_Distance();
-    void read_membrabe_input(string input_file);
-
-    void potential_1 (void);
-    void potential_2 (void);
-//    void FENE (void);
-    void check(void);
-    void calculate_mesh_properties(void);
-    void node_distance_correction(void);
-    void initialise(void);
-    void initialise(double min_radius);
-    void Pack(double min_radius);
-    double chromatin_prepack(void);
-    void packing_potential(double Sphere_Radius);
-    void packing_traj (void);
-    void reset_com_velocity(void);
-    void rescale_velocities(double scale);
-    
-public:
-    /** Assigns the label(pdb) used to write to the trajectory files. */
+    /** Assigns the label(pdb) used to write to the trajectory files.
+     */
     void set_label(std::string lab){
         label=lab;
     }
-    /** return the label(pdb) used to write to the trajectory files. */
+    
+    /** return the label(pdb) used to write to the trajectory files.
+     */
     std::string get_label(void){
         return label;
     }
-    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
+    /**Return the node mass. At the current stage of this code all membrane nodes have the same mass.
+     */
     double get_node_mass(void){
         return Node_Mass;
     }
-    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    /**Return input spring model, used to setup the openmm system for the bonds.
+     */
     int get_spring_model(void){
         return spring_model;
     }
-    /**Return node type. node types: A (0), B (1)*/
-    int get_node_type(int index){
-        return AB_index[index];
+    /**Return the number of node types in a chromatin chain.
+     */
+    int get_num_of_node_types(){
+        return num_of_node_types;
     }
-    /**Return spring stiffness coefficient. */
+    /**Return node type. node types: A (0), B (1)
+     */
+    int get_node_type(int index){
+        return ABC_index[index];
+    }
+    /**Return spring stiffness coefficient.
+     */
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
@@ -177,8 +212,8 @@ public:
     void set_file_time(char* buffer){
         file_time=buffer;
     }
-    void set_index(int index){
-        index=index;
+    void set_index(int ind){
+        index=ind;
     }
     
     double get_node_radius(void){
