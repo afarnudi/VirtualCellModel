@@ -476,6 +476,10 @@ int main(int argc, char **argv)
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
+                
+                if (check_for_membrane_update(Membranes, time)) {
+                    updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set);
+                }
                 //the monte_carlo part
 
                 if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
