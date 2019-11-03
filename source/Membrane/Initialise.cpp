@@ -49,7 +49,7 @@ void Membrane::initialise(std::string Mesh_file_name){
   
 
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
-    //shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     check();
 
     check_radius_update_values();
