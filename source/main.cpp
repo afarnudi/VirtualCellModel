@@ -95,6 +95,7 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+    
 }
 
 
@@ -181,7 +182,8 @@ int main(int argc, char **argv)
             Membranes.resize(GenConst::Num_of_Membranes);
             membrane_set.resize(GenConst::Num_of_Membranes);
             for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-                Membranes[i].set_label(GenConst::Membrane_label);
+                string label=GenConst::Membrane_label+to_string(i);
+                Membranes[i].set_label(label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
                 Membranes[i].import_config(membrane_config_list[i]);
@@ -196,7 +198,8 @@ int main(int argc, char **argv)
             Actins.resize(GenConst::Num_of_Actins);
             actin_set.resize(GenConst::Num_of_Actins);
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
-                Actins[i].set_label(GenConst::Actin_label);
+                string label=GenConst::Actin_label+to_string(i);
+                Actins[i].set_label(label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
                 Actins[i].import_config(actin_config_list[i]);
@@ -210,7 +213,8 @@ int main(int argc, char **argv)
             ECMs.resize(GenConst::Num_of_ECMs);
             ecm_set.resize(GenConst::Num_of_ECMs);
             for (int i=0; i<GenConst::Num_of_ECMs; i++) {
-                ECMs[i].set_label(GenConst::ECM_label);
+                string label=GenConst::ECM_label+to_string(i);
+                ECMs[i].set_label(label);
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
                 ECMs[i].import_config(ecm_config_list[i]);
@@ -226,7 +230,8 @@ int main(int argc, char **argv)
             Chromatins.resize(GenConst::Num_of_Chromatins);
             chromatin_set.resize(GenConst::Num_of_Chromatins);
             for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
-                Chromatins[i].set_label(GenConst::Chromatin_label);
+                string label=GenConst::Chromatin_label+to_string(i);
+                Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
                 Chromatins[i].import_config(chromatin_config_list[i]);
@@ -468,8 +473,11 @@ int main(int argc, char **argv)
                 }
                 //the monte_carlo part
 
+                 //if(progress==0 or progress==25 or progress==50 or progress==75){ 
                 if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
-                   
+                 
+                    //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
+                    
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
                }
