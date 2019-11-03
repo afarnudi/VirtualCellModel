@@ -446,6 +446,8 @@ int main(int argc, char **argv)
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
             int total_step_num = 0;
+            double last_update_time=0;
+            
             
             for (int frame=1; ; ++frame) {
 
@@ -477,8 +479,8 @@ int main(int argc, char **argv)
                     progress+=1;
                 }
                 
-                if (check_for_membrane_update(Membranes, time)) {
-                    updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set);
+                if (check_for_membrane_update(Membranes, time, last_update_time)) {
+                    updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set);
                 }
                 //the monte_carlo part
 
@@ -486,8 +488,11 @@ int main(int argc, char **argv)
                    
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
-               }
-
+                }
+                if (Include_Chromatin) {
+                    analysis(buffer,
+                             Chromatins);
+                }
              
             }
             
@@ -498,10 +503,7 @@ int main(int argc, char **argv)
             print_real_time(chrono_clock_start, chrono::steady_clock::now());
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
             
-            if (Include_Chromatin) {
-                analysis(buffer,
-                         Chromatins);
-            }
+            
             
             
             

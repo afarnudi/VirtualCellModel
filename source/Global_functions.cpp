@@ -74,7 +74,7 @@ void write_CM(string buffer, vector<Chromatin> chromos){
         for (int x=0; x<N; x++) {
             for (int y=0; y<N; y++) {
                 if (y != N-1) {
-                    write_cms<<chromos[ch].get_cm(x, y)<<"";
+                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
                 } else {
                     write_cms<<chromos[ch].get_cm(x, y)<<"\n";
                 }
