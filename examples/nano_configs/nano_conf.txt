@@ -1,0 +1,24 @@
+//MD_num_of_steps	1000000
+Simulation_Time_In_Ps	100
+//MD_traj_save_step	1000
+Report_Interval_In_Fs	20
+//Step_Size_In_Fs	0.0001
+Step_Size_In_Fs	0.1
+Integrator_type	2
+temperature	200
+frictionInPs	5
+K	1
+MD_T	1
+Num_of_Membranes	2	nano_mem.txt nano_particle 
+Num_of_Actins		0	actin_config.txt
+Num_of_ECMs		0	configs/bacteria/bacteria_ecm_config.txt
+Num_of_Chromatins	0	configs/chromo/chromo_0.txt configs/chromo/chromo_1.txt	configs/chromo/chromo_2.txt configs/chromo/chromo_3.txt 
+Actin_Membrane_Bond_Coefficient	400
+MD_thrmo_step	200
+Bussi_tau	30
+MC_step	10
+trajectory_file_name	1	nano
+excluded_volume_interactio	0
+Interaction_map	1	interaction_map.txt
+//sigma_LJ_12_6	1
+//epsilon_LJ_12_6	0.001
