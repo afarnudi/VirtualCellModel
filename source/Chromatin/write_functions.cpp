@@ -30,8 +30,7 @@ void Chromatin::write_parameters(int MD_Step){
     }
 }
 
-void Chromatin::packing_traj (void)
-{
+void Chromatin::packing_traj (void){
     string energy_file_name;
     string traj_file_name;
     

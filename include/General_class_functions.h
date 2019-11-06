@@ -19,17 +19,15 @@ void Export_classes_for_resume(std::vector<Membrane>  &membranes,
 using std::set;
 
 bool check_for_membrane_update(vector<Membrane>    &membranes,
-                               double               time);
+                               double               time,
+                               double              &last_update_time);
 
 void updateOpenMMforces(vector<Membrane>                &membranes,
+                        vector<Chromatin>                chromos,
                         MyOpenMMData*                    omm,
                         double                           time,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
-                        vector<set<int> >               &membrane_set,
-                        vector<set<int> >               &actin_set,
-                        vector<set<int> >               &ecm_set,
-                        vector<vector<set<int> > >      &chromatin_set,
-                        vector<vector<int> >             interaction_map);
+                        vector<set<int> >               &membrane_set);
 
 #endif // GENERAL_CLASS_FUNCTIONS_H

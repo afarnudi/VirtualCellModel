@@ -27,9 +27,12 @@ MD_num_of_Relaxation_steps	20000
 Interaction_map	0
 excluded_volume_interaction	0
 OpenMM	1
+write_bonds_to_PDB	1
 sigma_LJ_12_6   2
 epsilon_LJ_12_6 0.01
 Membrane_label	0
 Actin_label	0
 Chromatin_label	0
 ECM_label	0
+WantEnergy	1
+WantForce	1

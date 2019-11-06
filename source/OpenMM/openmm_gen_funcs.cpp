@@ -1,10 +1,16 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
+#include "Global_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 #include <vector>
 
-void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, MyAtomInfo atoms[], int numSteps , int& total_step) {
+void myStepWithOpenMM(MyOpenMMData* omm,
+                      TimeDependantData* time_dependant_data,
+                      MyAtomInfo atoms[],
+                      int numSteps ,
+                      int& total_step) {
+    
     if(time_dependant_data->Kelvin_Voigt)
     {
         for (int i=0; i<numSteps; i++)
@@ -37,15 +43,14 @@ void myStepWithOpenMM(MyOpenMMData* omm,TimeDependantData* time_dependant_data, 
     
 }
 
-void myTerminateOpenMM(MyOpenMMData* omm, TimeDependantData* time_dependant_data) {
+void myTerminateOpenMM(MyOpenMMData* omm,
+                       TimeDependantData* time_dependant_data) {
     delete omm;
     delete time_dependant_data;
 }
 
 using OpenMM::Vec3;
 void myGetOpenMMState(MyOpenMMData* omm,
-                      bool wantEnergy,
-                      bool wantForce,
                       double& timeInPs,
                       double& energyInKcal,
                       double& potential_energyInKcal,
@@ -54,10 +59,10 @@ void myGetOpenMMState(MyOpenMMData* omm,
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
     infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
-    if (wantEnergy) {
+    if (GenConst::WantEnergy) {
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
-    if (wantForce) {
+    if (GenConst::WantForce) {
         infoMask += OpenMM::State::Forces;
     }
     // Forces are also available (and cheap).
@@ -67,21 +72,23 @@ void myGetOpenMMState(MyOpenMMData* omm,
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = state.getPositions();
-    const std::vector<Vec3>& velInAngperPs  = state.getVelocities();
+    const std::vector<Vec3>& velInNmperPs  = state.getVelocities();
     const std::vector<Vec3>& Forces        = state.getForces();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
             atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
-            atoms[i].velocityInAngperPs[j] = velInAngperPs[i][j];
-            if (wantForce) {
+            atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
+            if (GenConst::WantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
             }
         }
     }
+    
+    
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
 
-    if (wantEnergy){
+    if (GenConst::WantEnergy){
     energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
      * OpenMM::KcalPerKJ;
         potential_energyInKcal = (state.getPotentialEnergy())
@@ -112,7 +119,6 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
 void myWritePDBFrame(int frameNum,
-                     bool wantforce,
                      double timeInPs,
                      double energyInKcal,
                      const MyAtomInfo atoms[],
@@ -143,6 +149,7 @@ void myWritePDBFrame(int frameNum,
             hist = new_label;
         }
         fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
+//        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f %8.3f%8.3f%8.3f%6.2f%6.1f\n",
                 n+1,
                 atoms[n].pdb,
                 chain[index],
@@ -156,14 +163,16 @@ void myWritePDBFrame(int frameNum,
     }
     
     // visualize bonds in pdb file
-    for (int n=0; bonds[n].type != EndOfList; ++n){
-        if(bonds[n].atoms[0] < bonds[n].atoms[1])
-        {
-            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
-        }
-        if(bonds[n].atoms[0] > bonds[n].atoms[1])
-        {
-            fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
+    if (GenConst::write_bonds_to_PDB) {
+        for (int n=0; bonds[n].type != EndOfList; ++n){
+            if(bonds[n].atoms[0] < bonds[n].atoms[1])
+            {
+                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
+            }
+            if(bonds[n].atoms[0] > bonds[n].atoms[1])
+            {
+                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
+            }
         }
     }
     

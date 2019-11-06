@@ -65,7 +65,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     set<int> :: iterator it_2 = set_2[set_2_index].begin();
     
     set<int> compined_set;
-    for (int i=0; i<set_1.size(); i++) {
+    for (int i=0; i<set_1[set_1_index].size(); i++) {
         compined_set.insert(set_1[set_1_index][i].begin(),set_1[set_1_index][i].end());
     }
     

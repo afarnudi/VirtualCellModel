@@ -4,8 +4,8 @@ using std::cout;
 using std::endl;
 
 void Chromatin::import(string import_file_name){
-    cout<<"Importing the Chromatin from the resume file:"<<endl;
-    cout<<import_file_name<<endl<<endl;
+//    cout<<"Importing the Chromatin from the resume file:"<<endl;
+//    cout<<import_file_name<<endl<<endl;
     std::ifstream read_resume_file;
     
     read_resume_file.open(import_file_name.c_str());
@@ -17,7 +17,7 @@ void Chromatin::import(string import_file_name){
     }
     int temp;
     read_resume_file>>temp;
-    cout<<"Resuming the MD from step "<<temp<<endl;
+    cout<<"Resuming the MD from "<<temp<<" Ps"<<endl;
     
     read_resume_file>>Num_of_Nodes;
     cout<<"Number of Nodes: "<<Num_of_Nodes<<endl;
@@ -27,7 +27,7 @@ void Chromatin::import(string import_file_name){
     
     epsilon_LJ.resize(num_of_node_types);
     sigma_LJ.resize(num_of_node_types);
-    for (int i=0; i<<num_of_node_types; i++) {
+    for (int i=0; i<num_of_node_types; i++) {
         read_resume_file>>epsilon_LJ[i];
         read_resume_file>>sigma_LJ[i];
     }
@@ -39,9 +39,9 @@ void Chromatin::import(string import_file_name){
     
     vector<double> read_double;
     read_double.resize(3);
-//    int read_int;
     
     for (int i=0; i<Num_of_Nodes; i++) {
+        
         read_resume_file>>read_double[0]>>read_double[1]>>read_double[2];
         Node_Position.push_back(read_double);
 
@@ -58,8 +58,12 @@ void Chromatin::import(string import_file_name){
     
 //    Node_neighbour_list_constructor();
     read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
-    cout<<"Spring coefficients:"<<endl;
+    cout<<"node distance statistics:"<<endl;
     cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
+    
+    shift_node_positions();
+    pdb_label_check();
+    
     cout<<"\n\nMembrane class initiated.\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }
