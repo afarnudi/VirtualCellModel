@@ -60,6 +60,10 @@ void Chromatin::import(string import_file_name){
     read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
     cout<<"node distance statistics:"<<endl;
     cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
+    
+    shift_node_positions();
+    pdb_label_check();
+    
     cout<<"\n\nMembrane class initiated.\n";
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

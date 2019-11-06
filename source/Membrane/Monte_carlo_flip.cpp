@@ -645,10 +645,10 @@ void Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
      double localDeltaE=0;
      int Accepted_Try_Counter=0;
      for(int i=0; i<GenConst::MC_step; i++){
-        myGetOpenMMState(omm,1, 1, time, initenergy,initpenergy, atoms);
+        myGetOpenMMState(omm, time, initenergy,initpenergy, atoms);
         mem.monte_carlo_flip(omm, bonds, dihedrals, atoms,localDeltaE, Accepted_Try_Counter);
         omm->context->reinitialize(preservestate);
-        myGetOpenMMState(omm,1, 1, time, finalenergy,finalpenergy, atoms);
+        myGetOpenMMState(omm, time, finalenergy,finalpenergy, atoms);
         double globalDeltaE=finalpenergy-initpenergy;
         if(globalDeltaE!=0){
             if(abs(localDeltaE-globalDeltaE)>0.0000001){

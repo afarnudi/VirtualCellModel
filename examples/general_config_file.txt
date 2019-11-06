@@ -94,3 +94,12 @@ Chromatin_label	0
 
 //Set ECM class label. An index will be assigned during runtime. Default ecm
 ECM_label	0
+
+//Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true
+WantEnergy	0
+
+//Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true
+WantForce	1
+
+//Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
+WriteVelocitiesandForces	0

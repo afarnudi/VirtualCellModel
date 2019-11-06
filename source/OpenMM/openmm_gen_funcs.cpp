@@ -51,8 +51,6 @@ void myTerminateOpenMM(MyOpenMMData* omm,
 
 using OpenMM::Vec3;
 void myGetOpenMMState(MyOpenMMData* omm,
-                      bool wantEnergy,
-                      bool wantForce,
                       double& timeInPs,
                       double& energyInKcal,
                       double& potential_energyInKcal,
@@ -61,10 +59,10 @@ void myGetOpenMMState(MyOpenMMData* omm,
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
     infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
-    if (wantEnergy) {
+    if (GenConst::WantEnergy) {
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
-    if (wantForce) {
+    if (GenConst::WantForce) {
         infoMask += OpenMM::State::Forces;
     }
     // Forces are also available (and cheap).
@@ -80,19 +78,17 @@ void myGetOpenMMState(MyOpenMMData* omm,
         for (int j=0; j < 3; ++j){
             atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
             atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
-            if (wantForce) {
+            if (GenConst::WantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
             }
         }
     }
     
     
-    
-    
     // If energy has been requested, obtain it and convert from kJ to kcal.
     energyInKcal = 0;
 
-    if (wantEnergy){
+    if (GenConst::WantEnergy){
     energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
      * OpenMM::KcalPerKJ;
         potential_energyInKcal = (state.getPotentialEnergy())
@@ -123,7 +119,6 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
 void myWritePDBFrame(int frameNum,
-                     bool wantforce,
                      double timeInPs,
                      double energyInKcal,
                      const MyAtomInfo atoms[],

@@ -61,7 +61,6 @@ private: //(if we define these constants as private members of the class, we can
     /*constants*/
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     std::map<string, double> param_map;
-    std::vector<std::vector<double> > CM;
     
     double Average_Node_Distance();
     void read_membrabe_input(string input_file);
@@ -83,6 +82,8 @@ private: //(if we define these constants as private members of the class, we can
     
     
 public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+    
+    void pdb_label_check(void);
     
     double COM_velocity[3];
     double COM_position[3];
@@ -221,14 +222,14 @@ public: //these are using in monte carlo flip function. for defining them as pri
         for (int i=0; i<Num_of_Nodes; i++) {
             for (int j=i; j<Num_of_Nodes; j++) {
                 if (i!=j) {
-                    delta_x = Node_Position[i][0]-Node_Position[j][0];
-                    delta_y = Node_Position[i][1]-Node_Position[j][1];
-                    delta_z = Node_Position[i][2]-Node_Position[j][2];
+                    delta_x = Node_Position[i][0] - Node_Position[j][0];
+                    delta_y = Node_Position[i][1] - Node_Position[j][1];
+                    delta_z = Node_Position[i][2] - Node_Position[j][2];
                     temp_dist = delta_x*delta_x + delta_y*delta_y + delta_z*delta_z;
                     
                     if (temp_dist < dist*dist ) {
-                        CM[i][j]++;
-                        CM[j][i]++;
+                        Contact_Matrix[i][j]++;
+                        Contact_Matrix[j][i]++;
                     }
                     
                 }
@@ -237,7 +238,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
         
     }
     double get_cm(int i, int j){
-        return CM[i][j];
+        return Contact_Matrix[i][j];
     }
     
     

@@ -34,3 +34,5 @@ Membrane_label	0
 Actin_label	0
 Chromatin_label	0
 ECM_label	0
+WantEnergy	1
+WantForce	1

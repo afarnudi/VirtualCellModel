@@ -89,12 +89,17 @@ namespace GenConst {
     extern std::string Checkpoint_path;
     
     extern bool write_bonds_to_PDB;
-
+    /**Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true*/
+    extern bool   WantEnergy;
+    /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
+    extern bool   WantForce;
+    /**Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
+    extern bool   WriteVelocitiesandForces;
 
 
     //non config file parameters
-    extern std::vector<std::vector<std::vector<double> > > velocity_save;
-    extern std::vector<double> vel_times;
+//    extern std::vector<std::vector<std::vector<double> > > data;
+    extern std::vector<double> data_colection_times;
     
 }
 

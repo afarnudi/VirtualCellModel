@@ -29,6 +29,30 @@
 ///
 /// This function will linearly change the temperature from "Buffer_temperature" to "MD_T" set in the General Constants in ?? MD steps.
 ///
+
+const int EndOfList=-1;
+using std::vector;
+
+
+void write_data(MyAtomInfo atoms[], string buffer, double pressure);
+void write_CM(string buffer, vector<Chromatin> chromos);
+double calculate_pressure(vector<Membrane> mems);
+
+void collect_data(MyAtomInfo atoms[],
+                  string buffer,
+                  vector<Chromatin> chromos,
+                  vector<Membrane> mems,
+                  double timeInPs){
+    
+    GenConst::data_colection_times.push_back(timeInPs);
+    write_data(atoms, buffer, calculate_pressure(mems));
+    
+    if (chromos.size()!=0) {
+        write_CM(buffer, chromos);
+    }
+}
+
+
 void set_temperature(int MD_step, double temperature, int buffer){
     if (MD_step < buffer) {
         double slope=temperature/double(buffer);
@@ -42,24 +66,22 @@ using std::string;
 using std::endl;
 
 
-void write_velocities(string buffer){
+void write_data(MyAtomInfo atoms[],
+                string buffer,
+                double pressure){
     
     
-    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels.txt";
-    std::ofstream write_vels;
-    write_vels.open(traj_file_name.c_str());
+    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
+    std::ofstream wdata;
+    wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    for (int t=0; t<GenConst::velocity_save[0].size(); t++) {
-        for (int ind=0; ind<3; ind++) {
-            write_vels<<GenConst::vel_times[t]<<"\t";
-            for (int n=0; n<GenConst::velocity_save.size(); n++) {
-                if (n==GenConst::velocity_save.size()-1) {
-                    write_vels<<GenConst::velocity_save[n][t][ind]<<endl;
-                } else {
-                    write_vels<<GenConst::velocity_save[n][t][ind]<<"\t";
-                }
-            }
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tv_x_InAngperPs v_y_InAngperPs v_z_InAngperPs f_x_inN f_y_inN f_z_inN Pressure_in_N/An^2\n";
+    for (int t=0; atoms[t].type != EndOfList; t++) {
+        wdata<<t<<"\t"<<atoms[t].velocityInAngperPs[0] << "\t" << atoms[t].velocityInAngperPs[1] << "\t" << atoms[t].velocityInAngperPs[2];
+        if (GenConst::WantForce) {
+            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
+        wdata<<"\t"<<pressure<<"\n";
     }
 }
 
@@ -84,29 +106,7 @@ void write_CM(string buffer, vector<Chromatin> chromos){
     
 }
 
-using std::vector;
-
-void collect_data(MyAtomInfo atoms[],
-                  double timeInPs){
-    GenConst::velocity_save.resize(6);
-    vector<double> temp_vel(3,0);
-    vector<int> atom_list ={ 0, 20, 75, 150, 300, 320, 450};
-    int counter = 0;
-    for (int n : atom_list) {
-        for (int ind=0; ind<3; ind++) {
-            temp_vel[ind] = atoms[n].velocityInAngperPs[ind]  * OpenMM::AngstromsPerNm;
-        }
-        GenConst::velocity_save[counter].push_back(temp_vel);
-        counter++;
-    }
-    GenConst::vel_times.push_back(timeInPs);
-}
-
-
-void analysis(string buffer,
-              vector<Chromatin> chromos){
-    
-    write_velocities(buffer);
-    write_CM(buffer, chromos);
-    
+double calculate_pressure(vector<Membrane> mems){
+    double pressure=0;
+    return pressure;
 }

@@ -154,8 +154,5 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         myatominfo[i].radius=chromo.get_node_radius();
         
     }
-    //End of list
-    //    myatominfo[mem_num_atom].type=-1;
-    
     return myatominfo;
 }

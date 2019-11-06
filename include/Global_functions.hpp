@@ -14,6 +14,7 @@
 
 #include "General_constants.h"
 #include "Chromatin.h"
+#include "Membrane.h"
 #include "OpenMM_structs.h"
 
 /// \file
@@ -28,9 +29,9 @@ using std::string;
 using std::vector;
 
 void collect_data(MyAtomInfo atoms[],
+                  string buffer,
+                  vector<Chromatin> chromos,
+                  vector<Membrane> mems,
                   double timeInPs);
-
-void analysis(string buffer,
-              vector<Chromatin> chromos);
 
 #endif /* Global_functions_hpp */

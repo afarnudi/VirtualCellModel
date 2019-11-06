@@ -96,19 +96,15 @@ namespace GenConst {
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
     bool write_bonds_to_PDB;
+    bool   WantEnergy;
+    bool   WantForce;
+    bool   WriteVelocitiesandForces;
 
 
 
-
-    std::vector<std::vector<std::vector<double> > > velocity_save;
-    std::vector<double> vel_times;
+//    std::vector<std::vector<std::vector<double> > > data;
+    std::vector<double> data_colection_times;
 }
-
-
-
-static const bool   WantEnergy   = true;
-static const bool   WantForce    = true;
-
 
 
 
@@ -407,7 +403,7 @@ int main(int argc, char **argv)
         
         
         //autocorrelation calculations:
-        GenConst::velocity_save.resize(6);
+//        GenConst::velocity_save.resize(6);
         
         
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
@@ -426,7 +422,6 @@ int main(int argc, char **argv)
                 //wrok in progress.
                 //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
-            
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -453,11 +448,11 @@ int main(int argc, char **argv)
 
                 double time, energy, potential_energy;
                 
-                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
-                
-                collect_data(all_atoms, time);
-    
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
+                myGetOpenMMState(omm, time, energy, potential_energy, all_atoms);
+                if(GenConst::WriteVelocitiesandForces){
+                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
+                }
+                myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
@@ -465,6 +460,7 @@ int main(int argc, char **argv)
                 for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
                     Chromatins[chr_c].contact_matrix_update();
                 }
+                
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
@@ -489,10 +485,7 @@ int main(int argc, char **argv)
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
                 }
-                if (Include_Chromatin) {
-                    analysis(buffer,
-                             Chromatins);
-                }
+                
              
             }
             
@@ -525,6 +518,7 @@ int main(int argc, char **argv)
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
     progress=0;
+    
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
         //        cout<<Membranes[0].return_node_position(0, 0);
