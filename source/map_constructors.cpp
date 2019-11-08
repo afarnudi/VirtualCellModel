@@ -9,10 +9,10 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
     map<string, double>::iterator it;
     string param_name;
     double param_value;
-
+    
     if (read_map.is_open()) {
         //    map<string, double> general_param_map;
-
+        
         while (read_map>>param_name>>param_value) {
             general_param_map[param_name]=param_value;
             set_parameter(general_param_map, param_name, param_value);
@@ -21,8 +21,8 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         cout<<"Couldn't open the 'General_param_map.txt'. Please check the file and make sure that the file is in the same directory as the executable file.\n";
         exit(EXIT_FAILURE);
     }
-
-
+    
+    
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
         cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
@@ -32,32 +32,32 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         //        char delimiter=' ';
         while(getline(read_config_file, line)){
             line_num++;
-
+            
             if(line.empty()){
                 continue;
             }
-
+            
             istringstream iss(line);
             vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
-
+            
             for (int i=0; i<split.size(); i++) {
                 if (split[i] == comment || (split[i][0]=='/' && split[i][1]=='/')) {
                     break;
                 }
-
+                
                 it = general_param_map.find(split[i]);
                 if (it != general_param_map.end()){
                     it->second=stod(split[i+1]);
                     set_parameter(general_param_map, it->first, it->second);
                     if (it->first=="Num_of_Membranes") {
-
+                        
                         for (int j=0; j<it->second; j++) {
                             cout<<"\t"<<split[i+2+j]<<endl;
                             membrane_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     } else if (it->first=="Num_of_Chromatins") {
-
+                        
                         for (int j=0; j<it->second; j++) {
                             cout<<"\t"<<split[i+2+j]<<endl;
                             chromatin_config_list.push_back(split[i+2+j]);
@@ -78,7 +78,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         }
                         continue;
                     } else if (it->first=="Num_of_pointparticles") {
-
+                        
                         for (int j=0; j<it->second; j++) {
                             cout<<"\t"<<split[i+2+j]<<endl;
                             pointparticle_config_list.push_back(split[i+2+j]);
@@ -90,7 +90,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         } else {
                             GenConst::trajectory_file_name="VCProject_";
                         }
-
+                        
                         continue;
                     } else if (it->first=="Interaction_map") {
                         if (it->second==0) {
@@ -162,22 +162,11 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         cout<<"Couldn't open the config file.\n";
         exit(EXIT_FAILURE);
     }
-
-//    cout<<"Mem_fluidity "<<GenConst::Mem_fluidity<<"\nMD_num_of_steps "<<GenConst::MD_num_of_steps<<"\nNum_of_Membranes "<<GenConst::Num_of_Membranes<<"\nMD_traj_save_step "<<GenConst::MD_traj_save_step<<"\nMembrane file name "<<membrane_list[0]<<endl;
-//    exit(EXIT_SUCCESS);
-
-//    for (auto const& x : general_param_map)
-//    {
-//        cout << x.first << " = " << x.second << endl;
-//    }
-//    for (int i=0; i<membrane_list.size(); i++) {
-//        cout<<membrane_list[i]<<"\n";
-//    }
-//    exit(EXIT_SUCCESS);
+    
 }
 
 void set_parameter(map<string, double> &general_param_map, string param_name, double param_value){
-
+    
     map<string, double>::iterator it;
     if (param_name=="MD_num_of_steps") {
         it = general_param_map.find(param_name);
@@ -361,12 +350,51 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::temperature=it->second;
         }
+    } else if (param_name=="WantEnergy"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::WantEnergy= false;
+            } else {
+                GenConst::WantEnergy= true;
+            }
+            
+        }
+    } else if (param_name=="WantForce"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::WantForce= false;
+            } else {
+                GenConst::WantForce= true;
+            }
+            
+        }
+    } else if (param_name=="WriteVelocitiesandForces"){
+           it = general_param_map.find(param_name);
+           if (it != general_param_map.end()){
+               if (it->second == 0) {
+                   GenConst::WriteVelocitiesandForces= false;
+               } else {
+                   GenConst::WriteVelocitiesandForces= true;
+               }
+               
+           }
     } else if (param_name=="Load_from_checkpoint"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Load_from_checkpoint=it->second;
         }
         GenConst::Checkpoint_path = "/Results/Resumes/OpenMM/";
+    } else if (param_name=="write_bonds_to_PDB"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::write_bonds_to_PDB= false;
+            } else {
+                GenConst::write_bonds_to_PDB= true;
+            }
+        }
     }
-
+    
 }

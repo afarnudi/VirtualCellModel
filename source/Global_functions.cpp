@@ -9,6 +9,9 @@
 #include "Global_functions.hpp"
 #include "General_constants.h"
 #include <math.h>
+#include <string.h>
+#include <fstream>
+#include <vector>
 
 ///    \fn Temperature
 ///     \brief a brief Temperature
@@ -26,6 +29,30 @@
 ///
 /// This function will linearly change the temperature from "Buffer_temperature" to "MD_T" set in the General Constants in ?? MD steps.
 ///
+
+const int EndOfList=-1;
+using std::vector;
+
+
+void write_data(MyAtomInfo atoms[], string buffer, double pressure);
+void write_CM(string buffer, vector<Chromatin> chromos);
+double calculate_pressure(vector<Membrane> mems);
+
+void collect_data(MyAtomInfo atoms[],
+                  string buffer,
+                  vector<Chromatin> chromos,
+                  vector<Membrane> mems,
+                  double timeInPs){
+    
+    GenConst::data_colection_times.push_back(timeInPs);
+    write_data(atoms, buffer, calculate_pressure(mems));
+    
+    if (chromos.size()!=0) {
+        write_CM(buffer, chromos);
+    }
+}
+
+
 void set_temperature(int MD_step, double temperature, int buffer){
     if (MD_step < buffer) {
         double slope=temperature/double(buffer);
@@ -33,4 +60,53 @@ void set_temperature(int MD_step, double temperature, int buffer){
     } else {
         GenConst::Buffer_temperature=GenConst::MD_T;
     }
+}
+
+using std::string;
+using std::endl;
+
+
+void write_data(MyAtomInfo atoms[],
+                string buffer,
+                double pressure){
+    
+    
+    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
+    std::ofstream wdata;
+    wdata.open(traj_file_name.c_str(), std::ios::app);
+    
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tv_x_InAngperPs v_y_InAngperPs v_z_InAngperPs f_x_inN f_y_inN f_z_inN Pressure_in_N/An^2\n";
+    for (int t=0; atoms[t].type != EndOfList; t++) {
+        wdata<<t<<"\t"<<atoms[t].velocityInAngperPs[0] << "\t" << atoms[t].velocityInAngperPs[1] << "\t" << atoms[t].velocityInAngperPs[2];
+        if (GenConst::WantForce) {
+            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
+        }
+        wdata<<"\t"<<pressure<<"\n";
+    }
+}
+
+void write_CM(string buffer, vector<Chromatin> chromos){
+    string cm_file_name="Results/CMs/"+GenConst::trajectory_file_name+buffer;
+    
+    for (int ch=0; ch< chromos.size(); ch++) {
+        string write_name = cm_file_name + std::to_string(ch) + ".txt";
+        std::ofstream write_cms;
+        write_cms.open(write_name.c_str());
+        int N = chromos[ch].get_num_of_nodes();
+        for (int x=0; x<N; x++) {
+            for (int y=0; y<N; y++) {
+                if (y != N-1) {
+                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
+                } else {
+                    write_cms<<chromos[ch].get_cm(x, y)<<"\n";
+                }
+            }
+        }
+    }
+    
+}
+
+double calculate_pressure(vector<Membrane> mems){
+    double pressure=0;
+    return pressure;
 }

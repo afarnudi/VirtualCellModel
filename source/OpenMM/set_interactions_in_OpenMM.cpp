@@ -483,6 +483,47 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     system.addForce(ExcludedVolumes[index]);
                     
                     break;
+                
+                case 3:
+                    if (i == j-class_count_j) {
+                        for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+                            for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
+                                
+                                set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+                                set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
+                                
+                                if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                                    
+                                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, GenConst::Chromatin_label , GenConst::Membrane_label);
+                                    index = int(LJ_12_6_interactions.size()-1);
+                                    
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(LJ_12_6_interactions[index]);
+                                } else {
+                                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, GenConst::Chromatin_label , GenConst::Chromatin_label);
+                                    index = int(ExcludedVolumes.size()-1);
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(ExcludedVolumes[index]);
+                                }
+                            }
+                        }
+                        
+                        
+                    } else {
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Chromatin_label);
+                        index = int(ExcludedVolumes.size()-1);
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                    }
+                    
+                    break;
             }
         }
     }

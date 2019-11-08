@@ -614,10 +614,12 @@ void Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
      int Accepted_Try_Counter=0;
      int pyramid_counter=0;
      for(int i=0; i<GenConst::MC_step; i++){
-        myGetOpenMMState(omm,1, 1, time, initenergy,initpenergy, atoms);
+
+        myGetOpenMMState(omm, time, initenergy,initpenergy, atoms);
         mem.monte_carlo_flip(omm, bonds, dihedrals, atoms,localDeltaE, Accepted_Try_Counter, pyramid_counter);
+
         omm->context->reinitialize(preservestate);
-        myGetOpenMMState(omm,1, 1, time, finalenergy,finalpenergy, atoms);
+        myGetOpenMMState(omm, time, finalenergy,finalpenergy, atoms);
         double globalDeltaE=finalpenergy-initpenergy;
         if(globalDeltaE!=0){
             if(abs(localDeltaE-globalDeltaE)>0.0000001){
@@ -628,6 +630,7 @@ void Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
         }
     
      }
+
      cout<<"num_of_accepted tries  "<<Accepted_Try_Counter<<"  out of  "<<GenConst::MC_step<<"  pyramid_counter  "<<pyramid_counter<<endl;
      
 }
@@ -826,6 +829,5 @@ bool Membrane::check_Pyramid_2(int initial_pair, vector<int> A_neighbours_dihedr
     else{
         return(false);
     }
-        
-
 }
+

@@ -95,13 +95,18 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+
+
+    bool   write_bonds_to_PDB;
+    bool   WantEnergy;
+    bool   WantForce;
+    bool   WriteVelocitiesandForces;
+
+
+
+//    std::vector<std::vector<std::vector<double> > > data;
+    std::vector<double> data_colection_times;
 }
-
-
-
-static const bool   WantEnergy   = true;
-static const bool   WantForce    = true;
-
 
 
 
@@ -181,7 +186,8 @@ int main(int argc, char **argv)
             Membranes.resize(GenConst::Num_of_Membranes);
             membrane_set.resize(GenConst::Num_of_Membranes);
             for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-                Membranes[i].set_label(GenConst::Membrane_label);
+                string label=GenConst::Membrane_label+to_string(i);
+                Membranes[i].set_label(label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
                 Membranes[i].import_config(membrane_config_list[i]);
@@ -196,7 +202,8 @@ int main(int argc, char **argv)
             Actins.resize(GenConst::Num_of_Actins);
             actin_set.resize(GenConst::Num_of_Actins);
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
-                Actins[i].set_label(GenConst::Actin_label);
+                string label=GenConst::Actin_label+to_string(i);
+                Actins[i].set_label(label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
                 Actins[i].import_config(actin_config_list[i]);
@@ -210,7 +217,8 @@ int main(int argc, char **argv)
             ECMs.resize(GenConst::Num_of_ECMs);
             ecm_set.resize(GenConst::Num_of_ECMs);
             for (int i=0; i<GenConst::Num_of_ECMs; i++) {
-                ECMs[i].set_label(GenConst::ECM_label);
+                string label=GenConst::ECM_label+to_string(i);
+                ECMs[i].set_label(label);
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
                 ECMs[i].import_config(ecm_config_list[i]);
@@ -226,7 +234,8 @@ int main(int argc, char **argv)
             Chromatins.resize(GenConst::Num_of_Chromatins);
             chromatin_set.resize(GenConst::Num_of_Chromatins);
             for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
-                Chromatins[i].set_label(GenConst::Chromatin_label);
+                string label=GenConst::Chromatin_label+to_string(i);
+                Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
                 Chromatins[i].import_config(chromatin_config_list[i]);
@@ -398,6 +407,11 @@ int main(int argc, char **argv)
         }
        
         
+        
+        //autocorrelation calculations:
+//        GenConst::velocity_save.resize(6);
+        
+        
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         
@@ -414,7 +428,6 @@ int main(int argc, char **argv)
                 //wrok in progress.
                 //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
-            
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -434,31 +447,32 @@ int main(int argc, char **argv)
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
             int total_step_num = 0;
+            double last_update_time=0;
+            
             
             for (int frame=1; ; ++frame) {
 
                 double time, energy, potential_energy;
                 
-                myGetOpenMMState(omm, WantEnergy, WantForce, time, energy, potential_energy, all_atoms);
-                myWritePDBFrame(frame, WantForce, time, energy, all_atoms, all_bonds, traj_name);
+                myGetOpenMMState(omm, time, energy, potential_energy, all_atoms);
+                if(GenConst::WriteVelocitiesandForces){
+                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
+                }
+                myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
+                for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
+                    Chromatins[chr_c].contact_matrix_update();
+                }
+                
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 
-              //  if (check_for_membrane_update(Membranes, time)) {
-                //    cout<<"o my God... :/"<<endl;
-                  //  updateOpenMMforces(Membranes, omm, time, all_atoms, all_bonds, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
-                //}
-                
-                
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
-                    break;  
-    
-                    
+                    break;
                 
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
@@ -466,14 +480,21 @@ int main(int argc, char **argv)
                     cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progress+=1;
                 }
+                
+                if (check_for_membrane_update(Membranes, time, last_update_time)) {
+                    updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set);
+                }
                 //the monte_carlo part
 
+                 //if(progress==0 or progress==25 or progress==50 or progress==75){ 
                 if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
-                   
+                 
+                    //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
+                    
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
-               }
-
+                }
+                
              
             }
             
@@ -483,6 +504,10 @@ int main(int argc, char **argv)
             print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
             print_real_time(chrono_clock_start, chrono::steady_clock::now());
             print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
+            
+            
+            
+            
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm,time_dependant_data);
@@ -502,6 +527,7 @@ int main(int argc, char **argv)
     Trajectory.open(traj_file_name.c_str(), ios::app);
     Trajectory << std:: fixed;
     progress=0;
+    
     cout<<"\nBeginnig the MD\nProgress:\n";
     for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
         //        cout<<Membranes[0].return_node_position(0, 0);

@@ -1,25 +1,29 @@
 #include "General_class_functions.h"
 #include "Membrane.h"
+#include "Chromatin.h"
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 
-const int EndOfList=-1;
 using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
 bool check_for_membrane_update(vector<Membrane>    &membranes,
-                               double               time)
+                               double               time,
+                               double              &last_update_time)
 {
+    
     bool update_mem = false;
     for (int mem_index=0; mem_index<membranes.size(); mem_index++) {
-        if (time < membranes[mem_index].get_End_update_time_in_Ps() &&
+        if (membranes[mem_index].get_new_node_radius() != -1 &&
             time > membranes[mem_index].get_Begin_update_time_in_Ps()   ) {
-            if (membranes[mem_index].get_new_node_radius() != -1) {
-                update_mem = true;
-            } else if (membranes[mem_index].get_new_nominal_length() != -1){
-                update_mem = true;
+            if (time < membranes[mem_index].get_End_update_time_in_Ps()) {
+//                if (time - last_update_time > 0.3) {
+                    last_update_time = time;
+                    update_mem = true;
+//                }
+                
             }
         }
     }
@@ -58,20 +62,22 @@ double updated_length_value(Membrane &mem, double time){
 /** -----------------------------------------------------------------------------
  */
 void updateOpenMMforces(vector<Membrane>                &membranes,
+                        vector<Chromatin>                chromos,
                         MyOpenMMData*                    omm,
                         double                           time,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
-                        vector<set<int> >               &membrane_set,
-                        vector<set<int> >               &actin_set,
-                        vector<set<int> >               &ecm_set,
-                        vector<vector<set<int> > >      &chromatin_set,
-                        vector<vector<int> >             interaction_map)
+                        vector<set<int> >               &membrane_set)
 {
     
     int mem_count=0;
     
+<<<<<<< HEAD
 //    double t1, t2, r, rnew, dt, a, b;
+=======
+    double t1, t2, r, rnew, dt, a, b;
+    double new_radius=0;
+>>>>>>> c869f3273c2b5c5cf57b5ce4cb75ac82185f29f5
     
     for (int i=0; i<membranes.size(); i++) {
         //Update node radius
@@ -89,37 +95,8 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 a    = (rnew - r)/dt;
                 b    = (r*t2 - rnew* t1)/dt;
                 
-                vector<double> sigma_ev;
                 
-                sigma_ev.push_back( a * time * 1000 + b);
-                for (int node_index = mem_count; node_index < membranes[i].get_num_of_nodes() + mem_count; node_index++) {
-                    
-                    atoms[node_index].radius = sigma_ev[0];
-                    sigma_ev[0] *= OpenMM::NmPerAngstrom;
-                    
-                    for (int j=0; j<omm->EV.size(); j++) {
-                        omm->EV[j]->setParticleParameters(node_index, sigma_ev);
-                    }
-                }
-                
-            }
-        }
-        
-        mem_count += membranes[i].get_num_of_nodes();
-    }
-    
-    
-    
-    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
-    int EV_index = 0;
-    
-    bool dist_update =false;
-    
-    
-    if (dist_update) {
-        for (int i=0; i< GenConst::Num_of_Membranes; i++) {
-            for (int j=0; j < i+1; j++) {
-                
+<<<<<<< HEAD
                 switch (interaction_map[i][j]) {
                         
                     case 1:
@@ -219,6 +196,25 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
     }
     cout<<"cutoff after = "<<omm->EV[0]->getCutoffDistance() <<endl;
 //    exit(EXIT_SUCCESS);
+=======
+                string sigma = "sigma" + GenConst::Membrane_label + std::to_string(i) + GenConst::Membrane_label + std::to_string(i) ;
+                double new_sig = (a * time * 1000 + b);
+                new_radius = new_sig;
+                omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                
+                for (int ch=0; ch<chromos.size(); ch++) {
+                    sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
+                    new_sig = (new_sig + chromos[ch].get_node_radius())/2.0;
+                    omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                }
+                
+            }
+        }
+        
+        mem_count += membranes[i].get_num_of_nodes();
+    }
+//    cout<<"2*new_radius = "<<2*new_radius<<endl;
+>>>>>>> c869f3273c2b5c5cf57b5ce4cb75ac82185f29f5
     int mem_bond_count=0;
     for (int i=0; i<membranes.size(); i++) {
         if (membranes[i].get_new_node_radius() != -1) {
@@ -226,7 +222,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 int atom1, atom2 ;
                 double length, stiffness;
                 omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
-                omm->harmonic->setBondParameters(k, atom1, atom2, length*0.999, stiffness);
+                omm->harmonic->setBondParameters(k, atom1, atom2, 2*new_radius*OpenMM::NmPerAngstrom, stiffness);
             }
         }
         mem_bond_count += membranes[i].get_num_of_node_pairs();

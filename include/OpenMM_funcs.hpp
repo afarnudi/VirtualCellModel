@@ -52,8 +52,6 @@ void          myStepWithOpenMM(MyOpenMMData*,
  * -----------------------------------------------------------------------------
  */
 void          myGetOpenMMState(MyOpenMMData*,
-                               bool         wantEnergy,
-                               bool         wantForce,
                                double&      time,
                                double&      energy,
                                double&      potential_energy,
@@ -109,7 +107,6 @@ void          myTerminateOpenMM(MyOpenMMData*,
  * Given state data, output a single frame (pdb "model") of the trajectory.
  */
 void myWritePDBFrame(int                frameNum,
-                     bool               wantforce,
                      double             timeInPs,
                      double             energyInKcal,
                      const MyAtomInfo   atoms[],
