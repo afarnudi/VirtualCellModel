@@ -16,7 +16,7 @@ bool check_for_membrane_update(vector<Membrane>    &membranes,
     
     bool update_mem = false;
     for (int mem_index=0; mem_index<membranes.size(); mem_index++) {
-        if (membranes[mem_index].get_num_of_nodes() != -1 &&
+        if (membranes[mem_index].get_new_node_radius() != -1 &&
             time > membranes[mem_index].get_Begin_update_time_in_Ps()   ) {
             if (time < membranes[mem_index].get_End_update_time_in_Ps()) {
 //                if (time - last_update_time > 0.3) {
