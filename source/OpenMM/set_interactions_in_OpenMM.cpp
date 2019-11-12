@@ -20,6 +20,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       OpenMM::System                        &system
                       ){
+    
+    std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds);
    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
         //initialize external force for membrane i
@@ -36,7 +38,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Membrane_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
             
@@ -87,7 +89,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Actin_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
             
@@ -121,7 +123,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Actin_label+std::to_string(i);
             std::string class_label_j=GenConst::Actin_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             
             int index;
@@ -174,7 +176,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::ECM_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
             
@@ -212,7 +214,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::ECM_label+std::to_string(i);
             std::string class_label_j=GenConst::Actin_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             
             int index;
@@ -250,7 +252,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::ECM_label+std::to_string(i);
             std::string class_label_j=GenConst::ECM_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             
             int index;
@@ -291,7 +293,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
             std::string class_label_j=GenConst::Membrane_label+std::to_string(j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
             
@@ -328,7 +330,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
             std::string class_label_j=GenConst::Actin_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             
             int index;
@@ -368,7 +370,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
             std::string class_label_j=GenConst::ECM_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             
             int index;
@@ -407,7 +409,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             std::string class_label_i=GenConst::Chromatin_label+std::to_string(i);
             std::string class_label_j=GenConst::Chromatin_label+std::to_string(j-class_count_j);
             
-            std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
             int num_forces=0;

@@ -186,9 +186,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo);
 
 
 /**Creates a vector of node pairs (excluded bonds) from the system bond list using class labels.*/
-std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
-                                                              std::string label_1,
-                                                              std::string label_2);
+std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds);
 /**Add excluded bonds to Custom non bonded force from exclude_list.*/
 void add_exclusion(OpenMM::CustomNonbondedForce* custom_bond,
                    std::vector< std::pair< int, int > > exclude_list);
