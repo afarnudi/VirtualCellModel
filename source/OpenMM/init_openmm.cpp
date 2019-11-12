@@ -84,6 +84,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        ExcludedVolumes,
                                        system);
     
+    omm->LJ = LJ_12_6_interactions;
     omm->EV = ExcludedVolumes;
     // Create an array of harmonic spring force objects to add to the system.
     

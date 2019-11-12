@@ -377,6 +377,17 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
     vector<double> parameters;
     bonds[bond_index].atoms[0]=u1;
     bonds[bond_index].atoms[1]=u4;
+    
+    for (int i=0; i< omm->EV.size() ; i++)
+    {
+        omm->EV[i]->setExclusionParticles(bond_index, u1, u4);
+    }
+    
+    for (int i=0; i< omm->LJ.size() ; i++)
+    {
+        omm->LJ[i]->setExclusionParticles(bond_index, u1, u4);
+    }
+    
     switch (spring_model){
         case 1: //Fene
             { 
