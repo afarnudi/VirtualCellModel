@@ -9,7 +9,7 @@
 #ifndef General_constants_h
 #define General_constants_h
 #include <string>
-
+#include <vector>
 
 namespace GenConst {
     /**MD total number of steps. Default 10000*/

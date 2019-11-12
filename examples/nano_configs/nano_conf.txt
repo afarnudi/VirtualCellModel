@@ -9,7 +9,7 @@ temperature	200
 frictionInPs	5
 K	1
 MD_T	1
-Num_of_Membranes	2	nano_mem.txt nano_particle 
+Num_of_Membranes	1	nano_mem.txt //nano_particle 
 Num_of_Actins		0	actin_config.txt
 Num_of_ECMs		0	configs/bacteria/bacteria_ecm_config.txt
 Num_of_Chromatins	0	configs/chromo/chromo_0.txt configs/chromo/chromo_1.txt	configs/chromo/chromo_2.txt configs/chromo/chromo_3.txt 
