@@ -77,6 +77,7 @@ private:
     double Node_radius=1;
     double New_node_radius=-1;
     double Begin_update_time_in_Ps=0;
+    double Update_nominal_length=-1;
     double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
@@ -124,6 +125,10 @@ public:
     /**Returns the node radius update value (set value in the configuration file). */
     double get_new_node_radius(void){
         return New_node_radius;
+    }
+    /**Returns the spring nominal length update value (set value in the configuration file). */
+    double get_new_nominal_length(void){
+        return Update_nominal_length;
     }
     ///Call all initilisation members and initilise openmm handles.
     void initilise_openmm(void);  
