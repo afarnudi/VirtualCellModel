@@ -8,7 +8,6 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     bool accept=0; 
     
     //Randomly choosing a Dihedral and finding the neighbours.
-
     int triangle_A, triangle_B,temp_triangle, u1;
     int initial_pair;
     vector<int> A_neighbours_dihedral_index;
@@ -158,7 +157,7 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
         double deltaE=(final_bend_energy+final_bond_energy)-(initial_bend_energy+initial_bond_energy);
         localDeltaE=deltaE;
         //cout<<"local delta E  "<<deltaE<<endl;
-        double fluidity=0.3;
+//        double fluidity=0.3;
         
         if(deltaE>0){
             double random_number=(double) rand() / (RAND_MAX);
@@ -295,7 +294,7 @@ double Membrane::calculating_the_bend_energy(int uncommon1, int common2, int com
 
 void Membrane::find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B){
     //cout<<"find_the_new_neighbours"<<endl;
-    int Uncommon_node;
+//    int Uncommon_node;
     int uncommon1=Triangle_Pair_Nodes[initial_pair][0];
     int common2=Triangle_Pair_Nodes[initial_pair][1];
     int common3=Triangle_Pair_Nodes[initial_pair][2];
@@ -431,7 +430,7 @@ void Membrane::Update_Membrane(int initial_pair,int triangle_A,int triangle_B, i
         
     //updating Node_bond_list
     
-    for(int i; i<Num_of_Node_Pairs; i++){
+    for(int i=0; i<Num_of_Node_Pairs; i++){
         if((Node_Bond_list[i][0]==c2 and Node_Bond_list[i][1]==c3) ||(Node_Bond_list[i][1]==c2 and Node_Bond_list[i][0]==c3)){
             bond_index=i;
             Node_Bond_list[i][0]=u1;
@@ -594,7 +593,7 @@ double Membrane::calculating_the_bond_energy_check(int p1, int p2, MyAtomInfo at
 double Membrane::calculating_the_bond_length_check(int p1, int p2, MyAtomInfo atoms[]){
     
     vector<double> bond;
-    double Avg=get_avg_node_dist();
+//    double Avg=get_avg_node_dist();
     double bond_length;
     bond.resize(3);    
     for(int i=0; i<3; i++){    
@@ -623,15 +622,15 @@ void Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
         double globalDeltaE=finalpenergy-initpenergy;
         if(globalDeltaE!=0){
             if(abs(localDeltaE-globalDeltaE)>0.0000001){
-                cout<<"warning! local and global DeltaE are different  "<<"global Delta potential energy  "<<globalDeltaE<<"   "<<"locall  "<<localDeltaE<<endl;
-                cout<<"Test  "<<globalDeltaE-localDeltaE<<endl;
+//                cout<<"warning! local and global DeltaE are different  "<<"global Delta potential energy  "<<globalDeltaE<<"   "<<"locall  "<<localDeltaE<<endl;
+//                cout<<"Test  "<<globalDeltaE-localDeltaE<<endl;
             }
 
         }
     
      }
 
-     cout<<"num_of_accepted tries  "<<Accepted_Try_Counter<<"  out of  "<<GenConst::MC_step<<"  pyramid_counter  "<<pyramid_counter<<endl;
+//     cout<<"num_of_accepted tries  "<<Accepted_Try_Counter<<"  out of  "<<GenConst::MC_step<<"  pyramid_counter  "<<pyramid_counter<<endl;
      
 }
 
@@ -712,11 +711,11 @@ void Membrane::check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
     int initial_pair;
     vector<int> A_neighbours_dihedral_index;
     vector<int> B_neighbours_dihedral_index;
-    double initial_bend_energy=0;
-    double initial_bond_energy=0;
-    double final_bend_energy=0;
-    double final_bond_energy=0;
-    int number_of_privious_mem_nodes=0;
+//    double initial_bend_energy=0;
+//    double initial_bond_energy=0;
+//    double final_bend_energy=0;
+//    double final_bond_energy=0;
+//    int number_of_privious_mem_nodes=0;
     
     int new_neighbour_dihedrals[4][6];
     
@@ -795,10 +794,10 @@ void Membrane::check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
 
 bool Membrane::check_Pyramid_2(int initial_pair, vector<int> A_neighbours_dihedral_index, vector<int> B_neighbours_dihedral_index){
     bool ButerflyEffect=0;
-    int u1= Triangle_Pair_Nodes[initial_pair][0];
+//    int u1= Triangle_Pair_Nodes[initial_pair][0];
     int c2= Triangle_Pair_Nodes[initial_pair][1];
     int c3= Triangle_Pair_Nodes[initial_pair][2];
-    int u4= Triangle_Pair_Nodes[initial_pair][3];
+//    int u4= Triangle_Pair_Nodes[initial_pair][3];
     vector<int> uncommen_nodes;
     for(int i=0; i<2; i++){
         if (Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][0]!=c2 and Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][0]!=c3){
