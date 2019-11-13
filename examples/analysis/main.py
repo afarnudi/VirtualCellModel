@@ -6,7 +6,7 @@ This is a temporary script file.
 """
 
 import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 
 from Python_functions.import_pdb      import import_trajectories_from_pdb
 from Python_functions.gyration_radius import gyration

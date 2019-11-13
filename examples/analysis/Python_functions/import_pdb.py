@@ -39,7 +39,7 @@ def concat_data(words, xyz):
 
 def import_trajectories_from_pdb(filename, label = None):
     name = filename
-    filename = '../'+filename
+#    filename = '../'+filename
     
     try:
         data = np.load(filename[:-3]+'npy')
