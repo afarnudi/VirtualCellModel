@@ -197,6 +197,6 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="num_of_node_types"){
         num_of_node_types=param_value;
         epsilon_LJ.resize(num_of_node_types,0);
-        sigma_LJ.resize(num_of_node_types,1.5*Node_radius);
+        sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
     }
 }
