@@ -482,7 +482,7 @@ int main(int argc, char **argv)
                 }
                 
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
-                    updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set);
+                    updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
                 //the monte_carlo part
 
