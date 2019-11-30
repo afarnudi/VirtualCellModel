@@ -34,9 +34,9 @@ const int EndOfList=-1;
 using std::vector;
 
 
-void write_data(MyAtomInfo atoms[], string buffer, double pressure);
-void write_CM(string buffer, vector<Chromatin> chromos);
-double calculate_pressure(vector<Membrane> mems);
+void write_data(MyAtomInfo atoms[], string buffer);
+//void write_CM(string buffer, vector<Chromatin> chromos);
+//double calculate_pressure(vector<Membrane> mems);
 
 void collect_data(MyAtomInfo atoms[],
                   string buffer,
@@ -45,11 +45,7 @@ void collect_data(MyAtomInfo atoms[],
                   double timeInPs){
     
     GenConst::data_colection_times.push_back(timeInPs);
-    write_data(atoms, buffer, calculate_pressure(mems));
-    
-    if (chromos.size()!=0) {
-        write_CM(buffer, chromos);
-    }
+    write_data(atoms, buffer);
 }
 
 
@@ -65,10 +61,8 @@ void set_temperature(int MD_step, double temperature, int buffer){
 using std::string;
 using std::endl;
 
-
 void write_data(MyAtomInfo atoms[],
-                string buffer,
-                double pressure){
+                string buffer){
     
     
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
@@ -81,32 +75,32 @@ void write_data(MyAtomInfo atoms[],
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
-        wdata<<"\t"<<pressure<<"\n";
+        wdata<<"\n";
     }
 }
 
-void write_CM(string buffer, vector<Chromatin> chromos){
-    string cm_file_name="Results/CMs/"+GenConst::trajectory_file_name+buffer;
-    
-    for (int ch=0; ch< chromos.size(); ch++) {
-        string write_name = cm_file_name + std::to_string(ch) + ".txt";
-        std::ofstream write_cms;
-        write_cms.open(write_name.c_str());
-        int N = chromos[ch].get_num_of_nodes();
-        for (int x=0; x<N; x++) {
-            for (int y=0; y<N; y++) {
-                if (y != N-1) {
-                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
-                } else {
-                    write_cms<<chromos[ch].get_cm(x, y)<<"\n";
-                }
-            }
-        }
-    }
-    
-}
+//void write_CM(string buffer, vector<Chromatin> chromos){
+//    string cm_file_name="Results/CMs/"+GenConst::trajectory_file_name+buffer;
+//
+//    for (int ch=0; ch< chromos.size(); ch++) {
+//        string write_name = cm_file_name + std::to_string(ch) + ".txt";
+//        std::ofstream write_cms;
+//        write_cms.open(write_name.c_str());
+//        int N = chromos[ch].get_num_of_nodes();
+//        for (int x=0; x<N; x++) {
+//            for (int y=0; y<N; y++) {
+//                if (y != N-1) {
+//                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
+//                } else {
+//                    write_cms<<chromos[ch].get_cm(x, y)<<"\n";
+//                }
+//            }
+//        }
+//    }
+//
+//}
 
-double calculate_pressure(vector<Membrane> mems){
-    double pressure=0;
-    return pressure;
-}
+//double calculate_pressure(vector<Membrane> mems){
+//    double pressure=0;
+//    return pressure;
+//}

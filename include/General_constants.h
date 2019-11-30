@@ -87,6 +87,8 @@ namespace GenConst {
     extern bool Load_from_checkpoint;
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
     extern std::string Checkpoint_path;
+    /**name of the OpenMM checkpoint file (binary file)*/
+    extern std::string Checkpoint_file_name;
     
     extern bool write_bonds_to_PDB;
     /**Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true*/

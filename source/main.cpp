@@ -95,6 +95,7 @@ namespace GenConst {
     double temperature;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+    std::string Checkpoint_file_name;
 
 
     bool   write_bonds_to_PDB;
@@ -151,7 +152,7 @@ int main(int argc, char **argv)
     bondlengthcheck.open("L_bondlength", ios::app);
     bondlengthcheck2.open("R_bondlength", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-    string ckeckpoint_name="Results/Resumes/OpenMM/"+GenConst::trajectory_file_name+buffer;
+    string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
     
     vector<Membrane> Membranes;
@@ -423,9 +424,18 @@ int main(int argc, char **argv)
                 omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             } else {
                 std::filebuf rfb;
-                rfb.open (GenConst::Checkpoint_path.c_str(),std::ios::in);
+                string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;
+                checkpoint_load_name = "Results/Resumes/OpenMM/chromo2019_11_17_time_11_57";
+                rfb.open (checkpoint_load_name.c_str(),std::ios::in);
+                if (rfb.is_open()) {
+                    cout<<"Loading checkpoint from: "<<checkpoint_load_name<<endl;
+                } else {
+                    cout<<"Checkpoint loadding is enabled. Cannpt find the checkpoint file. Please check the checkpoint path and filename in the general config file."<<endl;
+                    exit(EXIT_FAILURE);
+                }
                 std::istream rcheckpoint(&rfb);
                 omm->context->loadCheckpoint(rcheckpoint);
+                
                 //wrok in progress.
                 //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
