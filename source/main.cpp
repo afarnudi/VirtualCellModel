@@ -330,7 +330,8 @@ int main(int argc, char **argv)
         } // End of if (Include_Membrane)
     }
     
-    int progress=0;
+    float progressp=0;
+    int   progress=0;
     //openmm**
     if (GenConst::OpenMM) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -458,7 +459,8 @@ int main(int argc, char **argv)
             
             int total_step_num = 0;
             double last_update_time=0;
-            
+            bool expanding = true;
+            bool set_spring = true;
             
             for (int frame=1; ; ++frame) {
 
@@ -486,13 +488,36 @@ int main(int argc, char **argv)
                 
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
-                if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
-                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
-                    progress+=1;
+                if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
+//                    printf("[ %2.1f ]\t time: %4.1f Ps [out of %4.1f Ps]    \r",progressp, time, GenConst::Simulation_Time_In_Ps);
+                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
+                    progressp+=0.1;
+                    progress++;
                 }
                 
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
+                }
+                
+                if (time>100 && set_spring) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    
+                    for(int i=0; i<Membranes[0].get_num_of_node_pairs() ; i++)
+                    {
+                        omm->harmonic->getBondParameters(i, atom1, atom2, length, stiffness);
+                        stiffness = 0.5 * OpenMM::KJPerKcal
+                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                        
+                        omm->harmonic->setBondParameters(i, atom1, atom2, length, stiffness);
+                    }
+                    omm->harmonic->updateParametersInContext(*omm->context);
+                    set_spring=false;
+                }
+                
+                if (time>800 && expanding) {
+                    expand(Chromatins, omm);
+                    expanding=false;
                 }
                 //the monte_carlo part
 

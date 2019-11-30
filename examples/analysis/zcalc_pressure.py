@@ -27,6 +27,7 @@ ts, atoms, inds = traj_data.shape
 
 def calc_pressure(data, Vels, mnodes=162):
     mass = np.ones(atoms)
+
     for i in range(mnodes):
         mass[i]=200
     mass = np.asarray([mass])
@@ -37,6 +38,7 @@ def calc_pressure(data, Vels, mnodes=162):
     unit1=24 # 1Kcal = 24 gr.ang^2/Ps^2.mol
     p=np.sum(np.sum(np.square(vs),axis=2)*mass, axis=1) + unit1*np.sum(np.sum(data*fs, axis=2), axis=1)
     return p/3
+
 
 def calc_chromo_pressure(data, Vels, mnodes=162):
     mass = np.asarray([np.ones(atoms-mnodes)])
@@ -56,9 +58,9 @@ from Python_functions.gyration_radius import gyration
 memrg = gyration(traj_data[:,:mem_nodes,:], time)
 memrg3= 4*np.pi*memrg*memrg*memrg/3
 
+
 axes[0,0].plot(time,memrg, label='mem', color='orange')
 axes[0,0].set_title('Radius of Gyration')
-# =============================================================================
 
 p = calc_pressure(traj_data, vel_data)
 p=p/memrg3

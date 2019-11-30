@@ -19,10 +19,10 @@ bool check_for_membrane_update(vector<Membrane>    &membranes,
         if (membranes[mem_index].get_new_node_radius() != -1 &&
             time > membranes[mem_index].get_Begin_update_time_in_Ps()   ) {
             if (time < membranes[mem_index].get_End_update_time_in_Ps()) {
-//                if (time - last_update_time > 0.3) {
-                    last_update_time = time;
-                    update_mem = true;
-//                }
+                //                if (time - last_update_time > 0.3) {
+                last_update_time = time;
+                update_mem = true;
+                //                }
                 
             }
         }
@@ -83,7 +83,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
         
         mem_count += membranes[i].get_num_of_nodes();
     }
-//    cout<<"2*new_radius = "<<2*new_radius<<endl;
+    //    cout<<"2*new_radius = "<<2*new_radius<<endl;
     int mem_bond_count=0;
     for (int i=0; i<membranes.size(); i++) {
         if (membranes[i].get_new_node_radius() != -1) {
@@ -99,4 +99,16 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
     
     omm->harmonic->updateParametersInContext(*omm->context);
     
+}
+
+void expand(vector<Chromatin>                chromos,
+            MyOpenMMData*                    omm)
+{
+    for (int ch=0; ch<chromos.size(); ch++) {
+        string epsilon = "epsilon" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(0) ;
+        string sigma   = "sigma"   + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(0) ;
+        omm->context->setParameter(epsilon, 0);
+        omm->context->setParameter(sigma, 1000);
+        
+    }
 }

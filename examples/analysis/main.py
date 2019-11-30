@@ -19,6 +19,7 @@ from Python_functions.R2N             import R2N
 
 pdbname = 'chromo2019_11_18_time_23_15'+'.pdb'
 pdbname = 'chromo2019_11_22_time_11_40'+'.pdb'
+
 pdbname = 'chromo2019_11_23_time_07_29'+'.pdb'
 
 #data, time = import_trajectories_from_pdb(pdbname, 'mem0')
