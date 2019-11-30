@@ -13,6 +13,8 @@ Num_of_Chromatins	0
 Num_of_Actins		0
 Num_of_ECMs		0
 Num_of_pointparticles	0
+Load_from_checkpoint	0
+Checkpoint_path		Results/Resumes/OpenMM/
 MD_thrmo_step	200
 Bussi_tau	10
 MC_step	100
