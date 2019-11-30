@@ -7,11 +7,12 @@ This is a temporary script file.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 filename = 'chromo2019_11_21_time_10_33'
 filename = 'chromo2019_11_22_time_11_40'
 filename = 'chromo2019_11_23_time_07_29'
-
+filename = str(sys.argv[1])
 #filename = 'chromo2019_11_18_time_11_11'
 
 velname = filename + '_vels_forces.txt'
