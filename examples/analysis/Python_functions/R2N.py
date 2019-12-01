@@ -14,7 +14,7 @@ def R2N(data, lab, ax):
         r2n=np.append(r2n,np.mean(np.sqrt(np.mean(np.sum(np.square(data[:,:-j,:]-data[:,j:,:]),axis=2),axis=1))))
         
     ax.scatter(range(1,N+1,10),r2n, label=lab)
-    ax.set_title("R2 of bps along the chain of structures (averaged over time)")
+    ax.set_title("R^2 of bps separated along the chain\n(averaged over time)")
     ax.set_xlabel("N_bb")
     ax.set_ylabel("R2(N_bb)")
     ax.grid(True, which='both')

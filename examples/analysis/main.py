@@ -12,7 +12,7 @@ from Python_functions.import_pdb      import import_trajectories_from_pdb
 #from Python_functions.gyration_radius import gyration
 from Python_functions.RMSD            import RMSD
 from Python_functions.R2N             import R2N
-
+import sys
 
 #pdbname = 'chromo2019_10_28_time_10_48'+'.pdb'
 #pdbname = 'chromo2019_11_09_time_10_23'+'.pdb'
@@ -21,6 +21,7 @@ pdbname = 'chromo2019_11_18_time_23_15'+'.pdb'
 pdbname = 'chromo2019_11_22_time_11_40'+'.pdb'
 
 pdbname = 'chromo2019_11_23_time_07_29'+'.pdb'
+pdbname = str(sys.argv[1]) + '.pdb'
 
 #data, time = import_trajectories_from_pdb(pdbname, 'mem0')
 data, time = import_trajectories_from_pdb(pdbname)
@@ -35,15 +36,15 @@ RMSD(data[:,mem_nodes+2000:3000+mem_nodes,:], time[:], 'ch2',ax1)
 RMSD(data[:,mem_nodes+3000:,:],               time[:], 'ch3',ax1)
 
 
-R2N (data[100:,mem_nodes:1000+mem_nodes,:],      'ch0',ax2)
-R2N (data[100:,mem_nodes+1000:2000+mem_nodes,:], 'ch1',ax2)
-R2N (data[100:,mem_nodes+2000:3000+mem_nodes,:], 'ch2',ax2)
-R2N (data[100:,mem_nodes+3000:,:],               'ch3',ax2)
+R2N (data[400:,mem_nodes:1000+mem_nodes,:],      'ch0',ax2)
+R2N (data[400:,mem_nodes+1000:2000+mem_nodes,:], 'ch1',ax2)
+R2N (data[400:,mem_nodes+2000:3000+mem_nodes,:], 'ch2',ax2)
+R2N (data[400:,mem_nodes+3000:,:],               'ch3',ax2)
 
 left, right = ax2.get_xlim()
-ax2.set_xlim(50, right)
+ax2.set_xlim(20, right)
 down, up = ax2.get_ylim()
-ax2.set_ylim(10, up)
+ax2.set_ylim(8, up)
 
 
 #fig2, ax3 = plt.subplots()

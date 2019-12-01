@@ -36,8 +36,9 @@ def calc_pressure(data, Vels, mnodes=162):
     vs = Vels[:,:,:3]
     fs = Vels[:,:,3:-1]
 
-    unit1=24 # 1Kcal = 24 gr.ang^2/Ps^2.mol
-    p=np.sum(np.sum(np.square(vs),axis=2)*mass, axis=1) + unit1*np.sum(np.sum(data*fs, axis=2), axis=1)
+    unit1=4.182 
+    unit2=0.174 # 1Kcal = 24 gr.ang^2/Ps^2.mol
+    p=unit2*np.sum(np.sum(np.square(vs),axis=2)*mass, axis=1) + unit1*np.sum(np.sum(data*fs, axis=2), axis=1)
     return p/3
 
 
@@ -61,7 +62,8 @@ memrg3= 4*np.pi*memrg*memrg*memrg/3
 
 
 axes[0,0].plot(time,memrg, label='mem', color='orange')
-axes[0,0].set_title('Radius of Gyration')
+axes[0,0].set_title("Membrane Radius")
+axes[0,0].set_ylabel("R_g in Angstrom")
 
 p = calc_pressure(traj_data, vel_data)
 p=p/memrg3
@@ -71,8 +73,7 @@ pc = pc/memrg3
 
 axes[0,1].plot(time,p, label='mem + chromos', color='green')
 axes[0,1].set_title('Pressure')
-#axes[0,1].plot(time,pc, label='chromo Pressure', color='blue')
-# =============================================================================
+axes[0,1].set_ylabel('P (1.6*GPa)')
 
 ch0rg = gyration(traj_data[:,mem_nodes:1000 + mem_nodes,:], time)
 ch1rg = gyration(traj_data[:,1000 + mem_nodes:2000 + mem_nodes,:], time)
@@ -84,11 +85,12 @@ axes[1,0].plot(time,ch1rg, label='ch1')
 axes[1,0].plot(time,ch2rg, label='ch2')
 axes[1,0].plot(time,ch3rg, label='ch3')
 axes[1,0].set_title("Radius of Gyration")
+axes[1,0].set_ylabel("R_g in Angstrom")
 
 ch_rdius = 1
-mem_radius = 7
+mem_radius = 4
 ch_volume = ch_rdius*ch_rdius*ch_rdius*4000
-eff_radius = memrg - 7
+eff_radius = memrg - mem_radius
 Mem_volume = eff_radius*eff_radius*eff_radius
 volume_fraction = ch_volume/Mem_volume
 
