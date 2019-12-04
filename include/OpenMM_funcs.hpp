@@ -91,7 +91,7 @@ std::vector<double> Nominal_length_calc(TimeDependantData*,
  *                   Monte_Carlo
  * -----------------------------------------------------------------------------
  */
-void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[]);
+void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[],int &MC_total_tries,int &Accepted_Try_Counter, double &MC_Acceptance_Rate);
 
                                
 /** -----------------------------------------------------------------------------
@@ -237,6 +237,15 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       string                                set_1_name,
                                       string                                set_2_name);
 
+void init_Modified_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                      atoms[],
+                                      vector<std::set<int> >                     set_1,
+                                      vector<std::set<int> >                     set_2,
+                                      int                                   set_1_index,
+                                      int                                   set_2_index,
+                                      string                                set_1_name,
+                                      string                                set_2_name);
+                                      
 //overload for chromatin class interactions contatining different node types with other classes.
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                      atoms[],

@@ -330,6 +330,9 @@ int main(int argc, char **argv)
     }
     
     int progress=0;
+    double MC_Acceptance_Rate=0;
+    int MC_total_tries=0;
+    int Accepted_Try_Counter=0;
     //openmm**
     if (GenConst::OpenMM) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -448,7 +451,16 @@ int main(int argc, char **argv)
             
             int total_step_num = 0;
             double last_update_time=0;
-            
+            bool set_spring = true;
+            bool set_new_length_for_spring_1=true;
+            bool set_new_length_for_spring_2=true;
+            bool set_new_length_for_spring_3=true;
+            bool set_new_length_for_spring_4=true;
+            bool set_new_length_for_spring_5=true;
+            bool set_new_length_for_spring_6=true;
+            bool set_new_length_for_spring_7=true;
+            bool set_new_length_for_spring_8=true;
+            bool set_new_length_for_spring_9=true;
             
             for (int frame=1; ; ++frame) {
 
@@ -460,7 +472,7 @@ int main(int argc, char **argv)
                 }
                 myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
                 
-                //Begin: Exporting congiguration of classes for simulation resume.
+                //Begin: Exporting congiguration of classes for simulation .
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
@@ -484,7 +496,222 @@ int main(int argc, char **argv)
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
-                //the monte_carlo part
+                
+                //calculating the adhession force induced by membrane between the nanoparitcles.
+                if (time>10 && set_spring) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    
+                    stiffness = 59 * OpenMM::KJPerKcal
+                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_spring=false;
+                }
+                
+                if (time>20 && set_new_length_for_spring_1) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    
+                    cout<<"DeltaX 1 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_1=false;
+                }
+                
+                
+                 if (time>30 && set_new_length_for_spring_2) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    
+                    
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    
+                    cout<<"DeltaX 2 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_2=false;
+                }
+                
+                 if (time>40 && set_new_length_for_spring_3) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    cout<<"DeltaX 3 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_3=false;
+                }
+                
+                 if (time>50 && set_new_length_for_spring_4) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                                
+                    cout<<"DeltaX 4 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_4=false;
+                }
+                
+                if (time>60 && set_new_length_for_spring_5) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    
+                    cout<<"DeltaX 5 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_5=false;
+                }
+                
+                
+                if (time>70 && set_new_length_for_spring_6) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    cout<<"DeltaX 6 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_6=false;
+                }
+                
+                if (time>80 && set_new_length_for_spring_7) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    
+                    
+                    cout<<"DeltaX 7 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_7=false;
+                }
+                
+                
+                if (time>90 && set_new_length_for_spring_8) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                
+                    cout<<"DeltaX 8 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_8=false;
+                }
+                
+                if (time>100 && set_new_length_for_spring_9) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    double equilibrium_distance=0;
+                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    for(int i=0;i<3;i++){
+                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
+                    }
+                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
+                    
+                    cout<<"DeltaX 9 "<<length-equilibrium_distance<<endl;
+                    
+                    length=equilibrium_distance;
+                    cout<<"equilibriom distance of 2 nano particles  "<<length<<endl;
+                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
+                    omm->calcforce->updateParametersInContext(*omm->context);
+                    set_new_length_for_spring_9=false;
+                }
+                //the monte_Şcarlo part
 
                  //if(progress==0 or progress==25 or progress==50 or progress==75){ 
                 if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
@@ -492,9 +719,15 @@ int main(int argc, char **argv)
                     //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
                     
 
-                    Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
+                    Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
                 }
                 
+                if(progress%5==1 and  GenConst::MC_step !=0){
+                    
+                    cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
+                    cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
+                    cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
+                }
              
             }
             
@@ -511,8 +744,8 @@ int main(int argc, char **argv)
             
             // Clean up OpenMM data structures.
             myTerminateOpenMM(omm,time_dependant_data);
-            
-            cout<<"\nDone!"<<endl;
+            cout<<"MC_Acceptance_Rate   "<<MC_Acceptance_Rate<<endl;
+            cout<<"\nDone!!!!!"<<endl;
             return 0; // Normal return from main.
         }
         
@@ -793,6 +1026,7 @@ int main(int argc, char **argv)
         }
         
     } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
+   
     cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
     cout<<"\nDone!"<<endl;
     printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);

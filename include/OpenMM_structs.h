@@ -71,6 +71,7 @@ struct MyOpenMMData {
     OpenMM::Context*  context;
 
     OpenMM::HarmonicBondForce* harmonic;
+    OpenMM::HarmonicBondForce* calcforce;
     std::vector<OpenMM::CustomBondForce*> x4harmonic;
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
 

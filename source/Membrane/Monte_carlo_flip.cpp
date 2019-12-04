@@ -3,10 +3,10 @@
 #include "OpenMM_funcs.hpp"
 #include "General_functions.hpp"
 
-void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter){
+void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter, int &MC_total_tries, double &MC_Acceptance_Rate){
    
     bool accept=0; 
-    
+    MC_total_tries+=1;
     //Randomly choosing a Dihedral and finding the neighbours.
     int triangle_A, triangle_B,temp_triangle, u1;
     int initial_pair;
@@ -69,7 +69,6 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     
     if (accept){ //(checking the conditions)
         //cout<<"starting monte_carlo try"<<endl;
-        
         int uncommon1,common2,common3, uncommon4;
         //calculating the initial state energy
         ////calculating the bond energy
@@ -177,11 +176,15 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     
     if(accept){ // (updating the mem and parameters in openmm)
             Accepted_Try_Counter+=1;
+            MC_Acceptance_Rate=(MC_Acceptance_Rate*(MC_total_tries-1)+1)/MC_total_tries;
             
             update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
             
   
     } //end of if(accept){ // (updating the mem and parameters in openmm)
+    else{
+        MC_Acceptance_Rate=MC_Acceptance_Rate*(MC_total_tries-1)/MC_total_tries;
+    }
 }
 
 

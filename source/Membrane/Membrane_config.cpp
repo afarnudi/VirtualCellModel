@@ -150,6 +150,12 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         } else {
             Relaxation=true;
         }
+    }else if(param_name=="fixing_com"){
+        if (int(param_value) == 0){
+            fixing_com=false;
+        } else {
+            fixing_com=true;
+        }
     } else if(param_name=="particle_type"){
         if (int(param_value) == 0){
             particle_type=false;
