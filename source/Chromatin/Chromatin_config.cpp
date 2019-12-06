@@ -107,7 +107,7 @@ void Chromatin::import_config(string config_file_name){
                 }
             } else if(split[0]=="epsilon"){
                 if (split.size()<num_of_node_types + 1) {
-                    cout<<"Too few arguments for the Lenard Jones epsilon interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 0\n";
+                    cout<<"Too few arguments for the Lenard Jones epsilon interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 0.\n";
                     
                     for (int i=0; i<split.size(); i++) {
                         epsilon_LJ[i]=stod(split[i+1]);

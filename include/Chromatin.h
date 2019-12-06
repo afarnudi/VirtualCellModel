@@ -90,7 +90,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
 
     vector<vector<int> > Node_neighbour_list;
     vector<vector<int> > Membrane_neighbour_node;
-    vector<vector<double> > Contact_Matrix;
+//    vector<vector<double> > Contact_Matrix;
     
     
     
@@ -116,7 +116,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void FENE(void);
     void hard_sphere (void);
     void Strong_spring(void);
-    void write_parameters(int MD_Step);
+//    void write_parameters(int MD_Step);
     void export_pack(int MD_step);
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
@@ -215,31 +215,31 @@ public: //these are using in monte carlo flip function. for defining them as pri
     }
     
     /**CM update*/
-    double temp_dist, delta_x, delta_y, delta_z;
-    void contact_matrix_update(void){
-        double dist = 3*Node_radius;
-        
-        for (int i=0; i<Num_of_Nodes; i++) {
-            for (int j=i; j<Num_of_Nodes; j++) {
-                if (i!=j) {
-                    delta_x = Node_Position[i][0] - Node_Position[j][0];
-                    delta_y = Node_Position[i][1] - Node_Position[j][1];
-                    delta_z = Node_Position[i][2] - Node_Position[j][2];
-                    temp_dist = delta_x*delta_x + delta_y*delta_y + delta_z*delta_z;
-                    
-                    if (temp_dist < dist*dist ) {
-                        Contact_Matrix[i][j]++;
-                        Contact_Matrix[j][i]++;
-                    }
-                    
-                }
-            }
-        }
-        
-    }
-    double get_cm(int i, int j){
-        return Contact_Matrix[i][j];
-    }
+//    double temp_dist, delta_x, delta_y, delta_z;
+//    void contact_matrix_update(void){
+//        double dist = 3*Node_radius;
+//
+//        for (int i=0; i<Num_of_Nodes; i++) {
+//            for (int j=i; j<Num_of_Nodes; j++) {
+//                if (i!=j) {
+//                    delta_x = Node_Position[i][0] - Node_Position[j][0];
+//                    delta_y = Node_Position[i][1] - Node_Position[j][1];
+//                    delta_z = Node_Position[i][2] - Node_Position[j][2];
+//                    temp_dist = delta_x*delta_x + delta_y*delta_y + delta_z*delta_z;
+//
+//                    if (temp_dist < dist*dist ) {
+//                        Contact_Matrix[i][j]++;
+//                        Contact_Matrix[j][i]++;
+//                    }
+//
+//                }
+//            }
+//        }
+//
+//    }
+//    double get_cm(int i, int j){
+//        return Contact_Matrix[i][j];
+//    }
     
     
     void set_file_time(char* buffer){

@@ -78,29 +78,3 @@ void write_data(MyAtomInfo atoms[],
         wdata<<"\n";
     }
 }
-
-//void write_CM(string buffer, vector<Chromatin> chromos){
-//    string cm_file_name="Results/CMs/"+GenConst::trajectory_file_name+buffer;
-//
-//    for (int ch=0; ch< chromos.size(); ch++) {
-//        string write_name = cm_file_name + std::to_string(ch) + ".txt";
-//        std::ofstream write_cms;
-//        write_cms.open(write_name.c_str());
-//        int N = chromos[ch].get_num_of_nodes();
-//        for (int x=0; x<N; x++) {
-//            for (int y=0; y<N; y++) {
-//                if (y != N-1) {
-//                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
-//                } else {
-//                    write_cms<<chromos[ch].get_cm(x, y)<<"\n";
-//                }
-//            }
-//        }
-//    }
-//
-//}
-
-//double calculate_pressure(vector<Membrane> mems){
-//    double pressure=0;
-//    return pressure;
-//}

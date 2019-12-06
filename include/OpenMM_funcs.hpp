@@ -209,6 +209,16 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               int                                   set_2_index,
                               string                                set_1_name,
                               string                                set_2_name);
+//overload for chromatin class interactions contatining different node types with other classes.
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              std::set<int>                         set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              int                                   chromo_ind,
+                              string                                set_1_name,
+                              string                                set_2_name);
 //overload for inter chromatin class interactions contatining different node types.
 void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                               const MyAtomInfo                      atoms[],

@@ -475,10 +475,6 @@ int main(int argc, char **argv)
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
-                for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
-                    Chromatins[chr_c].contact_matrix_update();
-                }
-                
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
                 

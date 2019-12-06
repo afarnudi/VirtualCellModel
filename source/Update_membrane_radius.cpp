@@ -70,10 +70,16 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
                 
                 for (int ch=0; ch<chromos.size(); ch++) {
-                    if (interaction_map[ch+1][0]!=0) {
+                    if (interaction_map[ch+1][0]==2) {
                         sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
                         //                    new_sig = (new_sig + chromos[ch].get_node_radius())/2.0;
                         omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                    } else if (interaction_map[ch+1][0]==1){
+                        for (int chind=0; chind < chromos[ch].get_num_of_node_types(); chind++) {
+                            sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + std::to_string(chind) + GenConst::Membrane_label + std::to_string(i) ;
+                            omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                        }
+                        
                     }
                     
                 }

@@ -35,7 +35,7 @@ void Chromatin::import(string import_file_name){
     
     Node_Force.resize(Num_of_Nodes);
     ABC_index.resize(Num_of_Nodes);
-    Contact_Matrix.resize(Num_of_Nodes);
+//    Contact_Matrix.resize(Num_of_Nodes);
     
     vector<double> read_double;
     read_double.resize(3);
@@ -51,7 +51,7 @@ void Chromatin::import(string import_file_name){
         read_resume_file>>ABC_index[i];
         
         Node_Force[i].resize(3,0);
-        Contact_Matrix[i].resize(Num_of_Nodes,0);
+//        Contact_Matrix[i].resize(Num_of_Nodes,0);
     }
     cout<<"Coordinates and velocities loaded"<<endl;
     cout<<"Node forces set to zero"<<endl;

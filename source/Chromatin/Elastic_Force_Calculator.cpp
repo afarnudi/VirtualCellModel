@@ -45,42 +45,42 @@ void Chromatin::Force_Calculator_2(void)
             Node_distance /= Node_radius;
             temp_force=0.0;
             
-            if (Node_distance < 4.0 && Node_distance > 2.0) {
-                if (Node_distance<2.5) {
-                    Contact_Matrix[k][j]++;
-                }
-                if (ABC_index[k]*ABC_index[j] != 0) {
-                    double sigma = 0.35;
-                    double r_1 = (Node_distance -2.0)/sigma;
-                    double r_3 = r_1*r_1*r_1;
-                    double r_5 = r_3*r_1*r_1;
-                    epsilon = 4 * GenConst::K * GenConst::MD_T * 0.01;
-                    
-                    temp_force = 2*epsilon*( 2.0/r_5 - 1.0/r_3 )/sigma;
-                    temp_potential_energy = epsilon * ( r_1*1.0/r_5 - r_1*1.0/r_3  );
-//
-//
-                }
-                    else if (Node_distance < 2.3){
-                        double exp_le1=exp(1.0/(Node_distance-le1));
-                        temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
-                        temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
-                }
-                
-            }
-            else if(temp_force<-Threshold_force   ||  Node_distance < 2 )
-            {
-//                if (Node_distance<1) {
-//                    cout<<"warning!\n";
+//            if (Node_distance < 4.0 && Node_distance > 2.0) {
+//                if (Node_distance<2.5) {
+//                    Contact_Matrix[k][j]++;
 //                }
-                
-                temp_force = Threshold_force*Node_distance/2.0 - 2*Threshold_force;
-                temp_potential_energy=   Threshold_force*Node_distance*Node_distance/4.0 -2*Threshold_force*Node_distance;
-
-//                double c=1000;
-//                temp_force = -2.0*c*Node_distance/(Node_radius) + 3*c;
-//                temp_potential_energy=   c*Node_distance*Node_distance/(Node_radius) - 3*c*Node_distance;
-            }
+//                if (ABC_index[k]*ABC_index[j] != 0) {
+//                    double sigma = 0.35;
+//                    double r_1 = (Node_distance -2.0)/sigma;
+//                    double r_3 = r_1*r_1*r_1;
+//                    double r_5 = r_3*r_1*r_1;
+//                    epsilon = 4 * GenConst::K * GenConst::MD_T * 0.01;
+//
+//                    temp_force = 2*epsilon*( 2.0/r_5 - 1.0/r_3 )/sigma;
+//                    temp_potential_energy = epsilon * ( r_1*1.0/r_5 - r_1*1.0/r_3  );
+////
+////
+//                }
+//                    else if (Node_distance < 2.3){
+//                        double exp_le1=exp(1.0/(Node_distance-le1));
+//                        temp_force = ( (Spring_coefficient*exp_le1)/(Node_distance-lmin) )*( 1/(Node_distance-lmin)+1/( (Node_distance-le1)*(Node_distance-le1) ) );
+//                        temp_potential_energy = Spring_coefficient*exp_le1/(Node_distance-lmin);
+//                }
+//
+//            }
+//            else if(temp_force<-Threshold_force   ||  Node_distance < 2 )
+//            {
+////                if (Node_distance<1) {
+////                    cout<<"warning!\n";
+////                }
+//
+//                temp_force = Threshold_force*Node_distance/2.0 - 2*Threshold_force;
+//                temp_potential_energy=   Threshold_force*Node_distance*Node_distance/4.0 -2*Threshold_force*Node_distance;
+//
+////                double c=1000;
+////                temp_force = -2.0*c*Node_distance/(Node_radius) + 3*c;
+////                temp_potential_energy=   c*Node_distance*Node_distance/(Node_radius) - 3*c*Node_distance;
+//            }
             
             Total_Potential_Energy += temp_potential_energy;
             
