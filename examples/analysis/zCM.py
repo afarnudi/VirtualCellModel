@@ -24,6 +24,7 @@ from Python_functions.import_pdb       import import_trajectories_from_pdb
 data, time = import_trajectories_from_pdb(pdbname)
 print(data.shape)
 
+#data = data[:,2162:,:]
 
 from scipy.spatial.distance import pdist, squareform
 

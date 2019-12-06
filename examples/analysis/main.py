@@ -26,7 +26,7 @@ pdbname = str(sys.argv[1]) + '.pdb'
 #data, time = import_trajectories_from_pdb(pdbname, 'mem0')
 data, time = import_trajectories_from_pdb(pdbname)
 
-fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(10,4))
+fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(12,4))
 
 mem_nodes = 162
 
@@ -35,6 +35,10 @@ RMSD(data[:,mem_nodes+1000:2000+mem_nodes,:], time[:], 'ch1',ax1)
 RMSD(data[:,mem_nodes+2000:3000+mem_nodes,:], time[:], 'ch2',ax1)
 RMSD(data[:,mem_nodes+3000:,:],               time[:], 'ch3',ax1)
 
+RMSD(data[100:,mem_nodes:1000+mem_nodes,:]     , time[100:], ' ',ax1)
+RMSD(data[100:,mem_nodes+1000:2000+mem_nodes,:], time[100:], ' ',ax1)
+RMSD(data[100:,mem_nodes+2000:3000+mem_nodes,:], time[100:], ' ',ax1)
+RMSD(data[100:,mem_nodes+3000:,:],               time[100:], ' ',ax1)
 
 R2N (data[400:,mem_nodes:1000+mem_nodes,:],      'ch0',ax2)
 R2N (data[400:,mem_nodes+1000:2000+mem_nodes,:], 'ch1',ax2)
@@ -45,6 +49,12 @@ left, right = ax2.get_xlim()
 ax2.set_xlim(20, right)
 down, up = ax2.get_ylim()
 ax2.set_ylim(8, up)
+
+fig.subplots_adjust(wspace=.3)
+
+#leg =ax1.legend()
+#for line in leg.get_lines():
+#    line.set_linewidth(4.0)
 
 
 #fig2, ax3 = plt.subplots()
