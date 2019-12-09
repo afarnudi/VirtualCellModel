@@ -112,7 +112,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     omm->harmonic = HarmonicBond;
-    //omm->calcforce=calcforce;
+    omm->calcforce=calcforce;
     omm->x4harmonic=X4harmonics;
     time_dependant_data->Kelvin_VoigtBond = Kelvin_VoigtBond;
     time_dependant_data->Kelvin_Nominal_length_calc();

@@ -497,7 +497,7 @@ int main(int argc, char **argv)
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
-                /*//calcforce *****************************
+                //calcforce *****************************
                 //calculating the adhession force induced by membrane between the nanoparitcles.
                 
                 if (time>20 && start_of_force_calc) {
@@ -682,7 +682,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_14=false;
                 }
                 
-                */ 
+                
                  
                  
                 //the monte_carlo part
