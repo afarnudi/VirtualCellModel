@@ -25,10 +25,10 @@ Damping_coefficient	0
 
 
 //Shift membrane position in the x direction in nanometers. Default 0
-Shift_in_X_direction 14
+Shift_in_X_direction 0//14
 
 //Shift membrane position in the y direction in nanometers. Default 0
-Shift_in_Y_direction	6
+Shift_in_Y_direction	0//6
 
 
 //Shift membrane position in the z direction in nanometers. Default 0
