@@ -467,6 +467,7 @@ int main(int argc, char **argv)
 
                 double time, energy, potential_energy;
                 
+                
                 myGetOpenMMState(omm, time, energy, potential_energy, all_atoms);
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
@@ -497,15 +498,16 @@ int main(int argc, char **argv)
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
-                /*//calcforce *****************************
+                //calcforce *****************************
                 //calculating the adhession force induced by membrane between the nanoparitcles.
                 
                 if (time>20 && start_of_force_calc) {
                     int atom1, atom2 ;
+                    cout<<"Frameee  "<<frame<<endl;
                     double length, stiffness;
-                    
                     double equilibrium_distance=0;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
+                    //cout<<"atom1  "<<atom1<<"  atom2   "<<atom2<<endl;
                     for(int i=0;i<3;i++){
                       equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
                     }
@@ -524,7 +526,7 @@ int main(int argc, char **argv)
                     start_of_force_calc=false;
                 }
                 
-                if (time>50 && set_new_length_for_spring_1) {
+                if (time>70 && set_new_length_for_spring_1) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -536,7 +538,7 @@ int main(int argc, char **argv)
                 }
                 
                 
-                 if (time>80 && set_new_length_for_spring_2) {
+                 if (time>120 && set_new_length_for_spring_2) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -547,7 +549,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_2=false;
                 }
                 
-                 if (time>110 && set_new_length_for_spring_3) {
+                 if (time>170 && set_new_length_for_spring_3) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -558,7 +560,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_3=false;
                 }
                 
-                 if (time>140 && set_new_length_for_spring_4) {
+                 if (time>220 && set_new_length_for_spring_4) {
                    int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -569,7 +571,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_4=false;
                 }
                 
-                if (time>170 && set_new_length_for_spring_5) {
+                if (time>270 && set_new_length_for_spring_5) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -581,7 +583,7 @@ int main(int argc, char **argv)
                 }
                 
                 
-                if (time>200 && set_new_length_for_spring_6) {
+                if (time>320 && set_new_length_for_spring_6) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -592,7 +594,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_6=false;
                 }
                 
-                if (time>230 && set_new_length_for_spring_7) {
+                if (time>370 && set_new_length_for_spring_7) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -604,7 +606,7 @@ int main(int argc, char **argv)
                 }
                 
                 
-                if (time>250 && set_new_length_for_spring_8) {
+                if (time>420 && set_new_length_for_spring_8) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -615,7 +617,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_8=false;
                 }
                 
-                if (time>280 && set_new_length_for_spring_9) {
+                if (time>470 && set_new_length_for_spring_9) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -626,7 +628,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_9=false;
                 }
                 
-                if (time>310 && set_new_length_for_spring_10) {
+                if (time>520 && set_new_length_for_spring_10) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -637,7 +639,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_10=false;
                 }
                 
-                if (time>340 && set_new_length_for_spring_11) {
+                if (time>570 && set_new_length_for_spring_11) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -648,7 +650,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_11=false;
                 }
                 
-                if (time>370 && set_new_length_for_spring_12) {
+                if (time>620 && set_new_length_for_spring_12) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -659,7 +661,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_12=false;
                 }
                 
-                if (time>400 && set_new_length_for_spring_13) {
+                if (time>670 && set_new_length_for_spring_13) {
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -670,7 +672,7 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_13=false;
                 }
                 
-                if (time>430 && set_new_length_for_spring_14) {
+                if (time>720 && set_new_length_for_spring_14) {
                    int atom1, atom2 ;
                     double length, stiffness;
                     omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
@@ -682,21 +684,21 @@ int main(int argc, char **argv)
                     set_new_length_for_spring_14=false;
                 }
                 
-                */ 
+                
                  
                  
                 //the monte_carlo part
 
                  //if(progress==0 or progress==25 or progress==50 or progress==75){ 
-                if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
+                if ((frame%50==1) and GenConst::MC_step !=0){
                  
                     //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
-                    
+                    cout<<"Frame  "<<frame<<endl;
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
                 }
                 
-                if(progress%5==1 and  GenConst::MC_step !=0){
+                if(frame%50==2 and  GenConst::MC_step !=0){
                     
                     cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
                     cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;

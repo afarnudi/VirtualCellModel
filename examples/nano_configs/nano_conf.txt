@@ -1,12 +1,12 @@
 
-Simulation_Time_In_Ps	460
+Simulation_Time_In_Ps	7700
 
 Report_Interval_In_Fs	100
 
 Step_Size_In_Fs	0.1
 Integrator_type	2
 temperature	300
-frictionInPs	5
+frictionInPs	1
 K	1
 MD_T	1
 Num_of_Membranes	3	nano_c/previous/nano_mem_high.txt nano_c/previous/rescale1/nano_particle_1 nano_c/previous/rescale1/nano_particle_2 nano_c/previous/rescale1/nano_particle_3 nano_c/previous/rescale1/nano_particle_4 nano_c/previous/rescale1/nano_particle_5 nano_c/previous/rescale1/nano_particle_6 nano_c/previous/rescale1/nano_particle_7 nano_c/previous/rescale1/nano_particle_8 nano_c/previous/rescale1/nano_particle_9 nano_c/previous/rescale1/nano_particle_10 nano_c/previous/rescale1/nano_particle_11 nano_c/previous/rescale1/nano_particle_12 nano_c/previous/rescale1/nano_particle_13 nano_c/previous/rescale1/nano_particle_14 nano_c/previous/rescale1/nano_particle_15 nano_c/previous/rescale1/nano_particle_16 nano_c/previous/rescale1/nano_particle_17 nano_c/previous/rescale1/nano_particle_18 nano_c/previous/rescale1/nano_particle_19 nano_c/previous/rescale1/nano_particle_20
@@ -16,7 +16,7 @@ Num_of_Chromatins	0	configs/chromo/chromo_0.txt configs/chromo/chromo_1.txt	conf
 Actin_Membrane_Bond_Coefficient	400
 MD_thrmo_step	200
 Bussi_tau	30
-MC_step 0
+MC_step 600
 trajectory_file_name	1	nano
 excluded_volume_interactio	0
 //WriteVelocitiesandForces	1

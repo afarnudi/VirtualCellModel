@@ -99,13 +99,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::HarmonicBondForce* calcforce=new OpenMM::HarmonicBondForce(); 
     
     //for creating a non-spherical nano-particle
-    OpenMM::HarmonicBondForce* nonspherical=new OpenMM::HarmonicBondForce();
+    //OpenMM::HarmonicBondForce* nonspherical=new OpenMM::HarmonicBondForce();
     
-    /* //calcforce *****************************
+     //calcforce *****************************
     calcforce->addBond(2574,2587, 6* OpenMM::NmPerAngstrom, 0* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
     system.addForce(calcforce);
      */
-     
+     /*
      //non-spherical
      nonspherical->addBond(2574,2587, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
      nonspherical->addBond(2573,2586, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
