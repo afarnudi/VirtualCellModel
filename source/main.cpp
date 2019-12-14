@@ -127,8 +127,12 @@ int main(int argc, char **argv)
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
     string general_file_name="general-config.txt";
-    cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\nexample:\t../../myconfigfile.txt\n\nPath to configuration file: ";
-    cin>>general_file_name;
+    if (argc == 1) {
+        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
+        exit(EXIT_FAILURE);
+    }
+    
+    general_file_name = argv[1];
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
