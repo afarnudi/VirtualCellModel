@@ -34,9 +34,9 @@ import matplotlib.animation
 fig, ax = plt.subplots()
 
 
-cutoff = 4
+cutoff = 2.5
 
-init_t = 250
+init_t = 1000
 fin_t  = 2000
 
 eye = np.eye(dim1)
@@ -60,6 +60,7 @@ def update(i):
         d = squareform( pdist(data[init_t, :, :]) ) < cutoff
         d = d.astype(int)
         d = d.astype(float)
+        d += np.ones_like(d)*0.02
         return d
     else :
         c = np.zeros((dim1,dim1))
@@ -68,8 +69,8 @@ def update(i):
             c += b.astype(int)
         c = c.astype(bool)
         c = c.astype(int)
-        d += c - eye
-        return d/np.amax(d)
+        d += c #- eye
+        return np.log(d)/np.amax(np.log(d))
 
 def animate(i):
     im.set_data(update(i))
@@ -79,5 +80,5 @@ def animate(i):
     
 
 ani = matplotlib.animation.FuncAnimation(fig, animate, frames = (fin_t-init_t)//time_bin, interval=1)
-ani.save(filename+'_cm.gif', writer='imagemagick', fps=fs//10)
+ani.save(filename+'_cm.gif', writer='imagemagick', fps=(fin_t-init_t)//10)
 
