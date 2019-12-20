@@ -1,0 +1,63 @@
+//Set to 1 if you want to continue an finished/interrupted simulation. Followed by the directory of the resume file. The resume file is automatically generated during specific steps of the simulation that may be adjusted in the general configuration file. Default 0
+Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
+
+//Set 1 for mesh files produced with gmsh V2, and 2 for .ply files (blender). Followed by the directory of the mesh file relative to the executable.
+//Mesh_file_name	1	Mesh/Membrane_sep_1
+//Mesh_file_name	2	Mesh/vesicle.ply
+Mesh_file_name	2	particle.ply
+
+//The mass of each membrane node. Default 1
+Node_Mass	10
+
+//Radius of each membrane node. Default 1
+Node_radius	0.4
+
+//Energy of membrane nodes. 1) FENE with a log barrier. 2) Harmonic spring. Defaul2 
+spring_model	2
+
+//Harmonic spring coefficient in KJ per nanometre squared. Default 10*KT
+Spring_coefficient	400
+//Dihedral bending energy coefficent of triangle pairs. Default 20*KT
+Bending_coefficient	80
+
+//Viscosity coefficient of the membrane. Default 0
+Damping_coefficient	0
+
+
+//Shift membrane position in the x direction in nanometers. Default 0
+Shift_in_X_direction 	44.3336     
+
+//Shift membrane position in the y direction in nanometers. Default 0
+Shift_in_Y_direction	2.91226   
+
+
+//Shift membrane position in the z direction in nanometers. Default 0
+Shift_in_Z_direction	-18.1674
+
+//Set an initial speed in the -y direction. Default 0
+Downward_speed	0
+
+//An X coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
+X_in_mem	0
+
+
+//An Y coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
+Y_in_mem	0
+
+
+//An Z coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
+Z_in_mem	0
+
+rescale_factor	1
+
+sigma_LJ_12_6	1.6
+epsilon_LJ_12_6	15
+fixing_com	0
+
+//Update_radius	5
+//Begin_update_time_in_Ps	0
+//End_update_time_in_Ps	10
+
+//Relaxation	0
+//Relax_with_actin	0
+

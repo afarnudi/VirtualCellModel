@@ -96,17 +96,17 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomBondForce*>X4harmonics;
     vector<OpenMM::CustomBondForce*> FENEs;
     //for calculating the force between nano_particles which is induced by membrane.
-    OpenMM::HarmonicBondForce* calcforce=new OpenMM::HarmonicBondForce(); 
+    //OpenMM::HarmonicBondForce* calcforce=new OpenMM::HarmonicBondForce(); 
     
     //for creating a non-spherical nano-particle
     //OpenMM::HarmonicBondForce* nonspherical=new OpenMM::HarmonicBondForce();
     
      //calcforce *****************************
-    calcforce->addBond(2574,2587, 6* OpenMM::NmPerAngstrom, 0* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    system.addForce(calcforce);
-     */
-     /*
-     //non-spherical
+    //calcforce->addBond(2574,2587, 6* OpenMM::NmPerAngstrom, 0* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+    //system.addForce(calcforce);
+     
+     
+    /* //non-spherical
      nonspherical->addBond(2574,2587, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
      nonspherical->addBond(2573,2586, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
      nonspherical->addBond(2572,2585, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
@@ -135,7 +135,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     omm->harmonic = HarmonicBond;
-    omm->calcforce=calcforce;
+    //omm->calcforce=calcforce;
     omm->x4harmonic=X4harmonics;
     time_dependant_data->Kelvin_VoigtBond = Kelvin_VoigtBond;
     time_dependant_data->Kelvin_Nominal_length_calc();
