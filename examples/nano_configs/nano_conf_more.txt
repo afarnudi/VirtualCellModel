@@ -1,5 +1,5 @@
 
-Simulation_Time_In_Ps	200
+Simulation_Time_In_Ps	500
 
 Report_Interval_In_Fs	100
 
@@ -16,7 +16,7 @@ Num_of_Chromatins	0	configs/chromo/chromo_0.txt configs/chromo/chromo_1.txt	conf
 Actin_Membrane_Bond_Coefficient	400
 MD_thrmo_step	200
 Bussi_tau	30
-MC_step 0
+MC_step 2400
 trajectory_file_name	1	nano
 excluded_volume_interactio	0
 //WriteVelocitiesandForces	1

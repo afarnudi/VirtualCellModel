@@ -504,7 +504,7 @@ int main(int argc, char **argv)
                 }
                 //calcforce *****************************
                 //calculating the adhession force induced by membrane between the nanoparitcles.
-                
+                /*
                 if (time>20 && start_of_force_calc) {
                     int atom1, atom2 ;
                     cout<<"Frameee  "<<frame<<endl;
@@ -689,7 +689,7 @@ int main(int argc, char **argv)
                 }
                 
                 
-                 
+                 */
                  
                 //the monte_carlo part
 
