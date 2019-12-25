@@ -45,7 +45,8 @@ void collect_data(MyAtomInfo atoms[],
                   double timeInPs){
     
     GenConst::data_colection_times.push_back(timeInPs);
-    write_data(atoms, buffer);
+    mems[0].calculate_volume();
+    write_data(atoms, buffer, mems[0].return_volume() );
 }
 
 
@@ -62,19 +63,20 @@ using std::string;
 using std::endl;
 
 void write_data(MyAtomInfo atoms[],
-                string buffer){
+                string buffer,
+                double volume){
     
     
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tv_x_InAngperPs v_y_InAngperPs v_z_InAngperPs f_x_inN f_y_inN f_z_inN Pressure_in_N/An^2\n";
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(AngperPs) vy(AngperPs) vz(AngperPs) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Ang^3)\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
         wdata<<t<<"\t"<<atoms[t].velocityInAngperPs[0] << "\t" << atoms[t].velocityInAngperPs[1] << "\t" << atoms[t].velocityInAngperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
-        wdata<<"\n";
+        wdata<<"\t"<<volume<<"\n";
     }
 }

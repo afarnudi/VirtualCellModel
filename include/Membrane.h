@@ -44,7 +44,7 @@ private:
 
     std::string label;
 
-    
+    double volume;
     
     int index;
     /*variables*/
@@ -254,6 +254,12 @@ private:
 
     
 public:
+    /**Returns the last saved volume*/
+    double return_volume(void){
+        return volume;
+    }
+    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
+    void calculate_volume(void);
     /**Return the new node radius 'end update time' in Ps.*/
     double get_End_update_time_in_Ps(void){
         return End_update_time_in_Ps;
