@@ -99,9 +99,9 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
     }
     
     for (int i=atom_count; i<atom_count+Num_of_Nodes; i++) {
-        Node_Position[i-atom_count][0] = atoms[i].posInAng[0];
-        Node_Position[i-atom_count][1] = atoms[i].posInAng[1];
-        Node_Position[i-atom_count][2] = atoms[i].posInAng[2];
+        Node_Position[i-atom_count][0] = atoms[i].posInNm[0];
+        Node_Position[i-atom_count][1] = atoms[i].posInNm[1];
+        Node_Position[i-atom_count][2] = atoms[i].posInNm[2];
         
         Node_Velocity[i-atom_count][0] = atoms[i].velocityInAngperPs[0];
         Node_Velocity[i-atom_count][1] = atoms[i].velocityInAngperPs[1];

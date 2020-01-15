@@ -42,7 +42,7 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
         case 2: //harmonic
             {
                 parameters.resize(2);
-                parameters[0]=bonds[bond_index].nominalLengthInAngstroms* OpenMM::NmPerAngstrom; //I must check the bond index in case of having other objects
+                parameters[0]=bonds[bond_index].nominalLengthInNm; //I must check the bond index in case of having other objects
                 parameters[1]=bonds[bond_index].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
                 omm->harmonic->setBondParameters(bond_index,u1,u4, parameters[0], parameters[1] );
                     

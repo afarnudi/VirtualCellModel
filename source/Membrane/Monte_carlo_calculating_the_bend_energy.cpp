@@ -13,10 +13,10 @@ double Membrane::calculating_the_bend_energy(int uncommon1, int common2, int com
     double bending_energy;
     double origin_point[3]={0,0,0}; //in order to use the center of mass it is not working if we use membrane's COM, because node positions in memberane class dont update
     for (int index=0; index<3; index++){
-        p1[index]=atoms[uncommon1+number_of_privious_mem_nodes].posInAng[index];
-        p2[index]=atoms[common2+number_of_privious_mem_nodes].posInAng[index];
-        p3[index]=atoms[common3+number_of_privious_mem_nodes].posInAng[index];
-        p4[index]=atoms[uncommon4+number_of_privious_mem_nodes].posInAng[index];
+        p1[index]=atoms[uncommon1+number_of_privious_mem_nodes].posInNm[index];
+        p2[index]=atoms[common2+number_of_privious_mem_nodes].posInNm[index];
+        p3[index]=atoms[common3+number_of_privious_mem_nodes].posInNm[index];
+        p4[index]=atoms[uncommon4+number_of_privious_mem_nodes].posInNm[index];
         
         p3p4[index]=p4[index]-p3[index];
         p2p4[index]=p4[index]-p2[index];
@@ -69,15 +69,15 @@ double Membrane::calculating_the_bend_energy_2(int uncommon1, int common2, int c
     
     //Update the triangle node positions from OpenMM
     for (int k=0; k<3; k++) {
-            points[0][k]=atoms[node_A+number_of_privious_mem_nodes].posInAng[k];
-            points[1][k]=atoms[node_B+number_of_privious_mem_nodes].posInAng[k];
-            points[2][k]=atoms[node_C+number_of_privious_mem_nodes].posInAng[k];
+            points[0][k]=atoms[node_A+number_of_privious_mem_nodes].posInNm[k];
+            points[1][k]=atoms[node_B+number_of_privious_mem_nodes].posInNm[k];
+            points[2][k]=atoms[node_C+number_of_privious_mem_nodes].posInNm[k];
            
     }
     calc_surface_coefficeints_2(points, A, B, C);
             
     for (int k=0; k<3; k++) {
-            points[2][k]=atoms[node_D+number_of_privious_mem_nodes].posInAng[k];
+            points[2][k]=atoms[node_D+number_of_privious_mem_nodes].posInNm[k];
             
     }
     calc_surface_coefficeints_2(points, E, F, G);

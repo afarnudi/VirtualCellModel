@@ -9,11 +9,11 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
         bonds[i].class_label = mem.get_label() + mem.get_label();
         if (mem.get_new_node_radius()!=-1) {
-            bonds[i].nominalLengthInAngstroms=mem.get_avg_node_dist();
+            bonds[i].nominalLengthInNm=mem.get_avg_node_dist();
         } else {
-            bonds[i].nominalLengthInAngstroms=2*mem.get_new_node_radius();
+            bonds[i].nominalLengthInNm=2*mem.get_new_node_radius();
         }
-        bonds[i].nominalLengthInAngstroms=mem.get_avg_node_dist();
+        bonds[i].nominalLengthInNm=mem.get_avg_node_dist();
         switch (bonds[i].type) {
                 //FENE
             case 1:
@@ -96,13 +96,13 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=act.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
                 break;
                 
                 //Kelvin-Voigt
             case 4:
-                bonds[i].nominalLengthInAngstroms=act.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=act.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
                 bonds[i].dampInKcalPsPerAngstrom2=act.get_kelvin_damping_coefficient();
                 break;
@@ -141,7 +141,7 @@ Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
         bonds[i].type = type;
         bonds[i].atoms[0]=act.return_ActMem_shared_act_atom(k, i);
         bonds[i].atoms[1]=act.return_ActMem_shared_mem_atom(k, i);
-        bonds[i].nominalLengthInAngstroms=nominal_length;
+        bonds[i].nominalLengthInNm=nominal_length;
         bonds[i].stiffnessInKcalPerAngstrom2=stiffness;
         bonds[i].class_label = act.get_label() + GenConst::Membrane_label+std::to_string(k);
     }
@@ -168,7 +168,7 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInAngstroms=ecm.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=ecm.get_avg_node_dist();
                 bonds[i].stiffnessInKcalPerAngstrom2=ecm.get_spring_stiffness_coefficient();
                 break;
                 
@@ -200,7 +200,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInAngstroms=2*chromo.get_node_radius();
+                bonds[i].nominalLengthInNm=2*chromo.get_node_radius();
                 bonds[i].stiffnessInKcalPerAngstrom2=chromo.get_spring_stiffness_coefficient();
                 break;
                 

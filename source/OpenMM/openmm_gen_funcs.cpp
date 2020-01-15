@@ -76,7 +76,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
     const std::vector<Vec3>& Forces        = state.getForces();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
+            atoms[i].posInNm[j] = positionsInNm[i][j];
             atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
             if (GenConst::WantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
@@ -111,7 +111,7 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
     
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
+            atoms[i].posInNm[j] = positionsInNm[i][j];
         }
     }
 }
@@ -157,9 +157,9 @@ void myWritePDBFrame(int frameNum,
                 atoms[n].pdb,
                 chain[index],
                 double(index),
-                atoms[n].posInAng[0],
-                atoms[n].posInAng[1],
-                atoms[n].posInAng[2],
+                atoms[n].posInNm[0],
+                atoms[n].posInNm[1],
+                atoms[n].posInNm[2],
                 atoms[n].stretching_energy,
                 atoms[n].energy,
                 atoms[n].symbol);

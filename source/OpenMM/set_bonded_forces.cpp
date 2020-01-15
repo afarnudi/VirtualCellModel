@@ -62,8 +62,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
                 HarmonicBond->addBond(atom[0], atom[1],
-                                      bonds[i].nominalLengthInAngstroms
-                                      * OpenMM::NmPerAngstrom,
+                                      bonds[i].nominalLengthInNm,
                                       bonds[i].stiffnessInKcalPerAngstrom2
                                       * OpenMM::KJPerKcal
                                       * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
@@ -84,7 +83,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                     X4harmonics[X4harmonic_index]->addPerBondParameter("k_bond");
                     system.addForce(X4harmonics[X4harmonic_index]);
                 }
-                double r_rest =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
+                double r_rest =bonds[i].nominalLengthInNm;
                 double k_bond=bonds[i].stiffnessInKcalPerAngstrom4
                 * OpenMM::KJPerKcal
                 * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
@@ -107,8 +106,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
                 Kelvin_VoigtBond->addBond(atom[0], atom[1],
-                                          bonds[i].nominalLengthInAngstroms
-                                          * OpenMM::NmPerAngstrom,
+                                          bonds[i].nominalLengthInNm,
                                           bonds[i].stiffnessInKcalPerAngstrom2
                                           * OpenMM::KJPerKcal
                                           * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);

@@ -17,8 +17,8 @@ struct MyAtomInfo
     int type;
     char* pdb;
     char symbol;
-    double initPosInAng[3];
-    double posInAng[3];
+    double initPosInNm[3];
+    double posInNm[3];
     double velocityInAngperPs[3];
     double mass;
     double radius;
@@ -36,7 +36,7 @@ struct Bonds{
     int type;
     int atoms[2];
     std::string class_label;
-    double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
+    double nominalLengthInNm, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
     double dampInKcalPsPerAngstrom2;
     double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     bool   canConstrain;
@@ -126,7 +126,7 @@ struct TimeDependantData {
             for(int i=0; i<Num_Bonds; i++)
             {
                 Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
-                dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
+                dist =sqrt ( ( atoms[atom1].posInNm[0] - atoms[atom2].posInNm[0]) * ( atoms[atom1].posInNm[0] - atoms[atom2].posInNm[0]) + ( atoms[atom1].posInNm[1] - atoms[atom2].posInNm[1]) * ( atoms[atom1].posInNm[1] - atoms[atom2].posInNm[1]) + ( atoms[atom1].posInNm[2] - atoms[atom2].posInNm[2]) * ( atoms[atom1].posInNm[2] - atoms[atom2].posInNm[2]) ) ;
                 
                 distInAng.push_back(dist);
             }

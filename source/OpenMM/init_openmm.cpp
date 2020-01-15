@@ -63,9 +63,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::CMMotionRemover* comremover;
     comremover = new OpenMM::CMMotionRemover(GenConst::CMMotionRemoverStep);
 
-//    std::vector< std::pair< int, int > > excluded_bonds;
-    
-    
     set_interactions(atoms,
                      bonds,
                      membrane_set,
