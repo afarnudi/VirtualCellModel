@@ -110,3 +110,9 @@ WantForce	1
 
 //Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
 WriteVelocitiesandForces	0
+
+//Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false
+CMMotionRemover	0
+
+//The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10
+CMMotionRemoverStep	10

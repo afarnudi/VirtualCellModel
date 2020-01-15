@@ -102,6 +102,8 @@ namespace GenConst {
     bool   WantEnergy;
     bool   WantForce;
     bool   WriteVelocitiesandForces;
+    bool   CMMotionRemover;
+    int    CMMotionRemoverStep;
 
 
 
@@ -459,8 +461,8 @@ int main(int argc, char **argv)
             
             int total_step_num = 0;
             double last_update_time=0;
-            bool expanding = true;
-            bool set_spring = true;
+            bool expanding = false;
+            bool set_spring = false;
             
             for (int frame=1; ; ++frame) {
 
@@ -470,7 +472,7 @@ int main(int argc, char **argv)
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-                myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
+                myWritePDBFrame(frame, time, energy, potential_energy, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);

@@ -59,8 +59,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*> ext_force;
     
+    
     OpenMM::CMMotionRemover* comremover;
-    comremover = new OpenMM::CMMotionRemover(10);
+    comremover = new OpenMM::CMMotionRemover(GenConst::CMMotionRemoverStep);
 
 //    std::vector< std::pair< int, int > > excluded_bonds;
     
@@ -160,7 +161,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
     }
     
-    omm->system->addForce(comremover);
+    if (GenConst::CMMotionRemover) {
+        omm->system->addForce(comremover);
+    }
     
     omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     omm->context->setPositions(initialPosInNm);

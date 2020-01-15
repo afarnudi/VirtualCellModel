@@ -38,3 +38,5 @@ Chromatin_label	0
 ECM_label	0
 WantEnergy	1
 WantForce	1
+CMMotionRemover	0
+CMMotionRemoverStep	10
