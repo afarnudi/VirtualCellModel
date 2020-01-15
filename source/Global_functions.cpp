@@ -34,7 +34,7 @@ const int EndOfList=-1;
 using std::vector;
 
 
-void write_data(MyAtomInfo atoms[], string buffer);
+void write_data(MyAtomInfo atoms[], string buffer, double volume);
 //void write_CM(string buffer, vector<Chromatin> chromos);
 //double calculate_pressure(vector<Membrane> mems);
 

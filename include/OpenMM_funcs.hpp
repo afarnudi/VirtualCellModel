@@ -109,6 +109,7 @@ void          myTerminateOpenMM(MyOpenMMData*,
 void myWritePDBFrame(int                frameNum,
                      double             timeInPs,
                      double             energyInKcal,
+                     double             potential_energy,
                      const MyAtomInfo   atoms[],
                      const Bonds        bonds[],
                      std::string        traj_name);

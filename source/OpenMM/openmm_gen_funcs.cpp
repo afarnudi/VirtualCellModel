@@ -89,8 +89,8 @@ void myGetOpenMMState(MyOpenMMData* omm,
     energyInKcal = 0;
 
     if (GenConst::WantEnergy){
-    energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
-     * OpenMM::KcalPerKJ;
+        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+        * OpenMM::KcalPerKJ;
         potential_energyInKcal = (state.getPotentialEnergy())
         * OpenMM::KcalPerKJ;
     }
@@ -121,6 +121,7 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
 void myWritePDBFrame(int frameNum,
                      double timeInPs,
                      double energyInKcal,
+                     double potential_energy,
                      const MyAtomInfo atoms[],
                      const Bonds bonds[],
                      std::string traj_name)
@@ -129,8 +130,10 @@ void myWritePDBFrame(int frameNum,
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
-    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-            timeInPs, energyInKcal);
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f potential energy=%.3f kcal/mole\n",
+            timeInPs,
+            energyInKcal,
+            potential_energy);
     int index=0;
     string hist = atoms[0].pdb;
     if (atoms[0].class_label == "Chromatin") {
