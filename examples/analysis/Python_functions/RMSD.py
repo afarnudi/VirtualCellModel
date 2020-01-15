@@ -16,7 +16,5 @@ def RMSD(data, time, lab, ax):
     ax.set_xlabel("time (Ps)")
     ax.set_ylabel("RMSD")
     ax.grid(True)
-    leg = ax.legend(loc='upper center', ncol=2)
-    for line in leg.get_lines():
-        line.set_linewidth(4.0)
+    ax.legend()
     print('{}: RMSD finished.'.format(lab))

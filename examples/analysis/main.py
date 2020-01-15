@@ -6,7 +6,7 @@ This is a temporary script file.
 """
 
 import matplotlib.pyplot as plt
-#import numpy as np
+import numpy as np
 
 from Python_functions.import_pdb      import import_trajectories_from_pdb
 #from Python_functions.gyration_radius import gyration
@@ -14,56 +14,31 @@ from Python_functions.RMSD            import RMSD
 from Python_functions.R2N             import R2N
 import sys
 
-#pdbname = 'chromo2019_10_28_time_10_48'+'.pdb'
-#pdbname = 'chromo2019_11_09_time_10_23'+'.pdb'
+input_path = '../../../Membrae/DerivedData/Membrae/Build/Products/Debug/Results/'
+output_path = input_path
 
 pdbname = 'chromo2019_11_18_time_23_15'+'.pdb'
 pdbname = 'chromo2019_11_22_time_11_40'+'.pdb'
 
-pdbname = 'chromo2019_11_23_time_07_29'+'.pdb'
-pdbname = str(sys.argv[1]) + '.pdb'
+pdbname = 'chromo2019_11_30_time_08_38.pdb'
+pdbname = input_path + str(sys.argv[1]) + '.pdb'
 
-#data, time = import_trajectories_from_pdb(pdbname, 'mem0')
 data, time = import_trajectories_from_pdb(pdbname)
 
-fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(12,4))
+fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(10,4))
 
 mem_nodes = 162
+ini_t = 400
+fin_t = 800
 
-RMSD(data[:,mem_nodes:1000+mem_nodes,:]     , time[:], 'ch0',ax1)
-RMSD(data[:,mem_nodes+1000:2000+mem_nodes,:], time[:], 'ch1',ax1)
-RMSD(data[:,mem_nodes+2000:3000+mem_nodes,:], time[:], 'ch2',ax1)
-RMSD(data[:,mem_nodes+3000:,:],               time[:], 'ch3',ax1)
 
-RMSD(data[100:,mem_nodes:1000+mem_nodes,:]     , time[100:], ' ',ax1)
-RMSD(data[100:,mem_nodes+1000:2000+mem_nodes,:], time[100:], ' ',ax1)
-RMSD(data[100:,mem_nodes+2000:3000+mem_nodes,:], time[100:], ' ',ax1)
-RMSD(data[100:,mem_nodes+3000:,:],               time[100:], ' ',ax1)
+RMSD(data[ini_t:fin_t,mem_nodes:1000+mem_nodes,:]     , time[ini_t:fin_t], 'ch0',ax1)
+RMSD(data[ini_t:fin_t,mem_nodes+1000:2000+mem_nodes,:], time[ini_t:fin_t], 'ch1',ax1)
+RMSD(data[ini_t:fin_t,mem_nodes+2000:3000+mem_nodes,:], time[ini_t:fin_t], 'ch2',ax1)
+RMSD(data[ini_t:fin_t,mem_nodes+3000:,:],               time[ini_t:fin_t], 'ch3',ax1)
 
-R2N (data[400:,mem_nodes:1000+mem_nodes,:],      'ch0',ax2)
-R2N (data[400:,mem_nodes+1000:2000+mem_nodes,:], 'ch1',ax2)
-R2N (data[400:,mem_nodes+2000:3000+mem_nodes,:], 'ch2',ax2)
-R2N (data[400:,mem_nodes+3000:,:],               'ch3',ax2)
-
-left, right = ax2.get_xlim()
-ax2.set_xlim(20, right)
-down, up = ax2.get_ylim()
-ax2.set_ylim(8, up)
 
 fig.subplots_adjust(wspace=.3)
 
-#leg =ax1.legend()
-#for line in leg.get_lines():
-#    line.set_linewidth(4.0)
-
-
-#fig2, ax3 = plt.subplots()
-#rg = gyration(data, time)
-#ax3.scatter(time,rg, label='mem0')
-#ax3.set_title("Radius of Gyration of structures")
-#ax3.set_xlabel("time (Ps)")
-#ax3.set_ylabel("Rg")
-#ax3.grid(True)
-#ax3.legend()
 
 plt.show()
