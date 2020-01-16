@@ -35,6 +35,9 @@ private: //(if we define these constants as private members of the class, we can
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
+    double x_speed=0.0; //???
+    double y_speed=0.0;
+    double z_speed=0.0;
     
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -176,6 +179,13 @@ public: //these are using in monte carlo flip function. for defining them as pri
             Node_Position[i][0]+=Shift_in_X_direction;
             Node_Position[i][1]+=Shift_in_Y_direction;
             Node_Position[i][2]+=Shift_in_Z_direction;
+        }
+    }
+    void shift_node_velocities(void){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Velocity[i][0]+=x_speed;
+            Node_Velocity[i][1]+=y_speed;
+            Node_Velocity[i][2]+=z_speed;
         }
     }
     int get_num_of_nodes(void){

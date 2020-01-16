@@ -192,7 +192,13 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
         Shift_in_Y_direction=param_value;
     } else if (param_name=="Shift_in_Z_direction"){
         Shift_in_Z_direction=param_value;
-    } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
+    } else if (param_name=="x_speed"){
+           x_speed=param_value;
+       } else if (param_name=="y_speed"){
+           y_speed=param_value;
+       } else if (param_name=="z_speed"){
+           z_speed=param_value;
+       } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
         Num_of_Nodes=param_value;
     } else if (param_name=="num_of_node_types"){
         num_of_node_types=param_value;
