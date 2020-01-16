@@ -394,10 +394,10 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             GenConst::Load_from_checkpoint=it->second;
         }
     } else if (param_name=="Checkpoint_path"){
-           it = general_param_map.find(param_name);
-           if (it != general_param_map.end()){
-               GenConst::Checkpoint_path="Results/Resumes/OpenMM/";
-           }
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Checkpoint_path="Results/Resumes/OpenMM/";
+        }
     } else if (param_name=="write_bonds_to_PDB"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
@@ -411,9 +411,9 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             if (it->second == 0) {
-                GenConst::write_bonds_to_PDB= false;
+                GenConst::CMMotionRemover= false;
             } else {
-                GenConst::write_bonds_to_PDB= true;
+                GenConst::CMMotionRemover= true;
             }
         }
     } else if (param_name=="CMMotionRemoverStep"){
