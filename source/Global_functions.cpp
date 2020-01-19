@@ -45,8 +45,13 @@ void collect_data(MyAtomInfo atoms[],
                   double timeInPs){
     
     GenConst::data_colection_times.push_back(timeInPs);
-    mems[0].calculate_volume();
-    write_data(atoms, buffer, mems[0].return_volume() );
+    
+    double mem_volume = 0;
+    if (mems.size()!=0) {
+        mems[0].calculate_volume();
+        mem_volume = mems[0].return_volume();
+    }
+    write_data(atoms, buffer, mem_volume);
 }
 
 
@@ -71,9 +76,9 @@ void write_data(MyAtomInfo atoms[],
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(AngperPs) vy(AngperPs) vz(AngperPs) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Ang^3)\n";
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(Nm/Ps) vy(Nm/Ps) vz(Nm/Ps) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Ang^3)\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
-        wdata<<t<<"\t"<<atoms[t].velocityInAngperPs[0] << "\t" << atoms[t].velocityInAngperPs[1] << "\t" << atoms[t].velocityInAngperPs[2];
+        wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }

@@ -19,7 +19,7 @@ struct MyAtomInfo
     char symbol;
     double initPosInNm[3];
     double posInNm[3];
-    double velocityInAngperPs[3];
+    double velocityInNmperPs[3];
     double mass;
     double radius;
     double sigma_LJ_12_6;

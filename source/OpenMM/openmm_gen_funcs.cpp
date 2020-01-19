@@ -77,7 +77,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
             atoms[i].posInNm[j] = positionsInNm[i][j];
-            atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
+            atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
             if (GenConst::WantForce) {
                 atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
             }

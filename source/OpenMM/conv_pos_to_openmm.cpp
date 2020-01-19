@@ -25,9 +25,9 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].posInNm[0]=mem.get_node_position(i, 0);
         myatominfo[i].posInNm[1]=mem.get_node_position(i, 1);
         myatominfo[i].posInNm[2]=mem.get_node_position(i, 2);
-        myatominfo[i].velocityInAngperPs[0]=mem.get_node_velocity(i, 0);
-        myatominfo[i].velocityInAngperPs[1]=mem.get_node_velocity(i, 1);
-        myatominfo[i].velocityInAngperPs[2]=mem.get_node_velocity(i, 2);
+        myatominfo[i].velocityInNmperPs[0]=mem.get_node_velocity(i, 0);
+        myatominfo[i].velocityInNmperPs[1]=mem.get_node_velocity(i, 1);
+        myatominfo[i].velocityInNmperPs[2]=mem.get_node_velocity(i, 2);
         myatominfo[i].mass=mem.get_node_mass();
         myatominfo[i].radius=mem.get_node_radius();
         myatominfo[i].sigma_LJ_12_6=mem.get_sigma_LJ_12_6();
@@ -67,9 +67,9 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].initPosInNm[0]=act.get_node_position(i, 0);
         myatominfo[i].initPosInNm[1]=act.get_node_position(i, 1);
         myatominfo[i].initPosInNm[2]=act.get_node_position(i, 2);
-        myatominfo[i].velocityInAngperPs[0]=act.get_node_velocity(i, 0);
-        myatominfo[i].velocityInAngperPs[1]=act.get_node_velocity(i, 1);
-        myatominfo[i].velocityInAngperPs[2]=act.get_node_velocity(i, 2);
+        myatominfo[i].velocityInNmperPs[0]=act.get_node_velocity(i, 0);
+        myatominfo[i].velocityInNmperPs[1]=act.get_node_velocity(i, 1);
+        myatominfo[i].velocityInNmperPs[2]=act.get_node_velocity(i, 2);
         myatominfo[i].posInNm[0]=act.get_node_position(i, 0);
         myatominfo[i].posInNm[1]=act.get_node_position(i, 1);
         myatominfo[i].posInNm[2]=act.get_node_position(i, 2);
@@ -108,9 +108,9 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].posInNm[0]=ecm.get_node_position(i, 0);
         myatominfo[i].posInNm[1]=ecm.get_node_position(i, 1);
         myatominfo[i].posInNm[2]=ecm.get_node_position(i, 2);
-        myatominfo[i].velocityInAngperPs[0]=ecm.get_node_velocity(i, 0);
-        myatominfo[i].velocityInAngperPs[1]=ecm.get_node_velocity(i, 1);
-        myatominfo[i].velocityInAngperPs[2]=ecm.get_node_velocity(i, 2);
+        myatominfo[i].velocityInNmperPs[0]=ecm.get_node_velocity(i, 0);
+        myatominfo[i].velocityInNmperPs[1]=ecm.get_node_velocity(i, 1);
+        myatominfo[i].velocityInNmperPs[2]=ecm.get_node_velocity(i, 2);
         myatominfo[i].mass=ecm.get_node_mass();
         myatominfo[i].radius=ecm.get_node_radius();
         myatominfo[i].sigma_LJ_12_6=ecm.get_sigma_LJ_12_6();
@@ -147,9 +147,9 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         myatominfo[i].posInNm[0]=chromo.get_node_position(i, 0);
         myatominfo[i].posInNm[1]=chromo.get_node_position(i, 1);
         myatominfo[i].posInNm[2]=chromo.get_node_position(i, 2);
-        myatominfo[i].velocityInAngperPs[0]=chromo.get_node_velocity(i, 0);
-        myatominfo[i].velocityInAngperPs[1]=chromo.get_node_velocity(i, 1);
-        myatominfo[i].velocityInAngperPs[2]=chromo.get_node_velocity(i, 2);
+        myatominfo[i].velocityInNmperPs[0]=chromo.get_node_velocity(i, 0);
+        myatominfo[i].velocityInNmperPs[1]=chromo.get_node_velocity(i, 1);
+        myatominfo[i].velocityInNmperPs[2]=chromo.get_node_velocity(i, 2);
         myatominfo[i].mass=chromo.get_node_mass();
         myatominfo[i].radius=chromo.get_node_radius();
         
