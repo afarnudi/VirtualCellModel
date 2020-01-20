@@ -93,6 +93,7 @@ namespace GenConst {
     int Integrator_type;
     double frictionInPs;
     double temperature;
+    bool CreateCheckpoint;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
     std::string Checkpoint_file_name;
@@ -466,19 +467,22 @@ int main(int argc, char **argv)
             
             for (int frame=1; ; ++frame) {
 
-                double time, energy, potential_energy;
+                double time, energyInKJ, potential_energyInKJ;
                 
-                myGetOpenMMState(omm, time, energy, potential_energy, all_atoms);
+                myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-                myWritePDBFrame(frame, time, energy, potential_energy, all_atoms, all_bonds, traj_name);
+                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
-                omm->context->createCheckpoint(wcheckpoint);
-                //End: Exporting congiguration of classes for simulation resume.
+                if (GenConst::CreateCheckpoint) {
+                    omm->context->createCheckpoint(wcheckpoint);
+                    //End: Exporting congiguration of classes for simulation resume.
+                }
+                
                 
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)

@@ -421,7 +421,16 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::CMMotionRemoverStep=it->second;
         }
-    }
+    } else if (param_name=="CreateCheckpoint"){
+           it = general_param_map.find(param_name);
+           if (it != general_param_map.end()){
+               if (it->second == 0) {
+                   GenConst::CreateCheckpoint = false;
+               } else {
+                   GenConst::CreateCheckpoint = true;
+               }
+           }
+       }
     
     
 }
