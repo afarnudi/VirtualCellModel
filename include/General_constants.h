@@ -83,6 +83,8 @@ namespace GenConst {
     extern std::string Chromatin_label;
     /**Set ECM class label. An index will be assigned during runtime. Default ecm*/
     extern std::string ECM_label;
+    /**Create  a checkpoint during each saving step. default true*/
+    extern bool CreateCheckpoint;
     /**Load the context from OpenMM checkpoint (binary file). Default flase*/
     extern bool Load_from_checkpoint;
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
@@ -101,7 +103,7 @@ namespace GenConst {
     extern bool CMMotionRemover;
     /**The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10*/
     extern int CMMotionRemoverStep;
-
+    
     //non config file parameters
 //    extern std::vector<std::vector<std::vector<double> > > data;
     extern std::vector<double> data_colection_times;
