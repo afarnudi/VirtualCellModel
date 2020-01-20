@@ -17,7 +17,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         std::string str = mem.get_label();
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
-        myatominfo[i].energy = 0;
+        myatominfo[i].energyInKJ = 0;
         myatominfo[i].symbol = 'M';
         myatominfo[i].initPosInNm[0]=mem.get_node_position(i, 0);
         myatominfo[i].initPosInNm[1]=mem.get_node_position(i, 1);
@@ -63,7 +63,7 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
         myatominfo[i].symbol = 'A';
-        myatominfo[i].energy = 0;
+        myatominfo[i].energyInKJ = 0;
         myatominfo[i].initPosInNm[0]=act.get_node_position(i, 0);
         myatominfo[i].initPosInNm[1]=act.get_node_position(i, 1);
         myatominfo[i].initPosInNm[2]=act.get_node_position(i, 2);
@@ -101,7 +101,7 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
         myatominfo[i].symbol = 'E';
-        myatominfo[i].energy = 0;
+        myatominfo[i].energyInKJ = 0;
         myatominfo[i].initPosInNm[0]=ecm.get_node_position(i, 0);
         myatominfo[i].initPosInNm[1]=ecm.get_node_position(i, 1);
         myatominfo[i].initPosInNm[2]=ecm.get_node_position(i, 2);
@@ -137,7 +137,7 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         std::string str = chromo.get_label() + std::to_string(chromo.get_node_type(i));
         myatominfo[i].pdb = new char[str.length() + 1];
         strcpy(myatominfo[i].pdb, str.c_str());
-        myatominfo[i].energy = 0;
+        myatominfo[i].energyInKJ = 0;
         myatominfo[i].symbol = 'C';
         myatominfo[i].sigma_LJ_12_6=chromo.get_sigma_LJ_12_6(chromo.get_node_type(i));
         myatominfo[i].epsilon_LJ_12_6=chromo.get_epsilon_LJ_12_6(chromo.get_node_type(i));

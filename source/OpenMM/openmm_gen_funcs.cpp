@@ -52,8 +52,8 @@ void myTerminateOpenMM(MyOpenMMData* omm,
 using OpenMM::Vec3;
 void myGetOpenMMState(MyOpenMMData* omm,
                       double& timeInPs,
-                      double& energyInKcal,
-                      double& potential_energyInKcal,
+                      double& energyInKJ,
+                      double& potential_energyInKJ,
                       MyAtomInfo atoms[])
 {
     int infoMask = 0;
@@ -85,13 +85,13 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
     
     
-    // If energy has been requested, obtain it and convert from kJ to kcal.
-    energyInKcal = 0;
+    // If energy has been requested, obtain it in kJ/mol.
+    energyInKJ = 0;
 
     if (GenConst::WantEnergy){
-        energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
+        energyInKJ = (state.getPotentialEnergy() + state.getKineticEnergy())
         * OpenMM::KcalPerKJ;
-        potential_energyInKcal = (state.getPotentialEnergy())
+        potential_energyInKJ = (state.getPotentialEnergy())
         * OpenMM::KcalPerKJ;
     }
 
@@ -120,8 +120,8 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
 // Given state data, output a single frame (pdb "model") of the trajectory.
 void myWritePDBFrame(int frameNum,
                      double timeInPs,
-                     double energyInKcal,
-                     double potential_energy,
+                     double energyInKJ,
+                     double potential_energyInKJ,
                      const MyAtomInfo atoms[],
                      const Bonds bonds[],
                      std::string traj_name)
@@ -130,10 +130,10 @@ void myWritePDBFrame(int frameNum,
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
-    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f potential energy=%.3f kcal/mole\n",
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%6.6f potential energy=%.3f KJ/mole\n",
             timeInPs,
-            energyInKcal,
-            potential_energy);
+            energyInKJ,
+            potential_energyInKJ);
     int index=0;
     string hist = atoms[0].pdb;
     if (atoms[0].class_label == "Chromatin") {
@@ -161,7 +161,7 @@ void myWritePDBFrame(int frameNum,
                 atoms[n].posInNm[1],
                 atoms[n].posInNm[2],
                 atoms[n].stretching_energy,
-                atoms[n].energy,
+                atoms[n].energyInKJ,
                 atoms[n].symbol);
     }
     

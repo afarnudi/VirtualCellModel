@@ -44,9 +44,10 @@ def import_trajectories_from_pdb(filename, label = None):
     try:
         data = np.load(filename[:-3]+'npy')
         time = np.load(filename[:-4]+'_t.npy')
+        #energy = np.load(filename[:-4]+'_e.npy')
         
         print('{} imported successfully from the "npy"s.'.format(name))
-        return data, time
+        return data, time#, energy
         
     except:
         print('No npy files located. importing from the pdb.')
@@ -85,5 +86,7 @@ def import_trajectories_from_pdb(filename, label = None):
                     data=np.concatenate((data,[xyz]))
     np.save(filename[:-4],data)
     np.save(filename[:-4]+'_t',time)
+    #np.save(filename[:-4]+'_e',energy)
+    
     print('{} imported successfully.'.format(name))
-    return data, time
+    return data, time#, energy

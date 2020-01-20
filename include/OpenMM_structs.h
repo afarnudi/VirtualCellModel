@@ -25,7 +25,7 @@ struct MyAtomInfo
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
     double force[3];
-    double energy;
+    double energyInKJ;
     double stretching_energy;
     int ext_force_model;
     double ext_force_constants[3];
