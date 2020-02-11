@@ -483,8 +483,6 @@ int main(int argc, char **argv)
                     //End: Exporting congiguration of classes for simulation resume.
                 }
                 
-                
-                
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 

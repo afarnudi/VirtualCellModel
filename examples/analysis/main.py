@@ -32,26 +32,25 @@ vel_data,  time = read_file(velname)
 
 fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(10,4))
 
-
-
 m=10.
 
-energy = np.sum(np.square(vel_data[:,:,:3]), axis=2)
-print(energy.shape) 
+energy = np.sum(np.sum(np.square(vel_data[:,:,:3]), axis=2), axis=1)
+print(vel_data.shape) 
 
-energy *= 5*m 
-
-avgvel = np.mean(np.square(vel_data[:,:,:3])) 
-avgvel = m*5.*avgvel
+energy *= 0.5*m 
+num_particles = len(vel_data[0])
+avgvel = np.mean(np.sum(np.sum(np.square(vel_data[2000:,:,:3]), axis=2), axis=1), axis=0) 
+avgvel = m*0.5*avgvel
 
 avgvels = np.ones_like(time)
 avgvels.fill(avgvel) 
 
-k= avgvel/(300.*3./2.)
+T = avgvel*120.273/(num_particles*3*.5)
 
 ax2.plot(time, energy)
-ax2.plot(time, avgvels)
-print("k = "+str(k)+'\n\n\n')
+#ax2.plot(time, energy)
+ax2.plot(time[2000:], avgvels[2000:], label="T = "+str(T))
+ax2.legend()
 
 
 mem_nodes = 162

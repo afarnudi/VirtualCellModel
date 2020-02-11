@@ -125,7 +125,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->Dihedral = DihedralForces;
     }
 
-    
+    cout<<"temperature = "<<GenConst::temperature<<endl;
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
@@ -152,6 +152,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
         case 2:
+            
             omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
