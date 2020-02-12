@@ -39,8 +39,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 {
 	const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
-    //OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
-    OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
+    OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
+    //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
 
     // Allocate space to hold OpenMM objects while we're using them.
     MyOpenMMData*       omm = new MyOpenMMData();
@@ -138,12 +138,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     std::cin>>platform_id;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
     
-    std::vector<std::string> platform_devices = platform.getPropertyNames();
-    for (auto & name : platform_devices){
-        cout<<name<<"\t"<<platform.getPropertyDefaultValue(name)<<endl;
-        
-    }
-    exit(EXIT_SUCCESS);
+    
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
@@ -171,10 +166,18 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(comremover);
     }
     
-    omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
-    omm->context->setPositions(initialPosInNm);
-    omm->context->setVelocities(initialVelInNmperPs);
-    platformName = omm->context->getPlatform().getName();
+    //omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
+    const OpenMM::Context lcontext(*omm->system, *omm->integrator, platform);
+    //omm->context->setPositions(initialPosInNm);
+    //omm->context->setVelocities(initialVelInNmperPs);
+    //platformName = omm->context->getPlatform().getName();
+    
+    std::vector<std::string> platform_devices = platform.getPropertyNames();
+    for (auto & name : platform_devices){
+        cout<<name<<"\t"<<platform.getPropertyValue(lcontext, name)<<endl;
+        
+    }
+    exit(EXIT_SUCCESS);
 
     return omm;
 }
