@@ -37,9 +37,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 //                                 vector<set<int> >      &chromatin_set,
                                  vector<vector<int> >   interaction_map)
 {
+	const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
-    OpenMM::Platform::loadPluginsFromDirectory
-    (OpenMM::Platform::getDefaultPluginsDirectory());
+    //OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
+    OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
 
     // Allocate space to hold OpenMM objects while we're using them.
     MyOpenMMData*       omm = new MyOpenMMData();
@@ -125,7 +126,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->Dihedral = DihedralForces;
     }
 
-    cout<<"temperature = "<<GenConst::temperature<<endl;
+    cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
