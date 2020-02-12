@@ -136,6 +136,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     cout<<"Please choose a pltform (index): \n";
     std::cin>>platform_id;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
+    
+    std::vector<std::string> platform_devices = platform.getPropertyNames();
+    for (auto & name : platform_devices){
+        cout<<name<<"\t"<<platform.getPropertyDefaultValue(name)<<endl;
+        
+    }
+    exit(EXIT_SUCCESS);
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
