@@ -154,16 +154,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : \t";
+                    cout<<counter<<" : ";
                     for (auto & name : platform_devices){
-//                        if (name == "DeviceName") {
-//                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
-//                        }
-//                        if (name == "Precision") {
+                        if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
+                            continue;
+                        } else {
                             cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
-//                        }
+                        }
                     }
                     cout<<"------------------------"<<endl;
+                    counter++;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
                     
@@ -184,16 +184,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : \t";
+                    cout<<counter<<" : ";
                     for (auto & name : platform_devices){
-//                        if (name == "DeviceName") {
-//                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
-//                        }
-//                        if (name == "Precision") {
+                        if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
+                            continue;
+                        } else {
                             cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
-//                        }
+                        }
                     }
                     cout<<"------------------------"<<endl;
+                    counter++;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
                     
