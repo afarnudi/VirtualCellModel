@@ -156,14 +156,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
                     cout<<counter<<" : \t";
                     for (auto & name : platform_devices){
-                        if (name == "DeviceName") {
-                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
-                        }
-                        if (name == "Precision") {
-                            cout<<"\t"<<name<<" = "<<platform.getPropertyValue(temp_context, name)<<endl;
-                        }
+//                        if (name == "DeviceName") {
+//                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
+//                        }
+//                        if (name == "Precision") {
+                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+//                        }
                     }
-                    cout<<endl;
+                    cout<<"------------------------"<<endl;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
                     
@@ -186,14 +186,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
                     cout<<counter<<" : \t";
                     for (auto & name : platform_devices){
-                        if (name == "DeviceName") {
-                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
-                        }
-                        if (name == "Precision") {
-                            cout<<"\t"<<name<<" = "<<platform.getPropertyValue(temp_context, name)<<endl;
-                        }
+//                        if (name == "DeviceName") {
+//                            cout<<platform.getPropertyValue(temp_context, name)<<endl;
+//                        }
+//                        if (name == "Precision") {
+                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+//                        }
                     }
-                    cout<<endl;
+                    cout<<"------------------------"<<endl;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
                     
@@ -206,10 +206,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
         OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
         std::vector<std::string> platform_devices = platform.getPropertyNames();
+        cout<<"CPU properties:\n";
         for (auto & name : platform_devices){
-            if (name == "Threads") {
-                cout<<"CPU threads : "<<platform.getPropertyValue(temp_context, name)<<endl;
-            }
+            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
         }
         cout<<endl;
     }
