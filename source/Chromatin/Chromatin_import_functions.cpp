@@ -26,10 +26,10 @@ void Chromatin::import_coordinates(string import_file_name){
     
     double temp_vector[3];
     
-    while (!read_coordinate_file.eof()) {
+    while (true) {
         read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
+        if (read_coordinate_file.eof()) break;
         Node_Position.push_back(read_double);
-        
         if (Num_of_Nodes>0) {
             temp_vector[0] = Node_Position[Num_of_Nodes][0]-Node_Position[Num_of_Nodes-1][0];
             temp_vector[1] = Node_Position[Num_of_Nodes][1]-Node_Position[Num_of_Nodes-1][1];
@@ -40,13 +40,16 @@ void Chromatin::import_coordinates(string import_file_name){
         
         read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
         Node_Velocity.push_back(read_double);
-        
         Node_Force.push_back(zero_double);
         
         Num_of_Nodes++;
     }
     
-    bond_length/=Num_of_Nodes;
+    cout<<"# of nodes\t"<<Num_of_Nodes<<endl;
+    
+    bond_length/=Num_of_Nodes-1.0;
+    cout<<"bond length set to \t"<<bond_length<<endl;
+    
     
     ABC_index.resize(Num_of_Nodes);
     cout<<"Coordinates and velocities loaded"<<endl;
