@@ -169,20 +169,24 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         
         MyAtomInfo* atoms = convert_Chromatin_position_to_openmm(chromos[i]);
         
-        
         for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
             chromatin_set[i][chromos[i].get_node_type(j)].insert(j+atom_count);
         }
         
-        
+        //Check to if all node-types in the chromatin sets have a node associated to them. An empty node set will cause a problem in the interaction definition section since we use pointers to access the "set" and an empty set can may point to random numbers.
+        for (int j=0; j<chromatin_set[i].size(); j++) {
+            if (chromatin_set[i][j].size()==0) {
+                cout<<"some node-types have no nodes associated with them. If a random distribution is used for node-type association this may be due to limited number of nodes.\n";
+                exit(EXIT_FAILURE);
+            }
+        }
         
         Bonds* bonds = convert_Chromatin_bond_info_to_openmm(chromos[i]);
         for (int j=0; j<chromos[i].get_num_of_nodes()-1; j++) {
             all_bonds[j+bond_count]=bonds[j];
             all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
             all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
-            
         }
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
