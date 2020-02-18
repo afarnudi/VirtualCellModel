@@ -34,17 +34,14 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     
     LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                    + atoms[*it_2].sigma_LJ_12_6 )
-                                                    * OpenMM::NmPerAngstrom);
+                                                                    + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                     * atoms[*it_2].epsilon_LJ_12_6)
-                                                    * OpenMM::KJPerKcal);
+                                                                     * atoms[*it_2].epsilon_LJ_12_6) );
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                          + atoms[*it_2].sigma_LJ_12_6 )
-                                                   * OpenMM::NmPerAngstrom);
+                                                          + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     
@@ -81,16 +78,13 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     
     LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                  + atoms[*it_2].sigma_LJ_12_6 )
-                                                                * OpenMM::NmPerAngstrom);
+                                                                  + atoms[*it_2].sigma_LJ_12_6 ) );
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                 * atoms[*it_2].epsilon_LJ_12_6)
-                                                                 * OpenMM::KJPerKcal);
+                                                                 * atoms[*it_2].epsilon_LJ_12_6) );
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                          + atoms[*it_2].sigma_LJ_12_6 )
-                                                       * OpenMM::NmPerAngstrom);
+                                                          + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     
@@ -122,20 +116,17 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
     int index = LJ_12_6_interactions.size()-1;
     
-    cout<<"sigma   = "<< 0.5*( atoms[*it_1].sigma_LJ_12_6 + atoms[*it_2].sigma_LJ_12_6 ) * OpenMM::NmPerAngstrom << endl;
+    cout<<"sigma   = "<< 0.5*( atoms[*it_1].sigma_LJ_12_6 + atoms[*it_2].sigma_LJ_12_6 ) << endl;
     cout<<"epsilon = "<< sqrt(atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6) << endl;
     
     LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6 +
-                                                                   atoms[*it_2].sigma_LJ_12_6 )
-                                                                * OpenMM::NmPerAngstrom);
+                                                                   atoms[*it_2].sigma_LJ_12_6 ) );
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                 * atoms[*it_2].epsilon_LJ_12_6)
-                                                                 * OpenMM::KJPerKcal);
+                                                                 * atoms[*it_2].epsilon_LJ_12_6) );
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                          + atoms[*it_2].sigma_LJ_12_6 )
-                                                       * OpenMM::NmPerAngstrom);
+                                                          + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     
@@ -167,17 +158,14 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     int index = LJ_12_6_interactions.size()-1;
     
     LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
-                                                                    + atoms[*it_2].sigma_LJ_12_6 )
-                                                    * OpenMM::NmPerAngstrom);
+                                                                    + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
-                                                                     * atoms[*it_2].epsilon_LJ_12_6)
-                                                    * OpenMM::KJPerKcal);
+                                                                     * atoms[*it_2].epsilon_LJ_12_6) );
     LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
-                                                          + atoms[*it_2].sigma_LJ_12_6 )
-                                                   * OpenMM::NmPerAngstrom);
+                                                          + atoms[*it_2].sigma_LJ_12_6 ) );
     
     
     
@@ -222,9 +210,9 @@ bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
             
             int index = ext_force.size()-1;
             
-            ext_force[index]->addGlobalParameter(kx,  atoms[*it_1].ext_force_constants[0] * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm);
-            ext_force[index]->addGlobalParameter(ky,  atoms[*it_1].ext_force_constants[1] * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm);
-            ext_force[index]->addGlobalParameter(kz,  atoms[*it_1].ext_force_constants[2] * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm);
+            ext_force[index]->addGlobalParameter(kx,  atoms[*it_1].ext_force_constants[0] );
+            ext_force[index]->addGlobalParameter(ky,  atoms[*it_1].ext_force_constants[1] );
+            ext_force[index]->addGlobalParameter(kz,  atoms[*it_1].ext_force_constants[2] );
             
             for(set<int>::iterator it=set_1[set_1_index].begin(); it != set_1[set_1_index].end(); ++it){
                 ext_force[index]->addParticle(*it);
