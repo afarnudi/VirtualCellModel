@@ -3,7 +3,55 @@
 using std::cout;
 using std::endl;
 
-void Chromatin::import(string import_file_name){
+void Chromatin::import_coordinates(string import_file_name){
+//    cout<<"Importing the Chromatin from the resume file:"<<endl;
+//    cout<<import_file_name<<endl<<endl;
+    std::ifstream read_coordinate_file;
+    
+    read_coordinate_file.open(import_file_name.c_str());
+    if ( read_coordinate_file.is_open() ) {
+        cout << "Coordinate file opened successfully successfully. \n\n";
+    }else{
+        cout << "Unable to read coordinate file.\n";
+        exit(EXIT_FAILURE);
+    }
+    
+    
+    Num_of_Nodes=0;
+    vector<double> read_double;
+    read_double.resize(3);
+    
+    vector<double> zero_double;
+    zero_double.resize(3,0);
+    
+    while (!read_coordinate_file.eof()) {
+        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
+        Node_Position.push_back(read_double);
+        
+        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
+        Node_Velocity.push_back(read_double);
+        
+        Node_Force.push_back(zero_double);
+        
+        Num_of_Nodes++;
+    }
+    
+    ABC_index.resize(Num_of_Nodes);
+    cout<<"Coordinates and velocities loaded"<<endl;
+    cout<<"Node forces set to zero"<<endl;
+    
+    shift_node_positions();
+    pdb_label_check();
+    for (int i=0; i<Num_of_Nodes; i++) {
+        Node_Position[i][0]*=rescale_factor;
+        Node_Position[i][1]*=rescale_factor;
+        Node_Position[i][2]*=rescale_factor;
+    }
+    
+    cout<<"\n\nChromatin class initiated.\n";
+}
+
+void Chromatin::import_resume(string import_file_name){
 //    cout<<"Importing the Chromatin from the resume file:"<<endl;
 //    cout<<import_file_name<<endl<<endl;
     std::ifstream read_resume_file;

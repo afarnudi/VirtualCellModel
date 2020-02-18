@@ -55,7 +55,7 @@ void Chromatin::import_config(string config_file_name, double min_radius){
         exit(EXIT_FAILURE);
     }
     if (resume) {
-        import(resume_file_name);
+        import_resume(resume_file_name);
     } else {
         if (Num_of_Nodes==0) {
             cout<< "Error. \nPlease specify the number of Chromatin nodes in the "<<config_file_name<< " file.\n";
@@ -72,8 +72,10 @@ void Chromatin::import_config(string config_file_name){
     
     map<string, double>::iterator it;
     string resume_file_name;
+    string import_file_name;
     ifstream read_config_file(config_file_name.c_str());
-    bool resume=false;
+    bool resume_flag=false;
+    bool import_flag=false;
     
     if (read_config_file.is_open()) {
         cout<<"'"<<config_file_name<<"' file opened successfully.\n";
@@ -99,9 +101,9 @@ void Chromatin::import_config(string config_file_name){
             if (split[0]=="Resume") {
                 
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag off. The Chromatins will be initiated using the config parameters.\n";
+                    cout<<"Resume flag off.\n";
                 } else {
-                    resume=true;
+                    resume_flag=true;
                     resume_file_name=split[2];
                     cout<<"Resume flag on. Chromatin will resume using the '"<<resume_file_name<<" file.\n";
                 }
@@ -127,6 +129,14 @@ void Chromatin::import_config(string config_file_name){
                     for (int i=0; i<num_of_node_types; i++) {
                         sigma_LJ[i]=stod(split[i+1]);
                     }
+                }
+            } else if(split[0]=="Import_coordinates"){
+                if (stoi(split[1])==0) {
+                    cout<<"Import flag off. The Chromatins will be initiated using the config parameters.\n";
+                } else {
+                    import_flag=true;
+                    import_file_name=split[2];
+                    cout<<"Import flag on. Chromatin will resume using the '"<<import_file_name<<" file.\n";
                 }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
@@ -158,8 +168,10 @@ void Chromatin::import_config(string config_file_name){
         cout<<"Couldn't open the '"<<config_file_name<<"' file.\n";
         exit(EXIT_FAILURE);
     }
-    if (resume) {
-        import(resume_file_name);
+    if (resume_flag) {
+        import_resume(resume_file_name);
+    } else if (import_flag) {
+        import_coordinates(import_file_name);
     } else {
         if (Num_of_Nodes==0) {
             cout<< "Error. \nPlease specify the number of Chromatin nodes in the "<<config_file_name<< " file.\n";
@@ -193,12 +205,14 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="Shift_in_Z_direction"){
         Shift_in_Z_direction=param_value;
     } else if (param_name=="x_speed"){
-           x_speed=param_value;
-       } else if (param_name=="y_speed"){
-           y_speed=param_value;
-       } else if (param_name=="z_speed"){
-           z_speed=param_value;
-       } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
+        x_speed=param_value;
+    } else if (param_name=="y_speed"){
+        y_speed=param_value;
+    } else if (param_name=="z_speed"){
+        z_speed=param_value;
+    } else if (param_name=="rescale_factor"){
+        rescale_factor=param_value;
+    } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
         Num_of_Nodes=param_value;
     } else if (param_name=="num_of_node_types"){
         num_of_node_types=param_value;

@@ -39,6 +39,8 @@ private: //(if we define these constants as private members of the class, we can
     double y_speed=0.0;
     double z_speed=0.0;
     
+    double rescale_factor=1;
+    
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
@@ -104,7 +106,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
     void write_traj (string traj_name, string label);
     
-    void import(string import_file_name);
+    void import_resume(string import_file_name);
+    void import_coordinates(string import_file_name);
     void import_config(string config_file_name);
     void import_config(string config_file_name, double min_radius);
     void set_map_parameter(string param_name, double param_value);
