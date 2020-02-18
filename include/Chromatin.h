@@ -39,6 +39,8 @@ private: //(if we define these constants as private members of the class, we can
     double y_speed=0.0;
     double z_speed=0.0;
     
+    
+    double bond_length=0;
     double rescale_factor=1;
     
     double com[3]; //center of mass
@@ -67,7 +69,7 @@ private: //(if we define these constants as private members of the class, we can
     //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     std::map<string, double> param_map;
     
-    double Average_Node_Distance();
+//    double Average_Node_Distance();
     void read_membrabe_input(string input_file);
 
     void potential_1 (void);
@@ -130,6 +132,11 @@ public: //these are using in monte carlo flip function. for defining them as pri
     //=========================================================================================================
     //Function definitions:
     //=========================================================================================================
+    
+    /**return the chromatin node-node distance.*/
+    double get_bond_length(void){
+        return bond_length;
+    }
     
     /**return the assigned sigma to the provided node type.*/
     double get_sigma_LJ_12_6(int node_type){
@@ -224,36 +231,8 @@ public: //these are using in monte carlo flip function. for defining them as pri
             average_force_z+=Node_Force[j][2];
             
         }
-//        cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
-    
-    /**CM update*/
-//    double temp_dist, delta_x, delta_y, delta_z;
-//    void contact_matrix_update(void){
-//        double dist = 3*Node_radius;
-//
-//        for (int i=0; i<Num_of_Nodes; i++) {
-//            for (int j=i; j<Num_of_Nodes; j++) {
-//                if (i!=j) {
-//                    delta_x = Node_Position[i][0] - Node_Position[j][0];
-//                    delta_y = Node_Position[i][1] - Node_Position[j][1];
-//                    delta_z = Node_Position[i][2] - Node_Position[j][2];
-//                    temp_dist = delta_x*delta_x + delta_y*delta_y + delta_z*delta_z;
-//
-//                    if (temp_dist < dist*dist ) {
-//                        Contact_Matrix[i][j]++;
-//                        Contact_Matrix[j][i]++;
-//                    }
-//
-//                }
-//            }
-//        }
-//
-//    }
-//    double get_cm(int i, int j){
-//        return Contact_Matrix[i][j];
-//    }
-    
+
     
     void set_file_time(char* buffer){
         file_time=buffer;

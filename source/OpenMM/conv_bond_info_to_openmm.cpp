@@ -200,7 +200,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInNm=2*chromo.get_node_radius();
+                bonds[i].nominalLengthInNm=chromo.get_bond_length();
                 bonds[i].stiffnessInKcalPerAngstrom2=chromo.get_spring_stiffness_coefficient();
                 break;
                 
