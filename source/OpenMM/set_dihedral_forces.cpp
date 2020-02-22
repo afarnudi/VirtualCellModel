@@ -26,7 +26,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             
         }
         
-        vector<double> parameters={dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal};
+        vector<double> parameters={dihedrals[i].bendingStiffnessinKJ};
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
 }

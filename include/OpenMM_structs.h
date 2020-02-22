@@ -36,9 +36,9 @@ struct Bonds{
     int type;
     int atoms[2];
     std::string class_label;
-    double nominalLengthInNm, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
-    double dampInKcalPsPerAngstrom2;
-    double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
+    double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
+    double dampInKJPsPerNm2;
+    double FENE_lmaxinNm, FENE_lmininNm, FENE_le0inNm, FENE_le1inNm;
     bool   canConstrain;
 };
 
@@ -46,7 +46,7 @@ struct Dihedrals{
     int type;
     std::string class_label;
     std::vector<int> atoms;
-    double bending_stiffness_value;
+    double bendingStiffnessinKJ;
 };
 
 /** -----------------------------------------------------------------------------

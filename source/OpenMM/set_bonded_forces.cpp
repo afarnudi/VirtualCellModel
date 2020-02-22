@@ -43,13 +43,11 @@ void set_bonded_forces(Bonds*                                 bonds,
                     
                     system.addForce(FENEs[FENE_index]);
                 }
-                vector<double> parameters={bonds[i].FENE_lmin* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_le0* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_le1* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_lmax* OpenMM::AngstromsPerNm,
-                                           bonds[i].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal
-                                                                         * OpenMM::AngstromsPerNm
-                                                                         * OpenMM::AngstromsPerNm
+                vector<double> parameters={bonds[i].FENE_lmininNm,
+                                           bonds[i].FENE_le0inNm,
+                                           bonds[i].FENE_le1inNm,
+                                           bonds[i].FENE_lmaxinNm,
+                                           bonds[i].stiffnessInKJPerNm2
                                            };
                 
                 FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);
@@ -63,9 +61,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // it as used in the force term kx, with energy kx^2/2.
                 HarmonicBond->addBond(atom[0], atom[1],
                                       bonds[i].nominalLengthInNm,
-                                      bonds[i].stiffnessInKcalPerAngstrom2
-                                      * OpenMM::KJPerKcal
-                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                      bonds[i].stiffnessInKJPerNm2);
                 
             }
                 break;
@@ -84,10 +80,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                     system.addForce(X4harmonics[X4harmonic_index]);
                 }
                 double r_rest =bonds[i].nominalLengthInNm;
-                double k_bond=bonds[i].stiffnessInKcalPerAngstrom4
-                * OpenMM::KJPerKcal
-                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
-                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                double k_bond=bonds[i].stiffnessInKJPerNm4;
                 vector<double> parameters;
                 parameters.resize(2);
                 parameters[0]=r_rest;
@@ -107,11 +100,9 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // it as used in the force term kx, with energy kx^2/2.
                 Kelvin_VoigtBond->addBond(atom[0], atom[1],
                                           bonds[i].nominalLengthInNm,
-                                          bonds[i].stiffnessInKcalPerAngstrom2
-                                          * OpenMM::KJPerKcal
-                                          * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                          bonds[i].stiffnessInKJPerNm2);
                 
-                time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2);
+                time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKJPsPerNm2);
                 
             }
                 break;
