@@ -241,18 +241,34 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
     }
-    
     if (GenConst::CMMotionRemover) {
         omm->system->addForce(comremover);
     }
+    
+    for (int i=0; atoms[i].type != EndOfList; i++) {
+        if (atoms[i].mass < 0.0001) {
+            if (atoms[i].class_label == "Chromatin") {
+                omm->system->setParticleMass(i, 0);
+                
+                OpenMM::TwoParticleAverageSite* vsite_pars;
+                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);
+                
+                omm->system->setVirtualSite(i, vsite_pars);
+            }
+        }
+    }
+    
+    
+    
     if (platform.getName() == "CPU" || platform_id==0) {
         omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
     } else {
         omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
     }
-    
+        
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
+    
     platformName = omm->context->getPlatform().getName();
     
     return omm;

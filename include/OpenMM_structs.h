@@ -15,6 +15,8 @@
 struct MyAtomInfo
 {
     int type;
+    int Vsite_particleindecies[2];
+    double Vsite_weights[2];
     char* pdb;
     char symbol;
     double initPosInNm[3];
@@ -30,6 +32,8 @@ struct MyAtomInfo
     int ext_force_model;
     double ext_force_constants[3];
     std::string class_label;
+    int vsite_atoms[2];
+    double vsite_weights[2];
 };
 
 struct Bonds{

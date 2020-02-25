@@ -76,6 +76,7 @@ void Chromatin::import_config(string config_file_name){
     ifstream read_config_file(config_file_name.c_str());
     bool resume_flag=false;
     bool import_flag=false;
+    GenConst::ChromatinVirtualSites = false;
     
     if (read_config_file.is_open()) {
         cout<<"'"<<config_file_name<<"' file opened successfully.\n";
@@ -220,5 +221,13 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
         sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
     } else if (param_name=="bond_length"){
         bond_length=param_value;
+    } else if (param_name=="bond_radius"){
+        bond_radius=param_value;
+    } else if (param_name=="optimise_bond_radius"){
+        if (param_value == 0) {
+            optimise_bond_radius = false;
+        } else {
+            optimise_bond_radius = true;
+        }
     }
 }

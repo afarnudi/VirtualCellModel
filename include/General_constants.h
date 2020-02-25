@@ -101,6 +101,9 @@ namespace GenConst {
     extern bool   WriteVelocitiesandForces;
     /**Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false*/
     extern bool CMMotionRemover;
+
+    /**Specify if Virtual Sites are used  in the chromatin. Default false*/
+    extern bool ChromatinVirtualSites;
     /**The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10*/
     extern int CMMotionRemoverStep;
     

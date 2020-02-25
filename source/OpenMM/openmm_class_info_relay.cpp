@@ -169,8 +169,17 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         
         MyAtomInfo* atoms = convert_Chromatin_position_to_openmm(chromos[i]);
         
+        
+        
         for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
+            if (atoms[j].mass < 0.0001) {
+                atoms[j].vsite_atoms[0] += atom_count;
+                atoms[j].vsite_atoms[1] += atom_count;
+            }
+            
             all_atoms[j+atom_count]=atoms[j];
+            
+            
             chromatin_set[i][chromos[i].get_node_type(j)].insert(j+atom_count);
         }
         
@@ -183,7 +192,8 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         }
         
         Bonds* bonds = convert_Chromatin_bond_info_to_openmm(chromos[i]);
-        for (int j=0; j<chromos[i].get_num_of_nodes()-1; j++) {
+        
+        for (int j=0; j<chromos[i].get_num_of_bonds(); j++) {
             all_bonds[j+bond_count]=bonds[j];
             all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
             all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
@@ -191,7 +201,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
         atom_count += chromos[i].get_num_of_nodes();
-        bond_count += chromos[i].get_num_of_nodes()-1;
+        bond_count += chromos[i].get_num_of_bonds();
         //        dihe_count += membranes[i].get_num_of_triangle_pairs();
     }
 }

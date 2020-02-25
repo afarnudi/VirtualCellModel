@@ -48,20 +48,39 @@ void Chromatin::import_coordinates(string import_file_name){
     cout<<"# of nodes\t"<<Num_of_Nodes<<endl;
     
     bond_length/=Num_of_Nodes-1.0;
-    cout<<"bond length set to \t"<<bond_length<<endl;
+    cout<<"Average bond length: \t"<<bond_length<<endl;
     
     
-    ABC_index.resize(Num_of_Nodes);
+    
     cout<<"Coordinates and velocities loaded"<<endl;
     cout<<"Node forces set to zero"<<endl;
     
     shift_node_positions();
-    pdb_label_check();
-    for (int i=0; i<Num_of_Nodes; i++) {
-        Node_Position[i][0]*=rescale_factor;
-        Node_Position[i][1]*=rescale_factor;
-        Node_Position[i][2]*=rescale_factor;
+    
+    
+    if (rescale_factor!=1 && rescale_factor!=0) {
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]*=rescale_factor;
+            Node_Position[i][1]*=rescale_factor;
+            Node_Position[i][2]*=rescale_factor;
+        }
+        bond_length *= rescale_factor;
+        cout<<"Average bond length rescaled to: \t"<<bond_length<<endl;
+        
     }
+    
+    if (bond_radius> 0.0001) {
+        if (bond_length<2) {
+            cout<<"Bond length is shorter than the node diameter. The relative parameters, bond_length and node_radius, can be adjusted in the chromatin configuration file.\n";
+            exit(EXIT_FAILURE);
+        } else {
+            cout<<"will generate virtual spheres in between node beads to prevent bonds from slipping through each other.\n";
+            generate_virtual_sites();
+        }
+    }
+    
+    ABC_index.resize(Num_of_Nodes);
+    pdb_label_check();
     
     cout<<"\n\nChromatin class initiated.\n";
 }

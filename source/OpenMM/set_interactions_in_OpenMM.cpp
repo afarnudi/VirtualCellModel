@@ -21,6 +21,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       OpenMM::System                        &system
                       ){
     
+    
     std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds);
    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {

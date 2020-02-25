@@ -29,26 +29,35 @@ private: //(if we define these constants as private members of the class, we can
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
-    double Spring_coefficient=10.0; // streching constant
-    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
-    double Spring_force_cutt_off=1000.0;
+    double Spring_coefficient=10.0; // stretching constant
+    double Damping_coefficient=0.0; // Viscosity of the Membrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were involved).
+    double Spring_force_cut_off=1000.0;
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
     double x_speed=0.0; //???
     double y_speed=0.0;
     double z_speed=0.0;
-    
+    vector<vector<int > > virtual_bond_pairs;
     
     double bond_length=0;
+    double bond_radius=0;
+    bool   optimise_bond_radius=false;
+    int    num_virtual_sites_per_bond=0;
+    int    num_of_extra_VS_bonds=0;
+    int    num_of_total_bonds=0;
+    
     double rescale_factor=1;
     
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
-    string output_file_neme;
+    string output_file_name;
     string file_time;
     string label;
+    
+    vector<vector<int> > Vsite_and_bindings;
+    vector<vector<double> > Vsite_binding_weights;
     
     vector<vector<double> > Node_Position;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -66,11 +75,11 @@ private: //(if we define these constants as private members of the class, we can
     
     int Num_of_Nodes=0;
     /*constants*/
-    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
+    //This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opened with a text editor)
     std::map<string, double> param_map;
     
 //    double Average_Node_Distance();
-    void read_membrabe_input(string input_file);
+    void read_membrane_input(string input_file);
 
     void potential_1 (void);
     void potential_2 (void);
@@ -86,9 +95,9 @@ private: //(if we define these constants as private members of the class, we can
     void packing_traj (void);
     void reset_com_velocity(void);
     void rescale_velocities(double scale);
+    int generate_virtual_sites(void);
     
-    
-public: //these are using in monte carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
     void pdb_label_check(void);
     
@@ -129,6 +138,7 @@ public: //these are using in monte carlo flip function. for defining them as pri
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
     
+    void calculate_extra_virtual_bonds(void);
     //=========================================================================================================
     //Function definitions:
     //=========================================================================================================
@@ -136,6 +146,45 @@ public: //these are using in monte carlo flip function. for defining them as pri
     /**return the chromatin node-node distance.*/
     double get_bond_length(void){
         return bond_length;
+    }
+    
+    /**return a 2 dimentional list where the first column of each row is the index  of the virtual site on the chromatin and the second and third column correspond to the real sites that are needed for coordiante calculations. the weights can be obtained through the "get_Vsite_binding_weight_list" member.  */
+    vector<vector<int> > get_Vsite_and_bindings_list(void){
+        return Vsite_and_bindings;
+    }
+    
+    /**return the weights used to calculate the coordinates of the virtual sites. the coresponding real node indecies can be obtained through the "get_Vsite_and_bindings_list" member.*/
+    vector<vector<double> > get_Vsite_binding_weight_list(void){
+        return Vsite_binding_weights;
+    }
+    
+    
+    /**return chromatin number of bonds. If there are no virtual site this number is  Num_of_Nodes-1. In the presence of Virtual Sites this number is reduced to [(Num_of_Nodes + num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1)]-1*/
+    double get_num_of_bonds(void){
+        if (!GenConst::ChromatinVirtualSites) {
+            num_of_total_bonds = Num_of_Nodes-1;
+            return num_of_total_bonds;
+        } else {
+            if (num_of_extra_VS_bonds==0){
+                calculate_extra_virtual_bonds();
+            }
+            return num_of_total_bonds;
+        }
+    }
+    
+    /**return the number of  chromatin's real (non virtual) nodes .*/
+    int get_num_of_real_site(void){
+        return (Num_of_Nodes+num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1);
+    }
+    
+    /**return the number of  chromatin's real (non virtual) nodes .*/
+    int get_num_of_virtual_sites_per_bond(void){
+        return num_virtual_sites_per_bond;
+    }
+    
+    /**return the list of all virtual site pairs that should be excluded from non bonded interactions.*/
+    vector< vector < int> > get_virtual_bonds (void){
+        return virtual_bond_pairs;
     }
     
     /**return the assigned sigma to the provided node type.*/

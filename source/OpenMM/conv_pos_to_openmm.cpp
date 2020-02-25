@@ -131,7 +131,16 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
     const int chromo_num_atom = chromo.get_num_of_nodes();
     MyAtomInfo* myatominfo = new MyAtomInfo[chromo_num_atom];
     
+    int counter=0;
+    vector<vector<int> > v_list;
+    vector<vector<double> > v_weight_list;
+    if (GenConst::ChromatinVirtualSites) {
+        v_list = chromo.get_Vsite_and_bindings_list();
+        v_weight_list = chromo.get_Vsite_binding_weight_list();
+    }
+    
     for (int i=0; i<chromo_num_atom; i++) {
+        
         myatominfo[i].type=chromo.get_node_type(i);
         myatominfo[i].class_label="Chromatin";
         std::string str = chromo.get_label() + std::to_string(chromo.get_node_type(i));
@@ -153,6 +162,36 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         myatominfo[i].mass=chromo.get_node_mass();
         myatominfo[i].radius=chromo.get_node_radius();
         
+        
+        if (GenConst::ChromatinVirtualSites) {
+            if (counter < v_list.size()) {
+                if (v_list[counter][0] == i) {
+                    myatominfo[i].mass = 0;
+                    
+                    myatominfo[i].vsite_atoms[0] = v_list[counter][1];
+                    myatominfo[i].vsite_atoms[1] = v_list[counter][2];
+                    
+                    myatominfo[i].Vsite_weights[0] = v_weight_list[counter][0];
+                    myatominfo[i].Vsite_weights[1] = v_weight_list[counter][1];
+                    
+                    myatominfo[i].posInNm[0]=chromo.get_node_position(myatominfo[i].vsite_atoms[0], 0)*myatominfo[i].Vsite_weights[0] + chromo.get_node_position(myatominfo[i].vsite_atoms[1], 0)*myatominfo[i].Vsite_weights[1];
+                    myatominfo[i].posInNm[1]=chromo.get_node_position(myatominfo[i].vsite_atoms[0], 1)*myatominfo[i].Vsite_weights[0] + chromo.get_node_position(myatominfo[i].vsite_atoms[1], 1)*myatominfo[i].Vsite_weights[1];
+                    myatominfo[i].posInNm[2]=chromo.get_node_position(myatominfo[i].vsite_atoms[0], 2)*myatominfo[i].Vsite_weights[0] + chromo.get_node_position(myatominfo[i].vsite_atoms[1], 2)*myatominfo[i].Vsite_weights[1];
+                    
+                    myatominfo[i].initPosInNm[0]=myatominfo[i].posInNm[0];
+                    myatominfo[i].initPosInNm[1]=myatominfo[i].posInNm[1];
+                    myatominfo[i].initPosInNm[2]=myatominfo[i].posInNm[2];
+                    
+                    
+                    
+                    counter++;
+                }
+            }
+            
+            
+        }
+        
     }
+    
     return myatominfo;
 }

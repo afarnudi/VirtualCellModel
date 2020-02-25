@@ -33,7 +33,7 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds)
     //if shared node --> acin or membrane label
     for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
             std::pair< int, int > temp;
-            temp.first=bonds[i_b].atoms[0];
+            temp.first =bonds[i_b].atoms[0];
             temp.second=bonds[i_b].atoms[1];
             exclude_bonds.push_back(temp);
     }

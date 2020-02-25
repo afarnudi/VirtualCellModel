@@ -97,6 +97,7 @@ namespace GenConst {
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
     std::string Checkpoint_file_name;
+    bool ChromatinVirtualSites;
 
 
     bool   write_bonds_to_PDB;
@@ -304,7 +305,7 @@ int main(int argc, char **argv)
         if (Include_Chromatin) {
             for (int i=0; i<Chromatins.size(); i++) {
                 num_of_atoms    += Chromatins[i].get_num_of_nodes();
-                num_of_bonds    += Chromatins[i].get_num_of_nodes()-1;
+                num_of_bonds    += Chromatins[i].get_num_of_bonds();
             }
         }
         
@@ -347,9 +348,12 @@ int main(int argc, char **argv)
         //int act_atom_count=0;
         
         //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
-        MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
-        Bonds* all_bonds         = new Bonds[num_of_bonds+1];
-        Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+        MyAtomInfo* all_atoms     = new MyAtomInfo[num_of_atoms+1];
+        Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
+        Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+        
+        cout<<"num_of_atoms = "<<num_of_atoms<<endl;
+        cout<<"num_of_bonds = "<<num_of_bonds<<endl;
         
         all_atoms[num_of_atoms].type         =EndOfList;
         all_bonds[num_of_bonds].type         =EndOfList;
@@ -411,7 +415,6 @@ int main(int argc, char **argv)
                                         dihe_count);
         }
        
-        
         
         //autocorrelation calculations:
 //        GenConst::velocity_save.resize(6);
