@@ -42,32 +42,32 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     }
     if(bonds[0].type==2){
         cout<<"bond potential: Harmonic "<<endl;
-        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal <<endl;
+        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     
     if (bonds[0].type == 1) {
         cout<< "bond potential: FENE"<<endl;
-        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"lmin(nm)\tlmax(nm)\tle0(nm)   \tle1(nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].FENE_le0inNm<<"\t"<<bonds[0].FENE_le1inNm<<endl;
+        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"lmin(Nm)\tlmax(Nm)\tle0(Nm)   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].FENE_le0inNm<<"\t"<<bonds[0].FENE_le1inNm<<endl;
     }
     
     if(bonds[0].type == 3){
         cout<<"bond potential: X4Harmonic "<<endl;
-        cout<<"spring coeficient (KJ per Nanometer4) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"spring coeficient (KJ . Nm^-4 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient()  <<endl;
+        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     
     if(bonds[0].type == 4){
         cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
-        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm <<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     if(bonds[0].type==5){
         cout<<"bond potential: realHarmonic "<<endl;
-        cout<<"spring coeficient (KJ per Nanometer2) ="<<mem.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     
     cout<<endl;
@@ -196,8 +196,8 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
         bonds[i].type = chromo.get_spring_model();
         bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
         bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
-        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
-        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
+//        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
+//        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
         bonds[i].class_label = chromo.get_label() + chromo.get_label();
         switch (bonds[i].type) {
                 //FENE
