@@ -42,3 +42,4 @@ WriteVelocitiesandForces	0
 CMMotionRemover	0
 CMMotionRemoverStep	10
 CreateCheckpoint	1
+MC_step	0

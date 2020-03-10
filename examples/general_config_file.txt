@@ -119,3 +119,5 @@ CMMotionRemoverStep	10
 
 //Create  a checkpoint during each saving step. default true
 CreateCheckpoint	1
+
+MC_step	0
