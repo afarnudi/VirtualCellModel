@@ -114,6 +114,18 @@ void myWritePDBFrame(int                frameNum,
                      const Bonds        bonds[],
                      std::string        traj_name);
 
+/**                               PDB FILE WRITER
+ * Given state data, output a single frame (pdb "model") of the trajectory.
+ */
+void writeXYZFrame  (int                frameNum,
+                     double             timeInPs,
+                     double             energyInKcal,
+                     double             potential_energy,
+                     const MyAtomInfo   atoms[],
+                     const Bonds        bonds[],
+                     std::string        traj_name);
+
+
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  vector<std::set<int> > &membrane_set,

@@ -3,9 +3,9 @@
 #include "OpenMM_funcs.hpp"
 #include "General_functions.hpp"
 
-void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter){
+bool Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter){
    
-    bool accept=0; 
+    bool accept = false, update = false;
     
     //Randomly choosing a Dihedral and finding the neighbours.
     int triangle_A, triangle_B,temp_triangle, u1;
@@ -29,7 +29,7 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     triangle_A=Triangle_pair_list[initial_pair][0];
     triangle_B=Triangle_pair_list[initial_pair][1];
     //the next part is for making sure that the first uncommon node in dihedral belongs to triangle A;
-    u1=Triangle_Pair_Nodes[initial_pair][0];
+    u1 = Triangle_Pair_Nodes[initial_pair][0];
     
     if(Triangle_list[triangle_A][0]!=u1 and Triangle_list[triangle_A][1]!=u1 and Triangle_list[triangle_A][2]!=u1){
         temp_triangle=triangle_A;
@@ -61,14 +61,13 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
         
  
    else{
-       cout<<"no enough neighbours,    num of naighbours  "<<A_neighbours_dihedral_index.size()<<"  and  "<<B_neighbours_dihedral_index.size()<<endl;
+       cout<<"not enough neighbours,    num of naighbours  "<<A_neighbours_dihedral_index.size()<<"  and  "<<B_neighbours_dihedral_index.size()<<endl;
         cout<<"index  "<<initial_pair<<endl;
     }//end of else 
     
     
     
     if (accept){ //(checking the conditions)
-        //cout<<"starting monte_carlo try"<<endl;
         
         int uncommon1,common2,common3, uncommon4;
         //calculating the initial state energy
@@ -79,42 +78,41 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
    
         ////calculating the bend energy of initial pairs
         //cout<<"calculating the bend energy of initial pairs"<<endl;
-        uncommon1=Triangle_Pair_Nodes[initial_pair][0];
-        common2=Triangle_Pair_Nodes[initial_pair][1];
-        common3=Triangle_Pair_Nodes[initial_pair][2];
-        uncommon4=Triangle_Pair_Nodes[initial_pair][3];
+        uncommon1 = Triangle_Pair_Nodes[initial_pair][0];
+        common2   = Triangle_Pair_Nodes[initial_pair][1];
+        common3   = Triangle_Pair_Nodes[initial_pair][2];
+        uncommon4 = Triangle_Pair_Nodes[initial_pair][3];
         initial_bend_energy+=calculating_the_bend_energy_2(uncommon1, common2, common3, uncommon4, atoms, number_of_privious_mem_nodes);
     
         ////calculating the bend energy of initial neighbours.
         for(int i=0; i<2; i++){
             //triangle_A neighbours
-            uncommon1=Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][0];
-            common2=Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][1];
-            common3=Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][2];
-            uncommon4=Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][3];
+            uncommon1 = Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][0];
+            common2   = Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][1];
+            common3   = Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][2];
+            uncommon4 = Triangle_Pair_Nodes[A_neighbours_dihedral_index[i]][3];
           //  cout<<"previous neigbours   "<<uncommon1<<"  "<< common2<<" "<<common3<<"  "<<uncommon4<<"  "<<A_neighbours_dihedral_index[i]<<endl;
             initial_bend_energy+=calculating_the_bend_energy_2(uncommon1, common2, common3, uncommon4,atoms, number_of_privious_mem_nodes);
             //triangle_B neighbours
-            uncommon1=Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][0];
-            common2=Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][1];
-            common3=Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][2];
-            uncommon4=Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][3];
+            uncommon1 = Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][0];
+            common2   = Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][1];
+            common3   = Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][2];
+            uncommon4 = Triangle_Pair_Nodes[B_neighbours_dihedral_index[i]][3];
            // cout<<"previous neigbours   "<<uncommon1<<"  "<< common2<<" "<<common3<<"  "<<uncommon4<<"  "<<B_neighbours_dihedral_index[i]<<endl;
             initial_bend_energy+=calculating_the_bend_energy_2(uncommon1, common2, common3, uncommon4, atoms, number_of_privious_mem_nodes);
         } //end of for(int i=0; i<2; i++) (calculating the bending energy of initial neighbors)
         
-        //cout<<"initial_bend_energy  "<<initial_bend_energy<<endl;
         //calculating the final state energy
         ////calculating the bond energy
         initial_or_final=1;
-        final_bond_energy=calculating_the_bond_energy(initial_pair, initial_or_final, atoms, number_of_privious_mem_nodes);
-        //cout<<"final_bond_energy  "<<final_bond_energy<<endl;
+        final_bond_energy = calculating_the_bond_energy(initial_pair, initial_or_final, atoms, number_of_privious_mem_nodes);
+        
         ////calculating the bend energy of  newpairs
-       // cout<<"calculating the bend energy of  newpairs"<<endl;
-        uncommon1=Triangle_Pair_Nodes[initial_pair][1];
-        common2=Triangle_Pair_Nodes[initial_pair][0];
-        common3=Triangle_Pair_Nodes[initial_pair][3];
-        uncommon4=Triangle_Pair_Nodes[initial_pair][2];
+        uncommon1 = Triangle_Pair_Nodes[initial_pair][1];
+        common2   = Triangle_Pair_Nodes[initial_pair][0];
+        common3   = Triangle_Pair_Nodes[initial_pair][3];
+        uncommon4 = Triangle_Pair_Nodes[initial_pair][2];
+        
         final_bend_energy+=calculating_the_bend_energy_2(uncommon1, common2, common3, uncommon4, atoms, number_of_privious_mem_nodes);
         //find the neighbours of new pairs
         
@@ -123,7 +121,7 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
         int previous_dihedral_index;
         for(int i=0; i<2; i++){
             A_or_B=0;
-            previous_dihedral_index=A_neighbours_dihedral_index[i];
+            previous_dihedral_index = A_neighbours_dihedral_index[i];
             find_the_new_neighbour(new_neighbour_dihedrals[n],  previous_dihedral_index ,  initial_pair, A_or_B);
              //cout<<"new_neighbour_dihedrals"<< new_neighbour_dihedrals[n][0]<<"  "<< new_neighbour_dihedrals[n][1]<<"  "<< new_neighbour_dihedrals[n][2]<<"  "<< new_neighbour_dihedrals[n][3]<<"  "<< new_neighbour_dihedrals[n][4]<<"  "<< new_neighbour_dihedrals[n][5]<<endl;
             n++;
@@ -135,53 +133,28 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
         }//end of for(int i=0; i<2; i++) (finding the neighbors of new configuration)
 
         
-        
-        /*
-         * ////calculating the bend energy of final neighbours with the function 1
-         * for(int i=0; i<4; i++){
-                if(accept){
-                    double energy=calculating_the_bend_energy_2(new_neighbour_dihedrals[i][0], new_neighbour_dihedrals[i][1], new_neighbour_dihedrals[i][2], new_neighbour_dihedrals[i][3], atoms, number_of_privious_mem_nodes);
-                    if(energy>=0){
-                    final_bend_energy+=energy;}
-                    else{
-                    accept=0;}
-                }//end of if(accept) related to the function calculation of bending energy (1)
-            }*/
-            
-            
         for (int i=0; i<4; i++){
             final_bend_energy+=calculating_the_bend_energy_2(new_neighbour_dihedrals[i][0], new_neighbour_dihedrals[i][1], new_neighbour_dihedrals[i][2], new_neighbour_dihedrals[i][3], atoms, number_of_privious_mem_nodes);
         }
-       // cout<<"final_bend_energy  "<<final_bend_energy<<endl;
+       
         
         double deltaE=(final_bend_energy+final_bond_energy)-(initial_bend_energy+initial_bond_energy);
         localDeltaE=deltaE;
-        //cout<<"local delta E  "<<deltaE<<endl;
-//        double fluidity=0.3;
+       
         
         if(deltaE>0){
-            double random_number=(double) rand() / (RAND_MAX);
-            double metropolice_condition =exp((-deltaE)/(0.001987*GenConst::temperature));
             //the coefficient 0.001987 is R (gas constant) and its unit is kcal*K^(-1)mole^(-1)
             //our energy calculatin unit is kcal*mol(-1)
-            //cout<<"random number  "<<random_number<<" fluidity  "<<metropolice_condition<<"  temprature  "<< GenConst::temperature <<endl;
-            if(random_number>metropolice_condition){
-                accept=0;}
+            
+            if( double(rand()/RAND_MAX) < exp((-deltaE)/(0.0083*GenConst::temperature))){
+                Accepted_Try_Counter+=1;
+                update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
+                update =  true;
+            }
                 
         }//end of if(deltaE>0)
     }// end of if(accept) (checking the conditions)
-    
-    //if(accept){
-      //  check_before_update(triangle_A, triangle_B,new_neighbour_dihedrals,pyramid_counter, accept);
-        //}
-    
-    if(accept){ // (updating the mem and parameters in openmm)
-            Accepted_Try_Counter+=1;
-            
-            update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
-            
-  
-    } //end of if(accept){ // (updating the mem and parameters in openmm)
+    return update;
 }
 
 

@@ -32,41 +32,15 @@ void Membrane::check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
     int initial_pair;
     vector<int> A_neighbours_dihedral_index;
     vector<int> B_neighbours_dihedral_index;
-//    double initial_bend_energy=0;
-//    double initial_bond_energy=0;
-//    double final_bend_energy=0;
-//    double final_bond_energy=0;
-//    int number_of_privious_mem_nodes=0;
     
     int new_neighbour_dihedrals[4][6];
     
     //** the new pair must have 4 new neighbours.
     //**each array contains the information of new neighbours. the first 4 elements are the index of nodes which constructs the dihedral. the fifths element indicates the index of the dihedral in both Triangle_Pair_Nodes and Triangle_pair_list. the last element is a boolian which 0 indicates that we dont have to update the indexes of triangles which are connected to each other and one indicates that we have to update the lable of new connected triangles.
     
-    //initial_pair=rand()%(Num_of_Triangle_Pairs-1);
-    //cout<<"initial pair  "<<initial_pair<<endl;
     initial_pair=2;
     triangle_A=Triangle_pair_list[initial_pair][0];
     triangle_B=Triangle_pair_list[initial_pair][1];
-   
-
-
- 
-    /*
-     * cout<<"Tiangle A  "<<triangle_A<<endl;
-    
-    //cout<<"Tiangle B  "<<triangle_B<<endl;
-    for(int k=0; k<Num_of_Triangles; k++){
-        cout<<"initial Triangle list  "<<k<<"   "<<  Triangle_list[k][0]<<"  "<<Triangle_list[k][1]<<"   "<<Triangle_list[k][2]<<endl;}
-
-    for(int p=0; p<Num_of_Triangle_Pairs; p++){
-      cout<<"initial neighbours list   "<<Triangle_pair_list[p][0]<<"  "<<Triangle_pair_list[p][1]<<endl; 
-      cout<<"initial neighbour nodes   "<<Triangle_Pair_Nodes[p][0]<<"  "<<Triangle_Pair_Nodes[p][1]<<"  "<<Triangle_Pair_Nodes[p][2]<<"  "<<Triangle_Pair_Nodes[p][3]<<endl;
-      
-    }
-    */
-
-
 
 
     //the next part is for making sure that the first uncommon node in dihedral belongs to triangle A;
@@ -97,12 +71,10 @@ void Membrane::check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
             A_or_B=0;
             previous_dihedral_index=A_neighbours_dihedral_index[i];
             find_the_new_neighbour(new_neighbour_dihedrals[n],  previous_dihedral_index ,  initial_pair, A_or_B);
-             //cout<<"new_neighbour_dihedrals"<< new_neighbour_dihedrals[n][0]<<"  "<< new_neighbour_dihedrals[n][1]<<"  "<< new_neighbour_dihedrals[n][2]<<"  "<< new_neighbour_dihedrals[n][3]<<"  "<< new_neighbour_dihedrals[n][4]<<"  "<< new_neighbour_dihedrals[n][5]<<endl;
             n++;
             A_or_B=1;
             previous_dihedral_index=B_neighbours_dihedral_index[i];
             find_the_new_neighbour(new_neighbour_dihedrals[n],  previous_dihedral_index ,  initial_pair, A_or_B);
-            //cout<<"new_neighbour_dihedrals"<< new_neighbour_dihedrals[n][0]<<"  "<< new_neighbour_dihedrals[n][1]<<"  "<< new_neighbour_dihedrals[n][2]<<"  "<< new_neighbour_dihedrals[n][3]<<"  "<< new_neighbour_dihedrals[n][4]<<"  "<< new_neighbour_dihedrals[n][5]<<endl;
             n++;
         }
  

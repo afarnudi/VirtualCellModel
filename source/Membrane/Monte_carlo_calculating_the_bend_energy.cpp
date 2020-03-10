@@ -50,8 +50,7 @@ double Membrane::calculating_the_bend_energy(int uncommon1, int common2, int com
         bending_energy=-1;
         cout<<"monte_carlo flip rejected because of bad configuration"<<endl;
     }
-    bending_energy= Bending_coefficient //* OpenMM::KJPerKcal
-                                        *(1.00001-cosine);
+    bending_energy= Bending_coefficient *(1.00001-cosine);
     return(bending_energy);
 }
 
@@ -90,8 +89,7 @@ double Membrane::calculating_the_bend_energy_2(int uncommon1, int common2, int c
            
     }
             
-    bending_energy= Bending_coefficient //* OpenMM::KJPerKcal
-                                        *(1+ cosine);
+    bending_energy= Bending_coefficient *(1+ cosine);
    
     return(bending_energy);
     
