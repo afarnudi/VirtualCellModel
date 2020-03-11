@@ -17,8 +17,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         switch (bonds[i].type) {
                 //FENE
             case 1:
-//                mem.set_FENE_param(bonds[i].FENE_le0inNm, bonds[i].FENE_le1inNm, bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm);
-//                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+                mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
                 break;
                 //Harmonic
             case 2:
@@ -48,9 +47,9 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     
     if (bonds[0].type == 1) {
         cout<< "bond potential: FENE"<<endl;
-        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
-        cout<<"lmin(Nm)\tlmax(Nm)\tle0(Nm)   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].FENE_le0inNm<<"\t"<<bonds[0].FENE_le1inNm<<endl;
+//        cout<<"attraction coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
+//        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+//        cout<<"lmin(Nm)\tlmax(Nm)\tK_FENE   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].K_FENE<<"\t"<<bonds[0].FENE_le1inNm<<endl;
     }
     
     if(bonds[0].type == 3){
@@ -163,7 +162,7 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
         switch (bonds[i].type) {
                 //FENE
             case 1:
-                ecm.set_FENE_param(bonds[i].FENE_le0inNm, bonds[i].FENE_le1inNm, bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm);
+                ecm.set_FENE_param(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
                 bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient();
                 break;
                 //Harmonic

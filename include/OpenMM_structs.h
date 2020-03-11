@@ -42,7 +42,7 @@ struct Bonds{
     std::string class_label;
     double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
     double dampInKJPsPerNm2;
-    double FENE_lmaxinNm, FENE_lmininNm, FENE_le0inNm, FENE_le1inNm;
+    double FENE_lmaxinNm, FENE_lmininNm, FENE_k, FENE_epsilon;
     bool   canConstrain;
 };
 

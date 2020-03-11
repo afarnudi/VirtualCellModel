@@ -176,6 +176,18 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if(param_name=="Update_nominal_length"){
         
         Update_nominal_length = param_value;
+    } else if(param_name=="FENE_min"){
+        
+        FENE_min = param_value;
+    } else if(param_name=="FENE_max"){
+        
+        FENE_max = param_value;
+    } else if(param_name=="FENE_eps"){
+        
+        FENE_epsilon = param_value;
+    } else if(param_name=="FENE_k"){
+        
+        FENE_k = param_value;
     }
     
 }

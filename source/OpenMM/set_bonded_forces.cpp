@@ -27,6 +27,8 @@ void set_bonded_forces(Bonds*                                 bonds,
         switch (bonds[i].type) {
             case 1://FENE
             {
+                
+                
                 auto FENE_item = FENE_classes.find(bonds[i].class_label);
                 if (FENE_item == FENE_classes.end()) {
                     
@@ -42,10 +44,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                     
                     system.addForce(FENEs[FENE_index]);
                 }
-                vector<double> parameters={17,
-                                           23,
-                                           0.09,
-                                           0.02
+                vector<double> parameters={bonds[i].FENE_lmininNm,
+                                           bonds[i].FENE_lmaxinNm,
+                                           bonds[i].FENE_epsilon,
+                                           bonds[i].FENE_k
                                            };
                 
                 FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);

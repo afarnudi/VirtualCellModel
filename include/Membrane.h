@@ -82,6 +82,8 @@ private:
     double COM_velocity[3]={0};
     double COM_position[3]={0};
 
+    double FENE_min=0, FENE_max=0, FENE_epsilon=0, FENE_k=0;
+    
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
     int Num_of_Triangle_Pairs;
     double X_in=0;
@@ -352,7 +354,12 @@ public:
     double get_kz(void){
         return kz;
     }
-    
+    void set_FENE_param_2(double &lmin, double &lmax, double &epsilon, double &k){
+        lmin = FENE_min;
+        lmax = FENE_max;
+        epsilon = FENE_epsilon;
+        k = FENE_k;
+    }
     
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){

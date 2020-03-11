@@ -69,6 +69,14 @@ void Membrane::initialise(std::string Mesh_file_name){
     } else {
         label += std::to_string(index);
     }
+    
+    if (spring_model == 1) {
+        if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
+            cout<<"Warning. Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+            exit(EXIT_FAILURE);
+        }
+    }
+    
     cout<<"\nMembrane class initiated.\n******************************\n\n";
 
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
