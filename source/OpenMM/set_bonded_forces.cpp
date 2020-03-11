@@ -33,21 +33,19 @@ void set_bonded_forces(Bonds*                                 bonds,
                     FENE_classes.insert(bonds[i].class_label);
                     FENE_index++;
                     
-                    FENEs.push_back(new OpenMM::CustomBondForce("k_bond*lmin*lmin*(((lmin/1.5)/(r-(lmin/1.5)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0);"));
+                    FENEs.push_back(new OpenMM::CustomBondForce("4*ep*( (s/r)^12-(s/r)^6 + 0.25) -0.5*K_fene*R*R*log(1-(r*r/(R*R) ))"));
                     
-                    FENEs[FENE_index]->addPerBondParameter("lmin");
-                    FENEs[FENE_index]->addPerBondParameter("le0");
-                    FENEs[FENE_index]->addPerBondParameter("le1");
-                    FENEs[FENE_index]->addPerBondParameter("lmax");
-                    FENEs[FENE_index]->addPerBondParameter("k_bond");
+                    FENEs[FENE_index]->addPerBondParameter("s");
+                    FENEs[FENE_index]->addPerBondParameter("R");
+                    FENEs[FENE_index]->addPerBondParameter("ep");
+                    FENEs[FENE_index]->addPerBondParameter("K_fene");
                     
                     system.addForce(FENEs[FENE_index]);
                 }
-                vector<double> parameters={bonds[i].FENE_lmininNm,
-                                           bonds[i].FENE_le0inNm,
-                                           bonds[i].FENE_le1inNm,
-                                           bonds[i].FENE_lmaxinNm,
-                                           bonds[i].stiffnessInKJPerNm2
+                vector<double> parameters={17,
+                                           23,
+                                           0.09,
+                                           0.02
                                            };
                 
                 FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);

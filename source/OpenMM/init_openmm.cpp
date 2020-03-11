@@ -58,7 +58,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
-    vector<OpenMM::CustomExternalForce*> ext_force;
+    vector<OpenMM::CustomExternalForce*>  ext_force;
     
     
     OpenMM::CMMotionRemover* comremover;
@@ -94,7 +94,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     time_dependant_data->ext_force = ext_force;
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
-    vector<OpenMM::CustomBondForce*>X4harmonics;
+    vector<OpenMM::CustomBondForce*> X4harmonics;
     vector<OpenMM::CustomBondForce*> FENEs;
     
     set_bonded_forces(bonds,

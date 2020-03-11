@@ -17,8 +17,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         switch (bonds[i].type) {
                 //FENE
             case 1:
-                mem.set_FENE_param(bonds[i].FENE_le0inNm, bonds[i].FENE_le1inNm, bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm);
-                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+//                mem.set_FENE_param(bonds[i].FENE_le0inNm, bonds[i].FENE_le1inNm, bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm);
+//                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
                 break;
                 //Harmonic
             case 2:
