@@ -80,7 +80,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
             atoms[i].posInNm[j] = positionsInNm[i][j];
             atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
             if (GenConst::WantForce) {
-                atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
+                atoms[i].force[j]    = Forces[i][j];
             }
         }
     }
@@ -90,10 +90,8 @@ void myGetOpenMMState(MyOpenMMData* omm,
     energyInKJ = 0;
 
     if (GenConst::WantEnergy){
-        energyInKJ = (state.getPotentialEnergy() + state.getKineticEnergy())
-        * OpenMM::KcalPerKJ;
-        potential_energyInKJ = (state.getPotentialEnergy())
-        * OpenMM::KcalPerKJ;
+        energyInKJ = state.getPotentialEnergy() + state.getKineticEnergy();
+        potential_energyInKJ = state.getPotentialEnergy();
     }
 
 }
@@ -117,72 +115,6 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
     }
 }
 
-//                               PDB FILE WRITER
-// Given state data, output a single frame (pdb "model") of the trajectory.
-void writeXYZFrame  (int frameNum,
-                     double timeInPs,
-                     double energyInKJ,
-                     double potential_energyInKJ,
-                     const MyAtomInfo atoms[],
-                     const Bonds bonds[],
-                     std::string traj_name)
-{
-    int EndOfList=-1;
-    FILE* pFile;
-    pFile = fopen (traj_name.c_str(),"a");
-    fprintf(pFile,"MODEL     %d\n", frameNum);
-    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%6.6f potential energy=%.3f KJ/mole\n",
-            timeInPs,
-            energyInKJ,
-            potential_energyInKJ);
-    int index=0;
-    string hist = atoms[0].pdb;
-    if (atoms[0].class_label == "Chromatin") {
-        hist.pop_back();
-    }
-    char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-    
-    //    double occ=1;
-    for (int n=0; atoms[n].type != EndOfList; ++n){
-        string new_label = atoms[n].pdb;
-        if (atoms[n].class_label == "Chromatin") {
-            new_label.pop_back();
-        }
-        if (hist != new_label) {
-            index++;
-            hist = new_label;
-        }
-//        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
-        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
-                n+1,
-                atoms[n].pdb,
-                chain[index],
-                double(index),
-                atoms[n].posInNm[0],
-                atoms[n].posInNm[1],
-                atoms[n].posInNm[2],
-                atoms[n].stretching_energy,
-                atoms[n].energyInKJ);//,
-//                atoms[n].symbol);
-    }
-    
-    // visualize bonds in pdb file
-    if (GenConst::write_bonds_to_PDB) {
-        for (int n=0; bonds[n].type != EndOfList; ++n){
-            if(bonds[n].atoms[0] < bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
-            }
-            if(bonds[n].atoms[0] > bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
-            }
-        }
-    }
-    
-    fprintf(pFile,"ENDMDL\n");
-    fclose (pFile);
-}
 //                               PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
 void myWritePDBFrame(int frameNum,
@@ -262,7 +194,7 @@ void Kelvin_Voigt_update(MyOpenMMData* omm,
     {
         time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
         
         time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }

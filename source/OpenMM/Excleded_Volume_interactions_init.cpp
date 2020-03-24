@@ -34,8 +34,7 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
 //                                                                                       + atoms[*it_2].radius )<<endl;
     ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
     ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-                                                    + atoms[*it_2].radius )
-                                                    * OpenMM::NmPerAngstrom);
+                                                    + atoms[*it_2].radius ) );
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
 }
 

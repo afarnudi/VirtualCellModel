@@ -67,17 +67,17 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 string sigma = "sigma" + GenConst::Membrane_label + std::to_string(i) + GenConst::Membrane_label + std::to_string(i) ;
                 double new_sig = (a * time * 1000 + b);
                 new_radius = new_sig;
-                omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                omm->context->setParameter(sigma, new_sig);
                 
                 for (int ch=0; ch<chromos.size(); ch++) {
                     if (interaction_map[ch+1][0]==2) {
                         sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
                         //                    new_sig = (new_sig + chromos[ch].get_node_radius())/2.0;
-                        omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                        omm->context->setParameter(sigma, new_sig);
                     } else if (interaction_map[ch+1][0]==1){
                         for (int chind=0; chind < chromos[ch].get_num_of_node_types(); chind++) {
                             sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + std::to_string(chind) + GenConst::Membrane_label + std::to_string(i) ;
-                            omm->context->setParameter(sigma, new_sig* OpenMM::NmPerAngstrom);
+                            omm->context->setParameter(sigma, new_sig);
                         }
                         
                     }
@@ -97,7 +97,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 int atom1, atom2 ;
                 double length, stiffness;
                 omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
-                omm->harmonic->setBondParameters(k, atom1, atom2, 2*new_radius*OpenMM::NmPerAngstrom, stiffness);
+                omm->harmonic->setBondParameters(k, atom1, atom2, 2*new_radius, stiffness);
             }
         }
         mem_bond_count += membranes[i].get_num_of_node_pairs();

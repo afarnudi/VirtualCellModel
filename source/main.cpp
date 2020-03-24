@@ -509,8 +509,7 @@ int main(int argc, char **argv)
                     for(int i=0; i<Membranes[0].get_num_of_node_pairs() ; i++)
                     {
                         omm->harmonic->getBondParameters(i, atom1, atom2, length, stiffness);
-                        stiffness = 0.5 * OpenMM::KJPerKcal
-                                        * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                        stiffness = 0.5 ;
                         
                         omm->harmonic->setBondParameters(i, atom1, atom2, length, stiffness);
                     }
