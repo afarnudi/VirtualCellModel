@@ -524,12 +524,7 @@ int main(int argc, char **argv)
                 }
                 //the monte_carlo part
 
-                 //if(progress==0 or progress==25 or progress==50 or progress==75){ 
                 if ((progress%5==0 or progress==0) and GenConst::MC_step !=0){
-                 
-                    //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
-                    
-
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms);
                 }
                 

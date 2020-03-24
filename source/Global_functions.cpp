@@ -34,7 +34,10 @@ const int EndOfList=-1;
 using std::vector;
 
 
-void write_data(MyAtomInfo atoms[], string buffer, double volume);
+void write_data(MyAtomInfo atoms[],
+                string buffer,
+                double volume,
+                double area);
 //void write_CM(string buffer, vector<Chromatin> chromos);
 //double calculate_pressure(vector<Membrane> mems);
 
@@ -47,11 +50,12 @@ void collect_data(MyAtomInfo atoms[],
     GenConst::data_colection_times.push_back(timeInPs);
     
     double mem_volume = 0;
+    double mem_surface = 0;
     if (mems.size()!=0) {
-        mems[0].calculate_volume();
+        mems[0].calculate_volume_and_sruface_area();
         mem_volume = mems[0].return_volume();
     }
-    write_data(atoms, buffer, mem_volume);
+    write_data(atoms, buffer, mem_volume, mem_surface);
 }
 
 
@@ -69,19 +73,20 @@ using std::endl;
 
 void write_data(MyAtomInfo atoms[],
                 string buffer,
-                double volume){
+                double volume,
+                double area){
     
     
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(Nm/Ps) vy(Nm/Ps) vz(Nm/Ps) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Ang^3)\n";
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(Nm/Ps) vy(Nm/Ps) vz(Nm/Ps) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Nm^3) Area(Nm^2)\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
         wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
-        wdata<<"\t"<<volume<<"\n";
+        wdata<<"\t"<<volume<<"\t"<<area<<"\n";
     }
 }

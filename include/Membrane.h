@@ -38,13 +38,20 @@ using std::endl;
 
 class Membrane
 {
-
+    
 private:
     /** Store the label(pdb) used to write to the trajectory file */
-
+    int mem_index;
+    /*variables*/
+    //    void Normal_direction_Identifier(double x, double y, double z);
+    //    void Rescale(double rescale_factor);
+    void potential_1 (void);
+    void potential_2 (void);
+    
     std::string label;
-
+    
     double volume;
+    double surface_area;
     
     int index;
     /*variables*/
@@ -54,7 +61,7 @@ private:
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     int MD_num_of_Relaxation_steps=200000;
     int MD_correction_steps=2000;
-
+    
     std::map<std::string, double> param_map;
     
     std::string Mesh_file_name="None";
@@ -64,7 +71,7 @@ private:
     double epsilon_LJ_12_6=0;
     
     bool Relaxation=false;
-//    bool Shift= false;
+    //    bool Shift= false;
     bool Relax_with_actin=false;
     int Relaxation_Process_Model=1; /// 1 represents the relaxation Processes without node correction and 2 includes node corrections.
     int correction_progress;
@@ -81,7 +88,7 @@ private:
     double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
-
+    
     double FENE_min=0, FENE_max=0, FENE_epsilon=0, FENE_k=0;
     
     int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
@@ -92,10 +99,10 @@ private:
     double X_scale=0;
     double Y_scale=0;
     double Z_scale=0;
-
+    
     double ECM_interaction_strength=1;
-
-
+    
+    
     double vesicle_interaction_strength=30;
     double vesicle_interaction_sigma=3;
     double Average_Node_Distance();
@@ -106,21 +113,21 @@ private:
     void Normal_direction_Identifier();
     void node_distance_correction(void);
     //    void Normal_direction_Identifier(double x, double y, double z);
-
+    
     
     void FENE_log (void);
     void Hookian (void);
     void custom (void);
     void Relaxation_potential(void);
-   void Node_Bonds_identifier(void);
+    void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial(void);
     //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
-
+    
     void export_relaxed(int MD_step);
     int membrane_counter;
-//    bool rescale=0;
+    //    bool rescale=0;
     
     
 public:
@@ -133,13 +140,13 @@ public:
         return Update_nominal_length;
     }
     ///Call all initilisation members and initilise openmm handles.
-    void initilise_openmm(void);  
+    void initilise_openmm(void);
     ///node-node hard sphere interaction.
     void excluded_volume(void);
     
-
+    
     double min_radius_after_relaxation;
-
+    
     std::string output_file_neme;
     std::string file_time;
     bool particle_type=0; // True means the object is a particle and false means it is a vesicle
@@ -170,7 +177,7 @@ public:
     void ConstantSurfaceForceLocalTriangles ();
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
-
+    
     //monte carlo flip functions
     bool check_monte_carlo=0;
     void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
@@ -190,8 +197,8 @@ public:
     //end of monte carlo flip functions
     
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
-
-
+    
+    
     //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(std::string Mesh_file_name);
     //    void initialise(string Mesh_file_name, double x, double y, double z);
@@ -214,9 +221,9 @@ public:
     void write_pov_traj(std::string traj_name, std::string label, int currentstep);
     double Average_velocity_squared();
     double Omega[3]={0};
-
-
-
+    
+    
+    
     int **Normal_direction; //??? (These 2 elements should be defined and explained)
     int spring_model=2;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
@@ -241,27 +248,20 @@ public:
     //bool =0;
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
-
-    bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
-
-
-private:
-
-    int mem_index;
-    /*variables*/
-    //    void Normal_direction_Identifier(double x, double y, double z);
-//    void Rescale(double rescale_factor);
-    void potential_1 (void);
-    void potential_2 (void);
-
     
-public:
+    bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
+    
     /**Returns the last saved volume*/
     double return_volume(void){
         return volume;
     }
     /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
-    void calculate_volume(void);
+    void calculate_volume_and_sruface_area(void);
+    
+    /**Returns the last saved surface area*/
+    double return_surface_area(void){
+        return surface_area;
+    }
     /**Return the new node radius 'end update time' in Ps.*/
     double get_End_update_time_in_Ps(void){
         return End_update_time_in_Ps;
@@ -282,7 +282,7 @@ public:
     }
     void Relax_1(void);
     void Relax_2(void);
-
+    
     /** \brief public access to total number of membrane nodes.
      * \return integer number of nodes in the membrane
      */
@@ -364,17 +364,17 @@ public:
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
         
-
+        
         double width= 0.66*Average_node_pair_length; // it defines a minimum limit for weil width.
         double delta_length=Max_node_pair_length-Min_node_pair_length;
         double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
         if ((1+ 2*width_scaling)*delta_length < width ){ //this condition shows the case when the mesh is almost ordered.
             width_scaling= (width-delta_length)/(2*delta_length); //in this case the width tuned in a way that the weil width becomes exactly 0.66*Average_node_pair_lenght
-//            cout<<"\n\nif == true\n\n";
+            //            cout<<"\n\nif == true\n\n";
         }
         else{
             width=  (1+ 2*width_scaling)*delta_length; //for disordered meshes it sets the weil witdh by scaling factor 0.2. in this case, the width may become larger than 0.66Average which was the minimum limit.
-//            cout<<"\n\nif == false\n\n";
+            //            cout<<"\n\nif == false\n\n";
         }
         lmin= Min_node_pair_length - width_scaling*delta_length;
         lmax= Max_node_pair_length +  width_scaling*delta_length;
@@ -382,7 +382,7 @@ public:
         le0 = lmin + 3.0*(lmax-lmin)/4.0;
         le1 = lmin +   (lmax-lmin)/4.0;
         
-
+        
     }
     
     int  get_Relaxation_Process_Model(void){
@@ -391,9 +391,9 @@ public:
     bool  get_Relaxation_flag(void){
         return Relaxation;
     }
-
-
-
+    
+    
+    
     void shift_velocity (double vx, double vy, double vz){
         for (int i=0; i<Num_of_Nodes; i++) {
             Node_Velocity[i][0]+=vx;
@@ -415,14 +415,14 @@ public:
     }
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
-
+    
     void calculate_average_force(void){
         double average_force_x=0, average_force_y=0, average_force_z=0;
         for(int j=0 ; j<Num_of_Nodes ; j++){
             average_force_x+=Node_Force[j][0];
             average_force_y+=Node_Force[j][1];
             average_force_z+=Node_Force[j][2];
-
+            
         }
         cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
     }
@@ -443,7 +443,7 @@ public:
     }
     double get_vesicle_interaction_cut_off(void){
         return vesicle_interaction_cut_off;
-    } 
+    }
     double get_vesicle_interaction_sigma(void){
         return vesicle_interaction_sigma;
     }/**Returns epsilon for lennard-Jones interaction between the nodes of  2 membranes.*/

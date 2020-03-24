@@ -22,8 +22,9 @@ double Membrane::Average_Node_Distance()
     
 }
  
-void Membrane::calculate_volume(){
+void Membrane::calculate_volume_and_sruface_area(){
     volume = 0;
+    surface_area=0;
     
     update_COM_position();
     
@@ -50,9 +51,10 @@ void Membrane::calculate_volume(){
         
         crossvector(ABxAC, AB, AC);
         
-        double area = vector_length(ABxAC);
-        double H = abs(innerproduct(ABxAC, height)/area );
+        double area = 0.5*vector_length(ABxAC);
+        double H = abs(innerproduct(ABxAC, height)/(2*area) );
         
+        surface_area += area;
         volume += H*area/3.0;
         
     }
