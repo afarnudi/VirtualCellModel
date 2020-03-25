@@ -27,8 +27,8 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         std::vector<double> sigma_ev;
-        sigma_ev.push_back(atoms[n].radius
-                           * OpenMM::NmPerAngstrom);
+        sigma_ev.push_back(atoms[n].radius);
+        
         for (int i=0; i<ExcludedVolumes.size(); i++) {
             ExcludedVolumes[i]->addParticle();
         }

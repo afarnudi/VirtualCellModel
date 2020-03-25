@@ -42,12 +42,12 @@ def import_trajectories_from_pdb(filename, label = None):
 #    filename = '../'+filename
     
     try:
-        data = np.load(filename[:-3]+'npy')
-        time = np.load(filename[:-4]+'_t.npy')
-        #energy = np.load(filename[:-4]+'_e.npy')
+        data             = np.load(filename[:-3]+'npy')
+        time             = np.load(filename[:-4]+'_t.npy')
+        energy           = np.load(filename[:-4]+'_en.npy')
         
         print('{} imported successfully from the "npy"s.'.format(name))
-        return data, time#, energy
+        return data, time, energy
         
     except:
         print('No npy files located. importing from the pdb.')
@@ -60,9 +60,11 @@ def import_trajectories_from_pdb(filename, label = None):
             words = line.split()
             if words[0] == 'MODEL':
                 xyz=[]
+                en =[]
             elif words[0] == 'REMARK':
                 time = np.append(time, float(words[2].replace('time=','')) )
-                energy = np.append(energy, float(words[4].replace('energy=','')) )
+                en = np.append(en, float(words[4].replace('energy=','')) )
+                en = np.append(en, float(words[6].replace('energy=','')) )
             elif words[0]=='ATOM':
                 if label is None:
                     xyz=concat_data(words,xyz)
@@ -81,12 +83,14 @@ def import_trajectories_from_pdb(filename, label = None):
 
             elif words[0]=='ENDMDL':
                 if len(data)==0:
-                    data=np.asarray([xyz])
+                    data   = np.asarray([xyz])
+                    energy = np.asarray([en])
                 else:
-                    data=np.concatenate((data,[xyz]))
+                    data   = np.concatenate((data,[xyz]))
+                    energy = np.concatenate((energy,[en]))
     np.save(filename[:-4],data)
     np.save(filename[:-4]+'_t',time)
-    #np.save(filename[:-4]+'_e',energy)
+    np.save(filename[:-4]+'_en',energy)
     
     print('{} imported successfully.'.format(name))
-    return data, time#, energy
+    return data, time, energy

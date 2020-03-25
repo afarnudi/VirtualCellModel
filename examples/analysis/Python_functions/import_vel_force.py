@@ -27,17 +27,33 @@ def import_data(filename):
     time=[]
     data=[]
     d = []
+    
+    properties = []
+    props = []
     with open(filename, "r") as f:
         for line in f:
             words = line.split()
             if words[0]=='time:':
                 time = np.append(time, float(words[1]))
+                props = np.append(props, float(words[8].replace('Volume=','')) )
+                props = np.append(props, float(words[10].replace('Area=','')) )
+
                 if len(time) == 2:
                     data = np.asarray([d])
                     d=[]
+                    
+                    properties = np.asarray([props[:2]])
+                    properties = np.concatenate((properties,[props[2:]] ))
+                    props = []
+                    
+                    
                 elif len(time)>2:
                     data = np.concatenate((data, [d]))
                     d=[]
+                    
+                    properties = np.concatenate((properties,[props] ))
+                    props = []
+                    
             else:
                 temp=[]
                 for i in  words[1:]:
@@ -47,19 +63,21 @@ def import_data(filename):
                 else:
                     d = np.concatenate((d,[temp] ))
     data = np.concatenate((data,[d]))
-    return data, time
+    return data, time, properties
 
 def read_file(filename):
     try:
-        data = np.load(filename[:-3]+'npy')
-        time = np.load(filename[:-4]+'_t.npy')
+        data       = np.load(filename[:-3]+'npy')
+        time       = np.load(filename[:-4]+'_t.npy')
+        properties = np.load(filename[:-4]+'_props.npy')
         print('{} imported successfully from the "npy"s.'.format(filename))
-        return data, time
+        return data, time, properties
     except:
         print('No npy files located. importing from the txt.')
         
-        data, time = import_data(filename)
+        data, time, properties = import_data(filename)
         np.save(filename[:-4],data)
         np.save(filename[:-4]+'_t',time)
+        np.save(filename[:-4]+'_props',properties)
         print('{} imported successfully.'.format(filename))
-        return data, time
+        return data, time, properties

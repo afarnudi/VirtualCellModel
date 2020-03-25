@@ -53,7 +53,8 @@ void collect_data(MyAtomInfo atoms[],
     double mem_surface = 0;
     if (mems.size()!=0) {
         mems[0].calculate_volume_and_sruface_area();
-        mem_volume = mems[0].return_volume();
+        mem_volume  = mems[0].return_volume();
+        mem_surface = mems[0].return_surface_area();
     }
     write_data(atoms, buffer, mem_volume, mem_surface);
 }
@@ -81,12 +82,12 @@ void write_data(MyAtomInfo atoms[],
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx(Nm/Ps) vy(Nm/Ps) vz(Nm/Ps) fx(KJ/Ang) fy(KJ/Ang) fz(KJ/Ang) Volume(Nm^3) Area(Nm^2)\n";
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx, vy, vz(Nm/Ps) fx, fy, fz(KJ/Nm) Volume="<<volume<<" (Nm^3) Area="<<area<<" (Nm^2)\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
         wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
-        wdata<<"\t"<<volume<<"\t"<<area<<"\n";
+        wdata<<"\n";
     }
 }
