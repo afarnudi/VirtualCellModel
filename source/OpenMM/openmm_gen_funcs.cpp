@@ -182,7 +182,24 @@ void myWritePDBFrame(int frameNum,
     fclose (pFile);
 }
 
+void writeXYZFrame  (int atom_count,
+                     const MyAtomInfo atoms[],
+                     std::string traj_name)
+{
+    int EndOfList=-1;
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile,"%d\ncomment\n", atom_count);
 
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+        fprintf(pFile,"%4s\t%8.3f\t%8.3f\t%8.3f\n",
+                atoms[n].pdb,
+                atoms[n].posInNm[0],
+                atoms[n].posInNm[1],
+                atoms[n].posInNm[2]);
+    }
+    fclose (pFile);
+}
 void Kelvin_Voigt_update(MyOpenMMData* omm,
                          TimeDependantData* time_dependant_data)
 {

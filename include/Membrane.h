@@ -78,7 +78,7 @@ private:
     double ECM_interaction_cut_off=0;
     double vesicle_interaction_cut_off=10;
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
-    double Total_Potential_Energy;
+    double Total_Potential_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=1;
@@ -228,7 +228,6 @@ public:
     int spring_model=2;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
-    double Total_potential_Energy=0.0;
     double Spring_coefficient=10.0*GenConst::MD_T*GenConst::K; // streching constant
     double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).

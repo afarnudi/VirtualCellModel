@@ -117,12 +117,8 @@ void myWritePDBFrame(int                frameNum,
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.
  */
-void writeXYZFrame  (int                frameNum,
-                     double             timeInPs,
-                     double             energyInKcal,
-                     double             potential_energy,
+void writeXYZFrame  (int                atom_count,
                      const MyAtomInfo   atoms[],
-                     const Bonds        bonds[],
                      std::string        traj_name);
 
 

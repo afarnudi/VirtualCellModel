@@ -460,6 +460,7 @@ int main(int argc, char **argv)
             chrono_sys_clock_start = chrono::system_clock::now();
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+            std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
@@ -477,6 +478,7 @@ int main(int argc, char **argv)
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
+//                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
