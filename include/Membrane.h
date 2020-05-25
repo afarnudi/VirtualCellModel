@@ -121,9 +121,11 @@ private:
     void Relaxation_potential(void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
-    void Bending_potetial(void);
+//    void Bending_potetial(void);
     //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
+    
+    double Total_Bending_Energy = 0.0;
     
     void export_relaxed(int MD_step);
     int membrane_counter;
@@ -131,6 +133,9 @@ private:
     
     
 public:
+    /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
+    double calculate_bending_energy(void);
+    
     /**Returns the node radius update value (set value in the configuration file). */
     double get_new_node_radius(void){
         return New_node_radius;
