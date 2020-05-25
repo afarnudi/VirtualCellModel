@@ -1,0 +1,27 @@
+Simulation_Time_In_Ps	2000 //2000
+Report_Interval_In_Fs	2000
+
+Step_Size_In_Fs	1
+Integrator_type	2
+frictionInPs	0.01
+temperature	300
+MC_step	0//300
+K	1
+MD_T	0.1
+Num_of_Membranes	1	configs/droso/droso_mem.txt
+Num_of_Actins		0	actin_config.txt
+Num_of_ECMs		0	configs/bacteria/bacteria_ecm_config.txt
+Num_of_Chromatins	0	configs/droso/v_test_2.txt configs/droso/v_test_3.txt	configs/chromo/chromo_2.txt configs/chromo/chromo_3.txt 
+Actin_Membrane_Bond_Coefficient	400
+MD_thrmo_step	200
+Bussi_tau	30
+trajectory_file_name	1	chromo
+excluded_volume_interactio	0
+Interaction_map	1	droso_interaction_map.txt
+sigma_LJ_12_6	1
+epsilon_LJ_12_6	0.001
+write_bonds_to_PDB	0
+WantEnergy	1
+WriteVelocitiesandForces	1
+CMMotionRemover	0
+CreateCheckpoint	0
