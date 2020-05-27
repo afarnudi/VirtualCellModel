@@ -494,9 +494,9 @@ int main(int argc, char **argv)
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
                 if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
-//                    printf("[ %2.1f ]\t time: %4.1f Ps [out of %4.1f Ps]    \r",progressp, time, GenConst::Simulation_Time_In_Ps);
-                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
-                    progressp+=0.1;
+                    printf("[ %2.1f ]\t time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
+//                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
+                    progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
                     progress++;
                 }
                 

@@ -7,7 +7,7 @@ Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
 //Mesh_file_name	2	Mesh/3.ply
 //Mesh_file_name	1	Mesh/mem_r50.msh
 //Mesh_file_name	2	Mesh/hoda/4sub.ply
-Mesh_file_name	2	Mesh/icospheres/1_12.ply //Mesh/5.ply //Mesh/6.ply
+Mesh_file_name	2	Mesh/icospheres/47_22092n.ply //Mesh/5.ply //Mesh/6.ply
 
 
 //The mass of each membrane node. Default 1
@@ -23,11 +23,11 @@ FENE_eps	0.09
 FENE_max	23
 FENE_min	17
 //Harmonic spring coefficient in KJ per nanometre squared. Default 10*KT
-Spring_coefficient	0.8660254037844386 //10 //50  //200
+Spring_coefficient	0.73 //10 //50  //200
 
 
 //Dihedral bending energy coefficent of triangle pairs. Default 20*KT
-Bending_coefficient	 2.3094010767585034 //303.109 //10  //2000
+Bending_coefficient	 21.1 //10  //2000
 
 //Viscosity coefficient of the membrane. Default 0
 Damping_coefficient	0
@@ -58,7 +58,7 @@ Y_in_mem	0
 //An Z coordinate inside the membrane mesh used in the initilisation stage to determin the inside and outside of the membrane. Default 0
 Z_in_mem	0
 
-rescale_factor	200
+rescale_factor	872
 
 sigma_LJ_12_6	8
 epsilon_LJ_12_6	0.01
