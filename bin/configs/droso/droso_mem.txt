@@ -23,11 +23,11 @@ FENE_eps	0.09
 FENE_max	23
 FENE_min	17
 //Harmonic spring coefficient in KJ per nanometre squared. Default 10*KT
-Spring_coefficient	0.73 //10 //50  //200
+Spring_coefficient	 0.01 //0.73 //10 //50  //200
 
 
 //Dihedral bending energy coefficent of triangle pairs. Default 20*KT
-Bending_coefficient	 21.1 //10  //2000
+Bending_coefficient	 70 //10  //2000
 
 //Viscosity coefficient of the membrane. Default 0
 Damping_coefficient	0
