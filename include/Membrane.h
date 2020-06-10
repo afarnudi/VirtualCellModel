@@ -165,7 +165,42 @@ public:
     vector<vector<int> > Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    /**This list is used to store all the neighbours of nodes:
+     *Example:
+     *If node i has 4 neighbours:  m, n, o, p
+     *Then we find these neighbours  in the 'Node_neighbour_list' as follows:
+     *Node_neighbour_list [ i ][0] = m
+     *Node_neighbour_list [ i ][1] = n
+     *Node_neighbour_list [ i ][2] = o
+     *Node_neighbour_list [ i ][3] = p
+     */
     vector<vector<int> > Node_neighbour_list;
+    /**This list is used to cross reference the neighbouring nodes to their respective index in the 'Node_neighbour_list'.
+     *Example:
+     *Suppose  node i has 4 neighbours:  m, n, o, p
+     *Then  we find  these  neighbours  in the 'Node_neighbour_list' as follows:
+     *Node_neighbour_list [ i ][0] = m
+     *Node_neighbour_list [ i ][1] = n
+     *Node_neighbour_list [ i ][2] = o
+     *Node_neighbour_list [ i ][3] = p
+     *
+     *Then the i'th index of the 'Node_neighbour_list_respective_bond_index' will also contain 4 elements:
+     *Node_neighbour_list_respective_bond_index [ i ][0] = index_1
+     *Node_neighbour_list_respective_bond_index [ i ][1] = index_2
+     *Node_neighbour_list_respective_bond_index [ i ][2] = index_3
+     *Node_neighbour_list_respective_bond_index [ i ][3] = index_4
+     *
+     *The index_#s will point to the index in the 'Node_Bond_list' that has stored the respective nodes as pairs:
+     *Node_Bond_list [ index_1 ][ 0 ] and Node_Bond_list [ index_1 ][ 1 ]  = i, m
+     *Node_Bond_list [ index_2 ][ 0 ] and Node_Bond_list [ index_2 ][ 1 ]  = i, n
+     *Node_Bond_list [ index_3 ][ 0 ] and Node_Bond_list [ index_3 ][ 1 ]  = i, o
+     *Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ]  = i, p
+     */
+    vector<vector<int> > Node_neighbour_list_respective_bond_index;
+    
+    vector<double> node_voronoi_area;
+    
+    vector<int> Bond_triangle_neighbour_indices ;
     //    vector<double>DamperCheck;
     vector<double>SinusCheck;
     void Damper_check(int MD_step);
@@ -180,7 +215,13 @@ public:
     void MD_Evolution_beginning (double MD_Time_Step);
     void MD_Evolution_end (double MD_Time_Step);
     void ConstantSurfaceForceLocalTriangles ();
+    /**Construct a vector that lists all the neighbours of  each node and their respective index in the 'Node_Bond_list'.
+     */
     void Node_neighbour_list_constructor();
+    /**Construct a vector that lists the triangle neighbours of each node  pair.
+     */
+    void Bond_triangle_neighbour_list_constructor();
+    
     void export_for_resume(int MD_step);
     
     //monte carlo flip functions
@@ -260,7 +301,10 @@ public:
         return volume;
     }
     /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
-    void calculate_volume_and_sruface_area(void);
+    void calculate_volume_and_surface_area(void);
+    
+    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
+    void calculate_surface_area_with_voronoi(void);
     
     /**Returns the last saved surface area*/
     double return_surface_area(void){
@@ -364,6 +408,8 @@ public:
         epsilon = FENE_epsilon;
         k = FENE_k;
     }
+    /**Calculate and return the cot of the  angle between nodes A(middle of the angle), B, and C.*/
+    double calc_theta_angle_ABC(int node_A, int node_B, int node_C);
     
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){

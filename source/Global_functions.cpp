@@ -55,7 +55,7 @@ void collect_data(MyAtomInfo atoms[],
     double bending_energy = 0;
 //    double stretch_energy = 0;
     if (mems.size()!=0) {
-        mems[0].calculate_volume_and_sruface_area();
+        mems[0].calculate_volume_and_surface_area();
         mem_volume  = mems[0].return_volume();
         mem_surface = mems[0].return_surface_area();
         bending_energy = mems[0].calculate_bending_energy();

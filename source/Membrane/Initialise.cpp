@@ -44,8 +44,11 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
     }
     Node_Bonds_identifier();
-    Node_neighbour_list_constructor();
     Triangle_pair_identifier();
+    
+    Node_neighbour_list_constructor();
+    Bond_triangle_neighbour_list_constructor();
+    
   
 
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
@@ -76,6 +79,9 @@ void Membrane::initialise(std::string Mesh_file_name){
             exit(EXIT_FAILURE);
         }
     }
+    
+    node_voronoi_area.resize(Num_of_Nodes,0);
+    calculate_surface_area_with_voronoi();
     
     cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
     
