@@ -111,6 +111,9 @@ namespace GenConst {
 //    extern std::vector<std::vector<std::vector<double> > > data;
     extern std::vector<double> data_colection_times;
     
+    //1/0 true/false if you want/don't want to calculate and write the voronoi area associated with Membrane nodes in the properties output file. Default 0
+    extern bool Wantvoronoi;
+    
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps

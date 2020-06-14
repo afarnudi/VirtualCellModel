@@ -23,6 +23,7 @@
 #include <fstream>
 #include <vector>
 #include <math.h>
+
 #include <map>
 #include <iomanip>
 #include <iterator>
@@ -133,6 +134,20 @@ private:
     
     
 public:
+    //Analysis funcs/vars:
+    void update_spherical_positions();
+    void surface_integral_test();
+    void load_pdb_frame(int frame);
+    int import_pdb_frames(std::string filename);
+    void pdb_to_bin(std::string filename);
+    void calculate_ulm(int ell_max);
+    void write_ulm(int ell_max, std::string traj_name, double num_frames);
+    vector<vector<double> > ulm_avg;
+    vector<vector<double> > ulm_std;
+    vector<vector<vector<double> > > pdb_frames;
+    vector<vector<double> > spherical_positions;
+    
+    
     /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
     double calculate_bending_energy(void);
     
@@ -165,6 +180,10 @@ public:
     vector<vector<int> > Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    
+    
+    
+    
     /**This list is used to store all the neighbours of nodes:
      *Example:
      *If node i has 4 neighbours:  m, n, o, p
@@ -199,6 +218,7 @@ public:
     vector<vector<int> > Node_neighbour_list_respective_bond_index;
     
     vector<double> node_voronoi_area;
+    double surface_area_voronoi=0;
     
     vector<int> Bond_triangle_neighbour_indices ;
     //    vector<double>DamperCheck;
@@ -299,6 +319,11 @@ public:
     /**Returns the last saved volume*/
     double return_volume(void){
         return volume;
+    }
+    /**Calculate the voronoi area of  each  node and return a list that indicated the voronoi area of each node.*/
+    vector<double> return_voronoi_node_area(){
+        calculate_surface_area_with_voronoi();
+        return node_voronoi_area;
     }
     /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
     void calculate_volume_and_surface_area(void);

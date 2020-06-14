@@ -106,6 +106,7 @@ namespace GenConst {
     bool   WriteVelocitiesandForces;
     bool   CMMotionRemover;
     int    CMMotionRemoverStep;
+    bool   Wantvoronoi;
 
 
 
@@ -120,7 +121,23 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
-
+    
+    bool analysis_mode=false;
+    std::string analysis_filename;
+    int ell_max;
+    
+    for (int i=1; i<argc; i++) {
+        if (argv[i] == "-analysis") {
+            analysis_mode=true;
+            analysis_filename = argv[i+1];
+        }
+        if (argv[i] == "-lmax") {
+            analysis_mode=true;
+            ell_max = stoi(argv[i+1]);
+        }
+        
+    }
+    
     
     // get the current time.
     time_t t = time(0);
@@ -336,6 +353,30 @@ int main(int argc, char **argv)
     
     float progressp=0;
     int   progress=0;
+    
+    if (analysis_mode) {
+
+        cout<<"Entering analysis mode:\n";
+        vector<vector<double> > ulm;
+        
+
+        
+        
+        int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
+
+        for (int i=2; i<max_frame; i++) {
+            
+            Membranes[0].load_pdb_frame(i);
+
+            Membranes[0].calculate_ulm(ell_max);
+            cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+        }
+        Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1);
+        
+        return 2;
+    }
+    
+    
     //openmm**
     if (GenConst::OpenMM) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -556,6 +597,7 @@ int main(int argc, char **argv)
             return 1;
         }
     }
+    
     
     
     Trajectory.open(traj_file_name.c_str(), ios::app);

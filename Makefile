@@ -2,7 +2,11 @@ TARGET=VCM
 CXXFLAGS=-std=c++14 -O2
 CXX=g++
 
+# CXXFLAGS=-std=c++14 -O3
+# CXX=icpc
+
 OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
+# OpenMM_INSTALL_DIR=/usr/local/openmm
 BINDIR=bin
 SRCDIR=source
 INCDIR=include

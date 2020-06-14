@@ -25,3 +25,4 @@ WantEnergy	1
 WriteVelocitiesandForces	1
 CMMotionRemover	0
 CreateCheckpoint	0
+Wantvoronoi	1

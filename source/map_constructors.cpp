@@ -422,15 +422,24 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             GenConst::CMMotionRemoverStep=it->second;
         }
     } else if (param_name=="CreateCheckpoint"){
-           it = general_param_map.find(param_name);
-           if (it != general_param_map.end()){
-               if (it->second == 0) {
-                   GenConst::CreateCheckpoint = false;
-               } else {
-                   GenConst::CreateCheckpoint = true;
-               }
-           }
-       }
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::CreateCheckpoint = false;
+            } else {
+                GenConst::CreateCheckpoint = true;
+            }
+        }
+    } else if (param_name=="Wantvoronoi"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::Wantvoronoi = false;
+            } else {
+                GenConst::Wantvoronoi = true;
+            }
+        }
+    }
     
     
 }

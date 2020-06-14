@@ -89,14 +89,14 @@ void matrix_inverse (double mat[3][3]){
 void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C){
     
     double  x1 = points[0][0],
-            x2 = points[1][0],
-            x3 = points[2][0],
-            y1 = points[0][1],
-            y2 = points[1][1],
-            y3 = points[2][1],
-            z1 = points[0][2],
-            z2 = points[1][2],
-            z3 = points[2][2];
+    x2 = points[1][0],
+    x3 = points[2][0],
+    y1 = points[0][1],
+    y2 = points[1][1],
+    y3 = points[2][1],
+    z1 = points[0][2],
+    z2 = points[1][2],
+    z3 = points[2][2];
     
     C = ( (x2-x1)*(x3*y1-y3*x1) + (x3-x1)*(x1*y2-y1*x2) )/( (z1*x2-x1*z2)*(x1*y3-y1*x3) + (z3*x1-x3*z1)*(x1*y2-y1*x2) );
     B = ( x2-x1 + C*(z1*x2-x1*z2) )/( x1*y2-x2*y1 );
@@ -109,21 +109,43 @@ void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, dou
     for(int i=0; i<3; i++){
         p1p2[i]=points[0][i]-points[1][i];
         p1p3[i]=points[0][i]-points[2][i];
-        }
+    }
     
-        crossvector( n,p1p2,p1p3);
-        A=n[0];
-        B=n[1];
-        C=n[2];
-        /*
-        D= A*points[0][0]+B*points[0][1]+C*points[0][2];
-        if(D!=0){
-            A=-A/D;
-            B=-B/D;
-            C=-C/D;
-        }
-        check_1= A*points[0][0]+B*points[0][1]+C*points[0][2];
-        check_2=A*points[1][0]+B*points[1][1]+C*points[1][2];
-        check3=A*points[2][0]+B*points[2][1]+C*points[2][2];
-         */
+    crossvector( n,p1p2,p1p3);
+    A=n[0];
+    B=n[1];
+    C=n[2];
+    /*
+     D= A*points[0][0]+B*points[0][1]+C*points[0][2];
+     if(D!=0){
+     A=-A/D;
+     B=-B/D;
+     C=-C/D;
+     }
+     check_1= A*points[0][0]+B*points[0][1]+C*points[0][2];
+     check_2=A*points[1][0]+B*points[1][1]+C*points[1][2];
+     check3=A*points[2][0]+B*points[2][1]+C*points[2][2];
+     */
 }
+
+
+
+int count_pdb_frames(std::string filename, int num_atoms){
+    std::ifstream read_pdb;
+    read_pdb.open(filename.c_str());
+    read_pdb.seekg(std::ios::beg);
+    if (read_pdb) {
+        std::cout << filename<<" opend successfully. \n\n";
+    }else{
+        std::cout << "Unable to read "<<filename<<std::endl;
+    }
+    std::string line;
+    
+    int num_frames = 0;
+    while(getline(read_pdb, line)){
+        num_frames++;
+    }
+    read_pdb.close();
+    return num_frames/(num_atoms+3);
+}
+

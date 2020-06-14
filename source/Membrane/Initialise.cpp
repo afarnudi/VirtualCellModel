@@ -80,8 +80,10 @@ void Membrane::initialise(std::string Mesh_file_name){
         }
     }
     
-    node_voronoi_area.resize(Num_of_Nodes,0);
-    calculate_surface_area_with_voronoi();
+    if (GenConst::Wantvoronoi){
+        node_voronoi_area.resize(Num_of_Nodes,0);
+//        calculate_surface_area_with_voronoi();
+    }
     
     cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
     
