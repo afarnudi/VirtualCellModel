@@ -124,16 +124,22 @@ int main(int argc, char **argv)
     
     bool analysis_mode=false;
     std::string analysis_filename;
-    int ell_max;
+    int ell_max =0;
     
+//    cout<<"argc "<<argc<<endl;
     for (int i=1; i<argc; i++) {
-        if (argv[i] == "-analysis") {
+        string arg = argv[i];
+        if (arg == "-analysis") {
+            
             analysis_mode=true;
             analysis_filename = argv[i+1];
+            cout<<"Analysis mode\n";
         }
-        if (argv[i] == "-lmax") {
+        if (arg == "-lmax") {
             analysis_mode=true;
-            ell_max = stoi(argv[i+1]);
+            string lmax = argv[i+1];
+            ell_max = stoi(lmax);
+            cout<<"lmax "<<ell_max<<endl;
         }
         
     }
