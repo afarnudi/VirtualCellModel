@@ -378,7 +378,7 @@ int main(int argc, char **argv)
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
         }
         Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1);
-        
+        cout<<"max_frame  "<<max_frame<<endl;
         return 2;
     }
     
