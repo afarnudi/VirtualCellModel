@@ -4,7 +4,7 @@ Report_Interval_In_Fs	2000
 Step_Size_In_Fs	1
 Integrator_type	2
 frictionInPs	0.01
-temperature	300
+temperature	310
 MC_step	0//300
 K	1
 MD_T	0.1
