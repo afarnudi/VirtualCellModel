@@ -153,6 +153,14 @@ void Membrane::surface_integral_test(){
 }
 
 using namespace std;
+void Membrane::set_com_to_zero(){
+    for (int i=0; i<Num_of_Nodes; i++) {
+        for (int j=0; j<3; j++) {
+            Node_Position[i][j] -= COM_position[j];
+        }
+    }
+}
+
 
 void Membrane::load_pdb_frame(int frame){
     for (int i=0; i<Num_of_Nodes; i++) {
@@ -160,9 +168,9 @@ void Membrane::load_pdb_frame(int frame){
             Node_Position[i][j] = pdb_frames[frame][i][j];
         }
     }
-    
-    update_spherical_positions();
     update_COM_position();
+    set_com_to_zero();
+    update_spherical_positions();
     calculate_surface_area_with_voronoi();
 }
 
@@ -429,7 +437,7 @@ void Membrane::calculate_ulm(int ell_max){
                 ylm_cc = ylm;
                 ylm_cc.imag(-1*imag(ylm));
 
-                f_theta_phi = spherical_positions[i][0]-radius;
+                f_theta_phi = (spherical_positions[i][0]-radius);
                 double multi = f_theta_phi*voronoi_to_omega_multiplyer*node_voronoi_area[i];
                 ylm_cc.real(real(ylm) * multi);
                 ylm_cc.imag(imag(ylm) * multi);

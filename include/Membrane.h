@@ -139,6 +139,7 @@ public:
     void surface_integral_test();
     void load_pdb_frame(int frame);
     int import_pdb_frames(std::string filename);
+    void set_com_to_zero();
     void pdb_to_bin(std::string filename);
     void calculate_ulm(int ell_max);
     void write_ulm(int ell_max, std::string traj_name, double num_frames);
