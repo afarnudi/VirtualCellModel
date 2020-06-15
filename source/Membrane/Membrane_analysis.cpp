@@ -196,11 +196,23 @@ void Membrane::surface_integral_test(){
 }
 
 using namespace std;
+
+
 void Membrane::set_com_to_zero(){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Position[i][j] -= COM_position[j];
         }
+    }
+}
+
+void Membrane::rotate_particle_one_to_z_axis(void){
+    double theta0 = spherical_positions[0][1];
+    double phi0   = spherical_positions[0][2];
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        spherical_positions[i][1] -= theta0;
+        spherical_positions[i][2] -= phi0;
     }
 }
 
@@ -214,8 +226,10 @@ void Membrane::load_pdb_frame(int frame){
     update_COM_position();
     set_com_to_zero();
     update_spherical_positions();
+    rotate_particle_one_to_z_axis();
     calculate_surface_area_with_voronoi();
 }
+
 
 int Membrane::import_pdb_frames(string filename){
     

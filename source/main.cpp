@@ -508,6 +508,7 @@ int main(int argc, char **argv)
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
+            cout<<"file name "<<traj_name<<endl;
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
