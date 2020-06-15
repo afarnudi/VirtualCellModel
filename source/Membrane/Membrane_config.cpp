@@ -188,6 +188,12 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if(param_name=="FENE_k"){
         
         FENE_k = param_value;
+    } else if(param_name=="init_random_rotation"){
+        if (int(param_value) == 0) {
+            initial_random_rotation_coordinates=false;
+        } else{
+            initial_random_rotation_coordinates=true;
+        }
     }
     
 }

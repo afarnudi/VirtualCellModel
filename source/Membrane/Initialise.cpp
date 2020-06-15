@@ -80,6 +80,11 @@ void Membrane::initialise(std::string Mesh_file_name){
         }
     }
     
+    if (initial_random_rotation_coordinates){
+        cout<<"randomly rotating the mesh\n";
+        randomly_rotate_coordinates();
+    }
+    
     if (GenConst::Wantvoronoi){
         node_voronoi_area.resize(Num_of_Nodes,0);
 //        calculate_surface_area_with_voronoi();

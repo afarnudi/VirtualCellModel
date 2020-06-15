@@ -7,8 +7,8 @@ Resume	0	Results/Relaxation/Resume_Membrane_0_2019_02_27_time_14_39.txt
 //Mesh_file_name	2	Mesh/3.ply
 //Mesh_file_name	1	Mesh/mem_r50.msh
 //Mesh_file_name	2	Mesh/hoda/4sub.ply
-Mesh_file_name	2	Mesh/icospheres/47_22092n.ply //Mesh/5.ply //Mesh/6.ply
-
+Mesh_file_name	2	Mesh/icospheres/32_1024.ply //Mesh/5.ply //Mesh/6.ply
+init_random_rotation	1
 
 //The mass of each membrane node. Default 1
 Node_Mass	5

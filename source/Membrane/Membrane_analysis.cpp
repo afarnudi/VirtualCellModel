@@ -2,6 +2,49 @@
 #include "General_functions.hpp"
 #include <cstdlib>
 
+void Membrane::randomly_rotate_coordinates(void){
+    double theta = ((double) rand() / (RAND_MAX))*M_PI;
+    double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+    
+    vector<vector<double> > Rotationy;
+    vector<vector<double> > Rotationz;
+    
+    Rotationy.resize(3);
+    Rotationz.resize(3);
+    for (int i=0; i<3; i++) {
+        Rotationy[i].resize(3);
+        Rotationz[i].resize(3);
+    }
+    
+    Rotationy[0][0] = cos(theta);
+    Rotationy[0][1] = 0;
+    Rotationy[0][2] = sin(theta);
+    
+    Rotationy[1][0] = 0;
+    Rotationy[1][1] = 1;
+    Rotationy[1][2] = 0;
+    
+    Rotationy[2][0] = -sin(theta);
+    Rotationy[2][1] = 0;
+    Rotationy[2][2] = cos(theta);
+    
+    Rotationz[0][0] = cos(phi);
+    Rotationz[0][1] = -sin(phi);
+    Rotationz[0][2] = 0;
+    
+    Rotationz[1][0] = sin(phi);
+    Rotationz[1][1] = cos(phi);
+    Rotationz[1][2] = 0;
+    
+    Rotationz[2][0] = 0;
+    Rotationz[2][1] = 0;
+    Rotationz[2][2] = 1;
+    
+    
+}
+
+
+
 double Membrane::calc_theta_angle_ABC(int node_A, int node_B, int node_C){
     /**A is the is the middle point of the angle*/
     double AB[3], AC[3], ACxAB[3];
