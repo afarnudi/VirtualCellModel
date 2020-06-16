@@ -2,10 +2,7 @@
 #include "General_functions.hpp"
 #include <cstdlib>
 
-void Membrane::randomly_rotate_coordinates(void){
-    double theta = ((double) rand() / (RAND_MAX))*M_PI;
-    double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
-    
+void Membrane::rotate_coordinates(double theta, double phi){
     vector<vector<double> > Rotationy;
     vector<vector<double> > Rotationz;
     
@@ -39,6 +36,26 @@ void Membrane::randomly_rotate_coordinates(void){
     Rotationz[2][0] = 0;
     Rotationz[2][1] = 0;
     Rotationz[2][2] = 1;
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        double x = Node_Position[i][0];
+        double y = Node_Position[i][1];
+        double z = Node_Position[i][2];
+        
+        Node_Position[i][0] = x*Rotationz[0][0] + y*Rotationz[0][1] + z*Rotationz[0][2];
+        Node_Position[i][1] = x*Rotationz[1][0] + y*Rotationz[1][1] + z*Rotationz[1][2];
+        Node_Position[i][2] = x*Rotationz[2][0] + y*Rotationz[2][1] + z*Rotationz[2][2];
+        
+        x = Node_Position[i][0];
+        y = Node_Position[i][1];
+        z = Node_Position[i][2];
+        
+        Node_Position[i][0] = x*Rotationy[0][0] + y*Rotationy[0][1] + z*Rotationy[0][2];
+        Node_Position[i][1] = x*Rotationy[1][0] + y*Rotationy[1][1] + z*Rotationy[1][2];
+        Node_Position[i][2] = x*Rotationy[2][0] + y*Rotationy[2][1] + z*Rotationy[2][2];
+        
+    }
+    
     
     
 }
@@ -207,13 +224,15 @@ void Membrane::set_com_to_zero(){
 }
 
 void Membrane::rotate_particle_one_to_z_axis(void){
-    double theta0 = spherical_positions[0][1];
-    double phi0   = spherical_positions[0][2];
+    vector<double> r_theta_phi;
+    r_theta_phi = convert_cartesian_to_spherical(Node_Position[0][0],
+                                                 Node_Position[0][1],
+                                                 Node_Position[0][2]);
     
-    for (int i=0; i<Num_of_Nodes; i++) {
-        spherical_positions[i][1] -= theta0;
-        spherical_positions[i][2] -= phi0;
-    }
+    double theta0 = r_theta_phi[1];
+    double phi0   = r_theta_phi[2];
+    
+    rotate_coordinates(-theta0, -phi0);
 }
 
 
@@ -225,8 +244,8 @@ void Membrane::load_pdb_frame(int frame){
     }
     update_COM_position();
     set_com_to_zero();
-    update_spherical_positions();
     rotate_particle_one_to_z_axis();
+    update_spherical_positions();
     calculate_surface_area_with_voronoi();
 }
 

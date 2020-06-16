@@ -82,7 +82,13 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (initial_random_rotation_coordinates){
         cout<<"randomly rotating the mesh\n";
-        randomly_rotate_coordinates();
+        srand (time(NULL));
+        double scratch = rand();
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        cout<<"theta: "<<theta<<"\n";
+        cout<<"phi  : "<<phi<<"\n";
+        rotate_coordinates(theta, phi);
     }
     
     if (GenConst::Wantvoronoi){

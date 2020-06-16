@@ -136,7 +136,7 @@ private:
 public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
-    void randomly_rotate_coordinates(void);
+    void rotate_coordinates(double theta, double phi);
     void rotate_particle_one_to_z_axis(void);
     void update_spherical_positions();
     void surface_integral_test();
