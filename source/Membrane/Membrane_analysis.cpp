@@ -297,8 +297,6 @@ void Membrane::load_pdb_frame(int frame, int analysis_averaging_option,int znode
     }else if(analysis_averaging_option == 2){
         if(z_node_index == -1 || y_node_index == -1){
             find_nodes_on_the_z_and_y_axis();
-        } else {
-            cout<<"using:\n z_node_index "<<z_node_index<<"\ny_node_index"<<y_node_index<<endl;
         }
         rotate_particle_to_axes();
     }
