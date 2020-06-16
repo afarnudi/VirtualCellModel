@@ -12,47 +12,58 @@ void Membrane::rotate_coordinates(double theta, double phi){
         Rotationy[i].resize(3);
         Rotationz[i].resize(3);
     }
+    if (theta != 0) {
+        Rotationy[0][0] = cos(theta);
+        Rotationy[0][1] = 0;
+        Rotationy[0][2] = sin(theta);
+        
+        Rotationy[1][0] = 0;
+        Rotationy[1][1] = 1;
+        Rotationy[1][2] = 0;
+        
+        Rotationy[2][0] = -sin(theta);
+        Rotationy[2][1] = 0;
+        Rotationy[2][2] = cos(theta);
+    }
     
-    Rotationy[0][0] = cos(theta);
-    Rotationy[0][1] = 0;
-    Rotationy[0][2] = sin(theta);
+    if (phi !=0) {
+        Rotationz[0][0] = cos(phi);
+        Rotationz[0][1] = -sin(phi);
+        Rotationz[0][2] = 0;
+        
+        Rotationz[1][0] = sin(phi);
+        Rotationz[1][1] = cos(phi);
+        Rotationz[1][2] = 0;
+        
+        Rotationz[2][0] = 0;
+        Rotationz[2][1] = 0;
+        Rotationz[2][2] = 1;
+    }
     
-    Rotationy[1][0] = 0;
-    Rotationy[1][1] = 1;
-    Rotationy[1][2] = 0;
-    
-    Rotationy[2][0] = -sin(theta);
-    Rotationy[2][1] = 0;
-    Rotationy[2][2] = cos(theta);
-    
-    Rotationz[0][0] = cos(phi);
-    Rotationz[0][1] = -sin(phi);
-    Rotationz[0][2] = 0;
-    
-    Rotationz[1][0] = sin(phi);
-    Rotationz[1][1] = cos(phi);
-    Rotationz[1][2] = 0;
-    
-    Rotationz[2][0] = 0;
-    Rotationz[2][1] = 0;
-    Rotationz[2][2] = 1;
     
     for (int i=0; i<Num_of_Nodes; i++) {
         double x = Node_Position[i][0];
         double y = Node_Position[i][1];
         double z = Node_Position[i][2];
         
-        Node_Position[i][0] = x*Rotationz[0][0] + y*Rotationz[0][1] + z*Rotationz[0][2];
-        Node_Position[i][1] = x*Rotationz[1][0] + y*Rotationz[1][1] + z*Rotationz[1][2];
-        Node_Position[i][2] = x*Rotationz[2][0] + y*Rotationz[2][1] + z*Rotationz[2][2];
+        if (phi != 0) {
+            Node_Position[i][0] = x*Rotationz[0][0] + y*Rotationz[0][1] + z*Rotationz[0][2];
+            Node_Position[i][1] = x*Rotationz[1][0] + y*Rotationz[1][1] + z*Rotationz[1][2];
+            Node_Position[i][2] = x*Rotationz[2][0] + y*Rotationz[2][1] + z*Rotationz[2][2];
+        }
         
-        x = Node_Position[i][0];
-        y = Node_Position[i][1];
-        z = Node_Position[i][2];
+        if (theta !=0) {
+            x = Node_Position[i][0];
+            y = Node_Position[i][1];
+            z = Node_Position[i][2];
+            
+            Node_Position[i][0] = x*Rotationy[0][0] + y*Rotationy[0][1] + z*Rotationy[0][2];
+            Node_Position[i][1] = x*Rotationy[1][0] + y*Rotationy[1][1] + z*Rotationy[1][2];
+            Node_Position[i][2] = x*Rotationy[2][0] + y*Rotationy[2][1] + z*Rotationy[2][2];
+        }
         
-        Node_Position[i][0] = x*Rotationy[0][0] + y*Rotationy[0][1] + z*Rotationy[0][2];
-        Node_Position[i][1] = x*Rotationy[1][0] + y*Rotationy[1][1] + z*Rotationy[1][2];
-        Node_Position[i][2] = x*Rotationy[2][0] + y*Rotationy[2][1] + z*Rotationy[2][2];
+        
+        
         
     }
     
@@ -223,28 +234,73 @@ void Membrane::set_com_to_zero(){
     }
 }
 
-void Membrane::rotate_particle_one_to_z_axis(void){
+void Membrane::rotate_particle_to_axes(void){
+    
+    //find the angles of the node that used to be on the z axis
     vector<double> r_theta_phi;
-    r_theta_phi = convert_cartesian_to_spherical(Node_Position[0][0],
-                                                 Node_Position[0][1],
-                                                 Node_Position[0][2]);
+    r_theta_phi = convert_cartesian_to_spherical(Node_Position[z_node_index][0],
+                                                 Node_Position[z_node_index][1],
+                                                 Node_Position[z_node_index][2]);
     
     double theta0 = r_theta_phi[1];
     double phi0   = r_theta_phi[2];
     
     rotate_coordinates(-theta0, -phi0);
+    //rotate the particles so the node that was on the z axis at the beginning of the run will lie on the z axis
+    r_theta_phi = convert_cartesian_to_spherical(Node_Position[y_node_index][0],
+                                                 Node_Position[y_node_index][1],
+                                                 Node_Position[y_node_index][2]);
+    
+    phi0   = r_theta_phi[2];
+    //rotate the particles so the node that was on the y axis at the beginning of the run will lie on the y axis
+    rotate_coordinates(0, M_PI-phi0);
 }
 
+void Membrane::find_nodes_on_the_z_and_y_axis(){
+    for (int i=0; i<Num_of_Nodes; i++) {
+        if ( (abs( pdb_frames[0][i][0]-1 )<0.0001) &&
+             (abs( pdb_frames[0][i][1]-1 )<0.0001) ) {
+            z_node_index=i;
+        }
+        if ( (abs( pdb_frames[0][i][0]-1 )<0.0001) &&
+             (abs( pdb_frames[0][i][2]-1 )<0.0001) ) {
+            y_node_index=i;
+        }
+        if( (y_node_index != -1) && (z_node_index != -1)){
+            cout<<"Founds nodes lying on the z and y axis: "<<endl;
+            cout<<"z nodes "<<z_node_index<<"\ny node "<<y_node_index<<endl;
+            break;
+        }
+    }
+    if(y_node_index == -1) {
+        cout<<"Could not find a node on the y axis"<<endl;
+    }
+    if( (y_node_index == -1) || (z_node_index == -1)){
+        cout<<"Could not find a node on the z axis"<<endl;
+    }
+}
 
-void Membrane::load_pdb_frame(int frame){
+void Membrane::load_pdb_frame(int frame, int analysis_averaging_option){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Position[i][j] = pdb_frames[frame][i][j];
         }
     }
+    
     update_COM_position();
     set_com_to_zero();
-    rotate_particle_one_to_z_axis();
+    if (analysis_averaging_option == 1) {
+        srand (time(NULL));
+        double scratch = rand();
+        scratch = rand();
+    }else if(analysis_averaging_option == 2){
+        if(z_node_index == -1 || y_node_index == -1){
+            find_nodes_on_the_z_and_y_axis();
+        }
+        rotate_particle_to_axes();
+    }
+    
+    
     update_spherical_positions();
     calculate_surface_area_with_voronoi();
 }
@@ -465,7 +521,7 @@ void Membrane::pdb_to_bin(string filename){
 //    //    }
 }
 
-void Membrane::calculate_ulm(int ell_max){
+void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();
         ulm_std.clear();
@@ -477,6 +533,17 @@ void Membrane::calculate_ulm(int ell_max){
         }
         cout<<"cleared ulm\n";
     }
+    
+    
+    if(analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    
     
     double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     //    cout<<"radius voronoi = "<<radius<<endl;
@@ -524,30 +591,6 @@ void Membrane::calculate_ulm(int ell_max){
         }
     }
     
-    
-//    for(int i=0;i<Num_of_Nodes;i++){
-//
-//        for (int ell=0; ell<ell_max+1; ell++) {
-//            for (int m=-ell; m<ell+1; m++) {
-//
-//                ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
-//                ylm_cc = ylm;
-//                ylm_cc.imag(-1*imag(ylm));
-//
-//                f_theta_phi = spherical_positions[i][0]-radius;
-//                double multi = f_theta_phi*voronoi_to_omega_multiplyer*node_voronoi_area[i];
-//                ylm_cc.real(real(ylm) * multi);
-//                ylm_cc.imag(imag(ylm) * multi);
-//
-//                //                double ulm = abs(ylm_cc);
-//                ulm_avg_frame[ell][m+ell] += ylm_cc;
-//                //                ulm_std_frame[ell][m+ell] += ulm*ulm;
-//
-//
-//            }
-//        }
-//
-//    }
     
     for (int ell=0; ell<ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {

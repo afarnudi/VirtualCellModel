@@ -137,19 +137,22 @@ public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
     void rotate_coordinates(double theta, double phi);
-    void rotate_particle_one_to_z_axis(void);
+    void rotate_particle_to_axes(void);
     void update_spherical_positions();
     void surface_integral_test();
-    void load_pdb_frame(int frame);
-    int import_pdb_frames(std::string filename);
+    void load_pdb_frame(int frame, int analysis_averaging_option);
+    int  import_pdb_frames(std::string filename);
     void set_com_to_zero();
     void pdb_to_bin(std::string filename);
-    void calculate_ulm(int ell_max);
+    void calculate_ulm(int ell_max, int analysis_averaging_option);
     void write_ulm(int ell_max, std::string traj_name, double num_frames);
+    void find_nodes_on_the_z_and_y_axis();
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
     vector<vector<vector<double> > > pdb_frames;
     vector<vector<double> > spherical_positions;
+    int z_node_index = -1;
+    int y_node_index = -1;
     
     
     /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */

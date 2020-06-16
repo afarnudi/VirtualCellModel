@@ -123,6 +123,8 @@ int main(int argc, char **argv)
 {
     
     bool analysis_mode=false;
+    int analysis_averaging_option = 0;
+    int num_ang_avg= 1;
     std::string analysis_filename;
     int ell_max =0;
     
@@ -140,6 +142,17 @@ int main(int argc, char **argv)
             string lmax = argv[i+1];
             ell_max = stoi(lmax);
             cout<<"lmax "<<ell_max<<endl;
+        }
+        if (arg == "-angavg") {
+            analysis_averaging_option = 1;
+            cout<<"analysis_angular_average_modes: ON"<<endl;
+            string rotations = argv[i+1];
+            num_ang_avg = stoi(rotations);
+            cout<<"rotations "<<num_ang_avg<<endl;
+        }
+        if (arg == "-align_axes") {
+            analysis_averaging_option=2;
+            cout<<"align_axeas: ON"<<endl;
         }
         
     }
@@ -369,12 +382,15 @@ int main(int argc, char **argv)
         
         
         int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
-
+        
         for (int i=2; i<max_frame; i++) {
             
-            Membranes[0].load_pdb_frame(i);
-
-            Membranes[0].calculate_ulm(ell_max);
+            
+            Membranes[0].load_pdb_frame(i, analysis_averaging_option);
+            for (int runs=0; runs<num_ang_avg; runs++) {
+                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+            }
+            
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
         }
         Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1);
@@ -470,6 +486,8 @@ int main(int argc, char **argv)
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
         
+        cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+        
         try {
             MyOpenMMData* omm = new MyOpenMMData();
             TimeDependantData* time_dependant_data = new TimeDependantData();
@@ -508,7 +526,7 @@ int main(int argc, char **argv)
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
             std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-            cout<<"file name "<<traj_name<<endl;
+            
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
