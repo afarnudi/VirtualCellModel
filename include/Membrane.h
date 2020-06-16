@@ -140,7 +140,7 @@ public:
     void rotate_particle_to_axes(void);
     void update_spherical_positions();
     void surface_integral_test();
-    void load_pdb_frame(int frame, int analysis_averaging_option);
+    void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
     int  import_pdb_frames(std::string filename);
     void set_com_to_zero();
     void pdb_to_bin(std::string filename);

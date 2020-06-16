@@ -125,6 +125,8 @@ int main(int argc, char **argv)
     bool analysis_mode=false;
     int analysis_averaging_option = 0;
     int num_ang_avg= 1;
+    int z_node=-1;
+    int y_node=-1;
     std::string analysis_filename;
     int ell_max =0;
     
@@ -153,6 +155,12 @@ int main(int argc, char **argv)
         if (arg == "-align_axes") {
             analysis_averaging_option=2;
             cout<<"align_axeas: ON"<<endl;
+            string number = argv[i+1];
+            z_node = stoi(number);
+            cout<<"z_node "<<z_node<<endl;
+            number = argv[i+2];
+            y_node = stoi(number);
+            cout<<"y_node "<<y_node<<endl;
         }
         
     }
@@ -386,7 +394,7 @@ int main(int argc, char **argv)
         for (int i=2; i<max_frame; i++) {
             
             
-            Membranes[0].load_pdb_frame(i, analysis_averaging_option);
+            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
             for (int runs=0; runs<num_ang_avg; runs++) {
                 Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
             }

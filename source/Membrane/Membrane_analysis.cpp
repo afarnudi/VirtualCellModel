@@ -258,12 +258,12 @@ void Membrane::rotate_particle_to_axes(void){
 
 void Membrane::find_nodes_on_the_z_and_y_axis(){
     for (int i=0; i<Num_of_Nodes; i++) {
-        if ( (abs( pdb_frames[0][i][0]-1 )<0.0001) &&
-             (abs( pdb_frames[0][i][1]-1 )<0.0001) ) {
+        if ( (abs( pdb_frames[0][i][0]-1 )<0.01) &&
+             (abs( pdb_frames[0][i][1]-1 )<0.01) ) {
             z_node_index=i;
         }
-        if ( (abs( pdb_frames[0][i][0]-1 )<0.0001) &&
-             (abs( pdb_frames[0][i][2]-1 )<0.0001) ) {
+        if ( (abs( pdb_frames[0][i][0]-rescale_factor )<0.01) &&
+             (abs( pdb_frames[0][i][2]-rescale_factor )<0.01) ) {
             y_node_index=i;
         }
         if( (y_node_index != -1) && (z_node_index != -1)){
@@ -280,13 +280,14 @@ void Membrane::find_nodes_on_the_z_and_y_axis(){
     }
 }
 
-void Membrane::load_pdb_frame(int frame, int analysis_averaging_option){
+void Membrane::load_pdb_frame(int frame, int analysis_averaging_option,int znode, int ynode){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Position[i][j] = pdb_frames[frame][i][j];
         }
     }
-    
+    z_node_index = znode;
+    y_node_index = ynode;
     update_COM_position();
     set_com_to_zero();
     if (analysis_averaging_option == 1) {
@@ -296,6 +297,8 @@ void Membrane::load_pdb_frame(int frame, int analysis_averaging_option){
     }else if(analysis_averaging_option == 2){
         if(z_node_index == -1 || y_node_index == -1){
             find_nodes_on_the_z_and_y_axis();
+        } else {
+            cout<<"using:\n z_node_index "<<z_node_index<<"\ny_node_index"<<y_node_index<<endl;
         }
         rotate_particle_to_axes();
     }
