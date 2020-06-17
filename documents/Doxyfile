@@ -60,7 +60,7 @@ INPUT                  =  ../include \
 			  ./Doxygen/Coding_Style.md \
 			  ./Doxygen/Commenting_Style.md \
 			  ./Doxygen/IDE_Setup.md \
-			  ./Doxygen/Installation.md
+			  ./Doxygen/Install.md
 USE_MDFILE_AS_MAINPAGE =  ./Doxygen/Main_Page.md
 
 # If the BRIEF_MEMBER_DESC tag is set to YES, doxygen will include brief member
