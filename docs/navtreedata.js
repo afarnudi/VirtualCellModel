@@ -53,9 +53,7 @@ var NAVTREE =
       [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md29", null ]
     ] ],
     [ "Installation", "_installation.html", [
-      [ "OpenMM", "_installation.html#autotoc_md30", null ],
-      [ "Generating Mesh files", "_installation.html#autotoc_md31", null ],
-      [ "The vertual Cell Package", "_installation.html#autotoc_md32", null ]
+      [ "OpenMM", "_installation.html#autotoc_md30", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -86,9 +84,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_actin_8h.html",
-"class_chromatin.html#a49adafb5a81413b23a66f3a59d49d59c",
-"class_membrane.html#a72b951cd255e853e51db5dcaa0bfc9d5",
-"interaction_8hpp.html#a989584a13f2b6c37fedc4c60add73d7d"
+"class_chromatin.html#a52dc82b9e38229850d3dc615b54081de",
+"class_membrane.html#a73b22fb2ebda65accee05510303249ae",
+"interaction_8hpp.html#ac6e9dace50cab886e8a1b0c4ca27f064"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

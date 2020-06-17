@@ -76,8 +76,6 @@ var NAVTREEINDEX0 =
 "_global__functions_8hpp_source.html":[7,0,1,7],
 "_installation.html":[4],
 "_installation.html#autotoc_md30":[4,0],
-"_installation.html#autotoc_md31":[4,1],
-"_installation.html#autotoc_md32":[4,2],
 "_membrane_8h.html":[7,0,1,10],
 "_membrane_8h_source.html":[7,0,1,10],
 "_open_m_m__funcs_8hpp.html":[7,0,1,11],
@@ -249,5 +247,7 @@ var NAVTREEINDEX0 =
 "class_chromatin.html#a33f4823e1310f125090a25d0abef2dfa":[6,0,2,66],
 "class_chromatin.html#a37cf6dcb2eca02312739e4b14e48c2b9":[6,0,2,12],
 "class_chromatin.html#a398e59a7a3ce36b0cb74dae0cfbba295":[6,0,2,29],
-"class_chromatin.html#a44cc3cf95649333fccc2eaf12b3a8005":[6,0,2,70]
+"class_chromatin.html#a44cc3cf95649333fccc2eaf12b3a8005":[6,0,2,70],
+"class_chromatin.html#a49adafb5a81413b23a66f3a59d49d59c":[6,0,2,55],
+"class_chromatin.html#a50b1be4724b856dc98fc68ad05a6b1c9":[6,0,2,87]
 };
