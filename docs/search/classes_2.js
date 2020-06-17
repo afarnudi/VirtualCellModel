@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['chromatin',['Chromatin',['../classChromatin.html',1,'']]]
+  ['chromatin_479',['Chromatin',['../class_chromatin.html',1,'']]]
 ];
