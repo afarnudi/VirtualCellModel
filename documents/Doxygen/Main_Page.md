@@ -1,8 +1,10 @@
 The Virtual Cell Model Software Package           {#mainpage}
 ============
-# Breif Introduction
+Breif Introduction
 --------------------
-The [Soft Condensed Matter Group] at [Sharif university of Technology] lead by [Prof. Mohammad Reza Ejtehadi] has developed a unifying computational framework to create a multicomponent cell model, called the **Virtual Cell Model** (VCM) that has the capability to predict changes in whole cell and cell nucleus characteristics (in terms of shape, direction, and even chromatin conformation) on cell substrates. Modelling data used in the package are correlated with cell culture experimental outcomes in order to confirm the applicability of the models and to demonstrate their ability to reflect the qualitative behaviour of different cells. This may provide a reliable, efficient, and fast high-throughput approach for the development of optimised substrates for a broad range of cellular applications including stem cell differentiation. Since the VCM is designed to mimic properties of soft matter in the micro scale, it can be used to study a verity of physical problems. Mechanical properties of thin film near or attached to other objects.
+The Virtual Cell Model (VCM) software package is a Molecular Dynamics (MD) simulation software. The core concept of VCM is to get particle coordinates and the potentials between them and solve Newton's equations to calculate the dynamics of the system. VCM's design focuses on simulating linear chains of particles (such as long polymers), particles on 2D triangular meshes (vesicles), and particles on 3D Meshes (solid objects). The combination of these inputs can be used to build any general system for simulation porpuses. With OpenMM as the engine, VCM can fully utilise the resources of the host machine (Multiple CPU cores and/or GPUs). For installation please  proceed to the installation page.
+
+VCM was developed in the [Soft Condensed Matter Group] at [Sharif university of Technology] lead by [Prof Mohammad Reza Ejtehadi]. It is a unifying computational framework to create a multicomponent cell model that has the capability to predict changes in whole cell and cell nucleus characteristics (in terms of shape, direction, and chromatin conformation) on cell substrates.
 
 The VCM utilises 4 basic parts that are the membrane, the actin network, the nucleus, and the substrate.
 
