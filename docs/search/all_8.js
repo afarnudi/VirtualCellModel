@@ -16,7 +16,7 @@ var searchData=
   ['initilise_5fopenmm_205',['initilise_openmm',['../class_membrane.html#a8ffb572d8b3b2cf07b2cb5e487fbc3b9',1,'Membrane']]],
   ['initposinang_206',['initPosInAng',['../struct_my_atom_info.html#a8baed26db4167ce38492d90f2b2d313f',1,'MyAtomInfo']]],
   ['innerproduct_207',['innerproduct',['../_general__functions_8hpp.html#aeac4b91bfa6a97355fe32ccdde942909',1,'General_functions.hpp']]],
-  ['install_2emd_208',['Install.md',['../_install_8md.html',1,'']]],
+  ['install_5fcopy_2emd_208',['Install_copy.md',['../_install__copy_8md.html',1,'']]],
   ['installation_209',['Installation',['../_installation.html',1,'']]],
   ['integrator_210',['integrator',['../struct_my_open_m_m_data.html#a471489f3c9bd1e5a54fc5202b71b6b96',1,'MyOpenMMData']]],
   ['integrator_5ftype_211',['Integrator_type',['../namespace_gen_const.html#aac105e3a7fd6172ca631f1272e4e8f04',1,'GenConst']]],
