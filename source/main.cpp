@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     int y_node=-1;
     std::string analysis_filename;
     int ell_max =0;
-    
+    std::string analysis_extension = "_ulmt_cpp.txt";
 //    cout<<"argc "<<argc<<endl;
     for (int i=1; i<argc; i++) {
         string arg = argv[i];
@@ -161,6 +161,10 @@ int main(int argc, char **argv)
             number = argv[i+2];
             y_node = stoi(number);
             cout<<"y_node "<<y_node<<endl;
+        }
+        if (arg == "-ext") {
+            analysis_extension  = argv[i+1];
+            cout<<"analysis file extension: "<<analysis_extension<<endl;
         }
         
     }
@@ -402,7 +406,7 @@ int main(int argc, char **argv)
             
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
         }
-        Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, "_ulmt_cpp__.txt");
+        Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, analysis_extension);
         cout<<"max_frame  "<<max_frame<<endl;
         return 2;
     }
