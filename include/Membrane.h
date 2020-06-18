@@ -142,11 +142,11 @@ public:
     void surface_integral_test();
     void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
     int  import_pdb_frames(std::string filename);
-    void set_com_to_zero();
-    void pdb_to_bin(std::string filename);
+    
+    
     void calculate_ulm(int ell_max, int analysis_averaging_option);
     void write_ulm(int ell_max, std::string traj_name, double num_frames);
-    void find_nodes_on_the_z_and_y_axis();
+    
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
     vector<vector<vector<double> > > pdb_frames;
@@ -154,7 +154,14 @@ public:
     int z_node_index = -1;
     int y_node_index = -1;
     
-    
+    void set_com_to_zero(){
+        update_COM_position();
+        for (int i=0; i<Num_of_Nodes; i++) {
+            for (int j=0; j<3; j++) {
+                Node_Position[i][j] -= COM_position[j];
+            }
+        }
+    }
     /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
     double calculate_bending_energy(void);
     

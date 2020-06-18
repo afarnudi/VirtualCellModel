@@ -1,4 +1,5 @@
 #include "Membrane.h"
+
 using std::ifstream;
 
 void Membrane::read_gmesh_file (std::string gmesh_file)
@@ -208,4 +209,124 @@ void Membrane::read_ply_file (std::string ply_file)
         Triangle_list.push_back(push);
         
     }
+}
+
+
+#include <sstream>
+using std::string;
+
+int Membrane::import_pdb_frames(string filename){
+    
+    
+    int num_of_frames = count_pdb_frames(filename, Num_of_Nodes);
+//    cout<<"I'm out\n";
+    ifstream read_pdb;
+    read_pdb.open(filename.c_str());
+    if (!read_pdb) {
+        cout << "Unable to read "<<filename<<endl;
+        exit(EXIT_FAILURE);
+    }
+    string line;
+    read_pdb.seekg(std::ios::beg);
+    
+    cout<<"num of frames = "<<num_of_frames<<endl;
+    pdb_frames.resize(num_of_frames);
+    for (int i=0; i<num_of_frames; i++) {
+        pdb_frames[i].resize(Num_of_Nodes);
+        for (int j=0; j<Num_of_Nodes; j++) {
+            pdb_frames[i][j].resize(3);
+            pdb_frames[i][j][0]=0;
+            pdb_frames[i][j][1]=0;
+            pdb_frames[i][j][2]=0;
+        }
+    }
+
+    for (int frame_index= 0; frame_index<num_of_frames; frame_index++){
+
+        getline(read_pdb, line);
+        getline(read_pdb, line);
+
+        for (int node_index= 0; node_index<Num_of_Nodes; node_index++) {
+            
+            getline(read_pdb, line);
+            std::istringstream iss(line);
+            vector<string> split(std::istream_iterator<string>{iss}, std::istream_iterator<string>());
+            
+            if(split.size()==11){
+                pdb_frames[frame_index][node_index][0] = stod(split[6]);
+                pdb_frames[frame_index][node_index][1] = stod(split[7]);
+                pdb_frames[frame_index][node_index][2] = stod(split[8]);
+            } else if(split.size()==10){
+                if (split[6].size()<=9){
+                    
+                    pdb_frames[frame_index][node_index][0] = stod(split[6]);
+                    int it=-1;
+                    for(int i=0; i<split[7].size();i++){
+                        if (split[7][i] == '.' ){
+                            it=i+4;
+                            break;
+                        }
+                    }
+                    
+                    
+                    string coor;
+                    coor = split[7];
+                    coor.erase(coor.begin() + it, coor.end());
+                    pdb_frames[frame_index][node_index][1] = stod(coor);
+                    
+                    coor = split[7];
+                    coor.erase(coor.begin() + 0,coor.begin()+ it );
+                    pdb_frames[frame_index][node_index][2] = stod(coor);
+                    
+                    
+                    
+                } else {
+                    int it=-1;
+                    for(int i=0; i<split[6].size();i++){
+                        if (split[6][i] == '.' ){
+                            it=i+4;
+                            break;
+                        }
+                    }
+                    
+                    string coor;
+                    coor = split[6];
+                    coor.erase(coor.begin() + it, coor.end());
+                    pdb_frames[frame_index][node_index][0] = stod(coor);
+                    
+                    coor = split[6];
+                    coor.erase(coor.begin() + 0,coor.begin()+ it );
+                    pdb_frames[frame_index][node_index][1] = stod(coor);
+                    pdb_frames[frame_index][node_index][2] = stod(split[7]);
+                }
+            } else if(split.size()==9){
+                int it[3] = {-1,-1,-1};
+                int it_index=0;
+                for(int i=0; i<split[6].size();i++){
+                    if (split[6][i] == '.' ){
+                        it[it_index]=i+4;
+                        it_index++;
+                    }
+                }
+                
+                string coor;
+                coor = split[6];
+                coor.erase(coor.begin() + it[0], coor.end());
+                pdb_frames[frame_index][node_index][0] = stod(coor);
+                
+                coor = split[6];
+                coor.erase(coor.begin() + it[1], coor.end());
+                coor.erase(coor.begin() + 0,coor.begin()+ it[0] );
+                pdb_frames[frame_index][node_index][1] = stod(coor);
+                
+                coor = split[6];
+                coor.erase(coor.begin() + 0,coor.begin()+ it[1] );
+                pdb_frames[frame_index][node_index][2] = stod(coor);
+                
+            }
+
+        }
+        getline(read_pdb, line);
+    }
+    return num_of_frames;
 }
