@@ -177,8 +177,8 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     for (int ell=0; ell<ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
             double ulm = abs(ulm_avg_frame[ell][m+ell]);
-            ulm_avg[ell][m+ell] += ulm*ulm;
-            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+            ulm_avg[ell][m+ell] += ulm;
+            ulm_std[ell][m+ell] += ulm*ulm;
             
         }
     }
