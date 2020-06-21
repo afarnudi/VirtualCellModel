@@ -47,8 +47,8 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
         case 2: //harmonic
             {
                 parameters.resize(2);
-                parameters[0]=bonds[bond_index].nominalLengthInAngstroms* OpenMM::NmPerAngstrom; //I must check the bond index in case of having other objects
-                parameters[1]=bonds[bond_index].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                parameters[0]=bonds[bond_index].nominalLengthInNm; //I must check the bond index in case of having other objects
+                parameters[1]=bonds[bond_index].stiffnessInKJPerNm2;
                 omm->harmonic->setBondParameters(bond_index,u1,u4, parameters[0], parameters[1] );
                     
             }
@@ -57,7 +57,7 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
     ////updating dihedral structs and setBondParameters of Dihedral Forces.
     vector<double> bendingparameter;
     bendingparameter.resize(1);
-    bendingparameter[0]=Bending_coefficient* OpenMM::KJPerKcal;
+    bendingparameter[0]=Bending_coefficient;
     
     dihedrals[initial_pair].atoms[0]=c2;
     dihedrals[initial_pair].atoms[1]=u1;

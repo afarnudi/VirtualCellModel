@@ -44,8 +44,11 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
     }
     Node_Bonds_identifier();
-    Node_neighbour_list_constructor();
     Triangle_pair_identifier();
+    
+    Node_neighbour_list_constructor();
+    Bond_triangle_neighbour_list_constructor();
+    
   
 
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
@@ -69,6 +72,32 @@ void Membrane::initialise(std::string Mesh_file_name){
     } else {
         label += std::to_string(index);
     }
+    
+    if (spring_model == 1) {
+        if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
+            cout<<"Warning. Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+            exit(EXIT_FAILURE);
+        }
+    }
+    
+    if (initial_random_rotation_coordinates){
+        cout<<"randomly rotating the mesh\n";
+        srand (time(NULL));
+        double scratch = rand();
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+//        cout<<"theta: "<<theta<<"\n";
+//        cout<<"phi  : "<<phi<<"\n";
+        rotate_coordinates(theta, phi);
+    }
+    
+    if (GenConst::Wantvoronoi){
+        node_voronoi_area.resize(Num_of_Nodes,0);
+//        calculate_surface_area_with_voronoi();
+    }
+    
+    cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
+    
     cout<<"\nMembrane class initiated.\n******************************\n\n";
 
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;

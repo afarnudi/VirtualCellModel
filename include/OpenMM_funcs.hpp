@@ -109,9 +109,18 @@ void          myTerminateOpenMM(MyOpenMMData*,
 void myWritePDBFrame(int                frameNum,
                      double             timeInPs,
                      double             energyInKcal,
+                     double             potential_energy,
                      const MyAtomInfo   atoms[],
                      const Bonds        bonds[],
                      std::string        traj_name);
+
+/**                               PDB FILE WRITER
+ * Given state data, output a single frame (pdb "model") of the trajectory.
+ */
+void writeXYZFrame  (int                atom_count,
+                     const MyAtomInfo   atoms[],
+                     std::string        traj_name);
+
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
@@ -207,6 +216,16 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               vector<std::set<int> >                set_2,
                               int                                   set_1_index,
                               int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name);
+//overload for chromatin class interactions contatining different node types with other classes.
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              std::set<int>                         set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              int                                   chromo_ind,
                               string                                set_1_name,
                               string                                set_2_name);
 //overload for inter chromatin class interactions contatining different node types.

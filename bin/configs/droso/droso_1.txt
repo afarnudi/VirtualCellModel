@@ -1,0 +1,22 @@
+Resume	0	Results/Resumes/Resume_Chromatin_0_2019_08_11_time_13_04.txt
+Import_coordinates	1	configs/droso/drosochromo_1.txt
+
+rescale_factor	17.3
+Node_Mass	10
+Node_radius	10
+spring_model	2
+Spring_coefficient	2000
+Damping_coefficient	0
+Shift_in_X_direction	60
+Shift_in_Y_direction	0
+Shift_in_Z_direction	-20
+
+//x_speed	20
+
+//Shift_in_X_direction	0
+//Shift_in_Y_direction	-13
+//Shift_in_Z_direction	0
+
+num_of_node_types	2
+epsilon	0.7	0.14	0
+

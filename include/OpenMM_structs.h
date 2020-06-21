@@ -15,30 +15,34 @@
 struct MyAtomInfo
 {
     int type;
+    int Vsite_particleindecies[2];
+    double Vsite_weights[2];
     char* pdb;
     char symbol;
-    double initPosInAng[3];
-    double posInAng[3];
-    double velocityInAngperPs[3];
+    double initPosInNm[3];
+    double posInNm[3];
+    double velocityInNmperPs[3];
     double mass;
     double radius;
     double sigma_LJ_12_6;
     double epsilon_LJ_12_6;
     double force[3];
-    double energy;
+    double energyInKJ;
     double stretching_energy;
     int ext_force_model;
     double ext_force_constants[3];
     std::string class_label;
+    int vsite_atoms[2];
+    double vsite_weights[2];
 };
 
 struct Bonds{
     int type;
     int atoms[2];
     std::string class_label;
-    double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
-    double dampInKcalPsPerAngstrom2;
-    double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
+    double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
+    double dampInKJPsPerNm2;
+    double FENE_lmaxinNm, FENE_lmininNm, FENE_k, FENE_epsilon;
     bool   canConstrain;
 };
 
@@ -46,7 +50,7 @@ struct Dihedrals{
     int type;
     std::string class_label;
     std::vector<int> atoms;
-    double bending_stiffness_value;
+    double bendingStiffnessinKJ;
 };
 
 /** -----------------------------------------------------------------------------
@@ -127,7 +131,7 @@ struct TimeDependantData {
             for(int i=0; i<Num_Bonds; i++)
             {
                 Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
-                dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
+                dist =sqrt ( ( atoms[atom1].posInNm[0] - atoms[atom2].posInNm[0]) * ( atoms[atom1].posInNm[0] - atoms[atom2].posInNm[0]) + ( atoms[atom1].posInNm[1] - atoms[atom2].posInNm[1]) * ( atoms[atom1].posInNm[1] - atoms[atom2].posInNm[1]) + ( atoms[atom1].posInNm[2] - atoms[atom2].posInNm[2]) * ( atoms[atom1].posInNm[2] - atoms[atom2].posInNm[2]) ) ;
                 
                 distInAng.push_back(dist);
             }

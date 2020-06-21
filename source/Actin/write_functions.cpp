@@ -119,13 +119,13 @@ void Actin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count){
     write_resume_file<<Num_of_Nodes<<endl;
     
     for (int i=atom_count; i<atom_count+Num_of_Nodes; i++) {
-        Node_Position[i-atom_count][0] = atoms[i].posInAng[0];
-        Node_Position[i-atom_count][1] = atoms[i].posInAng[1];
-        Node_Position[i-atom_count][2] = atoms[i].posInAng[2];
+        Node_Position[i-atom_count][0] = atoms[i].posInNm[0];
+        Node_Position[i-atom_count][1] = atoms[i].posInNm[1];
+        Node_Position[i-atom_count][2] = atoms[i].posInNm[2];
         
-        Node_Velocity[i-atom_count][0] = atoms[i].velocityInAngperPs[0];
-        Node_Velocity[i-atom_count][1] = atoms[i].velocityInAngperPs[1];
-        Node_Velocity[i-atom_count][2] = atoms[i].velocityInAngperPs[2];
+        Node_Velocity[i-atom_count][0] = atoms[i].velocityInNmperPs[0];
+        Node_Velocity[i-atom_count][1] = atoms[i].velocityInNmperPs[1];
+        Node_Velocity[i-atom_count][2] = atoms[i].velocityInNmperPs[2];
     }
     
     for (int i=0; i<Num_of_Nodes; i++) {

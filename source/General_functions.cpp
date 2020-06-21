@@ -32,8 +32,7 @@ double vector_length_squared(double v[3]) // calculate length of vector
     return  v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
 }
 
-double sign_function(double x)
-{
+double sign_function(double x){
     if(x<0){
         return -1.0;
     }
@@ -41,24 +40,7 @@ double sign_function(double x)
     return 1.0;
 }
 
-//double periodiccondition(double dx )
-//{
-//    if( dx>Lbox/2.0  )
-//    {
-//        return dx-(Lbox+1.0); /// so the new dx is <0
-//    }
-//    else if(dx<-Lbox/2.0  )
-//    {
-//        return (Lbox+1.0)+dx;  /// so the new dx is >0
-//    }
-//    else
-//    {
-//        return dx;
-//    }
-//}
-
-void Vector_transformation (double MV[3],double  M[3][3] ,double V[3])
-{
+void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]){
     MV[0]= M[0][0] * V [0] + M[0][1] * V [1]  +M[0][2] * V [2] ;
     MV[1]= M[1][0] * V [0] + M[1][1] * V [1]  +M[1][2] * V [2] ;
     MV[2]= M[2][0] * V [0] + M[2][1] * V [1]  +M[2][2] * V [2] ;
@@ -86,44 +68,69 @@ void matrix_inverse (double mat[3][3]){
     }
 }
 
-void calc_surface_coefficeints (double points[3][3], double &A, double &B, double &C){
-    
-    double  x1 = points[0][0],
-            x2 = points[1][0],
-            x3 = points[2][0],
-            y1 = points[0][1],
-            y2 = points[1][1],
-            y3 = points[2][1],
-            z1 = points[0][2],
-            z2 = points[1][2],
-            z3 = points[2][2];
-    
-    C = ( (x2-x1)*(x3*y1-y3*x1) + (x3-x1)*(x1*y2-y1*x2) )/( (z1*x2-x1*z2)*(x1*y3-y1*x3) + (z3*x1-x3*z1)*(x1*y2-y1*x2) );
-    B = ( x2-x1 + C*(z1*x2-x1*z2) )/( x1*y2-x2*y1 );
-    A = -( 1 + B*y1 + C*z1 )/x1;
-    
-}
-
 void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C){
     double p1p2[3], p1p3[3], n[3], D;
     for(int i=0; i<3; i++){
         p1p2[i]=points[0][i]-points[1][i];
         p1p3[i]=points[0][i]-points[2][i];
-        }
+    }
     
-        crossvector( n,p1p2,p1p3);
-        A=n[0];
-        B=n[1];
-        C=n[2];
-        /*
-        D= A*points[0][0]+B*points[0][1]+C*points[0][2];
-        if(D!=0){
-            A=-A/D;
-            B=-B/D;
-            C=-C/D;
-        }
-        check_1= A*points[0][0]+B*points[0][1]+C*points[0][2];
-        check_2=A*points[1][0]+B*points[1][1]+C*points[1][2];
-        check3=A*points[2][0]+B*points[2][1]+C*points[2][2];
-         */
+    crossvector( n,p1p2,p1p3);
+    A=n[0];
+    B=n[1];
+    C=n[2];
+    /*
+     D= A*points[0][0]+B*points[0][1]+C*points[0][2];
+     if(D!=0){
+     A=-A/D;
+     B=-B/D;
+     C=-C/D;
+     }
+     check_1= A*points[0][0]+B*points[0][1]+C*points[0][2];
+     check_2=A*points[1][0]+B*points[1][1]+C*points[1][2];
+     check3=A*points[2][0]+B*points[2][1]+C*points[2][2];
+     */
 }
+
+
+#include <boost/geometry.hpp>
+namespace bg = boost::geometry;
+
+std::vector<double> convert_cartesian_to_spherical(double x, double y, double z){
+    std::vector<double> r_theta_phi;
+    r_theta_phi.resize(3,0);
+    
+    bg::model::point<double, 3, bg::cs::spherical<bg::radian> > p1;
+    bg::model::point<double, 3, bg::cs::cartesian> p3(x,y,z);
+    bg::transform(p3, p1);
+    
+    r_theta_phi[0] = p1.get<2>();
+    r_theta_phi[1] = p1.get<1>();
+    r_theta_phi[2] = p1.get<0>();
+    return r_theta_phi;
+}
+
+
+
+
+
+
+int count_pdb_frames(std::string filename, int num_atoms){
+    std::ifstream read_pdb;
+    read_pdb.open(filename.c_str());
+    read_pdb.seekg(std::ios::beg);
+    if (read_pdb) {
+        std::cout << filename<<" opend successfully. \n\n";
+    }else{
+        std::cout << "Unable to read "<<filename<<std::endl;
+    }
+    std::string line;
+    
+    int num_frames = 0;
+    while(getline(read_pdb, line)){
+        num_frames++;
+    }
+    read_pdb.close();
+    return num_frames/(num_atoms+3);
+}
+

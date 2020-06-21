@@ -137,14 +137,23 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     } else if (it->first=="Load_from_checkpoint") {
                         if (it->second==0) {
                             GenConst::Load_from_checkpoint = false;
-                            GenConst::Checkpoint_path="/Results/Resumes/OpenMM/";
+                            GenConst::Checkpoint_file_name = "None";
                         } else {
                             GenConst::Load_from_checkpoint = true;
-                            GenConst::Checkpoint_path=split[i+2];
+                            GenConst::Checkpoint_file_name=split[i+2];
+                        }
+                        
+                        continue;
+                    }  else if (it->first=="Checkpoint_path") {
+                        if (it->second==0) {
+                            GenConst::Checkpoint_path = "Results/Resumes/OpenMM/";
+                        } else {
+                            GenConst::Checkpoint_path = split[i+2];
                         }
                         
                         continue;
                     }
+                    
                     break;
                 }
                 //                cout<<split[i]<<"\t";
@@ -371,21 +380,24 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
             
         }
     } else if (param_name=="WriteVelocitiesandForces"){
-           it = general_param_map.find(param_name);
-           if (it != general_param_map.end()){
-               if (it->second == 0) {
-                   GenConst::WriteVelocitiesandForces= false;
-               } else {
-                   GenConst::WriteVelocitiesandForces= true;
-               }
-               
-           }
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::WriteVelocitiesandForces= false;
+            } else {
+                GenConst::WriteVelocitiesandForces= true;
+            }
+        }
     } else if (param_name=="Load_from_checkpoint"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Load_from_checkpoint=it->second;
         }
-        GenConst::Checkpoint_path = "/Results/Resumes/OpenMM/";
+    } else if (param_name=="Checkpoint_path"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::Checkpoint_path="Results/Resumes/OpenMM/";
+        }
     } else if (param_name=="write_bonds_to_PDB"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
@@ -395,6 +407,39 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
                 GenConst::write_bonds_to_PDB= true;
             }
         }
+    } else if (param_name=="CMMotionRemover"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::CMMotionRemover= false;
+            } else {
+                GenConst::CMMotionRemover= true;
+            }
+        }
+    } else if (param_name=="CMMotionRemoverStep"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::CMMotionRemoverStep=it->second;
+        }
+    } else if (param_name=="CreateCheckpoint"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::CreateCheckpoint = false;
+            } else {
+                GenConst::CreateCheckpoint = true;
+            }
+        }
+    } else if (param_name=="Wantvoronoi"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::Wantvoronoi = false;
+            } else {
+                GenConst::Wantvoronoi = true;
+            }
+        }
     }
+    
     
 }

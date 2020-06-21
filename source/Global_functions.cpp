@@ -34,9 +34,20 @@ const int EndOfList=-1;
 using std::vector;
 
 
-void write_data(MyAtomInfo atoms[], string buffer, double pressure);
-void write_CM(string buffer, vector<Chromatin> chromos);
-double calculate_pressure(vector<Membrane> mems);
+void write_data(MyAtomInfo atoms[],
+                string buffer,
+                double volume,
+                double area,
+                double bending_energy);
+//void write_CM(string buffer, vector<Chromatin> chromos);
+//double calculate_pressure(vector<Membrane> mems);
+
+void write_data2(   MyAtomInfo atoms[],
+                 string buffer,
+                 double volume,
+                 double area,
+                 double bending_energy,
+                 vector<double> voronoi_area);
 
 void collect_data(MyAtomInfo atoms[],
                   string buffer,
@@ -45,11 +56,24 @@ void collect_data(MyAtomInfo atoms[],
                   double timeInPs){
     
     GenConst::data_colection_times.push_back(timeInPs);
-    write_data(atoms, buffer, calculate_pressure(mems));
     
-    if (chromos.size()!=0) {
-        write_CM(buffer, chromos);
+    double mem_volume = 0;
+    double mem_surface = 0;
+    double bending_energy = 0;
+    vector <double> voronoi_area;
+    //    double stretch_energy = 0;
+    if (mems.size()!=0) {
+        mems[0].calculate_volume_and_surface_area();
+        if (GenConst::Wantvoronoi) {
+            voronoi_area = mems[0].return_voronoi_node_area();
+        }
+        
+        mem_volume  = mems[0].return_volume();
+        mem_surface = mems[0].return_surface_area();
+        bending_energy = mems[0].calculate_bending_energy();
     }
+    //    write_data(atoms, buffer, mem_volume, mem_surface, bending_energy);
+    write_data2(atoms, buffer, mem_volume, mem_surface, bending_energy, voronoi_area);
 }
 
 
@@ -65,48 +89,59 @@ void set_temperature(int MD_step, double temperature, int buffer){
 using std::string;
 using std::endl;
 
-
 void write_data(MyAtomInfo atoms[],
                 string buffer,
-                double pressure){
+                double volume,
+                double area,
+                double bending_energy){
     
     
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tv_x_InAngperPs v_y_InAngperPs v_z_InAngperPs f_x_inN f_y_inN f_z_inN Pressure_in_N/An^2\n";
+    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx, vy, vz(Nm/Ps) fx, fy, fz(KJ/Nm) Volume="<<volume<<" (Nm^3) Area="<<area<<" (Nm^2) bending_energy="<<bending_energy<<" (KJ)\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
-        wdata<<t<<"\t"<<atoms[t].velocityInAngperPs[0] << "\t" << atoms[t].velocityInAngperPs[1] << "\t" << atoms[t].velocityInAngperPs[2];
+        wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
-        wdata<<"\t"<<pressure<<"\n";
+        wdata<<"\n";
     }
 }
 
-void write_CM(string buffer, vector<Chromatin> chromos){
-    string cm_file_name="Results/CMs/"+GenConst::trajectory_file_name+buffer;
+void write_data2(MyAtomInfo atoms[],
+                 string buffer,
+                 double volume,
+                 double area,
+                 double bending_energy,
+                 vector<double> voronoi_area){
     
-    for (int ch=0; ch< chromos.size(); ch++) {
-        string write_name = cm_file_name + std::to_string(ch) + ".txt";
-        std::ofstream write_cms;
-        write_cms.open(write_name.c_str());
-        int N = chromos[ch].get_num_of_nodes();
-        for (int x=0; x<N; x++) {
-            for (int y=0; y<N; y++) {
-                if (y != N-1) {
-                    write_cms<<chromos[ch].get_cm(x, y)<<" ";
-                } else {
-                    write_cms<<chromos[ch].get_cm(x, y)<<"\n";
-                }
-            }
+    
+    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_properties.txt";
+    std::ofstream wdata;
+    wdata.open(traj_file_name.c_str(), std::ios::app);
+    
+    //header
+    
+    wdata<<"vx, vy, vz(Nm/Ps)";
+    if (GenConst::WantForce) {
+        wdata<<" fx, fy, fz(KJ/Nm)";
+    }
+    if (GenConst::Wantvoronoi){
+        wdata<<" voronoi_area(Nm^2)";
+    }
+    wdata<<endl;
+    
+    wdata<<"time "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<" Volume_(Nm^3) "<<volume<<"  Area_(Nm^2) "<<area<<" bending_energy_(KJ/mol) "<<bending_energy<<"\n";
+    for (int t=0; atoms[t].type != EndOfList; t++) {
+        wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
+        if (GenConst::WantForce) {
+            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
+        if (GenConst::Wantvoronoi) {
+            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
+        }
+        wdata<<"\n";
     }
-    
-}
-
-double calculate_pressure(vector<Membrane> mems){
-    double pressure=0;
-    return pressure;
 }

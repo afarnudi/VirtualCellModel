@@ -19,14 +19,14 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             DFs_classes.insert(dihedrals[i].class_label);
             DFs_index++;
             
-            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(cos(dihedral(p1,p2,p3,p4)))"));
+            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1+cos(dihedral(p1,p2,p3,p4)))"));
             DihedralForces[DFs_index]->addPerBondParameter("K_bend");
             
             system.addForce(DihedralForces[DFs_index]);
             
         }
         
-        vector<double> parameters={dihedrals[i].bending_stiffness_value * OpenMM::KJPerKcal};
+        vector<double> parameters={dihedrals[i].bendingStiffnessinKJ};
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
 }

@@ -58,3 +58,35 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         }
     }  // end of 'for-i'
 }
+
+double Membrane::calculate_bending_energy(){
+    int pos1,pos2,pos3,pos4;
+    double  N1[3], N2[3];
+    double x1_3[3], x1_4[3], x2_3[3], x2_4[3];
+    
+    Total_Bending_Energy=0;
+    
+    for(int i=0 ;i<Num_of_Triangle_Pairs;i++)  // who are neighbors?
+    {
+        pos1=Triangle_Pair_Nodes[i][0];
+        pos2=Triangle_Pair_Nodes[i][3];
+        pos3=Triangle_Pair_Nodes[i][1];
+        pos4=Triangle_Pair_Nodes[i][2];
+        for (int index=0; index<3; index++) {
+            x1_3[index]=Node_Position[pos1][index]-Node_Position[pos3][index];
+            x1_4[index]=Node_Position[pos1][index]-Node_Position[pos4][index];
+            x2_3[index]=Node_Position[pos2][index]-Node_Position[pos3][index];
+            x2_4[index]=Node_Position[pos2][index]-Node_Position[pos4][index];
+        }
+        
+        crossvector(N1, x1_3, x1_4);
+        crossvector(N2, x2_4, x2_3);
+        
+        double N1_length=vector_length(N1), N2_length=vector_length(N2);
+        double N1dotN2 = innerproduct(N1, N2)/(N1_length*N2_length);
+        Total_Bending_Energy += 1-N1dotN2;
+    }  // end of 'for-i'
+    Total_Bending_Energy *= Bending_coefficient;
+    
+    return Total_Bending_Energy;
+}

@@ -38,6 +38,7 @@ void myStepWithOpenMM(MyOpenMMData* omm,
     else
     {
         omm->integrator->step(numSteps);
+//        omm->context->computeVirtualSites();
         total_step += numSteps;
     }
     
@@ -52,8 +53,8 @@ void myTerminateOpenMM(MyOpenMMData* omm,
 using OpenMM::Vec3;
 void myGetOpenMMState(MyOpenMMData* omm,
                       double& timeInPs,
-                      double& energyInKcal,
-                      double& potential_energyInKcal,
+                      double& energyInKJ,
+                      double& potential_energyInKJ,
                       MyAtomInfo atoms[])
 {
     int infoMask = 0;
@@ -76,23 +77,21 @@ void myGetOpenMMState(MyOpenMMData* omm,
     const std::vector<Vec3>& Forces        = state.getForces();
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
-            atoms[i].velocityInAngperPs[j] = velInNmperPs[i][j]  * OpenMM::AngstromsPerNm;
+            atoms[i].posInNm[j] = positionsInNm[i][j];
+            atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
             if (GenConst::WantForce) {
-                atoms[i].force[j]    = Forces[i][j] * OpenMM::KcalPerKJ * OpenMM::NmPerAngstrom;
+                atoms[i].force[j]    = Forces[i][j];
             }
         }
     }
     
     
-    // If energy has been requested, obtain it and convert from kJ to kcal.
-    energyInKcal = 0;
+    // If energy has been requested, obtain it in kJ/mol.
+    energyInKJ = 0;
 
     if (GenConst::WantEnergy){
-    energyInKcal = (state.getPotentialEnergy() + state.getKineticEnergy())
-     * OpenMM::KcalPerKJ;
-        potential_energyInKcal = (state.getPotentialEnergy())
-        * OpenMM::KcalPerKJ;
+        energyInKJ = state.getPotentialEnergy() + state.getKineticEnergy();
+        potential_energyInKJ = state.getPotentialEnergy();
     }
 
 }
@@ -111,7 +110,7 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
     
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
-            atoms[i].posInAng[j] = positionsInNm[i][j] * OpenMM::AngstromsPerNm;
+            atoms[i].posInNm[j] = positionsInNm[i][j];
         }
     }
 }
@@ -120,7 +119,8 @@ void Cheap_GetOpenMMState(MyOpenMMData* omm,
 // Given state data, output a single frame (pdb "model") of the trajectory.
 void myWritePDBFrame(int frameNum,
                      double timeInPs,
-                     double energyInKcal,
+                     double energyInKJ,
+                     double potential_energyInKJ,
                      const MyAtomInfo atoms[],
                      const Bonds bonds[],
                      std::string traj_name)
@@ -129,8 +129,10 @@ void myWritePDBFrame(int frameNum,
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
-    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-            timeInPs, energyInKcal);
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%6.6f potential energy=%.3f KJ/mole\n",
+            timeInPs,
+            energyInKJ,
+            potential_energyInKJ);
     int index=0;
     string hist = atoms[0].pdb;
     if (atoms[0].class_label == "Chromatin") {
@@ -148,18 +150,18 @@ void myWritePDBFrame(int frameNum,
             index++;
             hist = new_label;
         }
-        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
-//        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f %8.3f%8.3f%8.3f%6.2f%6.1f\n",
+//        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
+        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
                 n+1,
                 atoms[n].pdb,
                 chain[index],
                 double(index),
-                atoms[n].posInAng[0],
-                atoms[n].posInAng[1],
-                atoms[n].posInAng[2],
+                atoms[n].posInNm[0],
+                atoms[n].posInNm[1],
+                atoms[n].posInNm[2],
                 atoms[n].stretching_energy,
-                atoms[n].energy,
-                atoms[n].symbol);
+                atoms[n].energyInKJ);//,
+//                atoms[n].symbol);
     }
     
     // visualize bonds in pdb file
@@ -180,7 +182,24 @@ void myWritePDBFrame(int frameNum,
     fclose (pFile);
 }
 
+void writeXYZFrame  (int atom_count,
+                     const MyAtomInfo atoms[],
+                     std::string traj_name)
+{
+    int EndOfList=-1;
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile,"%d\ncomment\n", atom_count);
 
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+        fprintf(pFile,"%4s\t%8.3f\t%8.3f\t%8.3f\n",
+                atoms[n].pdb,
+                atoms[n].posInNm[0],
+                atoms[n].posInNm[1],
+                atoms[n].posInNm[2]);
+    }
+    fclose (pFile);
+}
 void Kelvin_Voigt_update(MyOpenMMData* omm,
                          TimeDependantData* time_dependant_data)
 {
@@ -192,7 +211,7 @@ void Kelvin_Voigt_update(MyOpenMMData* omm,
     {
         time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i])*(OpenMM::NmPerAngstrom) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInAng[1][i] - time_dependant_data->Kelvin_Voigt_distInAng[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
         
         time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }

@@ -21,6 +21,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       OpenMM::System                        &system
                       ){
     
+    
     std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds);
    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
     for (int i=0; i< GenConst::Num_of_Membranes; i++) {
@@ -309,13 +310,15 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j , GenConst::Chromatin_label , GenConst::Membrane_label);
-                    index = int(LJ_12_6_interactions.size()-1);
-                    
-                    // Add the list of atom pairs that are excluded from the excluded volume force.
-                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                    
-                    system.addForce(LJ_12_6_interactions[index]);
+                    for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, GenConst::Chromatin_label, GenConst::Membrane_label);
+                        index = int(LJ_12_6_interactions.size()-1);
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                    }
                     
                     break;
                 case 2:
@@ -421,7 +424,6 @@ void set_interactions(const MyAtomInfo                       atoms[],
             //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
-            int num_forces=0;
             
             switch (interaction_map[i + class_count_i][j]) {
                     

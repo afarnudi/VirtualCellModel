@@ -85,9 +85,9 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value*GenConst::MD_T;
+        Spring_coefficient=param_value;
     } else if (param_name=="Bending_coefficient"){
-        Bending_coefficient=param_value*GenConst::MD_T;
+        Bending_coefficient=param_value;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
     }else if (param_name=="MD_num_of_Relaxation_steps"){
@@ -182,6 +182,24 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if(param_name=="Update_nominal_length"){
         
         Update_nominal_length = param_value;
+    } else if(param_name=="FENE_min"){
+        
+        FENE_min = param_value;
+    } else if(param_name=="FENE_max"){
+        
+        FENE_max = param_value;
+    } else if(param_name=="FENE_eps"){
+        
+        FENE_epsilon = param_value;
+    } else if(param_name=="FENE_k"){
+        
+        FENE_k = param_value;
+    } else if(param_name=="init_random_rotation"){
+        if (int(param_value) == 0) {
+            initial_random_rotation_coordinates=false;
+        } else{
+            initial_random_rotation_coordinates=true;
+        }
     }
     
 }

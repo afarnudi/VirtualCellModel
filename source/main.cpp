@@ -68,7 +68,7 @@ namespace GenConst {
     double K;
     int MD_thrmo_step;
     int MC_step;
-    double Mem_fluidity;
+    int Mem_fluidity;
     double Lbox;
     bool Periodic_condtion_status;
     int Num_of_Membranes;
@@ -93,14 +93,20 @@ namespace GenConst {
     int Integrator_type;
     double frictionInPs;
     double temperature;
+    bool CreateCheckpoint;
     bool Load_from_checkpoint;
     std::string Checkpoint_path;
+    std::string Checkpoint_file_name;
+    bool ChromatinVirtualSites;
 
 
     bool   write_bonds_to_PDB;
     bool   WantEnergy;
     bool   WantForce;
     bool   WriteVelocitiesandForces;
+    bool   CMMotionRemover;
+    int    CMMotionRemoverStep;
+    bool   Wantvoronoi;
 
 
 
@@ -115,7 +121,54 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
-
+    
+    bool analysis_mode=false;
+    int analysis_averaging_option = 0;
+    int num_ang_avg= 1;
+    int z_node=-1;
+    int y_node=-1;
+    std::string analysis_filename;
+    int ell_max =0;
+    std::string analysis_extension = "_ulmt_cpp.txt";
+//    cout<<"argc "<<argc<<endl;
+    for (int i=1; i<argc; i++) {
+        string arg = argv[i];
+        if (arg == "-analysis") {
+            
+            analysis_mode=true;
+            analysis_filename = argv[i+1];
+            cout<<"Analysis mode\n";
+        }
+        if (arg == "-lmax") {
+            analysis_mode=true;
+            string lmax = argv[i+1];
+            ell_max = stoi(lmax);
+            cout<<"lmax "<<ell_max<<endl;
+        }
+        if (arg == "-angavg") {
+            analysis_averaging_option = 1;
+            cout<<"analysis_angular_average_modes: ON"<<endl;
+            string rotations = argv[i+1];
+            num_ang_avg = stoi(rotations);
+            cout<<"rotations "<<num_ang_avg<<endl;
+        }
+        if (arg == "-align_axes") {
+            analysis_averaging_option=2;
+            cout<<"align_axes: ON"<<endl;
+            string number = argv[i+1];
+            z_node = stoi(number);
+            cout<<"z_node "<<z_node<<endl;
+            number = argv[i+2];
+            y_node = stoi(number);
+            cout<<"y_node "<<y_node<<endl;
+        }
+        if (arg == "-ext") {
+            analysis_extension  = argv[i+1];
+            cout<<"analysis file extension: "<<analysis_extension<<endl;
+        }
+        
+    }
+    
     
     // get the current time.
     time_t t = time(0);
@@ -151,7 +204,7 @@ int main(int argc, char **argv)
     calcforce_l0.open("calcforce_l0", ios::app);
     calcforce_delta.open("calcforce_delta", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-    string ckeckpoint_name="Results/Resumes/OpenMM/"+GenConst::trajectory_file_name+buffer;
+    string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
     
     vector<Membrane> Membranes;
@@ -300,7 +353,7 @@ int main(int argc, char **argv)
         if (Include_Chromatin) {
             for (int i=0; i<Chromatins.size(); i++) {
                 num_of_atoms    += Chromatins[i].get_num_of_nodes();
-                num_of_bonds    += Chromatins[i].get_num_of_nodes()-1;
+                num_of_bonds    += Chromatins[i].get_num_of_bonds();
             }
         }
         
@@ -329,10 +382,43 @@ int main(int argc, char **argv)
         } // End of if (Include_Membrane)
     }
     
+
+    float progressp=0;
+    
+    
+    if (analysis_mode) {
+
+        cout<<"Entering analysis mode:\n";
+        vector<vector<double> > ulm;
+        
+
+        
+        
+        int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
+        
+        for (int i=2; i<max_frame; i++) {
+            
+            
+            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
+            for (int runs=0; runs<num_ang_avg; runs++) {
+//                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+            }
+            
+            cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+        }
+        Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, analysis_extension);
+        cout<<"max_frame  "<<max_frame<<endl;
+        return 2;
+    }
+    
+    
+
     int progress=0;
     double MC_Acceptance_Rate=0;
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
+
     //openmm**
     if (GenConst::OpenMM) {
         cout<<"\nBeginnig the OpenMM section:\n";
@@ -345,9 +431,12 @@ int main(int argc, char **argv)
         //int act_atom_count=0;
         
         //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
-        MyAtomInfo* all_atoms    = new MyAtomInfo[num_of_atoms+1];
-        Bonds* all_bonds         = new Bonds[num_of_bonds+1];
-        Dihedrals* all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+        MyAtomInfo* all_atoms     = new MyAtomInfo[num_of_atoms+1];
+        Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
+        Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+        
+        cout<<"num_of_atoms = "<<num_of_atoms<<endl;
+        cout<<"num_of_bonds = "<<num_of_bonds<<endl;
         
         all_atoms[num_of_atoms].type         =EndOfList;
         all_bonds[num_of_bonds].type         =EndOfList;
@@ -410,13 +499,14 @@ int main(int argc, char **argv)
         }
        
         
-        
         //autocorrelation calculations:
 //        GenConst::velocity_save.resize(6);
         
         
         // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
         // usage and runtime errors are caught and reported.
+        
+        cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
@@ -425,9 +515,18 @@ int main(int argc, char **argv)
                 omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
             } else {
                 std::filebuf rfb;
-                rfb.open (GenConst::Checkpoint_path.c_str(),std::ios::in);
+                string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;
+                checkpoint_load_name = "Results/Resumes/OpenMM/chromo2019_11_17_time_11_57";
+                rfb.open (checkpoint_load_name.c_str(),std::ios::in);
+                if (rfb.is_open()) {
+                    cout<<"Loading checkpoint from: "<<checkpoint_load_name<<endl;
+                } else {
+                    cout<<"Checkpoint loadding is enabled. Cannpt find the checkpoint file. Please check the checkpoint path and filename in the general config file."<<endl;
+                    exit(EXIT_FAILURE);
+                }
                 std::istream rcheckpoint(&rfb);
                 omm->context->loadCheckpoint(rcheckpoint);
+                
                 //wrok in progress.
                 //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
@@ -446,263 +545,115 @@ int main(int argc, char **argv)
             chrono_sys_clock_start = chrono::system_clock::now();
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+            std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
             
-            const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+            
+            //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+            int MCCalcTime = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
+            int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+            int Savingstep = NumSilentSteps;
+            if ( (MCCalcTime < NumSilentSteps) && MCCalcTime != 0 ) {
+                Savingstep = (int)(NumSilentSteps / MCCalcTime )* MCCalcTime;
+                NumSilentSteps = MCCalcTime;
+            } else if ( (NumSilentSteps < MCCalcTime) && MCCalcTime != 0 ){
+                int rate =  (int)(MCCalcTime / NumSilentSteps );
+                Savingstep = int(MCCalcTime/rate);
+                NumSilentSteps = Savingstep;
+            }
             
             int total_step_num = 0;
             double last_update_time=0;
-            bool start_of_force_calc = true;
-            bool set_new_length_for_spring_1=true;
-            bool set_new_length_for_spring_2=true;
-            bool set_new_length_for_spring_3=true;
-            bool set_new_length_for_spring_4=true;
-            bool set_new_length_for_spring_5=true;
-            bool set_new_length_for_spring_6=true;
-            bool set_new_length_for_spring_7=true;
-            bool set_new_length_for_spring_8=true;
-            bool set_new_length_for_spring_9=true;
-            bool set_new_length_for_spring_10=true;
-            bool set_new_length_for_spring_11=true;
-            bool set_new_length_for_spring_12=true;
-            bool set_new_length_for_spring_13=true;
-            bool set_new_length_for_spring_14=true;
-            double deltalength;
+
+
+            bool expanding = false;
+            bool set_spring = false;
+            
+
+
             for (int frame=1; ; ++frame) {
 
-                double time, energy, potential_energy;
+                double time, energyInKJ, potential_energyInKJ;
                 
-                
-                myGetOpenMMState(omm, time, energy, potential_energy, all_atoms);
+
+                myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
+
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-                myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
-                
-                //Begin: Exporting congiguration of classes for simulation .
-                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
-                
-                for (int chr_c=0; chr_c<Chromatins.size(); chr_c++) {
-                    Chromatins[chr_c].contact_matrix_update();
+                //Ps to Fs
+                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= Savingstep ) {
+                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
+                    //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
+                                    
+                                    //Begin: Exporting congiguration of classes for simulation .
+                    Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
+                    
+                    Savingstep += Savingstep;
                 }
                 
-                omm->context->createCheckpoint(wcheckpoint);
-                //End: Exporting congiguration of classes for simulation resume.
                 
+                if (GenConst::CreateCheckpoint) {
+                    omm->context->createCheckpoint(wcheckpoint);
+                    //End: Exporting congiguration of classes for simulation resume.
+                }
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
                 
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
-                if (int(100*time/GenConst::Simulation_Time_In_Ps)>progress){
-                    cout<<"[ "<<progress<<"% ]\t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
-                    progress+=1;
+                if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
+                    printf("[ %2.1f ] time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
+//                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
+                    progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
+                    progress++;
                 }
                 
                 if (check_for_membrane_update(Membranes, time, last_update_time)) {
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
-                //calcforce *****************************
-                //calculating the adhession force induced by membrane between the nanoparitcles.
-                /*
-                if (time>20 && start_of_force_calc) {
-                    int atom1, atom2 ;
-                    cout<<"Frameee  "<<frame<<endl;
-                    double length, stiffness;
-                    double equilibrium_distance=0;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    //cout<<"atom1  "<<atom1<<"  atom2   "<<atom2<<endl;
-                    for(int i=0;i<3;i++){
-                      equilibrium_distance+= (all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i])*(all_atoms[atom1].posInAng[i]-all_atoms[atom2].posInAng[i]);  
-                    }
-                    equilibrium_distance=sqrt(equilibrium_distance) *OpenMM::NmPerAngstrom;
-                    
-                    
-                    
-                    stiffness = 5900 * OpenMM::KJPerKcal
-                                    * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-                    
-                    //cout<<"equilibriom distance of 2 nano particles  "<<equilibrium_distance<<endl;
-                    deltalength=(equilibrium_distance-0.2)/15;
-                    length=equilibrium_distance-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    start_of_force_calc=false;
-                }
+
+
+
                 
-                if (time>70 && set_new_length_for_spring_1) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_1=false;
-                }
+//                if (time>100 && set_spring) {
+//                    int atom1, atom2 ;
+//                    double length, stiffness;
+//
+//                    for(int i=0; i<Membranes[0].get_num_of_node_pairs() ; i++)
+//                    {
+//                        omm->harmonic->getBondParameters(i, atom1, atom2, length, stiffness);
+//                        stiffness = 0.5 ;
+//
+//                        omm->harmonic->setBondParameters(i, atom1, atom2, length, stiffness);
+//                    }
+//                    omm->harmonic->updateParametersInContext(*omm->context);
+//                    set_spring=false;
+//                }
+//
+//                if (time>800 && expanding) {
+//                    expand(Chromatins, omm);
+//                    expanding=false;
+//                }
                 
-                
-                 if (time>120 && set_new_length_for_spring_2) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_2=false;
-                }
-                
-                 if (time>170 && set_new_length_for_spring_3) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_3=false;
-                }
-                
-                 if (time>220 && set_new_length_for_spring_4) {
-                   int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_4=false;
-                }
-                
-                if (time>270 && set_new_length_for_spring_5) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_5=false;
-                }
-                
-                
-                if (time>320 && set_new_length_for_spring_6) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_6=false;
-                }
-                
-                if (time>370 && set_new_length_for_spring_7) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_7=false;
-                }
-                
-                
-                if (time>420 && set_new_length_for_spring_8) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_8=false;
-                }
-                
-                if (time>470 && set_new_length_for_spring_9) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_9=false;
-                }
-                
-                if (time>520 && set_new_length_for_spring_10) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_10=false;
-                }
-                
-                if (time>570 && set_new_length_for_spring_11) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_11=false;
-                }
-                
-                if (time>620 && set_new_length_for_spring_12) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_12=false;
-                }
-                
-                if (time>670 && set_new_length_for_spring_13) {
-                    int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_13=false;
-                }
-                
-                if (time>720 && set_new_length_for_spring_14) {
-                   int atom1, atom2 ;
-                    double length, stiffness;
-                    omm->calcforce->getBondParameters(0, atom1, atom2, length, stiffness);
-                    calcforce_l0<<length<<endl;
-                    length=length-deltalength;
-                    calcforce_l0<<length<<endl;
-                    omm->calcforce->setBondParameters(0, atom1, atom2, length, stiffness);
-                    omm->calcforce->updateParametersInContext(*omm->context);
-                    set_new_length_for_spring_14=false;
-                }
-                
-                
-                 */
+
                  
                 //the monte_carlo part
 
                  //if(progress==0 or progress==25 or progress==50 or progress==75){ 
-                if ((frame%50==1) and GenConst::MC_step !=0){
+
+
+                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= MCCalcTime and GenConst::Mem_fluidity !=0){
                  
                     //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
-                    cout<<"Frame  "<<frame<<endl;
+//                    cout<<"Frame  "<<frame<<endl;
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
+                    
+                    MCCalcTime += MCCalcTime;
                 }
                 
-                if(frame%50==2 and  GenConst::MC_step !=0){
+                if(frame%50==2 and  GenConst::Mem_fluidity !=0){
                     
                     cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
                     cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
@@ -735,6 +686,7 @@ int main(int argc, char **argv)
             return 1;
         }
     }
+    
     
     
     Trajectory.open(traj_file_name.c_str(), ios::app);

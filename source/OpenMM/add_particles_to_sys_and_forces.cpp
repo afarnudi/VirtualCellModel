@@ -14,23 +14,21 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
         system.addParticle(atoms[n].mass);
-        // Convert the initial position to nm and append to the array.
-        const Vec3 posInNm(atoms[n].initPosInAng[0] * OpenMM::NmPerAngstrom,
-                           atoms[n].initPosInAng[1] * OpenMM::NmPerAngstrom,
-                           atoms[n].initPosInAng[2] * OpenMM::NmPerAngstrom);
-        const Vec3 velocityInNmperPs(atoms[n].velocityInAngperPs[0] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[1] * OpenMM::NmPerAngstrom,
-                                     atoms[n].velocityInAngperPs[2] * OpenMM::NmPerAngstrom);
-        //        cout<<atoms[n].velocityInAngperPs[0]<<"\t"<<
-        //              atoms[n].velocityInAngperPs[1]<<"\t"<<
-        //              atoms[n].velocityInAngperPs[2]<<endl;
+        
+        const Vec3 posInNm(atoms[n].initPosInNm[0],
+                           atoms[n].initPosInNm[1],
+                           atoms[n].initPosInNm[2]);
+        const Vec3 velocityInNmperPs(atoms[n].velocityInNmperPs[0],
+                                     atoms[n].velocityInNmperPs[1],
+                                     atoms[n].velocityInNmperPs[2]);
+        
         initialPosInNm.push_back(posInNm);
         initialVelInNmperPs.push_back(velocityInNmperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
         std::vector<double> sigma_ev;
-        sigma_ev.push_back(atoms[n].radius
-                           * OpenMM::NmPerAngstrom);
+        sigma_ev.push_back(atoms[n].radius);
+        
         for (int i=0; i<ExcludedVolumes.size(); i++) {
             ExcludedVolumes[i]->addParticle();
         }
