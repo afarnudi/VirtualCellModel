@@ -174,6 +174,12 @@ Only random access containers can be adapted.</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
+<dt id="_CPPv4N8Membrane24calculate_bending_energyEv">
+<span id="_CPPv3N8Membrane24calculate_bending_energyEv"></span><span id="_CPPv2N8Membrane24calculate_bending_energyEv"></span><span id="Membrane::calculate_bending_energy__void"></span><span class="target" id="class_membrane_1a07bf89493e23e321f88d6d1e21f6d1ae"></span>double <code class="sig-name descname">calculate_bending_energy</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane24calculate_bending_energyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the total bending energy of the membrane (indepentant of OpenMM calculations) </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4N8Membrane19get_new_node_radiusEv">
 <span id="_CPPv3N8Membrane19get_new_node_radiusEv"></span><span id="_CPPv2N8Membrane19get_new_node_radiusEv"></span><span id="Membrane::get_new_node_radius__void"></span><span class="target" id="class_membrane_1a8a0ab2bcb15628b748a1c8322b8ea803"></span>double <code class="sig-name descname">get_new_node_radius</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane19get_new_node_radiusEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the node radius update value (set value in the configuration file). </p>
@@ -195,6 +201,48 @@ Only random access containers can be adapted.</p>
 <dt id="_CPPv4N8Membrane15excluded_volumeEv">
 <span id="_CPPv3N8Membrane15excluded_volumeEv"></span><span id="_CPPv2N8Membrane15excluded_volumeEv"></span><span id="Membrane::excluded_volume__void"></span><span class="target" id="class_membrane_1a917057b75f5a7f766eb747daf40a1ef4"></span>void <code class="sig-name descname">excluded_volume</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane15excluded_volumeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>node-node hard sphere interaction. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane31Node_neighbour_list_constructorEv">
+<span id="_CPPv3N8Membrane31Node_neighbour_list_constructorEv"></span><span id="_CPPv2N8Membrane31Node_neighbour_list_constructorEv"></span><span id="Membrane::Node_neighbour_list_constructor"></span><span class="target" id="class_membrane_1aca9785ad0ab2514006a46c0c9bd8cf5c"></span>void <code class="sig-name descname">Node_neighbour_list_constructor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane31Node_neighbour_list_constructorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a vector that lists all the neighbours of each node and their respective index in the ‘Node_Bond_list’. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane40Bond_triangle_neighbour_list_constructorEv">
+<span id="_CPPv3N8Membrane40Bond_triangle_neighbour_list_constructorEv"></span><span id="_CPPv2N8Membrane40Bond_triangle_neighbour_list_constructorEv"></span><span id="Membrane::Bond_triangle_neighbour_list_constructor"></span><span class="target" id="class_membrane_1adeb300c2d9eaacef8f3cf30b12e55c2e"></span>void <code class="sig-name descname">Bond_triangle_neighbour_list_constructor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane40Bond_triangle_neighbour_list_constructorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a vector that lists the triangle neighbours of each node pair. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane13return_volumeEv">
+<span id="_CPPv3N8Membrane13return_volumeEv"></span><span id="_CPPv2N8Membrane13return_volumeEv"></span><span id="Membrane::return_volume__void"></span><span class="target" id="class_membrane_1a2ef973e747c1b1330b4d7e28fe89e481"></span>double <code class="sig-name descname">return_volume</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane13return_volumeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the last saved volume. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane24return_voronoi_node_areaEv">
+<span id="_CPPv3N8Membrane24return_voronoi_node_areaEv"></span><span id="_CPPv2N8Membrane24return_voronoi_node_areaEv"></span><span id="Membrane::return_voronoi_node_area"></span><span class="target" id="class_membrane_1a783a980d2255cd1b0d3990fc23fb50c6"></span>vector&lt;double&gt; <code class="sig-name descname">return_voronoi_node_area</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane24return_voronoi_node_areaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculate the voronoi area of each node and return a list that indicated the voronoi area of each node. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane33calculate_volume_and_surface_areaEv">
+<span id="_CPPv3N8Membrane33calculate_volume_and_surface_areaEv"></span><span id="_CPPv2N8Membrane33calculate_volume_and_surface_areaEv"></span><span id="Membrane::calculate_volume_and_surface_area__void"></span><span class="target" id="class_membrane_1aad340e3089f2385d00f32d768a06c631"></span>void <code class="sig-name descname">calculate_volume_and_surface_area</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane33calculate_volume_and_surface_areaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculate the volume of a closed membrane by summing triangular pyramids. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane35calculate_surface_area_with_voronoiEv">
+<span id="_CPPv3N8Membrane35calculate_surface_area_with_voronoiEv"></span><span id="_CPPv2N8Membrane35calculate_surface_area_with_voronoiEv"></span><span id="Membrane::calculate_surface_area_with_voronoi__void"></span><span class="target" id="class_membrane_1abe18ac1a231653ef4e6baec4dfa18ae8"></span>void <code class="sig-name descname">calculate_surface_area_with_voronoi</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane35calculate_surface_area_with_voronoiEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculate the volume of a closed membrane by summing triangular pyramids. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N8Membrane19return_surface_areaEv">
+<span id="_CPPv3N8Membrane19return_surface_areaEv"></span><span id="_CPPv2N8Membrane19return_surface_areaEv"></span><span id="Membrane::return_surface_area__void"></span><span class="target" id="class_membrane_1ae2cb3da756b41d0e103871911f24d44f"></span>double <code class="sig-name descname">return_surface_area</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane19return_surface_areaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the last saved surface area. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -319,6 +367,12 @@ Only random access containers can be adapted.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt id="_CPPv4N8Membrane20calc_theta_angle_ABCEiii">
+<span id="_CPPv3N8Membrane20calc_theta_angle_ABCEiii"></span><span id="_CPPv2N8Membrane20calc_theta_angle_ABCEiii"></span><span id="Membrane::calc_theta_angle_ABC__i.i.i"></span><span class="target" id="class_membrane_1a28da2aba21ab701482d989b5e3b9947f"></span>double <code class="sig-name descname">calc_theta_angle_ABC</code><span class="sig-paren">(</span>int <em>node_A</em>, int <em>node_B</em>, int <em>node_C</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane20calc_theta_angle_ABCEiii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculate and return the cot of the angle between nodes A(middle of the angle), B, and C. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4N8Membrane14set_FENE_paramERdRdRdRd">
 <span id="_CPPv3N8Membrane14set_FENE_paramERdRdRdRd"></span><span id="_CPPv2N8Membrane14set_FENE_paramERdRdRdRd"></span><span id="Membrane::set_FENE_param__doubleR.doubleR.doubleR.doubleR"></span><span class="target" id="class_membrane_1ae240d9a481d914b7e5092bb9183aa0fa"></span>void <code class="sig-name descname">set_FENE_param</code><span class="sig-paren">(</span>double &amp;<em>le0</em>, double &amp;<em>le1</em>, double &amp;<em>lmin</em>, double &amp;<em>lmax</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane14set_FENE_paramERdRdRdRd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set FENE calculated parameters. </p>
@@ -358,6 +412,24 @@ Only random access containers can be adapted.</p>
 <dt id="_CPPv4N8Membrane14shift_positionEddd">
 <span id="_CPPv3N8Membrane14shift_positionEddd"></span><span id="_CPPv2N8Membrane14shift_positionEddd"></span><span id="Membrane::shift_position__double.double.double"></span><span class="target" id="class_membrane_1aae01bd33119728d0b268081bee3815e7"></span>void <code class="sig-name descname">shift_position</code><span class="sig-paren">(</span>double <em>x</em>, double <em>y</em>, double <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Membrane14shift_positionEddd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This function shifts the whole membrane. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N8Membrane19Node_neighbour_listE">
+<span id="_CPPv3N8Membrane19Node_neighbour_listE"></span><span id="_CPPv2N8Membrane19Node_neighbour_listE"></span><span id="Membrane::Node_neighbour_list__vector:vector:i::"></span><span class="target" id="class_membrane_1a705770b79289d894b0b58919e810d71a"></span>vector&lt;vector&lt;int&gt;&gt; <code class="sig-name descname">Node_neighbour_list</code><a class="headerlink" href="#_CPPv4N8Membrane19Node_neighbour_listE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This list is used to store all the neighbours of nodes: Example: If node i has 4 neighbours: m, n, o, p Then we find these neighbours in the ‘Node_neighbour_list’ as follows: Node_neighbour_list [ i ][0] = m Node_neighbour_list [ i ][1] = n Node_neighbour_list [ i ][2] = o Node_neighbour_list [ i ][3] = p. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N8Membrane41Node_neighbour_list_respective_bond_indexE">
+<span id="_CPPv3N8Membrane41Node_neighbour_list_respective_bond_indexE"></span><span id="_CPPv2N8Membrane41Node_neighbour_list_respective_bond_indexE"></span><span id="Membrane::Node_neighbour_list_respective_bond_index__vector:vector:i::"></span><span class="target" id="class_membrane_1a5e8d7785b5d33266bd44713567bf16f1"></span>vector&lt;vector&lt;int&gt;&gt; <code class="sig-name descname">Node_neighbour_list_respective_bond_index</code><a class="headerlink" href="#_CPPv4N8Membrane41Node_neighbour_list_respective_bond_indexE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This list is used to cross reference the neighbouring nodes to their respective index in the ‘Node_neighbour_list’. </p>
+<p>Example: Suppose node i has 4 neighbours: m, n, o, p Then we find these neighbours in the ‘Node_neighbour_list’ as follows: Node_neighbour_list [ i ][0] = m Node_neighbour_list [ i ][1] = n Node_neighbour_list [ i ][2] = o Node_neighbour_list [ i ][3] = p</p>
+<p>Then the i’th index of the ‘Node_neighbour_list_respective_bond_index’ will also contain 4 elements: Node_neighbour_list_respective_bond_index [ i ][0] = index_1 Node_neighbour_list_respective_bond_index [ i ][1] = index_2 Node_neighbour_list_respective_bond_index [ i ][2] = index_3 Node_neighbour_list_respective_bond_index [ i ][3] = index_4</p>
+<p>The index_::s will point to the index in the ‘Node_Bond_list’ that has stored the respective nodes as pairs: Node_Bond_list [ index_1 ][ 0 ] and Node_Bond_list [ index_1 ][ 1 ] = i, m Node_Bond_list [ index_2 ][ 0 ] and Node_Bond_list [ index_2 ][ 1 ] = i, n Node_Bond_list [ index_3 ][ 0 ] and Node_Bond_list [ index_3 ][ 1 ] = i, o Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ] = i, p </p>
 </dd></dl>
 
 </div>
