@@ -180,12 +180,14 @@ int main(int argc, char **argv)
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
     string general_file_name="general-config.txt";
-    if (argc == 1) {
-        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
-        exit(EXIT_FAILURE);
-    }
-    
-    general_file_name = argv[1];
+//    if (argc == 1) {
+//        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
+//        exit(EXIT_FAILURE);
+//    }
+//
+//    general_file_name = argv[1];
+    cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\nexample:\t../../myconfigfile.txt\n\nPath to configuration file: ";
+    cin>>general_file_name;
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
@@ -199,10 +201,10 @@ int main(int argc, char **argv)
     read_interaction_map(interaction_map);
     
     ofstream Trajectory;
-    ofstream calcforce_l0;
-    ofstream calcforce_delta;
-    calcforce_l0.open("calcforce_l0", ios::app);
-    calcforce_delta.open("calcforce_delta", ios::app);
+//    ofstream calcforce_l0;
+//    ofstream calcforce_delta;
+//    calcforce_l0.open("calcforce_l0", ios::app);
+//    calcforce_delta.open("calcforce_delta", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
@@ -560,6 +562,8 @@ int main(int argc, char **argv)
                 Savingstep = int(MCCalcTime/rate);
                 NumSilentSteps = Savingstep;
             }
+            
+            cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
             
             int total_step_num = 0;
             double last_update_time=0;
