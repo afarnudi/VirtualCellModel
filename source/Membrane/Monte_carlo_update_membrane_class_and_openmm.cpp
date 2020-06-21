@@ -5,7 +5,7 @@
 
 void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
    // check_monte_carlo=1;
-    
+    const int EndOfList=-1;
     int u1=Triangle_Pair_Nodes[initial_pair][0];
     int c2=Triangle_Pair_Nodes[initial_pair][1];
     int c3= Triangle_Pair_Nodes[initial_pair][2];
@@ -23,17 +23,22 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
     vector<double> parameters;
     bonds[bond_index].atoms[0]=u1;
     bonds[bond_index].atoms[1]=u4;
-    
+    /*
+    int p1,p2;
     for (int i=0; i< omm->EV.size() ; i++)
     {
+     omm->EV[i]->getExclusionParticles(bond_index, p1, p2);
+        cout<<"p_exclude_bond  "<<p1<<"   "<<p2<<endl;
+        cout<<"p_bonds "<<c2<<"  "<<c3<<endl;
         omm->EV[i]->setExclusionParticles(bond_index, u1, u4);
+        
+        
     }
-    
     for (int i=0; i< omm->LJ.size() ; i++)
     {
         omm->LJ[i]->setExclusionParticles(bond_index, u1, u4);
     }
-    
+    */
     switch (spring_model){
         case 1: //Fene
             { 

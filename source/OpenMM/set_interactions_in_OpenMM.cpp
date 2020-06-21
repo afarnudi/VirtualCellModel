@@ -50,20 +50,29 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     index = int(LJ_12_6_interactions.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
-                    add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                    //add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                     
                     system.addForce(LJ_12_6_interactions[index]);
                     
                     break;
                 case 2:
+                    if(GenConst::MC_step!=0 and i==0 and j==0){
+                        init_Modified_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
+                        index = int(ExcludedVolumes.size()-1);
+                        system.addForce(ExcludedVolumes[index]);
+                        cout<<"modified ev "<<endl;
+                    }
+                    else{
                     init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
                     
                     index = int(ExcludedVolumes.size()-1);
 //
                     // Add the list of atom pairs that are excluded from the excluded volume force.
-                    add_exclusion(ExcludedVolumes[index], exclude_bonds);
+                    //add_exclusion(ExcludedVolumes[index], exclude_bonds);
                     
                     system.addForce(ExcludedVolumes[index]);
+                    
+                    }
                     
                     break;
                     
@@ -100,7 +109,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     index = int(LJ_12_6_interactions.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
-                    add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                   // add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                     
                     system.addForce(LJ_12_6_interactions[index]);
                     
@@ -110,7 +119,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     index = int(ExcludedVolumes.size()-1);
                     // Add the list of atom pairs that are excluded from the excluded volume force.
-                    add_exclusion(ExcludedVolumes[index], exclude_bonds);
+                    //add_exclusion(ExcludedVolumes[index], exclude_bonds);
                     
                     system.addForce(ExcludedVolumes[index]);
                     break;

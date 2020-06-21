@@ -30,7 +30,7 @@ namespace GenConst {
     extern int MD_thrmo_step;
     /**During every 'MC_step' the MC step will be applied to the membrane mesh. Default 100*/
     extern int MC_step;
-    extern double Mem_fluidity;
+    extern int Mem_fluidity;
     extern double Lbox;
     extern bool Periodic_condtion_status;
     /**Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0.*/

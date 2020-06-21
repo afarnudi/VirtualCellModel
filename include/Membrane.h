@@ -62,7 +62,11 @@ private:
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
     int MD_num_of_Relaxation_steps=200000;
     int MD_correction_steps=2000;
-    
+
+
+    int Num_of_Free_Bonds=0; //this variable is set for defining the bonds which we dont want to consider the triangles formed by them.
+    bool fixing_com=0; //this flag indicates that if we want to keep the center of mass as a physical point to apply the forces on it or not.
+
     std::map<std::string, double> param_map;
     
     std::string Mesh_file_name="None";
@@ -192,6 +196,7 @@ public:
     vector<vector<int> > Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> > Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
+    vector<vector<int> >Free_Bonds; //this variable is set for defining the bonds which we dont want to consider the triangles formed by them.
     vector<vector<int> > Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -262,7 +267,11 @@ public:
     //monte carlo flip functions
     bool check_monte_carlo=0;
     void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
-    bool monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter);
+
+//    bool monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter);
+
+    void monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter, int &MC_total_tries, double &MC_Acceptance_Rate);
+
     double calculating_the_bond_energy(int index, bool initial_or_final, MyAtomInfo  atoms[],int number_of_privious_mem_nodes);
     double calculating_the_bond_energy_check(int p1, int p2, MyAtomInfo atoms[]);
     double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4, bool initial_or_final, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);

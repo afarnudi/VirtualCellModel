@@ -3,10 +3,12 @@
 #include "OpenMM_funcs.hpp"
 #include "General_functions.hpp"
 
-bool Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter){
+
+void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter, int& pyramid_counter, int &MC_total_tries, double &MC_Acceptance_Rate){
    
-    bool accept = false, update = false;
-    
+    bool accept=0; 
+    MC_total_tries+=1;
+
     //Randomly choosing a Dihedral and finding the neighbours.
     int triangle_A, triangle_B,temp_triangle, u1;
     int initial_pair;
@@ -21,7 +23,7 @@ bool Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     int new_neighbour_dihedrals[4][6];
     
     //** the new pair must have 4 new neighbours.
-    //**each array contains the information of new neighbours. the first 4 elements are the index of nodes which constructs the dihedral. the fifths element indicates the index of the dihedral in both Triangle_Pair_Nodes and Triangle_pair_list. the last element is a boolian which 0 indicates that we dont have to update the indexes of triangles which are connected to each other and one indicates that we have to update the lable of new connected triangles.
+    //**each array contains the information of new neighbours. the first 4 elements are the index of nodes which constructs the dihedral. the fifth element indicates the index of the dihedral in both Triangle_Pair_Nodes and Triangle_pair_list. the last element is a boolian which 0 indicates that we do not have to update the indexes of triangles which are connected to each other and one indicates that we have to update the lable of new connected triangles.
     
     initial_pair=rand()%(Num_of_Triangle_Pairs-1);
     
@@ -68,7 +70,7 @@ bool Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     
     
     if (accept){ //(checking the conditions)
-        
+
         int uncommon1,common2,common3, uncommon4;
         //calculating the initial state energy
         ////calculating the bond energy
@@ -149,12 +151,29 @@ bool Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
             if( double(rand()/RAND_MAX) < exp((-deltaE)/(0.0083*GenConst::temperature))){
                 Accepted_Try_Counter+=1;
                 update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
-                update =  true;
+//                update =  true;
             }
                 
         }//end of if(deltaE>0)
     }// end of if(accept) (checking the conditions)
-    return update;
+
+    
+    //if(accept){
+      //  check_before_update(triangle_A, triangle_B,new_neighbour_dihedrals,pyramid_counter, accept);
+        //}
+    
+    if(accept){ // (updating the mem and parameters in openmm)
+            Accepted_Try_Counter+=1;
+            MC_Acceptance_Rate=(MC_Acceptance_Rate*(MC_total_tries-1)+1)/MC_total_tries;
+            
+            update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
+            
+  
+    } //end of if(accept){ // (updating the mem and parameters in openmm)
+    else{
+        MC_Acceptance_Rate=MC_Acceptance_Rate*(MC_total_tries-1)/MC_total_tries;
+    }
+
 }
 
 

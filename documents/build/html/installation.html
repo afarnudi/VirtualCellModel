@@ -13,42 +13,41 @@
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/main_stylesheet.css" type="text/css" />
-  
-
-  
-    <link rel="top" title="The Virtual Cell Model  documentation" href="index.html"/>
-        <link rel="next" title="The Membrane" href="Membrane.html"/>
-        <link rel="prev" title="Introduction" href="index.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/main_stylesheet.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Membrane" href="Membrane.html" />
+    <link rel="prev" title="Introduction" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -57,7 +56,7 @@
 
           
             
-            <img src="_static/logo_1.png" class="logo" />
+            <img src="_static/logo_1.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -82,9 +81,12 @@
           
             
             
-                <p class="caption"><span class="caption-text">INSTALLATION</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">INSTALLATION</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#using-the-conda-package">Using the conda package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-the-debian-package">Using the Debian package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-the-spack-package">Using the Spack package</a></li>
@@ -104,34 +106,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">The Virtual Cell Model</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The Virtual Cell Model</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>Installation</li>
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
+            
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -148,62 +170,62 @@
 }
 </style><div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Although <code class="docutils literal"><span class="pre">xtensor</span></code> is a header-only library, we provide standardized means to
+<p>Although <code class="docutils literal notranslate"><span class="pre">xtensor</span></code> is a header-only library, we provide standardized means to
 install it, with package managers or with cmake.</p>
-<p>Besides the xtensor headers, all these methods place the <code class="docutils literal"><span class="pre">cmake</span></code> project
+<p>Besides the xtensor headers, all these methods place the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> project
 configuration file in the right location so that third-party projects can use
-cmake&#8217;s <code class="docutils literal"><span class="pre">find_package</span></code> to locate xtensor headers.</p>
-<img src="_images/conda.svg" /><div class="section" id="using-the-conda-package">
+cmake’s <code class="docutils literal notranslate"><span class="pre">find_package</span></code> to locate xtensor headers.</p>
+<img alt="_images/conda.svg" src="_images/conda.svg" /><div class="section" id="using-the-conda-package">
 <h2>Using the conda package<a class="headerlink" href="#using-the-conda-package" title="Permalink to this headline">¶</a></h2>
 <p>A package for xtensor is available on the conda package manager.</p>
-<div class="code highlight-c++"><div class="highlight"><pre><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">xtensor</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">xtensor</span>
 </pre></div>
 </div>
-<img src="_images/debian.svg" /></div>
+<img alt="_images/debian.svg" src="_images/debian.svg" /></div>
 <div class="section" id="using-the-debian-package">
 <h2>Using the Debian package<a class="headerlink" href="#using-the-debian-package" title="Permalink to this headline">¶</a></h2>
 <p>A package for xtensor is available on Debian.</p>
-<div class="code highlight-c++"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">xtensor</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">xtensor</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 </div>
-<img src="_images/spack.svg" /></div>
+<img alt="_images/spack.svg" src="_images/spack.svg" /></div>
 <div class="section" id="using-the-spack-package">
 <h2>Using the Spack package<a class="headerlink" href="#using-the-spack-package" title="Permalink to this headline">¶</a></h2>
 <p>A package for xtensor is available on the Spack package manager.</p>
-<div class="code highlight-c++"><div class="highlight"><pre><span class="n">spack</span> <span class="n">install</span> <span class="n">xtensor</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">spack</span> <span class="n">install</span> <span class="n">xtensor</span>
 <span class="n">spack</span> <span class="n">load</span> <span class="o">--</span><span class="n">dependencies</span> <span class="n">xtensor</span>
 </pre></div>
 </div>
-<img src="_images/cmake.svg" /></div>
+<img alt="_images/cmake.svg" src="_images/cmake.svg" /></div>
 <div class="section" id="from-source-with-cmake">
 <h2>From source with cmake<a class="headerlink" href="#from-source-with-cmake" title="Permalink to this headline">¶</a></h2>
-<p>You can also install <code class="docutils literal"><span class="pre">xtensor</span></code> from source with cmake. This requires that you
+<p>You can also install <code class="docutils literal notranslate"><span class="pre">xtensor</span></code> from source with cmake. This requires that you
 have the <a class="reference external" href="https://github.com/QuantStack/xtl">xtl</a> library installed on your system. On Unix platforms, from the
 source directory:</p>
-<div class="code highlight-c++"><div class="highlight"><pre><span class="n">mkdir</span> <span class="n">build</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
 <span class="n">cd</span> <span class="n">build</span>
 <span class="n">cmake</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">path_to_prefix</span> <span class="p">..</span>
 <span class="n">make</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>On Windows platforms, from the source directory:</p>
-<div class="code highlight-c++"><div class="highlight"><pre><span class="n">mkdir</span> <span class="n">build</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
 <span class="n">cd</span> <span class="n">build</span>
 <span class="n">cmake</span> <span class="o">-</span><span class="n">G</span> <span class="s">&quot;NMake Makefiles&quot;</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">path_to_prefix</span> <span class="p">..</span>
 <span class="n">nmake</span>
 <span class="n">nmake</span> <span class="n">install</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">path_to_prefix</span></code> is the absolute path to the folder where cmake searches for
-dependencies and installs libraries. <code class="docutils literal"><span class="pre">xtensor</span></code> installation from cmake assumes
-this folder contains <code class="docutils literal"><span class="pre">include</span></code> and <code class="docutils literal"><span class="pre">lib</span></code> subfolders.</p>
-<p>See the <code class="xref doc docutils literal"><span class="pre">build-options</span></code> section for more details about cmake options.</p>
+<p><code class="docutils literal notranslate"><span class="pre">path_to_prefix</span></code> is the absolute path to the folder where cmake searches for
+dependencies and installs libraries. <code class="docutils literal notranslate"><span class="pre">xtensor</span></code> installation from cmake assumes
+this folder contains <code class="docutils literal notranslate"><span class="pre">include</span></code> and <code class="docutils literal notranslate"><span class="pre">lib</span></code> subfolders.</p>
+<p>See the <span class="xref std std-doc">build-options</span> section for more details about cmake options.</p>
 </div>
 <div class="section" id="including-xtensor-in-your-project">
 <h2>Including xtensor in your project<a class="headerlink" href="#including-xtensor-in-your-project" title="Permalink to this headline">¶</a></h2>
-<p>The different packages of <code class="docutils literal"><span class="pre">xtensor</span></code> are built with cmake, so whatever the
-installation mode you choose, you can add <code class="docutils literal"><span class="pre">xtensor</span></code> to your project using cmake:</p>
-<div class="code highlight-c++"><div class="highlight"><pre>find_package(xtensor REQUIRED)
+<p>The different packages of <code class="docutils literal notranslate"><span class="pre">xtensor</span></code> are built with cmake, so whatever the
+installation mode you choose, you can add <code class="docutils literal notranslate"><span class="pre">xtensor</span></code> to your project using cmake:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span>find_package(xtensor REQUIRED)
 target_include_directories(your_target PUBLIC ${xtensor_INCLUDE_DIRS})
 target_link_libraries(your_target PUBLIC xtensor)
 </pre></div>
@@ -213,15 +235,16 @@ target_link_libraries(your_target PUBLIC xtensor)
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Membrane.html" class="btn btn-neutral float-right" title="The Membrane" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Membrane.html" class="btn btn-neutral float-right" title="The Membrane" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Introduction" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -230,11 +253,11 @@ target_link_libraries(your_target PUBLIC xtensor)
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Mohammad Reza Ejtehadi, Morteza Mahmoudi, Maziar Heidari,Tiam Heydari, Ali Farnudi.
+        &copy; Copyright 2016, Mohammad Reza Ejtehadi, Morteza Mahmoudi, Maziar Heidari,Tiam Heydari, Ali Farnudi
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -247,35 +270,15 @@ target_link_libraries(your_target PUBLIC xtensor)
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

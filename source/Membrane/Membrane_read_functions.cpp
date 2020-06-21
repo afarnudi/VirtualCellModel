@@ -209,6 +209,19 @@ void Membrane::read_ply_file (std::string ply_file)
         Triangle_list.push_back(push);
         
     }
+    if(fixing_com){
+        read>>temp_string;
+        read>>Num_of_Free_Bonds;
+        vector<int> extra;
+        extra.resize(2);
+        for(int i=0; i<Num_of_Free_Bonds; i++){
+        read>>extra[0];
+        read>>extra[1];
+        Free_Bonds.push_back(extra);
+        }
+    cout<<"Num_of_Free_Bonds  "<<Num_of_Free_Bonds<<endl;
+    }
+    
 }
 
 
