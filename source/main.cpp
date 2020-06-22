@@ -552,17 +552,20 @@ int main(int argc, char **argv)
             
             
             //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
-            int MCCalcTime = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
+            int MCCalcstep = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
             int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             int Savingstep = NumSilentSteps;
-            if ( (MCCalcTime < NumSilentSteps) && MCCalcTime != 0 ) {
-                Savingstep = (int)(NumSilentSteps / MCCalcTime )* MCCalcTime;
-                NumSilentSteps = MCCalcTime;
-            } else if ( (NumSilentSteps < MCCalcTime) && MCCalcTime != 0 ){
-                int rate =  (int)(MCCalcTime / NumSilentSteps );
-                Savingstep = int(MCCalcTime/rate);
+            if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
+                Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
+                NumSilentSteps = MCCalcstep;
+            } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
+                int rate =  (int)(MCCalcstep / NumSilentSteps );
+                Savingstep = int(MCCalcstep/rate);
                 NumSilentSteps = Savingstep;
             }
+            
+            int savetime = 0;
+            int MCCalcTime = MCCalcstep;
             
             cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
             
@@ -588,14 +591,15 @@ int main(int argc, char **argv)
                 }
                 //Ps to Fs
 //                cout<<"myWritePDBFrame\n";
-                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= Savingstep ) {
+                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
+//                    cout<<"\ntime: "<<time<<endl;
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                                     
                                     //Begin: Exporting congiguration of classes for simulation .
                     Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                     
-                    Savingstep += Savingstep;
+                    savetime += Savingstep;
                 }
                 
                 if (changeTemp) {
@@ -656,7 +660,7 @@ int main(int argc, char **argv)
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
                     
-                    MCCalcTime += MCCalcTime;
+                    MCCalcTime += MCCalcstep;
                 }
                 
                 if(frame%50==2 and  GenConst::Mem_fluidity !=0){
