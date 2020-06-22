@@ -403,8 +403,8 @@ int main(int argc, char **argv)
             
             Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
             for (int runs=0; runs<num_ang_avg; runs++) {
-//                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
-                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+//                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
             }
             
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
