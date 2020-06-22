@@ -509,6 +509,10 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         
         cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+        bool changeTemp = true;
+        double TempStep = 20;
+        double initTemp = GenConst::temperature;
+        
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
@@ -593,7 +597,10 @@ int main(int argc, char **argv)
                     Savingstep += Savingstep;
                 }
                 
-                
+                if (changeTemp) {
+                    initTemp -= TempStep;
+                    omm->Lintegrator->setTemperature(initTemp);
+                }
                 if (GenConst::CreateCheckpoint) {
                     omm->context->createCheckpoint(wcheckpoint);
                     //End: Exporting congiguration of classes for simulation resume.

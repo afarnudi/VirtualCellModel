@@ -254,6 +254,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
+
     
     switch (GenConst::Integrator_type) {
         case 0:
@@ -268,6 +269,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         case 2:
             
             omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+                                                             GenConst::frictionInPs,
+                                                             stepSizeInFs * OpenMM::PsPerFs);
+            
+            omm->Lintegrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
@@ -292,9 +297,35 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     if (platform.getName() == "CPU" || platform_id==0) {
-        omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
+        switch (GenConst::Integrator_type) {
+            case 0:
+                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
+                break;
+                
+            case 1:
+                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
+                break;
+            case 2:
+                
+                omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform);
+                break;
+        }
+        
     } else {
-        omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
+        switch (GenConst::Integrator_type) {
+            case 0:
+                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
+                break;
+                
+            case 1:
+                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
+                break;
+            case 2:
+                
+                omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform, device_properties[device_id]);
+                break;
+        }
+        
     }
         
     omm->context->setPositions(initialPosInNm);

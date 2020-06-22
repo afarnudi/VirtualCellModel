@@ -72,6 +72,7 @@ struct MyOpenMMData {
     ~MyOpenMMData() {delete context; delete integrator; delete system;}
     OpenMM::System*         system;
     OpenMM::Integrator*     integrator;
+    OpenMM::LangevinIntegrator*     Lintegrator;
     OpenMM::Context*  context;
 
     OpenMM::HarmonicBondForce* harmonic;
