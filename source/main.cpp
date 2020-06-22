@@ -509,9 +509,6 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         
         cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
-        bool changeTemp = true;
-        double TempStep = 20;
-        double initTemp = GenConst::temperature;
         
         
         try {
@@ -574,12 +571,15 @@ int main(int argc, char **argv)
 
             bool expanding = false;
             bool set_spring = false;
+            bool changeTemp = false;
+            double TempStep = 20;
+            double initTemp = GenConst::temperature;
             
 
             for (int frame=1; ; ++frame) {
 
                 double time, energyInKJ, potential_energyInKJ;
-                
+//                cout<<"frame: "<<frame<<endl;
 
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
 
@@ -587,6 +587,7 @@ int main(int argc, char **argv)
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
                 //Ps to Fs
+//                cout<<"myWritePDBFrame\n";
                 if ( int(time*1000/GenConst::Step_Size_In_Fs) >= Savingstep ) {
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
@@ -601,6 +602,7 @@ int main(int argc, char **argv)
                     initTemp -= TempStep;
                     omm->Lintegrator->setTemperature(initTemp);
                 }
+//                cout<<"CreateCheckpoint\n";
                 if (GenConst::CreateCheckpoint) {
                     omm->context->createCheckpoint(wcheckpoint);
                     //End: Exporting congiguration of classes for simulation resume.
@@ -608,7 +610,7 @@ int main(int argc, char **argv)
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
-                
+//                cout<<"myStepWithOpenMM\n";
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
                 if (100*time/GenConst::Simulation_Time_In_Ps>progressp){

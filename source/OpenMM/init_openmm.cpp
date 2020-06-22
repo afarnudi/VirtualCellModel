@@ -297,34 +297,21 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     if (platform.getName() == "CPU" || platform_id==0) {
-        switch (GenConst::Integrator_type) {
-            case 0:
-                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
-                break;
-                
-            case 1:
-                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
-                break;
-            case 2:
-                
-                omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform);
-                break;
+        if ( omm->integrator != NULL ) {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
+        } else {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform);
         }
         
+        
+        
     } else {
-        switch (GenConst::Integrator_type) {
-            case 0:
-                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
-                break;
-                
-            case 1:
-                omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
-                break;
-            case 2:
-                
-                omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform, device_properties[device_id]);
-                break;
+        if ( omm->integrator != NULL ) {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
+        } else {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform, device_properties[device_id]);
         }
+        
         
     }
         
