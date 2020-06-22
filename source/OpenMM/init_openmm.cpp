@@ -268,9 +268,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
         case 2:
             
-            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
-                                                             GenConst::frictionInPs,
-                                                             stepSizeInFs * OpenMM::PsPerFs);
+//            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+//                                                             GenConst::frictionInPs,
+//                                                             stepSizeInFs * OpenMM::PsPerFs);
             
             omm->Lintegrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
                                                              GenConst::frictionInPs,
