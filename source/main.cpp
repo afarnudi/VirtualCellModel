@@ -180,12 +180,14 @@ int main(int argc, char **argv)
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
     string general_file_name="general-config.txt";
-    if (argc == 1) {
-        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
-        exit(EXIT_FAILURE);
-    }
-    
-    general_file_name = argv[1];
+//    if (argc == 1) {
+//        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
+//        exit(EXIT_FAILURE);
+//    }
+//
+//    general_file_name = argv[1];
+    cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\nexample:\t../../myconfigfile.txt\n\nPath to configuration file: ";
+    cin>>general_file_name;
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
@@ -199,10 +201,10 @@ int main(int argc, char **argv)
     read_interaction_map(interaction_map);
     
     ofstream Trajectory;
-    ofstream calcforce_l0;
-    ofstream calcforce_delta;
-    calcforce_l0.open("calcforce_l0", ios::app);
-    calcforce_delta.open("calcforce_delta", ios::app);
+//    ofstream calcforce_l0;
+//    ofstream calcforce_delta;
+//    calcforce_l0.open("calcforce_l0", ios::app);
+//    calcforce_delta.open("calcforce_delta", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
@@ -401,8 +403,8 @@ int main(int argc, char **argv)
             
             Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
             for (int runs=0; runs<num_ang_avg; runs++) {
-//                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
-                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+//                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
             }
             
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
@@ -508,6 +510,7 @@ int main(int argc, char **argv)
         
         cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
         
+        
         try {
             MyOpenMMData* omm = new MyOpenMMData();
             TimeDependantData* time_dependant_data = new TimeDependantData();
@@ -549,17 +552,22 @@ int main(int argc, char **argv)
             
             
             //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
-            int MCCalcTime = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
+            int MCCalcstep = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
             int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             int Savingstep = NumSilentSteps;
-            if ( (MCCalcTime < NumSilentSteps) && MCCalcTime != 0 ) {
-                Savingstep = (int)(NumSilentSteps / MCCalcTime )* MCCalcTime;
-                NumSilentSteps = MCCalcTime;
-            } else if ( (NumSilentSteps < MCCalcTime) && MCCalcTime != 0 ){
-                int rate =  (int)(MCCalcTime / NumSilentSteps );
-                Savingstep = int(MCCalcTime/rate);
+            if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
+                Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
+                NumSilentSteps = MCCalcstep;
+            } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
+                int rate =  (int)(MCCalcstep / NumSilentSteps );
+                Savingstep = int(MCCalcstep/rate);
                 NumSilentSteps = Savingstep;
             }
+            
+            int savetime = 0;
+            int MCCalcTime = MCCalcstep;
+            
+            cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
             
             int total_step_num = 0;
             double last_update_time=0;
@@ -567,13 +575,16 @@ int main(int argc, char **argv)
 
             bool expanding = false;
             bool set_spring = false;
+            bool changeTemp = false;
+            double TempStep = 20;
+            double initTemp = GenConst::temperature;
             
 
 
             for (int frame=1; ; ++frame) {
 
                 double time, energyInKJ, potential_energyInKJ;
-                
+//                cout<<"frame: "<<frame<<endl;
 
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
 
@@ -581,17 +592,23 @@ int main(int argc, char **argv)
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
                 //Ps to Fs
-                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= Savingstep ) {
+//                cout<<"myWritePDBFrame\n";
+                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
+//                    cout<<"\ntime: "<<time<<endl;
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                                     
                                     //Begin: Exporting congiguration of classes for simulation .
                     Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                     
-                    Savingstep += Savingstep;
+                    savetime += Savingstep;
                 }
                 
-                
+                if (changeTemp) {
+                    initTemp -= TempStep;
+                    omm->Lintegrator->setTemperature(initTemp);
+                }
+//                cout<<"CreateCheckpoint\n";
                 if (GenConst::CreateCheckpoint) {
                     omm->context->createCheckpoint(wcheckpoint);
                     //End: Exporting congiguration of classes for simulation resume.
@@ -599,7 +616,7 @@ int main(int argc, char **argv)
                 
                 if (time >= GenConst::Simulation_Time_In_Ps)
                     break;
-                
+//                cout<<"myStepWithOpenMM\n";
                 myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
                 
                 if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
@@ -650,7 +667,7 @@ int main(int argc, char **argv)
 
                     Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
                     
-                    MCCalcTime += MCCalcTime;
+                    MCCalcTime += MCCalcstep;
                 }
                 
                 if(frame%50==2 and  GenConst::Mem_fluidity !=0){

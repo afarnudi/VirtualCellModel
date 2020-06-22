@@ -8,6 +8,7 @@ var struct_my_open_m_m_data =
     [ "EV", "struct_my_open_m_m_data.html#a5284fe93e3178234282fdbad2d80c07e", null ],
     [ "harmonic", "struct_my_open_m_m_data.html#af2fef800bec4dda8e074aa6167624a2f", null ],
     [ "integrator", "struct_my_open_m_m_data.html#a471489f3c9bd1e5a54fc5202b71b6b96", null ],
+    [ "Lintegrator", "struct_my_open_m_m_data.html#a30021edc64e76e4a8383eff123e10319", null ],
     [ "LJ", "struct_my_open_m_m_data.html#abd6cf5b786c5093aca60cbbb82506b4e", null ],
     [ "system", "struct_my_open_m_m_data.html#ad14c08e4c616766db92ae52e57b44480", null ],
     [ "x4harmonic", "struct_my_open_m_m_data.html#a50a7654af50ee04f08a9f8cd07298724", null ]

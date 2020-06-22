@@ -37,9 +37,18 @@ void myStepWithOpenMM(MyOpenMMData* omm,
     
     else
     {
-        omm->integrator->step(numSteps);
-//        omm->context->computeVirtualSites();
-        total_step += numSteps;
+        if ( omm->integrator != NULL ) {
+            
+            omm->integrator->step(numSteps);
+            //        omm->context->computeVirtualSites();
+                    total_step += numSteps;
+        } else {
+            
+            omm->Lintegrator->step(numSteps);
+            //        omm->context->computeVirtualSites();
+                    total_step += numSteps;
+        }
+        
     }
     
 }
