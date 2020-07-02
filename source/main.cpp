@@ -575,7 +575,7 @@ int main(int argc, char **argv)
             bool expanding = false;
             bool set_spring = false;
             bool changeTemp = false;
-            double TempStep = 20;
+            double TempStep = 0.2;
             double initTemp = GenConst::temperature;
             
 
@@ -586,25 +586,46 @@ int main(int argc, char **argv)
 
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
 
-                if(GenConst::WriteVelocitiesandForces){
-                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
-                }
+                
                 //Ps to Fs
 //                cout<<"myWritePDBFrame\n";
                 if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
-//                    cout<<"\ntime: "<<time<<endl;
+                    
+                    
+                    if(GenConst::WriteVelocitiesandForces){
+                        collect_data(all_atoms, buffer, Chromatins, Membranes, time);
+                    }
+                    
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                                     
                                     //Begin: Exporting congiguration of classes for simulation .
                     Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                     
+                    
+                    
                     savetime += Savingstep;
+                    
+                    
+                    
+                    
                 }
                 
                 if (changeTemp) {
                     initTemp -= TempStep;
                     omm->Lintegrator->setTemperature(initTemp);
+//                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
+//                    map <string, double> params;
+//                    params = omm->context->getParameters();
+//
+//                    cout<<"\nframe: "<<frame<<endl;
+//                    cout<<params.size()<<endl;
+//                    for(auto elem : params)
+//                    {
+//                       cout << elem.first << " " << elem.second << "\n";
+//                    }
+//                    cout<<"\n";
+//
                 }
 //                cout<<"CreateCheckpoint\n";
                 if (GenConst::CreateCheckpoint) {
@@ -619,8 +640,10 @@ int main(int argc, char **argv)
                 
                 if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
                     printf("[ %2.1f ] time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
+                    cout<< std::flush;
 //                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
+//                    cout<<progressp<<endl;
                     progress++;
                 }
                 

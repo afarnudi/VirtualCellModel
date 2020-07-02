@@ -140,7 +140,7 @@ void write_data2(MyAtomInfo atoms[],
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
         if (GenConst::Wantvoronoi) {
-            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
+//            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
         wdata<<"\n";
     }
