@@ -186,6 +186,91 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     //    cout<<endl;
 }
 
+void Membrane::calculate_ulm_radiustest(int ell_max, int analysis_averaging_option){
+    if(ulm_avg.size() != ell_max+1){
+        ulm_avg.clear();
+        ulm_std.clear();
+        ulm_avg.resize(ell_max+1);
+        ulm_std.resize(ell_max+1);
+        for (int ell=0; ell<ell_max+1; ell++) {
+            ulm_avg[ell].resize(2*ell+1,0);
+            ulm_std[ell].resize(2*ell+1,0);
+        }
+        cout<<"cleared ulm\n";
+    }
+    
+    
+    if(analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    
+    
+//    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+    
+//    calculate_volume_and_surface_area();
+//    double radius = cbrt( 3*volume/(M_PI*4) );
+    
+    double radius=0;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        radius += spherical_positions[i][0];
+    }
+    radius/=Num_of_Nodes;
+    
+    std::complex<double> ylm;
+    std::complex<double> ylm_cc;
+    
+    double voronoi_to_omega_multiplyer = 1./(radius*radius*radius);
+    double f_theta_phi;
+    
+    
+    vector<vector< std::complex<double> > > ulm_avg_frame;
+    ulm_avg_frame.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_avg_frame[ell].resize(2*ell+1);
+        
+        for (int m=0; m<2*ell+1; m++) {
+            ulm_avg_frame[ell][m].real(0);
+            ulm_avg_frame[ell][m].imag(0);
+        }
+    }
+    
+    for (int ell=0; ell<ell_max+1; ell++) {
+        //        cout<<ell<<" out of "<<ell_max<<"\r";
+        for (int m=-ell; m<ell+1; m++) {
+            for(int i=0;i<Num_of_Nodes;i++){
+                ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
+                ylm_cc = ylm;
+                ylm_cc.imag(-1*imag(ylm));
+
+                f_theta_phi = (spherical_positions[i][0]-radius);
+                double multi = f_theta_phi*voronoi_to_omega_multiplyer*node_voronoi_area[i];
+                ylm_cc.real(real(ylm) * multi);
+                ylm_cc.imag(imag(ylm) * multi);
+
+                ulm_avg_frame[ell][m+ell] += ylm_cc;
+            }
+
+        }
+    }
+    
+    
+    for (int ell=0; ell<ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            double ulm = abs(ulm_avg_frame[ell][m+ell]);
+            ulm_avg[ell][m+ell] += ulm*ulm;
+            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+            
+        }
+    }
+    
+    //    cout<<endl;
+}
+
 void Membrane::calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option){
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();

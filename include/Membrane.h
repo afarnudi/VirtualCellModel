@@ -149,6 +149,7 @@ public:
     
     
     void calculate_ulm(int ell_max, int analysis_averaging_option);
+    void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
     void write_ulm(int ell_max, std::string traj_name, double num_frames, std::string extension);
     
