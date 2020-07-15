@@ -210,21 +210,21 @@ void Membrane::calculate_ulm_radiustest(int ell_max, int analysis_averaging_opti
     }
     
     
-//    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     
 //    calculate_volume_and_surface_area();
 //    double radius = cbrt( 3*volume/(M_PI*4) );
     
-    double radius=0;
-    for (int i=0; i<Num_of_Nodes; i++) {
-        radius += spherical_positions[i][0];
-    }
-    radius/=Num_of_Nodes;
+//    double radius=0;
+//    for (int i=0; i<Num_of_Nodes; i++) {
+//        radius += spherical_positions[i][0];
+//    }
+//    radius/=Num_of_Nodes;
     
     std::complex<double> ylm;
     std::complex<double> ylm_cc;
-    
-    double voronoi_to_omega_multiplyer = 1./(radius*radius*radius);
+//    double voronoi_to_omega_multiplyer =1./(radius*radius*radius);
+    double voronoi_to_omega_multiplyer =1;
     double f_theta_phi;
     
     
@@ -248,6 +248,7 @@ void Membrane::calculate_ulm_radiustest(int ell_max, int analysis_averaging_opti
                 ylm_cc.imag(-1*imag(ylm));
 
                 f_theta_phi = (spherical_positions[i][0]-radius);
+                voronoi_to_omega_multiplyer  = 1./(radius*spherical_positions[i][0]*spherical_positions[i][2]);
                 double multi = f_theta_phi*voronoi_to_omega_multiplyer*node_voronoi_area[i];
                 ylm_cc.real(real(ylm) * multi);
                 ylm_cc.imag(imag(ylm) * multi);
