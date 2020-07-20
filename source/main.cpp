@@ -397,19 +397,53 @@ int main(int argc, char **argv)
         
         
         int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
-        
+        int  L=2,M=0;
+        double U=1;
+//        string temp_pdb_name = analysis_filename;
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name+="_l_"+to_string(L)+"_m_"+to_string(M)+"_u_"+to_string(U)+".pdb";
         for (int i=2; i<max_frame; i++) {
-            
-            
+
+
             Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
+            Membranes[0].generate_ulm_mode(L, M, U);
             for (int runs=0; runs<num_ang_avg; runs++) {
 //                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
                 Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
+//                Membranes[0].myWritePDBFrame(runs,temp_pdb_name+".pdb");
 //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
             }
-            
+
             cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
         }
+//        string temp_pdb_name = analysis_filename;
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//
+//        for (int ell=0; ell<11; ell++) {
+//            for (int m = -ell; m<=ell; m++) {
+//                for (int i=2; i<max_frame; i++) {
+//
+//                    string lmtrajname ="ulm_"+to_string(ell)+"_"+to_string(m)+".pdb";
+//                    Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
+//                    Membranes[0].generate_ulm_mode(ell, m, double(i)/5.);
+//                    for (int runs=0; runs<num_ang_avg; runs++) {
+//                        //                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+//                        Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
+//                        Membranes[0].myWritePDBFrame(runs,lmtrajname);
+//                        //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+//                    }
+//
+//                    cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+//                }
+//            }
+//        }
+                
         Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, analysis_extension);
         cout<<"max_frame  "<<max_frame<<endl;
         return 2;
@@ -510,7 +544,7 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         
         cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
-        
+//        GenConst::Lbox = 200;
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();

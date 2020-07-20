@@ -22,6 +22,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1+cos(dihedral(p1,p2,p3,p4)))"));
             DihedralForces[DFs_index]->addPerBondParameter("K_bend");
             
+            DihedralForces[DFs_index]->setUsesPeriodicBoundaryConditions(true);
             system.addForce(DihedralForces[DFs_index]);
             
         }

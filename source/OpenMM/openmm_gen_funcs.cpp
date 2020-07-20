@@ -77,7 +77,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
     // Forces are also available (and cheap).
 
-    const OpenMM::State state = omm->context->getState(infoMask);
+    const OpenMM::State state = omm->context->getState(infoMask,true);
     timeInPs = state.getTime(); // OpenMM time is in ps already
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.

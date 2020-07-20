@@ -129,6 +129,42 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->Dihedral = DihedralForces;
     }
     
+    cout<<"PBC:\n";
+    std::vector<Vec3> pbcxyz;
+    pbcxyz.resize(3);
+    
+    pbcxyz[0][0]=GenConst::Lbox;
+    pbcxyz[0][1]=0;
+    pbcxyz[0][2]=0;
+    
+    pbcxyz[1][0]=0;
+    pbcxyz[1][1]=GenConst::Lbox;
+    pbcxyz[1][2]=0;
+    
+    pbcxyz[2][0]=0;
+    pbcxyz[2][1]=0;
+    pbcxyz[2][2]=GenConst::Lbox;
+    
+    system.setDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+    
+    pbcxyz[0][0]=0;
+    pbcxyz[0][1]=0;
+    pbcxyz[0][2]=0;
+    
+    pbcxyz[1][0]=0;
+    pbcxyz[1][1]=0;
+    pbcxyz[1][2]=0;
+    
+    pbcxyz[2][0]=0;
+    pbcxyz[2][1]=0;
+    pbcxyz[2][2]=0;
+    
+    system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+    for (int i=0; i<3; i++) {
+        cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
+    }
+    
+    
     //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
     cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
@@ -285,7 +321,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         
         
-    }
+        }
     
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
@@ -302,6 +338,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         cout << elem.first << " " << elem.second << "\n";
     }
     cout<<"\n";
+    
+    
+    
+    
     
     
     return omm;

@@ -110,7 +110,19 @@ std::vector<double> convert_cartesian_to_spherical(double x, double y, double z)
     return r_theta_phi;
 }
 
-
+std::vector<double> convert_spherical_to_cartesian(double r, double theta, double phi){
+    std::vector<double> xyz;
+    xyz.resize(3,0);
+    
+    bg::model::point<double, 3, bg::cs::spherical<bg::radian> > p1(phi,theta,r);
+    bg::model::point<double, 3, bg::cs::cartesian> p3;
+    bg::transform(p1, p3);
+    
+    xyz[0] = p3.get<0>();
+    xyz[1] = p3.get<1>();
+    xyz[2] = p3.get<2>();
+    return xyz;
+}
 
 
 

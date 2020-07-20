@@ -62,6 +62,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                 HarmonicBond->addBond(atom[0], atom[1],
                                       bonds[i].nominalLengthInNm,
                                       bonds[i].stiffnessInKJPerNm2);
+                HarmonicBond->setUsesPeriodicBoundaryConditions(true);
                 
             }
                 break;

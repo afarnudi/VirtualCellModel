@@ -146,6 +146,8 @@ public:
     void surface_integral_test();
     void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
     int  import_pdb_frames(std::string filename);
+    void generate_ulm_mode(int ell, int m, double ulm);
+    void myWritePDBFrame(int frameNum, std::string traj_name);
     
     
     void calculate_ulm(int ell_max, int analysis_averaging_option);

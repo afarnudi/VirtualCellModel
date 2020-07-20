@@ -1,5 +1,5 @@
 mem0	0
-chr0	2	2
+chr0	2	0
 chr1	2	2	1
 chr2	2	2	2	1
 chr3	2	2	2	2	1
