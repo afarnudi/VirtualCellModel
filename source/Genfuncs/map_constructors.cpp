@@ -25,7 +25,10 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
     
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
+        if (!GenConst::Testmode) {
+            cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
+        }
+        
         string line;
         int line_num=0;
         string comment="//";
@@ -52,7 +55,10 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     if (it->first=="Num_of_Membranes") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
+                            if (!GenConst::Testmode) {
+                                cout<<"\t"<<split[i+2+j]<<endl;
+                            }
+                            
                             membrane_config_list.push_back(split[i+2+j]);
                         }
                         continue;
@@ -437,6 +443,15 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
                 GenConst::Wantvoronoi = false;
             } else {
                 GenConst::Wantvoronoi = true;
+            }
+        }
+    } else if (param_name=="Testmode"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            if (it->second == 0) {
+                GenConst::Testmode = false;
+            } else {
+                GenConst::Testmode = true;
             }
         }
     }

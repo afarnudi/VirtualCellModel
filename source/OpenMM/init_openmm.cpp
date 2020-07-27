@@ -97,36 +97,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
     vector<OpenMM::CustomBondForce*> X4harmonics;
     vector<OpenMM::CustomBondForce*> FENEs;
-    //for calculating the force between nano_particles which is induced by membrane.
-    //OpenMM::HarmonicBondForce* calcforce=new OpenMM::HarmonicBondForce(); 
     
-    //for creating a non-spherical nano-particle
-    //OpenMM::HarmonicBondForce* nonspherical=new OpenMM::HarmonicBondForce();
     
-     //calcforce *****************************
-    //calcforce->addBond(2574,2587, 6* OpenMM::NmPerAngstrom, 0* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    //system.addForce(calcforce);
-     
-     
-    /* //non-spherical
-     nonspherical->addBond(2574,2587, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2573,2586, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2572,2585, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2569,2582, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2567,2580, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2564,2577, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-     nonspherical->addBond(2562,2575, 2* OpenMM::NmPerAngstrom, 4000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    system.addForce(nonspherical);
-    /*
-    nonspherical->addBond(12,25, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    nonspherical->addBond(11,24, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    nonspherical->addBond(10,23, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    nonspherical->addBond(7,20, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    nonspherical->addBond(5,18, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); 
-    nonspherical->addBond(2,15, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    nonspherical->addBond(0,13, 2* OpenMM::NmPerAngstrom, 10000* OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-    system.addForce(nonspherical);
-    */
     set_bonded_forces(bonds,
                       HarmonicBond,
                       Kelvin_VoigtBond,
@@ -156,6 +128,42 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
     }
+    
+    cout<<"PBC:\n";
+    std::vector<Vec3> pbcxyz;
+    pbcxyz.resize(3);
+    
+    pbcxyz[0][0]=GenConst::Lbox;
+    pbcxyz[0][1]=0;
+    pbcxyz[0][2]=0;
+    
+    pbcxyz[1][0]=0;
+    pbcxyz[1][1]=GenConst::Lbox;
+    pbcxyz[1][2]=0;
+    
+    pbcxyz[2][0]=0;
+    pbcxyz[2][1]=0;
+    pbcxyz[2][2]=GenConst::Lbox;
+    
+    system.setDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+    
+    pbcxyz[0][0]=0;
+    pbcxyz[0][1]=0;
+    pbcxyz[0][2]=0;
+    
+    pbcxyz[1][0]=0;
+    pbcxyz[1][1]=0;
+    pbcxyz[1][2]=0;
+    
+    pbcxyz[2][0]=0;
+    pbcxyz[2][1]=0;
+    pbcxyz[2][2]=0;
+    
+    system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+    for (int i=0; i<3; i++) {
+        cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
+    }
+    
     
     //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
@@ -254,7 +262,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
-
+    
     
     switch (GenConst::Integrator_type) {
         case 0:
@@ -268,13 +276,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
         case 2:
             
-//            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
-//                                                             GenConst::frictionInPs,
-//                                                             stepSizeInFs * OpenMM::PsPerFs);
+            //            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
+            //                                                             GenConst::frictionInPs,
+            //                                                             stepSizeInFs * OpenMM::PsPerFs);
             
             omm->Lintegrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
-                                                             GenConst::frictionInPs,
-                                                             stepSizeInFs * OpenMM::PsPerFs);
+                                                              GenConst::frictionInPs,
+                                                              stepSizeInFs * OpenMM::PsPerFs);
             break;
     }
     if (GenConst::CMMotionRemover) {
@@ -313,12 +321,28 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         
         
-    }
-        
+        }
+    
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
     
     platformName = omm->context->getPlatform().getName();
+    
+    const std::map <std::string, double> params = omm->context->getParameters();
+    
+    
+    
+    cout<<params.size()<<endl;
+    for(auto elem : params)
+    {
+        cout << elem.first << " " << elem.second << "\n";
+    }
+    cout<<"\n";
+    
+    
+    
+    
+    
     
     return omm;
 }

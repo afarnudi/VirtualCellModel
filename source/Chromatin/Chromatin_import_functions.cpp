@@ -10,7 +10,7 @@ void Chromatin::import_coordinates(string import_file_name){
     
     read_coordinate_file.open(import_file_name.c_str());
     if ( read_coordinate_file.is_open() ) {
-        cout << "Coordinate file opened successfully successfully. \n\n";
+        cout << "Coordinate file opened successfully. \n\n";
     }else{
         cout << "Unable to read coordinate file.\n";
         exit(EXIT_FAILURE);

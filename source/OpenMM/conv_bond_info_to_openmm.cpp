@@ -187,48 +187,47 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
     
     
     cout<<"chromo_num_bonds = "<<chromo_num_bonds<<endl;
-    int num_of_real_bonds = chromo.get_num_of_real_site()-1;
-    int num_virtual_sites_per_bond= chromo.get_num_of_virtual_sites_per_bond();
-    //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
-    //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
-    for (int i=0; i<num_of_real_bonds; i++) {
-        bonds[i].type = chromo.get_spring_model();
-        bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
-        bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
-//        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
-//        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
-        bonds[i].class_label = chromo.get_label() + chromo.get_label();
-        switch (bonds[i].type) {
-                //FENE
-            case 1:
-                //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
-                //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                break;
-                //Harmonic
-            case 2:
-                bonds[i].nominalLengthInNm=chromo.get_bond_length();
-                bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
-                break;
+    if (chromo_num_bonds != 0) {
+        int num_of_real_bonds = chromo.get_num_of_real_site()-1;
+            int num_virtual_sites_per_bond= chromo.get_num_of_virtual_sites_per_bond();
+            //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
+            //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
+            for (int i=0; i<num_of_real_bonds; i++) {
+                bonds[i].type = chromo.get_spring_model();
+                bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
+                bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
+        //        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
+        //        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
+                bonds[i].class_label = chromo.get_label() + chromo.get_label();
+                switch (bonds[i].type) {
+                        //FENE
+                    case 1:
+                        //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
+                        //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                        break;
+                        //Harmonic
+                    case 2:
+                        bonds[i].nominalLengthInNm=chromo.get_bond_length();
+                        bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
+                        break;
+                        
+                        
+                }
                 
                 
-        }
-        
-        
+            }
+            vector<vector<int> > virtual_bond_list = chromo.get_virtual_bonds();
+            
+            int list_counter=0;
+            for (int i=num_of_real_bonds+1; i<chromo_num_bonds; i++) {
+                
+                bonds[i].type = -2;
+                bonds[i].atoms[0]=virtual_bond_list[list_counter][0];
+                bonds[i].atoms[1]=virtual_bond_list[list_counter][1];
+                bonds[i].class_label = chromo.get_label() + chromo.get_label();
+                bonds[i].nominalLengthInNm=0;
+                bonds[i].stiffnessInKJPerNm2=0;
+            }
     }
-    vector<vector<int> > virtual_bond_list = chromo.get_virtual_bonds();
-    
-    int list_counter=0;
-    for (int i=num_of_real_bonds+1; i<chromo_num_bonds; i++) {
-        
-        bonds[i].type = -2;
-        bonds[i].atoms[0]=virtual_bond_list[list_counter][0];
-        bonds[i].atoms[1]=virtual_bond_list[list_counter][1];
-        bonds[i].class_label = chromo.get_label() + chromo.get_label();
-        bonds[i].nominalLengthInNm=0;
-        bonds[i].stiffnessInKJPerNm2=0;
-    }
-    
-    
-    
     return bonds;
 }

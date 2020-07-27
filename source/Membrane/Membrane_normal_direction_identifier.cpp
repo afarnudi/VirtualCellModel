@@ -5,7 +5,10 @@ void Membrane::Normal_direction_Identifier()
 {
     double AC[3], AB[3], ABxAC[3], reference[3];
     int Point_A, Point_B, Point_C;
-    cout<<Triangle_list.size()<<endl;
+    if (!GenConst::Testmode) {
+        cout<<Triangle_list.size()<<endl;
+    }
+    
     for(  int i=0;i<Triangle_list.size();i++)
     {
         Point_A=Triangle_list[i][0];

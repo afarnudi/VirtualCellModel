@@ -37,7 +37,7 @@ void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono
                        std::chrono::time_point<std::chrono::system_clock> chrono_clock_end);
 
 std::vector<double> convert_cartesian_to_spherical(double x, double y, double z);
-
+std::vector<double> convert_spherical_to_cartesian(double r, double theta, double phi);
 int count_pdb_frames(std::string filename, int num_atoms);
 
 #endif /* General_functions_hpp */

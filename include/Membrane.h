@@ -40,7 +40,7 @@ using std::endl;
 class Membrane
 {
     
-private:
+protected:
     /** Store the label(pdb) used to write to the trajectory file */
     int mem_index;
     /*variables*/
@@ -144,11 +144,18 @@ public:
     void rotate_particle_to_axes(void);
     void update_spherical_positions();
     void surface_integral_test();
+    void surface_integral_test_real();
     void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
     int  import_pdb_frames(std::string filename);
+    void generate_ulm_mode(int ell, int m, double ulm);
+    void generate_ulm_mode_real(int ell, int m, double ulm);
+    double real_harmonics(int Ell, int M, double theta, double phi);
+    void myWritePDBFrame(int frameNum, std::string traj_name);
     
     
     void calculate_ulm(int ell_max, int analysis_averaging_option);
+    void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
+    void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
     void write_ulm(int ell_max, std::string traj_name, double num_frames, std::string extension);
     

@@ -44,4 +44,4 @@ CMMotionRemoverStep	10
 CreateCheckpoint	1
 MC_step	0
 Wantvoronoi	0
-Testmode	0
+Testmode	1

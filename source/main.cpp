@@ -41,6 +41,7 @@
 #include "OpenMM_funcs.hpp"
 #include "General_class_functions.h"
 
+#include "Tests.hpp"
 
 /** -----------------------------------------------------------------------------
  *                           OpenMM-USING CODE
@@ -107,6 +108,7 @@ namespace GenConst {
     bool   CMMotionRemover;
     int    CMMotionRemoverStep;
     bool   Wantvoronoi;
+    bool   Testmode;
 
 
 
@@ -397,18 +399,77 @@ int main(int argc, char **argv)
         
         
         int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
+        int  L=2,M=2;
+        double U=0.00001;
+//        string temp_pdb_name = analysis_filename;
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name.pop_back();
+//        temp_pdb_name+="_l_"+to_string(L)+"_m_"+to_string(M)+"_u_"+to_string(U)+".pdb";
+//        for (int i=2; i<max_frame; i++) {
+//
+//
+//            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
+////            Membranes[0].generate_ulm_mode(L, M, U);
+//            for (int runs=0; runs<num_ang_avg; runs++) {
+//                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+//
+//
+////                Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
+////                Membranes[0].myWritePDBFrame(runs,temp_pdb_name+".pdb");
+////                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+//            }
+//
+//            cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+//        }
+        string temp_pdb_name = analysis_filename;
+        temp_pdb_name.pop_back();
+        temp_pdb_name.pop_back();
+        temp_pdb_name.pop_back();
+        temp_pdb_name.pop_back();
+//        string lmtrajname ="Results/real_real/ulm_"+to_string(L)+"_"+to_string(M)+".pdb";
+//        Membranes[0].load_pdb_frame(2, analysis_averaging_option, z_node, y_node);
+//                    Membranes[0].generate_ulm_mode2(L, M, U);
         
-        for (int i=2; i<max_frame; i++) {
+        //integrattion tests that went wrong:
+//        cout<<"Complex:\n";
+//        Membranes[0].surface_integral_test();
+//        cout<<"Real:\n";
+//        Membranes[0].surface_integral_test_real();
+        
+//        cout<<"here -1\n";
+//        for (int ell=0; ell<4; ell++) {
+//            for (int m = -ell; m<=ell; m++) {
+        int superposes  = 1;
+        string lmtrajname ="Results/real_real/ulm_"+to_string(U)+"_"+to_string(L)+"_"+to_string(M)+".pdb";
+        vector<int> Ells;
+        vector<int> Ms;
+        Ells.resize(superposes,0);
+        Ms.resize(superposes,0);
+        
+        for (int sup =0 ; sup<superposes; sup++) {
             
-            
-            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
-            for (int runs=0; runs<num_ang_avg; runs++) {
-                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
-//                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
-            }
-            
-            cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
         }
+            for (int i=2; i<max_frame; i++) {
+
+                                
+                                Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
+                                Membranes[0].generate_ulm_mode_real(L, M, U);
+            //                    Membranes[0].generate_ulm_mode(L, M, U);
+                                for (int runs=0; runs<num_ang_avg; runs++) {
+                                    //                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
+            //                        Membranes[0].surface_integral_test();
+                                    Membranes[0].calculate_ulm_radiustest_real(ell_max, analysis_averaging_option);
+            //                        Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
+            //                        Membranes[0].myWritePDBFrame(runs,lmtrajname);
+                                    //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                                }
+
+            //                    cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+                            }
+        
+             
         Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, analysis_extension);
         cout<<"max_frame  "<<max_frame<<endl;
         return 2;
@@ -509,7 +570,7 @@ int main(int argc, char **argv)
         // usage and runtime errors are caught and reported.
         
         cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
-        
+//        GenConst::Lbox = 200;
         
         try {
             MyOpenMMData* omm = new MyOpenMMData();
@@ -576,7 +637,7 @@ int main(int argc, char **argv)
             bool expanding = false;
             bool set_spring = false;
             bool changeTemp = false;
-            double TempStep = 20;
+            double TempStep = 0.2;
             double initTemp = GenConst::temperature;
             
 
@@ -588,25 +649,46 @@ int main(int argc, char **argv)
 
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
 
-                if(GenConst::WriteVelocitiesandForces){
-                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
-                }
+                
                 //Ps to Fs
 //                cout<<"myWritePDBFrame\n";
                 if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
-//                    cout<<"\ntime: "<<time<<endl;
+                    
+                    
+                    if(GenConst::WriteVelocitiesandForces){
+                        collect_data(all_atoms, buffer, Chromatins, Membranes, time);
+                    }
+                    
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                                     
                                     //Begin: Exporting congiguration of classes for simulation .
                     Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                     
+                    
+                    
                     savetime += Savingstep;
+                    
+                    
+                    
+                    
                 }
                 
                 if (changeTemp) {
                     initTemp -= TempStep;
                     omm->Lintegrator->setTemperature(initTemp);
+//                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
+//                    map <string, double> params;
+//                    params = omm->context->getParameters();
+//
+//                    cout<<"\nframe: "<<frame<<endl;
+//                    cout<<params.size()<<endl;
+//                    for(auto elem : params)
+//                    {
+//                       cout << elem.first << " " << elem.second << "\n";
+//                    }
+//                    cout<<"\n";
+//
                 }
 //                cout<<"CreateCheckpoint\n";
                 if (GenConst::CreateCheckpoint) {
@@ -621,8 +703,10 @@ int main(int argc, char **argv)
                 
                 if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
                     printf("[ %2.1f ] time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
+                    cout<< std::flush;
 //                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                     progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
+//                    cout<<progressp<<endl;
                     progress++;
                 }
                 

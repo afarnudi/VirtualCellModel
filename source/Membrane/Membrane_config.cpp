@@ -10,8 +10,10 @@ void Membrane::import_config(string config_file_name){
     bool resume=false;
     
     if (read_config_file.is_open()) {
+        if (!GenConst::Testmode) {
+            cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+        }
         
-        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -34,7 +36,10 @@ void Membrane::import_config(string config_file_name){
             if (split[0]=="Resume") {
                 
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                    if (!GenConst::Testmode) {
+                        cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                    }
+                    
                 } else {
                     resume=true;
                     resume_file_name=split[2];
@@ -48,7 +53,10 @@ void Membrane::import_config(string config_file_name){
                 }
 //                cout<<"Mesh format"<<mesh_format;
                 Mesh_file_name=split[2];
-                cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
+                if (!GenConst::Testmode) {
+                    cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
+                }
+                
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
             }
