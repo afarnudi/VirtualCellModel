@@ -27,8 +27,10 @@ void Membrane::check(void){
         }
     }
     Average_node_pair_length/=(Num_of_Node_Pairs-Num_of_Free_Bonds);
+    if (!GenConst::Testmode) {
+        cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
+    }
     
-    cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
 
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
         if (!Relaxation) {

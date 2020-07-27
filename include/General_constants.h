@@ -113,6 +113,9 @@ namespace GenConst {
     
     //1/0 true/false if you want/don't want to calculate and write the voronoi area associated with Membrane nodes in the properties output file. Default 0
     extern bool Wantvoronoi;
+
+    //When in test mode, most of the console prints (std::cout) of the programme will be turned off for a better viewing of the test report. Deafault 0 (off)
+    extern bool Testmode;
     
 }
 

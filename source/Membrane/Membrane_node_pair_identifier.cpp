@@ -78,7 +78,11 @@ void Membrane::Node_Bonds_identifier(void){
             Node_Bond_list.push_back(Free_Bonds[i]);
         }
     }
+    
     Num_of_Node_Pairs=int(Node_Bond_list.size());
-    cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl; 
+    if (!GenConst::Testmode) {
+        cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl;
+    }
+     
 }
 

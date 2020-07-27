@@ -14,59 +14,88 @@ using namespace std::complex_literals;
 
 void Membrane::surface_integral_test(){
     
-    double theta = M_PI/5.7;
-    double phi   = M_PI/3.5;
-    int    ell   = 4;
-    int    m     = 3;
-    std::complex<double> ylm, ylm2, integral;
-    std::complex<double> ylm_cc, mult;
-    
-    
-    integral.real(0);
-    integral.imag(0);
-    for(int i=0;i<Num_of_Nodes;i++){
-        ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
-        ylm_cc = ylm;
-        ylm_cc.imag(-1*imag(ylm));
+    for (int j =0; j<1000; j++) {
+        int    ell   = rand()%20;
+        int    m     = rand()%(ell+1)*(rand()%2)*(-1);
+        int    ell2   = rand()%20;
+        int    m2     = rand()%(ell+1)*(rand()%2)*(-1);
         
-        ylm2 = boost::math::spherical_harmonic(ell+1,m-1,spherical_positions[i][1],spherical_positions[i][2]);
+        std::complex<double> ylm, ylm2, ylm3, integral, integral_same;
+        std::complex<double> ylm_cc, mult;
         
-        integral+=  ylm_cc* ylm2 * node_voronoi_area[i];
+        
+        integral.real(0);
+        integral.imag(0);
+        
+        integral_same.real(0);
+        integral_same.imag(0);
+        for(int i=0;i<Num_of_Nodes;i++){
+            ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
+            ylm_cc = ylm;
+            ylm_cc.imag(-1*imag(ylm));
+            
+            ylm2 = boost::math::spherical_harmonic(ell+1,m-1,spherical_positions[i][1],spherical_positions[i][2]);
+            
+            ylm3 = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
+            
+            integral+=  ylm_cc* ylm2 * node_voronoi_area[i];
+            integral_same+=  ylm_cc* ylm3 * node_voronoi_area[i];
+        }
+        
+        integral *= 4*M_PI/surface_area_voronoi;
+        integral_same *= 4*M_PI/surface_area_voronoi;
+        if ( real(integral)>0.01  ){
+            if (ell != ell2 && m != m2) {
+                cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell2<<","<<m2<<"} = "<<real(integral)<<" Imag: "<<imag(integral)<<endl;
+            }
+            
+        }
+        if ( (real(integral_same)-1)>0.01 || (real(integral_same)-1)<-0.01 ){
+            
+            cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell<<","<<m<<"} = "<<real(integral_same)<<" Imag: "<<imag(integral_same)<<endl;
+        }
+        
     }
     
-    cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell+1<<","<<m-1<<"} = "<<real(integral)*4*M_PI/surface_area_voronoi<<" "<<imag(integral)<<endl;
     
-    ell=5;
-    m=-2;
-    integral.real(0);
-    integral.imag(0);
-    for(int i=0;i<Num_of_Nodes;i++){
-        ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
-        ylm_cc = ylm;
-        ylm_cc.imag(-1*imag(ylm));
+    
+}
+
+void Membrane::surface_integral_test_real(){
+    
+    for (int j=0; j<1000; j++) {
+        int    ell   = rand()%20;
+        int    m     = rand()%(ell+1)*(rand()%2)*(-1);
+        int    ell2   = rand()%20;
+        int    m2     = rand()%(ell+1)*(rand()%2)*(-1);
         
-        ylm2 = boost::math::spherical_harmonic(ell+1,m-1,spherical_positions[i][1],spherical_positions[i][2]);
+        double ylm, ylm2, ylm3, integral=0, integral_same=0;
+        double ylm_cc, mult;
         
-        integral+=  ylm_cc* ylm2 * node_voronoi_area[i];
+        
+        for(int i=0;i<Num_of_Nodes;i++){
+            ylm = real_harmonics(ell, m, spherical_positions[i][1], spherical_positions[i][2]);
+            ylm_cc = ylm;
+            
+            ylm2 = real_harmonics(ell2, m2, spherical_positions[i][1], spherical_positions[i][2]);
+            ylm3 = real_harmonics(ell, m, spherical_positions[i][1], spherical_positions[i][2]);
+            integral+=  ylm_cc* ylm2 * node_voronoi_area[i];
+            integral_same+=  ylm_cc* ylm3 * node_voronoi_area[i];
+        }
+        integral *= 4*M_PI/surface_area_voronoi;
+        integral_same *= 4*M_PI/surface_area_voronoi;
+        if ( integral>0.01  ){
+            if (ell != ell2 && m != m2) {
+                cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell2<<","<<m2<<"} = "<<integral<<endl;
+            }
+            
+        }
+        if ( (integral_same-1)>0.01 || (integral_same-1)<-0.01 ){
+            cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell<<","<<m<<"} = "<<integral_same<<endl;
+        }
+        
     }
     
-    cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell+1<<","<<m-1<<"} = "<<real(integral)*4*M_PI/surface_area_voronoi<<" "<<imag(integral)<<endl;
-    
-    ell=1;
-    m=0;
-    integral.real(0);
-    integral.imag(0);
-    for(int i=0;i<Num_of_Nodes;i++){
-        ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
-        ylm_cc = ylm;
-        ylm_cc.imag(-1*imag(ylm));
-        
-        ylm2 = boost::math::spherical_harmonic(ell+1,m-1,spherical_positions[i][1],spherical_positions[i][2]);
-        
-        integral+=  ylm_cc* ylm2 * node_voronoi_area[i];
-    }
-    
-    cout<<"Integral y_{"<<ell<<","<<m<<"}* x y_{"<<ell+1<<","<<m-1<<"} = "<<real(integral)*4*M_PI/surface_area_voronoi<<" "<<imag(integral)<<endl;
     
 }
 
@@ -97,20 +126,20 @@ void Membrane::calculate_ulm_radiustest(int ell_max, int analysis_averaging_opti
     }
     
     
-//    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+    //    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     
-//        calculate_volume_and_surface_area();
-//        double radius = cbrt( 3*volume/(M_PI*4) );
-//
-        double radius=0;
-        for (int i=0; i<Num_of_Nodes; i++) {
-            radius += spherical_positions[i][0];
-        }
-        radius/=Num_of_Nodes;
-    
+    //        calculate_volume_and_surface_area();
+    //        double radius = cbrt( 3*volume/(M_PI*4) );
+    //
+    double radius=0;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        radius += spherical_positions[i][0];
+    }
+    radius/=Num_of_Nodes;
+//    cout<<"radius = "<<radius<<endl<<endl;
     std::complex<double> ylm;
     std::complex<double> ylm_cc;
-//    double voronoi_to_omega_multiplyer =1./(radius*radius*radius);
+    //    double voronoi_to_omega_multiplyer =1./(radius*radius*radius);
     double voronoi_to_omega_multiplyer =1;
     double f_theta_phi;
     
@@ -135,7 +164,7 @@ void Membrane::calculate_ulm_radiustest(int ell_max, int analysis_averaging_opti
                 ylm_cc.imag(-1*imag(ylm));
                 
                 f_theta_phi = (spherical_positions[i][0]-radius);
-                voronoi_to_omega_multiplyer  = 1./(radius*spherical_positions[i][0]*spherical_positions[i][2]);
+                voronoi_to_omega_multiplyer  = 1./(radius*spherical_positions[i][0]*spherical_positions[i][0]);
                 double multi = f_theta_phi*voronoi_to_omega_multiplyer*node_voronoi_area[i];
                 ylm_cc.real(real(ylm) * multi);
                 ylm_cc.imag(imag(ylm) * multi);
@@ -273,23 +302,53 @@ void Membrane::generate_ulm_mode(int Ell, int M, double uLM){
     }
     
     std::complex<double> ylm;
-//    std::complex<double> ylm_cc;
+    //    std::complex<double> ylm_cc;
     double f_theta_phi;
     
-    double radius =100;
- 
+    double radius =10;
+    
     for(int i=0;i<Num_of_Nodes;i++){
         ylm = boost::math::spherical_harmonic(Ell,M,spherical_positions[i][1],spherical_positions[i][2]);
-//        ylm_cc = ylm;
-//        ylm_cc.imag(-1*imag(ylm));
+        //        ylm_cc = ylm;
+        //        ylm_cc.imag(-1*imag(ylm));
         
         f_theta_phi = radius*uLM*real(ylm);
         spherical_positions[i][0] = radius+f_theta_phi;
-//        Node_Position[i]=convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
+        //        Node_Position[i]=convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
         Node_Position[i][0]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-                                                     *cos(spherical_positions[i][2]);
+        *cos(spherical_positions[i][2]);
         Node_Position[i][1]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-                                                     *sin(spherical_positions[i][2]);
+        *sin(spherical_positions[i][2]);
+        Node_Position[i][2]=spherical_positions[i][0]*cos(spherical_positions[i][1]);
+        
+    }
+    
+}
+
+void Membrane::generate_ulm_mode_real(int Ell, int M, double uLM){
+    
+    if (Ell<0){
+        cout<<"\nl must be positive"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    if (abs(M)>Ell){
+        cout<<"\n |m| cannot be larger than l"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    
+    double radius = 1;
+    
+    for(int i=0;i<Num_of_Nodes;i++){
+        double ylm = real_harmonics(Ell, M, spherical_positions[i][1],spherical_positions[i][2]);
+        double ylm2 = real_harmonics(8, 4, spherical_positions[i][1],spherical_positions[i][2]);
+        double f_theta_phi = radius*uLM*ylm;
+        spherical_positions[i][0] = radius + f_theta_phi + radius*uLM*ylm2;
+        //        Node_Position[i]=convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
+        Node_Position[i][0]=spherical_positions[i][0]*sin(spherical_positions[i][1])
+        *cos(spherical_positions[i][2]);
+        Node_Position[i][1]=spherical_positions[i][0]*sin(spherical_positions[i][1])
+        *sin(spherical_positions[i][2]);
         Node_Position[i][2]=spherical_positions[i][0]*cos(spherical_positions[i][1]);
         
     }
@@ -303,7 +362,10 @@ void Membrane::myWritePDBFrame(int frameNum,
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
-    fprintf(pFile,"REMARK 250");
+    fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%6.6f potential energy=%.3f KJ/mole\n",
+            0.,
+            0.,
+            0.);
     int index=0;
     for (int n=0; n< Num_of_Nodes; ++n){
         
@@ -317,10 +379,111 @@ void Membrane::myWritePDBFrame(int frameNum,
                 Node_Position[n][2],
                 0.,
                 0.);//,
-//                atoms[n].symbol);
+        //                atoms[n].symbol);
     }
     
     
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);
+}
+
+double Membrane::real_harmonics(int Ell, int M, double theta, double phi){
+    std::complex<double> ylm;
+    
+    double realYLM=0;
+    
+    if (M<0){
+        ylm = boost::math::spherical_harmonic(Ell,-M,theta,phi);
+        
+        realYLM = imag(ylm)*pow(-1,M)*sqrt(2);
+        
+    } else if (M==0){
+        ylm = boost::math::spherical_harmonic(Ell,0,theta,phi);
+        
+        realYLM = real(ylm);
+    } else {
+        
+        ylm = boost::math::spherical_harmonic(Ell,M,theta,phi);
+        
+        realYLM = real(ylm)*pow(-1,M)*sqrt(2);
+        
+    }
+    return realYLM;
+}
+
+
+void Membrane::calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option){
+    if(ulm_avg.size() != ell_max+1){
+        ulm_avg.clear();
+        ulm_std.clear();
+        ulm_avg.resize(ell_max+1);
+        ulm_std.resize(ell_max+1);
+        for (int ell=0; ell<ell_max+1; ell++) {
+            ulm_avg[ell].resize(2*ell+1,0);
+            ulm_std[ell].resize(2*ell+1,0);
+        }
+        cout<<"cleared ulm\n";
+    }
+    
+    
+    if(analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    
+    double radius=0;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        radius += spherical_positions[i][0];
+    }
+    radius/=Num_of_Nodes;
+//    cout<<"radius = "<<radius<<endl<<endl;
+    double ylm;
+//    double ylm_cc;
+    //    double voronoi_to_omega_multiplyer =1./(radius*radius*radius);
+    double voronoi_to_omega_multiplyer =1;
+    double f_theta_phi;
+    
+    
+    vector<vector< double > > ulm_avg_frame;
+    ulm_avg_frame.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_avg_frame[ell].resize(2*ell+1);
+        
+        for (int m=0; m<2*ell+1; m++) {
+            ulm_avg_frame[ell][m]=0;
+        }
+    }
+    
+    for (int ell=0; ell<ell_max+1; ell++) {
+        //        cout<<ell<<" out of "<<ell_max<<"\r";
+        for (int m=-ell; m<ell+1; m++) {
+            for(int i=0;i<Num_of_Nodes;i++){
+                ylm = real_harmonics(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
+//                ylm_cc = ylm;
+                
+                f_theta_phi = (spherical_positions[i][0]-radius);
+                voronoi_to_omega_multiplyer  = 1./(spherical_positions[i][0]*spherical_positions[i][0]);
+                double d_omega = voronoi_to_omega_multiplyer*node_voronoi_area[i];
+//                ylm_cc =ylm * multi;
+                
+                ulm_avg_frame[ell][m+ell] += ylm * f_theta_phi * d_omega/radius;
+            }
+            
+        }
+    }
+    
+    for (int ell=0; ell<ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            double ulm = ulm_avg_frame[ell][m+ell];
+            ulm_avg[ell][m+ell] += ulm*ulm;
+            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+            
+        }
+    }
+    
+    //    cout<<endl;
 }

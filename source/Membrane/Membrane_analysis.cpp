@@ -136,19 +136,6 @@ void Membrane::write_ulm(int ell_max, string traj_name, double num_frames, strin
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
-//    for (int ell=0; ell<ell_max+1; ell++) {
-//        for (int m=-ell; m<ell+1; m++) {
-//            
-//            ulm_avg[ell][m+ell] /= num_frames;
-//            
-//            ulm_std[ell][m+ell] /= num_frames;
-//            ulm_std[ell][m+ell] -= ulm_avg[ell][m+ell]*ulm_avg[ell][m+ell];
-//            ulm_std[ell][m+ell] = sqrt(ulm_std[ell][m+ell]/(num_frames-1 ));
-//        }
-//        
-//    }
-    
-    
     
     
     for (int ell=0; ell<ell_max+1; ell++) {
@@ -166,4 +153,5 @@ void Membrane::write_ulm(int ell_max, string traj_name, double num_frames, strin
         }
         wdata<<"\n";
     }
+    cout<<traj_name<<" written"<<endl;
 }

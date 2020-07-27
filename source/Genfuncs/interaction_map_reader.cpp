@@ -16,7 +16,10 @@ void read_interaction_map(vector<vector<int> > &inter_map){
         
         ifstream read_map(GenConst::Interaction_map_file_name.c_str());
         if (read_map.is_open()) {
-            cout<<"\""<<GenConst::Interaction_map_file_name<<"\" interaction map file opened successfully.\n";
+            if (!GenConst::Testmode) {
+                cout<<"\""<<GenConst::Interaction_map_file_name<<"\" interaction map file opened successfully.\n";
+            }
+            
             string line;
             int line_num=0;
             string comment="//";

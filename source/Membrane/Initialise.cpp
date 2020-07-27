@@ -10,7 +10,10 @@
 
 void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
-    cout<<"Initialising the Membrane Class..."<<endl;
+    if (!GenConst::Testmode) {
+        cout<<"Initialising the Membrane Class..."<<endl;
+    }
+    
    
 
     if (mesh_format==1){
@@ -21,9 +24,12 @@ void Membrane::initialise(std::string Mesh_file_name){
     output_file_neme=Mesh_file_name;
     
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
-    cout<<"\nRadius="<<Radius<<endl;
-    cout<<"# of Nodes="<<Num_of_Nodes<<endl;
-    cout<<"# of triangles="<<Num_of_Triangles<<endl;
+    if (!GenConst::Testmode) {
+        cout<<"\nRadius="<<Radius<<endl;
+        cout<<"# of Nodes="<<Num_of_Nodes<<endl;
+        cout<<"# of triangles="<<Num_of_Triangles<<endl;
+    }
+    
    
 
     //this part is for testing  just one bond (be carful to pass a mesh with just 2 nodes to the programm in case of using it)
@@ -39,7 +45,10 @@ void Membrane::initialise(std::string Mesh_file_name){
 */
     Normal_direction_Identifier();
     Triangle_pair_counter();
-    cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
+    if (!GenConst::Testmode) {
+        cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
+    }
+    
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
         cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
     }
@@ -81,7 +90,10 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
     
     if (initial_random_rotation_coordinates){
-        cout<<"randomly rotating the mesh\n";
+        if (!GenConst::Testmode) {
+            cout<<"randomly rotating the mesh\n";
+        }
+        
         srand (time(NULL));
         double scratch = rand();
         double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
@@ -96,9 +108,12 @@ void Membrane::initialise(std::string Mesh_file_name){
 //        calculate_surface_area_with_voronoi();
     }
     shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
-    cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
+    if (!GenConst::Testmode) {
+        cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
+        
+        cout<<"\nMembrane class initiated.\n******************************\n\n";
+    }
     
-    cout<<"\nMembrane class initiated.\n******************************\n\n";
 
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 
