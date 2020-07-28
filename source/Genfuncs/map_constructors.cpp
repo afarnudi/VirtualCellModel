@@ -172,7 +172,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         if (GenConst::Simulation_Time_In_Ps==0) {
             GenConst::Simulation_Time_In_Ps = GenConst::MD_num_of_steps*GenConst::Step_Size_In_Fs;
         }
-        cout<<endl;
+//        cout<<endl;
     } else {
         cout<<"Couldn't open the config file.\n";
         exit(EXIT_FAILURE);

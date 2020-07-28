@@ -132,7 +132,10 @@ int count_pdb_frames(std::string filename, int num_atoms){
     read_pdb.open(filename.c_str());
     read_pdb.seekg(std::ios::beg);
     if (read_pdb) {
-        std::cout << filename<<" opend successfully. \n\n";
+        if (!GenConst::Testmode) {
+            std::cout << filename<<" opend successfully. \n\n";
+        }
+        
     }else{
         std::cout << "Unable to read "<<filename<<std::endl;
     }
