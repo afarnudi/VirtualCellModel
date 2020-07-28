@@ -66,14 +66,14 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
         
     }
     
-    
-    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+    double radius=0;
+//    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     //    cout<<"radius voronoi = "<<radius<<endl;
-//    double r=0;
-//    for(int i=0;i<Num_of_Nodes;i++){
-//        r+=spherical_positions[i][0];
-//    }
-//    r/=Num_of_Nodes;
+    
+    for(int i=0;i<Num_of_Nodes;i++){
+        radius+=spherical_positions[i][0];
+    }
+    radius/=Num_of_Nodes;
     //    cout<<"radius spheric = "<<r<<endl;
     
     std::complex<double> ylm;
