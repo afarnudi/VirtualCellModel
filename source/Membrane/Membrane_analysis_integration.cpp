@@ -16,17 +16,17 @@ using namespace std;
 
 vector<double> Membrane::get_ulmYlm_vectorlist_for_mesh(){
     
-    //    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+        double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     
     //        calculate_volume_and_surface_area();
     //        double radius = cbrt( 3*volume/(M_PI*4) );
     //
-    double radius=0;
-    //    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
-    for(int i=0;i<Num_of_Nodes;i++){
-        radius+=spherical_positions[i][0];
-    }
-    radius/=Num_of_Nodes;
+//    double radius=0;
+//    //    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
+//    for(int i=0;i<Num_of_Nodes;i++){
+//        radius+=spherical_positions[i][0];
+//    }
+//    radius/=Num_of_Nodes;
 //    cout<<radius<<endl;
     
     vector<double> radius_vectorlist;
