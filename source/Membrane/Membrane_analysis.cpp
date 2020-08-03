@@ -3,9 +3,9 @@
 #include <cstdlib>
 
 
-
-#include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <complex>
+
+
 
 
 using namespace std::complex_literals;
@@ -66,21 +66,6 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
         
     }
     
-    double radius=0;
-//    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
-    //    cout<<"radius voronoi = "<<radius<<endl;
-    
-    for(int i=0;i<Num_of_Nodes;i++){
-        radius+=spherical_positions[i][0];
-    }
-    radius/=Num_of_Nodes;
-    //    cout<<"radius spheric = "<<r<<endl;
-    
-    std::complex<double> ylm;
-    std::complex<double> ylm_cc;
-    
-    double voronoi_to_omega_multiplyer = 1./(radius);
-    double f_theta_phi;
     
     
     vector<vector< std::complex<double> > > ulm_avg_frame;
@@ -94,24 +79,14 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
         }
     }
     
+    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh();
     for (int ell=0; ell<ell_max+1; ell++) {
         //        cout<<ell<<" out of "<<ell_max<<"\r";
         for (int m=-ell; m<ell+1; m++) {
-            for(int i=0;i<Num_of_Nodes;i++){
-                ylm = boost::math::spherical_harmonic(ell,m,spherical_positions[i][1],spherical_positions[i][2]);
-                ylm_cc = ylm;
-                ylm_cc.imag(-1*imag(ylm));
-
-                f_theta_phi = (spherical_positions[i][0]-radius);
-                double multi = f_theta_phi*voronoi_to_omega_multiplyer
-                                          *node_voronoi_area[i]
-                                          /(spherical_positions[i][0]*spherical_positions[i][0]);
-                ylm_cc.real(real(ylm) * multi);
-                ylm_cc.imag(imag(ylm) * multi);
-
-                ulm_avg_frame[ell][m+ell] += ylm_cc;
-            }
-
+            
+            vector<std::complex<double> >  ylm_cc = get_ylm_vectorlist_for_mesh(ell, m, true);
+            ulm_avg_frame[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(ylm_cc, membrane_radii_list);
+            
         }
     }
     
@@ -126,6 +101,66 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     }
     
     //    cout<<endl;
+}
+
+void Membrane::calculate_real_ulm(int ell_max, int analysis_averaging_option){
+    if(ulm_avg.size() != ell_max+1){
+        ulm_avg.clear();
+        ulm_std.clear();
+        ulm_avg.resize(ell_max+1);
+        ulm_std.resize(ell_max+1);
+        for (int ell=0; ell<ell_max+1; ell++) {
+            ulm_avg[ell].resize(2*ell+1,0);
+            ulm_std[ell].resize(2*ell+1,0);
+        }
+        if (!GenConst::Testmode) {
+            cout<<"cleared ulm\n";
+        }
+        
+    }
+    
+    
+    if(analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    
+    
+    vector<vector< double > > ulm_avg_frame;
+    ulm_avg_frame.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_avg_frame[ell].resize(2*ell+1);
+        
+        for (int m=0; m<2*ell+1; m++) {
+            ulm_avg_frame[ell][m]=0;
+        }
+    }
+    
+    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh();
+    for (int ell=0; ell<ell_max+1; ell++) {
+        //        cout<<ell<<" out of "<<ell_max<<"\r";
+        for (int m=-ell; m<ell+1; m++) {
+            
+            vector<double>  Realylm = get_real_ylm_vectorlist_for_mesh(ell, m);
+            ulm_avg_frame[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(Realylm, membrane_radii_list);
+            
+        }
+    }
+    
+    
+    for (int ell=0; ell<ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            double ulm = ulm_avg_frame[ell][m+ell];
+            ulm_avg[ell][m+ell] += ulm*ulm;
+            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+            
+        }
+    }
+    
 }
 
 void Membrane::write_ulm(int ell_max, string traj_name, double num_frames, string extension){

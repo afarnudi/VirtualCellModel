@@ -242,7 +242,10 @@ int Membrane::import_pdb_frames(string filename){
     string line;
     read_pdb.seekg(std::ios::beg);
     
-    cout<<"num of frames = "<<num_of_frames<<endl;
+    if (!GenConst::Testmode) {
+        cout<<"num of frames = "<<num_of_frames<<endl;
+    }
+    
     pdb_frames.resize(num_of_frames);
     for (int i=0; i<num_of_frames; i++) {
         pdb_frames[i].resize(Num_of_Nodes);

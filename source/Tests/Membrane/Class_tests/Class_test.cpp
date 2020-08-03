@@ -113,6 +113,10 @@ TEST_F( MemClassTest, NumOfTrianglePairs){
     ASSERT_EQ(Mem->get_num_of_triangle_pairs() , 3000);
 }
 
+TEST_F( MemClassTest, NumOfTrianglePairs){
+    ASSERT_EQ(Mem->get_num_of_triangle_pairs() , 3000);
+}
+
 int main (int argc, char **argv){
     testing::InitGoogleTest(&argc,argv);
     return RUN_ALL_TESTS();
