@@ -66,7 +66,7 @@ std::vector<double> data_colection_times;
 }
 
 using namespace std;
-struct MemAnalysisTest : protected testing::Test{
+struct MemAnalysisTest : public testing::Test{
     //setup
     
     
@@ -113,43 +113,9 @@ struct MemAnalysisTest : protected testing::Test{
             
             
         }
-        
-//        int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
-//        int  L=2,M=2;
-//        double U=0.00001;
-//
-//        string temp_pdb_name = analysis_filename;
-//        temp_pdb_name.pop_back();
-//        temp_pdb_name.pop_back();
-//        temp_pdb_name.pop_back();
-//        temp_pdb_name.pop_back();
-//
-//        string lmtrajname ="Results/real_real/ulm_"+to_string(U)+"_"+to_string(L)+"_"+to_string(M)+".pdb";
-//        vector<int> Ells;
-//        vector<int> Ms;
-//        Ells.resize(superposes,0);
-//        Ms.resize(superposes,0);
-//
-//        for (int sup =0 ; sup<superposes; sup++) {
-//
-//        }
-//        for (int i=2; i<max_frame; i++) {
-//
-//
-//            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
-//            Membranes[0].generate_ulm_mode_real(L, M, U);
-//            //                    Membranes[0].generate_ulm_mode(L, M, U);
-//            for (int runs=0; runs<num_ang_avg; runs++) {
-//                //                Membranes[0].calculate_ulm(ell_max, analysis_averaging_option);
-//                //                        Membranes[0].surface_integral_test();
-//                Membranes[0].calculate_ulm_radiustest_real(ell_max, analysis_averaging_option);
-//                //                        Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
-//                //                        Membranes[0].myWritePDBFrame(runs,lmtrajname);
-//                //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
-//            }
-//
-//        }
-        
+        std::string analysis_filename = "10_1002n3frames.pdb";
+        int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+        Membranes[0]->load_pdb_frame(2, 0, -1, -1);
         
     }
     ~MemAnalysisTest() {
@@ -162,50 +128,904 @@ struct MemAnalysisTest : protected testing::Test{
 };
 
 
-TEST_F( MemAnalysisTest, NumOfframes){
-    std::string analysis_filename = "10_1002n3frames.pdb";
-    ASSERT_EQ(count_pdb_frames(analysis_filename,Membranes[0]->get_num_of_nodes()) , 3);
+TEST_F( MemAnalysisTest, Radius){
+    
+    double radius=0;
+    for(int i=0;i<Membranes[0]->get_num_of_nodes();i++){
+        radius+=Membranes[0]->get_spherical_position(i,0);
+    }
+    radius/=Membranes[0]->get_num_of_nodes();
+    EXPECT_NEAR( radius , 1, 0.00002);
 }
+
+TEST_F( MemAnalysisTest, VoronoiAreaSum){
+    
+    double integral =0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        integral+=Membranes[0]->node_voronoi_area[i];
+    }
+    
+    EXPECT_NEAR(integral , 4*M_PI, 0.04);
+}
+
+using SurfaceIntegral = MemAnalysisTest;
+
+TEST_F( SurfaceIntegral, UnitVector){
+    
+    
+    vector<double>  unit_vector;
+    
+    unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
+    
+    double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(unit_vector, unit_vector);
+    
+    EXPECT_NEAR(integral , 4*M_PI,0.04);
+}
+
+
+//******************************************************************************
+//******************** Spherical Harmonics Mode Generator  *********************
+//******************************************************************************
+
+
+struct EllM{
+    
+    int l1;
+    int m1;
+    
+    int l2;
+    int m2;
+};
+
+class LMParameterized : public testing::TestWithParam<EllM>{
+protected:
+    vector<Membrane*> Membranes;
+    
+    LMParameterized() {
+        bool Include_Membrane = false;
+        bool analysis_mode=true;
+        int analysis_averaging_option = 0;
+        int num_ang_avg= 1;
+        int z_node=-1;
+        int y_node=-1;
+        
+        int ell_max =20;
+        std::string analysis_extension = "_ulmt_cpp.txt";
+        //    cout<<"argc "<<argc<<endl;
+        
+        string general_file_name="test_conf.txt";
+        vector<string> membrane_config_list;
+        //The following configfiles are just needed for the structure of the "read_general_parameters" function
+        vector<string> chromatin_config_list;
+        vector<string> actin_config_list;
+        vector<string> ecm_config_list;
+        vector<string> pointparticle_config_list;
+        
+        read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+        
+        vector<vector<int> > interaction_map;
+        read_interaction_map(interaction_map);
+        
+        
+        if (!GenConst::Load_from_checkpoint) {
+            if (GenConst::Num_of_Membranes!=0) {
+                Include_Membrane = true;
+                
+                for (int i=0; i<GenConst::Num_of_Membranes; i++) {
+                    Membranes.push_back(new Membrane);
+                    string label=GenConst::Membrane_label+to_string(i);
+                    Membranes[i]->set_label(label);
+                    Membranes[i]->set_index(i);
+                    Membranes[i]->import_config(membrane_config_list[i]);
+                }
+            }
+            
+            
+        }
+        std::string analysis_filename = "10_1002n3frames.pdb";
+        int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+        Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+        
+    }
+    ~LMParameterized() {
+        for (auto pointer : Membranes){
+            delete pointer;
+        }
+        Membranes.clear();
+    }
+    
+    std::complex<double> Ylmintegral (int l1, int m1, int l2, int m2){
+        
+        vector<std::complex<double> >  ylm_cc = Membranes[0]->get_ylm_vectorlist_for_mesh(l1, m1, true);
+        vector<std::complex<double> >    ylm = Membranes[0]->get_ylm_vectorlist_for_mesh(l2, m2, false);
+        
+        std::complex<double> integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(ylm_cc, ylm);
+        return integral;
+    }
+    
+    std::complex<double> evaluate_u (int l1, int m1, int l2, int m2, double u, double r){
+        Membranes[0]->generate_ulm_mode(l2, m2, u, r);
+        vector<double> membrane_radii_list = Membranes[0]->get_ulmYlm_vectorlist_for_mesh();
+        
+        vector<std::complex<double> >  ylm_cc = Membranes[0]->get_ylm_vectorlist_for_mesh(l1, m1, true);
+        
+        std::complex<double> integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(ylm_cc, membrane_radii_list);
+        return integral;
+    }
+    
+    double RealYlmintegral (int l1, int m1, int l2, int m2){
+        
+        vector<double>  Realylm1 = Membranes[0]->get_real_ylm_vectorlist_for_mesh(l1, m1);
+        vector<double>  Realylm2 = Membranes[0]->get_real_ylm_vectorlist_for_mesh(l2, m2);
+        
+        double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(Realylm1, Realylm2);
+        return integral;
+    }
+    
+    double Realevaluate_u (int l1, int m1, int l2, int m2, double u, double r){
+        
+        Membranes[0]->generate_ulm_mode_real(l2, m2, u, r);
+        
+        vector<double> membrane_radii_list = Membranes[0]->get_ulmYlm_vectorlist_for_mesh();
+        
+        vector<double>  Realylm1 = Membranes[0]->get_real_ylm_vectorlist_for_mesh(l1, m1);
+        
+        double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(Realylm1, membrane_radii_list);
+        
+        return integral;
+    }
+};
+
+TEST_P(LMParameterized, get_ulmYlm_vectorlist_for_mesh){
+    
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.000000001);
+    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+    
+    double t_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    EXPECT_NEAR(t_value, 0, 0.000000001);
+}
+
+
+/**Spherical harmonics Normality*/
+
+TEST_P(LMParameterized, YlmccYlmzzzNormality){
+    EllM params = GetParam();
+    int ell1 = params.l2;
+    int m1 = params.m2;
+    std::complex<double> test_value = Ylmintegral(params.l2, params.m2, params.l2, params.m2);
+    
+    EXPECT_NEAR(real(test_value), 1, 0.0037);
+    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+}
+
+
+/**Spherical harmonics Orthonormality*/
+TEST_P(LMParameterized, YlmccYlmzzzOrthonormality){
+    EllM params = GetParam();
+    //    int ell1 = params.l2;
+    //    int m1 = params.m2;
+    std::complex<double> test_value = Ylmintegral(params.l1, params.m1, params.l2, params.m2);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0012);
+    EXPECT_NEAR(imag(test_value), 0, 0.0007);
+}
+
+/**Spherical harmonics Mode generator Orthonormality*/
+/**Var:: Radius */
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0022);
+    EXPECT_NEAR(imag(test_value), 0, 0.0034);
+}
+
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR10){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 10;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0023);
+    EXPECT_NEAR(imag(test_value), 0, 0.00004);
+}
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR100){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 100;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.000023);
+    EXPECT_NEAR(imag(test_value), 0, 0.0000004);
+}
+
+/**Spherical harmonics Mode generator Orthonormality*/
+/**Var:: Amplitude */
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p1zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.1;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.018);
+    EXPECT_NEAR(imag(test_value), 0, 0.00007);
+}
+
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p01zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.01;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.000018);
+    EXPECT_NEAR(imag(test_value), 0, 0.0000069);
+}
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.001;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0000012);
+    EXPECT_NEAR(imag(test_value), 0, 0.00000069);
+}
+
+/**Spherical harmonics Mode generator Orthonormality*/
+//Var:: Amplitude , Radius
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p1zzR10){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.1;
+    double R = 10;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.000018);
+    EXPECT_NEAR(imag(test_value), 0, 0.000007);
+}
+
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p01zzR100){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.01;
+    double R = 100;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0000000018);
+    EXPECT_NEAR(imag(test_value), 0, 0.0000000007);
+}
+
+TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1000){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.001;
+    double R = 1000;
+    std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.0000000001);
+    EXPECT_NEAR(imag(test_value), 0, 0.0000000001);
+}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Var::  Radius*/
+
+TEST_P(LMParameterized, YlmccModeNormalityzzU1zzR1){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 1;
+    double R = 1;
+    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), U, 0.35);
+    EXPECT_NEAR(imag(test_value), 0, 0.0008);
+}
+
+//TEST_P(LMParameterized, YlmccModeNormalityzzU1zzR10){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 1;
+//    double R = 10;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.000000001);
+//    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+//}
+//
+//TEST_P(LMParameterized, YlmccModeNormalityzzU1zzR100){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 1;
+//    double R = 100;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.000000001);
+//    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+//}
+
+///**Spherical harmonics Mode generator Normality*/
+///**Var::  Amplitute*/
+//
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p1zzR1){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.1;
+//    double R = 1;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.051);
+//    EXPECT_NEAR(imag(test_value), 0, 0.00005);
+//}
+//
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p01zzR1){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.01;
+//    double R = 1;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.0051);
+//    EXPECT_NEAR(imag(test_value), 0, 0.000005);
+//}
+
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p001zzR1){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.001;
+//    double R = 1;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.000051);
+//    EXPECT_NEAR(imag(test_value), 0, 0.00000046);
+//}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Var::  Amplitute*/
+
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p1zzR100){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.1;
+//    double R = 100;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.00000001);
+//    EXPECT_NEAR(imag(test_value), 0, 0.00000001);
+//}
+//
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p01zzR1000){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.01;
+//    double R = 1000;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.00000001);
+//    EXPECT_NEAR(imag(test_value), 0, 0.00000001);
+//}
+//
+//TEST_P(LMParameterized, YlmccModeNormalityzzU0p001zzR10000){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 0.001;
+//    double R = 10000;
+//    std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(real(test_value), U, 0.000000001);
+//    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+//}
+
+
+//******************************************************************************
+//******************** Real Spherical Harmonics   *********************
+//******************************************************************************
+
+
+/** Real Spherical harmonics Normality*/
+
+TEST_P(LMParameterized, RYlmxRYlmzzzNormality){
+    EllM params = GetParam();
+    double test_value = RealYlmintegral(params.l2, params.m2, params.l2, params.m2);
+    
+    EXPECT_NEAR(test_value, 1, 0.0052);
+    
+}
+
+
+/**Real Spherical harmonics Orthonormality*/
+TEST_P(LMParameterized, RYlmxRYlmzzzOrthonormality){
+    EllM params = GetParam();
+    
+    double test_value = RealYlmintegral(params.l1, params.m1, params.l2, params.m2);
+    
+    EXPECT_NEAR(test_value, 0, 0.0017);
+}
+
+
+/**Real Spherical harmonics Mode generator Orthonormality*/
+/**Var:: Radius */
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 1;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.08);
+    
+}
+
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR10){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 10;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.08);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR100){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 1;
+    double R = 100;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(real(test_value), 0, 0.08);
+    
+}
+
+/**Spherical harmonics Mode generator Orthonormality*/
+/**Var:: Amplitude */
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p1zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.1;
+    double R = 1;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.0002);
+    
+}
+
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p01zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.01;
+    double R = 1;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.00002);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p001zzR1){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.001;
+    double R = 1;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.0000017);
+    
+}
+
+/**Real Spherical harmonics Mode generator Orthonormality*/
+//Var:: Amplitude , Radius
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p1zzR10){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.1;
+    double R = 10;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.0002);
+    
+}
+
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p01zzR100){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.01;
+    double R = 100;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.00002);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p001zzR1000){
+    EllM params = GetParam();
+    int ell1 = params.l1;
+    int m1 = params.m1;
+    double U = 0.001;
+    double R = 1000;
+    double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    
+    EXPECT_NEAR(test_value, 0, 0.000002);
+    
+}
+
+/**Real Spherical harmonics Mode generator Normality*/
+/**Var::  Radius*/
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU1zzR1){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 1;
+    double R = 1;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.90);
+    
+}
+//Will FAIL the same conditions as above
+//TEST_P(LMParameterized, RYlmxRModeNormalityzzU1zzR10){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 1;
+//    double R = 10;
+//    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(test_value, U, 0.000000001);
+//
+//}
+//Will FAIL the same conditions as above
+//TEST_P(LMParameterized, RYlmxRModeNormalityzzU1zzR100){
+//    EllM params = GetParam();
+//    int ell2 = params.l2;
+//    int m2 = params.m2;
+//    double U = 1;
+//    double R = 100;
+//    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+//
+//    EXPECT_NEAR(test_value, U, 0.000000001);
+//
+//}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Var::  Amplitute*/
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR1){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.1;
+    double R = 1;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0027);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR1){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.01;
+    double R = 1;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.000052);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR1){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.001;
+    double R = 1;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0000052);
+    
+}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Fix::  Amplitute 0.1, Var:: Radius*/
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR10){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.1;
+    double R = 10;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0027);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR100){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.1;
+    double R = 100;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0027);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR1000){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.1;
+    double R = 1000;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0027);
+    
+}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Fix::  Amplitute 0.01, Var:: Radius*/
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR10){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.01;
+    double R = 10;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.000052);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR100){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.01;
+    double R = 100;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.000052);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR1000){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.01;
+    double R = 1000;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.000052);
+    
+}
+
+/**Spherical harmonics Mode generator Normality*/
+/**Fix::  Amplitute 0.001, Var:: Radius*/
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR10){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.001;
+    double R = 10;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0000052);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR100){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.001;
+    double R = 100;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0000052);
+    
+}
+
+TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR1000){
+    EllM params = GetParam();
+    int ell2 = params.l2;
+    int m2 = params.m2;
+    double U = 0.001;
+    double R = 1000;
+    double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    
+    EXPECT_NEAR(test_value, U, 0.0000052);
+    
+}
+
+INSTANTIATE_TEST_SUITE_P(ModeGen,
+                         LMParameterized,
+                         ::testing::Values(
+                                           EllM{3,-1,2,0},
+                                           EllM{2,0,2,2},
+                                           EllM{5,2,2,1},
+                                           EllM{6,1,3,0},
+                                           EllM{2,-1,3,-1},
+                                           EllM{7,3,4,3},
+                                           EllM{5,-4,8,-7},
+                                           EllM{10,4,6,0},
+                                           EllM{2,1,7,-5},
+                                           EllM{13,13,5,-3}
+                                           ));
+
+
+
+
+
 
 
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <complex>
 using namespace std::complex_literals;
 
-TEST_F( MemAnalysisTest, Ylm00Theta0Phi0){
+struct thetaphi{
+    double theta;
+    double phi;
+};
+
+class YlmWithOmegaParameterized : public testing::TestWithParam<thetaphi>{
+protected:
+    Membrane* mem;
     
-    std::complex<double> ylm;
-    int ell=0,m=0;
-    double theta =0, phi = 0;
-    ylm = boost::math::spherical_harmonic(ell,m,theta,phi);
-    ASSERT_EQ(ylm, 0.5*sqrt(1/M_PI));
+public:
+    std::complex<double> calc_ylm(int ell, int m, double theta, double phi){
+        return mem->calc_complex_ylmthetaphi(ell,m,theta,phi);
+        
+    }
+};
+
+TEST_P(YlmWithOmegaParameterized, AllYlm00AreConst){
+    thetaphi params = GetParam();
+    std::complex<double> test_value = calc_ylm(0, 0, params.theta, params.phi);
+    ASSERT_EQ(test_value, 0.5*sqrt(1/M_PI));
 }
 
-TEST_F( MemAnalysisTest, Ylm00ThetaPiPhi2Pi){
+INSTANTIATE_TEST_SUITE_P(YlmExpectedValueTests,
+                         YlmWithOmegaParameterized,
+                         ::testing::Values(
+                                           thetaphi{0,0},
+                                           thetaphi{M_PI,2*M_PI},
+                                           thetaphi{M_PI/3,2*M_PI/7},
+                                           thetaphi{M_PI/13,17*M_PI/7}
+                                           ));
+
+
+TEST_P(YlmWithOmegaParameterized, L1Mn1SinglePrec){
+    thetaphi params = GetParam();
     
-    std::complex<double> ylm;
-    int ell=0,m=0;
-    double theta =M_PI, phi = 2*M_PI;
+    std::complex<double> test_value = calc_ylm(1, -1, params.theta, params.phi);
     
-    ylm = boost::math::spherical_harmonic(ell,m,theta,phi);
-    ASSERT_EQ(ylm, 0.5*sqrt(1/M_PI));
+    std::complex<double> assert_value;
+    double multiplyer =0.5*sqrt(3./(2*M_PI));
+    assert_value.real(multiplyer*sin(params.theta)*cos(params.phi));
+    assert_value.imag(-multiplyer*sin(params.theta)*sin(params.phi));
+    
+    EXPECT_FLOAT_EQ(real(test_value), real(assert_value));
+    ASSERT_FLOAT_EQ(imag(test_value), imag(assert_value));
+    
 }
-TEST_F( MemAnalysisTest, Ylm00ThetaPiD3Phi2PiD3){
+
+TEST_P(YlmWithOmegaParameterized, L1Mn1DoublePrec){
+    thetaphi params = GetParam();
     
-    std::complex<double> ylm;
-    int ell=0,m=0;
-    double theta =M_PI/3, phi = 2*M_PI/7;
-    ylm = boost::math::spherical_harmonic(ell,m,theta,phi);
-    ASSERT_EQ(ylm, 0.5*sqrt(1/M_PI));
-}
-TEST_F( MemAnalysisTest, Ylm00ThetaRandPhiRand){
+    std::complex<double> test_value = calc_ylm(1, -1, params.theta, params.phi);
     
-    std::complex<double> ylm;
-    int ell=0,m=0;
-    double theta =M_PI*((double) rand() / (RAND_MAX)), phi = 2*M_PI*((double) rand() / (RAND_MAX));
-    ylm = boost::math::spherical_harmonic(ell,m,theta,phi);
-    ASSERT_EQ(ylm, 0.5*sqrt(1/M_PI));
+    std::complex<double> assert_value;
+    double multiplyer =0.5*sqrt(3./(2*M_PI));
+    assert_value.real(multiplyer*sin(params.theta)*cos(params.phi));
+    assert_value.imag(-multiplyer*sin(params.theta)*sin(params.phi));
+    
+    EXPECT_DOUBLE_EQ(real(test_value), real(assert_value));
+    ASSERT_DOUBLE_EQ(imag(test_value), imag(assert_value));
+    
 }
+
+TEST_P(YlmWithOmegaParameterized, L2Mn2SinglePrec){
+    thetaphi params = GetParam();
+    
+    std::complex<double> test_value = calc_ylm(2, -2, params.theta, params.phi);
+    
+    std::complex<double> assert_value;
+    double multiplyer =0.25*sqrt(15./(2*M_PI));
+    assert_value.real(multiplyer*sin(params.theta)*sin(params.theta)*cos(2*params.phi));
+    assert_value.imag(-multiplyer*sin(params.theta)*sin(params.theta)*sin(2*params.phi));
+    
+    EXPECT_FLOAT_EQ(real(test_value), real(assert_value));
+    ASSERT_FLOAT_EQ(imag(test_value), imag(assert_value));
+    
+}
+
+TEST_P(YlmWithOmegaParameterized, L2Mn2DoublePrec){
+    thetaphi params = GetParam();
+    
+    std::complex<double> test_value = calc_ylm(2, -2, params.theta, params.phi);
+    
+    std::complex<double> assert_value;
+    double multiplyer =0.25*sqrt(15./(2*M_PI));
+    assert_value.real(multiplyer*sin(params.theta)*sin(params.theta)*cos(2*params.phi));
+    assert_value.imag(-multiplyer*sin(params.theta)*sin(params.theta)*sin(2*params.phi));
+    
+    EXPECT_DOUBLE_EQ(real(test_value), real(assert_value));
+    ASSERT_DOUBLE_EQ(imag(test_value), imag(assert_value));
+    
+}
+
+TEST_P(YlmWithOmegaParameterized, L2M0){
+    thetaphi params = GetParam();
+    
+    std::complex<double> test_value = calc_ylm(2, 0, params.theta, params.phi);
+    
+    std::complex<double> assert_value;
+    double multiplyer =0.25*sqrt(5./(M_PI));
+    assert_value.real(multiplyer*(3*cos(params.theta)*cos(params.theta)-1));
+    assert_value.imag(0);
+    
+    
+    ASSERT_EQ(imag(test_value), imag(assert_value));
+    
+}
+
 
 int main (int argc, char **argv){
     testing::InitGoogleTest(&argc,argv);

@@ -27,7 +27,7 @@
 #include <map>
 #include <iomanip>
 #include <iterator>
-
+#include <complex>
 
 #include "OpenMM_structs.h"
 #include "General_functions.hpp"
@@ -143,17 +143,32 @@ public:
     void rotate_coordinates(double theta, double phi);
     void rotate_particle_to_axes(void);
     void update_spherical_positions();
-    void surface_integral_test();
-    void surface_integral_test_real();
+    
+    
     void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
     int  import_pdb_frames(std::string filename);
-    void generate_ulm_mode(int ell, int m, double ulm);
-    void generate_ulm_mode_real(int ell, int m, double ulm);
-    double real_harmonics(int Ell, int M, double theta, double phi);
+    void generate_ulm_mode(int ell, int m, double ulm, double radius);
+    
+    void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
+    
     void myWritePDBFrame(int frameNum, std::string traj_name);
+    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<std::complex<double> > vectorlist2);
+    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<double> vectorlist2);
+    double calc_vectorlist_vectorlist_surface_integral(vector<double> vectorlist1, vector<double> vectorlist2);
+    vector<std::complex<double> > get_ylm_vectorlist_for_mesh(int ell, int m, bool complex_conjugate);
+    vector<double> get_real_ylm_vectorlist_for_mesh(int ell, int m);
+    vector<double> get_ulmYlm_vectorlist_for_mesh();
+    
+    
+    std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
+    /**return the  complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). Where l is a positiv integer, m is defined -l <= m <= l, theta is 0 <= theta <= pi, and phi is defined 0 <= phi <= 2pi. s*/
+    std::complex<double> calc_complex_ylmthetaphi(int l,  int  m, double theta, double phi);
+    double calc_real_ylmthetaphi(int l,  int  m, double theta, double phi);
+    
     
     
     void calculate_ulm(int ell_max, int analysis_averaging_option);
+    void calculate_real_ulm(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
@@ -161,6 +176,9 @@ public:
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
+  
+    
+    
     vector<vector<vector<double> > > pdb_frames;
     vector<vector<double> > spherical_positions;
     int z_node_index = -1;
@@ -387,6 +405,7 @@ public:
     void Relax_1(void);
     void Relax_2(void);
     
+    
     /** \brief public access to total number of membrane nodes.
      * \return integer number of nodes in the membrane
      */
@@ -510,6 +529,10 @@ public:
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_triangle(){
         return Num_of_Triangles;
+    }
+    /**Returns the r (0), theta (1), and phi (2) spherical coordinate of the node index (number). Note: update_spherical_positions(); should be called to upddate the values.*/
+    double get_spherical_position(int node_number, int node_coordinate){
+        return spherical_positions[node_number][node_coordinate];
     }
     /**Returns the x (0), y (1), and z (2) coordinate of the node index (number).*/
     double get_node_position(int node_number, int node_coordinate){
