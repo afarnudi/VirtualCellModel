@@ -112,7 +112,7 @@ void ECM::generate_report()
     Report<<"MC_step\t"<<GenConst::MC_step<<endl;
     Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
     Report<<"Lbox\t"<<GenConst::Lbox<<endl;
-    Report<<"Periodic_condtion_status\t"<<GenConst::Periodic_condtion_status<<endl;
+    Report<<"Periodic_box\t"<<GenConst::Periodic_box<<endl;
     Report<<"trajectory_file_name\t"<<GenConst::trajectory_file_name<<endl;
     
     

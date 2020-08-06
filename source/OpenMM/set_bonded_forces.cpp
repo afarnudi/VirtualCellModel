@@ -51,6 +51,9 @@ void set_bonded_forces(Bonds*                                 bonds,
                                            };
                 
                 FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);
+                if (GenConst::Periodic_box) {
+                    FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 break;
             case 2://Harmonic
@@ -62,7 +65,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                 HarmonicBond->addBond(atom[0], atom[1],
                                       bonds[i].nominalLengthInNm,
                                       bonds[i].stiffnessInKJPerNm2);
-                HarmonicBond->setUsesPeriodicBoundaryConditions(true);
+                if (GenConst::Periodic_box) {
+                    HarmonicBond->setUsesPeriodicBoundaryConditions(true);
+                }
+                
                 
             }
                 break;
@@ -87,6 +93,9 @@ void set_bonded_forces(Bonds*                                 bonds,
                 parameters[0]=r_rest;
                 parameters[1]=k_bond;
                 X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1], parameters);
+                if (GenConst::Periodic_box) {
+                    X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 
                 
@@ -104,7 +113,9 @@ void set_bonded_forces(Bonds*                                 bonds,
                                           bonds[i].stiffnessInKJPerNm2);
                 
                 time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKJPsPerNm2);
-                
+                if (GenConst::Periodic_box) {
+                    Kelvin_VoigtBond->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 break;
                 

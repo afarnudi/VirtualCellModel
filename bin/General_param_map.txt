@@ -18,7 +18,8 @@ Checkpoint_path		0
 MD_thrmo_step	200
 Bussi_tau	10
 MC_step	100
-Lbox	1000
+Periodic_box	0
+Lbox	0
 Periodic_condtion_status 0
 Mem_fluidity	0
 trajectory_file_name	0
