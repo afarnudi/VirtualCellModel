@@ -146,6 +146,8 @@ int count_pdb_frames(std::string filename, int num_atoms){
         num_frames++;
     }
     read_pdb.close();
+//    std::cout<<"num_atoms = "<<num_atoms<<std::endl;
+//    std::cout<<"num_lines = "<<num_frames<<std::endl;
     return num_frames/(num_atoms+3);
 }
 

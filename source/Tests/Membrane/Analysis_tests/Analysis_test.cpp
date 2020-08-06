@@ -19,6 +19,7 @@ double K;
 int MD_thrmo_step;
 int MC_step;
 int Mem_fluidity;
+bool Periodic_box;
 double Lbox;
 bool Periodic_condtion_status;
 int Num_of_Membranes;
@@ -162,6 +163,59 @@ TEST_F( SurfaceIntegral, UnitVector){
     EXPECT_NEAR(integral , 4*M_PI,0.04);
 }
 
+TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz121){
+    std::string analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
+    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    double integral =0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        integral+=Membranes[0]->node_voronoi_area[i];
+    }
+    
+    EXPECT_NEAR(integral , 21.45963, 0.03);
+}
+
+TEST_F( SurfaceIntegral, OmegaEllipsoidxyz121){
+
+    std::string analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
+    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    vector<double>  unit_vector;
+
+    unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
+
+    double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(unit_vector, unit_vector);
+
+    EXPECT_NEAR(integral , 4*M_PI,1.2);
+}
+
+TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz123){
+    std::string analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
+    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    double integral =0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        integral+=Membranes[0]->node_voronoi_area[i];
+    }
+    
+    EXPECT_NEAR(integral , 48.93663, 0.15);
+}
+
+TEST_F( SurfaceIntegral, OmegaEllipsoidxyz123){
+
+    std::string analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
+    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
+    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    vector<double>  unit_vector;
+
+    unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
+
+    double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(unit_vector, unit_vector);
+    EXPECT_NEAR(integral , 4*M_PI,0.000000002);
+    
+    
+}
+
 
 //******************************************************************************
 //******************** Spherical Harmonics Mode Generator  *********************
@@ -285,11 +339,11 @@ TEST_P(LMParameterized, get_ulmYlm_vectorlist_for_mesh){
     double R = 1;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.000000001);
-    EXPECT_NEAR(imag(test_value), 0, 0.000000001);
+    EXPECT_NEAR(real(test_value), 0, 0.00002);
+    EXPECT_NEAR(imag(test_value), 0, 0.00002);
     
     double t_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
-    EXPECT_NEAR(t_value, 0, 0.000000001);
+    EXPECT_NEAR(t_value, 0, 0.00002);
 }
 
 
@@ -340,8 +394,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR10){
     double R = 10;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.0023);
-    EXPECT_NEAR(imag(test_value), 0, 0.00004);
+    EXPECT_NEAR(real(test_value), 0, 0.0069);
+    EXPECT_NEAR(imag(test_value), 0, 0.0006);
 }
 
 TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR100){
@@ -352,8 +406,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU1zzR100){
     double R = 100;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.000023);
-    EXPECT_NEAR(imag(test_value), 0, 0.0000004);
+    EXPECT_NEAR(real(test_value), 0, 0.001);
+    EXPECT_NEAR(imag(test_value), 0, 0.00006);
 }
 
 /**Spherical harmonics Mode generator Orthonormality*/
@@ -368,7 +422,7 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p1zzR1){
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
     EXPECT_NEAR(real(test_value), 0, 0.018);
-    EXPECT_NEAR(imag(test_value), 0, 0.00007);
+    EXPECT_NEAR(imag(test_value), 0, 0.00009);
 }
 
 
@@ -381,7 +435,7 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p01zzR1){
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
     EXPECT_NEAR(real(test_value), 0, 0.000018);
-    EXPECT_NEAR(imag(test_value), 0, 0.0000069);
+    EXPECT_NEAR(imag(test_value), 0, 0.000009);
 }
 
 TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1){
@@ -392,8 +446,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1){
     double R = 1;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.0000012);
-    EXPECT_NEAR(imag(test_value), 0, 0.00000069);
+    EXPECT_NEAR(real(test_value), 0, 0.000012);
+    EXPECT_NEAR(imag(test_value), 0, 0.0000069);
 }
 
 /**Spherical harmonics Mode generator Orthonormality*/
@@ -407,8 +461,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p1zzR10){
     double R = 10;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.000018);
-    EXPECT_NEAR(imag(test_value), 0, 0.000007);
+    EXPECT_NEAR(real(test_value), 0, 0.0007);
+    EXPECT_NEAR(imag(test_value), 0, 0.0003);
 }
 
 
@@ -420,8 +474,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p01zzR100){
     double R = 100;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.0000000018);
-    EXPECT_NEAR(imag(test_value), 0, 0.0000000007);
+    EXPECT_NEAR(real(test_value), 0, 0.00008);
+    EXPECT_NEAR(imag(test_value), 0, 0.00007);
 }
 
 TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1000){
@@ -432,8 +486,8 @@ TEST_P(LMParameterized, YlmccModeOrthonormalityzzU0p001zzR1000){
     double R = 1000;
     std::complex<double> test_value = evaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.0000000001);
-    EXPECT_NEAR(imag(test_value), 0, 0.0000000001);
+    EXPECT_NEAR(real(test_value), 0, 0.000008);
+    EXPECT_NEAR(imag(test_value), 0, 0.000003);
 }
 
 /**Spherical harmonics Mode generator Normality*/
@@ -590,7 +644,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR1){
     double R = 1;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.08);
+    EXPECT_NEAR(test_value, 0, 0.1);
     
 }
 
@@ -603,7 +657,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR10){
     double R = 10;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.08);
+    EXPECT_NEAR(test_value, 0, 0.1);
     
 }
 
@@ -615,7 +669,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.08);
+    EXPECT_NEAR(real(test_value), 0, 0.1);
     
 }
 
@@ -643,7 +697,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p01zzR1){
     double R = 1;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.00002);
+    EXPECT_NEAR(test_value, 0, 0.00004);
     
 }
 
@@ -655,7 +709,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p001zzR1){
     double R = 1;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.0000017);
+    EXPECT_NEAR(test_value, 0, 0.000017);
     
 }
 
@@ -683,7 +737,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p01zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.00002);
+    EXPECT_NEAR(test_value, 0, 0.00003);
     
 }
 
@@ -695,7 +749,7 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p001zzR1000){
     double R = 1000;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.000002);
+    EXPECT_NEAR(test_value, 0, 0.00003);
     
 }
 
@@ -773,7 +827,7 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR1){
     double R = 1;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0000052);
+    EXPECT_NEAR(test_value, U, 0.000006);
     
 }
 
@@ -866,7 +920,7 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR10){
     double R = 10;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0000052);
+    EXPECT_NEAR(test_value, U, 0.000006);
     
 }
 
@@ -878,7 +932,7 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0000052);
+    EXPECT_NEAR(test_value, U, 0.000006);
     
 }
 
@@ -890,7 +944,7 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR1000){
     double R = 1000;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0000052);
+    EXPECT_NEAR(test_value, U, 0.000006);
     
 }
 

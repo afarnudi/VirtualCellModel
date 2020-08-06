@@ -41,7 +41,7 @@
 #include "OpenMM_funcs.hpp"
 #include "General_class_functions.h"
 
-#include "Tests.hpp"
+//#include "Tests.hpp"
 
 /** -----------------------------------------------------------------------------
  *                           OpenMM-USING CODE
@@ -70,6 +70,7 @@ namespace GenConst {
     int MD_thrmo_step;
     int MC_step;
     int Mem_fluidity;
+    bool Periodic_box;
     double Lbox;
     bool Periodic_condtion_status;
     int Num_of_Membranes;
@@ -547,6 +548,8 @@ int main(int argc, char **argv)
                 //wrok in progress.
                 //Need to retrive all information from the checkpoint and relay them to the respective classes.
             }
+            
+            cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
             // Run the simulation:
             //  (1) Write the first line of the PDB file and the initial configuration.
             //  (2) Run silently entirely within OpenMM between reporting intervals.

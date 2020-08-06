@@ -31,8 +31,11 @@ namespace GenConst {
     /**During every 'MC_step' the MC step will be applied to the membrane mesh. Default 100*/
     extern int MC_step;
     extern int Mem_fluidity;
+    /**The simulation uses periodic boundary condition. Default False*/
+    extern bool Periodic_box;
+    /**The size of the simulation box (cube). If Periodic_box  == False the default value is 0*/
     extern double Lbox;
-    extern bool Periodic_condtion_status;
+    
     /**Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0.*/
     extern int Num_of_Membranes;
     /**Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0.*/

@@ -19,6 +19,7 @@ double K;
 int MD_thrmo_step;
 int MC_step;
 int Mem_fluidity;
+bool Periodic_box;
 double Lbox;
 bool Periodic_condtion_status;
 int Num_of_Membranes;

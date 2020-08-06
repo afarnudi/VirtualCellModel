@@ -128,3 +128,9 @@ Wantvoronoi	0
 
 //When in test mode, most of the console prints (std::cout) of the programme will be turned off for a better viewing of the test report. Deafault 0 (off)
 Testmode	0
+
+//The simulation uses periodic boundary condition. Default False
+Periodic_box	0
+
+//The size of the simulation box (cube). If Periodic_box  == False the default value is 0
+Lbox	0
