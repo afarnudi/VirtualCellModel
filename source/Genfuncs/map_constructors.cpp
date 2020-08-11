@@ -450,6 +450,21 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
                 GenConst::Testmode = true;
             }
         }
+    } else if (param_name=="MCBarostatPressure"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::MCBarostatPressure = it->second;
+        }
+    } else if (param_name=="MCBarostatTemperature"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::MCBarostatTemperature = it->second;
+        }
+    } else if (param_name=="MCBarostatFrequency"){
+        it = general_param_map.find(param_name);
+        if (it != general_param_map.end()){
+            GenConst::MCBarostatFrequency = it->second;
+        }
     }
     
     

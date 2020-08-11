@@ -134,3 +134,12 @@ Periodic_box	0
 
 //The size of the simulation box (cube). If Periodic_box  == False the default value is 0
 Lbox	0
+
+//The pressure acting on the system (in bar) through OpenMM's MonteCarloBarostat. Default 0
+MCBarostatPressure	0
+
+//The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature.
+MCBarostatTemperature	-1
+
+//The frequency at which the MonteCarloBarostat pressure changes should be attempted (in time steps). If zero MCBarostat will be disabled. Default 0.
+MCBarostatFrequency	0

@@ -61,8 +61,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
     
-    OpenMM::CMMotionRemover* comremover;
-    comremover = new OpenMM::CMMotionRemover(GenConst::CMMotionRemoverStep);
+    
     
     set_interactions(atoms,
                      bonds,
@@ -99,6 +98,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomBondForce*> FENEs;
     
     
+    
+    
     set_bonded_forces(bonds,
                       HarmonicBond,
                       Kelvin_VoigtBond,
@@ -128,6 +129,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
     }
+    
+    
+    
     
     
     std::vector<Vec3> pbcxyz;
@@ -164,6 +168,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         for (int i=0; i<3; i++) {
             cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
         }
+        cout<<"usesPeriodicBoundaryConditions = "<<system.usesPeriodicBoundaryConditions()<<endl;
     }
     
     
@@ -292,7 +297,17 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             break;
     }
     if (GenConst::CMMotionRemover) {
+        OpenMM::CMMotionRemover* comremover;
+        comremover = new OpenMM::CMMotionRemover(GenConst::CMMotionRemoverStep);
         omm->system->addForce(comremover);
+    }
+    
+    if (GenConst::MCBarostatFrequency != 0) {
+        if (GenConst::MCBarostatTemperature<0) {
+            GenConst::MCBarostatTemperature = GenConst::temperature;
+        }
+        OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(GenConst::MCBarostatPressure, GenConst::MCBarostatTemperature, GenConst::MCBarostatFrequency);
+        omm->system->addForce(MCBarostat);
     }
     
     for (int i=0; atoms[i].type != EndOfList; i++) {

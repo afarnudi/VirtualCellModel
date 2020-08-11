@@ -60,7 +60,9 @@ int    CMMotionRemoverStep;
 bool   Wantvoronoi;
 bool   Testmode;
 
-
+double MCBarostatPressure;
+double MCBarostatTemperature;
+int    MCBarostatFrequency;
 
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;

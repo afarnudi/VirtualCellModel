@@ -71,6 +71,8 @@ void collect_data(MyAtomInfo atoms[],
         mem_volume  = mems[0].return_volume();
         mem_surface = mems[0].return_surface_area();
         bending_energy = mems[0].calculate_bending_energy();
+    } else {
+        voronoi_area.resize(1,0);
     }
     //    write_data(atoms, buffer, mem_volume, mem_surface, bending_energy);
     write_data2(atoms, buffer, mem_volume, mem_surface, bending_energy, voronoi_area);
@@ -133,14 +135,18 @@ void write_data2(MyAtomInfo atoms[],
     }
     wdata<<endl;
     
-    wdata<<"time "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<" Volume_(Nm^3) "<<volume<<"  Area_(Nm^2) "<<area<<" bending_energy_(KJ/mol) "<<bending_energy<<"\n";
+    wdata<<"time "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<" Volume_(Nm^3) "<<volume<<"  Area_(Nm^2) "<<area<<" bending_energy_(KJ/mol) "<<bending_energy;
+    if (GenConst::MCBarostatFrequency!=0) {
+        wdata<<" LboxX_(Nm) "<<GenConst::Lboxdims[0][0]<<" LboxY_(Nm) "<<GenConst::Lboxdims[1][1]<<" LboxZ_(Nm) "<<GenConst::Lboxdims[2][2];
+    }
+    wdata<<"\n";
     for (int t=0; atoms[t].type != EndOfList; t++) {
         wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
         if (GenConst::WantForce) {
             wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
         }
         if (GenConst::Wantvoronoi) {
-//            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
+            wdata<<"\t"<<voronoi_area[t];
         }
         wdata<<"\n";
     }

@@ -120,6 +120,15 @@ namespace GenConst {
     //When in test mode, most of the console prints (std::cout) of the programme will be turned off for a better viewing of the test report. Deafault 0 (off)
     extern bool Testmode;
     
+    /**The pressure acting on the system (in bar) through OpenMM's MonteCarloBarostat. Default 0*/
+    extern double MCBarostatPressure;
+    /**The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
+    extern double MCBarostatTemperature;
+    /**The frequency at which the MonteCarloBarostat pressure changes should be attempted (in time steps). If zero MCBarostat will be disabled. Default 0.*/
+    extern int MCBarostatFrequency;
+    
+    /**The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
+    extern std::vector<std::vector<double> > Lboxdims;
 }
 
 //#define MD_num_of_steps  300000//35000// number of MD stps
