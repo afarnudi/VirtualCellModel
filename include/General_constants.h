@@ -43,6 +43,7 @@ namespace GenConst {
     extern int Num_of_ECMs;
     /**Name of the output file. Please note that the date and time the file is generated will be attached to this name.*/
     extern std::string trajectory_file_name;
+    extern std::string force_file_name;
     
     /**Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
      * Type 0 : Verlet

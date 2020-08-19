@@ -39,6 +39,10 @@ struct Bonds{
     double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
     double dampInKcalPsPerAngstrom2;
     double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
+    double F0;
+    double r_min,r_max;
+    double hill_co;
+    double k_F0;
     bool   canConstrain;
 };
 
@@ -82,11 +86,22 @@ struct MyOpenMMData {
 
 struct TimeDependantData {
     OpenMM::HarmonicBondForce*  Kelvin_VoigtBond;
+    std::vector<OpenMM::CustomBondForce*> Hill_force;
+    std::vector<OpenMM::CustomBondForce*> k_force;
+    int hill_stepnum = 40;
+    bool HillForce = false;
+    int k_stepnum = 120;
+    bool kForce = false;
+    double COM[3];
     bool Kelvin_Voigt = false;
-    int Kelvin_stepnum = 100;
+    int Kelvin_stepnum = 40;
     std::vector<double> Kelvin_Voigt_damp;
+    std::vector<double> hill_const_force;
+    std::vector<double> hill_coefficient;
     std::vector<std::vector<double>> Kelvin_Voigt_distInAng;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
+    std::vector<std::vector<std::vector<double>>> hill_distInAng;
+    //std::vector<std::vector<double>> Contractile_initForce;
     
     std::vector<OpenMM::CustomExternalForce*> ext_force;
     //OpenMM::CustomExternalForce* ext_force;
@@ -135,6 +150,70 @@ struct TimeDependantData {
             Kelvin_Voigt_distInAng.push_back(distInAng);
         }
     }
+    
+    
+    
+    
+    void COM_calculator(MyAtomInfo atoms[])
+    {
+        double total_mass = 0;
+        for(int i=0; atoms[i].type != -1 ; i++)
+            {
+                if(atoms[i].class_label.compare("ECM") != 0)
+                {
+                    COM[0] = COM[0] + atoms[i].mass * atoms[i].posInAng[0];
+                    COM[1] = COM[1] + atoms[i].mass * atoms[i].posInAng[1];
+                    COM[2] = COM[2] + atoms[i].mass * atoms[i].posInAng[2];
+                    total_mass = total_mass + atoms[i].mass ;
+                }
+                
+            }
+        
+        COM[0] = COM[0] / total_mass ;
+        COM[1] = COM[1] / total_mass ;
+        COM[2] = COM[2] / total_mass ;
+            
+            
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    void hill_dist_calc(MyAtomInfo atoms[])
+    {
+        if(HillForce)
+        {
+            std::vector<std::vector<double>> all_distInAng;
+            for(int j=0; j<Hill_force.size() ; j++)
+            {
+            std::vector<double> distInAng ;
+            distInAng.clear();
+            const int Num_Bonds = Hill_force[j]->getNumBonds();
+            int atom1, atom2 ;
+            double dist;
+            std::vector<double> parameters;
+            
+            for(int i=0; i<Num_Bonds; i++)
+            {
+                Hill_force[j]->getBondParameters(i, atom1, atom2, parameters);
+                dist =sqrt ( ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) * ( atoms[atom1].posInAng[0] - atoms[atom2].posInAng[0]) + ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) * ( atoms[atom1].posInAng[1] - atoms[atom2].posInAng[1]) + ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) * ( atoms[atom1].posInAng[2] - atoms[atom2].posInAng[2]) ) ;
+                
+                distInAng.push_back(dist);
+            }
+                all_distInAng.push_back(distInAng);
+            
+            }
+            
+            hill_distInAng.push_back(all_distInAng);
+            
+        }
+    }
+    
     
     
 };

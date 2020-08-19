@@ -74,6 +74,12 @@ void Kelvin_Voigt_update(MyOpenMMData*,
 void force_update(MyOpenMMData*,
                          TimeDependantData*);
 
+void hill_update(MyOpenMMData*,
+TimeDependantData*,  MyAtomInfo atoms[]);
+
+void kf_update(MyOpenMMData*,
+TimeDependantData*,  MyAtomInfo atoms[]);
+
 
 /** -----------------------------------------------------------------------------
  *                     BOND LENGTH
@@ -109,9 +115,11 @@ void          myTerminateOpenMM(MyOpenMMData*,
 void myWritePDBFrame(int                frameNum,
                      double             timeInPs,
                      double             energyInKcal,
+                     double             potential_energy,
                      const MyAtomInfo   atoms[],
                      const Bonds        bonds[],
-                     std::string        traj_name);
+                     std::string        traj_name,
+                     std::string        force_name);
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
@@ -141,7 +149,7 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_Actin_position_to_openmm(Actin act);
 /**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
-Bonds* convert_Actin_bond_info_to_openmm(Actin act);
+Bonds* convert_Actin_bond_info_to_openmm(Actin act, MyAtomInfo* atoms);
 
 
 void OpenMM_ActMem_info_relay (vector<Actin>          acts,
@@ -167,7 +175,7 @@ void OpenMM_ECM_info_relay (vector<ECM>             ecms,
 /**Relay the position information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm);
 /**Relay the bond information of the ECM nodes to other data structures ready to pass to OpenMM handles.*/
-Bonds* convert_ECM_bond_info_to_openmm(ECM ecm);
+Bonds* convert_ECM_bond_info_to_openmm(ECM ecm , MyAtomInfo* atoms);
 
 void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
 //                                  vector<std::set<int> >  &chromo_set,
@@ -227,6 +235,30 @@ bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
                               vector<std::set<int> >                set_1,
                               int                                   set_1_index,
                               string                                set_name);
+
+
+/**Initiate the stronger Lenard Jones 12 6 interaction for sets of class atoms.*/
+void initdouble_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<std::set<int> >                set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name);
+
+
+/**initiate LJ 4-2*/
+void init_LJ_4_2_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+const MyAtomInfo                      atoms[],
+vector<std::set<int> >                set_1,
+vector<std::set<int> >                set_2,
+int                                   set_1_index,
+int                                   set_2_index,
+string                                set_1_name,
+string                                set_2_name);
+
+
 
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                      atoms[],
@@ -310,6 +342,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomBondForce*>      &FENEs,
+                       vector<OpenMM::CustomBondForce*>      &Contractiles,
+                       vector<OpenMM::CustomBondForce*>      &KFs,
+                       vector<OpenMM::CustomBondForce*>      &hill_bonds,
+                       vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
                        TimeDependantData*                    &time_dependant_data,
                        OpenMM::System                        &system
                        );
