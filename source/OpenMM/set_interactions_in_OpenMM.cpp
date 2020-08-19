@@ -2,6 +2,8 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include <stdlib.h>
+#include <time.h>
 
 using OpenMM::Vec3;
 using std::vector;
@@ -20,6 +22,73 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       OpenMM::System                        &system
                       ){
+    
+    
+    vector<std::set<int>> sp_nodes;
+    vector<std::set<int>> ns_nodes;
+    sp_nodes.resize(1);
+    ns_nodes.resize(1);
+    
+    
+    vector<std::set<int>> ad_sites;
+    vector<std::set<int>> na_sites;
+    ad_sites.resize(1);
+    na_sites.resize(1);
+    
+    srand(time(NULL));
+    
+    for(set<int>::iterator it=membrane_set[0].begin(); it != membrane_set[0].end(); ++it)
+    {
+        int r = rand() % 100 + 1;
+        
+        if(atoms[*it].initPosInAng[0]>0)
+        {
+            if (r<75)
+            {
+                sp_nodes[0].insert(*it);
+            }
+            else
+            {
+                ns_nodes[0].insert(*it);
+            }
+        }
+        else
+        {
+            if (r<36)
+            {
+                sp_nodes[0].insert(*it);
+            }
+            else
+            {
+                ns_nodes[0].insert(*it);
+            }
+        }
+    }
+    
+    cout<<"sp nodes"<<sp_nodes[0].size()<< '\n';
+    cout<<"ns nodes"<<ns_nodes[0].size()<< '\n';
+    
+    
+    //srand(time(NULL));
+    
+    for(set<int>::iterator it=ecm_set[0].begin(); it != ecm_set[0].end(); ++it)
+    {
+        
+        if( atoms[*it].symbol == 'E')
+        {
+            ad_sites[0].insert(*it);
+        }
+        else
+        {
+            na_sites[0].insert(*it);
+        }
+        
+
+    }
+    
+    cout<<"ad sites"<<ad_sites[0].size()<< '\n';
+    cout<<"na sites"<<na_sites[0].size()<< '\n';
+    
     
     std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds);
    //Order: Membranes, Actins, ECMs, Chromatins, Point Particles
@@ -203,6 +272,54 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     system.addForce(ExcludedVolumes[index]);
                     break;
+                    
+                case 3:
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ns_nodes, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                                       
+                                       
+                        initdouble_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, sp_nodes, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                    break;
+                    
+                    
+                    case 4:
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, na_sites, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                                       
+                                       
+                        initdouble_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ad_sites, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                    
+                    break;
+                    
+                    case 5:
+                    init_LJ_4_2_interaction(LJ_12_6_interactions, atoms, ecm_set, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                                       
+                                       
+                        initdouble_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ad_sites, membrane_set, i, j , GenConst::ECM_label , GenConst::Membrane_label);
+
+                        index = int(LJ_12_6_interactions.size()-1);
+                        add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
+                        system.addForce(LJ_12_6_interactions[index]);
+                    break;
+                                       
             }
             
         }

@@ -23,20 +23,40 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
-    
+    //string potential = "(" + sigma + "/(r-" + sigma + "))^12";
+    string potential = "100*((" + sigma + "/r)^12 - (" + sigma + "/r)^6 + 0.25)";
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     int index = ExcludedVolumes.size()-1;
-    ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-                                                             + atoms[*it_2].radius )
-                                                            * OpenMM::NmPerAngstrom);
+    
+    if(atoms[*it_1].radius >= atoms[*it_2].radius )
+    {
+        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_1].radius * OpenMM::NmPerAngstrom);
+    }
+    else
+    {
+        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_2].radius * OpenMM::NmPerAngstrom);
+    }
+    
+//    ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
+//                                                             + atoms[*it_2].radius )
+//                                                            * OpenMM::NmPerAngstrom);
 //    ExcludedVolumes[index]->addPerParticleParameter("sigma");
 //    cout<<"sigma = 0.5*("<<atoms[*it_1].radius<<" + "<<atoms[*it_2].radius<<") = "<<0.5*( atoms[*it_1].radius
 //                                                                                       + atoms[*it_2].radius )<<endl;
     ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
-    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-                                                    + atoms[*it_2].radius )
-                                                    * OpenMM::NmPerAngstrom);
+//    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
+//                                                    + atoms[*it_2].radius )
+//                                                    * OpenMM::NmPerAngstrom);
+    
+    if(atoms[*it_1].radius >= atoms[*it_2].radius )
+    {
+        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_1].radius * OpenMM::NmPerAngstrom);
+    }
+    else
+    {
+        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_2].radius * OpenMM::NmPerAngstrom);
+    }
+    
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
 }
 
