@@ -35,7 +35,25 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds)
             std::pair< int, int > temp;
             temp.first=bonds[i_b].atoms[0];
             temp.second=bonds[i_b].atoms[1];
+            //exclude_bonds.push_back(temp);
+        int j=0;
+        bool flag = true;
+        
+        while (j<exclude_bonds.size())
+        {
+            if( (exclude_bonds[j] == temp)  )
+            {
+                flag = false;
+                j=i_b;
+            }
+            j++;
+        }
+        
+        if(flag)
+        {
             exclude_bonds.push_back(temp);
+        }
+        
     }
     return exclude_bonds;
 }

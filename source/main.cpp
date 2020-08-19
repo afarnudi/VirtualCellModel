@@ -77,6 +77,7 @@ namespace GenConst {
     int Num_of_ECMs;
     int Num_of_pointparticles;
     string trajectory_file_name;;
+    string force_file_name;;
     double Buffer_temperature;
     double Bussi_tau;
     double Actin_Membrane_Bond_Coefficient;
@@ -288,7 +289,7 @@ int main(int argc, char **argv)
         if (Include_Actin) {
             for (int i=0; i<Actins.size(); i++) {
                 num_of_atoms        += Actins[i].get_num_of_nodes();
-                num_of_bonds        += Actins[i].get_num_of_node_pairs();
+                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
             }
         }
         if (Include_ECM) {
@@ -443,6 +444,7 @@ int main(int argc, char **argv)
             chrono_sys_clock_start = chrono::system_clock::now();
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+            std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
             
             const int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
             
@@ -458,7 +460,7 @@ int main(int argc, char **argv)
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-                myWritePDBFrame(frame, time, energy, all_atoms, all_bonds, traj_name);
+                myWritePDBFrame(frame, time, energy, potential_energy, all_atoms, all_bonds, traj_name , force_name);
                 
                 //Begin: Exporting congiguration of classes for simulation resume.
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
