@@ -33,7 +33,7 @@ namespace GenConst {
     extern int Mem_fluidity;
     /**The simulation uses periodic boundary condition. Default False*/
     extern bool Periodic_box;
-    /**The size of the simulation box (cube). If Periodic_box  == False the default value is 0*/
+    /**he size of the simulation box (cube). If Periodic_box  == False the default value will be set to zero (here -1 will trigger this proccess).*/
     extern double Lbox;
     
     /**Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0.*/

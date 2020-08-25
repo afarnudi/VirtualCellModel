@@ -245,11 +245,12 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
     } else if(param_name=="Lbox"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
-            GenConst::Lbox=it->second;
-            if (it->second<=0.1) {
+            if (it->second<0) {
                 GenConst::Periodic_box=false;
+                GenConst::Lbox=0;
             } else {
                 GenConst::Periodic_box=true;
+                GenConst::Lbox=it->second;
             }
         }
     } else if (param_name=="Num_of_Membranes"){
