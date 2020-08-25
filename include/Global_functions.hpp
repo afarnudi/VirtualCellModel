@@ -34,4 +34,5 @@ void collect_data(MyAtomInfo atoms[],
                   vector<Membrane> mems,
                   double timeInPs);
 
+
 #endif /* Global_functions_hpp */

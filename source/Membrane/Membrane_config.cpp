@@ -10,8 +10,10 @@ void Membrane::import_config(string config_file_name){
     bool resume=false;
     
     if (read_config_file.is_open()) {
+        if (!GenConst::Testmode) {
+            cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+        }
         
-        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -34,7 +36,10 @@ void Membrane::import_config(string config_file_name){
             if (split[0]=="Resume") {
                 
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                    if (!GenConst::Testmode) {
+                        cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                    }
+                    
                 } else {
                     resume=true;
                     resume_file_name=split[2];
@@ -48,7 +53,10 @@ void Membrane::import_config(string config_file_name){
                 }
 //                cout<<"Mesh format"<<mesh_format;
                 Mesh_file_name=split[2];
-                cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
+                if (!GenConst::Testmode) {
+                    cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
+                }
+                
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
             }
@@ -85,9 +93,9 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value*GenConst::MD_T;
+        Spring_coefficient=param_value;
     } else if (param_name=="Bending_coefficient"){
-        Bending_coefficient=param_value*GenConst::MD_T;
+        Bending_coefficient=param_value;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
     }else if (param_name=="MD_num_of_Relaxation_steps"){
@@ -150,6 +158,12 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         } else {
             Relaxation=true;
         }
+    }else if(param_name=="fixing_com"){
+        if (int(param_value) == 0){
+            fixing_com=false;
+        } else {
+            fixing_com=true;
+        }
     } else if(param_name=="particle_type"){
         if (int(param_value) == 0){
             particle_type=false;
@@ -176,6 +190,24 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if(param_name=="Update_nominal_length"){
         
         Update_nominal_length = param_value;
+    } else if(param_name=="FENE_min"){
+        
+        FENE_min = param_value;
+    } else if(param_name=="FENE_max"){
+        
+        FENE_max = param_value;
+    } else if(param_name=="FENE_eps"){
+        
+        FENE_epsilon = param_value;
+    } else if(param_name=="FENE_k"){
+        
+        FENE_k = param_value;
+    } else if(param_name=="init_random_rotation"){
+        if (int(param_value) == 0) {
+            initial_random_rotation_coordinates=false;
+        } else{
+            initial_random_rotation_coordinates=true;
+        }
     }
     
 }

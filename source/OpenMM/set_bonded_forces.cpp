@@ -41,32 +41,33 @@ void set_bonded_forces(Bonds*                                 bonds,
         switch (bonds[i].type) {
             case 1://FENE
             {
+                
+                
                 auto FENE_item = FENE_classes.find(bonds[i].class_label);
                 if (FENE_item == FENE_classes.end()) {
                     
                     FENE_classes.insert(bonds[i].class_label);
                     FENE_index++;
                     
-                    FENEs.push_back(new OpenMM::CustomBondForce("k_bond*lmin*lmin*(((lmin/1.5)/(r-(lmin/1.5)))^6)*step(le1-r)+(-0.5*k_bond*lmax*lmax*log(1-(r*r/lmax*lmax)))*step(r-le0);"));
+                    FENEs.push_back(new OpenMM::CustomBondForce("4*ep*( (s/r)^12-(s/r)^6 + 0.25) -0.5*K_fene*R*R*log(1-(r*r/(R*R) ))"));
                     
-                    FENEs[FENE_index]->addPerBondParameter("lmin");
-                    FENEs[FENE_index]->addPerBondParameter("le0");
-                    FENEs[FENE_index]->addPerBondParameter("le1");
-                    FENEs[FENE_index]->addPerBondParameter("lmax");
-                    FENEs[FENE_index]->addPerBondParameter("k_bond");
+                    FENEs[FENE_index]->addPerBondParameter("s");
+                    FENEs[FENE_index]->addPerBondParameter("R");
+                    FENEs[FENE_index]->addPerBondParameter("ep");
+                    FENEs[FENE_index]->addPerBondParameter("K_fene");
                     
                     system.addForce(FENEs[FENE_index]);
                 }
-                vector<double> parameters={bonds[i].FENE_lmin* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_le0* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_le1* OpenMM::NmPerAngstrom,
-                                           bonds[i].FENE_lmax* OpenMM::AngstromsPerNm,
-                                           bonds[i].stiffnessInKcalPerAngstrom2* OpenMM::KJPerKcal
-                                                                         * OpenMM::AngstromsPerNm
-                                                                         * OpenMM::AngstromsPerNm
+                vector<double> parameters={bonds[i].FENE_lmininNm,
+                                           bonds[i].FENE_lmaxinNm,
+                                           bonds[i].FENE_epsilon,
+                                           bonds[i].FENE_k
                                            };
                 
                 FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);
+                if (GenConst::Periodic_box) {
+                    FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 break;
             case 2://Harmonic
@@ -76,11 +77,12 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
                 HarmonicBond->addBond(atom[0], atom[1],
-                                      bonds[i].nominalLengthInAngstroms
-                                      * OpenMM::NmPerAngstrom,
-                                      bonds[i].stiffnessInKcalPerAngstrom2
-                                      * OpenMM::KJPerKcal
-                                      * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                      bonds[i].nominalLengthInNm,
+                                      bonds[i].stiffnessInKJPerNm2);
+                if (GenConst::Periodic_box) {
+                    HarmonicBond->setUsesPeriodicBoundaryConditions(true);
+                }
+                
                 
             }
                 break;
@@ -98,16 +100,16 @@ void set_bonded_forces(Bonds*                                 bonds,
                     X4harmonics[X4harmonic_index]->addPerBondParameter("k_bond");
                     system.addForce(X4harmonics[X4harmonic_index]);
                 }
-                double r_rest =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                double k_bond=bonds[i].stiffnessInKcalPerAngstrom4
-                * OpenMM::KJPerKcal
-                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm
-                * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
+                double r_rest =bonds[i].nominalLengthInNm;
+                double k_bond=bonds[i].stiffnessInKJPerNm4;
                 vector<double> parameters;
                 parameters.resize(2);
                 parameters[0]=r_rest;
                 parameters[1]=k_bond;
                 X4harmonics[X4harmonic_index]->addBond(atom[0], atom[1], parameters);
+                if (GenConst::Periodic_box) {
+                    X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 
                 
@@ -121,14 +123,13 @@ void set_bonded_forces(Bonds*                                 bonds,
                 // as it is used in the harmonic energy term kx^2 with force 2kx; OpenMM wants
                 // it as used in the force term kx, with energy kx^2/2.
                 Kelvin_VoigtBond->addBond(atom[0], atom[1],
-                                          bonds[i].nominalLengthInAngstroms
-                                          * OpenMM::NmPerAngstrom,
-                                          bonds[i].stiffnessInKcalPerAngstrom2
-                                          * OpenMM::KJPerKcal
-                                          * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                                          bonds[i].nominalLengthInNm,
+                                          bonds[i].stiffnessInKJPerNm2);
                 
-                time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKcalPsPerAngstrom2 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::FsPerPs );
-                
+                time_dependant_data->Kelvin_Voigt_damp.push_back(bonds[i].dampInKJPsPerNm2);
+                if (GenConst::Periodic_box) {
+                    Kelvin_VoigtBond->setUsesPeriodicBoundaryConditions(true);
+                }
             }
                 break;
                 
@@ -149,10 +150,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                     Contractiles[Contractile_index]->addPerBondParameter("r_max");
                     system.addForce(Contractiles[Contractile_index]);
                 }
-                double r0 =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                double F0=bonds[i].F0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm;
-                double r_min = bonds[i].r_min * OpenMM::NmPerAngstrom;
-                double r_max = bonds[i].r_max * OpenMM::NmPerAngstrom;
+                double r0 =bonds[i].nominalLengthInNm;
+                double F0=bonds[i].F0;
+                double r_min = bonds[i].r_min;
+                double r_max = bonds[i].r_max;
                 vector<double> parameters;
                 parameters.resize(4);
                 parameters[0]=r0;
@@ -160,6 +161,11 @@ void set_bonded_forces(Bonds*                                 bonds,
                 parameters[2]=r_min;
                 parameters[3]=r_max;
                 Contractiles[Contractile_index]->addBond(atom[0], atom[1], parameters);
+                
+                if(GenConst::Periodic_box)
+                {
+                    Contractiles[Contractile_index]->setUsesPeriodicBoundaryConditions(true);
+                }
                 
                 //time_dependant_data->hill_coefficient = bonds[i].hill_co;
                 //time_dependant_data->Contractile_force = bonds[i].F0;
@@ -185,10 +191,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                     Harmonic_minmax[Harmonic_minmax_index]->addPerBondParameter("r_max");
                     system.addForce(Harmonic_minmax[Harmonic_minmax_index]);
                 }
-                double r0 =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                double k_bond=bonds[i].stiffnessInKcalPerAngstrom2 * OpenMM::KJPerKcal* OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm;
-                double r_min = bonds[i].r_min * OpenMM::NmPerAngstrom;
-                double r_max = bonds[i].r_max * OpenMM::NmPerAngstrom;
+                double r0 =bonds[i].nominalLengthInNm;
+                double k_bond=bonds[i].stiffnessInKJPerNm2;
+                double r_min = bonds[i].r_min;
+                double r_max = bonds[i].r_max;
                 vector<double> parameters;
                 parameters.resize(4);
                 parameters[0]=r0;
@@ -196,6 +202,11 @@ void set_bonded_forces(Bonds*                                 bonds,
                 parameters[2]=r_min;
                 parameters[3]=r_max;
                 Harmonic_minmax[Harmonic_minmax_index]->addBond(atom[0], atom[1], parameters);
+                
+                if(GenConst::Periodic_box)
+                          {
+                              Harmonic_minmax[Harmonic_minmax_index]->setUsesPeriodicBoundaryConditions(true);
+                          }
             }
                 
                 
@@ -221,10 +232,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                         HillBonds[Hill_index]->addPerBondParameter("b");
                         system.addForce(HillBonds[Hill_index]);
                     }
-                    double r0 =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                    double F0=bonds[i].F0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm;
-                    double r_min = bonds[i].r_min * OpenMM::NmPerAngstrom;
-                    double r_max = bonds[i].r_max * OpenMM::NmPerAngstrom;
+                    double r0 =bonds[i].nominalLengthInNm;
+                    double F0=bonds[i].F0;
+                    double r_min = bonds[i].r_min;
+                    double r_max = bonds[i].r_max;
                     double b = bonds[i].hill_co;
                     vector<double> parameters;
                     parameters.resize(5);
@@ -237,6 +248,11 @@ void set_bonded_forces(Bonds*                                 bonds,
                     
                     time_dependant_data->hill_coefficient.push_back(b);
                     time_dependant_data->hill_const_force.push_back(F0);
+                    
+                    if(GenConst::Periodic_box)
+                              {
+                                  HillBonds[Hill_index]->setUsesPeriodicBoundaryConditions(true);
+                              }
                 }
                     
                     
@@ -263,12 +279,12 @@ void set_bonded_forces(Bonds*                                 bonds,
                         KFs[KF_index]->addPerBondParameter("Fc");
                         system.addForce(KFs[KF_index]);
                     }
-                    double r0 =bonds[i].nominalLengthInAngstroms * OpenMM::NmPerAngstrom;
-                    double F0=bonds[i].F0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm;
-                    double r_min = bonds[i].r_min * OpenMM::NmPerAngstrom;
-                    double r_max = bonds[i].r_max * OpenMM::NmPerAngstrom;
+                    double r0 =bonds[i].nominalLengthInNm;
+                    double F0=bonds[i].F0;
+                    double r_min = bonds[i].r_min;
+                    double r_max = bonds[i].r_max;
                     double n = bonds[i].k_F0;
-                    double Fc=bonds[i].F0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm;
+                    double Fc=bonds[i].F0;
                     vector<double> parameters;
                     parameters.resize(6);
                     parameters[0]=r0;

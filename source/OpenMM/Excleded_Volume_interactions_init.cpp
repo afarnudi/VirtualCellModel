@@ -30,33 +30,84 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     if(atoms[*it_1].radius >= atoms[*it_2].radius )
     {
-        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_1].radius * OpenMM::NmPerAngstrom);
+        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_1].radius);
     }
     else
     {
-        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_2].radius * OpenMM::NmPerAngstrom);
+        ExcludedVolumes[index]->addGlobalParameter(sigma,    atoms[*it_2].radius);
+    }
+
+if (GenConst::Periodic_box) {
+    ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+} else {
+    ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+}
+
+    if(atoms[*it_1].radius >= atoms[*it_2].radius )
+    {
+        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_1].radius);
+    }
+    else
+    {
+        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_2].radius);
     }
     
+ 
+    
+    
 //    ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-//                                                             + atoms[*it_2].radius )
-//                                                            * OpenMM::NmPerAngstrom);
+//                                                             + atoms[*it_2].radius ) );
 //    ExcludedVolumes[index]->addPerParticleParameter("sigma");
 //    cout<<"sigma = 0.5*("<<atoms[*it_1].radius<<" + "<<atoms[*it_2].radius<<") = "<<0.5*( atoms[*it_1].radius
 //                                                                                       + atoms[*it_2].radius )<<endl;
-    ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
+//    if (GenConst::Periodic_box) {
+//        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+//    } else {
+//        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+//    }
+//
+//
 //    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-//                                                    + atoms[*it_2].radius )
-//                                                    * OpenMM::NmPerAngstrom);
+//                                                    + atoms[*it_2].radius ) );
     
-    if(atoms[*it_1].radius >= atoms[*it_2].radius )
-    {
-        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_1].radius * OpenMM::NmPerAngstrom);
-    }
-    else
-    {
-        ExcludedVolumes[index]-> setCutoffDistance( 1.1224 * atoms[*it_2].radius * OpenMM::NmPerAngstrom);
+    ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
+}
+
+
+
+void init_Modified_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                      atoms[],
+                                      vector<set<int> >                     set_1,
+                                      vector<set<int> >                     set_2,
+                                      int                                   set_1_index,
+                                      int                                   set_2_index,
+                                      string                                set_1_name,
+                                      string                                set_2_name){
+    
+    set<int> :: iterator it_1 = set_1[set_1_index].begin();
+    set<int> :: iterator it_2 = set_2[set_2_index].begin();
+    
+    
+    
+    string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    string potential = "10*(" + sigma + "/r)^12";
+    
+    ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
+    int index = ExcludedVolumes.size()-1;
+    ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
+                                                        + atoms[*it_2].radius ) );
+//    ExcludedVolumes[index]->addPerParticleParameter("sigma");
+//    cout<<"sigma = 0.5*("<<atoms[*it_1].radius<<" + "<<atoms[*it_2].radius<<") = "<<0.5*( atoms[*it_1].radius
+//                                                                                       + atoms[*it_2].radius )<<endl;
+    if (GenConst::Periodic_box) {
+        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+    } else {
+        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     }
     
+    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
+                                                        + atoms[*it_2].radius ) );
+
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
 }
 
@@ -77,20 +128,25 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     set<int> :: iterator it_1 = compined_set.begin();
     set<int> :: iterator it_2 = set_2[set_2_index].begin();
     
+    string epsilon = "epsilon" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
     string sigma = "sigma" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
-    string potential = "(" + sigma + "/(r-" + sigma + "))^12";
+    string potential = epsilon + "*(" + sigma + "/(r-" + sigma + "))^12";
     
     ExcludedVolumes.push_back(new OpenMM::CustomNonbondedForce(potential));
     
     
     int index = ExcludedVolumes.size()-1;
         ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-                                                                 + atoms[*it_2].radius )
-                                                                * OpenMM::NmPerAngstrom);
-        ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
+                                                                 + atoms[*it_2].radius ) );
+    ExcludedVolumes[index]->addGlobalParameter(epsilon,   1);
+    
+    if (GenConst::Periodic_box) {
+        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+    } else {
+        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    }
         ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-                                                         + atoms[*it_2].radius )
-                                                        * OpenMM::NmPerAngstrom);
+                                                         + atoms[*it_2].radius ) );
     
     ExcludedVolumes[index]-> addInteractionGroup(compined_set, set_2[set_2_index]);
 }
@@ -127,12 +183,15 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     int index = ExcludedVolumes.size()-1;
     ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-                                                                 + atoms[*it_2].radius )
-                                                                * OpenMM::NmPerAngstrom);
-    ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
+                                                                 + atoms[*it_2].radius ));
+    
+    if (GenConst::Periodic_box) {
+        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+    } else {
+        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    }
     ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-                                                         + atoms[*it_2].radius )
-                                                        * OpenMM::NmPerAngstrom);
+                                                         + atoms[*it_2].radius ) );
     
     ExcludedVolumes[index]-> addInteractionGroup(compined_set_1, compined_set_2);
 }
@@ -162,12 +221,14 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     int index = ExcludedVolumes.size()-1;
     ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-                                                                 + atoms[*it_2].radius )
-                                                                * OpenMM::NmPerAngstrom);
-    ExcludedVolumes[index]-> setNonbondedMethod(    OpenMM::CustomNonbondedForce::CutoffNonPeriodic );
+                                                                 + atoms[*it_2].radius ) );
+    if (GenConst::Periodic_box) {
+        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+    } else {
+        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+    }
     ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-                                                         + atoms[*it_2].radius )
-                                                        * OpenMM::NmPerAngstrom);
+                                                         + atoms[*it_2].radius ) );
     
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index][sub_set_1], set_2[set_2_index][sub_set_2]);
 }

@@ -1,0 +1,24 @@
+Resume	0	Results/Resumes/Resume_Chromatin_0_2019_08_11_time_13_04.txt
+Import_coordinates	1	configs/droso/dealgas_test.txt
+Num_of_Nodes	2
+rescale_factor	1
+Node_Mass	1
+Node_radius	4
+bond_radius	3
+optimise_bond_radius	0
+spring_model	2
+Spring_coefficient	0 //2000
+Damping_coefficient	0
+//Shift_in_X_direction	60
+//Shift_in_Y_direction	0
+//Shift_in_Z_direction	-20
+
+//x_speed	20
+
+//Shift_in_X_direction	0
+//Shift_in_Y_direction	-13
+//Shift_in_Z_direction	0
+
+num_of_node_types	1
+epsilon	0.7	0.14	0
+

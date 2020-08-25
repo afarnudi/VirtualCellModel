@@ -16,6 +16,10 @@ using std::endl;
 
 void Chromatin::build_random_chain(void){
     
+    if (bond_length == 0) {
+        bond_length = Node_radius*2.1;
+    }
+    
     Node_Position.resize(Num_of_Nodes);
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
@@ -69,6 +73,9 @@ void Chromatin::build_random_chain(void){
             velocity_COM[2] += Node_Velocity[i][2];
         }
     } // for (int i=1; i<Num_of_Nodes; i++)
+    
+    
+    
     
     velocity_COM[0]/=Num_of_Nodes;
     velocity_COM[1]/=Num_of_Nodes;

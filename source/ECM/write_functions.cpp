@@ -54,13 +54,13 @@ void ECM::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count){
     write_resume_file<<Num_of_Nodes<<endl;
     
     for (int i=atom_count; i<atom_count+Num_of_Nodes; i++) {
-        Node_Position[i-atom_count][0] = atoms[i].posInAng[0];
-        Node_Position[i-atom_count][1] = atoms[i].posInAng[1];
-        Node_Position[i-atom_count][2] = atoms[i].posInAng[2];
+        Node_Position[i-atom_count][0] = atoms[i].posInNm[0];
+        Node_Position[i-atom_count][1] = atoms[i].posInNm[1];
+        Node_Position[i-atom_count][2] = atoms[i].posInNm[2];
         
-        Node_Velocity[i-atom_count][0] = atoms[i].velocityInAngperPs[0];
-        Node_Velocity[i-atom_count][1] = atoms[i].velocityInAngperPs[1];
-        Node_Velocity[i-atom_count][2] = atoms[i].velocityInAngperPs[2];
+        Node_Velocity[i-atom_count][0] = atoms[i].velocityInNmperPs[0];
+        Node_Velocity[i-atom_count][1] = atoms[i].velocityInNmperPs[1];
+        Node_Velocity[i-atom_count][2] = atoms[i].velocityInNmperPs[2];
     }
     
     for (int i=0; i<Num_of_Nodes; i++) {
@@ -112,7 +112,7 @@ void ECM::generate_report()
     Report<<"MC_step\t"<<GenConst::MC_step<<endl;
     Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
     Report<<"Lbox\t"<<GenConst::Lbox<<endl;
-    Report<<"Periodic_condtion_status\t"<<GenConst::Periodic_condtion_status<<endl;
+    Report<<"Periodic_box\t"<<GenConst::Periodic_box<<endl;
     Report<<"trajectory_file_name\t"<<GenConst::trajectory_file_name<<endl;
     
     

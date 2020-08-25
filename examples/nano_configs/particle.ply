@@ -1,7 +1,7 @@
 ply
 format ascii 1.0
 comment Created by Blender 2.76 (sub 0) - www.blender.org, source file: ''
-element vertex 12
+element vertex 13
 property float x
 property float y
 property float z
@@ -20,6 +20,7 @@ end_header
 -0.723607 0.525725 0.447220
 0.276388 0.850649 0.447220
 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000
 3 0 1 2
 3 1 0 3
 3 0 2 4
@@ -40,3 +41,8 @@ end_header
 3 9 8 11
 3 10 9 11
 3 6 10 11
+extra_bonds 4
+12 1
+12 9
+12 2
+12 10

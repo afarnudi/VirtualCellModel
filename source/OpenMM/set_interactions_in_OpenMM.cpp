@@ -35,38 +35,38 @@ void set_interactions(const MyAtomInfo                       atoms[],
     ad_sites.resize(1);
     na_sites.resize(1);
     
-    srand(time(NULL));
-    
-    for(set<int>::iterator it=membrane_set[0].begin(); it != membrane_set[0].end(); ++it)
-    {
-        int r = rand() % 100 + 1;
-        
-        if(atoms[*it].initPosInAng[0]>0)
-        {
-            if (r<75)
-            {
-                sp_nodes[0].insert(*it);
-            }
-            else
-            {
-                ns_nodes[0].insert(*it);
-            }
-        }
-        else
-        {
-            if (r<36)
-            {
-                sp_nodes[0].insert(*it);
-            }
-            else
-            {
-                ns_nodes[0].insert(*it);
-            }
-        }
-    }
-    
-    cout<<"sp nodes"<<sp_nodes[0].size()<< '\n';
-    cout<<"ns nodes"<<ns_nodes[0].size()<< '\n';
+//    srand(time(NULL));
+//
+//    for(set<int>::iterator it=membrane_set[0].begin(); it != membrane_set[0].end(); ++it)
+//    {
+//        int r = rand() % 100 + 1;
+//
+//        if(atoms[*it].initPosInNm[0]>0)
+//        {
+//            if (r<75)
+//            {
+//                sp_nodes[0].insert(*it);
+//            }
+//            else
+//            {
+//                ns_nodes[0].insert(*it);
+//            }
+//        }
+//        else
+//        {
+//            if (r<36)
+//            {
+//                sp_nodes[0].insert(*it);
+//            }
+//            else
+//            {
+//                ns_nodes[0].insert(*it);
+//            }
+//        }
+//    }
+//
+//    cout<<"sp nodes"<<sp_nodes[0].size()<< '\n';
+//    cout<<"ns nodes"<<ns_nodes[0].size()<< '\n';
     
     
     //srand(time(NULL));
@@ -124,6 +124,13 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     
                     break;
                 case 2:
+                    if(GenConst::MC_step!=0 and i==0 and j==0){
+                        init_Modified_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
+                        index = int(ExcludedVolumes.size()-1);
+                        system.addForce(ExcludedVolumes[index]);
+                        cout<<"modified ev "<<endl;
+                    }
+                    else{
                     init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
                     
                     index = int(ExcludedVolumes.size()-1);
@@ -132,6 +139,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     add_exclusion(ExcludedVolumes[index], exclude_bonds);
                     
                     system.addForce(ExcludedVolumes[index]);
+                    
+                    }
                     
                     break;
                     
@@ -417,13 +426,15 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             switch (interaction_map[i + class_count_i][j]) {
                 case 1:
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, membrane_set, i, j , GenConst::Chromatin_label , GenConst::Membrane_label);
-                    index = int(LJ_12_6_interactions.size()-1);
-                    
-                    // Add the list of atom pairs that are excluded from the excluded volume force.
-                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                    
-                    system.addForce(LJ_12_6_interactions[index]);
+                    for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, GenConst::Chromatin_label, GenConst::Membrane_label);
+                        index = int(LJ_12_6_interactions.size()-1);
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                    }
                     
                     break;
                 case 2:
@@ -529,7 +540,6 @@ void set_interactions(const MyAtomInfo                       atoms[],
             //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
             
             int index;
-            int num_forces=0;
             
             switch (interaction_map[i + class_count_i][j]) {
                     

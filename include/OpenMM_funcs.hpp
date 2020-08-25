@@ -97,7 +97,7 @@ std::vector<double> Nominal_length_calc(TimeDependantData*,
  *                   Monte_Carlo
  * -----------------------------------------------------------------------------
  */
-void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[]);
+void          Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, Membrane &mem, MyAtomInfo atoms[],int &MC_total_tries,int &Accepted_Try_Counter, double &MC_Acceptance_Rate);
 
                                
 /** -----------------------------------------------------------------------------
@@ -120,6 +120,14 @@ void myWritePDBFrame(int                frameNum,
                      const Bonds        bonds[],
                      std::string        traj_name,
                      std::string        force_name);
+
+/**                               PDB FILE WRITER
+ * Given state data, output a single frame (pdb "model") of the trajectory.
+ */
+void writeXYZFrame  (int                atom_count,
+                     const MyAtomInfo   atoms[],
+                     std::string        traj_name);
+
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
@@ -217,6 +225,16 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                               int                                   set_2_index,
                               string                                set_1_name,
                               string                                set_2_name);
+//overload for chromatin class interactions contatining different node types with other classes.
+void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              std::set<int>                         set_1,
+                              vector<std::set<int> >                set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              int                                   chromo_ind,
+                              string                                set_1_name,
+                              string                                set_2_name);
 //overload for inter chromatin class interactions contatining different node types.
 void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                               const MyAtomInfo                      atoms[],
@@ -269,6 +287,15 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       string                                set_1_name,
                                       string                                set_2_name);
 
+void init_Modified_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                      const MyAtomInfo                      atoms[],
+                                      vector<std::set<int> >                     set_1,
+                                      vector<std::set<int> >                     set_2,
+                                      int                                   set_1_index,
+                                      int                                   set_2_index,
+                                      string                                set_1_name,
+                                      string                                set_2_name);
+                                      
 //overload for chromatin class interactions contatining different node types with other classes.
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                      atoms[],

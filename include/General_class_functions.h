@@ -28,6 +28,10 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                         double                           time,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
-                        vector<set<int> >               &membrane_set);
+                        vector<set<int> >               &membrane_set,
+                        vector<vector<int> >             interaction_map);
+
+void expand(vector<Chromatin>                chromos,
+            MyOpenMMData*                    omm);
 
 #endif // GENERAL_CLASS_FUNCTIONS_H

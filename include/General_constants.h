@@ -30,9 +30,12 @@ namespace GenConst {
     extern int MD_thrmo_step;
     /**During every 'MC_step' the MC step will be applied to the membrane mesh. Default 100*/
     extern int MC_step;
-    extern double Mem_fluidity;
+    extern int Mem_fluidity;
+    /**The simulation uses periodic boundary condition. Default False*/
+    extern bool Periodic_box;
+    /**The size of the simulation box (cube). If Periodic_box  == False the default value is 0*/
     extern double Lbox;
-    extern bool Periodic_condtion_status;
+    
     /**Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0.*/
     extern int Num_of_Membranes;
     /**Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0.*/
@@ -84,10 +87,14 @@ namespace GenConst {
     extern std::string Chromatin_label;
     /**Set ECM class label. An index will be assigned during runtime. Default ecm*/
     extern std::string ECM_label;
+    /**Create  a checkpoint during each saving step. default true*/
+    extern bool CreateCheckpoint;
     /**Load the context from OpenMM checkpoint (binary file). Default flase*/
     extern bool Load_from_checkpoint;
     /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
     extern std::string Checkpoint_path;
+    /**name of the OpenMM checkpoint file (binary file)*/
+    extern std::string Checkpoint_file_name;
     
     extern bool write_bonds_to_PDB;
     /**Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true*/
@@ -96,11 +103,23 @@ namespace GenConst {
     extern bool   WantForce;
     /**Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
     extern bool   WriteVelocitiesandForces;
+    /**Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false*/
+    extern bool CMMotionRemover;
 
-
+    /**Specify if Virtual Sites are used  in the chromatin. Default false*/
+    extern bool ChromatinVirtualSites;
+    /**The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10*/
+    extern int CMMotionRemoverStep;
+    
     //non config file parameters
 //    extern std::vector<std::vector<std::vector<double> > > data;
     extern std::vector<double> data_colection_times;
+    
+    //1/0 true/false if you want/don't want to calculate and write the voronoi area associated with Membrane nodes in the properties output file. Default 0
+    extern bool Wantvoronoi;
+
+    //When in test mode, most of the console prints (std::cout) of the programme will be turned off for a better viewing of the test report. Deafault 0 (off)
+    extern bool Testmode;
     
 }
 

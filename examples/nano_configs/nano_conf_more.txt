@@ -1,0 +1,25 @@
+
+Simulation_Time_In_Ps	500
+
+Report_Interval_In_Fs	100
+
+Step_Size_In_Fs	0.1
+Integrator_type	2
+temperature	300
+frictionInPs	1
+K	1
+MD_T	1
+Num_of_Membranes	68	nano_c/more/nano_mem_more.txt nano_c/more/rescale1/nano_particle_1 nano_c/more/rescale1/nano_particle_2 nano_c/more/rescale1/nano_particle_3 nano_c/more/rescale1/nano_particle_4 nano_c/more/rescale1/nano_particle_5 nano_c/more/rescale1/nano_particle_6 nano_c/more/rescale1/nano_particle_7 nano_c/more/rescale1/nano_particle_8 nano_c/more/rescale1/nano_particle_9 nano_c/more/rescale1/nano_particle_10 nano_c/more/rescale1/nano_particle_11 nano_c/more/rescale1/nano_particle_12 nano_c/more/rescale1/nano_particle_13 nano_c/more/rescale1/nano_particle_14 nano_c/more/rescale1/nano_particle_15 nano_c/more/rescale1/nano_particle_16 nano_c/more/rescale1/nano_particle_17 nano_c/more/rescale1/nano_particle_18 nano_c/more/rescale1/nano_particle_19 nano_c/more/rescale1/nano_particle_20 nano_c/more/rescale1/nano_particle_21 nano_c/more/rescale1/nano_particle_22 nano_c/more/rescale1/nano_particle_25 nano_c/more/rescale1/nano_particle_26 nano_c/more/rescale1/nano_particle_27 nano_c/more/rescale1/nano_particle_28 nano_c/more/rescale1/nano_particle_29 nano_c/more/rescale1/nano_particle_30 nano_c/more/rescale1/nano_particle_31 nano_c/more/rescale1/nano_particle_32 nano_c/more/rescale1/nano_particle_33 nano_c/more/rescale1/nano_particle_34 nano_c/more/rescale1/nano_particle_35 nano_c/more/rescale1/nano_particle_36 nano_c/more/rescale1/nano_particle_37 nano_c/more/rescale1/nano_particle_38 nano_c/more/rescale1/nano_particle_39 nano_c/more/rescale1/nano_particle_40 nano_c/more/rescale1/nano_particle_41 nano_c/more/rescale1/nano_particle_42 nano_c/more/rescale1/nano_particle_43 nano_c/more/rescale1/nano_particle_44 nano_c/more/rescale1/nano_particle_45 nano_c/more/rescale1/nano_particle_46 nano_c/more/rescale1/nano_particle_47 nano_c/more/rescale1/nano_particle_48 nano_c/more/rescale1/nano_particle_49 nano_c/more/rescale1/nano_particle_50 nano_c/more/rescale1/nano_particle_51 nano_c/more/rescale1/nano_particle_52 nano_c/more/rescale1/nano_particle_53 nano_c/more/rescale1/nano_particle_54 nano_c/more/rescale1/nano_particle_55 nano_c/more/rescale1/nano_particle_56 nano_c/more/rescale1/nano_particle_57 nano_c/more/rescale1/nano_particle_58 nano_c/more/rescale1/nano_particle_59 nano_c/more/rescale1/nano_particle_60 nano_c/more/rescale1/nano_particle_61 nano_c/more/rescale1/nano_particle_62 nano_c/more/rescale1/nano_particle_63 nano_c/more/rescale1/nano_particle_64 nano_c/more/rescale1/nano_particle_65 nano_c/more/rescale1/nano_particle_67 nano_c/more/rescale1/nano_particle_68 nano_c/more/rescale1/nano_particle_69 nano_c/more/rescale1/nano_particle_70 
+Num_of_Actins		0	actin_config.txt
+Num_of_ECMs		0	configs/bacteria/bacteria_ecm_config.txt
+Num_of_Chromatins	0	configs/chromo/chromo_0.txt configs/chromo/chromo_1.txt	configs/chromo/chromo_2.txt configs/chromo/chromo_3.txt 
+Actin_Membrane_Bond_Coefficient	400
+MD_thrmo_step	200
+Bussi_tau	30
+MC_step 2400
+trajectory_file_name	1	nano
+excluded_volume_interactio	0
+//WriteVelocitiesandForces	1
+Interaction_map	1	interaction_map.txt
+
+
