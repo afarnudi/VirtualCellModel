@@ -126,12 +126,8 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
     // Forces are also available (and cheap).
 
-    OpenMM::State state;
-    if (GenConst::Periodic_box) {
-        state = omm->context->getState(infoMask,true);
-    } else {
-        state = omm->context->getState(infoMask,false);
-    }
+    const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
+    
     
     timeInPs = state.getTime(); // OpenMM time is in ps already
     
