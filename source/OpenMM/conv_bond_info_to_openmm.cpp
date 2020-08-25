@@ -77,9 +77,11 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     return bonds;
 }
 
-Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
+Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     const int act_num_bonds = act.get_num_of_node_pairs();
-    Bonds* bonds = new Bonds[act_num_bonds];
+    const int act_abp_bonds = act.get_num_of_abp_pairs();
+    const int act_MT_bonds = act.get_num_of_MT_pairs();
+    Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
     //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
     //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
     for (int i=0; i<act_num_bonds; i++) {
@@ -95,15 +97,19 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+                // bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
                 bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
+
                 break;
                 
                 //Kelvin-Voigt
             case 4:
-                bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+                //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
                 bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
                 bonds[i].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+                
                 break;
                 
         }
@@ -111,14 +117,293 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act) {
         
     }
     
+    
+    
+    
+    //Contractile element parallel to bond spring
+    for (int i=act_num_bonds; i<(2*act_num_bonds); i++) {
+        int model = act.get_contractile_model();
+        switch (model) {
+            case 1:
+                bonds[i].type = 6;
+                break;
+            case 2:
+                bonds[i].type = 8;
+                break;
+            case 3:
+                bonds[i].type = 9;
+                break;
+        }
+        bonds[i].k_F0 = 4;
+        //bonds[i].type = 6;
+        bonds[i].atoms[0]=act.get_node_pair(i-act_num_bonds, 0);
+        bonds[i].atoms[1]=act.get_node_pair(i-act_num_bonds, 1);
+        bonds[i].class_label = act.get_label() + act.get_label();
+        
+        //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+        bonds[i].nominalLengthInNm=act.get_act_relaxlength(i-act_num_bonds) * act.get_act_r0factor();
+        bonds[i].F0 = act.get_contractile_force();
+        bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm ;
+        bonds[i].r_max = act.get_contractile_rmax() * bonds[i].nominalLengthInNm;
+        //bonds[i].hill_co = act.get_hill_co();
+        bonds[i].hill_co = act.get_contractile_hill_co();
+    }
+    
+    //Contractile spring
+    for (int i=2*act_num_bonds; i<(3*act_num_bonds); i++) {
+        bonds[i].type = 7;
+        bonds[i+act_num_bonds].type = 7;
+        bonds[i].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
+        bonds[i].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
+        bonds[i+act_num_bonds].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
+        bonds[i+act_num_bonds].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
+        bonds[i].class_label = act.get_label() + act.get_label();
+        bonds[i+act_num_bonds].class_label = act.get_label() + act.get_label();
+        
+        //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+        bonds[i].nominalLengthInNm=act.get_act_relaxlength(i-2*act_num_bonds) * act.get_act_r0factor();
+        bonds[i].stiffnessInKJPerNm2 = act.get_contractile_k1();
+        bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm;
+        bonds[i].r_max = bonds[i].nominalLengthInNm;
+        //bonds[i].r_max = act.get_avg_node_dist();
+        
+        bonds[i+act_num_bonds].nominalLengthInNm=act.get_act_relaxlength(i-2*act_num_bonds) * act.get_act_r0factor();
+        bonds[i+act_num_bonds].stiffnessInKJPerNm2 = act.get_contractile_k2();
+        bonds[i+act_num_bonds].r_min = bonds[i+act_num_bonds].nominalLengthInNm;
+        bonds[i+act_num_bonds].r_max = act.get_contractile_rmax() * bonds[i+act_num_bonds].nominalLengthInNm;
+    }
+    
+    
+    int n1=0;
+    int n2=0;
+    
+    for (int i=4*act_num_bonds; i<(4*act_num_bonds + act_abp_bonds); i++) {
+       
+        int model = act.get_abp_model();
+        switch (model) {
+            case 1:
+                bonds[i].type = 6;
+                break;
+            case 2:
+                bonds[i].type = 8;
+                break;
+            case 3:
+                bonds[i].type = 9;
+                break;
+        }
+        
+        bonds[i].k_F0 = 4;
+
+        
+        //bonds[i].type = 6;
+        bonds[i].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+        bonds[i].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+        bonds[i].class_label = act.get_label() + act.get_label();
+        
+        bonds[i].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+        
+        
+        
+        bonds[i].F0 = act.get_abp_force();
+        
+//        if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
+//        {
+//            bonds[i].F0 =  act.get_abp_force();
+//            n1++;
+//        }
+//        else
+//        {
+//            bonds[i].F0 = 10*act.get_abp_force();
+//            n2++;
+//        }
+        
+        
+        bonds[i].r_min = act.get_abp_rmin() * bonds[i].nominalLengthInNm;
+        bonds[i].r_max = act.get_abp_rmax() * bonds[i].nominalLengthInNm;
+        bonds[i].hill_co = act.get_abp_hill_co();
+        
+        
+        
+        bonds[i+act_abp_bonds].type = 7;
+        bonds[i+act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+        bonds[i+act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+        bonds[i+act_abp_bonds].class_label = act.get_label() + act.get_label();
+        
+        bonds[i+act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+        bonds[i+act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k1();
+        bonds[i+act_abp_bonds].r_min = act.get_abp_rmin() * bonds[i+act_abp_bonds].nominalLengthInNm;
+        bonds[i+act_abp_bonds].r_max = bonds[i+act_abp_bonds].nominalLengthInNm;
+        
+        
+        
+        bonds[i+2*act_abp_bonds].type = 7;
+        bonds[i+2*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+        bonds[i+2*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+        bonds[i+2*act_abp_bonds].class_label = act.get_label() + act.get_label();
+        
+        bonds[i+2*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+        bonds[i+2*act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k2();
+        bonds[i+2*act_abp_bonds].r_min = bonds[i+2*act_abp_bonds].nominalLengthInNm;
+        bonds[i+2*act_abp_bonds].r_max = act.get_abp_rmax() * bonds[i+2*act_abp_bonds].nominalLengthInNm;
+        
+        
+        
+        
+        
+        bonds[i+3*act_abp_bonds].type = act.get_abp_spring_model();
+        bonds[i+3*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+        bonds[i+3*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+        bonds[i+3*act_abp_bonds].class_label = act.get_label() + act.get_label();
+        switch (bonds[i+3*act_abp_bonds].type) {
+                //FENE
+            case 1:
+                //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
+                //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                break;
+                //Harmonic
+            case 2:
+                bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+                bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
+                break;
+                
+                //Kelvin-Voigt
+            case 4:
+                bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+                bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
+                bonds[i+3*act_abp_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+                break;
+                
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    for (int i=4*act_num_bonds+ 4*act_abp_bonds; i<(4*act_num_bonds + 4*act_abp_bonds + act_MT_bonds); i++) {
+           
+            int model = act.get_MT_model();
+            switch (model) {
+                case 1:
+                    bonds[i].type = 6;
+                    break;
+                case 2:
+                    bonds[i].type = 8;
+                    break;
+                case 3:
+                    bonds[i].type = 9;
+                    break;
+            }
+            
+            bonds[i].k_F0 = 4;
+
+            
+            //bonds[i].type = 6;
+            bonds[i].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i].class_label = act.get_label() + act.get_label();
+            
+            bonds[i].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            
+            
+            
+            bonds[i].F0 = act.get_MT_force();
+            
+//            if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
+//            {
+//                bonds[i].F0 =  act.get_MT_force();
+//                n1++;
+//            }
+//            else
+//            {
+//                bonds[i].F0 = 5*act.get_MT_force();
+//                n2++;
+//            }
+            
+            
+            bonds[i].r_min = act.get_MT_rmin() * bonds[i].nominalLengthInNm;
+            bonds[i].r_max = act.get_MT_rmax() * bonds[i].nominalLengthInNm;
+            bonds[i].hill_co = act.get_MT_hill_co();
+            
+            
+            
+            bonds[i+act_MT_bonds].type = 7;
+            bonds[i+act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+act_MT_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            bonds[i+act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k1();
+            bonds[i+act_MT_bonds].r_min = act.get_MT_rmin() * bonds[i+act_MT_bonds].nominalLengthInNm;
+            bonds[i+act_MT_bonds].r_max = bonds[i+act_MT_bonds].nominalLengthInNm;
+            
+            
+            
+            bonds[i+2*act_MT_bonds].type = 7;
+            bonds[i+2*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+2*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+2*act_MT_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+2*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            bonds[i+2*act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k2();
+            bonds[i+2*act_MT_bonds].r_min = bonds[i+2*act_MT_bonds].nominalLengthInNm;
+            bonds[i+2*act_MT_bonds].r_max = act.get_MT_rmax() * bonds[i+2*act_MT_bonds].nominalLengthInNm;
+            
+            
+            
+            
+            
+            bonds[i+3*act_MT_bonds].type = act.get_MT_spring_model();
+            bonds[i+3*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+3*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+3*act_MT_bonds].class_label = act.get_label() + act.get_label();
+            switch (bonds[i+3*act_MT_bonds].type) {
+                    //FENE
+                case 1:
+                    //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
+                    //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                    break;
+                    //Harmonic
+                case 2:
+                    bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+                    bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
+                    break;
+                    
+                    //Kelvin-Voigt
+                case 4:
+                    bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+                    bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
+                    bonds[i+3*act_MT_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+                    break;
+                    
+            }
+            
+            
+        }
+    
+    
+    
     if(bonds[0].type==2){
-        cout<<"bond potential: Harmonic "<<endl;
+        cout<<"Actin bond potential: Harmonic "<<endl;
     }
     
     if(bonds[0].type == 4){
         cout<<"Actin bond potential: Kelvin-Voigt "<<endl;
         //cout<<"spring coeficient (KJ per Nanometer4) ="<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
         //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+    }
+    
+    if(bonds[act_num_bonds].type == 6){
+        cout<<"Actin Contractile element with constant force "<< act.get_contractile_force()<< endl;
+    }
+    
+    if(bonds[2*act_num_bonds].type == 7){
+        cout<<"Actin Contractile element with k1 and k2 "<< act.get_contractile_k1()<< " and " << act.get_contractile_k2()<< endl;
+        cout<<"Actin Contractile element with rmin and rmax "<< act.get_contractile_rmin() * act.get_avg_node_dist()<< " and " << act.get_contractile_rmax() * act.get_avg_node_dist()<< endl;
     }
     
     cout<<endl;
@@ -149,7 +434,7 @@ Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
 }
 
 
-Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
+Bonds* convert_ECM_bond_info_to_openmm(ECM ecm , MyAtomInfo* atoms) {
     const int ecm_num_bonds = ecm.get_num_of_node_pairs();
     Bonds* bonds = new Bonds[ecm_num_bonds];
 //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
@@ -159,6 +444,12 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
         bonds[i].atoms[0]=ecm.get_node_pair(i, 0);
         bonds[i].atoms[1]=ecm.get_node_pair(i, 1);
         bonds[i].class_label = ecm.get_label() + ecm.get_label();
+        
+        
+        double dist;
+        dist = sqrt((atoms[ bonds[i].atoms[0] ].initPosInNm[0] - atoms[ bonds[i].atoms[1] ].initPosInNm[0]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[0] - atoms[ bonds[i].atoms[1] ].initPosInNm[0]) + (atoms[ bonds[i].atoms[0] ].initPosInNm[1] - atoms[ bonds[i].atoms[1] ].initPosInNm[1]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[1] - atoms[ bonds[i].atoms[1] ].initPosInNm[1]) + (atoms[ bonds[i].atoms[0] ].initPosInNm[2] - atoms[ bonds[i].atoms[1] ].initPosInNm[2]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[2] - atoms[ bonds[i].atoms[1] ].initPosInNm[2])) ;
+        
+        
         switch (bonds[i].type) {
                 //FENE
             case 1:
@@ -167,8 +458,14 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm) {
                 break;
                 //Harmonic
             case 2:
-                bonds[i].nominalLengthInNm=ecm.get_avg_node_dist();
-                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient();
+                //bonds[i].nominalLengthInNm=ecm.get_avg_node_dist();
+                bonds[i].nominalLengthInNm=dist;
+                
+                
+                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient() +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) * ecm.get_stiffness_gradient_x()
+                +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[1] + atoms[bonds[i].atoms[1]].initPosInNm[1]) * ecm.get_stiffness_gradient_y()
+                +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[2] + atoms[bonds[i].atoms[1]].initPosInNm[2]) * ecm.get_stiffness_gradient_z();
+               
                 break;
                 
                 

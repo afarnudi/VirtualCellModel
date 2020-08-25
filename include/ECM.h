@@ -40,6 +40,18 @@ private:
     double Node_radius=1;
     int spring_model=1;
     double Spring_coefficient=10;
+    double stiffness_gradient_x=0;
+    double stiffness_gradient_y=0;
+    double stiffness_gradient_z=0;
+    
+    int receptor_type = 1;
+    double receptor_density = 0.5;
+    double receptor_center_x = 0;
+    double receptor_center_y = 0;
+    double receptor_center_z = 0;
+    double receptor_gradient_x = 0;
+    double receptor_gradient_y = 0;
+    double receptor_gradient_z = 0;
     
     
     double Shift_in_X_direction=0;
@@ -66,6 +78,8 @@ private:
     vector<vector<double> > Node_Force;
     vector<vector<double> > Node_Position;
     vector<vector<int> > Triangle_List;
+    vector<vector<int> > Pyramid_Nodes;
+    vector<vector<int> > square_Nodes;
     
     double interaction_range=1.0;
     double epsilon=0.6;
@@ -82,7 +96,9 @@ private:
     vector<vector<double> > Node_Velocity;
     vector<vector<int> > Node_Bond_list;
     vector<vector<int> > Node_neighbour_list;
-    void Node_Bond_identifier(void);
+    void Node_Bond_identifier_2D(void);
+    void Node_Bond_identifier_3D(void);
+    void Node_Bond_identifier_3D_square(void);
     
     void initialise(int dimension);
     void set_map_parameter(std::string param_name, double param_value);
@@ -91,6 +107,7 @@ private:
 //    void read_input(string input_file);
     void read_gmesh_file_2D (std::string gmesh_file);
     void read_gmesh_file_3D (std::string gmesh_file);
+    void read_gmesh_file_3D_square (std::string gmesh_file);
     void normal_direction_Identifier (double x, double y, double z);
     void normal_direction_Identifier (void);
     void check(void);
@@ -130,6 +147,63 @@ public:
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    
+    /**Return spring stiffness gradient_x */
+    double get_stiffness_gradient_x(void){
+        return stiffness_gradient_x;
+    }
+    
+    /**Return spring stiffness gradient_y */
+    double get_stiffness_gradient_y(void){
+        return stiffness_gradient_y;
+    }
+    
+    /**Return spring stiffness gradient_z */
+    double get_stiffness_gradient_z(void){
+        return stiffness_gradient_z;
+    }
+    
+    /**Return receptor type. */
+    int get_receptor_type(void){
+        return receptor_type;
+    }
+    
+    /**Return receptor density. */
+    double get_receptor_density(void){
+        return receptor_density;
+    }
+    
+    /**Return receptor center_x. */
+    double get_receptor_center_x(void){
+        return receptor_center_x;
+    }
+    
+    /**Return receptor center_y. */
+    double get_receptor_center_y(void){
+        return receptor_center_y;
+    }
+    
+    /**Return receptor center_z. */
+    double get_receptor_center_z(void){
+        return receptor_center_z;
+    }
+    
+    /**Return receptor density gradient_x */
+    double get_receptor_gradient_x(void){
+        return receptor_gradient_x;
+    }
+    
+    /**Return receptor density gradient_y */
+    double get_receptor_gradient_y(void){
+        return receptor_gradient_y;
+    }
+    
+    /**Return receptor density gradient_z */
+    double get_receptor_gradient_z(void){
+        return receptor_gradient_z;
+    }
+    
+    
     /** \brief public access to total number of ECM nodes.
      * \return integer number of nodes in the ECM.
      */

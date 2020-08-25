@@ -38,7 +38,7 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
 //    vector<vector<double> >  dist_list;
 //    vector<vector<int> >  inde_list;
 //
-    vector<vector<pair<double, int> > > neighbour_pairs;
+    vector<vector<std::pair<double, int> > > neighbour_pairs;
 //    dist_list.resize(mem_nodes);
 //    inde_list.resize(mem_nodes);
     
@@ -59,7 +59,7 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
 //            cout<<cut_off<<endl;
             if (distance < cut_off) {
 //                cout<<distance<<endl;
-                neighbour_pairs[i].push_back(make_pair(distance, j));
+                neighbour_pairs[i].push_back(std::make_pair(distance, j));
 //                cout<<"i="<<i<<" : "<<distance<<"\t-> "<<j<<endl;
 //                dist[distance] = j;
             }
@@ -82,7 +82,7 @@ void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem){
     
 }
 
-void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pairs){
+void prune_list(int mem_nodes, vector<vector<std::pair<double, int> > > neighbour_pairs){
     
     for (int i=0; i<mem_nodes-1; i++) {
         for (int j=0; j<neighbour_pairs[i].size(); j++) {
@@ -110,7 +110,7 @@ void prune_list(int mem_nodes, vector<vector<pair<double, int> > > neighbour_pai
 
 }
 
-void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<pair<double, int> > > neighbour_pairs){
+void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<std::pair<double, int> > > neighbour_pairs){
     
     int mem_nodes=mem.get_num_of_nodes();
 //    double force=0, temp_potential_energy=0;
@@ -234,7 +234,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
 //    vector<vector<double> >  dist_list;
 //    vector<vector<int> >  inde_list;
 //
-    vector<vector<pair<double, int> > > neighbour_pairs;
+    vector<vector<std::pair<double, int> > > neighbour_pairs;
 //    dist_list.resize(mem_nodes);
 //    inde_list.resize(mem_nodes);
     
@@ -255,7 +255,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
 //            cout<<cut_off<<endl;
             if (distance < cut_off) {
 //                cout<<distance<<endl;
-                neighbour_pairs[i].push_back(make_pair(distance, j));
+                neighbour_pairs[i].push_back(std::make_pair(distance, j));
 //                cout<<"i="<<i<<" : "<<distance<<"\t-> "<<j<<endl;
 //                dist[distance] = j;
             }
@@ -280,7 +280,7 @@ void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &v
 }
 
 
-void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<pair<double, int> > > neighbour_pairs){
+void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<std::pair<double, int> > > neighbour_pairs){
     
     int particle_nodes=particle.get_num_of_nodes();
 //    double force=0, temp_potential_energy=0;

@@ -135,12 +135,27 @@ void Actin::Node_Bond_identifier(void){
 }
 
 // for test
-//void Actin::Node_Bond_identifier(void){
-//    for(int i=0; i<filaments.size(); i++)
-//    {
-//        Node_Bond_list.push_back(filaments[i]);
-//        //std::cout<<filaments[i][0]<<"and"<<filaments[i][1]<<'\n';
-//    }
-//    Num_of_Node_Pairs=int(Node_Bond_list.size());
-//}
+void Actin::Node_Bond_identifier_2(void){
+    for(int i=0; i<filaments.size(); i++)
+    {
+        Node_Bond_list.push_back(filaments[i]);
+        //std::cout<<filaments[i][0]<<"and"<<filaments[i][1]<<'\n';
+    }
+    Num_of_Node_Pairs=int(Node_Bond_list.size());
+    
+    for(int i=0; i<abps.size(); i++)
+    {
+        abp_Bond_list.push_back(abps[i]);
+        //std::cout<<filaments[i][0]<<"and"<<filaments[i][1]<<'\n';
+    }
+    Num_of_abp_Pairs=int(abp_Bond_list.size());
+    
+    
+    for(int i=0; i<MTs.size(); i++)
+    {
+        MT_Bond_list.push_back(MTs[i]);
+        //std::cout<<filaments[i][0]<<"and"<<filaments[i][1]<<'\n';
+    }
+    Num_of_MT_Pairs=int(MT_Bond_list.size());
+}
 

@@ -3,6 +3,8 @@
 #include "OpenMM_funcs.hpp"
 #include "OpenMM_structs.h"
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     const int mem_num_atom = mem.get_num_of_nodes();
@@ -94,13 +96,25 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
     //used in openmm to specify different types of atoms. I don't know what the application is at the moment.
     int C=0;
     
+    double min_x,min_y,min_z,max_x,max_z,max_y;
+    min_x = 1000000;
+    min_y = 1000000;
+    min_z = 1000000;
+    max_x = -1000000;
+    max_z = -1000000;
+    max_y = -1000000;
+    
+    srand(time(NULL));
+    
     for (int i=0; i<ecm_num_atom; i++) {
         myatominfo[i].type=C;
         myatominfo[i].class_label="ECM";
         std::string str = ecm.get_label();
+        //std::string str ("ec0a");
+        std::string str2 ("ecm9");
         myatominfo[i].pdb = new char[str.length() + 1];
-        strcpy(myatominfo[i].pdb, str.c_str());
-        myatominfo[i].symbol = 'E';
+        //strcpy(myatominfo[i].pdb, str.c_str());
+        //myatominfo[i].symbol = 'E';
         myatominfo[i].energyInKJ = 0;
         myatominfo[i].initPosInNm[0]=ecm.get_node_position(i, 0);
         myatominfo[i].initPosInNm[1]=ecm.get_node_position(i, 1);
@@ -120,7 +134,105 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].ext_force_constants[1]=ecm.get_ky();
         myatominfo[i].ext_force_constants[2]=ecm.get_kz();
         
+        int type = ecm.get_receptor_type();
+        double center_x = ecm.get_receptor_center_x();
+        double center_y = ecm.get_receptor_center_y();
+        double center_z = ecm.get_receptor_center_z();
+        
+        int r = rand() % 100 ;
+        int density = int(100*(ecm.get_receptor_density() + (myatominfo[i].initPosInNm[0]-center_x) * ecm.get_receptor_gradient_x() + (myatominfo[i].initPosInNm[1]-center_y) * ecm.get_receptor_gradient_y()  + (myatominfo[i].initPosInNm[2]-center_z) * ecm.get_receptor_gradient_z() )) ;
+        if(type==1)
+        {
+        if(r< density)
+        {
+            myatominfo[i].symbol = 'E';
+            strcpy(myatominfo[i].pdb, str.c_str());
+            
+        }
+        else{
+            myatominfo[i].symbol = 'e';
+            strcpy(myatominfo[i].pdb, str2.c_str());
+        }
+        }
+        else if (type==2)
+        {
+            if( ((myatominfo[i].initPosInNm[0]-center_x) > 25) || ((myatominfo[i].initPosInNm[0]-center_x) < -25) )
+            {
+                myatominfo[i].symbol = 'E';
+                strcpy(myatominfo[i].pdb, str.c_str());
+            }
+            else
+            {
+                myatominfo[i].symbol = 'e';
+                strcpy(myatominfo[i].pdb, str2.c_str());
+            }
+        }
+        
+        
+        if (myatominfo[i].initPosInNm[0]<min_x) {
+            min_x = myatominfo[i].initPosInNm[0];
+        }
+        
+        if (myatominfo[i].initPosInNm[1]<min_y) {
+            min_y = myatominfo[i].initPosInNm[1];
+        }
+        
+        if (myatominfo[i].initPosInNm[2]<min_z) {
+            min_z = myatominfo[i].initPosInNm[2];
+        }
+        
+        if (myatominfo[i].initPosInNm[0]>max_x) {
+            max_x = myatominfo[i].initPosInNm[0];
+        }
+        
+        if (myatominfo[i].initPosInNm[2]>max_z) {
+            max_z = myatominfo[i].initPosInNm[2];
+        }
+        
+        if (myatominfo[i].initPosInNm[1]>max_y) {
+            max_y = myatominfo[i].initPosInNm[1];
+        }
+        
     }
+    
+    
+    for (int i=0; i<ecm_num_atom; i++) {
+       
+        if(myatominfo[i].initPosInNm[0]< (min_x+0.00001))
+        {
+            myatominfo[i].mass = 0;
+        }
+        
+        if(myatominfo[i].initPosInNm[2]< (min_z+0.00001))
+        {
+            myatominfo[i].mass = 0;
+        }
+        
+        if(myatominfo[i].initPosInNm[1]< (min_y+0.00001))
+        {
+            if(min_y != max_y)
+            {
+            myatominfo[i].mass = 0;
+            }
+        }
+        
+        if(myatominfo[i].initPosInNm[0]> (max_x-0.00001))
+        {
+            myatominfo[i].mass = 0;
+        }
+        
+        if(myatominfo[i].initPosInNm[2]> (max_z-0.00001))
+        {
+            myatominfo[i].mass = 0;
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
     //End of list
     //    myatominfo[mem_num_atom].type=-1;
     

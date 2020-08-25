@@ -98,6 +98,14 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                         }
                         
                         continue;
+                    } else if (it->first=="force_file_name") {
+                        if (it->second!=0) {
+                            GenConst::force_file_name=split[i+2];
+                        } else {
+                            GenConst::force_file_name="Force_";
+                        }
+                        
+                        continue;
                     } else if (it->first=="Interaction_map") {
                         if (it->second==0) {
                             GenConst::Interaction_map = false;

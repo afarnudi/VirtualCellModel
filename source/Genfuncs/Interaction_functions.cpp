@@ -102,104 +102,104 @@ void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle){
 }
 
 
-void Vesicle_pointparticle_neighbour_finder (point_particle &particle, Membrane &vesicle){
-    double Min_dist=1000;
-    double delta_x, delta_y, delta_z, dist;
-    int vesicle_nodes = vesicle.get_num_of_nodes();
-    for (int i=0; i< vesicle_nodes ; i++){
-        delta_x = particle.return_position(0) - vesicle.get_node_position(i, 0);
-        delta_y = particle.return_position(1) - vesicle.get_node_position(i, 1);
-        delta_z = particle.return_position(2) - vesicle.get_node_position(i, 2);
-        double a[3]={delta_x, delta_y, delta_z};
-        dist = vector_length(a);
-
-        if (Min_dist > dist){
-            Min_dist=dist;
-            particle.Neighbournumber=i;
-            particle.Neighbour[0]=delta_x;
-            particle.Neighbour[1]=delta_y;
-            particle.Neighbour[2]=delta_z;
-            
-            
-        }
-    }
-    particle.Neighbour_dist=Min_dist;
-
-        
-}
-void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane &vesicle){
-    
-    int vesicle_Node= particle.Neighbournumber;
-    //cout<< "vesicle Node"<<particle.Neighbournumber<<endl;
-    double force=0, temp_potential_energy=0;
-    double delta_x=0, delta_y=0, delta_z=0, distance=0;
-    double sigma = particle.return_P_Membrane_sigma();
-    double epsilon = particle.return_P_Membrane_epsilon()* GenConst::K * GenConst::MD_T;
-    double cut_off=particle.return_P_Membrane_cut_off();
-    double SigmaOverR,repulsion,attraction;
-    distance=particle.Neighbour_dist;
-    
-    if (distance < cut_off){
-            //cout<<distance<<endl;
-            SigmaOverR= sigma/distance;
-            repulsion= pow(SigmaOverR ,12);
-            attraction = pow(SigmaOverR , 6);
-            delta_x= particle.Neighbour[0];
-            delta_y= particle.Neighbour[1];
-            delta_z= particle.Neighbour[2];
-    }
-
-
-            
-            force = 12*epsilon*(repulsion -attraction)/(distance*distance);
-            temp_potential_energy = epsilon * (repulsion- attraction );
-            
-            
-            particle.add_to_force(force*delta_x ,0);
-            particle.add_to_force(force*delta_y ,1);
-            particle.add_to_force(force*delta_z ,2);
-
-            vesicle.add_to_force(-force*delta_x, vesicle_Node, 0);
-            vesicle.add_to_force(-force*delta_y, vesicle_Node, 1);
-            vesicle.add_to_force(-force*delta_z, vesicle_Node, 2);
-        
-    
-}
-
-void pointparticle_pointparticle_interaction(point_particle &first,point_particle &second){
-        
-    double force=0, temp_potential_energy=0;
-    double delta_x=0, delta_y=0, delta_z=0, distance=0;
-    double sigma = first.return_P_P_sigma();
-    double epsilon = first.return_P_P_epsilon()* GenConst::K * GenConst::MD_T;
-    double cut_off= first.return_P_P_cut_off();
-    
-
-    double SigmaOverR,repulsion,attraction;
-    delta_x= second.return_position(0)-first.return_position(0);
-    delta_y= second.return_position(1)-first.return_position(1);
-    delta_z= second.return_position(2)-first.return_position(2);
-    double a[3]={delta_x, delta_y, delta_z};
-    distance = vector_length(a);
-    if (distance < cut_off){
-            
-            SigmaOverR= sigma/distance;
-            repulsion= pow(SigmaOverR ,12);
-            attraction = pow(SigmaOverR , 6);
-    
-
-
-            
-    force = 12*epsilon*( repulsion-attraction )/(distance*distance);
-    temp_potential_energy = epsilon * (repulsion- attraction );
-            
-            
-            first.add_to_force(-force*delta_x ,0);
-            first.add_to_force(-force*delta_y ,1);
-            first.add_to_force(-force*delta_z ,2);
-            second.add_to_force(force*delta_x ,0);
-            second.add_to_force(force*delta_y ,1);
-            second.add_to_force(force*delta_z ,2);
-    }
-        
-}
+//void Vesicle_pointparticle_neighbour_finder (point_particle &particle, Membrane &vesicle){
+//    double Min_dist=1000;
+//    double delta_x, delta_y, delta_z, dist;
+//    int vesicle_nodes = vesicle.get_num_of_nodes();
+//    for (int i=0; i< vesicle_nodes ; i++){
+//        delta_x = particle.return_position(0) - vesicle.get_node_position(i, 0);
+//        delta_y = particle.return_position(1) - vesicle.get_node_position(i, 1);
+//        delta_z = particle.return_position(2) - vesicle.get_node_position(i, 2);
+//        double a[3]={delta_x, delta_y, delta_z};
+//        dist = vector_length(a);
+//
+//        if (Min_dist > dist){
+//            Min_dist=dist;
+//            particle.Neighbournumber=i;
+//            particle.Neighbour[0]=delta_x;
+//            particle.Neighbour[1]=delta_y;
+//            particle.Neighbour[2]=delta_z;
+//
+//
+//        }
+//    }
+//    particle.Neighbour_dist=Min_dist;
+//
+//
+//}
+//void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane &vesicle){
+//
+//    int vesicle_Node= particle.Neighbournumber;
+//    //cout<< "vesicle Node"<<particle.Neighbournumber<<endl;
+//    double force=0, temp_potential_energy=0;
+//    double delta_x=0, delta_y=0, delta_z=0, distance=0;
+//    double sigma = particle.return_P_Membrane_sigma();
+//    double epsilon = particle.return_P_Membrane_epsilon()* GenConst::K * GenConst::MD_T;
+//    double cut_off=particle.return_P_Membrane_cut_off();
+//    double SigmaOverR,repulsion,attraction;
+//    distance=particle.Neighbour_dist;
+//
+//    if (distance < cut_off){
+//            //cout<<distance<<endl;
+//            SigmaOverR= sigma/distance;
+//            repulsion= pow(SigmaOverR ,12);
+//            attraction = pow(SigmaOverR , 6);
+//            delta_x= particle.Neighbour[0];
+//            delta_y= particle.Neighbour[1];
+//            delta_z= particle.Neighbour[2];
+//    }
+//
+//
+//
+//            force = 12*epsilon*(repulsion -attraction)/(distance*distance);
+//            temp_potential_energy = epsilon * (repulsion- attraction );
+//
+//
+//            particle.add_to_force(force*delta_x ,0);
+//            particle.add_to_force(force*delta_y ,1);
+//            particle.add_to_force(force*delta_z ,2);
+//
+//            vesicle.add_to_force(-force*delta_x, vesicle_Node, 0);
+//            vesicle.add_to_force(-force*delta_y, vesicle_Node, 1);
+//            vesicle.add_to_force(-force*delta_z, vesicle_Node, 2);
+//
+//
+//}
+//
+//void pointparticle_pointparticle_interaction(point_particle &first,point_particle &second){
+//
+//    double force=0, temp_potential_energy=0;
+//    double delta_x=0, delta_y=0, delta_z=0, distance=0;
+//    double sigma = first.return_P_P_sigma();
+//    double epsilon = first.return_P_P_epsilon()* GenConst::K * GenConst::MD_T;
+//    double cut_off= first.return_P_P_cut_off();
+//
+//
+//    double SigmaOverR,repulsion,attraction;
+//    delta_x= second.return_position(0)-first.return_position(0);
+//    delta_y= second.return_position(1)-first.return_position(1);
+//    delta_z= second.return_position(2)-first.return_position(2);
+//    double a[3]={delta_x, delta_y, delta_z};
+//    distance = vector_length(a);
+//    if (distance < cut_off){
+//
+//            SigmaOverR= sigma/distance;
+//            repulsion= pow(SigmaOverR ,12);
+//            attraction = pow(SigmaOverR , 6);
+//
+//
+//
+//
+//    force = 12*epsilon*( repulsion-attraction )/(distance*distance);
+//    temp_potential_energy = epsilon * (repulsion- attraction );
+//
+//
+//            first.add_to_force(-force*delta_x ,0);
+//            first.add_to_force(-force*delta_y ,1);
+//            first.add_to_force(-force*delta_z ,2);
+//            second.add_to_force(force*delta_x ,0);
+//            second.add_to_force(force*delta_y ,1);
+//            second.add_to_force(force*delta_z ,2);
+//    }
+//
+//}

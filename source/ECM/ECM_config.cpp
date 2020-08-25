@@ -94,6 +94,10 @@ void ECM::set_map_parameter(string param_name, double param_value){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
         Spring_coefficient=param_value*GenConst::MD_T;
+    } else if (param_name=="receptor_density"){
+        receptor_density=param_value;
+    } else if (param_name=="receptor_type"){
+        receptor_type=param_value;
     }  else if (param_name=="Shift_in_X_direction"){
         Shift_in_X_direction=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
@@ -114,6 +118,24 @@ void ECM::set_map_parameter(string param_name, double param_value){
         ky=param_value;
     } else if (param_name=="z_force_constant"){
         kz=param_value;
+    } else if (param_name=="stiffness_gradient_x"){
+        stiffness_gradient_x=param_value;
+    } else if (param_name=="stiffness_gradient_y"){
+        stiffness_gradient_y=param_value;
+    } else if (param_name=="stiffness_gradient_z"){
+        stiffness_gradient_z=param_value;
+    } else if (param_name=="receptor_gradient_x"){
+            receptor_gradient_x=param_value;
+    } else if (param_name=="receptor_gradient_y"){
+            receptor_gradient_y=param_value;
+    } else if (param_name=="receptor_gradient_z"){
+            receptor_gradient_z=param_value;
+    } else if (param_name=="receptor_center_x"){
+                receptor_center_x=param_value;
+    } else if (param_name=="receptor_center_y"){
+                receptor_center_y=param_value;
+    } else if (param_name=="receptor_center_z"){
+                receptor_center_z=param_value;
     } else if (param_name=="Kelvin_Damping_Coefficient"){
         Kelvin_Damping_Coefficient=param_value;
     } else if (param_name=="Dashpot_Viscosity"){

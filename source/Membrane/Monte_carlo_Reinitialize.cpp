@@ -10,10 +10,11 @@ void Monte_Carlo_Reinitialize(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedr
      int pyramid_counter=0;
      for(int i=0; i<GenConst::MC_step; i++){
 
+
        
         mem.monte_carlo_flip(omm, bonds, dihedrals, atoms,localDeltaE, Accepted_Try_Counter, pyramid_counter,MC_total_tries, MC_Acceptance_Rate);
        
-    
+
      }
      omm->context->reinitialize(preservestate);
 

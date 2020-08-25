@@ -96,6 +96,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
     vector<OpenMM::CustomBondForce*> X4harmonics;
     vector<OpenMM::CustomBondForce*> FENEs;
+    vector<OpenMM::CustomBondForce*> Contractiles;
+    vector<OpenMM::CustomBondForce*> HillBonds;
+    vector<OpenMM::CustomBondForce*> Harmonic_minmax;
+    vector<OpenMM::CustomBondForce*> KFs;
+    //OpenMM::HarmonicAngleForce*     HarmonicAngle = new OpenMM::HarmonicAngleForce();
     
     
     
@@ -105,6 +110,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                       Kelvin_VoigtBond,
                       X4harmonics,
                       FENEs,
+                      Contractiles,
+                      KFs,
+                      HillBonds,
+                      Harmonic_minmax,
                       time_dependant_data,
                       system);
     
@@ -113,6 +122,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     //omm->calcforce=calcforce;
     omm->x4harmonic=X4harmonics;
     time_dependant_data->Kelvin_VoigtBond = Kelvin_VoigtBond;
+    time_dependant_data->Hill_force = HillBonds;
+    time_dependant_data->k_force = KFs;
     time_dependant_data->Kelvin_Nominal_length_calc();
     
     // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -129,11 +140,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
     }
-    
-    
-    
-    
-    
+
     std::vector<Vec3> pbcxyz;
     if (GenConst::Periodic_box) {
         pbcxyz.resize(3);
@@ -346,6 +353,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
+    
+    cout<<"atoms position "<<atoms[0].posInNm[0]<<'\n';
+      cout<<"init position "<<initialPosInNm[0][0]<<'\n';
+    int infoMask = 0;
+    infoMask = OpenMM::State::Positions;
+    const OpenMM::State state = omm->context->getState(infoMask);
+    const std::vector<Vec3>& mypositionsInNm = state.getPositions();
+     cout<<"openmm position "<<mypositionsInNm[0][0]<<'\n';
     
     platformName = omm->context->getPlatform().getName();
     

@@ -173,7 +173,6 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
     else{
         MC_Acceptance_Rate=MC_Acceptance_Rate*(MC_total_tries-1)/MC_total_tries;
     }
-
 }
 
 

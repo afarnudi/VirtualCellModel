@@ -244,3 +244,103 @@ bool init_ext_force(vector<OpenMM::CustomExternalForce*> &ext_force,
     return is_force;
 }
 
+
+
+
+
+void initdouble_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<set<int> >                     set_1,
+                              vector<set<int> >                     set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name){
+    
+    set<int> :: iterator it_1 = set_1[set_1_index].begin();
+    set<int> :: iterator it_2 = set_2[set_2_index].begin();
+    
+    
+    
+    string epsilon = "epsilondouble" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    string sigma = "sigmadouble" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    string potential = epsilon + "*((" + sigma + "/r)^12-2*(" + sigma + "/r)^6)" ;
+    
+    //cout<<potential << '\n' ;
+    
+    
+    LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
+    int index = LJ_12_6_interactions.size()-1;
+    
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
+                                                                    + atoms[*it_2].sigma_LJ_12_6 ));
+    
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  8*sqrt(atoms[*it_1].epsilon_LJ_12_6
+                                                                     * atoms[*it_2].epsilon_LJ_12_6));
+    if (GenConst::Periodic_box) {
+         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
+     } else {
+         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+     }
+    LJ_12_6_interactions[index]->setCutoffDistance(1.6 * ( atoms[*it_1].sigma_LJ_12_6
+                                                          + atoms[*it_2].sigma_LJ_12_6 ));
+    
+    
+    
+    LJ_12_6_interactions[index]->addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
+    
+}
+
+
+
+
+void init_LJ_4_2_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                              const MyAtomInfo                      atoms[],
+                              vector<set<int> >                     set_1,
+                              vector<set<int> >                     set_2,
+                              int                                   set_1_index,
+                              int                                   set_2_index,
+                              string                                set_1_name,
+                              string                                set_2_name){
+    
+    set<int> :: iterator it_1 = set_1[set_1_index].begin();
+    set<int> :: iterator it_2 = set_2[set_2_index].begin();
+    
+    
+    
+    string epsilon = "epsilon42" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    string sigma = "sigma42" + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    string potential = epsilon + "*((" + sigma + "/r)^4-2*(" + sigma + "/r)^2)" ;
+    
+    //cout<<potential << '\n' ;
+    
+    
+    LJ_12_6_interactions.push_back(new OpenMM::CustomNonbondedForce(potential));
+    int index = LJ_12_6_interactions.size()-1;
+    
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].sigma_LJ_12_6
+                                                                    + atoms[*it_2].sigma_LJ_12_6 ));
+    
+    
+    LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
+                                                                     * atoms[*it_2].epsilon_LJ_12_6));
+    if (GenConst::Periodic_box) {
+         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
+     } else {
+         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+     }
+    LJ_12_6_interactions[index]->setCutoffDistance(2.5 * ( atoms[*it_1].sigma_LJ_12_6
+                                                          + atoms[*it_2].sigma_LJ_12_6 ));
+    
+    
+    
+    LJ_12_6_interactions[index]->addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
+    
+}
+
+
+
+

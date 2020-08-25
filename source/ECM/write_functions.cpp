@@ -131,6 +131,14 @@ void ECM::generate_report()
         Report<<"ECM Spring Model:\tKelvin"<<endl;
     }
     Report<<"Spring_coefficient\t"<<Spring_coefficient<<endl;
+    Report<<"Spring_coefficient_gradient_x\t"<<stiffness_gradient_x<<endl;
+    Report<<"Spring_coefficient_gradient_y\t"<<stiffness_gradient_y<<endl;
+    Report<<"Spring_coefficient_gradient_z\t"<<stiffness_gradient_z<<endl;
+    Report<<"receptor_type\t"<<receptor_type<<endl;
+    Report<<"receptor_density\t"<<receptor_density<<endl;
+    Report<<"receptor_gradient_x\t"<<receptor_gradient_x<<endl;
+    Report<<"receptor_gradient_y\t"<<receptor_gradient_y<<endl;
+    Report<<"receptor_gradient_z\t"<<receptor_gradient_z<<endl;
     Report<<"Dashpot_Viscosity\t"<<Dashpot_Viscosity<<endl;
     Report<<"Kelvin_Damping_Coefficient\t"<<Kelvin_Damping_Coefficient<<endl;
     Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;

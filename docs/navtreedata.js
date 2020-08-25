@@ -30,29 +30,29 @@ var NAVTREE =
     ] ],
     [ "C Coding Style", "md__doxygen__coding__style.html", null ],
     [ "Commenting Style", "md__doxygen__commenting__style.html", [
-      [ "Description Before Members", "md__doxygen__commenting__style.html#autotoc_md20", [
-        [ "Line Width", "md__doxygen__coding__style.html#autotoc_md11", null ],
-        [ "Indentation", "md__doxygen__coding__style.html#autotoc_md12", null ],
-        [ "Braces", "md__doxygen__coding__style.html#autotoc_md13", null ],
-        [ "Conditions", "md__doxygen__coding__style.html#autotoc_md14", null ],
-        [ "Functions", "md__doxygen__coding__style.html#autotoc_md15", null ],
-        [ "Whitespace", "md__doxygen__coding__style.html#autotoc_md16", null ],
-        [ "The switch Statement", "md__doxygen__coding__style.html#autotoc_md17", null ],
-        [ "Header Files", "md__doxygen__coding__style.html#autotoc_md18", null ],
-        [ "Detailed Description", "md__doxygen__commenting__style.html#autotoc_md21", null ],
-        [ "Brief Description", "md__doxygen__commenting__style.html#autotoc_md22", null ]
+      [ "Description Before Members", "md__doxygen__commenting__style.html#autotoc_md19", [
+        [ "Line Width", "md__doxygen__coding__style.html#autotoc_md10", null ],
+        [ "Indentation", "md__doxygen__coding__style.html#autotoc_md11", null ],
+        [ "Braces", "md__doxygen__coding__style.html#autotoc_md12", null ],
+        [ "Conditions", "md__doxygen__coding__style.html#autotoc_md13", null ],
+        [ "Functions", "md__doxygen__coding__style.html#autotoc_md14", null ],
+        [ "Whitespace", "md__doxygen__coding__style.html#autotoc_md15", null ],
+        [ "The switch Statement", "md__doxygen__coding__style.html#autotoc_md16", null ],
+        [ "Header Files", "md__doxygen__coding__style.html#autotoc_md17", null ],
+        [ "Detailed Description", "md__doxygen__commenting__style.html#autotoc_md20", null ],
+        [ "Brief Description", "md__doxygen__commenting__style.html#autotoc_md21", null ]
       ] ],
-      [ "Description After Members", "md__doxygen__commenting__style.html#autotoc_md23", null ],
-      [ "Detailed Description", "md__doxygen__commenting__style.html#autotoc_md24", null ],
-      [ "Brief description", "md__doxygen__commenting__style.html#autotoc_md25", null ]
+      [ "Description After Members", "md__doxygen__commenting__style.html#autotoc_md22", null ],
+      [ "Detailed Description", "md__doxygen__commenting__style.html#autotoc_md23", null ],
+      [ "Brief description", "md__doxygen__commenting__style.html#autotoc_md24", null ]
     ] ],
     [ "Setting up your IDE", "md__doxygen__i_d_e__setup.html", [
-      [ "Compiler and linker flags", "md__doxygen__i_d_e__setup.html#autotoc_md27", null ],
-      [ "Configfile paths", "md__doxygen__i_d_e__setup.html#autotoc_md28", null ],
-      [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md29", null ]
+      [ "Compiler and linker flags", "md__doxygen__i_d_e__setup.html#autotoc_md26", null ],
+      [ "Configfile paths", "md__doxygen__i_d_e__setup.html#autotoc_md27", null ],
+      [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md28", null ]
     ] ],
     [ "Installation", "_installation.html", [
-      [ "OpenMM", "_installation.html#autotoc_md30", null ]
+      [ "OpenMM", "_installation.html#autotoc_md29", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],

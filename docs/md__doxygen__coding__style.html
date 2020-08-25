@@ -86,13 +86,13 @@ $(document).ready(function(){initNavTree('md__doxygen__coding__style.html',''); 
 <div class="title">C Coding Style </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2><a class="anchor" id="autotoc_md11"></a>
+<div class="textblock"><h2><a class="anchor" id="autotoc_md10"></a>
 Line Width</h2>
 <p>Try to use lines of code between 80 and 120 characters long.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Indentation</h2>
 <p>We use 4 spaces for indentation.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Braces</h2>
 <ol type="1">
 <li>In GNU style, if either side of an if-else statement has braces, both sides should, to match up indentation: <div class="fragment"><div class="line"><span class="keywordflow">if</span> (condition):</div>
@@ -125,10 +125,10 @@ Braces</h2>
 <div class="line">    }</div>
 </div><!-- fragment --></li>
 </ol>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Conditions</h2>
 <p>Do not check boolean values for equality. By using implicit comparisons, the resulting code can be read more like conversational English. Another rationale is that a 'true' value may not be necessarily equal to whatever the <code>TRUE</code> macro uses. The C language uses the value 0 for many purposes. As a numeric value, the end of a string, a null pointer and the FALSE boolean. To make the code clearer, you should write code that highlights the speci?c way 0 is used. So when reading a comparison, it is possible to know the variable type. For boolean variables, an implicit comparison is appropriate because it's already a logical expression.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Functions</h2>
 <p>The argument list must be broken into a new line for each argument, with the argument names right aligned, taking into account pointers: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span></div>
 <div class="line">My_function (some_type_t    type,</div>
@@ -138,7 +138,7 @@ Functions</h2>
 <div class="line">    ...</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>The alignment also holds when invoking a function without breaking the line length limit.</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Whitespace</h2>
 <p>When declaring a structure type use newlines to separate logical sections of the structure: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>_GtkWrapBoxPrivate</div>
 <div class="line">{</div>
@@ -148,7 +148,7 @@ Whitespace</h2>
 <div class="line">    GtkWrapBoxSpreading   horizontal_spreading;</div>
 <div class="line">    GtkWrapBoxSpreading   vertical_spreading;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md17"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md16"></a>
 The switch Statement</h2>
 <p>A switch should open a block on a new indentation level, and each case should start on the same indentation level as the curly braces, with the case block on a new indentation level: </p><div class="fragment"><div class="line"><span class="keywordflow">switch</span> (condition) {</div>
 <div class="line"><span class="keywordflow">case</span> FOO:</div>
@@ -158,7 +158,7 @@ The switch Statement</h2>
 <div class="line">    do_bar;</div>
 <div class="line">    <span class="keywordflow">break</span>;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md18"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md17"></a>
 Header Files</h2>
 <p>The only major rule for headers is that the function definitions should be vertically aligned in three columns:</p>
 <div class="fragment"><div class="line">return_type function_name   (type   argument,</div>

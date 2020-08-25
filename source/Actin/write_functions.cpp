@@ -83,6 +83,21 @@ void Actin::generate_report()
     Report<<"rescale_factor\t"<<rescale_factor<<endl;
     Report<<"# of Nodes\t"<<Num_of_Nodes<<endl;
     Report<<"# of Node Pairs\t"<<Num_of_Node_Pairs<<endl;
+    Report<<"Contractile_force\t"<<Contractile_force<<endl;
+    Report<<"Contractile_k1\t"<<Contractile_k1<<endl;
+    Report<<"Contractile_k2\t"<<Contractile_k2<<endl;
+    Report<<"Contractile_rmin factor\t"<<Contractile_rmin<<endl;
+    Report<<"Contractile_rmax factor\t"<<Contractile_rmax<<endl;
+    Report<<"abp_force\t"<<abp_force<<endl;
+    Report<<"abp_k1\t"<<abp_k1<<endl;
+    Report<<"abp_k2\t"<<abp_k2<<endl;
+    Report<<"abp_rmin factor\t"<<abp_rmin<<endl;
+    Report<<"abp_rmax factor\t"<<abp_rmax<<endl;
+    Report<<"MT_force\t"<<MT_force<<endl;
+    Report<<"MT_k1\t"<<MT_k1<<endl;
+    Report<<"MT_k2\t"<<MT_k2<<endl;
+    Report<<"MT_rmin factor\t"<<MT_rmin<<endl;
+    Report<<"MT_rmax factor\t"<<MT_rmax<<endl;
     
 }
 

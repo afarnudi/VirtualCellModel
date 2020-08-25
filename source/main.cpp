@@ -80,6 +80,7 @@ namespace GenConst {
     int    Num_of_ECMs;
     int    Num_of_pointparticles;
     string trajectory_file_name;;
+    string force_file_name;;
     double Buffer_temperature;
     double Bussi_tau;
     double Actin_Membrane_Bond_Coefficient;
@@ -130,7 +131,6 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
-    
     ArgStruct args;
     if (argc > 1){
         args = cxxparser(argc, argv);
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 //    vector<std::set<int> > chromatin_set;
     vector<vector<std::set<int> > > chromatin_set;
     
-    vector<point_particle> pointparticles;
+    //vector<point_particle> pointparticles;
     
     bool Include_Membrane  = false;
     bool Include_Chromatin = false;
@@ -265,17 +265,17 @@ int main(int argc, char **argv)
             }
         }
         
-        if (GenConst::Num_of_pointparticles!=0){
-            Include_pointparticle=true;
-            pointparticles.resize(GenConst::Num_of_pointparticles);
-            for (int i=0; i<GenConst::Num_of_pointparticles; i++) {
-                pointparticles[i].set_file_time(buffer);
-                pointparticles[i].set_index(i);
-                pointparticles[i].import_config(pointparticle_config_list[i]);
-                pointparticles[i].generate_report();
-            }
-            
-        }
+//        if (GenConst::Num_of_pointparticles!=0){
+//            Include_pointparticle=true;
+//            pointparticles.resize(GenConst::Num_of_pointparticles);
+//            for (int i=0; i<GenConst::Num_of_pointparticles; i++) {
+//                pointparticles[i].set_file_time(buffer);
+//                pointparticles[i].set_index(i);
+//                pointparticles[i].import_config(pointparticle_config_list[i]);
+//                pointparticles[i].generate_report();
+//            }
+//
+//        }
         
         //Used in the old code (no OpenMM engine)
         if (!GenConst::OpenMM) {
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
         if (Include_Actin) {
             for (int i=0; i<Actins.size(); i++) {
                 num_of_atoms        += Actins[i].get_num_of_nodes();
-                num_of_bonds        += Actins[i].get_num_of_node_pairs();
+                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
             }
         }
         if (Include_ECM) {
@@ -518,6 +518,7 @@ int main(int argc, char **argv)
             chrono_sys_clock_start = chrono::system_clock::now();
             
             std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+            std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
             std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
             
             
@@ -542,6 +543,7 @@ int main(int argc, char **argv)
             int total_step_num = 0;
             double last_update_time=0;
 
+
             bool expanding = false;
             bool set_spring = false;
             bool changeTemp = false;
@@ -549,16 +551,13 @@ int main(int argc, char **argv)
             double initTemp = GenConst::temperature;
             
 
+
             for (int frame=1; ; ++frame) {
 
                 double time, energyInKJ, potential_energyInKJ;
-//                cout<<"frame: "<<frame<<endl;
-//                cout<<"here 0 frame "<<frame<<endl;
+
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
-//                cout<<"here 1 frame "<<frame<<endl;
-                
-                //Ps to Fs
-//                cout<<"myWritePDBFrame\n";
+
                 if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
                     
                     
@@ -566,7 +565,9 @@ int main(int argc, char **argv)
                         collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                     }
                     
-                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
+                    
+                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name , force_name);
+//                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
                     //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
                                     
                                     //Begin: Exporting congiguration of classes for simulation .
@@ -580,6 +581,7 @@ int main(int argc, char **argv)
                     
                     
                 }
+
                 
                 if (changeTemp) {
                     initTemp -= TempStep;
@@ -621,6 +623,8 @@ int main(int argc, char **argv)
                     updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
                 }
 
+
+
                 
 //                if (time>100 && set_spring) {
 //                    int atom1, atom2 ;
@@ -642,10 +646,13 @@ int main(int argc, char **argv)
 //                    expanding=false;
 //                }
                 
+
                  
                 //the monte_carlo part
 
                  //if(progress==0 or progress==25 or progress==50 or progress==75){ 
+
+
                 if ( int(time*1000/GenConst::Step_Size_In_Fs) >= MCCalcTime and GenConst::Mem_fluidity !=0){
                  
                     //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
@@ -751,14 +758,14 @@ int main(int argc, char **argv)
             }
         }
         
-        if (Include_pointparticle)
-        {
-            for (int i=0; i<pointparticles.size(); i++) {
-                if (pointparticles[i].on_or_off_MD_evolution){
-                    pointparticles[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-                }
-            }
-        }
+//        if (Include_pointparticle)
+//        {
+//            for (int i=0; i<pointparticles.size(); i++) {
+//                if (pointparticles[i].on_or_off_MD_evolution){
+//                    pointparticles[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
+//                }
+//            }
+//        }
         
         //force implamentation
         if (Include_Membrane)
@@ -831,25 +838,25 @@ int main(int argc, char **argv)
             }
         }
         
+//
+//        if (Include_Membrane && Include_pointparticle) {
+//            for (int i=0; i<Membranes.size(); i++) {
+//                for (int j=0; j<pointparticles.size(); j++){
+//                    Vesicle_pointparticle_neighbour_finder (pointparticles[j], Membranes[i]);
+//                    pointparticle_vesicle_shared_node_force (pointparticles[j], Membranes[i]);
+//                }
+//            }
+//        }
         
-        if (Include_Membrane && Include_pointparticle) {
-            for (int i=0; i<Membranes.size(); i++) {
-                for (int j=0; j<pointparticles.size(); j++){
-                    Vesicle_pointparticle_neighbour_finder (pointparticles[j], Membranes[i]);
-                    pointparticle_vesicle_shared_node_force (pointparticles[j], Membranes[i]);
-                }
-            }
-        }
-        
-        if(Include_pointparticle && pointparticles.size()>1){
-            for (int i=0; i<pointparticles.size(); i++){
-                for (int j=0; j<pointparticles.size(); j++){
-                    if(i != j){
-                        pointparticle_pointparticle_interaction(pointparticles[i],pointparticles[j]);
-                    }
-                }
-            }
-        }
+//        if(Include_pointparticle && pointparticles.size()>1){
+//            for (int i=0; i<pointparticles.size(); i++){
+//                for (int j=0; j<pointparticles.size(); j++){
+//                    if(i != j){
+//                        pointparticle_pointparticle_interaction(pointparticles[i],pointparticles[j]);
+//                    }
+//                }
+//            }
+//        }
         
         //Velocity Verlet second step
         if (Include_Membrane) {
@@ -873,15 +880,15 @@ int main(int argc, char **argv)
             }
         }
         
-        if (Include_pointparticle)
-        {
-            for (int i=0; i<pointparticles.size(); i++) {
-                if (pointparticles[i].on_or_off_MD_evolution){
-                    pointparticles[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-                    
-                }
-            }
-        }
+//        if (Include_pointparticle)
+//        {
+//            for (int i=0; i<pointparticles.size(); i++) {
+//                if (pointparticles[i].on_or_off_MD_evolution){
+//                    pointparticles[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
+//
+//                }
+//            }
+//        }
         
         
         //Thermostat second step
@@ -945,15 +952,15 @@ int main(int argc, char **argv)
                 }
             }
             
-            if (Include_pointparticle) {
-                for (int i=0; i<pointparticles.size(); i++) {
-                    
-                    pointparticles[i].write_traj(traj_file_name);
-                    
-                }
-            }
+//            if (Include_pointparticle) {
+//                for (int i=0; i<pointparticles.size(); i++) {
+//
+//                    pointparticles[i].write_traj(traj_file_name);
+//
+//                }
+//            }
         }// End of if (MD_Step%100==0)
-        
+
         
         if (int(100*MD_Step/GenConst::MD_num_of_steps)>progress){
             cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;

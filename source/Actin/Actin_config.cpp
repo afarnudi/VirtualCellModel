@@ -10,6 +10,7 @@ void Actin::import_config(string config_file_name){
     Mesh_file_name="non";
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
+    int type=1;
     
     if (read_config_file.is_open()) {
         cout<<"'"<<config_file_name<<"' file opened successfully.\n";
@@ -45,7 +46,13 @@ void Actin::import_config(string config_file_name){
 //                break;
             } else if (split[0]=="Mesh_file_name") {
                 Mesh_file_name=split[2];
+                type=stoi(split[1]);
                 cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Actin.\n";
+                if (type==1) {
+                    cout<<"The '"<<Mesh_file_name<<"' will be initialised as a normal type.";
+                } else if (type==2){
+                    cout<<"The '"<<Mesh_file_name<<"' will be initialised as a 3filaments type.";
+                }
 //                break;
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
@@ -69,7 +76,7 @@ void Actin::import_config(string config_file_name){
     } else {
         it=param_map.find("Mesh_file_name");
         if(it!=param_map.end()){
-            initialise();
+            initialise(type);
         }
 //        else {
 //            cout<<"Resume is off and no meshfile name is provided for initilisation. Please check the membrane config file.\n";
@@ -86,8 +93,66 @@ void Actin::set_map_parameter(string param_name, double param_value){
         Node_radius=param_value;
     } else if (param_name=="spring_model"){
         spring_model=param_value;
+    } else if (param_name=="abp_spring_model"){
+        abp_spring_model=param_value;
+    } else if (param_name=="MT_spring_model"){
+        MT_spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
         Spring_coefficient=param_value*GenConst::MD_T;
+    } else if (param_name=="abp_Spring_coefficient"){
+        abp_Spring_coefficient=param_value*GenConst::MD_T;
+    } else if (param_name=="MT_Spring_coefficient"){
+        MT_Spring_coefficient=param_value*GenConst::MD_T;
+    } else if (param_name=="Contractile_force"){
+        Contractile_force=param_value;
+    } else if (param_name=="Contractile_model"){
+        contractile_model=param_value;
+    } else if (param_name=="Contractile_hill_co"){
+        contractile_hill_co=param_value;
+    } else if (param_name=="Contractile_k1"){
+        Contractile_k1=param_value;
+    } else if (param_name=="Contractile_k2"){
+        Contractile_k2=param_value;
+    } else if (param_name=="Contractile_rmin_factor"){
+        Contractile_rmin=param_value;
+    } else if (param_name=="Contractile_rmax_factor"){
+        Contractile_rmax=param_value;
+    } else if (param_name=="abp_force"){
+        abp_force=param_value;
+    } else if (param_name=="abp_model"){
+        abp_model=param_value;
+    } else if (param_name=="abp_hill_co"){
+        abp_hill_co=param_value;
+    } else if (param_name=="abp_k1"){
+        abp_k1=param_value;
+    } else if (param_name=="abp_k2"){
+        abp_k2=param_value;
+    } else if (param_name=="abp_rmin_factor"){
+        abp_rmin=param_value;
+    } else if (param_name=="abp_rmax_factor"){
+        abp_rmax=param_value;
+    } else if (param_name=="abp_r0factor"){
+        abp_r0factor=param_value;
+        
+    } else if (param_name=="MT_force"){
+            MT_force=param_value;
+    } else if (param_name=="MT_model"){
+            MT_model=param_value;
+    } else if (param_name=="MT_hill_co"){
+            MT_hill_co=param_value;
+    } else if (param_name=="MT_k1"){
+            MT_k1=param_value;
+    } else if (param_name=="MT_k2"){
+        MT_k2=param_value;
+    } else if (param_name=="MT_rmin_factor"){
+            MT_rmin=param_value;
+    } else if (param_name=="MT_rmax_factor"){
+            MT_rmax=param_value;
+    } else if (param_name=="MT_r0factor"){
+            MT_r0factor=param_value;
+        
+    } else if (param_name=="actin_r0factor"){
+        act_r0factor=param_value;
     }  else if (param_name=="Shift_in_X_direction"){
         Shift_in_X_direction=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
