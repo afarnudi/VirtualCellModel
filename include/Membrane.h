@@ -32,6 +32,7 @@
 #include "OpenMM_structs.h"
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
+#include "Arg_pars.hpp"
 
 using std::vector;
 using std::cout;
@@ -141,11 +142,11 @@ public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
     void rotate_coordinates(double theta, double phi);
-    void rotate_particle_to_axes(void);
+    void rotate_particle_to_axes(ArgStruct args);
     void update_spherical_positions();
     
     
-    void load_pdb_frame(int frame, int analysis_averaging_option, int z_node, int y_node);
+    void load_pdb_frame(int frame, ArgStruct args);
     int  import_pdb_frames(std::string filename);
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
@@ -167,12 +168,12 @@ public:
     
     
     
-    void calculate_ulm(int ell_max, int analysis_averaging_option);
-    void calculate_real_ulm(int ell_max, int analysis_averaging_option);
+    void calculate_ulm(ArgStruct args);
+    void calculate_real_ulm(ArgStruct args);
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm(int ell_max, std::string traj_name, double num_frames, std::string extension);
+    void write_ulm(ArgStruct args);
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
@@ -181,8 +182,8 @@ public:
     
     vector<vector<vector<double> > > pdb_frames;
     vector<vector<double> > spherical_positions;
-    int z_node_index = -1;
-    int y_node_index = -1;
+//    int z_node_index = -1;
+//    int y_node_index = -1;
     
     void set_com_to_zero(){
         update_COM_position();

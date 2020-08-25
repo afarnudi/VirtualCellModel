@@ -18,17 +18,6 @@ vector<double> Membrane::get_ulmYlm_vectorlist_for_mesh(){
     
     double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     
-//    calculate_volume_and_surface_area();
-//    double radius = cbrt( 3*volume/(M_PI*4) );
-    //
-//    double radius=0;
-//    //    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
-//    for(int i=0;i<Num_of_Nodes;i++){
-//        radius+=spherical_positions[i][0];
-//    }
-//    radius/=Num_of_Nodes;
-//    cout<<radius<<endl;
-    
     vector<double> radius_vectorlist;
     radius_vectorlist.resize(Num_of_Nodes);
     for(int i=0;i<Num_of_Nodes;i++){
@@ -82,10 +71,13 @@ std::complex<double> Membrane::calc_vectorlist_vectorlist_surface_integral(vecto
 }
 
 double Membrane::calc_vectorlist_vectorlist_surface_integral(vector<double> vectorlist1, vector<double> vectorlist2){
+    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     double sum=0;
     for(int i=0;i<Num_of_Nodes;i++){
+//        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
+//        /(spherical_positions[i][0]*spherical_positions[i][0]);;
         sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
-        /(spherical_positions[i][0]*spherical_positions[i][0]);;
+        /(radius*radius);;
     }
     return sum;
 }

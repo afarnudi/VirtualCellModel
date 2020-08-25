@@ -28,7 +28,7 @@ all: $(BINDIR)/$(TARGET)
 	@echo Finished!
 
 $(BINDIR)/$(TARGET): $(OBJFILES)
-	@rm $(BINDIR)/$(TARGET)
+	@rm $(BINDIR)/$(TARGET); true
 	@$(CXX) $(CXXFLAGS) $(LIB_DIR) $(LIBS) $? -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

@@ -103,10 +103,9 @@ void Membrane::initialise(std::string Mesh_file_name){
         rotate_coordinates(theta, phi);
     }
     
-    if (GenConst::Wantvoronoi){
+//    if (GenConst::Wantvoronoi){
         node_voronoi_area.resize(Num_of_Nodes,0);
-//        calculate_surface_area_with_voronoi();
-    }
+//    }
     shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     if (!GenConst::Testmode) {
         cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;

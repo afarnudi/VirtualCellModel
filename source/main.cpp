@@ -40,6 +40,7 @@
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 #include "General_class_functions.h"
+#include "Arg_pars.hpp"
 
 //#include "Tests.hpp"
 
@@ -130,53 +131,10 @@ const int EndOfList=-1;
 int main(int argc, char **argv)
 {
     
-    bool analysis_mode=false;
-    int analysis_averaging_option = 0;
-    int num_ang_avg= 1;
-    int z_node=-1;
-    int y_node=-1;
-    std::string analysis_filename;
-    int ell_max =0;
-    std::string analysis_extension = "_ulmt_cpp.txt";
-//    cout<<"argc "<<argc<<endl;
-    for (int i=1; i<argc; i++) {
-        string arg = argv[i];
-        if (arg == "-analysis") {
-            
-            analysis_mode=true;
-            analysis_filename = argv[i+1];
-            cout<<"Analysis mode\n";
-        }
-        if (arg == "-lmax") {
-            analysis_mode=true;
-            string lmax = argv[i+1];
-            ell_max = stoi(lmax);
-            cout<<"lmax "<<ell_max<<endl;
-        }
-        if (arg == "-angavg") {
-            analysis_averaging_option = 1;
-            cout<<"analysis_angular_average_modes: ON"<<endl;
-            string rotations = argv[i+1];
-            num_ang_avg = stoi(rotations);
-            cout<<"rotations "<<num_ang_avg<<endl;
-        }
-        if (arg == "-align_axes") {
-            analysis_averaging_option=2;
-            cout<<"align_axes: ON"<<endl;
-            string number = argv[i+1];
-            z_node = stoi(number);
-            cout<<"z_node "<<z_node<<endl;
-            number = argv[i+2];
-            y_node = stoi(number);
-            cout<<"y_node "<<y_node<<endl;
-        }
-        if (arg == "-ext") {
-            analysis_extension  = argv[i+1];
-            cout<<"analysis file extension: "<<analysis_extension<<endl;
-        }
-        
+    ArgStruct args;
+    if (argc > 1){
+        args = cxxparser(argc, argv);
     }
-    
     
     // get the current time.
     time_t t = time(0);
@@ -396,30 +354,20 @@ int main(int argc, char **argv)
     float progressp=0;
     
     
-    if (analysis_mode) {
+    if (args.analysis_mode) {
 
         cout<<"Entering analysis mode:\n";
         vector<vector<double> > ulm;
-        
-
-        
-        
-        int max_frame = Membranes[0].import_pdb_frames(analysis_filename);
-        int  L=2,M=1;
-        double U=1;
-        string temp_pdb_name = analysis_filename;
-        temp_pdb_name.pop_back();
-        temp_pdb_name.pop_back();
-        temp_pdb_name.pop_back();
-        temp_pdb_name.pop_back();
-        temp_pdb_name+="new_l_"+to_string(L)+"_m_"+to_string(M)+"_u_"+to_string(U)+".pdb";
-        for (int i=2; i<max_frame; i++) {
-
-
-            Membranes[0].load_pdb_frame(i, analysis_averaging_option, z_node, y_node);
-            for (int runs=0; runs<num_ang_avg; runs++) {
+        int max_frame = Membranes[0].import_pdb_frames(args.analysis_filename);
+        if (args.framelimits_end==0) {
+            args.framelimits_end=max_frame;
+        }
+        for (int i=args.framelimits_beg; i<args.framelimits_end; i++) {
+            Membranes[0].load_pdb_frame(i, args);
+//            cout<<"Loaded"<<endl;
+            for (int runs=0; runs<args.num_ang_avg; runs++) {
                 
-                Membranes[0].calculate_real_ulm(ell_max, analysis_averaging_option);
+                Membranes[0].calculate_real_ulm(args);
 
 
 //                Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
@@ -427,9 +375,9 @@ int main(int argc, char **argv)
 //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
             }
 
-            cout<<"frame "<<i<<" out of "<<max_frame<<"\r"<< std::flush;
+            cout<<"frame "<<i<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
         }
-        Membranes[0].write_ulm(ell_max, analysis_filename, max_frame-1, analysis_extension);
+        Membranes[0].write_ulm(args);
         cout<<"max_frame  "<<max_frame<<endl;
         return 2;
     }

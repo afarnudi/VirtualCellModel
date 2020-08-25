@@ -1,8 +1,8 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
+
+
 #include <cstdlib>
-
-
 #include <complex>
 
 
@@ -14,26 +14,26 @@ using namespace std;
 
 
 
-void Membrane::load_pdb_frame(int frame, int analysis_averaging_option,int znode, int ynode){
+void Membrane::load_pdb_frame(int frame, ArgStruct args){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Position[i][j] = pdb_frames[frame][i][j];
         }
     }
-    z_node_index = znode;
-    y_node_index = ynode;
+    
     update_COM_position();
     set_com_to_zero();
-    if (analysis_averaging_option == 1) {
+    
+    if (args.analysis_averaging_option == 1) {
         srand (time(NULL));
         double scratch = rand();
         scratch = rand();
-    }else if(analysis_averaging_option == 2){
-        if(z_node_index == -1 || y_node_index == -1){
+    }else if(args.analysis_averaging_option == 2){
+        if(args.z_node == -1 || args.zy_node == -1){
             cout<<"No nodes specified for aligning.\n the nodes must be specfied with the '-align_axes flag z y' where z is the node index to be aligned with the  z axis (when the com is in the origin (0,0,0) )and y is the index of the node that will then be rotated to lie on the zy plane.\n";
             exit(EXIT_FAILURE);
         }
-        rotate_particle_to_axes();
+        rotate_particle_to_axes(args);
     }
     
     
@@ -43,7 +43,8 @@ void Membrane::load_pdb_frame(int frame, int analysis_averaging_option,int znode
 
 
 
-void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
+void Membrane::calculate_ulm(ArgStruct args){
+    int ell_max = args.ell_max;
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();
         ulm_std.clear();
@@ -57,7 +58,7 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     }
     
     
-    if(analysis_averaging_option == 1){
+    if(args.analysis_averaging_option == 1){
         double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
         double theta = ((double) rand() / (RAND_MAX))*M_PI;
         
@@ -103,7 +104,8 @@ void Membrane::calculate_ulm(int ell_max, int analysis_averaging_option){
     //    cout<<endl;
 }
 
-void Membrane::calculate_real_ulm(int ell_max, int analysis_averaging_option){
+void Membrane::calculate_real_ulm(ArgStruct args){
+    int ell_max = args.ell_max;
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();
         ulm_std.clear();
@@ -120,7 +122,7 @@ void Membrane::calculate_real_ulm(int ell_max, int analysis_averaging_option){
     }
     
     
-    if(analysis_averaging_option == 1){
+    if(args.analysis_averaging_option == 1){
         double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
         double theta = ((double) rand() / (RAND_MAX))*M_PI;
         
@@ -163,17 +165,11 @@ void Membrane::calculate_real_ulm(int ell_max, int analysis_averaging_option){
     
 }
 
-void Membrane::write_ulm(int ell_max, string traj_name, double num_frames, string extension){
-    
-    traj_name.erase(traj_name.end()-4,traj_name.end() );
-    string traj_file_name = traj_name + extension;
-    
+void Membrane::write_ulm(ArgStruct args){
     std::ofstream wdata;
-    wdata.open(traj_file_name.c_str(), std::ios::app);
-    
-    
-    
-    for (int ell=0; ell<ell_max+1; ell++) {
+    wdata.open(args.output_filename.c_str(), std::ios::app);
+
+    for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
             
             wdata<<ulm_avg[ell][m+ell]<<"\t";
@@ -181,12 +177,12 @@ void Membrane::write_ulm(int ell_max, string traj_name, double num_frames, strin
         wdata<<"\n";
         
     }
-    for (int ell=0; ell<ell_max+1; ell++) {
+    for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
             
             wdata<<ulm_std[ell][m+ell]<<"\t";
         }
         wdata<<"\n";
     }
-    cout<<traj_name<<" written"<<endl;
+    cout<<args.output_filename<<" written"<<endl;
 }

@@ -5,7 +5,7 @@
 #include "maps.hpp"
 #include "Membrane.h"
 #include "General_functions.hpp"
-//#include "Tests.hpp"
+#include "Arg_pars.hpp"
 
 
 namespace GenConst {
@@ -110,10 +110,6 @@ TEST_F( MemClassTest, NumOfTriangles){
 
 TEST_F( MemClassTest, NumOfBonds){
     ASSERT_EQ(Mem->get_num_of_node_pairs() , 3000);
-}
-
-TEST_F( MemClassTest, NumOfTrianglePairs){
-    ASSERT_EQ(Mem->get_num_of_triangle_pairs() , 3000);
 }
 
 TEST_F( MemClassTest, NumOfTrianglePairs){

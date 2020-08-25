@@ -25,7 +25,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
     
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        if (!GenConst::Testmode) {
+        if (GenConst::Testmode) {
             cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
         }
         
@@ -55,7 +55,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     if (it->first=="Num_of_Membranes") {
                         
                         for (int j=0; j<it->second; j++) {
-                            if (!GenConst::Testmode) {
+                            if (GenConst::Testmode) {
                                 cout<<"\t"<<split[i+2+j]<<endl;
                             }
                             

@@ -93,22 +93,22 @@ void Membrane::update_spherical_positions(){
 }
 
 
-void Membrane::rotate_particle_to_axes(void){
+void Membrane::rotate_particle_to_axes(ArgStruct args){
     
     //find the angles of the node that used to be on the z axis
     vector<double> r_theta_phi;
-    r_theta_phi = convert_cartesian_to_spherical(Node_Position[z_node_index][0],
-                                                 Node_Position[z_node_index][1],
-                                                 Node_Position[z_node_index][2]);
+    r_theta_phi = convert_cartesian_to_spherical(Node_Position[args.z_node][0],
+                                                 Node_Position[args.z_node][1],
+                                                 Node_Position[args.z_node][2]);
     
     double theta0 = r_theta_phi[1];
     double phi0   = r_theta_phi[2];
     
     rotate_coordinates(-theta0, -phi0);
     //rotate the particles so the node that was on the z axis at the beginning of the run will lie on the z axis
-    r_theta_phi = convert_cartesian_to_spherical(Node_Position[y_node_index][0],
-                                                 Node_Position[y_node_index][1],
-                                                 Node_Position[y_node_index][2]);
+    r_theta_phi = convert_cartesian_to_spherical(Node_Position[args.zy_node][0],
+                                                 Node_Position[args.zy_node][1],
+                                                 Node_Position[args.zy_node][2]);
     
     phi0   = r_theta_phi[2];
     //rotate the particles so the node that was on the y axis at the beginning of the run will lie on the y axis

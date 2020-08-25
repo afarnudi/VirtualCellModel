@@ -5,7 +5,7 @@
 #include "maps.hpp"
 #include "Membrane.h"
 #include "General_functions.hpp"
-//#include "Tests.hpp"
+#include "Arg_pars.hpp"
 
 
 namespace GenConst {
@@ -78,16 +78,21 @@ struct MemAnalysisTest : public testing::Test{
     
     MemAnalysisTest() {
         bool Include_Membrane = false;
-        bool analysis_mode=true;
-        int analysis_averaging_option = 0;
-        int num_ang_avg= 1;
-        int z_node=-1;
-        int y_node=-1;
         
-        int ell_max =20;
-        std::string analysis_extension = "_ulmt_cpp.txt";
-        //    cout<<"argc "<<argc<<endl;
+        ArgStruct args;
         
+        args.analysis_mode=true;
+        args.analysis_dim = 3;
+        args.analysis_averaging_option = 0;
+        args.num_ang_avg= 1;
+        args.z_node=-1;
+        args.zy_node=-1;
+        args.analysis_filename = "10_1002n3frames.pdb";
+        args.ell_max =20;
+        args.output_filename="10_1002n3frames_ulmt_cpp.txt";
+        args.framelimits_beg=2;
+        args.framelimits_end=0;
+
         string general_file_name="test_conf.txt";
         vector<string> membrane_config_list;
         //The following configfiles are just needed for the structure of the "read_general_parameters" function
@@ -97,10 +102,8 @@ struct MemAnalysisTest : public testing::Test{
         vector<string> pointparticle_config_list;
         
         read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
-        
         vector<vector<int> > interaction_map;
         read_interaction_map(interaction_map);
-        
         
         if (!GenConst::Load_from_checkpoint) {
             if (GenConst::Num_of_Membranes!=0) {
@@ -117,9 +120,11 @@ struct MemAnalysisTest : public testing::Test{
             
             
         }
-        std::string analysis_filename = "10_1002n3frames.pdb";
-        int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-        Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+        int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+        if (args.framelimits_end==0) {
+            args.framelimits_end=max_frame;
+        }
+        Membranes[0]->load_pdb_frame(2, args);
         
     }
     ~MemAnalysisTest() {
@@ -167,9 +172,22 @@ TEST_F( SurfaceIntegral, UnitVector){
 }
 
 TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz121){
-    std::string analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
-    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    ArgStruct args;
+    
+    args.analysis_mode=true;
+    args.analysis_dim = 3;
+    args.analysis_averaging_option = 0;
+    args.num_ang_avg= 1;
+    args.z_node=-1;
+    args.zy_node=-1;
+    args.analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
+    args.ell_max =20;
+    args.output_filename="10_1002nEllipsoid121_3frames_ulmt_cpp.txt";
+    args.framelimits_beg=2;
+    args.framelimits_end=0;
+    
+    int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+    Membranes[0]->load_pdb_frame(2, args);
     double integral =0;
     for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
         integral+=Membranes[0]->node_voronoi_area[i];
@@ -179,10 +197,21 @@ TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz121){
 }
 
 TEST_F( SurfaceIntegral, OmegaEllipsoidxyz121){
-
-    std::string analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
-    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    ArgStruct args;
+    args.analysis_mode=true;
+    args.analysis_dim = 3;
+    args.analysis_averaging_option = 0;
+    args.num_ang_avg= 1;
+    args.z_node=-1;
+    args.zy_node=-1;
+    args.analysis_filename = "10_1002nEllipsoid121_3frames.pdb";
+    args.ell_max =20;
+    args.output_filename="10_1002nEllipsoid121_3frames_ulmt_cpp.txt";
+    args.framelimits_beg=2;
+    args.framelimits_end=0;
+    
+    int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+    Membranes[0]->load_pdb_frame(2, args);
     vector<double>  unit_vector;
 
     unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
@@ -193,9 +222,20 @@ TEST_F( SurfaceIntegral, OmegaEllipsoidxyz121){
 }
 
 TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz123){
-    std::string analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
-    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    ArgStruct args;
+    args.analysis_mode=true;
+    args.analysis_dim = 3;
+    args.analysis_averaging_option = 0;
+    args.num_ang_avg= 1;
+    args.z_node=-1;
+    args.zy_node=-1;
+    args.analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
+    args.ell_max =20;
+    args.output_filename="10_1002nEllipsoid123_3frames_ulmt_cpp.txt";
+    args.framelimits_beg=2;
+    args.framelimits_end=0;
+    int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+    Membranes[0]->load_pdb_frame(2, args);
     double integral =0;
     for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
         integral+=Membranes[0]->node_voronoi_area[i];
@@ -205,10 +245,20 @@ TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz123){
 }
 
 TEST_F( SurfaceIntegral, OmegaEllipsoidxyz123){
-
-    std::string analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
-    int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-    Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+    ArgStruct args;
+    args.analysis_mode=true;
+    args.analysis_dim = 3;
+    args.analysis_averaging_option = 0;
+    args.num_ang_avg= 1;
+    args.z_node=-1;
+    args.zy_node=-1;
+    args.analysis_filename = "10_1002nEllipsoid123_3frames.pdb";
+    args.ell_max =20;
+    args.output_filename="10_1002nEllipsoid123_3frames_ulmt_cpp.txt";
+    args.framelimits_beg=2;
+    args.framelimits_end=0;
+    int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+    Membranes[0]->load_pdb_frame(2, args);
     vector<double>  unit_vector;
 
     unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
@@ -240,15 +290,18 @@ protected:
     
     LMParameterized() {
         bool Include_Membrane = false;
-        bool analysis_mode=true;
-        int analysis_averaging_option = 0;
-        int num_ang_avg= 1;
-        int z_node=-1;
-        int y_node=-1;
-        
-        int ell_max =20;
-        std::string analysis_extension = "_ulmt_cpp.txt";
-        //    cout<<"argc "<<argc<<endl;
+        ArgStruct args;
+        args.analysis_mode=true;
+        args.analysis_dim = 3;
+        args.analysis_averaging_option = 0;
+        args.num_ang_avg= 1;
+        args.z_node=-1;
+        args.zy_node=-1;
+        args.analysis_filename = "10_1002n3frames.pdb";
+        args.ell_max =20;
+        args.output_filename="10_1002n3frames_ulmt_cpp.txt";
+        args.framelimits_beg=2;
+        args.framelimits_end=0;
         
         string general_file_name="test_conf.txt";
         vector<string> membrane_config_list;
@@ -279,9 +332,11 @@ protected:
             
             
         }
-        std::string analysis_filename = "10_1002n3frames.pdb";
-        int max_frame = Membranes[0]->import_pdb_frames(analysis_filename);
-        Membranes[0]->load_pdb_frame(2, 0, -1, -1);
+        int max_frame = Membranes[0]->import_pdb_frames(args.analysis_filename);
+        if (args.framelimits_end==0) {
+            args.framelimits_end=max_frame;
+        }
+        Membranes[0]->load_pdb_frame(2, args);
         
     }
     ~LMParameterized() {
@@ -504,7 +559,11 @@ TEST_P(LMParameterized, YlmccModeNormalityzzU1zzR1){
     double R = 1;
     std::complex<double> test_value = evaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(real(test_value), U, 0.35);
+//    Old method where solid angle was calculated using the local radius
+//    EXPECT_NEAR(real(test_value), U, 0.35);
+//    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+//    We expect to fail for u=1
+    EXPECT_NEAR(real(test_value), U, 1.24);
     EXPECT_NEAR(imag(test_value), 0, 0.0008);
 }
 
@@ -659,8 +718,11 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR10){
     double U = 1;
     double R = 10;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
-    
-    EXPECT_NEAR(test_value, 0, 0.1);
+    //    Old method where solid angle was calculated using the local radius
+//    EXPECT_NEAR(test_value, 0, 0.1);
+    //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+    //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, 0, 0.22);
     
 }
 
@@ -672,7 +734,11 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU1zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(real(test_value), 0, 0.1);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, 0, 0.1);
+        //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+        //    We expect to fail for u=1
+        EXPECT_NEAR(test_value, 0, 0.22);
     
 }
 
@@ -686,8 +752,12 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p1zzR1){
     double U = 0.1;
     double R = 1;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
+    //    Old method where solid angle was calculated using the local radius
+//    EXPECT_NEAR(test_value, 0, 0.0002);
+        //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+        //    We expect to fail for u=1
+        EXPECT_NEAR(test_value, 0, 0.0036);
     
-    EXPECT_NEAR(test_value, 0, 0.0002);
     
 }
 
@@ -727,7 +797,11 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p1zzR10){
     double R = 10;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.0002);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, 0, 0.0002);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+            EXPECT_NEAR(test_value, 0, 0.0036);
     
 }
 
@@ -740,7 +814,12 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p01zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.00003);
+        //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, 0, 0.00003);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+            EXPECT_NEAR(test_value, 0, 0.000036);
+    
     
 }
 
@@ -752,7 +831,11 @@ TEST_P(LMParameterized, RYlmxRModeOrthonormalityzzU0p001zzR1000){
     double R = 1000;
     double test_value = Realevaluate_u(ell1, m1, params.l2, params.m2, U, R);
     
-    EXPECT_NEAR(test_value, 0, 0.00003);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, 0, 0.00003);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+            EXPECT_NEAR(test_value, 0, 0.000016);
     
 }
 
@@ -805,8 +888,11 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR1){
     double U = 0.1;
     double R = 1;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
-    
-    EXPECT_NEAR(test_value, U, 0.0027);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.0027);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.0036);
     
 }
 
@@ -817,8 +903,12 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR1){
     double U = 0.01;
     double R = 1;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000052);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.000081);
     
-    EXPECT_NEAR(test_value, U, 0.000052);
     
 }
 
@@ -844,8 +934,12 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR10){
     double U = 0.1;
     double R = 10;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.0027);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.0036);
     
-    EXPECT_NEAR(test_value, U, 0.0027);
     
 }
 
@@ -857,7 +951,11 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0027);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.0027);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.0036);
     
 }
 
@@ -869,7 +967,11 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p1zzR1000){
     double R = 1000;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.0027);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.0027);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.0036);
     
 }
 
@@ -883,8 +985,12 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR10){
     double U = 0.01;
     double R = 10;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000052);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.000081);
     
-    EXPECT_NEAR(test_value, U, 0.000052);
     
 }
 
@@ -896,7 +1002,11 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR100){
     double R = 100;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
-    EXPECT_NEAR(test_value, U, 0.000052);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000052);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.000081);
     
 }
 
@@ -907,8 +1017,12 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p01zzR1000){
     double U = 0.01;
     double R = 1000;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000052);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
+    EXPECT_NEAR(test_value, U, 0.000063);
     
-    EXPECT_NEAR(test_value, U, 0.000052);
     
 }
 
@@ -923,6 +1037,10 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR10){
     double R = 10;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000006);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
     EXPECT_NEAR(test_value, U, 0.000006);
     
 }
@@ -934,7 +1052,10 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR100){
     double U = 0.001;
     double R = 100;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
-    
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000006);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
     EXPECT_NEAR(test_value, U, 0.000006);
     
 }
@@ -947,6 +1068,10 @@ TEST_P(LMParameterized, RYlmxRModeNormalityzzU0p001zzR1000){
     double R = 1000;
     double test_value = Realevaluate_u(ell2, m2, ell2, m2, U, R);
     
+    //    Old method where solid angle was calculated using the local radius
+    //    EXPECT_NEAR(test_value, U, 0.000006);
+            //    New method where solid angle is calculated using the radius of a sphere with equivalent surface area
+            //    We expect to fail for u=1
     EXPECT_NEAR(test_value, U, 0.000006);
     
 }
