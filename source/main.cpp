@@ -549,18 +549,17 @@ int main(int argc, char **argv)
             bool changeTemp = false;
             double TempStep = 0.2;
             double initTemp = GenConst::temperature;
-            
 
-
+            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds, traj_name , force_name);
             for (int frame=1; ; ++frame) {
 
                 double time, energyInKJ, potential_energyInKJ;
-
+                
                 myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
 
-                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= savetime ) {
+                if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
                     
-                    
+
                     if(GenConst::WriteVelocitiesandForces){
                         collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                     }
@@ -576,9 +575,6 @@ int main(int argc, char **argv)
                     
                     
                     savetime += Savingstep;
-                    
-                    
-                    
                     
                 }
 

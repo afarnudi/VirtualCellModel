@@ -70,24 +70,26 @@ void set_interactions(const MyAtomInfo                       atoms[],
     
     
     //srand(time(NULL));
-    
-    for(set<int>::iterator it=ecm_set[0].begin(); it != ecm_set[0].end(); ++it)
-    {
-        
-        if( atoms[*it].symbol == 'E')
+    if (GenConst::Num_of_ECMs!=0) {
+        for(set<int>::iterator it=ecm_set[0].begin(); it != ecm_set[0].end(); ++it)
         {
-            ad_sites[0].insert(*it);
-        }
-        else
-        {
-            na_sites[0].insert(*it);
-        }
-        
+            
+            if( atoms[*it].symbol == 'E')
+            {
+                ad_sites[0].insert(*it);
+            }
+            else
+            {
+                na_sites[0].insert(*it);
+            }
+            
 
+        }
+        
+        cout<<"ad sites"<<ad_sites[0].size()<< '\n';
+        cout<<"na sites"<<na_sites[0].size()<< '\n';
     }
     
-    cout<<"ad sites"<<ad_sites[0].size()<< '\n';
-    cout<<"na sites"<<na_sites[0].size()<< '\n';
     
     
     std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds);

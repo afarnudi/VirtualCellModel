@@ -61,8 +61,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
     
-    
-    
     set_interactions(atoms,
                      bonds,
                      membrane_set,
@@ -140,8 +138,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
     }
-
+    
+//    GenConst::Periodic_box=true;
+//    GenConst::Lbox=200;
     std::vector<Vec3> pbcxyz;
+    
     if (GenConst::Periodic_box) {
         pbcxyz.resize(3);
         
@@ -354,13 +355,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
     
-    cout<<"atoms position "<<atoms[0].posInNm[0]<<'\n';
-      cout<<"init position "<<initialPosInNm[0][0]<<'\n';
-    int infoMask = 0;
-    infoMask = OpenMM::State::Positions;
-    const OpenMM::State state = omm->context->getState(infoMask);
-    const std::vector<Vec3>& mypositionsInNm = state.getPositions();
-     cout<<"openmm position "<<mypositionsInNm[0][0]<<'\n';
     
     platformName = omm->context->getPlatform().getName();
     
