@@ -51,30 +51,35 @@ var NAVTREE =
       [ "Configfile paths", "md__doxygen__i_d_e__setup.html#autotoc_md27", null ],
       [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md28", null ]
     ] ],
-    [ "Installation", "_installation.html", [
-      [ "OpenMM", "_installation.html#autotoc_md29", null ]
+    [ "Install_copy", "md__doxygen__install_copy.html", [
+      [ "OpenMM", "md__doxygen__install_copy.html#autotoc_md29", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ]
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ]
+        [ "Variables", "functions_vars.html", "functions_vars" ],
+        [ "Typedefs", "functions_type.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
+        [ "Functions", "globals_func.html", null ],
+        [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
   ] ]
@@ -83,9 +88,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_actin_8h.html",
-"class_chromatin.html#a22b0a397c521e9775a0fedc027aaf709",
-"class_membrane.html#a51536477e359a874919d08dc7a97c7fa",
-"functions_h.html"
+"class_actin.html#a8290b086ab224b29f1fb6ac5542ac775",
+"class_e_c_m.html#a6fc7bfd4b28fd9b0804cf6fef02fe2af",
+"class_membrane.html#abe96177ec38a092fcc6234a9c9f1c488",
+"classpoint__particle.html#a8019c456768e1fbe70d56bd3821b2906",
+"struct_my_atom_info.html#ab51a49ae5e66025c1b37adf966d1adcc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -129,6 +129,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aebeb549997f6d414aee3d1661363877e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aebeb549997f6d414aee3d1661363877e">get_label</a> (void)</td></tr>
 <tr class="memdesc:aebeb549997f6d414aee3d1661363877e"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the label(pdb) used to write to the trajectory files.  <a href="class_actin.html#aebeb549997f6d414aee3d1661363877e">More...</a><br /></td></tr>
 <tr class="separator:aebeb549997f6d414aee3d1661363877e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3fb5d11a7e92f81707ed4d132661672"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ab3fb5d11a7e92f81707ed4d132661672">get_act_relaxlength</a> (int bond_number)</td></tr>
+<tr class="separator:ab3fb5d11a7e92f81707ed4d132661672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1278ad45e7b1f8cf0e470dd2356b8d8c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1278ad45e7b1f8cf0e470dd2356b8d8c">get_abp_relaxlength</a> (int bond_number)</td></tr>
+<tr class="separator:a1278ad45e7b1f8cf0e470dd2356b8d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35bac34a0872cee5f75e66e56b178e41"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a35bac34a0872cee5f75e66e56b178e41">get_MT_relaxlength</a> (int bond_number)</td></tr>
+<tr class="separator:a35bac34a0872cee5f75e66e56b178e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a833dc614b33e4196ce9202f10e556e36"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a833dc614b33e4196ce9202f10e556e36">get_node_position</a> (int node_number, int node_coordinate)</td></tr>
 <tr class="separator:a833dc614b33e4196ce9202f10e556e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a012b67bcc55e02a460dbd4d4b6cd8ea7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a012b67bcc55e02a460dbd4d4b6cd8ea7">get_node_mass</a> (void)</td></tr>
@@ -144,18 +150,107 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aab2351fd842efa6127dda490cb1cdbd3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aab2351fd842efa6127dda490cb1cdbd3">get_num_of_node_pairs</a> (void)</td></tr>
 <tr class="memdesc:aab2351fd842efa6127dda490cb1cdbd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of bonds between membrane nodes.  <a href="class_actin.html#aab2351fd842efa6127dda490cb1cdbd3">More...</a><br /></td></tr>
 <tr class="separator:aab2351fd842efa6127dda490cb1cdbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8548da75e2510694be4ffb6ddfccc02"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ab8548da75e2510694be4ffb6ddfccc02">get_num_of_abp_pairs</a> (void)</td></tr>
+<tr class="memdesc:ab8548da75e2510694be4ffb6ddfccc02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of bonds between membrane nodes.  <a href="class_actin.html#ab8548da75e2510694be4ffb6ddfccc02">More...</a><br /></td></tr>
+<tr class="separator:ab8548da75e2510694be4ffb6ddfccc02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4331dd6387f7deaa72d1d1564ff9a795"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a4331dd6387f7deaa72d1d1564ff9a795">get_num_of_MT_pairs</a> (void)</td></tr>
+<tr class="separator:a4331dd6387f7deaa72d1d1564ff9a795"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb7a38c592a496135519c58664752ec9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#adb7a38c592a496135519c58664752ec9">get_spring_model</a> (void)</td></tr>
 <tr class="memdesc:adb7a38c592a496135519c58664752ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return input spring model, used to setup the openmm system for the bonds.  <a href="class_actin.html#adb7a38c592a496135519c58664752ec9">More...</a><br /></td></tr>
 <tr class="separator:adb7a38c592a496135519c58664752ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7eb3bab112e8d031d704fec44a78180"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ac7eb3bab112e8d031d704fec44a78180">get_abp_spring_model</a> (void)</td></tr>
+<tr class="memdesc:ac7eb3bab112e8d031d704fec44a78180"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return input abp spring model, used to setup the openmm system for the bonds.  <a href="class_actin.html#ac7eb3bab112e8d031d704fec44a78180">More...</a><br /></td></tr>
+<tr class="separator:ac7eb3bab112e8d031d704fec44a78180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bef030edce205ea238428430b34cbbd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a4bef030edce205ea238428430b34cbbd">get_MT_spring_model</a> (void)</td></tr>
+<tr class="separator:a4bef030edce205ea238428430b34cbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd9b6ba0cc9f5aa8e670c314ae8afa8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#abd9b6ba0cc9f5aa8e670c314ae8afa8e">get_node_pair</a> (int bond_num, int node_id)</td></tr>
 <tr class="memdesc:abd9b6ba0cc9f5aa8e670c314ae8afa8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the id(int) of the nodes in the bonds.  <a href="class_actin.html#abd9b6ba0cc9f5aa8e670c314ae8afa8e">More...</a><br /></td></tr>
 <tr class="separator:abd9b6ba0cc9f5aa8e670c314ae8afa8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f65f83c86096f05baf6fab33f93eb5f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a7f65f83c86096f05baf6fab33f93eb5f">get_abp_pair</a> (int bond_num, int node_id)</td></tr>
+<tr class="memdesc:a7f65f83c86096f05baf6fab33f93eb5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the id(int) of the nodes in the bonds.  <a href="class_actin.html#a7f65f83c86096f05baf6fab33f93eb5f">More...</a><br /></td></tr>
+<tr class="separator:a7f65f83c86096f05baf6fab33f93eb5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eb2f7d785f085a590f368bec6b0d2ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a3eb2f7d785f085a590f368bec6b0d2ff">get_MT_pair</a> (int bond_num, int node_id)</td></tr>
+<tr class="separator:a3eb2f7d785f085a590f368bec6b0d2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac003b972790cb2209bacabe7106ecdcb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ac003b972790cb2209bacabe7106ecdcb">get_avg_node_dist</a> (void)</td></tr>
 <tr class="memdesc:ac003b972790cb2209bacabe7106ecdcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the average distance of the nodes as calculated from the mesh.  <a href="class_actin.html#ac003b972790cb2209bacabe7106ecdcb">More...</a><br /></td></tr>
 <tr class="separator:ac003b972790cb2209bacabe7106ecdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae76a9852e14ce91bc7ff0e668f20517e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae76a9852e14ce91bc7ff0e668f20517e">get_avg_abp_dist</a> (void)</td></tr>
+<tr class="memdesc:ae76a9852e14ce91bc7ff0e668f20517e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the average distance of the nodes as calculated from the mesh.  <a href="class_actin.html#ae76a9852e14ce91bc7ff0e668f20517e">More...</a><br /></td></tr>
+<tr class="separator:ae76a9852e14ce91bc7ff0e668f20517e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a116b1ab35c58067ff0d30c71fa5eb7eb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a116b1ab35c58067ff0d30c71fa5eb7eb">get_avg_MT_dist</a> (void)</td></tr>
+<tr class="separator:a116b1ab35c58067ff0d30c71fa5eb7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20a406748d7f025f2f03640e36e53d9b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a20a406748d7f025f2f03640e36e53d9b">get_abp_r0factor</a> (void)</td></tr>
+<tr class="memdesc:a20a406748d7f025f2f03640e36e53d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the abp r0 factor for rest length of bond.  <a href="class_actin.html#a20a406748d7f025f2f03640e36e53d9b">More...</a><br /></td></tr>
+<tr class="separator:a20a406748d7f025f2f03640e36e53d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab828af36273fc9078e631c915d460671"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ab828af36273fc9078e631c915d460671">get_MT_r0factor</a> (void)</td></tr>
+<tr class="separator:ab828af36273fc9078e631c915d460671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e93b52bdb9b2f805956f40cdd0bd157"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1e93b52bdb9b2f805956f40cdd0bd157">get_act_r0factor</a> (void)</td></tr>
+<tr class="memdesc:a1e93b52bdb9b2f805956f40cdd0bd157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the actin r0 factor for rest length of bond.  <a href="class_actin.html#a1e93b52bdb9b2f805956f40cdd0bd157">More...</a><br /></td></tr>
+<tr class="separator:a1e93b52bdb9b2f805956f40cdd0bd157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdb4d9b0af05a00dd532e546a69c1371"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#abdb4d9b0af05a00dd532e546a69c1371">get_spring_stiffness_coefficient</a> (void)</td></tr>
 <tr class="memdesc:abdb4d9b0af05a00dd532e546a69c1371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return spring stiffness coefficient.  <a href="class_actin.html#abdb4d9b0af05a00dd532e546a69c1371">More...</a><br /></td></tr>
 <tr class="separator:abdb4d9b0af05a00dd532e546a69c1371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae36a5427f04839fbe445e81f32908849"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae36a5427f04839fbe445e81f32908849">get_abp_spring_stiffness_coefficient</a> (void)</td></tr>
+<tr class="memdesc:ae36a5427f04839fbe445e81f32908849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return abp spring stiffness coefficient.  <a href="class_actin.html#ae36a5427f04839fbe445e81f32908849">More...</a><br /></td></tr>
+<tr class="separator:ae36a5427f04839fbe445e81f32908849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c797a3c7fd421d3059246cbdfc4da9a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1c797a3c7fd421d3059246cbdfc4da9a">get_MT_spring_stiffness_coefficient</a> (void)</td></tr>
+<tr class="separator:a1c797a3c7fd421d3059246cbdfc4da9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e53ff8e24f49627fa42d20c4cb31503"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a2e53ff8e24f49627fa42d20c4cb31503">get_contractile_force</a> (void)</td></tr>
+<tr class="memdesc:a2e53ff8e24f49627fa42d20c4cb31503"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile constant force.  <a href="class_actin.html#a2e53ff8e24f49627fa42d20c4cb31503">More...</a><br /></td></tr>
+<tr class="separator:a2e53ff8e24f49627fa42d20c4cb31503"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974a537b3b35ddc3cfb805221e489639"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a974a537b3b35ddc3cfb805221e489639">get_contractile_k1</a> (void)</td></tr>
+<tr class="memdesc:a974a537b3b35ddc3cfb805221e489639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile stiffness_1.  <a href="class_actin.html#a974a537b3b35ddc3cfb805221e489639">More...</a><br /></td></tr>
+<tr class="separator:a974a537b3b35ddc3cfb805221e489639"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7cf5fbcefb5862cca948068d23c1753"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae7cf5fbcefb5862cca948068d23c1753">get_contractile_k2</a> (void)</td></tr>
+<tr class="memdesc:ae7cf5fbcefb5862cca948068d23c1753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile stiffness_2.  <a href="class_actin.html#ae7cf5fbcefb5862cca948068d23c1753">More...</a><br /></td></tr>
+<tr class="separator:ae7cf5fbcefb5862cca948068d23c1753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a12c39ae77a01fd95009e975640362"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a78a12c39ae77a01fd95009e975640362">get_contractile_rmin</a> (void)</td></tr>
+<tr class="memdesc:a78a12c39ae77a01fd95009e975640362"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile r_min.  <a href="class_actin.html#a78a12c39ae77a01fd95009e975640362">More...</a><br /></td></tr>
+<tr class="separator:a78a12c39ae77a01fd95009e975640362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae35a1797bd8f6066f3e137d31d07c674"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae35a1797bd8f6066f3e137d31d07c674">get_contractile_rmax</a> (void)</td></tr>
+<tr class="memdesc:ae35a1797bd8f6066f3e137d31d07c674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile r_max.  <a href="class_actin.html#ae35a1797bd8f6066f3e137d31d07c674">More...</a><br /></td></tr>
+<tr class="separator:ae35a1797bd8f6066f3e137d31d07c674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa31800839ea6535387650837c90ce8d5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aa31800839ea6535387650837c90ce8d5">get_abp_hill_co</a> (void)</td></tr>
+<tr class="memdesc:aa31800839ea6535387650837c90ce8d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hill coefficient.  <a href="class_actin.html#aa31800839ea6535387650837c90ce8d5">More...</a><br /></td></tr>
+<tr class="separator:aa31800839ea6535387650837c90ce8d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f5dddffcf4867c20f3401cd546f2651"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a7f5dddffcf4867c20f3401cd546f2651">get_MT_hill_co</a> (void)</td></tr>
+<tr class="separator:a7f5dddffcf4867c20f3401cd546f2651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0733d539d517084ad9ef4486ff2ae5bb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a0733d539d517084ad9ef4486ff2ae5bb">get_contractile_hill_co</a> (void)</td></tr>
+<tr class="memdesc:a0733d539d517084ad9ef4486ff2ae5bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hill coefficient.  <a href="class_actin.html#a0733d539d517084ad9ef4486ff2ae5bb">More...</a><br /></td></tr>
+<tr class="separator:a0733d539d517084ad9ef4486ff2ae5bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9514314839676a2cde3d9f8539026834"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a9514314839676a2cde3d9f8539026834">get_contractile_model</a> (void)</td></tr>
+<tr class="memdesc:a9514314839676a2cde3d9f8539026834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile type.  <a href="class_actin.html#a9514314839676a2cde3d9f8539026834">More...</a><br /></td></tr>
+<tr class="separator:a9514314839676a2cde3d9f8539026834"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab44fd1184a4a8d86f5ab30885398f91c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ab44fd1184a4a8d86f5ab30885398f91c">get_abp_model</a> (void)</td></tr>
+<tr class="memdesc:ab44fd1184a4a8d86f5ab30885398f91c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return abp type.  <a href="class_actin.html#ab44fd1184a4a8d86f5ab30885398f91c">More...</a><br /></td></tr>
+<tr class="separator:ab44fd1184a4a8d86f5ab30885398f91c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeed55eaeb026b2a8a85e36bb964c4566"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aeed55eaeb026b2a8a85e36bb964c4566">get_MT_model</a> (void)</td></tr>
+<tr class="separator:aeed55eaeb026b2a8a85e36bb964c4566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0ad11e5d13a5872c642ad391a1862fb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ab0ad11e5d13a5872c642ad391a1862fb">get_abp_force</a> (void)</td></tr>
+<tr class="memdesc:ab0ad11e5d13a5872c642ad391a1862fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile constant force.  <a href="class_actin.html#ab0ad11e5d13a5872c642ad391a1862fb">More...</a><br /></td></tr>
+<tr class="separator:ab0ad11e5d13a5872c642ad391a1862fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5608b80f05322fd02224577aa2614406"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a5608b80f05322fd02224577aa2614406">get_MT_force</a> (void)</td></tr>
+<tr class="separator:a5608b80f05322fd02224577aa2614406"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12995fcf8d9554d4ca38687db33a31eb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a12995fcf8d9554d4ca38687db33a31eb">get_abp_k1</a> (void)</td></tr>
+<tr class="memdesc:a12995fcf8d9554d4ca38687db33a31eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile stiffness_1.  <a href="class_actin.html#a12995fcf8d9554d4ca38687db33a31eb">More...</a><br /></td></tr>
+<tr class="separator:a12995fcf8d9554d4ca38687db33a31eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31431a2d5d23ebc4471761870a4b5dfc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a31431a2d5d23ebc4471761870a4b5dfc">get_MT_k1</a> (void)</td></tr>
+<tr class="separator:a31431a2d5d23ebc4471761870a4b5dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ae322f5af43b21ec4db6a2bf13e15b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a48ae322f5af43b21ec4db6a2bf13e15b">get_abp_k2</a> (void)</td></tr>
+<tr class="memdesc:a48ae322f5af43b21ec4db6a2bf13e15b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile stiffness_2.  <a href="class_actin.html#a48ae322f5af43b21ec4db6a2bf13e15b">More...</a><br /></td></tr>
+<tr class="separator:a48ae322f5af43b21ec4db6a2bf13e15b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f74c1044201adfb139e90f51afd5984"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a2f74c1044201adfb139e90f51afd5984">get_MT_k2</a> (void)</td></tr>
+<tr class="separator:a2f74c1044201adfb139e90f51afd5984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc5b9a178fc7c10f1fd68d0a19bde72d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#adc5b9a178fc7c10f1fd68d0a19bde72d">get_abp_rmin</a> (void)</td></tr>
+<tr class="memdesc:adc5b9a178fc7c10f1fd68d0a19bde72d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile r_min.  <a href="class_actin.html#adc5b9a178fc7c10f1fd68d0a19bde72d">More...</a><br /></td></tr>
+<tr class="separator:adc5b9a178fc7c10f1fd68d0a19bde72d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40bd42dcc0e040201965a1d4208e29ee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a40bd42dcc0e040201965a1d4208e29ee">get_MT_rmin</a> (void)</td></tr>
+<tr class="separator:a40bd42dcc0e040201965a1d4208e29ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93e8673f2758d21179bdcd6f6cdb13d1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a93e8673f2758d21179bdcd6f6cdb13d1">get_abp_rmax</a> (void)</td></tr>
+<tr class="memdesc:a93e8673f2758d21179bdcd6f6cdb13d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return contractile r_max.  <a href="class_actin.html#a93e8673f2758d21179bdcd6f6cdb13d1">More...</a><br /></td></tr>
+<tr class="separator:a93e8673f2758d21179bdcd6f6cdb13d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ba55f6e770538c76a4ff7101072fdcc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a8ba55f6e770538c76a4ff7101072fdcc">get_MT_rmax</a> (void)</td></tr>
+<tr class="separator:a8ba55f6e770538c76a4ff7101072fdcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a2d7e5b5f6cc97bedc5fe46bd18e4c8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a5a2d7e5b5f6cc97bedc5fe46bd18e4c8">get_kelvin_damping_coefficient</a> (void)</td></tr>
 <tr class="memdesc:a5a2d7e5b5f6cc97bedc5fe46bd18e4c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return kelvin damping coefficient.  <a href="class_actin.html#a5a2d7e5b5f6cc97bedc5fe46bd18e4c8">More...</a><br /></td></tr>
 <tr class="separator:a5a2d7e5b5f6cc97bedc5fe46bd18e4c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +265,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1837de15df7fd87c331af0ecbf1fbbd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb02feefaf5bfccbcee6cd1637f3c742"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#abb02feefaf5bfccbcee6cd1637f3c742">check</a> (void)</td></tr>
 <tr class="separator:abb02feefaf5bfccbcee6cd1637f3c742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af58ec8c06380bf58ea64c5fc7effc80e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#af58ec8c06380bf58ea64c5fc7effc80e">check_2</a> (void)</td></tr>
+<tr class="separator:af58ec8c06380bf58ea64c5fc7effc80e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a929b9a77d30a0a97b5c6e2d24d7f4c21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a929b9a77d30a0a97b5c6e2d24d7f4c21">check_3</a> (void)</td></tr>
+<tr class="separator:a929b9a77d30a0a97b5c6e2d24d7f4c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38649ca8146edc88562229715a1a4b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae38649ca8146edc88562229715a1a4b6">set_file_time</a> (char *buffer)</td></tr>
 <tr class="separator:ae38649ca8146edc88562229715a1a4b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a507b129521e48ef9aa5b47398e5d1213"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a507b129521e48ef9aa5b47398e5d1213">set_index</a> (int ind)</td></tr>
@@ -200,20 +299,32 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a53ae9e25081bfe749121d2f378c16afd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a53ae9e25081bfe749121d2f378c16afd">initialise</a> ()</td></tr>
-<tr class="separator:a53ae9e25081bfe749121d2f378c16afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9152c63dc9ff2963dbf468b55202eed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a9152c63dc9ff2963dbf468b55202eed1">initialise</a> (int type)</td></tr>
+<tr class="separator:a9152c63dc9ff2963dbf468b55202eed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a930e595f8323369295f1c71a68cac289"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a930e595f8323369295f1c71a68cac289">read_gmesh_file</a> (std::string gmesh_file)</td></tr>
 <tr class="separator:a930e595f8323369295f1c71a68cac289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaa73b9f95d8592870e360a71c7dd65c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aeaa73b9f95d8592870e360a71c7dd65c">read_gmesh_file_2</a> (std::string gmesh_file)</td></tr>
+<tr class="separator:aeaa73b9f95d8592870e360a71c7dd65c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad79a7525082f59e7e8bfcf69463eb408"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ad79a7525082f59e7e8bfcf69463eb408">Node_Bond_identifier</a> (void)</td></tr>
 <tr class="separator:ad79a7525082f59e7e8bfcf69463eb408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1941e90720f7f986c7a9b9cd6280dc04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1941e90720f7f986c7a9b9cd6280dc04">Node_Bond_identifier_2</a> (void)</td></tr>
+<tr class="separator:a1941e90720f7f986c7a9b9cd6280dc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa41dff2bff8565df2fe6601654b5b5af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aa41dff2bff8565df2fe6601654b5b5af">Node_Bond_relaxed_length_initialiser</a> (void)</td></tr>
 <tr class="separator:aa41dff2bff8565df2fe6601654b5b5af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a608f552b0cf1054bf9f44968e16e4ae7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a608f552b0cf1054bf9f44968e16e4ae7">abp_Bond_relaxed_length_initialiser</a> (void)</td></tr>
+<tr class="separator:a608f552b0cf1054bf9f44968e16e4ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bd2544dabe0e3214f604140130581bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a4bd2544dabe0e3214f604140130581bf">MT_Bond_relaxed_length_initialiser</a> (void)</td></tr>
+<tr class="separator:a4bd2544dabe0e3214f604140130581bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b131dd1f4f580f4a144b4459e81077e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1b131dd1f4f580f4a144b4459e81077e">Hookian</a> (double distance, double initial_distance)</td></tr>
 <tr class="separator:a1b131dd1f4f580f4a144b4459e81077e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f33ccb56771584a4e934fa50b218bc7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a9f33ccb56771584a4e934fa50b218bc7">Kelvin</a> (double distance, int bond_index)</td></tr>
 <tr class="separator:a9f33ccb56771584a4e934fa50b218bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a098d6ca23017f9222b0a34c5eed72608"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a098d6ca23017f9222b0a34c5eed72608">initialise_node_bond_relaxed_length</a> (void)</td></tr>
 <tr class="separator:a098d6ca23017f9222b0a34c5eed72608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aa58c7cb417748e750836a9d7d36400"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a3aa58c7cb417748e750836a9d7d36400">initialise_abp_bond_relaxed_length</a> (void)</td></tr>
+<tr class="separator:a3aa58c7cb417748e750836a9d7d36400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ff910f2d4368fb4ed6edf3a949ef179"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a6ff910f2d4368fb4ed6edf3a949ef179">initialise_MT_bond_relaxed_length</a> (void)</td></tr>
+<tr class="separator:a6ff910f2d4368fb4ed6edf3a949ef179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd328e13e76b561336f9e344b79dcfe2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#acd328e13e76b561336f9e344b79dcfe2">Maxwell</a> (double distance, int bond_index)</td></tr>
 <tr class="separator:acd328e13e76b561336f9e344b79dcfe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -237,6 +348,62 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3c25579b3ffa34cd2a9095f77cd772d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef98ecd6ac119fb1763921e20e64af0e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aef98ecd6ac119fb1763921e20e64af0e">Spring_coefficient</a> =100</td></tr>
 <tr class="separator:aef98ecd6ac119fb1763921e20e64af0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add1f6c193dc8992baea8ac1cf5f81593"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#add1f6c193dc8992baea8ac1cf5f81593">Contractile_force</a> =10</td></tr>
+<tr class="separator:add1f6c193dc8992baea8ac1cf5f81593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1919c112b6c2da0c88f41f1ff16462f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aa1919c112b6c2da0c88f41f1ff16462f">contractile_model</a> = 1</td></tr>
+<tr class="separator:aa1919c112b6c2da0c88f41f1ff16462f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae72158602ad10d011f4b726f0640917"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aae72158602ad10d011f4b726f0640917">contractile_hill_co</a> = 0</td></tr>
+<tr class="separator:aae72158602ad10d011f4b726f0640917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a21ac8479c1906e13da8e731a43c2a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#af9a21ac8479c1906e13da8e731a43c2a">Contractile_k1</a> =50</td></tr>
+<tr class="separator:af9a21ac8479c1906e13da8e731a43c2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61d3538e990b7c2c834ae28f927e1b55"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a61d3538e990b7c2c834ae28f927e1b55">Contractile_k2</a> =25</td></tr>
+<tr class="separator:a61d3538e990b7c2c834ae28f927e1b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed3e30f1b8d1289914a89d3753a8a02"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a9ed3e30f1b8d1289914a89d3753a8a02">Contractile_rmin</a> =0</td></tr>
+<tr class="separator:a9ed3e30f1b8d1289914a89d3753a8a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16e50a2cc8b919a52ecc3d7f506e57fe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a16e50a2cc8b919a52ecc3d7f506e57fe">Contractile_rmax</a> =1000000</td></tr>
+<tr class="separator:a16e50a2cc8b919a52ecc3d7f506e57fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceaa577df046257d4803249add65001e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aceaa577df046257d4803249add65001e">act_r0factor</a> = 1</td></tr>
+<tr class="separator:aceaa577df046257d4803249add65001e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2215c773ddb979b1959118d1b5144f93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a2215c773ddb979b1959118d1b5144f93">abp_force</a> =0</td></tr>
+<tr class="separator:a2215c773ddb979b1959118d1b5144f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56df1b7e5a7bdf5a6d8204a23b21ca9d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a56df1b7e5a7bdf5a6d8204a23b21ca9d">abp_k1</a> =0</td></tr>
+<tr class="separator:a56df1b7e5a7bdf5a6d8204a23b21ca9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a074aff35b07be2f55d3a46a32b8e641b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a074aff35b07be2f55d3a46a32b8e641b">abp_k2</a> =0</td></tr>
+<tr class="separator:a074aff35b07be2f55d3a46a32b8e641b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada60f51caaf25c7ba972ef8502884974"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ada60f51caaf25c7ba972ef8502884974">abp_rmin</a> =0</td></tr>
+<tr class="separator:ada60f51caaf25c7ba972ef8502884974"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96504e612c6454df30f66347e83043b3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a96504e612c6454df30f66347e83043b3">abp_rmax</a> =1000000</td></tr>
+<tr class="separator:a96504e612c6454df30f66347e83043b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c4f777de08d207a13d26d30cdf0d284"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a7c4f777de08d207a13d26d30cdf0d284">abp_r0factor</a> = 1</td></tr>
+<tr class="separator:a7c4f777de08d207a13d26d30cdf0d284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef8fe2d95a6800633af9e718a26a645"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#adef8fe2d95a6800633af9e718a26a645">abp_hill_co</a> = 100</td></tr>
+<tr class="separator:adef8fe2d95a6800633af9e718a26a645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac8ad1cd48f77412d28ae62aad30b8ac"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aac8ad1cd48f77412d28ae62aad30b8ac">abp_model</a> = 1</td></tr>
+<tr class="separator:aac8ad1cd48f77412d28ae62aad30b8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41c21cb3b94bf0fae949b184052dd5e9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a41c21cb3b94bf0fae949b184052dd5e9">abp_spring_model</a> =2</td></tr>
+<tr class="separator:a41c21cb3b94bf0fae949b184052dd5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f892f4af0a74abc217467ad75260767"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a9f892f4af0a74abc217467ad75260767">abp_Spring_coefficient</a> =0</td></tr>
+<tr class="separator:a9f892f4af0a74abc217467ad75260767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c0755bb38054db4b76794c851b10ac"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ad0c0755bb38054db4b76794c851b10ac">MT_force</a> =0</td></tr>
+<tr class="separator:ad0c0755bb38054db4b76794c851b10ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dd19fc3ccbc6c6c8d3d2552bebb4034"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1dd19fc3ccbc6c6c8d3d2552bebb4034">MT_k1</a> =0</td></tr>
+<tr class="separator:a1dd19fc3ccbc6c6c8d3d2552bebb4034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1859c3abb1b1e8cf49c272572dcf118"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ae1859c3abb1b1e8cf49c272572dcf118">MT_k2</a> =0</td></tr>
+<tr class="separator:ae1859c3abb1b1e8cf49c272572dcf118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee19a6df36977da8fddfc1496ec74e16"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aee19a6df36977da8fddfc1496ec74e16">MT_rmin</a> =0</td></tr>
+<tr class="separator:aee19a6df36977da8fddfc1496ec74e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2f30db6f7a73dbbad4561e330dd808"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a0a2f30db6f7a73dbbad4561e330dd808">MT_rmax</a> =1000000</td></tr>
+<tr class="separator:a0a2f30db6f7a73dbbad4561e330dd808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26fa26489b0c36cb5765563a8f6cbf0f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a26fa26489b0c36cb5765563a8f6cbf0f">MT_r0factor</a> = 1</td></tr>
+<tr class="separator:a26fa26489b0c36cb5765563a8f6cbf0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a134c5cbaa80fdfc01270bfd3509c115a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a134c5cbaa80fdfc01270bfd3509c115a">MT_hill_co</a> = 100</td></tr>
+<tr class="separator:a134c5cbaa80fdfc01270bfd3509c115a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da7cae31225a5b796fbb98870df03b2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a3da7cae31225a5b796fbb98870df03b2">MT_model</a> = 1</td></tr>
+<tr class="separator:a3da7cae31225a5b796fbb98870df03b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a136b8d2f3c0f6eb54098e918078c3b75"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a136b8d2f3c0f6eb54098e918078c3b75">MT_spring_model</a> =2</td></tr>
+<tr class="separator:a136b8d2f3c0f6eb54098e918078c3b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09d9f52bbb18e098be6b04e4e31a2895"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a09d9f52bbb18e098be6b04e4e31a2895">MT_Spring_coefficient</a> =0</td></tr>
+<tr class="separator:a09d9f52bbb18e098be6b04e4e31a2895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac54c585e3ee7bbd2a8a5203e6891a81c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ac54c585e3ee7bbd2a8a5203e6891a81c">rescale_factor</a> =1</td></tr>
 <tr class="separator:ac54c585e3ee7bbd2a8a5203e6891a81c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a606803cfc8393c59ed03ef7f4f57d99b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a606803cfc8393c59ed03ef7f4f57d99b">Damping_coefficient</a> =0.5</td></tr>
@@ -273,14 +440,30 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3d80bb8bf92ea8376d7755c1bad5acc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdc761d90d3c0e5747e6b2cb6ecc3984"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#acdc761d90d3c0e5747e6b2cb6ecc3984">filaments</a></td></tr>
 <tr class="separator:acdc761d90d3c0e5747e6b2cb6ecc3984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a9ef44748c90941cc82be01a76fcdc5"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a1a9ef44748c90941cc82be01a76fcdc5">abps</a></td></tr>
+<tr class="separator:a1a9ef44748c90941cc82be01a76fcdc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d40a8124d7c32f34fc675d7ba13fa54"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a0d40a8124d7c32f34fc675d7ba13fa54">MTs</a></td></tr>
+<tr class="separator:a0d40a8124d7c32f34fc675d7ba13fa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0984f8c4508f1b28cb23b2ff1c4b49a0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a0984f8c4508f1b28cb23b2ff1c4b49a0">output_file_neme</a></td></tr>
 <tr class="separator:a0984f8c4508f1b28cb23b2ff1c4b49a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7084562b6fae01d8c61ad459cd682654"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a7084562b6fae01d8c61ad459cd682654">Node_Bond_list</a></td></tr>
 <tr class="separator:a7084562b6fae01d8c61ad459cd682654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd04dc302500a9344c13b0cf50ff94ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#afd04dc302500a9344c13b0cf50ff94ef">Num_of_Node_Pairs</a> =0</td></tr>
 <tr class="separator:afd04dc302500a9344c13b0cf50ff94ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69f07c723a9085a81c95c683c50d4567"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a69f07c723a9085a81c95c683c50d4567">abp_Bond_list</a></td></tr>
+<tr class="separator:a69f07c723a9085a81c95c683c50d4567"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3b49b153dfc216c8d1e951d2d29384"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a4f3b49b153dfc216c8d1e951d2d29384">Num_of_abp_Pairs</a> =0</td></tr>
+<tr class="separator:a4f3b49b153dfc216c8d1e951d2d29384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4244934303459aba4c5b9c3e22ce4b69"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a4244934303459aba4c5b9c3e22ce4b69">MT_Bond_list</a></td></tr>
+<tr class="separator:a4244934303459aba4c5b9c3e22ce4b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60e84f3ed31c80584c8fdaf544bc7cff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a60e84f3ed31c80584c8fdaf544bc7cff">Num_of_MT_Pairs</a> =0</td></tr>
+<tr class="separator:a60e84f3ed31c80584c8fdaf544bc7cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8252d2750fe4c240da43ea842b89f038"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a8252d2750fe4c240da43ea842b89f038">Node_Bond_relaxed_length</a></td></tr>
 <tr class="separator:a8252d2750fe4c240da43ea842b89f038"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4432e489325692d19ec17834ed0bcf9"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ac4432e489325692d19ec17834ed0bcf9">abp_Bond_relaxed_length</a></td></tr>
+<tr class="separator:ac4432e489325692d19ec17834ed0bcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a539109fb01f01b2e202dc94f4f5adf75"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a539109fb01f01b2e202dc94f4f5adf75">MT_Bond_relaxed_length</a></td></tr>
+<tr class="separator:a539109fb01f01b2e202dc94f4f5adf75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9ae520029657ec6be9de6324c9231cd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#af9ae520029657ec6be9de6324c9231cd">Total_Potential_Energy</a> =0</td></tr>
 <tr class="separator:af9ae520029657ec6be9de6324c9231cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28af6190e678533430f3b8c54aa35dcb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a28af6190e678533430f3b8c54aa35dcb">Kelvin_Damping_Coefficient</a> =100</td></tr>
@@ -303,8 +486,46 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0bd9ef2c9df74b5e554264c23b331a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8a4d1d1165c25e15e40cf1e7c11496d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aa8a4d1d1165c25e15e40cf1e7c11496d">Average_node_pair_length</a> =0</td></tr>
 <tr class="separator:aa8a4d1d1165c25e15e40cf1e7c11496d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0ff0fede14b79fd75fa647365b5ea21"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#ac0ff0fede14b79fd75fa647365b5ea21">Min_abp_pair_length</a> =1000</td></tr>
+<tr class="separator:ac0ff0fede14b79fd75fa647365b5ea21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25307c5345c954ebab090ebcadfd604c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a25307c5345c954ebab090ebcadfd604c">Max_abp_pair_length</a> =0</td></tr>
+<tr class="separator:a25307c5345c954ebab090ebcadfd604c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6e076a8d7e2f62931f5fb1f60b8e9ca"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#aa6e076a8d7e2f62931f5fb1f60b8e9ca">Average_abp_pair_length</a> =0</td></tr>
+<tr class="separator:aa6e076a8d7e2f62931f5fb1f60b8e9ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6056a8b90931e03ada9d89af939ecd45"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a6056a8b90931e03ada9d89af939ecd45">Min_MT_pair_length</a> =1000</td></tr>
+<tr class="separator:a6056a8b90931e03ada9d89af939ecd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe3f4a79b69f97ae866d3f73dbd070e2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#afe3f4a79b69f97ae866d3f73dbd070e2">Max_MT_pair_length</a> =0</td></tr>
+<tr class="separator:afe3f4a79b69f97ae866d3f73dbd070e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e8ddb038e3c40d6f76900ded550acc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actin.html#a51e8ddb038e3c40d6f76900ded550acc">Average_MT_pair_length</a> =0</td></tr>
+<tr class="separator:a51e8ddb038e3c40d6f76900ded550acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a608f552b0cf1054bf9f44968e16e4ae7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a608f552b0cf1054bf9f44968e16e4ae7">&#9670;&nbsp;</a></span>abp_Bond_relaxed_length_initialiser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::abp_Bond_relaxed_length_initialiser </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afb396a5e38dede5d41066f6f1c5893ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afb396a5e38dede5d41066f6f1c5893ed">&#9670;&nbsp;</a></span>add_to_force()</h2>
 
@@ -355,6 +576,42 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void Actin::check </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af58ec8c06380bf58ea64c5fc7effc80e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af58ec8c06380bf58ea64c5fc7effc80e">&#9670;&nbsp;</a></span>check_2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::check_2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a929b9a77d30a0a97b5c6e2d24d7f4c21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a929b9a77d30a0a97b5c6e2d24d7f4c21">&#9670;&nbsp;</a></span>check_3()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::check_3 </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -452,6 +709,459 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab0ad11e5d13a5872c642ad391a1862fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0ad11e5d13a5872c642ad391a1862fb">&#9670;&nbsp;</a></span>get_abp_force()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_force </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile constant force. </p>
+
+</div>
+</div>
+<a id="aa31800839ea6535387650837c90ce8d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa31800839ea6535387650837c90ce8d5">&#9670;&nbsp;</a></span>get_abp_hill_co()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_hill_co </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return hill coefficient. </p>
+
+</div>
+</div>
+<a id="a12995fcf8d9554d4ca38687db33a31eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12995fcf8d9554d4ca38687db33a31eb">&#9670;&nbsp;</a></span>get_abp_k1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_k1 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile stiffness_1. </p>
+
+</div>
+</div>
+<a id="a48ae322f5af43b21ec4db6a2bf13e15b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48ae322f5af43b21ec4db6a2bf13e15b">&#9670;&nbsp;</a></span>get_abp_k2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_k2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile stiffness_2. </p>
+
+</div>
+</div>
+<a id="ab44fd1184a4a8d86f5ab30885398f91c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab44fd1184a4a8d86f5ab30885398f91c">&#9670;&nbsp;</a></span>get_abp_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_abp_model </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return abp type. </p>
+
+</div>
+</div>
+<a id="a7f65f83c86096f05baf6fab33f93eb5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f65f83c86096f05baf6fab33f93eb5f">&#9670;&nbsp;</a></span>get_abp_pair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_abp_pair </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>node_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the id(int) of the nodes in the bonds. </p>
+<p>The id of each node in the bond list is stored in the first (0) and the second (1) id slot. </p>
+
+</div>
+</div>
+<a id="a20a406748d7f025f2f03640e36e53d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20a406748d7f025f2f03640e36e53d9b">&#9670;&nbsp;</a></span>get_abp_r0factor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_r0factor </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the abp r0 factor for rest length of bond. </p>
+
+</div>
+</div>
+<a id="a1278ad45e7b1f8cf0e470dd2356b8d8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1278ad45e7b1f8cf0e470dd2356b8d8c">&#9670;&nbsp;</a></span>get_abp_relaxlength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_relaxlength </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a93e8673f2758d21179bdcd6f6cdb13d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93e8673f2758d21179bdcd6f6cdb13d1">&#9670;&nbsp;</a></span>get_abp_rmax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_rmax </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile r_max. </p>
+
+</div>
+</div>
+<a id="adc5b9a178fc7c10f1fd68d0a19bde72d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc5b9a178fc7c10f1fd68d0a19bde72d">&#9670;&nbsp;</a></span>get_abp_rmin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_rmin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile r_min. </p>
+
+</div>
+</div>
+<a id="ac7eb3bab112e8d031d704fec44a78180"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7eb3bab112e8d031d704fec44a78180">&#9670;&nbsp;</a></span>get_abp_spring_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_abp_spring_model </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return input abp spring model, used to setup the openmm system for the bonds. </p>
+
+</div>
+</div>
+<a id="ae36a5427f04839fbe445e81f32908849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae36a5427f04839fbe445e81f32908849">&#9670;&nbsp;</a></span>get_abp_spring_stiffness_coefficient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_abp_spring_stiffness_coefficient </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return abp spring stiffness coefficient. </p>
+
+</div>
+</div>
+<a id="a1e93b52bdb9b2f805956f40cdd0bd157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e93b52bdb9b2f805956f40cdd0bd157">&#9670;&nbsp;</a></span>get_act_r0factor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_act_r0factor </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the actin r0 factor for rest length of bond. </p>
+
+</div>
+</div>
+<a id="ab3fb5d11a7e92f81707ed4d132661672"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3fb5d11a7e92f81707ed4d132661672">&#9670;&nbsp;</a></span>get_act_relaxlength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_act_relaxlength </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae76a9852e14ce91bc7ff0e668f20517e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae76a9852e14ce91bc7ff0e668f20517e">&#9670;&nbsp;</a></span>get_avg_abp_dist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_avg_abp_dist </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the average distance of the nodes as calculated from the mesh. </p>
+
+</div>
+</div>
+<a id="a116b1ab35c58067ff0d30c71fa5eb7eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a116b1ab35c58067ff0d30c71fa5eb7eb">&#9670;&nbsp;</a></span>get_avg_MT_dist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_avg_MT_dist </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac003b972790cb2209bacabe7106ecdcb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac003b972790cb2209bacabe7106ecdcb">&#9670;&nbsp;</a></span>get_avg_node_dist()</h2>
 
@@ -477,6 +1187,202 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Return the average distance of the nodes as calculated from the mesh. </p>
+
+</div>
+</div>
+<a id="a2e53ff8e24f49627fa42d20c4cb31503"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e53ff8e24f49627fa42d20c4cb31503">&#9670;&nbsp;</a></span>get_contractile_force()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_force </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile constant force. </p>
+
+</div>
+</div>
+<a id="a0733d539d517084ad9ef4486ff2ae5bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0733d539d517084ad9ef4486ff2ae5bb">&#9670;&nbsp;</a></span>get_contractile_hill_co()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_hill_co </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return hill coefficient. </p>
+
+</div>
+</div>
+<a id="a974a537b3b35ddc3cfb805221e489639"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a974a537b3b35ddc3cfb805221e489639">&#9670;&nbsp;</a></span>get_contractile_k1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_k1 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile stiffness_1. </p>
+
+</div>
+</div>
+<a id="ae7cf5fbcefb5862cca948068d23c1753"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7cf5fbcefb5862cca948068d23c1753">&#9670;&nbsp;</a></span>get_contractile_k2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_k2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile stiffness_2. </p>
+
+</div>
+</div>
+<a id="a9514314839676a2cde3d9f8539026834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9514314839676a2cde3d9f8539026834">&#9670;&nbsp;</a></span>get_contractile_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_contractile_model </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile type. </p>
+
+</div>
+</div>
+<a id="ae35a1797bd8f6066f3e137d31d07c674"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae35a1797bd8f6066f3e137d31d07c674">&#9670;&nbsp;</a></span>get_contractile_rmax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_rmax </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile r_max. </p>
+
+</div>
+</div>
+<a id="a78a12c39ae77a01fd95009e975640362"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a12c39ae77a01fd95009e975640362">&#9670;&nbsp;</a></span>get_contractile_rmin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_contractile_rmin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return contractile r_min. </p>
 
 </div>
 </div>
@@ -639,6 +1545,328 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>return the label(pdb) used to write to the trajectory files. </p>
+
+</div>
+</div>
+<a id="a5608b80f05322fd02224577aa2614406"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5608b80f05322fd02224577aa2614406">&#9670;&nbsp;</a></span>get_MT_force()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_force </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f5dddffcf4867c20f3401cd546f2651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f5dddffcf4867c20f3401cd546f2651">&#9670;&nbsp;</a></span>get_MT_hill_co()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_hill_co </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a31431a2d5d23ebc4471761870a4b5dfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31431a2d5d23ebc4471761870a4b5dfc">&#9670;&nbsp;</a></span>get_MT_k1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_k1 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f74c1044201adfb139e90f51afd5984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f74c1044201adfb139e90f51afd5984">&#9670;&nbsp;</a></span>get_MT_k2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_k2 </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeed55eaeb026b2a8a85e36bb964c4566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeed55eaeb026b2a8a85e36bb964c4566">&#9670;&nbsp;</a></span>get_MT_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_MT_model </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3eb2f7d785f085a590f368bec6b0d2ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eb2f7d785f085a590f368bec6b0d2ff">&#9670;&nbsp;</a></span>get_MT_pair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_MT_pair </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>node_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab828af36273fc9078e631c915d460671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab828af36273fc9078e631c915d460671">&#9670;&nbsp;</a></span>get_MT_r0factor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_r0factor </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35bac34a0872cee5f75e66e56b178e41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35bac34a0872cee5f75e66e56b178e41">&#9670;&nbsp;</a></span>get_MT_relaxlength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_relaxlength </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_number</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ba55f6e770538c76a4ff7101072fdcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ba55f6e770538c76a4ff7101072fdcc">&#9670;&nbsp;</a></span>get_MT_rmax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_rmax </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a40bd42dcc0e040201965a1d4208e29ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40bd42dcc0e040201965a1d4208e29ee">&#9670;&nbsp;</a></span>get_MT_rmin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_rmin </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4bef030edce205ea238428430b34cbbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bef030edce205ea238428430b34cbbd">&#9670;&nbsp;</a></span>get_MT_spring_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_MT_spring_model </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c797a3c7fd421d3059246cbdfc4da9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c797a3c7fd421d3059246cbdfc4da9a">&#9670;&nbsp;</a></span>get_MT_spring_stiffness_coefficient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::get_MT_spring_stiffness_coefficient </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -810,6 +2038,60 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab8548da75e2510694be4ffb6ddfccc02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8548da75e2510694be4ffb6ddfccc02">&#9670;&nbsp;</a></span>get_num_of_abp_pairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_num_of_abp_pairs </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the number of bonds between membrane nodes. </p>
+
+</div>
+</div>
+<a id="a4331dd6387f7deaa72d1d1564ff9a795"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4331dd6387f7deaa72d1d1564ff9a795">&#9670;&nbsp;</a></span>get_num_of_MT_pairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::get_num_of_MT_pairs </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aab2351fd842efa6127dda490cb1cdbd3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aab2351fd842efa6127dda490cb1cdbd3">&#9670;&nbsp;</a></span>get_num_of_node_pairs()</h2>
 
@@ -977,8 +2259,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a53ae9e25081bfe749121d2f378c16afd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53ae9e25081bfe749121d2f378c16afd">&#9670;&nbsp;</a></span>initialise()</h2>
+<a id="a9152c63dc9ff2963dbf468b55202eed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9152c63dc9ff2963dbf468b55202eed1">&#9670;&nbsp;</a></span>initialise()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -989,6 +2271,59 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Actin::initialise </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3aa58c7cb417748e750836a9d7d36400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aa58c7cb417748e750836a9d7d36400">&#9670;&nbsp;</a></span>initialise_abp_bond_relaxed_length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::initialise_abp_bond_relaxed_length </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ff910f2d4368fb4ed6edf3a949ef179"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ff910f2d4368fb4ed6edf3a949ef179">&#9670;&nbsp;</a></span>initialise_MT_bond_relaxed_length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::initialise_MT_bond_relaxed_length </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1136,6 +2471,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4bd2544dabe0e3214f604140130581bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bd2544dabe0e3214f604140130581bf">&#9670;&nbsp;</a></span>MT_Bond_relaxed_length_initialiser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::MT_Bond_relaxed_length_initialiser </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad79a7525082f59e7e8bfcf69463eb408"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad79a7525082f59e7e8bfcf69463eb408">&#9670;&nbsp;</a></span>Node_Bond_identifier()</h2>
 
@@ -1147,6 +2508,32 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void Actin::Node_Bond_identifier </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1941e90720f7f986c7a9b9cd6280dc04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1941e90720f7f986c7a9b9cd6280dc04">&#9670;&nbsp;</a></span>Node_Bond_identifier_2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::Node_Bond_identifier_2 </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -1199,6 +2586,32 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void Actin::read_gmesh_file </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>gmesh_file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeaa73b9f95d8592870e360a71c7dd65c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaa73b9f95d8592870e360a71c7dd65c">&#9670;&nbsp;</a></span>read_gmesh_file_2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Actin::read_gmesh_file_2 </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>gmesh_file</em></td><td>)</td>
@@ -1660,6 +3073,314 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a69f07c723a9085a81c95c683c50d4567"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f07c723a9085a81c95c683c50d4567">&#9670;&nbsp;</a></span>abp_Bond_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;vector&lt;int&gt; &gt; Actin::abp_Bond_list</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac4432e489325692d19ec17834ed0bcf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4432e489325692d19ec17834ed0bcf9">&#9670;&nbsp;</a></span>abp_Bond_relaxed_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Actin::abp_Bond_relaxed_length</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2215c773ddb979b1959118d1b5144f93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2215c773ddb979b1959118d1b5144f93">&#9670;&nbsp;</a></span>abp_force</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_force =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adef8fe2d95a6800633af9e718a26a645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adef8fe2d95a6800633af9e718a26a645">&#9670;&nbsp;</a></span>abp_hill_co</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_hill_co = 100</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56df1b7e5a7bdf5a6d8204a23b21ca9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56df1b7e5a7bdf5a6d8204a23b21ca9d">&#9670;&nbsp;</a></span>abp_k1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_k1 =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a074aff35b07be2f55d3a46a32b8e641b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a074aff35b07be2f55d3a46a32b8e641b">&#9670;&nbsp;</a></span>abp_k2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_k2 =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac8ad1cd48f77412d28ae62aad30b8ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac8ad1cd48f77412d28ae62aad30b8ac">&#9670;&nbsp;</a></span>abp_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_model = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c4f777de08d207a13d26d30cdf0d284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c4f777de08d207a13d26d30cdf0d284">&#9670;&nbsp;</a></span>abp_r0factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_r0factor = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a96504e612c6454df30f66347e83043b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96504e612c6454df30f66347e83043b3">&#9670;&nbsp;</a></span>abp_rmax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_rmax =1000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada60f51caaf25c7ba972ef8502884974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada60f51caaf25c7ba972ef8502884974">&#9670;&nbsp;</a></span>abp_rmin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_rmin =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f892f4af0a74abc217467ad75260767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f892f4af0a74abc217467ad75260767">&#9670;&nbsp;</a></span>abp_Spring_coefficient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_Spring_coefficient =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a41c21cb3b94bf0fae949b184052dd5e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41c21cb3b94bf0fae949b184052dd5e9">&#9670;&nbsp;</a></span>abp_spring_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::abp_spring_model =2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a9ef44748c90941cc82be01a76fcdc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a9ef44748c90941cc82be01a76fcdc5">&#9670;&nbsp;</a></span>abps</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;vector&lt;int&gt; &gt; Actin::abps</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aceaa577df046257d4803249add65001e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aceaa577df046257d4803249add65001e">&#9670;&nbsp;</a></span>act_r0factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::act_r0factor = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a575a56b45d7492503465078635e6340f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a575a56b45d7492503465078635e6340f">&#9670;&nbsp;</a></span>Actin_Membrane_shared_Node_list</h2>
 
@@ -1670,6 +3391,50 @@ Private Attributes</h2></td></tr>
           <td class="memname">vector&lt;vector&lt;vector&lt;int&gt; &gt; &gt; Actin::Actin_Membrane_shared_Node_list</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa6e076a8d7e2f62931f5fb1f60b8e9ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6e076a8d7e2f62931f5fb1f60b8e9ca">&#9670;&nbsp;</a></span>Average_abp_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Average_abp_pair_length =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51e8ddb038e3c40d6f76900ded550acc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51e8ddb038e3c40d6f76900ded550acc">&#9670;&nbsp;</a></span>Average_MT_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Average_MT_pair_length =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1729,6 +3494,160 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">double Actin::COM_velocity[3] ={0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add1f6c193dc8992baea8ac1cf5f81593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add1f6c193dc8992baea8ac1cf5f81593">&#9670;&nbsp;</a></span>Contractile_force</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Contractile_force =10</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae72158602ad10d011f4b726f0640917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae72158602ad10d011f4b726f0640917">&#9670;&nbsp;</a></span>contractile_hill_co</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::contractile_hill_co = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af9a21ac8479c1906e13da8e731a43c2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9a21ac8479c1906e13da8e731a43c2a">&#9670;&nbsp;</a></span>Contractile_k1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Contractile_k1 =50</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61d3538e990b7c2c834ae28f927e1b55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61d3538e990b7c2c834ae28f927e1b55">&#9670;&nbsp;</a></span>Contractile_k2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Contractile_k2 =25</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa1919c112b6c2da0c88f41f1ff16462f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1919c112b6c2da0c88f41f1ff16462f">&#9670;&nbsp;</a></span>contractile_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::contractile_model = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16e50a2cc8b919a52ecc3d7f506e57fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16e50a2cc8b919a52ecc3d7f506e57fe">&#9670;&nbsp;</a></span>Contractile_rmax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Contractile_rmax =1000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ed3e30f1b8d1289914a89d3753a8a02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ed3e30f1b8d1289914a89d3753a8a02">&#9670;&nbsp;</a></span>Contractile_rmin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Contractile_rmin =0</td>
         </tr>
       </table>
   </td>
@@ -2004,6 +3923,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a25307c5345c954ebab090ebcadfd604c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25307c5345c954ebab090ebcadfd604c">&#9670;&nbsp;</a></span>Max_abp_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Max_abp_pair_length =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afe3f4a79b69f97ae866d3f73dbd070e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe3f4a79b69f97ae866d3f73dbd070e2">&#9670;&nbsp;</a></span>Max_MT_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Max_MT_pair_length =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0bd9ef2c9df74b5e554264c23b331a02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0bd9ef2c9df74b5e554264c23b331a02">&#9670;&nbsp;</a></span>Max_node_pair_length</h2>
 
@@ -2048,6 +4011,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac0ff0fede14b79fd75fa647365b5ea21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0ff0fede14b79fd75fa647365b5ea21">&#9670;&nbsp;</a></span>Min_abp_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Min_abp_pair_length =1000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6056a8b90931e03ada9d89af939ecd45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6056a8b90931e03ada9d89af939ecd45">&#9670;&nbsp;</a></span>Min_MT_pair_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::Min_MT_pair_length =1000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a321236e7f3389a0eace5edbb892f9b11"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a321236e7f3389a0eace5edbb892f9b11">&#9670;&nbsp;</a></span>Min_node_pair_length</h2>
 
@@ -2059,6 +4066,292 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">double Actin::Min_node_pair_length =1000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4244934303459aba4c5b9c3e22ce4b69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4244934303459aba4c5b9c3e22ce4b69">&#9670;&nbsp;</a></span>MT_Bond_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;vector&lt;int&gt; &gt; Actin::MT_Bond_list</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a539109fb01f01b2e202dc94f4f5adf75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a539109fb01f01b2e202dc94f4f5adf75">&#9670;&nbsp;</a></span>MT_Bond_relaxed_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Actin::MT_Bond_relaxed_length</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0c0755bb38054db4b76794c851b10ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c0755bb38054db4b76794c851b10ac">&#9670;&nbsp;</a></span>MT_force</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_force =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a134c5cbaa80fdfc01270bfd3509c115a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a134c5cbaa80fdfc01270bfd3509c115a">&#9670;&nbsp;</a></span>MT_hill_co</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_hill_co = 100</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1dd19fc3ccbc6c6c8d3d2552bebb4034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dd19fc3ccbc6c6c8d3d2552bebb4034">&#9670;&nbsp;</a></span>MT_k1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_k1 =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1859c3abb1b1e8cf49c272572dcf118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1859c3abb1b1e8cf49c272572dcf118">&#9670;&nbsp;</a></span>MT_k2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_k2 =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3da7cae31225a5b796fbb98870df03b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3da7cae31225a5b796fbb98870df03b2">&#9670;&nbsp;</a></span>MT_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_model = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26fa26489b0c36cb5765563a8f6cbf0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26fa26489b0c36cb5765563a8f6cbf0f">&#9670;&nbsp;</a></span>MT_r0factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_r0factor = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a2f30db6f7a73dbbad4561e330dd808"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2f30db6f7a73dbbad4561e330dd808">&#9670;&nbsp;</a></span>MT_rmax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_rmax =1000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee19a6df36977da8fddfc1496ec74e16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee19a6df36977da8fddfc1496ec74e16">&#9670;&nbsp;</a></span>MT_rmin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_rmin =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09d9f52bbb18e098be6b04e4e31a2895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09d9f52bbb18e098be6b04e4e31a2895">&#9670;&nbsp;</a></span>MT_Spring_coefficient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_Spring_coefficient =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a136b8d2f3c0f6eb54098e918078c3b75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a136b8d2f3c0f6eb54098e918078c3b75">&#9670;&nbsp;</a></span>MT_spring_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Actin::MT_spring_model =2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d40a8124d7c32f34fc675d7ba13fa54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d40a8124d7c32f34fc675d7ba13fa54">&#9670;&nbsp;</a></span>MTs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;vector&lt;int&gt; &gt; Actin::MTs</td>
         </tr>
       </table>
   </td>
@@ -2224,6 +4517,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4f3b49b153dfc216c8d1e951d2d29384"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f3b49b153dfc216c8d1e951d2d29384">&#9670;&nbsp;</a></span>Num_of_abp_Pairs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::Num_of_abp_Pairs =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aad926245a82c384b8e81dc55afec2f34"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad926245a82c384b8e81dc55afec2f34">&#9670;&nbsp;</a></span>Num_of_Actin_Membrane_shared_Nodes</h2>
 
@@ -2234,6 +4549,28 @@ Private Attributes</h2></td></tr>
           <td class="memname">vector&lt;int&gt; Actin::Num_of_Actin_Membrane_shared_Nodes</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60e84f3ed31c80584c8fdaf544bc7cff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60e84f3ed31c80584c8fdaf544bc7cff">&#9670;&nbsp;</a></span>Num_of_MT_Pairs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Actin::Num_of_MT_Pairs =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

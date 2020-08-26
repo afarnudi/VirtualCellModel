@@ -85,8 +85,8 @@ $(document).ready(function(){initNavTree('class_membrane.html',''); initResizabl
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_membrane-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Membrane Class Reference</div>  </div>
@@ -102,22 +102,51 @@ $(document).ready(function(){initNavTree('class_membrane.html',''); initResizabl
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a779f36d18b7dd6b740cbe81ae0976ea1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a779f36d18b7dd6b740cbe81ae0976ea1">rotate_coordinates</a> (double theta, double phi)</td></tr>
 <tr class="separator:a779f36d18b7dd6b740cbe81ae0976ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96eda821c8daac8dce9377ac7c2e4f58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a96eda821c8daac8dce9377ac7c2e4f58">rotate_particle_to_axes</a> (void)</td></tr>
-<tr class="separator:a96eda821c8daac8dce9377ac7c2e4f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc3a096fd2b748a88659c8c13aa2245f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#abc3a096fd2b748a88659c8c13aa2245f">rotate_particle_to_axes</a> (<a class="el" href="struct_arg_struct.html">ArgStruct</a> args)</td></tr>
+<tr class="separator:abc3a096fd2b748a88659c8c13aa2245f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab2fdee5eb2570cfaebfe2812ca32b2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#aab2fdee5eb2570cfaebfe2812ca32b2b">update_spherical_positions</a> ()</td></tr>
 <tr class="separator:aab2fdee5eb2570cfaebfe2812ca32b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9f7463ee8897038c607170b798bf625"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ae9f7463ee8897038c607170b798bf625">surface_integral_test</a> ()</td></tr>
-<tr class="separator:ae9f7463ee8897038c607170b798bf625"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a6dd613fe7e6547374357c7ec962fd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a5a6dd613fe7e6547374357c7ec962fd3">load_pdb_frame</a> (int frame, int analysis_averaging_option, int z_node, int y_node)</td></tr>
-<tr class="separator:a5a6dd613fe7e6547374357c7ec962fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d005acc4919648eaeacdddcf9fee70f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a5d005acc4919648eaeacdddcf9fee70f">load_pdb_frame</a> (int frame, <a class="el" href="struct_arg_struct.html">ArgStruct</a> args)</td></tr>
+<tr class="separator:a5d005acc4919648eaeacdddcf9fee70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ca8110ae4db1e233b0ced1e7fddaf75"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a1ca8110ae4db1e233b0ced1e7fddaf75">import_pdb_frames</a> (std::string filename)</td></tr>
 <tr class="separator:a1ca8110ae4db1e233b0ced1e7fddaf75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2990960fd66be652c90a78ee1303255"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#af2990960fd66be652c90a78ee1303255">calculate_ulm</a> (int ell_max, int analysis_averaging_option)</td></tr>
-<tr class="separator:af2990960fd66be652c90a78ee1303255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bc2d499f821bbd2d1587db4c6fe5745"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a3bc2d499f821bbd2d1587db4c6fe5745">generate_ulm_mode</a> (int ell, int m, double ulm, double radius)</td></tr>
+<tr class="separator:a3bc2d499f821bbd2d1587db4c6fe5745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab371e36de15ea9a8a44d4e7a3174abe7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ab371e36de15ea9a8a44d4e7a3174abe7">generate_ulm_mode_real</a> (int Ell, int M, double uLM, double radius)</td></tr>
+<tr class="separator:ab371e36de15ea9a8a44d4e7a3174abe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8089b959ecd9096a02d8690b13e2e548"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a8089b959ecd9096a02d8690b13e2e548">myWritePDBFrame</a> (int frameNum, std::string traj_name)</td></tr>
+<tr class="separator:a8089b959ecd9096a02d8690b13e2e548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f24fbfc4cd6f0ea29b46ea6984d2b81"><td class="memItemLeft" align="right" valign="top">std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a7f24fbfc4cd6f0ea29b46ea6984d2b81">calc_vectorlist_vectorlist_surface_integral</a> (vector&lt; std::complex&lt; double &gt; &gt; vectorlist1, vector&lt; std::complex&lt; double &gt; &gt; vectorlist2)</td></tr>
+<tr class="separator:a7f24fbfc4cd6f0ea29b46ea6984d2b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af645a825a7e2d8cc5147ddc4e2519d3c"><td class="memItemLeft" align="right" valign="top">std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#af645a825a7e2d8cc5147ddc4e2519d3c">calc_vectorlist_vectorlist_surface_integral</a> (vector&lt; std::complex&lt; double &gt; &gt; vectorlist1, vector&lt; double &gt; vectorlist2)</td></tr>
+<tr class="separator:af645a825a7e2d8cc5147ddc4e2519d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3292d9b5d01d0e8c14193301e5931d7a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a3292d9b5d01d0e8c14193301e5931d7a">calc_vectorlist_vectorlist_surface_integral</a> (vector&lt; double &gt; vectorlist1, vector&lt; double &gt; vectorlist2)</td></tr>
+<tr class="separator:a3292d9b5d01d0e8c14193301e5931d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ff0c90993d3f50d0e9a34f6537ea8a"><td class="memItemLeft" align="right" valign="top">vector&lt; std::complex&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ab9ff0c90993d3f50d0e9a34f6537ea8a">get_ylm_vectorlist_for_mesh</a> (int ell, int m, bool complex_conjugate)</td></tr>
+<tr class="separator:ab9ff0c90993d3f50d0e9a34f6537ea8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bd008f8067db707b9e6a85bf79d4e57"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a0bd008f8067db707b9e6a85bf79d4e57">get_real_ylm_vectorlist_for_mesh</a> (int ell, int m)</td></tr>
+<tr class="separator:a0bd008f8067db707b9e6a85bf79d4e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3f60f0baf11e1a296d431fd2507d964"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ae3f60f0baf11e1a296d431fd2507d964">get_ulmYlm_vectorlist_for_mesh</a> ()</td></tr>
+<tr class="separator:ae3f60f0baf11e1a296d431fd2507d964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad330faec95b67fcaf0cd8bfc0a00dea2"><td class="memItemLeft" align="right" valign="top">std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ad330faec95b67fcaf0cd8bfc0a00dea2">calc_complex_ylm_surface_integral</a> (int ell, int m, double radius)</td></tr>
+<tr class="separator:ad330faec95b67fcaf0cd8bfc0a00dea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac602f1bf728d5c623740d307a6b747ff"><td class="memItemLeft" align="right" valign="top">std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ac602f1bf728d5c623740d307a6b747ff">calc_complex_ylmthetaphi</a> (int l, int m, double theta, double phi)</td></tr>
+<tr class="memdesc:ac602f1bf728d5c623740d307a6b747ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the complex spherical harmonic for the provided parameters: Y_l,m (theta, phi).  <a href="class_membrane.html#ac602f1bf728d5c623740d307a6b747ff">More...</a><br /></td></tr>
+<tr class="separator:ac602f1bf728d5c623740d307a6b747ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e4f5d8ae9f01e8abec522ffe6bede8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a76e4f5d8ae9f01e8abec522ffe6bede8">calc_real_ylmthetaphi</a> (int l, int m, double theta, double phi)</td></tr>
+<tr class="separator:a76e4f5d8ae9f01e8abec522ffe6bede8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5681fdb7e4ca94208c094d894ea402c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ae5681fdb7e4ca94208c094d894ea402c">calculate_ulm</a> (<a class="el" href="struct_arg_struct.html">ArgStruct</a> args)</td></tr>
+<tr class="separator:ae5681fdb7e4ca94208c094d894ea402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad98445279914e3d75a98b547cfde4b06"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ad98445279914e3d75a98b547cfde4b06">calculate_real_ulm</a> (<a class="el" href="struct_arg_struct.html">ArgStruct</a> args)</td></tr>
+<tr class="separator:ad98445279914e3d75a98b547cfde4b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3129af4fc6c342d073dbc1658d47b5da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a3129af4fc6c342d073dbc1658d47b5da">calculate_ulm_radiustest</a> (int ell_max, int analysis_averaging_option)</td></tr>
+<tr class="separator:a3129af4fc6c342d073dbc1658d47b5da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5ababf0085b050a7b88dfde2dc7b023"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ac5ababf0085b050a7b88dfde2dc7b023">calculate_ulm_radiustest_real</a> (int ell_max, int analysis_averaging_option)</td></tr>
+<tr class="separator:ac5ababf0085b050a7b88dfde2dc7b023"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac78b1aad05861464ee0e13207cd0cdb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ac78b1aad05861464ee0e13207cd0cdb4">calculate_ulm_sub_particles</a> (int ell_max, int analysis_averaging_option)</td></tr>
 <tr class="separator:ac78b1aad05861464ee0e13207cd0cdb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a195f8ae8f3f48b651c528c1c361a8e75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a195f8ae8f3f48b651c528c1c361a8e75">write_ulm</a> (int ell_max, std::string traj_name, double num_frames, std::string extension)</td></tr>
-<tr class="separator:a195f8ae8f3f48b651c528c1c361a8e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad173f5428c5ba7a1bc880c244ff56166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ad173f5428c5ba7a1bc880c244ff56166">write_ulm</a> (<a class="el" href="struct_arg_struct.html">ArgStruct</a> args)</td></tr>
+<tr class="separator:ad173f5428c5ba7a1bc880c244ff56166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72445fcd7cd727540add60ad27c5771c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a72445fcd7cd727540add60ad27c5771c">set_com_to_zero</a> ()</td></tr>
 <tr class="separator:a72445fcd7cd727540add60ad27c5771c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07bf89493e23e321f88d6d1e21f6d1ae"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a07bf89493e23e321f88d6d1e21f6d1ae">calculate_bending_energy</a> (void)</td></tr>
@@ -324,6 +353,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2ab5e9ec0ae823cfa224be4db90e11c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a2ab5e9ec0ae823cfa224be4db90e11c5">get_num_of_triangle</a> ()</td></tr>
 <tr class="memdesc:a2ab5e9ec0ae823cfa224be4db90e11c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the calculated number of triangles in the imported mesh file.  <a href="class_membrane.html#a2ab5e9ec0ae823cfa224be4db90e11c5">More...</a><br /></td></tr>
 <tr class="separator:a2ab5e9ec0ae823cfa224be4db90e11c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa30c0c1a22f13e2801f2c2fbdf481ef6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#aa30c0c1a22f13e2801f2c2fbdf481ef6">get_spherical_position</a> (int node_number, int node_coordinate)</td></tr>
+<tr class="memdesc:aa30c0c1a22f13e2801f2c2fbdf481ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the r (0), theta (1), and phi (2) spherical coordinate of the node index (number).  <a href="class_membrane.html#aa30c0c1a22f13e2801f2c2fbdf481ef6">More...</a><br /></td></tr>
+<tr class="separator:aa30c0c1a22f13e2801f2c2fbdf481ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72b951cd255e853e51db5dcaa0bfc9d5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a72b951cd255e853e51db5dcaa0bfc9d5">get_node_position</a> (int node_number, int node_coordinate)</td></tr>
 <tr class="memdesc:a72b951cd255e853e51db5dcaa0bfc9d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the x (0), y (1), and z (2) coordinate of the node index (number).  <a href="class_membrane.html#a72b951cd255e853e51db5dcaa0bfc9d5">More...</a><br /></td></tr>
 <tr class="separator:a72b951cd255e853e51db5dcaa0bfc9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -382,10 +414,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab7aaf84a805847bd5ce2e3f2424e2b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a913a1986442b00afc8839ce37ccdac7d"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a913a1986442b00afc8839ce37ccdac7d">spherical_positions</a></td></tr>
 <tr class="separator:a913a1986442b00afc8839ce37ccdac7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a039756955a6fa5adcf5c9f8a215a5d9a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a039756955a6fa5adcf5c9f8a215a5d9a">z_node_index</a> = -1</td></tr>
-<tr class="separator:a039756955a6fa5adcf5c9f8a215a5d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02d0728f52f2c6285a3e6e4de43f243c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a02d0728f52f2c6285a3e6e4de43f243c">y_node_index</a> = -1</td></tr>
-<tr class="separator:a02d0728f52f2c6285a3e6e4de43f243c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78f183bfa7a6cf6a1bb1b25cdc56a0fa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a78f183bfa7a6cf6a1bb1b25cdc56a0fa">min_radius_after_relaxation</a></td></tr>
 <tr class="separator:a78f183bfa7a6cf6a1bb1b25cdc56a0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2926e36f86391bae373ce0c4ee2803e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ad2926e36f86391bae373ce0c4ee2803e">output_file_neme</a></td></tr>
@@ -481,8 +509,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a34400db3895f0e440d6f75d52c2a1167"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a34400db3895f0e440d6f75d52c2a1167">rescale_factor</a> =1</td></tr>
 <tr class="separator:a34400db3895f0e440d6f75d52c2a1167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9412c82b19f24cc2bfe9f99c0499a371"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a9412c82b19f24cc2bfe9f99c0499a371">potential_1</a> (void)</td></tr>
 <tr class="separator:a9412c82b19f24cc2bfe9f99c0499a371"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c36e6088a027e0f95f14a3b1aa2b6e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a7c36e6088a027e0f95f14a3b1aa2b6e4">potential_2</a> (void)</td></tr>
@@ -518,8 +546,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a3cb57b9504a01eabb96bea26e532b9cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a3cb57b9504a01eabb96bea26e532b9cc">export_relaxed</a> (int MD_step)</td></tr>
 <tr class="separator:a3cb57b9504a01eabb96bea26e532b9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
 <tr class="memitem:a62184107a13f4b5f65c60177040fccf2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a62184107a13f4b5f65c60177040fccf2">mem_index</a></td></tr>
 <tr class="memdesc:a62184107a13f4b5f65c60177040fccf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store the label(pdb) used to write to the trajectory file.  <a href="class_membrane.html#a62184107a13f4b5f65c60177040fccf2">More...</a><br /></td></tr>
 <tr class="separator:a62184107a13f4b5f65c60177040fccf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -691,7 +719,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -760,7 +788,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -783,6 +811,123 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a vector that lists the triangle neighbours of each node pair. </p>
+
+</div>
+</div>
+<a id="ad330faec95b67fcaf0cd8bfc0a00dea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad330faec95b67fcaf0cd8bfc0a00dea2">&#9670;&nbsp;</a></span>calc_complex_ylm_surface_integral()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::complex&lt;double&gt; Membrane::calc_complex_ylm_surface_integral </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>radius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac602f1bf728d5c623740d307a6b747ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac602f1bf728d5c623740d307a6b747ff">&#9670;&nbsp;</a></span>calc_complex_ylmthetaphi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::complex&lt;double&gt; Membrane::calc_complex_ylmthetaphi </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>return the complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). </p>
+<p>Where l is a positiv integer, m is defined -l &lt;= m &lt;= l, theta is 0 &lt;= theta &lt;= pi, and phi is defined 0 &lt;= phi &lt;= 2pi. s </p>
+
+</div>
+</div>
+<a id="a76e4f5d8ae9f01e8abec522ffe6bede8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76e4f5d8ae9f01e8abec522ffe6bede8">&#9670;&nbsp;</a></span>calc_real_ylmthetaphi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Membrane::calc_real_ylmthetaphi </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -819,6 +964,90 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculate and return the cot of the angle between nodes A(middle of the angle), B, and C. </p>
+
+</div>
+</div>
+<a id="a3292d9b5d01d0e8c14193301e5931d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3292d9b5d01d0e8c14193301e5931d7a">&#9670;&nbsp;</a></span>calc_vectorlist_vectorlist_surface_integral() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Membrane::calc_vectorlist_vectorlist_surface_integral </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af645a825a7e2d8cc5147ddc4e2519d3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af645a825a7e2d8cc5147ddc4e2519d3c">&#9670;&nbsp;</a></span>calc_vectorlist_vectorlist_surface_integral() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::complex&lt;double&gt; Membrane::calc_vectorlist_vectorlist_surface_integral </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; std::complex&lt; double &gt; &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f24fbfc4cd6f0ea29b46ea6984d2b81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f24fbfc4cd6f0ea29b46ea6984d2b81">&#9670;&nbsp;</a></span>calc_vectorlist_vectorlist_surface_integral() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::complex&lt;double&gt; Membrane::calc_vectorlist_vectorlist_surface_integral </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; std::complex&lt; double &gt; &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; std::complex&lt; double &gt; &gt;&#160;</td>
+          <td class="paramname"><em>vectorlist2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -886,6 +1115,24 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad98445279914e3d75a98b547cfde4b06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad98445279914e3d75a98b547cfde4b06">&#9670;&nbsp;</a></span>calculate_real_ulm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::calculate_real_ulm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_arg_struct.html">ArgStruct</a>&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abe18ac1a231653ef4e6baec4dfa18ae8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abe18ac1a231653ef4e6baec4dfa18ae8">&#9670;&nbsp;</a></span>calculate_surface_area_with_voronoi()</h2>
 
@@ -906,14 +1153,60 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af2990960fd66be652c90a78ee1303255"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2990960fd66be652c90a78ee1303255">&#9670;&nbsp;</a></span>calculate_ulm()</h2>
+<a id="ae5681fdb7e4ca94208c094d894ea402c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5681fdb7e4ca94208c094d894ea402c">&#9670;&nbsp;</a></span>calculate_ulm()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void Membrane::calculate_ulm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_arg_struct.html">ArgStruct</a>&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3129af4fc6c342d073dbc1658d47b5da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3129af4fc6c342d073dbc1658d47b5da">&#9670;&nbsp;</a></span>calculate_ulm_radiustest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::calculate_ulm_radiustest </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ell_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>analysis_averaging_option</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac5ababf0085b050a7b88dfde2dc7b023"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5ababf0085b050a7b88dfde2dc7b023">&#9670;&nbsp;</a></span>calculate_ulm_radiustest_real()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::calculate_ulm_radiustest_real </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>ell_max</em>, </td>
@@ -1414,7 +1707,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1566,7 +1859,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1610,7 +1903,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1669,6 +1962,86 @@ Private Attributes</h2></td></tr>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3bc2d499f821bbd2d1587db4c6fe5745"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bc2d499f821bbd2d1587db4c6fe5745">&#9670;&nbsp;</a></span>generate_ulm_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::generate_ulm_mode </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ulm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>radius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab371e36de15ea9a8a44d4e7a3174abe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab371e36de15ea9a8a44d4e7a3174abe7">&#9670;&nbsp;</a></span>generate_ulm_mode_real()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::generate_ulm_mode_real </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>Ell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>M</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>uLM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>radius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2418,6 +2791,34 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0bd008f8067db707b9e6a85bf79d4e57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bd008f8067db707b9e6a85bf79d4e57">&#9670;&nbsp;</a></span>get_real_ylm_vectorlist_for_mesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Membrane::get_real_ylm_vectorlist_for_mesh </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3030a224f8b882e0bdec2d1fd6861304"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3030a224f8b882e0bdec2d1fd6861304">&#9670;&nbsp;</a></span>get_relax_with_actin_flag()</h2>
 
@@ -2521,6 +2922,45 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction. </p>
+
+</div>
+</div>
+<a id="aa30c0c1a22f13e2801f2c2fbdf481ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa30c0c1a22f13e2801f2c2fbdf481ef6">&#9670;&nbsp;</a></span>get_spherical_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Membrane::get_spherical_position </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>node_number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>node_coordinate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the r (0), theta (1), and phi (2) spherical coordinate of the node index (number). </p>
+<p>Note: <a class="el" href="class_membrane.html#aab2fdee5eb2570cfaebfe2812ca32b2b">update_spherical_positions()</a>; should be called to upddate the values. </p>
 
 </div>
 </div>
@@ -2646,6 +3086,23 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae3f60f0baf11e1a296d431fd2507d964"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3f60f0baf11e1a296d431fd2507d964">&#9670;&nbsp;</a></span>get_ulmYlm_vectorlist_for_mesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Membrane::get_ulmYlm_vectorlist_for_mesh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac8de522542c4c2c68ea489ce13a79bb5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8de522542c4c2c68ea489ce13a79bb5">&#9670;&nbsp;</a></span>get_vesicle_interaction_cut_off()</h2>
 
@@ -2726,6 +3183,40 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab9ff0c90993d3f50d0e9a34f6537ea8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ff0c90993d3f50d0e9a34f6537ea8a">&#9670;&nbsp;</a></span>get_ylm_vectorlist_for_mesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;std::complex&lt;double&gt; &gt; Membrane::get_ylm_vectorlist_for_mesh </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>complex_conjugate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aee1e79307ba785b2d24213f88d861026"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee1e79307ba785b2d24213f88d861026">&#9670;&nbsp;</a></span>Hookian()</h2>
 
@@ -2745,7 +3236,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2844,8 +3335,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5a6dd613fe7e6547374357c7ec962fd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a6dd613fe7e6547374357c7ec962fd3">&#9670;&nbsp;</a></span>load_pdb_frame()</h2>
+<a id="a5d005acc4919648eaeacdddcf9fee70f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d005acc4919648eaeacdddcf9fee70f">&#9670;&nbsp;</a></span>load_pdb_frame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2859,20 +3350,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>analysis_averaging_option</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>z_node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>y_node</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_arg_struct.html">ArgStruct</a>&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2990,6 +3469,34 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8089b959ecd9096a02d8690b13e2e548"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8089b959ecd9096a02d8690b13e2e548">&#9670;&nbsp;</a></span>myWritePDBFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Membrane::myWritePDBFrame </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>frameNum</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>traj_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a5c59ed9f9fe15f7113d9fd693c58eb3d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c59ed9f9fe15f7113d9fd693c58eb3d">&#9670;&nbsp;</a></span>Node_Bonds_identifier()</h2>
 
@@ -3009,7 +3516,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3035,7 +3542,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3079,7 +3586,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3141,7 +3648,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3167,7 +3674,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3193,7 +3700,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3219,7 +3726,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3245,7 +3752,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3307,7 +3814,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3443,8 +3950,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a96eda821c8daac8dce9377ac7c2e4f58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96eda821c8daac8dce9377ac7c2e4f58">&#9670;&nbsp;</a></span>rotate_particle_to_axes()</h2>
+<a id="abc3a096fd2b748a88659c8c13aa2245f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc3a096fd2b748a88659c8c13aa2245f">&#9670;&nbsp;</a></span>rotate_particle_to_axes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3452,8 +3959,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Membrane::rotate_particle_to_axes </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="struct_arg_struct.html">ArgStruct</a>&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -3808,23 +4315,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae9f7463ee8897038c607170b798bf625"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9f7463ee8897038c607170b798bf625">&#9670;&nbsp;</a></span>surface_integral_test()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Membrane::surface_integral_test </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="acd87b1b9cf2c6c91a887749528c9f556"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd87b1b9cf2c6c91a887749528c9f556">&#9670;&nbsp;</a></span>Thermostat_2()</h2>
 
@@ -3914,7 +4404,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3940,7 +4430,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4218,8 +4708,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a195f8ae8f3f48b651c528c1c361a8e75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a195f8ae8f3f48b651c528c1c361a8e75">&#9670;&nbsp;</a></span>write_ulm()</h2>
+<a id="ad173f5428c5ba7a1bc880c244ff56166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad173f5428c5ba7a1bc880c244ff56166">&#9670;&nbsp;</a></span>write_ulm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4227,31 +4717,9 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Membrane::write_ulm </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>ell_max</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="struct_arg_struct.html">ArgStruct</a>&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>traj_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>num_frames</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>extension</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -4288,7 +4756,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4366,7 +4834,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4388,7 +4856,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4410,7 +4878,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4448,7 +4916,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4470,7 +4938,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4506,7 +4974,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4528,7 +4996,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4564,7 +5032,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4586,7 +5054,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4608,7 +5076,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4630,7 +5098,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4666,7 +5134,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4702,7 +5170,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4794,7 +5262,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4830,7 +5298,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4852,7 +5320,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4876,7 +5344,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4900,7 +5368,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4922,7 +5390,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -4986,7 +5454,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5036,7 +5504,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5107,7 +5575,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5171,7 +5639,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5193,7 +5661,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5215,7 +5683,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5237,7 +5705,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5259,7 +5727,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5325,7 +5793,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5375,7 +5843,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5397,7 +5865,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5419,7 +5887,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5441,7 +5909,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5477,7 +5945,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5541,7 +6009,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5633,7 +6101,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5669,7 +6137,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5691,7 +6159,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5713,7 +6181,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5805,7 +6273,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5827,7 +6295,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5849,7 +6317,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5871,7 +6339,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5907,7 +6375,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5929,7 +6397,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5951,7 +6419,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -5987,23 +6455,9 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a02d0728f52f2c6285a3e6e4de43f243c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02d0728f52f2c6285a3e6e4de43f243c">&#9670;&nbsp;</a></span>y_node_index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Membrane::y_node_index = -1</td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>
@@ -6023,7 +6477,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -6059,23 +6513,9 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a039756955a6fa5adcf5c9f8a215a5d9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a039756955a6fa5adcf5c9f8a215a5d9a">&#9670;&nbsp;</a></span>z_node_index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Membrane::z_node_index = -1</td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>
@@ -6095,7 +6535,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

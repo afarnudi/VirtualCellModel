@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['membrane_548',['Membrane',['../class_membrane.html',1,'']]],
-  ['myatominfo_549',['MyAtomInfo',['../struct_my_atom_info.html',1,'']]],
-  ['myopenmmdata_550',['MyOpenMMData',['../struct_my_open_m_m_data.html',1,'']]]
+  ['helpgroupdetails_850',['HelpGroupDetails',['../structcxxopts_1_1_help_group_details.html',1,'cxxopts']]],
+  ['helpoptiondetails_851',['HelpOptionDetails',['../structcxxopts_1_1_help_option_details.html',1,'cxxopts']]]
 ];
