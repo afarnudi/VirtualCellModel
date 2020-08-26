@@ -111,6 +111,10 @@ Functions</h2></td></tr>
 <tr class="separator:a473aa6cb9b00bd6a463b1fba8bb1759c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c3daffa2a3403642cd60dfa810367a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a0c3daffa2a3403642cd60dfa810367a8">force_update</a> (<a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *)</td></tr>
 <tr class="separator:a0c3daffa2a3403642cd60dfa810367a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1a93c7af6ccf8fe6b0bd0619028094f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ab1a93c7af6ccf8fe6b0bd0619028094f">hill_update</a> (<a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[])</td></tr>
+<tr class="separator:ab1a93c7af6ccf8fe6b0bd0619028094f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad797d90c2ba815c77cd0574f1545487f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ad797d90c2ba815c77cd0574f1545487f">kf_update</a> (<a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[])</td></tr>
+<tr class="separator:ad797d90c2ba815c77cd0574f1545487f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae34314116cd652d2cb46b3fc4e428a4f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ae34314116cd652d2cb46b3fc4e428a4f">dist_calc</a> (<a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], int bondtype)</td></tr>
 <tr class="separator:ae34314116cd652d2cb46b3fc4e428a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a475bc980097e87c015468a08cdd85919"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a475bc980097e87c015468a08cdd85919">Nominal_length_calc</a> (<a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *, int bondtype)</td></tr>
@@ -119,9 +123,9 @@ Functions</h2></td></tr>
 <tr class="separator:a823330efb8a584d843d6a164b4628bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac550c9043682a9639b134b4650d5c4b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ac550c9043682a9639b134b4650d5c4b2">myTerminateOpenMM</a> (<a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *)</td></tr>
 <tr class="separator:ac550c9043682a9639b134b4650d5c4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab63dab643e75c91d48a5f25dbae35e13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ab63dab643e75c91d48a5f25dbae35e13">myWritePDBFrame</a> (int frameNum, double timeInPs, double energyInKcal, double potential_energy, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], const <a class="el" href="struct_bonds.html">Bonds</a> bonds[], std::string traj_name)</td></tr>
-<tr class="memdesc:ab63dab643e75c91d48a5f25dbae35e13"><td class="mdescLeft">&#160;</td><td class="mdescRight">PDB FILE WRITER Given state data, output a single frame (pdb "model") of the trajectory.  <a href="_open_m_m__funcs_8hpp.html#ab63dab643e75c91d48a5f25dbae35e13">More...</a><br /></td></tr>
-<tr class="separator:ab63dab643e75c91d48a5f25dbae35e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a591ee351843d541897256479983ad0ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a591ee351843d541897256479983ad0ff">myWritePDBFrame</a> (int frameNum, double timeInPs, double energyInKcal, double potential_energy, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], const <a class="el" href="struct_bonds.html">Bonds</a> bonds[], std::string traj_name, std::string force_name)</td></tr>
+<tr class="memdesc:a591ee351843d541897256479983ad0ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">PDB FILE WRITER Given state data, output a single frame (pdb "model") of the trajectory.  <a href="_open_m_m__funcs_8hpp.html#a591ee351843d541897256479983ad0ff">More...</a><br /></td></tr>
+<tr class="separator:a591ee351843d541897256479983ad0ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76f1415b6ca83b61f93ba2668d179bd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a76f1415b6ca83b61f93ba2668d179bd5">writeXYZFrame</a> (int atom_count, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], std::string traj_name)</td></tr>
 <tr class="memdesc:a76f1415b6ca83b61f93ba2668d179bd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">PDB FILE WRITER Given state data, output a single frame (pdb "model") of the trajectory.  <a href="_open_m_m__funcs_8hpp.html#a76f1415b6ca83b61f93ba2668d179bd5">More...</a><br /></td></tr>
 <tr class="separator:a76f1415b6ca83b61f93ba2668d179bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,9 +147,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a0f79fcecea6eae95f88794997ab9d8f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a0f79fcecea6eae95f88794997ab9d8f9">convert_Actin_position_to_openmm</a> (<a class="el" href="class_actin.html">Actin</a> act)</td></tr>
 <tr class="memdesc:a0f79fcecea6eae95f88794997ab9d8f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the position information of the <a class="el" href="class_actin.html">Actin</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#a0f79fcecea6eae95f88794997ab9d8f9">More...</a><br /></td></tr>
 <tr class="separator:a0f79fcecea6eae95f88794997ab9d8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b6561608e27c112a8a5042a64d1b137"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bonds.html">Bonds</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a2b6561608e27c112a8a5042a64d1b137">convert_Actin_bond_info_to_openmm</a> (<a class="el" href="class_actin.html">Actin</a> act)</td></tr>
-<tr class="memdesc:a2b6561608e27c112a8a5042a64d1b137"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the bond information of the <a class="el" href="class_actin.html">Actin</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#a2b6561608e27c112a8a5042a64d1b137">More...</a><br /></td></tr>
-<tr class="separator:a2b6561608e27c112a8a5042a64d1b137"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7437bcd23b24b1444348123248b811cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bonds.html">Bonds</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a7437bcd23b24b1444348123248b811cb">convert_Actin_bond_info_to_openmm</a> (<a class="el" href="class_actin.html">Actin</a> act, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *atoms)</td></tr>
+<tr class="memdesc:a7437bcd23b24b1444348123248b811cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the bond information of the <a class="el" href="class_actin.html">Actin</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#a7437bcd23b24b1444348123248b811cb">More...</a><br /></td></tr>
+<tr class="separator:a7437bcd23b24b1444348123248b811cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdee0f9d4949fa0139913c78de2ef158"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#acdee0f9d4949fa0139913c78de2ef158">OpenMM_ActMem_info_relay</a> (vector&lt; <a class="el" href="class_actin.html">Actin</a> &gt; acts, vector&lt; <a class="el" href="class_membrane.html">Membrane</a> &gt; membranes, <a class="el" href="struct_bonds.html">Bonds</a> *all_bonds, int mem_atom_count, int &amp;bond_count)</td></tr>
 <tr class="separator:acdee0f9d4949fa0139913c78de2ef158"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28b2c36c621b38e54bc145b9a5c6040a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bonds.html">Bonds</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a28b2c36c621b38e54bc145b9a5c6040a">convert_ActMem_bond_info_to_openmm</a> (<a class="el" href="class_actin.html">Actin</a> act, int k)</td></tr>
@@ -156,9 +160,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a7a1ee14117003cfb541163c66ed34339"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a7a1ee14117003cfb541163c66ed34339">convert_ECM_position_to_openmm</a> (<a class="el" href="class_e_c_m.html">ECM</a> ecm)</td></tr>
 <tr class="memdesc:a7a1ee14117003cfb541163c66ed34339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the position information of the <a class="el" href="class_e_c_m.html">ECM</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#a7a1ee14117003cfb541163c66ed34339">More...</a><br /></td></tr>
 <tr class="separator:a7a1ee14117003cfb541163c66ed34339"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac184cc2a8a8ad9546124ffee10eeff93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bonds.html">Bonds</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ac184cc2a8a8ad9546124ffee10eeff93">convert_ECM_bond_info_to_openmm</a> (<a class="el" href="class_e_c_m.html">ECM</a> ecm)</td></tr>
-<tr class="memdesc:ac184cc2a8a8ad9546124ffee10eeff93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the bond information of the <a class="el" href="class_e_c_m.html">ECM</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#ac184cc2a8a8ad9546124ffee10eeff93">More...</a><br /></td></tr>
-<tr class="separator:ac184cc2a8a8ad9546124ffee10eeff93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0da4cdd2b888f012daed1411d303119a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_bonds.html">Bonds</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a0da4cdd2b888f012daed1411d303119a">convert_ECM_bond_info_to_openmm</a> (<a class="el" href="class_e_c_m.html">ECM</a> ecm, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *atoms)</td></tr>
+<tr class="memdesc:a0da4cdd2b888f012daed1411d303119a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relay the bond information of the <a class="el" href="class_e_c_m.html">ECM</a> nodes to other data structures ready to pass to OpenMM handles.  <a href="_open_m_m__funcs_8hpp.html#a0da4cdd2b888f012daed1411d303119a">More...</a><br /></td></tr>
+<tr class="separator:a0da4cdd2b888f012daed1411d303119a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a465e1af998f0df884c24c2022df71adc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a465e1af998f0df884c24c2022df71adc">OpenMM_Chromatin_info_relay</a> (vector&lt; <a class="el" href="class_chromatin.html">Chromatin</a> &gt; chromos, vector&lt; vector&lt; std::set&lt; int &gt; &gt; &gt; &amp;chromo_set, <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *all_atoms, <a class="el" href="struct_bonds.html">Bonds</a> *all_bonds, <a class="el" href="struct_dihedrals.html">Dihedrals</a> *all_dihedrals, int &amp;atom_count, int &amp;bond_count, int &amp;dihe_coun)</td></tr>
 <tr class="separator:a465e1af998f0df884c24c2022df71adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39395fb394a9da7ad8bbf6ad3b5594ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a39395fb394a9da7ad8bbf6ad3b5594ad">convert_Chromatin_position_to_openmm</a> (<a class="el" href="class_chromatin.html">Chromatin</a> chromo)</td></tr>
@@ -185,6 +189,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a496e9b29e3cfd8b380a604dbedb05a56"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a496e9b29e3cfd8b380a604dbedb05a56">init_ext_force</a> (vector&lt; OpenMM::CustomExternalForce * &gt; &amp;ext_force, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; std::set&lt; int &gt; &gt; set_1, int set_1_index, string set_name)</td></tr>
 <tr class="memdesc:a496e9b29e3cfd8b380a604dbedb05a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate External force for a set of class atoms.  <a href="_open_m_m__funcs_8hpp.html#a496e9b29e3cfd8b380a604dbedb05a56">More...</a><br /></td></tr>
 <tr class="separator:a496e9b29e3cfd8b380a604dbedb05a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29a292389968a45f3a7544fbbc4c530"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ab29a292389968a45f3a7544fbbc4c530">initdouble_LJ_12_6_interaction</a> (vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;LJ_12_6_interactions, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; std::set&lt; int &gt; &gt; set_1, vector&lt; std::set&lt; int &gt; &gt; set_2, int set_1_index, int set_2_index, string set_1_name, string set_2_name)</td></tr>
+<tr class="memdesc:ab29a292389968a45f3a7544fbbc4c530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate the stronger Lenard Jones 12 6 interaction for sets of class atoms.  <a href="_open_m_m__funcs_8hpp.html#ab29a292389968a45f3a7544fbbc4c530">More...</a><br /></td></tr>
+<tr class="separator:ab29a292389968a45f3a7544fbbc4c530"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae94088fbaa51da946c3b65f0788a2251"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ae94088fbaa51da946c3b65f0788a2251">init_LJ_4_2_interaction</a> (vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;LJ_12_6_interactions, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; std::set&lt; int &gt; &gt; set_1, vector&lt; std::set&lt; int &gt; &gt; set_2, int set_1_index, int set_2_index, string set_1_name, string set_2_name)</td></tr>
+<tr class="memdesc:ae94088fbaa51da946c3b65f0788a2251"><td class="mdescLeft">&#160;</td><td class="mdescRight">initiate LJ 4-2  <a href="_open_m_m__funcs_8hpp.html#ae94088fbaa51da946c3b65f0788a2251">More...</a><br /></td></tr>
+<tr class="separator:ae94088fbaa51da946c3b65f0788a2251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cb51ca28e1f9d14b869ecfe9b71b38a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a2cb51ca28e1f9d14b869ecfe9b71b38a">init_Excluded_volume_interaction</a> (vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;ExcludedVolumes, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; std::set&lt; int &gt; &gt; set_1, vector&lt; std::set&lt; int &gt; &gt; set_2, int set_1_index, int set_2_index, string set_1_name, string set_2_name)</td></tr>
 <tr class="separator:a2cb51ca28e1f9d14b869ecfe9b71b38a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6432e6f3ff83683455db8d639dc55b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#aa6432e6f3ff83683455db8d639dc55b3">init_Modified_Excluded_volume_interaction</a> (vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;ExcludedVolumes, const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; std::set&lt; int &gt; &gt; set_1, vector&lt; std::set&lt; int &gt; &gt; set_2, int set_1_index, int set_2_index, string set_1_name, string set_2_name)</td></tr>
@@ -205,9 +215,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ac1d7fbdbec3f6bf0ec3d0891d38d2ce6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ac1d7fbdbec3f6bf0ec3d0891d38d2ce6">add_particles_to_system_and_forces</a> (const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> atoms[], vector&lt; OpenMM::Vec3 &gt; &amp;initialPosInNm, vector&lt; OpenMM::Vec3 &gt; &amp;initialVelInNmperPs, vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;LJ_12_6_interactions, vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;ExcludedVolumes, OpenMM::System &amp;system)</td></tr>
 <tr class="memdesc:ac1d7fbdbec3f6bf0ec3d0891d38d2ce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add particles to the system and forces.  <a href="_open_m_m__funcs_8hpp.html#ac1d7fbdbec3f6bf0ec3d0891d38d2ce6">More...</a><br /></td></tr>
 <tr class="separator:ac1d7fbdbec3f6bf0ec3d0891d38d2ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c8d12f8685aeaa9981b3237824b3e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#ad8c8d12f8685aeaa9981b3237824b3e0">set_bonded_forces</a> (<a class="el" href="struct_bonds.html">Bonds</a> *bonds, OpenMM::HarmonicBondForce *&amp;HarmonicBond, OpenMM::HarmonicBondForce *&amp;Kelvin_VoigtBond, vector&lt; OpenMM::CustomBondForce * &gt; &amp;X4harmonics, vector&lt; OpenMM::CustomBondForce * &gt; &amp;FENEs, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *&amp;time_dependant_data, OpenMM::System &amp;system)</td></tr>
-<tr class="memdesc:ad8c8d12f8685aeaa9981b3237824b3e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define bonded forces and specify the involved atoms.  <a href="_open_m_m__funcs_8hpp.html#ad8c8d12f8685aeaa9981b3237824b3e0">More...</a><br /></td></tr>
-<tr class="separator:ad8c8d12f8685aeaa9981b3237824b3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f775db26cbd7900e08dcb4647d37a13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#a0f775db26cbd7900e08dcb4647d37a13">set_bonded_forces</a> (<a class="el" href="struct_bonds.html">Bonds</a> *bonds, OpenMM::HarmonicBondForce *&amp;HarmonicBond, OpenMM::HarmonicBondForce *&amp;Kelvin_VoigtBond, vector&lt; OpenMM::CustomBondForce * &gt; &amp;X4harmonics, vector&lt; OpenMM::CustomBondForce * &gt; &amp;FENEs, vector&lt; OpenMM::CustomBondForce * &gt; &amp;Contractiles, vector&lt; OpenMM::CustomBondForce * &gt; &amp;KFs, vector&lt; OpenMM::CustomBondForce * &gt; &amp;hill_bonds, vector&lt; OpenMM::CustomBondForce * &gt; &amp;Harmonic_minmax, <a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *&amp;time_dependant_data, OpenMM::System &amp;system)</td></tr>
+<tr class="memdesc:a0f775db26cbd7900e08dcb4647d37a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define bonded forces and specify the involved atoms.  <a href="_open_m_m__funcs_8hpp.html#a0f775db26cbd7900e08dcb4647d37a13">More...</a><br /></td></tr>
+<tr class="separator:a0f775db26cbd7900e08dcb4647d37a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abaeaf0a6ef05ac24ec0f465dce2fe1b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_open_m_m__funcs_8hpp.html#abaeaf0a6ef05ac24ec0f465dce2fe1b4">set_dihedral_forces</a> (<a class="el" href="struct_dihedrals.html">Dihedrals</a> *dihedrals, vector&lt; OpenMM::CustomCompoundBondForce * &gt; &amp;DihedralForces, OpenMM::System &amp;system)</td></tr>
 <tr class="memdesc:abaeaf0a6ef05ac24ec0f465dce2fe1b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set dihedral forces for triangle pair interactions.  <a href="_open_m_m__funcs_8hpp.html#abaeaf0a6ef05ac24ec0f465dce2fe1b4">More...</a><br /></td></tr>
 <tr class="separator:abaeaf0a6ef05ac24ec0f465dce2fe1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -329,8 +339,8 @@ COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM</h2>
 
 </div>
 </div>
-<a id="a2b6561608e27c112a8a5042a64d1b137"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b6561608e27c112a8a5042a64d1b137">&#9670;&nbsp;</a></span>convert_Actin_bond_info_to_openmm()</h2>
+<a id="a7437bcd23b24b1444348123248b811cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7437bcd23b24b1444348123248b811cb">&#9670;&nbsp;</a></span>convert_Actin_bond_info_to_openmm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,8 +349,18 @@ COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM</h2>
           <td class="memname"><a class="el" href="struct_bonds.html">Bonds</a>* convert_Actin_bond_info_to_openmm </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_actin.html">Actin</a>&#160;</td>
-          <td class="paramname"><em>act</em></td><td>)</td>
+          <td class="paramname"><em>act</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *&#160;</td>
+          <td class="paramname"><em>atoms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -437,8 +457,8 @@ COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM</h2>
 
 </div>
 </div>
-<a id="ac184cc2a8a8ad9546124ffee10eeff93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac184cc2a8a8ad9546124ffee10eeff93">&#9670;&nbsp;</a></span>convert_ECM_bond_info_to_openmm()</h2>
+<a id="a0da4cdd2b888f012daed1411d303119a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0da4cdd2b888f012daed1411d303119a">&#9670;&nbsp;</a></span>convert_ECM_bond_info_to_openmm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -447,8 +467,18 @@ COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM</h2>
           <td class="memname"><a class="el" href="struct_bonds.html">Bonds</a>* convert_ECM_bond_info_to_openmm </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_e_c_m.html">ECM</a>&#160;</td>
-          <td class="paramname"><em>ecm</em></td><td>)</td>
+          <td class="paramname"><em>ecm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a> *&#160;</td>
+          <td class="paramname"><em>atoms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -651,6 +681,40 @@ BOND LENGTH</h2>
           <td></td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>wantforce</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1a93c7af6ccf8fe6b0bd0619028094f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1a93c7af6ccf8fe6b0bd0619028094f">&#9670;&nbsp;</a></span>hill_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hill_update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a>&#160;</td>
+          <td class="paramname"><em>atoms</em>[]&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1254,6 +1318,72 @@ BOND LENGTH</h2>
 
 </div>
 </div>
+<a id="ae94088fbaa51da946c3b65f0788a2251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae94088fbaa51da946c3b65f0788a2251">&#9670;&nbsp;</a></span>init_LJ_4_2_interaction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void init_LJ_4_2_interaction </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>LJ_12_6_interactions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a>&#160;</td>
+          <td class="paramname"><em>atoms</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; std::set&lt; int &gt; &gt;&#160;</td>
+          <td class="paramname"><em>set_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; std::set&lt; int &gt; &gt;&#160;</td>
+          <td class="paramname"><em>set_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>set_1_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>set_2_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>set_1_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>set_2_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>initiate LJ 4-2 </p>
+
+</div>
+</div>
 <a id="aa6432e6f3ff83683455db8d639dc55b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa6432e6f3ff83683455db8d639dc55b3">&#9670;&nbsp;</a></span>init_Modified_Excluded_volume_interaction()</h2>
 
@@ -1318,6 +1448,72 @@ BOND LENGTH</h2>
 
 </div>
 </div>
+<a id="ab29a292389968a45f3a7544fbbc4c530"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab29a292389968a45f3a7544fbbc4c530">&#9670;&nbsp;</a></span>initdouble_LJ_12_6_interaction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initdouble_LJ_12_6_interaction </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; OpenMM::CustomNonbondedForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>LJ_12_6_interactions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_my_atom_info.html">MyAtomInfo</a>&#160;</td>
+          <td class="paramname"><em>atoms</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; std::set&lt; int &gt; &gt;&#160;</td>
+          <td class="paramname"><em>set_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; std::set&lt; int &gt; &gt;&#160;</td>
+          <td class="paramname"><em>set_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>set_1_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>set_2_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>set_1_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>set_2_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initiate the stronger Lenard Jones 12 6 interaction for sets of class atoms. </p>
+
+</div>
+</div>
 <a id="a473aa6cb9b00bd6a463b1fba8bb1759c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a473aa6cb9b00bd6a463b1fba8bb1759c">&#9670;&nbsp;</a></span>Kelvin_Voigt_update()</h2>
 
@@ -1346,6 +1542,40 @@ BOND LENGTH</h2>
 <hr  />
  <h2><a class="anchor" id="autotoc_md3"></a>
 Update System parameters</h2>
+
+</div>
+</div>
+<a id="ad797d90c2ba815c77cd0574f1545487f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad797d90c2ba815c77cd0574f1545487f">&#9670;&nbsp;</a></span>kf_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void kf_update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_my_open_m_m_data.html">MyOpenMMData</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_time_dependant_data.html">TimeDependantData</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_my_atom_info.html">MyAtomInfo</a>&#160;</td>
+          <td class="paramname"><em>atoms</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1630,8 +1860,8 @@ DEALLOCATE OpenMM OBJECTS</h2>
 
 </div>
 </div>
-<a id="ab63dab643e75c91d48a5f25dbae35e13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab63dab643e75c91d48a5f25dbae35e13">&#9670;&nbsp;</a></span>myWritePDBFrame()</h2>
+<a id="a591ee351843d541897256479983ad0ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a591ee351843d541897256479983ad0ff">&#9670;&nbsp;</a></span>myWritePDBFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1676,7 +1906,13 @@ DEALLOCATE OpenMM OBJECTS</h2>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>traj_name</em>&#160;</td>
+          <td class="paramname"><em>traj_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>force_name</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2026,8 +2262,8 @@ DEALLOCATE OpenMM OBJECTS</h2>
 
 </div>
 </div>
-<a id="ad8c8d12f8685aeaa9981b3237824b3e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8c8d12f8685aeaa9981b3237824b3e0">&#9670;&nbsp;</a></span>set_bonded_forces()</h2>
+<a id="a0f775db26cbd7900e08dcb4647d37a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f775db26cbd7900e08dcb4647d37a13">&#9670;&nbsp;</a></span>set_bonded_forces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2061,6 +2297,30 @@ DEALLOCATE OpenMM OBJECTS</h2>
           <td></td>
           <td class="paramtype">vector&lt; OpenMM::CustomBondForce * &gt; &amp;&#160;</td>
           <td class="paramname"><em>FENEs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; OpenMM::CustomBondForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Contractiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; OpenMM::CustomBondForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>KFs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; OpenMM::CustomBondForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>hill_bonds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; OpenMM::CustomBondForce * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Harmonic_minmax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

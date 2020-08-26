@@ -1,6 +1,8 @@
 var annotated_dup =
 [
+    [ "cxxopts", "namespacecxxopts.html", "namespacecxxopts" ],
     [ "Actin", "class_actin.html", "class_actin" ],
+    [ "ArgStruct", "struct_arg_struct.html", "struct_arg_struct" ],
     [ "Bonds", "struct_bonds.html", "struct_bonds" ],
     [ "Chromatin", "class_chromatin.html", "class_chromatin" ],
     [ "Dihedrals", "struct_dihedrals.html", "struct_dihedrals" ],

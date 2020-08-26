@@ -93,7 +93,6 @@ $(document).ready(function(){initNavTree('interaction_8hpp.html',''); initResiza
 <code>#include &quot;<a class="el" href="_e_c_m_8h_source.html">ECM.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_chromatin_8h_source.html">Chromatin.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_actin_8h_source.html">Actin.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="point__particle_8h_source.html">point_particle.h</a>&quot;</code><br />
 </div>
 <p><a href="interaction_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -119,8 +118,8 @@ Functions</h2></td></tr>
 <tr class="separator:acbf398a1f943366c50d49af14714a0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5792231911edd06b23a168f72f1dd991"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a5792231911edd06b23a168f72f1dd991">update_ecm_mem_neighbour_list</a> (<a class="el" href="class_e_c_m.html">ECM</a> &amp;ecm, <a class="el" href="class_membrane.html">Membrane</a> &amp;mem)</td></tr>
 <tr class="separator:a5792231911edd06b23a168f72f1dd991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a52b44f8a2f629ba642676e06b0b70d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a1a52b44f8a2f629ba642676e06b0b70d">add_nodes_to_neighbour_list</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;mem, vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
-<tr class="separator:a1a52b44f8a2f629ba642676e06b0b70d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22970dc98dce60c8eeaeffa3cb445d94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a22970dc98dce60c8eeaeffa3cb445d94">add_nodes_to_neighbour_list</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;mem, vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
+<tr class="separator:a22970dc98dce60c8eeaeffa3cb445d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afef3c68679636c0347209cf6d77db1ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#afef3c68679636c0347209cf6d77db1ec">Membrane_ECM_shared_node_force</a> (<a class="el" href="class_e_c_m.html">ECM</a> &amp;ecm, <a class="el" href="class_membrane.html">Membrane</a> &amp;mem)</td></tr>
 <tr class="separator:afef3c68679636c0347209cf6d77db1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a989584a13f2b6c37fedc4c60add73d7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a989584a13f2b6c37fedc4c60add73d7d">Vesicle_particle_neighbour_finder</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;particle, <a class="el" href="class_membrane.html">Membrane</a> &amp;vesicle)</td></tr>
@@ -129,18 +128,12 @@ Functions</h2></td></tr>
 <tr class="separator:a18095a829e721ec5526af7c56058688d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31647f1e5a456e2702fd210d6f49ec1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a31647f1e5a456e2702fd210d6f49ec1e">update_particle_vesicle_neighbour_list</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;particle, <a class="el" href="class_membrane.html">Membrane</a> &amp;vesicle)</td></tr>
 <tr class="separator:a31647f1e5a456e2702fd210d6f49ec1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac82f17a35963479ddead12e43db0dda6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#ac82f17a35963479ddead12e43db0dda6">add_nodes_to_particle_neighbour_list</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;particle, vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
-<tr class="separator:ac82f17a35963479ddead12e43db0dda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5267cbb5a39c30181d453bdba195b2f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a5267cbb5a39c30181d453bdba195b2f0">add_nodes_to_particle_neighbour_list</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;particle, vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
+<tr class="separator:a5267cbb5a39c30181d453bdba195b2f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75e70693cf499e3b7787e23a57038e6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a75e70693cf499e3b7787e23a57038e6e">particle_vesicle_shared_node_force</a> (<a class="el" href="class_membrane.html">Membrane</a> &amp;particle, <a class="el" href="class_membrane.html">Membrane</a> &amp;vesicle)</td></tr>
 <tr class="separator:a75e70693cf499e3b7787e23a57038e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236de9961742fdfdda2f62329038ca1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a236de9961742fdfdda2f62329038ca1e">Vesicle_pointparticle_neighbour_finder</a> (<a class="el" href="classpoint__particle.html">point_particle</a> &amp;particle, <a class="el" href="class_membrane.html">Membrane</a> &amp;vesicle)</td></tr>
-<tr class="separator:a236de9961742fdfdda2f62329038ca1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a148174b2536b2a5783879ff93b558ed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a148174b2536b2a5783879ff93b558ed1">pointparticle_vesicle_shared_node_force</a> (<a class="el" href="classpoint__particle.html">point_particle</a> &amp;particle, <a class="el" href="class_membrane.html">Membrane</a> &amp;vesicle)</td></tr>
-<tr class="separator:a148174b2536b2a5783879ff93b558ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4017bc61cb6d41509368c894c13c85e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a4017bc61cb6d41509368c894c13c85e8">pointparticle_pointparticle_interaction</a> (<a class="el" href="classpoint__particle.html">point_particle</a> &amp;first, <a class="el" href="classpoint__particle.html">point_particle</a> &amp;second)</td></tr>
-<tr class="separator:a4017bc61cb6d41509368c894c13c85e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fc864b3c170f8c46cf3f4252835a7dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a7fc864b3c170f8c46cf3f4252835a7dc">prune_list</a> (int mem_nodes, vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
-<tr class="separator:a7fc864b3c170f8c46cf3f4252835a7dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fc55ef9e72f60e9b8662fc529cd4cbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a0fc55ef9e72f60e9b8662fc529cd4cbd">prune_list</a> (int mem_nodes, vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt; neighbour_pairs)</td></tr>
+<tr class="separator:a0fc55ef9e72f60e9b8662fc529cd4cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ac6e9dace50cab886e8a1b0c4ca27f064"></a>
@@ -217,8 +210,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1a52b44f8a2f629ba642676e06b0b70d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a52b44f8a2f629ba642676e06b0b70d">&#9670;&nbsp;</a></span>add_nodes_to_neighbour_list()</h2>
+<a id="a22970dc98dce60c8eeaeffa3cb445d94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22970dc98dce60c8eeaeffa3cb445d94">&#9670;&nbsp;</a></span>add_nodes_to_neighbour_list()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -232,7 +225,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt;&#160;</td>
+          <td class="paramtype">vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt;&#160;</td>
           <td class="paramname"><em>neighbour_pairs</em>&#160;</td>
         </tr>
         <tr>
@@ -245,8 +238,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac82f17a35963479ddead12e43db0dda6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac82f17a35963479ddead12e43db0dda6">&#9670;&nbsp;</a></span>add_nodes_to_particle_neighbour_list()</h2>
+<a id="a5267cbb5a39c30181d453bdba195b2f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5267cbb5a39c30181d453bdba195b2f0">&#9670;&nbsp;</a></span>add_nodes_to_particle_neighbour_list()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +253,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt;&#160;</td>
+          <td class="paramtype">vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt;&#160;</td>
           <td class="paramname"><em>neighbour_pairs</em>&#160;</td>
         </tr>
         <tr>
@@ -497,64 +490,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4017bc61cb6d41509368c894c13c85e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4017bc61cb6d41509368c894c13c85e8">&#9670;&nbsp;</a></span>pointparticle_pointparticle_interaction()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pointparticle_pointparticle_interaction </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classpoint__particle.html">point_particle</a> &amp;&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classpoint__particle.html">point_particle</a> &amp;&#160;</td>
-          <td class="paramname"><em>second</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a148174b2536b2a5783879ff93b558ed1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a148174b2536b2a5783879ff93b558ed1">&#9670;&nbsp;</a></span>pointparticle_vesicle_shared_node_force()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pointparticle_vesicle_shared_node_force </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classpoint__particle.html">point_particle</a> &amp;&#160;</td>
-          <td class="paramname"><em>particle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_membrane.html">Membrane</a> &amp;&#160;</td>
-          <td class="paramname"><em>vesicle</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7fc864b3c170f8c46cf3f4252835a7dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fc864b3c170f8c46cf3f4252835a7dc">&#9670;&nbsp;</a></span>prune_list()</h2>
+<a id="a0fc55ef9e72f60e9b8662fc529cd4cbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fc55ef9e72f60e9b8662fc529cd4cbd">&#9670;&nbsp;</a></span>prune_list()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -568,7 +505,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; vector&lt; pair&lt; double, int &gt; &gt; &gt;&#160;</td>
+          <td class="paramtype">vector&lt; vector&lt; std::pair&lt; double, int &gt; &gt; &gt;&#160;</td>
           <td class="paramname"><em>neighbour_pairs</em>&#160;</td>
         </tr>
         <tr>
@@ -733,34 +670,6 @@ Functions</h2></td></tr>
           <td class="memname">void Vesicle_particle_neighbour_finder </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_membrane.html">Membrane</a> &amp;&#160;</td>
-          <td class="paramname"><em>particle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_membrane.html">Membrane</a> &amp;&#160;</td>
-          <td class="paramname"><em>vesicle</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a236de9961742fdfdda2f62329038ca1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a236de9961742fdfdda2f62329038ca1e">&#9670;&nbsp;</a></span>Vesicle_pointparticle_neighbour_finder()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Vesicle_pointparticle_neighbour_finder </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classpoint__particle.html">point_particle</a> &amp;&#160;</td>
           <td class="paramname"><em>particle</em>, </td>
         </tr>
         <tr>

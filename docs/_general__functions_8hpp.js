@@ -3,6 +3,7 @@ var _general__functions_8hpp =
     [ "calc_surface_coefficeints", "_general__functions_8hpp.html#ab35cd8b3b8aac27e2b286eeb531e075e", null ],
     [ "calc_surface_coefficeints_2", "_general__functions_8hpp.html#a1dfc1952331040dd2ee5525f4bcc5090", null ],
     [ "convert_cartesian_to_spherical", "_general__functions_8hpp.html#ad6a835697ba7d3543ece6f77a0e943c6", null ],
+    [ "convert_spherical_to_cartesian", "_general__functions_8hpp.html#acd5cd37d2313535a3b953f4f09080d89", null ],
     [ "count_pdb_frames", "_general__functions_8hpp.html#ac667e8187e993432185087bc0d4ad6da", null ],
     [ "crossvector", "_general__functions_8hpp.html#a2a90dbc716857a9916f0dca44c2108e8", null ],
     [ "innerproduct", "_general__functions_8hpp.html#aeac4b91bfa6a97355fe32ccdde942909", null ],
