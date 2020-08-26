@@ -25,7 +25,7 @@ var searchData=
   ['initilise_5fopenmm_391',['initilise_openmm',['../class_membrane.html#a8ffb572d8b3b2cf07b2cb5e487fbc3b9',1,'Membrane']]],
   ['initposinnm_392',['initPosInNm',['../struct_my_atom_info.html#aa9b791366453c3b969b3bb40cb83e9a0',1,'MyAtomInfo']]],
   ['innerproduct_393',['innerproduct',['../_general__functions_8hpp.html#aeac4b91bfa6a97355fe32ccdde942909',1,'General_functions.hpp']]],
-  ['install_5fcopy_2emd_394',['Install_copy.md',['../_install__copy_8md.html',1,'']]],
+  ['installation_2emd_394',['Installation.md',['../_installation_8md.html',1,'']]],
   ['integer_5fparser_395',['integer_parser',['../namespacecxxopts_1_1values.html#a2e205dc91741b7dde43b825da60c9f4c',1,'cxxopts::values']]],
   ['integrator_396',['integrator',['../struct_my_open_m_m_data.html#a471489f3c9bd1e5a54fc5202b71b6b96',1,'MyOpenMMData']]],
   ['integrator_5ftype_397',['Integrator_type',['../namespace_gen_const.html#aac105e3a7fd6172ca631f1272e4e8f04',1,'GenConst']]],
@@ -36,5 +36,5 @@ var searchData=
   ['invalid_5foption_5fformat_5ferror_402',['invalid_option_format_error',['../classcxxopts_1_1invalid__option__format__error.html',1,'cxxopts::invalid_option_format_error'],['../classcxxopts_1_1invalid__option__format__error.html#ae31d4f488bbee0eebe50e7c8949a6fb6',1,'cxxopts::invalid_option_format_error::invalid_option_format_error()']]],
   ['is_5fboolean_403',['is_boolean',['../structcxxopts_1_1_help_option_details.html#ae9edda8b102865694f3b76ef162f0ead',1,'cxxopts::HelpOptionDetails::is_boolean()'],['../classcxxopts_1_1_value.html#a77a4a731bcbbd95afca43f82affe5aaa',1,'cxxopts::Value::is_boolean()'],['../classcxxopts_1_1values_1_1abstract__value.html#abb08e41e3f19c891bd22fa7e0bef9565',1,'cxxopts::values::abstract_value::is_boolean()']]],
   ['is_5fcontainer_404',['is_container',['../structcxxopts_1_1_help_option_details.html#a68e51f91246958b2e3e84d0178a55afe',1,'cxxopts::HelpOptionDetails::is_container()'],['../classcxxopts_1_1_value.html#a632f3263dd598e30999a6bcff0652132',1,'cxxopts::Value::is_container()'],['../classcxxopts_1_1values_1_1abstract__value.html#a7845ba356463a1681dc10a0a355871bf',1,'cxxopts::values::abstract_value::is_container()']]],
-  ['install_5fcopy_405',['Install_copy',['../md__doxygen__install_copy.html',1,'']]]
+  ['installing_20vcm_405',['Installing VCM',['../md__doxygen__installation.html',1,'']]]
 ];

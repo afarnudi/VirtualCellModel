@@ -51,8 +51,8 @@ var NAVTREE =
       [ "Configfile paths", "md__doxygen__i_d_e__setup.html#autotoc_md27", null ],
       [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md28", null ]
     ] ],
-    [ "Install_copy", "md__doxygen__install_copy.html", [
-      [ "OpenMM", "md__doxygen__install_copy.html#autotoc_md29", null ]
+    [ "Installing VCM", "md__doxygen__installation.html", [
+      [ "OpenMM", "md__doxygen__installation.html#autotoc_md30", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
