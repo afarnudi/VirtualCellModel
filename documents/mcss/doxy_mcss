@@ -1,4 +1,0 @@
-@INCLUDE                = doxy_conf
-GENERATE_HTML           = NO
-GENERATE_XML            = YES
-XML_PROGRAMLISTING      = NO
