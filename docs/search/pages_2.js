@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['setting_20up_20your_20ide_1711',['Setting up your IDE',['../md__doxygen__i_d_e__setup.html',1,'']]]
+  ['setting_20up_20your_20ide',['Setting up your IDE',['../md__Users_sajjad_virtual_cell_Membrane_OBJ_documents_Doxygen_IDE_Setup.html',1,'']]]
 ];

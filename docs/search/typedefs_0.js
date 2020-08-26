@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['optionmap_1701',['OptionMap',['../classcxxopts_1_1_options.html#a32f0bc6f8cdb72df8ac940a7863b3c06',1,'cxxopts::Options']]]
+  ['string',['String',['../namespacecxxopts.html#a095b3fd6a666292bf51b52a16ce4e57e',1,'cxxopts']]],
+  ['surfaceintegral',['SurfaceIntegral',['../Analysis__test_8cpp.html#a69af25f6f1658b0851130940e60213cc',1,'Analysis_test.cpp']]]
 ];
