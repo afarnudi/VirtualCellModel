@@ -124,30 +124,3 @@ std::vector<double> convert_spherical_to_cartesian(double r, double theta, doubl
     return xyz;
 }
 
-
-
-
-int count_pdb_frames(std::string filename, int num_atoms){
-    std::ifstream read_pdb;
-    read_pdb.open(filename.c_str());
-    read_pdb.seekg(std::ios::beg);
-    if (read_pdb) {
-        if (!GenConst::Testmode) {
-            std::cout << filename<<" opend successfully. \n\n";
-        }
-        
-    }else{
-        std::cout << "Unable to read "<<filename<<std::endl;
-    }
-    std::string line;
-    
-    int num_frames = 0;
-    while(getline(read_pdb, line)){
-        num_frames++;
-    }
-    read_pdb.close();
-//    std::cout<<"num_atoms = "<<num_atoms<<std::endl;
-//    std::cout<<"num_lines = "<<num_frames<<std::endl;
-    return num_frames/(num_atoms+3);
-}
-

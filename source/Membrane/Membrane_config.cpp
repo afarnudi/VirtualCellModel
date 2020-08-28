@@ -11,7 +11,7 @@ void Membrane::import_config(string config_file_name){
     
     if (read_config_file.is_open()) {
         if (!GenConst::Testmode) {
-            cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+            cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TSUCCESS<<"successfully"<<TRESET<<".\n";
         }
         
         string line;
@@ -37,13 +37,13 @@ void Membrane::import_config(string config_file_name){
                 
                 if (stoi(split[1])==0) {
                     if (!GenConst::Testmode) {
-                        cout<<"Resume flag off. Looking for membrane config parameters.\n";
+                        cout<<"Resume flag "<<TRED<<"off"<<TRESET<<". Looking for membrane config parameters.\n";
                     }
                     
                 } else {
                     resume=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag on. Membrane will resume using the '"<<resume_file_name<<"' file.\n";
+                    cout<<"Resume flag "<<TGREEN"on"<<TRESET". Membrane will resume using the '"<<resume_file_name<<"' file.\n";
                 }
             } else if (split[0]=="Mesh_file_name") {
                 if (split[1]=="1"){
@@ -54,7 +54,7 @@ void Membrane::import_config(string config_file_name){
 //                cout<<"Mesh format"<<mesh_format;
                 Mesh_file_name=split[2];
                 if (!GenConst::Testmode) {
-                    cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the Membrane.\n";
+                    cout<<"The '"<<TFILE<<Mesh_file_name<<TRESET<<"' file will be used to initilise the Membrane.\n";
                 }
                 
             } else {
@@ -65,11 +65,11 @@ void Membrane::import_config(string config_file_name){
         
         
     } else {//End of if (read_config_file.is_open())
-        cout<<"Couldn't open the '"<<config_file_name<<"' file.\n";
+        cout<<TFAILED<<"Couldn't open"<<TRESET<<" the '"<<TFILE<<config_file_name<<TRESET<<"' file.\n";
         exit(EXIT_FAILURE);
     }
     if(!resume && Mesh_file_name=="non"){
-        cout<<"The 'Resume' parameter located in the Membrane config file is not set! Resume should be set to 0 for a membrane initilisation or set to 1 if the membrane is to be imported from a 'resume' file. Please edit the membrane config file and run the programme again.\n\nIn case this is a new run, please provide the meshfile name in the mebrane confi file.\n";
+        cout<<"The 'Resume' parameter located in the Membrane config file "<<TFAILED<<"is not set"<<TRESET<<"! Resume should be set to 0 for a membrane initilisation or set to 1 if the membrane is to be imported from a 'resume' file. Please edit the membrane config file and run the programme again.\n\nIn case this is a new run, please provide the meshfile name in the mebrane confi file.\n";
         exit(EXIT_FAILURE);
     }
     if (resume) {

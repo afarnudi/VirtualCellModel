@@ -165,9 +165,9 @@ void Membrane::calculate_real_ulm(ArgStruct args){
     
 }
 
-void Membrane::write_ulm(ArgStruct args){
+void Membrane::write_ulm(ArgStruct args, int file_index){
     std::ofstream wdata;
-    wdata.open(args.output_filename.c_str(), std::ios::app);
+    wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
 
     for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
@@ -184,5 +184,5 @@ void Membrane::write_ulm(ArgStruct args){
         }
         wdata<<"\n";
     }
-    cout<<args.output_filename<<" written"<<endl;
+//    cout<<args.output_filename<<" written"<<endl;
 }

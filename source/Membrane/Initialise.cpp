@@ -11,7 +11,7 @@
 void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     if (!GenConst::Testmode) {
-        cout<<"Initialising the Membrane Class..."<<endl;
+        cout<<TBLUE<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
     }
     
    
@@ -25,34 +25,28 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     if (!GenConst::Testmode) {
-        cout<<"\nRadius="<<Radius<<endl;
-        cout<<"# of Nodes="<<Num_of_Nodes<<endl;
-        cout<<"# of triangles="<<Num_of_Triangles<<endl;
+        
+        cout<<"Number of ... :\n";
+        cout<<"Nodes\t"<<Num_of_Nodes<<endl;
+        cout<<"Triangles\t"<<Num_of_Triangles<<endl;
     }
     
-   
-
-    //this part is for testing  just one bond (be carful to pass a mesh with just 2 nodes to the programm in case of using it)
-/*
-    Node_Bond_list.resize(1);
-    Node_Bond_list[0].resize(2);
-    Node_Bond_list[0][0]=0;
-    Node_Bond_list[0][1]=1;
-    
-    Num_of_Node_Pairs=1;
-    Num_of_Triangle_Pairs=0;
-    cout<<"\nMembrane class initiated.\n******************************\n\n";
-*/
     Normal_direction_Identifier();
     Triangle_pair_counter();
     if (!GenConst::Testmode) {
-        cout<<"# of triangle pairs="<<Num_of_Triangle_Pairs<<endl;
+        cout<<"Triangle pairs\t"<<Num_of_Triangle_Pairs<<endl;
     }
     
     if (Num_of_Triangle_Pairs != 3*(Triangle_list.size())/2){
-        cout<<"Warning! some triangles have less or more neighbour than 3"<<endl;
+        cout<<TWARN<<"Warning"<<TRESET<<"! some triangles have less or more neighbour than 3"<<endl;
     }
     Node_Bonds_identifier();
+    if (!GenConst::Testmode) {
+        cout<<"Node pairs (Bonds) "<<Num_of_Node_Pairs<<endl;
+    }
+    
+    cout<<"\nOther properties:\n";
+    cout<<"\nRadius\t"<<Radius<<endl;
     Triangle_pair_identifier();
     
     Node_neighbour_list_constructor();
@@ -61,7 +55,8 @@ void Membrane::initialise(std::string Mesh_file_name){
   
 
     ECM_Node_neighbour_list.resize(Num_of_Nodes);
-    //shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    
+    cout<<endl;
     check();
 
     check_radius_update_values();
@@ -84,14 +79,14 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (spring_model == 1) {
         if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
-            cout<<"Warning. Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+            cout<<TBLINK<<TWWARN<<"Warning"<<TRESET<<". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
             exit(EXIT_FAILURE);
         }
     }
     
     if (initial_random_rotation_coordinates){
         if (!GenConst::Testmode) {
-            cout<<"randomly rotating the mesh\n";
+            cout<<TWARN<<"Randomly rotating the mesh\n"<<TRESET;
         }
         
         srand (time(NULL));
@@ -108,13 +103,36 @@ void Membrane::initialise(std::string Mesh_file_name){
 //    }
     shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     if (!GenConst::Testmode) {
-        cout<<"\nBending energy = "<<calculate_bending_energy()<<endl;
+        cout<<"Bending energy = "<<calculate_bending_energy()<<endl;
         
-        cout<<"\nMembrane class initiated.\n******************************\n\n";
+        cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<"\n******************************\n\n";
     }
     
 
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 
 
+}
+
+void Membrane::analysis_init(std::string Mesh_path){
+    string mesh_extension = Mesh_path;
+    mesh_extension.erase(mesh_extension.begin(),mesh_extension.end()-3 );
+    if (mesh_extension=="ply"){
+        read_ply_file(Mesh_path);
+    } else {
+        read_gmesh_file(Mesh_path);
+    }
+    
+    Normal_direction_Identifier();
+    Triangle_pair_counter();
+    
+    Node_Bonds_identifier();
+    Triangle_pair_identifier();
+    
+    Node_neighbour_list_constructor();
+    Bond_triangle_neighbour_list_constructor();
+    
+    node_voronoi_area.resize(Num_of_Nodes,0);
+    
+    
 }

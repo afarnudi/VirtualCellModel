@@ -11,7 +11,7 @@ void Chromatin::import_config(string config_file_name, double min_radius){
     bool resume=false;
     
     if (read_config_file.is_open()) {
-        cout<<"'"<<config_file_name<<"' file opened successfully.";
+        cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TSUCCESS<<"successfully"<<TRESET<<".";
         string line;
         int line_num=0;
         string comment="//";
@@ -102,7 +102,7 @@ void Chromatin::import_config(string config_file_name){
             if (split[0]=="Resume") {
                 
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag off.\n";
+                    cout<<"Resume flag "<<TRED<<"off"<<TRESET<<".\n";
                 } else {
                     resume_flag=true;
                     resume_file_name=split[2];
@@ -137,7 +137,7 @@ void Chromatin::import_config(string config_file_name){
                 } else {
                     import_flag=true;
                     import_file_name=split[2];
-                    cout<<"Import flag on. Chromatin will resume using the '"<<import_file_name<<" file.\n";
+                    cout<<"Import flag "<<TGREEN<<"on"<<TRESET<<". importing coordinatesfrom '"<<TFILE<<import_file_name<<TRESET<<".\n";
                 }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);

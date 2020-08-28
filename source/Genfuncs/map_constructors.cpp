@@ -18,17 +18,17 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
             set_parameter(general_param_map, param_name, param_value);
         }
     } else {
-        cout<<"Couldn't open the 'General_param_map.txt'. Please check the file and make sure that the file is in the same directory as the executable file.\n";
+        cout<<TFAILED<<"Couldn't open"<<TRESET<<" the '"<<TFILE<<"General_param_map.txt"<<TRESET"'. Please check the file and make sure that the file is in the same directory as the executable file.\n";
         exit(EXIT_FAILURE);
     }
     
     
     ifstream read_config_file(input_file_name.c_str());
     if (read_config_file.is_open()) {
-        if (GenConst::Testmode) {
-            cout<<"\nGeneral Parameter file opened successfully.\nList of configuration files:\n";
+        if (!GenConst::Testmode) {
+            cout<<"\nGeneral Parameter file opened "<<TSUCCESS<<"successfully"<<TRESET<<".\nList of configuration files:\n";
         }
-        
+
         string line;
         int line_num=0;
         string comment="//";
@@ -55,8 +55,8 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     if (it->first=="Num_of_Membranes") {
                         
                         for (int j=0; j<it->second; j++) {
-                            if (GenConst::Testmode) {
-                                cout<<"\t"<<split[i+2+j]<<endl;
+                            if (!GenConst::Testmode) {
+                                cout<<"\t"<<TFILE<<split[i+2+j]<<TRESET<<endl;
                             }
                             
                             membrane_config_list.push_back(split[i+2+j]);
@@ -65,31 +65,31 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                     } else if (it->first=="Num_of_Chromatins") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
+                            cout<<"\t"<<TFILE<<split[i+2+j]<<TRESET<<endl;
                             chromatin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     } else if (it->first=="Num_of_Actins") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
+                            cout<<"\t"<<TFILE<<split[i+2+j]<<TRESET<<endl;
                             actin_config_list.push_back(split[i+2+j]);
                         }
                         continue;
                     } else if (it->first=="Num_of_ECMs") {
                         
                         for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
+                            cout<<"\t"<<TFILE<<split[i+2+j]<<TRESET<<endl;
                             ecm_config_list.push_back(split[i+2+j]);
                         }
                         continue;
-                    } else if (it->first=="Num_of_pointparticles") {
-                        
-                        for (int j=0; j<it->second; j++) {
-                            cout<<"\t"<<split[i+2+j]<<endl;
-                            pointparticle_config_list.push_back(split[i+2+j]);
-                        }
-                        continue;
+//                    } else if (it->first=="Num_of_pointparticles") {
+//
+//                        for (int j=0; j<it->second; j++) {
+//                            cout<<"\t"<<split[i+2+j]<<endl;
+//                            pointparticle_config_list.push_back(split[i+2+j]);
+//                        }
+//                        continue;
                     } else if (it->first=="trajectory_file_name") {
                         if (it->second!=0) {
                             GenConst::trajectory_file_name=split[i+2];
@@ -172,7 +172,7 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
                 }
                 //                cout<<split[i]<<"\t";
             } // End of for (int i=0; i<split.size(); i++) {
-            //            cout<<endl;
+            
         } //End of while(getline(read_config_file, line)){
         if (GenConst::Report_Interval_In_Fs==0) {
             GenConst::Report_Interval_In_Fs = GenConst::MD_traj_save_step*GenConst::Step_Size_In_Fs;
@@ -180,9 +180,9 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
         if (GenConst::Simulation_Time_In_Ps==0) {
             GenConst::Simulation_Time_In_Ps = GenConst::MD_num_of_steps*GenConst::Step_Size_In_Fs;
         }
-//        cout<<endl;
+        cout<<endl;
     } else {
-        cout<<"Couldn't open the config file.\n";
+        cout<<TFAILED<<"Couldn't open"<<TRESET<<" the config file.\n";
         exit(EXIT_FAILURE);
     }
     

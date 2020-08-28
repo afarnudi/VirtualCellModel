@@ -11,8 +11,9 @@
 #define General_functions_hpp
 #include <stdio.h>
 #include <chrono>
-#include "General_constants.h"
 #include <fstream>
+
+#include "General_constants.h"
 
 
 void crossvector( double c[3],double d[3],double b[3] ); // cross porduct
@@ -38,6 +39,10 @@ void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono
 
 std::vector<double> convert_cartesian_to_spherical(double x, double y, double z);
 std::vector<double> convert_spherical_to_cartesian(double r, double theta, double phi);
-int count_pdb_frames(std::string filename, int num_atoms);
+
+std::string get_pdb_first_label(std::string filename);
+int get_pdb_num_of_atoms(std::string filename, std::string label);
+int get_pdb_num_of_atoms(std::string filename);
+int get_pdb_num_of_frames(std::string filename, int num_atoms);
 
 #endif /* General_functions_hpp */

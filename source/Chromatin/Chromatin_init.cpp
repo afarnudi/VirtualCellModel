@@ -21,7 +21,7 @@ void Chromatin::initialise(void){
     generate(ABC_index.begin(), ABC_index.end(), [&r=num_of_node_types]() {
         return rand() % r;
     });
-    cout<<"\nInitialising the Chromatin Class..."<<endl;
+    cout<<TPINK<<"\nInitialising the Chromatin Class..."<<TRESET<<endl;
     build_random_chain();
     shift_node_positions();
     shift_node_velocities();

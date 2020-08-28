@@ -145,15 +145,15 @@ int main(int argc, char **argv)
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
-    string general_file_name="general-config.txt";
-//    if (argc == 1) {
-//        cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file, after the executable:\nexample:\t./bin ../../myconfigfile.txt\n";
-//        exit(EXIT_FAILURE);
-//    }
-//
-//    general_file_name = argv[1];
-    cout<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\nexample:\t../../myconfigfile.txt\n\nPath to configuration file: ";
-    cin>>general_file_name;
+    string general_file_name="General_param_map.txt";
+    
+    if (!args.analysis_mode) {
+        cout<<TBOLD<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
+        cout<<TFILE;
+        cin>>general_file_name;
+        cout<<TRESET;
+    }
+    
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
@@ -203,7 +203,6 @@ int main(int argc, char **argv)
     if (!GenConst::Load_from_checkpoint) {
         if (GenConst::Num_of_Membranes!=0) {
             Include_Membrane = true;
-            
             Membranes.resize(GenConst::Num_of_Membranes);
             membrane_set.resize(GenConst::Num_of_Membranes);
             for (int i=0; i<GenConst::Num_of_Membranes; i++) {
@@ -214,6 +213,12 @@ int main(int argc, char **argv)
                 Membranes[i].import_config(membrane_config_list[i]);
                 Membranes[i].generate_report();
             }
+        } else if (args.analysis_mode){
+            Include_Membrane = true;
+            GenConst::Num_of_Membranes=1;
+            Membranes.resize(GenConst::Num_of_Membranes);
+            membrane_set.resize(GenConst::Num_of_Membranes);
+            
         }
         
         
@@ -295,9 +300,6 @@ int main(int argc, char **argv)
         
         
         
-        
-        
-        
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
@@ -355,31 +357,69 @@ int main(int argc, char **argv)
     
     
     if (args.analysis_mode) {
-
-        cout<<"Entering analysis mode:\n";
-        vector<vector<double> > ulm;
-        int max_frame = Membranes[0].import_pdb_frames(args.analysis_filename);
+        cout<<TBOLD<<"Entering analysis mode:\n"<<TRESET;
+        if (args.membane_labels.size()==0) {
+            args.membane_labels.push_back(get_pdb_first_label(args.analysis_filename));
+        }
+        args.num_atoms_per_frame = get_pdb_num_of_atoms(args.analysis_filename);
         if (args.framelimits_end==0) {
-            args.framelimits_end=max_frame;
+            args.framelimits_end = get_pdb_num_of_frames(args.analysis_filename, args.num_atoms_per_frame);
+        } else {
+            //c++ arrays start from 0
+            args.framelimits_end--;
         }
-        for (int i=args.framelimits_beg; i<args.framelimits_end; i++) {
-            Membranes[0].load_pdb_frame(i, args);
-//            cout<<"Loaded"<<endl;
-            for (int runs=0; runs<args.num_ang_avg; runs++) {
+        if (args.framelimits_beg!=0) {
+            //c++ arrays start from 0
+            args.framelimits_beg--;
+        }
+        cout<<args.num_atoms_per_frame<<" ATOMs in each frame"<<endl;
+        for (int i=0; i<args.output_filename.size(); i++) {
+            
+            if (args.analysis_dim == 3 ) {
+                cout<<TPINK;
+                cout<<"3D Analysis"<<endl;
+                Membranes[i].import_pdb_frames(args, i);
                 
-                Membranes[0].calculate_real_ulm(args);
-
-
-//                Membranes[0].calculate_ulm_radiustest(ell_max, analysis_averaging_option);
-//                Membranes[0].myWritePDBFrame(runs,temp_pdb_name+".pdb");
-//                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                vector<vector<double> > ulm;
+                if (!GenConst::Testmode) {
+                    cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
+                }
+                for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
+                    
+                    Membranes[0].load_pdb_frame(i, args);
+                    
+                    for (int runs=0; runs<args.num_ang_avg; runs++) {
+                        
+                        Membranes[0].calculate_real_ulm(args);
+                        //                Membranes[0].myWritePDBFrame(runs,temp_pdb_name+".pdb");
+                        //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                    }
+                    
+                    cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+                }
+                Membranes[0].write_ulm(args, i);
+                return 3;
+            } else if(args.analysis_dim==2){
+                cout<<TCYAN;
+                cout<<"2D Analysis"<<endl;
+                Membranes[i].import_pdb_frames(args, i);
+                
+                if (!GenConst::Testmode) {
+                    cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
+                }
+                
+                for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
+                    Membranes[0].load_pdb_frame(i, args);
+                    
+                    
+                    
+                    cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+                }
+                return 2;
             }
-
-            cout<<"frame "<<i<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
         }
-        Membranes[0].write_ulm(args);
-        cout<<"max_frame  "<<max_frame<<endl;
-        return 2;
+        
+        
     }
     
     

@@ -10,6 +10,7 @@
 #define Arg_pars_hpp
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -22,13 +23,16 @@ struct ArgStruct
     int z_node=-1;
     int zy_node=-1;
     string analysis_filename;
+    vector<string> membane_labels;
     int ell_max =20;
-    string output_filename="_ulmt_cpp.txt";
+    string extension;
+    vector<string> output_filename;
     int framelimits_beg=0;
     int framelimits_end=0;
+    int num_atoms_per_frame=0;
+    vector<string> Mesh_files;
 };
 
-ArgStruct arg_parse_old(int argc, char **argv);
 ArgStruct cxxparser(int argc, char **argv);
 
 

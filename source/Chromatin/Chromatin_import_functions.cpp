@@ -10,9 +10,9 @@ void Chromatin::import_coordinates(string import_file_name){
     
     read_coordinate_file.open(import_file_name.c_str());
     if ( read_coordinate_file.is_open() ) {
-        cout << "Coordinate file opened successfully. \n\n";
+        cout << "\nCoordinate file opened "<<TSUCCESS<<"successfully. \n\n"<<TRESET;
     }else{
-        cout << "Unable to read coordinate file.\n";
+        cout << TFAILED<<"Unable to read"<<TRESET<<" coordinate file.\n";
         exit(EXIT_FAILURE);
     }
     
@@ -45,15 +45,11 @@ void Chromatin::import_coordinates(string import_file_name){
         Num_of_Nodes++;
     }
     
-    cout<<"# of nodes\t"<<Num_of_Nodes<<endl;
+    cout<<"Number of nodes\t"<<Num_of_Nodes<<endl;
     
     bond_length/=Num_of_Nodes-1.0;
-    cout<<"Average bond length: \t"<<bond_length<<endl;
-    
-    
-    
-    cout<<"Coordinates and velocities loaded"<<endl;
-    cout<<"Node forces set to zero"<<endl;
+    cout<<"Average bond length\t"<<bond_length<<endl;
+    cout<<TWARN<<"Node forces set to zero"<<TRESET<<endl;
     
     shift_node_positions();
     
@@ -82,7 +78,7 @@ void Chromatin::import_coordinates(string import_file_name){
     ABC_index.resize(Num_of_Nodes);
     pdb_label_check();
     
-    cout<<"\n\nChromatin class initiated.\n";
+    cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
 }
 
 void Chromatin::import_resume(string import_file_name){
@@ -140,12 +136,12 @@ void Chromatin::import_resume(string import_file_name){
     
 //    Node_neighbour_list_constructor();
     read_resume_file>>Max_node_pair_length>>Min_node_pair_length>>Average_node_pair_length;
-    cout<<"node distance statistics:"<<endl;
-    cout<<"Max="<<Max_node_pair_length<<"\tmin="<<Min_node_pair_length<<"\tAverage="<<Average_node_pair_length<<endl;
+    cout<<"Node distances:"<<endl;
+    cout<<"Max "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
     
     shift_node_positions();
     pdb_label_check();
     
-    cout<<"\n\nMembrane class initiated.\n";
+    cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }

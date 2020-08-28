@@ -17,7 +17,7 @@ void read_interaction_map(vector<vector<int> > &inter_map){
         ifstream read_map(GenConst::Interaction_map_file_name.c_str());
         if (read_map.is_open()) {
             if (!GenConst::Testmode) {
-                cout<<"\""<<GenConst::Interaction_map_file_name<<"\" interaction map file opened successfully.\n";
+                cout<<"'"<<TFILE<<GenConst::Interaction_map_file_name<<TRESET<<"' interaction map file opened "<<TSUCCESS<<"successfully"<<TRESET<<".\n";
             }
             
             string line;
@@ -57,7 +57,7 @@ void read_interaction_map(vector<vector<int> > &inter_map){
                 }
             } //End of while(getline(read_config_file, line)){
         } else {
-            cout<<"Couldn't open the interaction map file.\n";
+            cout<<TFAILED<<"Couldn't open"<<TRESET<<" the interaction map file.\n";
             exit(EXIT_FAILURE);
         }
         

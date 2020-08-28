@@ -132,16 +132,33 @@ namespace GenConst {
     extern std::vector<std::vector<double> > Lboxdims;
 }
 
-//#define MD_num_of_steps  300000//35000// number of MD stps
-//#define MD_traj_save_step    2000//The step on which the trajector of the membrane is saved.
-//#define MD_Time_Step     0.001 // time length of steps in MD
-//#define MD_KT     1.0  // KT the quanta of energy
-//#define MD_thrmo_step   100 //
-//#define MC_step 1
+#define TRESET   "\033[0m"
+#define TBLINK   "\033[5m"
+#define TBOLD    "\033[1m"       /* Bold */
+#define TBLACK   "\033[30m"      /* Black */
+#define TGRAY    "\033[90m"      /* Gray */
+#define TRED     "\033[91m"      /* Red */
+#define TGREEN   "\033[92m"      /* Green */
+#define TYELLOW  "\033[93m"      /* Yellow */
+#define TBLUE    "\033[94m"      /* Blue */
+#define TPINK    "\033[95m"      /* Magenta */
+#define TCYAN    "\033[96m"      /* Cyan */
+#define TWHITE   "\033[97m"      /* White */
 
-//#define Mem_fluidity       0.002 //Used in the MC step
+#define TBBLACK   "\033[40m"      /* Black */
+#define TBGRAY    "\033[100m"      /* Gray */
+#define TBRED     "\033[101m"      /* Red */
+#define TBGREEN   "\033[102m"      /* Green */
+#define TBYELLOW  "\033[103m"      /* Yellow */
+#define TBBLUE    "\033[104m"      /* Blue */
+#define TBMAGENTA "\033[105m"      /* Magenta */
+#define TBCYAN    "\033[106m"      /* Cyan */
+#define TBWHITE   "\033[107m"      /* White */
 
-//#define Lbox  1000.0///    (size of square periodic box-1)
-//#define Periodic_condtion_status 0.0 //status 0.0 = off (The Periodic update will not be executed in the 'Main MD' loop). status = 1.0 = on
+#define TSUCCESS TGREEN
+#define TFAILED  TRED
+#define TFILE    TGRAY
+#define TWARN    TYELLOW
+#define TWWARN   TRED
 
 #endif /* General_constants_h */
