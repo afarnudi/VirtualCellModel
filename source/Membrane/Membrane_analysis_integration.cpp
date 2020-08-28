@@ -76,8 +76,7 @@ double Membrane::calc_vectorlist_vectorlist_surface_integral(vector<double> vect
     for(int i=0;i<Num_of_Nodes;i++){
 //        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
 //        /(spherical_positions[i][0]*spherical_positions[i][0]);;
-        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
-        /(radius*radius);;
+        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]/(radius*radius);;
     }
     return sum;
 }

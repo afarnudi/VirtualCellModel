@@ -144,10 +144,10 @@ public:
     void rotate_coordinates(double theta, double phi);
     void rotate_particle_to_axes(ArgStruct args);
     void update_spherical_positions();
-    
+    void analysis_init(std::string Mesh_path);
     
     void load_pdb_frame(int frame, ArgStruct args);
-    int  import_pdb_frames(std::string filename);
+    void import_pdb_frames(ArgStruct args, int file_index);
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
     void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
@@ -173,7 +173,7 @@ public:
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm(ArgStruct args);
+    void write_ulm(ArgStruct args, int file_index);
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;

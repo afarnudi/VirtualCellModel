@@ -36,5 +36,5 @@ void Chromatin::pdb_label_check(void){
         }
     }
     
-    cout<<"label : "<<label<<endl;
+    cout<<"label "<<label<<endl;
 }
