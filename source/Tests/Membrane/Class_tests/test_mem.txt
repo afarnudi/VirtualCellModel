@@ -69,9 +69,4 @@ epsilon_LJ_12_6	0.01
 //Begin_update_time_in_Ps	50
 //End_update_time_in_Ps	100
 
-//Relaxation	0
-//Relax_with_actin	0
-//ECM_interaction_cut_off	2.5
-//ECM_interaction_strength	20
-
 //excluded_volume_interaction	0

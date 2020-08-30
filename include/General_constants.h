@@ -73,8 +73,6 @@ namespace GenConst {
     extern std::string Interaction_map_file_name;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.*/
     extern bool Excluded_volume_interaction;
-    /**Set to 1 for the programme to use the OpenMM engine or to 0 to use the internal simple engine. Default 1 (true).*/
-    extern bool OpenMM;
     /**Set Lennard-Jones 12 6 sigma.*/
     extern double sigma_LJ_12_6;
     /**Set Lennard-Jones 12 6 epsilon.*/

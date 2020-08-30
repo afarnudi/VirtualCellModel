@@ -88,13 +88,11 @@ private: //(if we define these constants as private members of the class, we can
     void calculate_mesh_properties(void);
     void node_distance_correction(void);
     void initialise(void);
-    void initialise(double min_radius);
-    void Pack(double min_radius);
-    double chromatin_prepack(void);
-    void packing_potential(double Sphere_Radius);
-    void packing_traj (void);
-    void reset_com_velocity(void);
-    void rescale_velocities(double scale);
+//    void Pack(double min_radius);
+//    double chromatin_prepack(void);
+//    void packing_potential(double Sphere_Radius);
+//    void packing_traj (void);
+//    void reset_com_velocity(void);
     int generate_virtual_sites(void);
     
 public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
@@ -105,17 +103,17 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     double COM_position[3];
 
     vector<vector<int> > Node_neighbour_list;
-    vector<vector<int> > Membrane_neighbour_node;
+//    vector<vector<int> > Membrane_neighbour_node;
 //    vector<vector<double> > Contact_Matrix;
     
     
     
-    void MD_Evolution_beginning (double MD_Time_Step);
-    void MD_Evolution_end (double MD_Time_Step);
+//    void MD_Evolution_beginning (double MD_Time_Step);
+//    void MD_Evolution_end (double MD_Time_Step);
     void Node_neighbour_list_constructor();
     void export_for_resume(int MD_step);
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
-    void write_traj (string traj_name, string label);
+    
     
     void import_resume(string import_file_name);
     void import_coordinates(string import_file_name);
@@ -123,18 +121,18 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     void import_config(string config_file_name, double min_radius);
     void set_map_parameter(string param_name, double param_value);
     void generate_report(void);
-    void Thermostat_2(double MD_KT);
-    void Thermostat_N6(double MD_KT);
-    void Thermostat_Bussi(double MD_T);
+//    void Thermostat_2(double MD_KT);
+//    void Thermostat_N6(double MD_KT);
+//    void Thermostat_Bussi(double MD_T);
     void Results (string label);
     void build_random_chain(void);
     void Force_Calculator();
     void Force_Calculator_2();
     void FENE(void);
-    void hard_sphere (void);
-    void Strong_spring(void);
+//    void hard_sphere (void);
+//    void Strong_spring(void);
 //    void write_parameters(int MD_Step);
-    void export_pack(int MD_step);
+//    void export_pack(int MD_step);
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
     

@@ -98,12 +98,6 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Bending_coefficient=param_value;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
-    }else if (param_name=="MD_num_of_Relaxation_steps"){
-        MD_num_of_Relaxation_steps=param_value;
-    } else if (param_name=="MD_correction_steps"){
-        MD_correction_steps=param_value;
-    } else if (param_name=="K_surfaceConstant_local"){
-        K_surfaceConstant_local=param_value;
     } else if (param_name=="Shift_in_X_direction"){
         Shift_in_X_direction=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
@@ -142,41 +136,7 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         sigma_LJ_12_6=param_value;
     } else if (param_name=="epsilon_LJ_12_6"){
         epsilon_LJ_12_6=param_value;
-    } else if (param_name=="ECM_interaction_cut_off"){
-        ECM_interaction_cut_off=param_value;
-    } else if (param_name=="ECM_interaction_strength"){
-        ECM_interaction_strength=param_value;
-    }else if (param_name=="vesicle_interaction_cut_off"){
-        vesicle_interaction_cut_off=param_value;
-    }else if (param_name=="vesicle_interaction_sigma"){
-        vesicle_interaction_sigma=param_value;
-    }else if (param_name=="vesicle_interaction_strength"){
-        vesicle_interaction_strength=param_value;
-    }else if(param_name=="Relaxation"){
-        if (int(param_value) == 0){
-            Relaxation=false;
-        } else {
-            Relaxation=true;
-        }
-    }else if(param_name=="fixing_com"){
-        if (int(param_value) == 0){
-            fixing_com=false;
-        } else {
-            fixing_com=true;
-        }
-    } else if(param_name=="particle_type"){
-        if (int(param_value) == 0){
-            particle_type=false;
-        } else {
-            particle_type=true;
-        }
-    } else if(param_name=="Relax_with_actin"){
-        if (int(param_value) == 0) {
-            Relax_with_actin=false;
-        } else{
-            Relax_with_actin=true;
-        }
-    }  else if(param_name=="Update_radius"){
+    } else if(param_name=="Update_radius"){
         
         New_node_radius = param_value;
         

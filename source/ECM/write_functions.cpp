@@ -9,15 +9,6 @@
 #include "ECM.h"
 #include "General_constants.h"
 
-void ECM::write_traj (std::string traj_name, std::string label){
-    std::ofstream Trajectory;
-    Trajectory.open(traj_name.c_str(), std::ios::app);
-    Trajectory << std:: fixed;
-    for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
-    {
-        Trajectory << label <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
-    }
-}
 
 
 void ECM::export_for_resume(int MD_step){

@@ -1,6 +1,7 @@
 TARGET=Class_test
 CXXFLAGS=-std=c++14 -O3
-CXX=icpc
+#CXX=icpc
+CXX=g++
 
 OpenMM_INSTALL_DIR=/usr/local/openmm
 BINDIR=.
@@ -16,8 +17,7 @@ LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib -L/usr/local/lib
 LIBS= -lOpenMM -lgtest -lgtest_main
 #LIBS= -lgtest -lgtest_main
 
-#SRCFILES=$(wildcard $(SRCDIR)/Tests/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Chromatin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Particle/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp) $(wildcard $(SRCDIR)/Genfuncs/*.cpp)
-SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Class_tests/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/resamplekin.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp $(SRCDIR)/Genfuncs/General_pdb_functions.cpp $(SRCDIR)/Genfuncs/Arg_pars.cpp
+SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Class_tests/Class_test.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp $(SRCDIR)/Genfuncs/General_pdb_functions.cpp
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 

@@ -5,10 +5,6 @@ void Chromatin::Force_Calculator(void)
     Total_Potential_Energy=0.0;
 	if (spring_model==0) {potential_1();}
     if (spring_model==1) {FENE();}
-    if (spring_model==2) {Strong_spring();}
-    
-    
-    hard_sphere();
 }
 
 // This is the old code and it is designed to work with a chromatin chain with only 2 node types.
@@ -19,8 +15,6 @@ void Chromatin::Force_Calculator_2(void)
         potential_1();
     } else if (spring_model==1) {
         FENE();
-    } else if (spring_model==2) {
-        Strong_spring();
     }
     
     double deltax,deltay,deltaz,Node_distance,temp_force;

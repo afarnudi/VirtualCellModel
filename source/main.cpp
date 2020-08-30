@@ -61,67 +61,66 @@
 
 
 namespace GenConst {
-    int    MD_num_of_steps;
-    double Simulation_Time_In_Ps;
-    int    MD_traj_save_step;
-    double Report_Interval_In_Fs;
-    double Step_Size_In_Fs;
-    double MD_T;
-    double K;
-    int    MD_thrmo_step;
-    int    MC_step;
-    int    Mem_fluidity;
-    bool   Periodic_box;
-    double Lbox;
-    bool   Periodic_condtion_status;
-    int    Num_of_Membranes;
-    int    Num_of_Chromatins;
-    int    Num_of_Actins;
-    int    Num_of_ECMs;
-    int    Num_of_pointparticles;
-    string trajectory_file_name;;
-    string force_file_name;;
-    double Buffer_temperature;
-    double Bussi_tau;
-    double Actin_Membrane_Bond_Coefficient;
-    bool   Interaction_map;
-    string Interaction_map_file_name;
-    bool   Excluded_volume_interaction;
-    bool   OpenMM;
-    double sigma_LJ_12_6;
-    double epsilon_LJ_12_6;
-    string Membrane_label;
-    string Actin_label;
-    string Chromatin_label;
-    string ECM_label;
-    int    Integrator_type;
-    double frictionInPs;
-    double temperature;
-    bool   CreateCheckpoint;
-    bool   Load_from_checkpoint;
-    string Checkpoint_path;
-    string Checkpoint_file_name;
-    bool   ChromatinVirtualSites;
+int    MD_num_of_steps;  //***********OLDCODE
+double Simulation_Time_In_Ps;
+int    MD_traj_save_step;
+double Report_Interval_In_Fs;
+double Step_Size_In_Fs;
+double MD_T;
+double K;
+int    MD_thrmo_step;
+int    MC_step;
+int    Mem_fluidity;
+bool   Periodic_box;
+double Lbox;
+bool   Periodic_condtion_status;
+int    Num_of_Membranes;
+int    Num_of_Chromatins;
+int    Num_of_Actins;
+int    Num_of_ECMs;
+int    Num_of_pointparticles;
+string trajectory_file_name;;
+string force_file_name;;
+double Buffer_temperature; //***********OLDCODE
+double Bussi_tau;
+double Actin_Membrane_Bond_Coefficient;
+bool   Interaction_map;
+string Interaction_map_file_name;
+bool   Excluded_volume_interaction;
+double sigma_LJ_12_6;
+double epsilon_LJ_12_6;
+string Membrane_label;
+string Actin_label;
+string Chromatin_label;
+string ECM_label;
+int    Integrator_type;
+double frictionInPs;
+double temperature;
+bool   CreateCheckpoint;
+bool   Load_from_checkpoint;
+string Checkpoint_path;
+string Checkpoint_file_name;
+bool   ChromatinVirtualSites;
 
 
-    bool   write_bonds_to_PDB;
-    bool   WantEnergy;
-    bool   WantForce;
-    bool   WriteVelocitiesandForces;
-    bool   CMMotionRemover;
-    int    CMMotionRemoverStep;
-    bool   Wantvoronoi;
-    bool   Testmode;
+bool   write_bonds_to_PDB;
+bool   WantEnergy;
+bool   WantForce;
+bool   WriteVelocitiesandForces;
+bool   CMMotionRemover;
+int    CMMotionRemoverStep;
+bool   Wantvoronoi;
+bool   Testmode;
 
-    
-    double MCBarostatPressure;
-    double MCBarostatTemperature;
-    int    MCBarostatFrequency;
-    
+
+double MCBarostatPressure;
+double MCBarostatTemperature;
+int    MCBarostatFrequency;
+
 
 //    std::vector<std::vector<std::vector<double> > > data;
-    std::vector<double> data_colection_times;
-    std::vector<std::vector<double> > Lboxdims;
+std::vector<double> data_colection_times;
+std::vector<std::vector<double> > Lboxdims;
 }
 
 
@@ -167,10 +166,10 @@ int main(int argc, char **argv)
     read_interaction_map(interaction_map);
     
     ofstream Trajectory;
-//    ofstream calcforce_l0;
-//    ofstream calcforce_delta;
-//    calcforce_l0.open("calcforce_l0", ios::app);
-//    calcforce_delta.open("calcforce_delta", ios::app);
+    //    ofstream calcforce_l0;
+    //    ofstream calcforce_delta;
+    //    calcforce_l0.open("calcforce_l0", ios::app);
+    //    calcforce_delta.open("calcforce_delta", ios::app);
     string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
@@ -185,10 +184,9 @@ int main(int argc, char **argv)
     vector<std::set<int> > ecm_set;
     
     vector<Chromatin> Chromatins;
-//    vector<std::set<int> > chromatin_set;
+    //    vector<std::set<int> > chromatin_set;
     vector<vector<std::set<int> > > chromatin_set;
     
-    //vector<point_particle> pointparticles;
     
     bool Include_Membrane  = false;
     bool Include_Chromatin = false;
@@ -270,35 +268,6 @@ int main(int argc, char **argv)
             }
         }
         
-//        if (GenConst::Num_of_pointparticles!=0){
-//            Include_pointparticle=true;
-//            pointparticles.resize(GenConst::Num_of_pointparticles);
-//            for (int i=0; i<GenConst::Num_of_pointparticles; i++) {
-//                pointparticles[i].set_file_time(buffer);
-//                pointparticles[i].set_index(i);
-//                pointparticles[i].import_config(pointparticle_config_list[i]);
-//                pointparticles[i].generate_report();
-//            }
-//
-//        }
-        
-        //Used in the old code (no OpenMM engine)
-        if (!GenConst::OpenMM) {
-            if (Include_Membrane && Include_ECM) {
-                for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-                    for (int j=0; j<GenConst::Num_of_ECMs; j++) {
-                        Membrane_ECM_neighbour_finder(ECMs[j], Membranes[i]);
-                    }
-                }
-            }
-            if (Include_Membrane && Membranes.size()>1) {
-                for (int i=1; i<GenConst::Num_of_Membranes; i++) {
-                    Vesicle_particle_neighbour_finder (Membranes[i], Membranes[0]);
-                }
-            }
-        }
-        
-        
         
         if (Include_Membrane) {
             for (int i=0; i<Membranes.size(); i++) {
@@ -336,23 +305,15 @@ int main(int argc, char **argv)
             if (Include_Actin){
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
                     for (int j=0; j<GenConst::Num_of_Membranes; j++) {
-                        Actin_Membrane_shared_Node_Identifier(Actins[i], Membranes[j] , i, j);
                         num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
-                        if (Membranes[j].get_relax_with_actin_flag()) {
-                            Membranes[j].Relax_1();
-                        }
                     }
                     
                 } //for (int i=0; i<GenConst::Num_of_Actins; i++)
-            } else { //if (Include_Actin){
-                for (int i=0; i<Membranes.size(); i++){
-                    Membranes[i].Relax_1();
-                }// End of for (int i=0; i<Membranes.size(); i++)
-            }//end else
+            }
         } // End of if (Include_Membrane)
     }
     
-
+    
     float progressp=0;
     
     
@@ -423,591 +384,311 @@ int main(int argc, char **argv)
     }
     
     
-
+    
     int progress=0;
     double MC_Acceptance_Rate=0;
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
-
-    //openmm**
-    if (GenConst::OpenMM) {
-        cout<<"\nBeginnig the OpenMM section:\n";
-        std::string   platformName;
-        int atom_count=0;
-        int bond_count=0;
-        int dihe_count=0;
+    
+    cout<<"\nBeginnig the OpenMM section:\n";
+    std::string   platformName;
+    int atom_count=0;
+    int bond_count=0;
+    int dihe_count=0;
+    
+    int mem_atom_count=0;
+    //int act_atom_count=0;
+    
+    //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
+    MyAtomInfo* all_atoms     = new MyAtomInfo[num_of_atoms+1];
+    Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
+    Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+    
+    cout<<"num_of_atoms = "<<num_of_atoms<<endl;
+    cout<<"num_of_bonds = "<<num_of_bonds<<endl;
+    
+    all_atoms[num_of_atoms].type         =EndOfList;
+    all_bonds[num_of_bonds].type         =EndOfList;
+    all_dihedrals[num_of_dihedrals].type =EndOfList;
+    
+    if (Include_Membrane) {
+        OpenMM_membrane_info_relay(Membranes,
+                                   membrane_set,
+                                   all_atoms,
+                                   all_bonds,
+                                   all_dihedrals,
+                                   atom_count,
+                                   bond_count,
+                                   dihe_count);
+    }
+    
+    mem_atom_count = atom_count;
+    
+    
+    if (Include_Actin) {
+        OpenMM_Actin_info_relay(Actins,
+                                actin_set,
+                                all_atoms,
+                                all_bonds,
+                                all_dihedrals,
+                                atom_count,
+                                bond_count,
+                                dihe_count);
+    }
+    
+    
+    if (Include_Membrane  && Include_Actin) {
+        OpenMM_ActMem_info_relay(Actins,
+                                 Membranes,
+                                 all_bonds,
+                                 mem_atom_count,
+                                 bond_count);
         
-        int mem_atom_count=0;
-        //int act_atom_count=0;
-        
-        //The +1 is for the last member of the list that is set to -1 to indicate the end of list.
-        MyAtomInfo* all_atoms     = new MyAtomInfo[num_of_atoms+1];
-        Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
-        Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
-        
-        cout<<"num_of_atoms = "<<num_of_atoms<<endl;
-        cout<<"num_of_bonds = "<<num_of_bonds<<endl;
-        
-        all_atoms[num_of_atoms].type         =EndOfList;
-        all_bonds[num_of_bonds].type         =EndOfList;
-        all_dihedrals[num_of_dihedrals].type =EndOfList;
-        
-        if (Include_Membrane) {
-            OpenMM_membrane_info_relay(Membranes,
-                                       membrane_set,
-                                       all_atoms,
-                                       all_bonds,
-                                       all_dihedrals,
-                                       atom_count,
-                                       bond_count,
-                                       dihe_count);
-        }
-        
-        mem_atom_count = atom_count;
-        
-        
-        if (Include_Actin) {
-            OpenMM_Actin_info_relay(Actins,
-                                    actin_set,
+    }
+    
+    if (Include_ECM) {
+        OpenMM_ECM_info_relay(ECMs,
+                              ecm_set,
+                              all_atoms,
+                              all_bonds,
+                              all_dihedrals,
+                              atom_count,
+                              bond_count,
+                              dihe_count);
+    }
+    if (Include_Chromatin) {
+        OpenMM_Chromatin_info_relay(Chromatins,
+                                    chromatin_set,
                                     all_atoms,
                                     all_bonds,
                                     all_dihedrals,
                                     atom_count,
                                     bond_count,
                                     dihe_count);
-        }
-        
-        
-        if (Include_Membrane  && Include_Actin) {
-            OpenMM_ActMem_info_relay(Actins,
-                                     Membranes,
-                                    all_bonds,
-                                    mem_atom_count,
-                                    bond_count);
-
-        }
-        
-        if (Include_ECM) {
-            OpenMM_ECM_info_relay(ECMs,
-                                  ecm_set,
-                                  all_atoms,
-                                  all_bonds,
-                                  all_dihedrals,
-                                  atom_count,
-                                  bond_count,
-                                  dihe_count);
-        }
-        if (Include_Chromatin) {
-            OpenMM_Chromatin_info_relay(Chromatins,
-                                        chromatin_set,
-                                        all_atoms,
-                                        all_bonds,
-                                        all_dihedrals,
-                                        atom_count,
-                                        bond_count,
-                                        dihe_count);
-        }
-       
-        
-        //autocorrelation calculations:
-//        GenConst::velocity_save.resize(6);
-        
-        
-        // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
-        // usage and runtime errors are caught and reported.
-        
-        cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
-//        GenConst::Lbox = 200;
-        
-        try {
-            MyOpenMMData* omm = new MyOpenMMData();
-            TimeDependantData* time_dependant_data = new TimeDependantData();
-            if (!GenConst::Load_from_checkpoint) {
-                omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
-            } else {
-                std::filebuf rfb;
-                string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;
-                checkpoint_load_name = "Results/Resumes/OpenMM/chromo2019_11_17_time_11_57";
-                rfb.open (checkpoint_load_name.c_str(),std::ios::in);
-                if (rfb.is_open()) {
-                    cout<<"Loading checkpoint from: "<<checkpoint_load_name<<endl;
-                } else {
-                    cout<<"Checkpoint loadding is enabled. Cannpt find the checkpoint file. Please check the checkpoint path and filename in the general config file."<<endl;
-                    exit(EXIT_FAILURE);
-                }
-                std::istream rcheckpoint(&rfb);
-                omm->context->loadCheckpoint(rcheckpoint);
-                
-                //wrok in progress.
-                //Need to retrive all information from the checkpoint and relay them to the respective classes.
-            }
-            
-            cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
-            // Run the simulation:
-            //  (1) Write the first line of the PDB file and the initial configuration.
-            //  (2) Run silently entirely within OpenMM between reporting intervals.
-            //  (3) Write a PDB frame when the time comes.
-            printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
-            std::filebuf wfb;
-            wfb.open (ckeckpoint_name.c_str(),std::ios::out);
-            std::ostream wcheckpoint(&wfb);
-            
-            //Time the programme
-            tStart = clock();
-            chrono_clock_start = chrono::steady_clock::now();
-            chrono_sys_clock_start = chrono::system_clock::now();
-            
-            std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
-            std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
-            std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-            
-            
-            //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
-            int MCCalcstep = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
-            int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
-            int Savingstep = NumSilentSteps;
-            if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
-                Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
-                NumSilentSteps = MCCalcstep;
-            } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
-                int rate =  (int)(MCCalcstep / NumSilentSteps );
-                Savingstep = int(MCCalcstep/rate);
-                NumSilentSteps = Savingstep;
-            }
-            
-            int savetime = 0;
-            int MCCalcTime = MCCalcstep;
-            
-            cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
-            
-            int total_step_num = 0;
-            double last_update_time=0;
-
-
-            bool expanding = false;
-            bool set_spring = false;
-            bool changeTemp = false;
-            double TempStep = 0.2;
-            double initTemp = GenConst::temperature;
-
-            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds, traj_name , force_name);
-            for (int frame=1; ; ++frame) {
-
-                double time, energyInKJ, potential_energyInKJ;
-                
-                myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
-
-                if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
-                    
-
-                    if(GenConst::WriteVelocitiesandForces){
-                        collect_data(all_atoms, buffer, Chromatins, Membranes, time);
-                    }
-                    
-                    
-                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name , force_name);
-//                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
-                    //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
-                                    
-                                    //Begin: Exporting congiguration of classes for simulation .
-                    Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
-                    
-                    
-                    
-                    savetime += Savingstep;
-                    
-                }
-
-                
-                if (changeTemp) {
-                    initTemp -= TempStep;
-                    omm->Lintegrator->setTemperature(initTemp);
-//                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
-//                    map <string, double> params;
-//                    params = omm->context->getParameters();
-//
-//                    cout<<"\nframe: "<<frame<<endl;
-//                    cout<<params.size()<<endl;
-//                    for(auto elem : params)
-//                    {
-//                       cout << elem.first << " " << elem.second << "\n";
-//                    }
-//                    cout<<"\n";
-//
-                }
-//                cout<<"CreateCheckpoint\n";
-                if (GenConst::CreateCheckpoint) {
-                    omm->context->createCheckpoint(wcheckpoint);
-                    //End: Exporting congiguration of classes for simulation resume.
-                }
-                
-                if (time >= GenConst::Simulation_Time_In_Ps)
-                    break;
-//                cout<<"myStepWithOpenMM\n";
-                myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
-                
-                if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
-                    printf("[ %2.1f ] time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
-                    cout<< std::flush;
-//                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
-                    progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
-//                    cout<<progressp<<endl;
-                    progress++;
-                }
-                
-                if (check_for_membrane_update(Membranes, time, last_update_time)) {
-                    updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
-                }
-
-
-
-                
-//                if (time>100 && set_spring) {
-//                    int atom1, atom2 ;
-//                    double length, stiffness;
-//
-//                    for(int i=0; i<Membranes[0].get_num_of_node_pairs() ; i++)
-//                    {
-//                        omm->harmonic->getBondParameters(i, atom1, atom2, length, stiffness);
-//                        stiffness = 0.5 ;
-//
-//                        omm->harmonic->setBondParameters(i, atom1, atom2, length, stiffness);
-//                    }
-//                    omm->harmonic->updateParametersInContext(*omm->context);
-//                    set_spring=false;
-//                }
-//
-//                if (time>800 && expanding) {
-//                    expand(Chromatins, omm);
-//                    expanding=false;
-//                }
-                
-
-                 
-                //the monte_carlo part
-
-                 //if(progress==0 or progress==25 or progress==50 or progress==75){ 
-
-
-                if ( int(time*1000/GenConst::Step_Size_In_Fs) >= MCCalcTime and GenConst::Mem_fluidity !=0){
-                 
-                    //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
-//                    cout<<"Frame  "<<frame<<endl;
-
-                    Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
-                    
-                    MCCalcTime += MCCalcstep;
-                }
-                
-                if(frame%50==2 and  GenConst::Mem_fluidity !=0){
-                    
-                    cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
-                    cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
-                    cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
-                }
-             
-            }
-            
-            cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
-            
-            
-            print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
-            print_real_time(chrono_clock_start, chrono::steady_clock::now());
-            print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
-            
-            
-            
-            
-            
-            // Clean up OpenMM data structures.
-            myTerminateOpenMM(omm,time_dependant_data);
-            cout<<"MC_Acceptance_Rate   "<<MC_Acceptance_Rate<<endl;
-            cout<<"\nDone!!!!!"<<endl;
-            return 0; // Normal return from main.
-        }
-        
-        // Catch and report usage and runtime errors detected by OpenMM and fail.
-        catch(const std::exception& e) {
-            printf("EXCEPTION: %s\n", e.what());
-            return 1;
-        }
     }
     
     
+    //autocorrelation calculations:
+    //        GenConst::velocity_save.resize(6);
     
-    Trajectory.open(traj_file_name.c_str(), ios::app);
-    Trajectory << std:: fixed;
-    progress=0;
     
-    cout<<"\nBeginnig the MD\nProgress:\n";
-    for(int MD_Step=0 ;MD_Step<=GenConst::MD_num_of_steps ; MD_Step++){
-        //        cout<<Membranes[0].return_node_position(0, 0);
+    // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
+    // usage and runtime errors are caught and reported.
+    
+    cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+    //        GenConst::Lbox = 200;
+    
+    try {
+        MyOpenMMData* omm = new MyOpenMMData();
+        TimeDependantData* time_dependant_data = new TimeDependantData();
+        if (!GenConst::Load_from_checkpoint) {
+            omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+        } else {
+            std::filebuf rfb;
+            string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;
+            checkpoint_load_name = "Results/Resumes/OpenMM/chromo2019_11_17_time_11_57";
+            rfb.open (checkpoint_load_name.c_str(),std::ios::in);
+            if (rfb.is_open()) {
+                cout<<"Loading checkpoint from: "<<checkpoint_load_name<<endl;
+            } else {
+                cout<<"Checkpoint loadding is enabled. Cannpt find the checkpoint file. Please check the checkpoint path and filename in the general config file."<<endl;
+                exit(EXIT_FAILURE);
+            }
+            std::istream rcheckpoint(&rfb);
+            omm->context->loadCheckpoint(rcheckpoint);
+            
+            //wrok in progress.
+            //Need to retrive all information from the checkpoint and relay them to the respective classes.
+        }
         
-        //Thermostat step first step
-        if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-            if (Include_Membrane) {
-                for (int i=0; i<Membranes.size(); i++) {
-                    Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
+        cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+        // Run the simulation:
+        //  (1) Write the first line of the PDB file and the initial configuration.
+        //  (2) Run silently entirely within OpenMM between reporting intervals.
+        //  (3) Write a PDB frame when the time comes.
+        printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
+        std::filebuf wfb;
+        wfb.open (ckeckpoint_name.c_str(),std::ios::out);
+        std::ostream wcheckpoint(&wfb);
+        
+        //Time the programme
+        tStart = clock();
+        chrono_clock_start = chrono::steady_clock::now();
+        chrono_sys_clock_start = chrono::system_clock::now();
+        
+        std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+        std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
+        std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
+        
+        
+        //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+        int MCCalcstep = (int)(GenConst::Mem_fluidity * GenConst::Step_Size_In_Fs + 0.5);
+        int NumSilentSteps = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
+        int Savingstep = NumSilentSteps;
+        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
+            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
+            NumSilentSteps = MCCalcstep;
+        } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
+            int rate =  (int)(MCCalcstep / NumSilentSteps );
+            Savingstep = int(MCCalcstep/rate);
+            NumSilentSteps = Savingstep;
+        }
+        
+        int savetime = 0;
+        int MCCalcTime = MCCalcstep;
+        
+        cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
+        
+        int total_step_num = 0;
+        double last_update_time=0;
+        
+        
+        bool expanding = false;
+        bool set_spring = false;
+        bool changeTemp = false;
+        double TempStep = 0.2;
+        double initTemp = GenConst::temperature;
+        
+        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds, traj_name , force_name);
+        for (int frame=1; ; ++frame) {
+            
+            double time, energyInKJ, potential_energyInKJ;
+            
+            myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
+            
+            if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
+                
+                
+                if(GenConst::WriteVelocitiesandForces){
+                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-            }
-            if (Include_Actin) {
-                for (int i=0; i<Actins.size(); i++) {
-                    //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
-                }
-            }
-            if (Include_Chromatin) {
-                for (int i=0; i<Chromatins.size(); i++) {
-                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
-                }
-            }
-            if (Include_ECM) {
-                for (int i=0; i<ECMs.size(); i++) {
-                    //                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
-                }
-            }
-        }
-        
-        
-        //Velocity Verlet first step
-        if (Include_Membrane)
-        {
-            for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_Chromatin)
-        {
-            for (int i=0; i<Chromatins.size(); i++) {
-                Chromatins[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_Actin)
-        {
-            for (int i=0; i<Actins.size(); i++) {
-                Actins[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_ECM)
-        {
-            for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-            }
-        }
-        
-//        if (Include_pointparticle)
-//        {
-//            for (int i=0; i<pointparticles.size(); i++) {
-//                if (pointparticles[i].on_or_off_MD_evolution){
-//                    pointparticles[i].MD_Evolution_beginning(GenConst::Step_Size_In_Fs);
-//                }
-//            }
-//        }
-        
-        //force implamentation
-        if (Include_Membrane)
-        {
-            for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].Elastic_Force_Calculator(0);
-            }
-        }
-        if (Include_Chromatin)
-        {
-            for (int i=0; i<Chromatins.size(); i++) {
-                Chromatins[i].Force_Calculator_2();
-            }
-        }
-        if (Include_Actin)
-        {
-            for (int i=0; i<Actins.size(); i++) {
-                Actins[i].Elastic_Force_Calculator();
-            }
-        }
-        if (Include_ECM)
-        {
-            for (int i=0; i<ECMs.size(); i++) {
-                //                ECMs[i].Elastic_Force_Calculator();
-            }
-        }
-        
-        //Shared Forces
-        if (Include_Chromatin && Include_Membrane) {
-            if (MD_Step%2000==0) {
-                for (int i=0; i<Chromatins.size(); i++) {
-                    Chromatin_Membrane_neighbour_finder(Chromatins[i], Membranes[i]);
-                    Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
-                }
-            }
-            for (int i=0; i<Chromatins.size(); i++) {
-                Chromatin_Membrane_hard_sphere(Chromatins[i], Membranes[i]);
+                
+                
+                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name , force_name);
+                //                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
+                //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
+                
+                //Begin: Exporting congiguration of classes for simulation .
+                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
+                
+                
+                
+                savetime += Savingstep;
+                
             }
             
             
-        }
-        
-        if (Include_Membrane && Include_Actin) {
-            for (int i=0; i<Actins.size(); i++) {
-                for (int j=0; j<Membranes.size(); j++) {
-                    Actin_Membrane_shared_Node_Force_calculator(Actins[i], Membranes[j], j);
-                }
+            if (changeTemp) {
+                initTemp -= TempStep;
+                omm->Lintegrator->setTemperature(initTemp);
+                //                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
+                //                    map <string, double> params;
+                //                    params = omm->context->getParameters();
+                //
+                //                    cout<<"\nframe: "<<frame<<endl;
+                //                    cout<<params.size()<<endl;
+                //                    for(auto elem : params)
+                //                    {
+                //                       cout << elem.first << " " << elem.second << "\n";
+                //                    }
+                //                    cout<<"\n";
+                //
             }
-        }
-        
-        
-        if (Include_Membrane && Membranes.size()>1) {
-            for (int i=1; i<Membranes.size(); i++) {
-                particle_vesicle_shared_node_force (Membranes[i] , Membranes[0]);
-                if (MD_Step%2000==0) {
-                    update_particle_vesicle_neighbour_list (Membranes[i] , Membranes[0]);
-                }
-            }
-        }
-        
-        
-        if (Include_Membrane && Include_ECM) {
-            for (int i=0; i<Membranes.size(); i++) {
-                for (int j=0; j<ECMs.size(); j++) {
-                    Membrane_ECM_shared_node_force (ECMs[j], Membranes[i]);
-                    if (MD_Step%2000==0) {
-                        update_ecm_mem_neighbour_list (ECMs[j], Membranes[i]);
-                    }
-                }
-            }
-        }
-        
-//
-//        if (Include_Membrane && Include_pointparticle) {
-//            for (int i=0; i<Membranes.size(); i++) {
-//                for (int j=0; j<pointparticles.size(); j++){
-//                    Vesicle_pointparticle_neighbour_finder (pointparticles[j], Membranes[i]);
-//                    pointparticle_vesicle_shared_node_force (pointparticles[j], Membranes[i]);
-//                }
-//            }
-//        }
-        
-//        if(Include_pointparticle && pointparticles.size()>1){
-//            for (int i=0; i<pointparticles.size(); i++){
-//                for (int j=0; j<pointparticles.size(); j++){
-//                    if(i != j){
-//                        pointparticle_pointparticle_interaction(pointparticles[i],pointparticles[j]);
-//                    }
-//                }
-//            }
-//        }
-        
-        //Velocity Verlet second step
-        if (Include_Membrane) {
-            for (int i=0; i<Membranes.size(); i++) {
-                Membranes[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_Chromatin) {
-            for (int i=0; i<Chromatins.size(); i++) {
-                Chromatins[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_Actin) {
-            for (int i=0; i<Actins.size(); i++) {
-                Actins[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-            }
-        }
-        if (Include_ECM) {
-            for (int i=0; i<ECMs.size(); i++) {
-                ECMs[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-            }
-        }
-        
-//        if (Include_pointparticle)
-//        {
-//            for (int i=0; i<pointparticles.size(); i++) {
-//                if (pointparticles[i].on_or_off_MD_evolution){
-//                    pointparticles[i].MD_Evolution_end(GenConst::Step_Size_In_Fs);
-//
-//                }
-//            }
-//        }
-        
-        
-        //Thermostat second step
-        if (GenConst::MD_thrmo_step!=0 && MD_Step%GenConst::MD_thrmo_step==0 && MD_Step>1000) {
-            if (Include_Membrane) {
-                for (int i=0; i<Membranes.size(); i++) {
-                    Membranes[i].Thermostat_Bussi(GenConst::Buffer_temperature);
-                }
-            }
-            if (Include_Actin) {
-                for (int i=0; i<Actins.size(); i++) {
-                    //                    Actins[i].Thermostat_Bussi(GenConst::MD_T);
-                }
-            }
-            if (Include_Chromatin) {
-                for (int i=0; i<Chromatins.size(); i++) {
-                    Chromatins[i].Thermostat_Bussi(GenConst::MD_T*0.01);
-                }
-            }
-            if (Include_ECM) {
-                for (int i=0; i<ECMs.size(); i++) {
-                    //                    ECMs[i].Thermostat_Bussi(GenConst::MD_T);
-                }
-            }
-        }
-        
-        //saving Results
-        if (MD_Step%GenConst::MD_traj_save_step == 0)
-        {
-            Trajectory << num_of_atoms<<endl;
-            Trajectory << " nodes  "<<endl;
-            
-            
-            if (Include_Membrane) {
-                for (int i=0; i<Membranes.size(); i++) {
-                    //                    string label="Membrane_"+to_string(i);
-                    Membranes[i].write_traj(traj_file_name);
-                    Membranes[i].export_for_resume(MD_Step);
-                }
+            //                cout<<"CreateCheckpoint\n";
+            if (GenConst::CreateCheckpoint) {
+                omm->context->createCheckpoint(wcheckpoint);
+                //End: Exporting congiguration of classes for simulation resume.
             }
             
-            if (Include_Chromatin) {
-                for (int i=0; i<Chromatins.size(); i++) {
-                    string label="Chromatin_"+to_string(i);
-                    Chromatins[i].write_traj(traj_file_name, label);
-                    Chromatins[i].export_for_resume(MD_Step);
-                }
-            }
-            if (Include_Actin) {
-                for (int i=0; i<Actins.size(); i++) {
-                    string label="Actin_"+to_string(i);
-                    Actins[i].write_traj(traj_file_name, label);
-                    //                    Actins[i].export_for_resume(MD_Step);
-                }
-            }
-            if (Include_ECM) {
-                for (int i=0; i<ECMs.size(); i++) {
-                    string label="ECM_"+to_string(i);
-                    ECMs[i].write_traj(traj_file_name, label);
-                    //                    Actins[i].export_for_resume(MD_Step);
-                }
+            if (time >= GenConst::Simulation_Time_In_Ps)
+                break;
+            //                cout<<"myStepWithOpenMM\n";
+            myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
+            
+            if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
+                printf("[ %2.1f ] time: %4.1f Ps [out of %4.1f Ps]    \r",100*time/GenConst::Simulation_Time_In_Ps, time, GenConst::Simulation_Time_In_Ps);
+                cout<< std::flush;
+                //                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
+                progressp =  int(1000*time/GenConst::Simulation_Time_In_Ps)/10. + 0.1;
+                //                    cout<<progressp<<endl;
+                progress++;
             }
             
-//            if (Include_pointparticle) {
-//                for (int i=0; i<pointparticles.size(); i++) {
-//
-//                    pointparticles[i].write_traj(traj_file_name);
-//
-//                }
-//            }
-        }// End of if (MD_Step%100==0)
-
-        
-        if (int(100*MD_Step/GenConst::MD_num_of_steps)>progress){
-            cout<<"[ "<<progress<<"% ]\t step: "<<MD_Step<<"\r" << std::flush;
-            progress+=5;
+            if (check_for_membrane_update(Membranes, time, last_update_time)) {
+                updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
+            }
+            
+            
+            
+            
+            //                if (time>100 && set_spring) {
+            //                    int atom1, atom2 ;
+            //                    double length, stiffness;
+            //
+            //                    for(int i=0; i<Membranes[0].get_num_of_node_pairs() ; i++)
+            //                    {
+            //                        omm->harmonic->getBondParameters(i, atom1, atom2, length, stiffness);
+            //                        stiffness = 0.5 ;
+            //
+            //                        omm->harmonic->setBondParameters(i, atom1, atom2, length, stiffness);
+            //                    }
+            //                    omm->harmonic->updateParametersInContext(*omm->context);
+            //                    set_spring=false;
+            //                }
+            //
+            //                if (time>800 && expanding) {
+            //                    expand(Chromatins, omm);
+            //                    expanding=false;
+            //                }
+            
+            
+            
+            //the monte_carlo part
+            
+            //if(progress==0 or progress==25 or progress==50 or progress==75){
+            
+            
+            if ( int(time*1000/GenConst::Step_Size_In_Fs) >= MCCalcTime and GenConst::Mem_fluidity !=0){
+                
+                //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
+                //                    cout<<"Frame  "<<frame<<endl;
+                
+                Monte_Carlo_Reinitialize(omm, all_bonds , all_dihedrals, Membranes[0], all_atoms, MC_total_tries,Accepted_Try_Counter, MC_Acceptance_Rate);
+                
+                MCCalcTime += MCCalcstep;
+            }
+            
+            if(frame%50==2 and  GenConst::Mem_fluidity !=0){
+                
+                cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
+                cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
+                cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
+            }
+            
         }
         
-    } //End of for (int MD_Step=0 ;MD_Step<=MD_num_of_steps ; MD_Step++)
-   
-    cout<<"[ 100% ]\t step: "<<GenConst::MD_num_of_steps<<"\n";
-    cout<<"\nDone!"<<endl;
-    printf("Time taken: %.2f Minutes\n", (double)((clock() - tStart)/CLOCKS_PER_SEC)/60.0);
-    return 0;
+        cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
+        
+        
+        print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
+        print_real_time(chrono_clock_start, chrono::steady_clock::now());
+        print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
+        
+        
+        
+        
+        
+        // Clean up OpenMM data structures.
+        myTerminateOpenMM(omm,time_dependant_data);
+        cout<<"MC_Acceptance_Rate   "<<MC_Acceptance_Rate<<endl;
+        cout<<"\nDone!!!!!"<<endl;
+        return 0; // Normal return from main.
+    }
+    
+    // Catch and report usage and runtime errors detected by OpenMM and fail.
+    catch(const std::exception& e) {
+        printf("EXCEPTION: %s\n", e.what());
+        return 0;
+    }
 }
 

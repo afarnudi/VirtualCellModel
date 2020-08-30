@@ -16,42 +16,7 @@
 #include "Actin.h"
 
 
-double return_ecm_membrane_node_distance(Membrane mem, int mem_node, ECM ecm, int ecm_node);
-double return_triangle_membrane_distance(Membrane mem, int mem_node, ECM ecm, int tri_index, double tri_com[3]);
-bool barrier_2(Membrane mem, int mem_index);
-
-
-//Chromatin-Membrane
-void Chromatin_Membrane_neighbour_finder(Chromatin &chromo, Membrane Mem);
-void Chromatin_Membrane_hard_sphere(Chromatin &chromo, Membrane &Mem);
-//void Chromatin_Membrane_triangle_collision(Chromatin chromo, Membrane Mem);
-
 //Actin-Membrane
 void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem, int i, int j);
-void Actin_Membrane_shared_Node_Force_calculator(Actin &actin, Membrane &Mem, int j);
-
-//ECM-Membrane
-void Membrane_ECM_neighbour_finder (ECM &ecm, Membrane &mem);
-void initialise_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
-void update_ecm_mem_neighbour_list (ECM &ecm, Membrane &mem);
-void add_nodes_to_neighbour_list (Membrane &mem, vector<vector<std::pair<double, int> > > neighbour_pairs);
-void Membrane_ECM_shared_node_force (ECM &ecm, Membrane &mem);
-
-
-//Particle_ Vesicle
-void Vesicle_particle_neighbour_finder (Membrane &particle, Membrane &vesicle);
-void initialise_vesicle_particle_neighbour_list (Membrane &particle, Membrane &vesicle);
-void update_particle_vesicle_neighbour_list (Membrane &particle, Membrane &vesicle);
-void add_nodes_to_particle_neighbour_list (Membrane &particle, vector<vector<std::pair<double, int> > > neighbour_pairs);
-void particle_vesicle_shared_node_force (Membrane &particle, Membrane &vesicle);
-
-//pointparticle -Vesicle
-//void Vesicle_pointparticle_neighbour_finder (point_particle &particle, Membrane &vesicle);
-//void pointparticle_vesicle_shared_node_force (point_particle &particle, Membrane &vesicle);
-
-//pointparticle-pointparticle
-//void pointparticle_pointparticle_interaction(point_particle &first,point_particle &second);
-//general
-void prune_list(int mem_nodes, vector<vector<std::pair<double, int> > > neighbour_pairs);
 
 #endif /* interaction_hpp */

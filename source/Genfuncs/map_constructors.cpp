@@ -336,15 +336,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         if (it != general_param_map.end()){
             GenConst::ECM_label="ecm";
         }
-    } else if (param_name=="OpenMM"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            if (it->second == 0) {
-                GenConst::OpenMM= false;
-            } else {
-                GenConst::OpenMM= true;
-            }
-        }
     } else if (param_name=="sigma_LJ_12_6"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){

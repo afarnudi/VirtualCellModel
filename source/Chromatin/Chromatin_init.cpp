@@ -36,20 +36,3 @@ void Chromatin::initialise(void){
     cout<<"Chromatin class initiated.\n\n";
     
 }
-
-void Chromatin::initialise(double min_radius){
-//    vector<vector<double> > zero_vec(Num_of_Nodes, vector<double> (Num_of_Nodes));
-//    Contact_Matrix=zero_vec;
-    
-    ABC_index.resize(Num_of_Nodes);
-    generate(ABC_index.begin(), ABC_index.end(), [&r=num_of_node_types]() {
-        return rand() % r;
-    });
-    
-    cout<<"\nInitialising the Chromatin Class..."<<endl;
-    build_random_chain();
-    Pack(min_radius-2);
-    shift_node_positions();
-    cout<<"Chromatin class initiated.\n";
-    
-}

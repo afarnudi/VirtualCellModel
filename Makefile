@@ -5,8 +5,8 @@ CXX=g++
 # CXXFLAGS=-std=c++14 -O3
 # CXX=icpc
 
-OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
-# OpenMM_INSTALL_DIR=/usr/local/openmm
+#OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
+OpenMM_INSTALL_DIR=/usr/local/openmm
 BINDIR=bin
 SRCDIR=source
 INCDIR=include
@@ -17,7 +17,7 @@ INCDIRS=-I$(INCDIR) -I$(OpenMM_INSTALL_DIR)/include
 LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib  
 LIBS= -lOpenMM 
 
-SRCFILES=$(wildcard $(SRCDIR)/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Chromatin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Particle/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp)
+SRCFILES=$(wildcard $(SRCDIR)/main.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp) $(wildcard $(SRCDIR)/Genfuncs/*.cpp) 
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 

@@ -149,35 +149,3 @@ void Chromatin::FENE(void){
     }
     // End of Membrane Node Pair forces
 }
-
-void Chromatin::Strong_spring (void){
-    
-    double deltax,deltay,deltaz,temp_Node_distance,temp_force;
-    
-    int temp_Node_A, temp_Node_B;
-    
-    for (int k=0 ; k< Num_of_Nodes-1 ; k++)
-    {
-        temp_Node_B=k;
-        temp_Node_A=k+1;
-        
-        deltax=Node_Position[temp_Node_A][0]-Node_Position[temp_Node_B][0];
-        deltay=Node_Position[temp_Node_A][1]-Node_Position[temp_Node_B][1];
-        deltaz=Node_Position[temp_Node_A][2]-Node_Position[temp_Node_B][2];
-        
-        temp_Node_distance=sqrt(deltax*deltax+deltay*deltay+deltaz*deltaz);
-       
-        temp_force=Spring_coefficient*(temp_Node_distance-2*Node_radius);
-        
-        
-        // implimentation of forces:
-        Node_Force[temp_Node_A][0] += -temp_force*deltax/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]);
-        Node_Force[temp_Node_A][1] += -temp_force*deltay/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_A][2] += -temp_force*deltaz/temp_Node_distance+Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
-        
-        Node_Force[temp_Node_B][0] += temp_force*deltax/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][0]-Node_Velocity[temp_Node_B][0]); //from j  to i
-        Node_Force[temp_Node_B][1] += temp_force*deltay/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][1]-Node_Velocity[temp_Node_B][1]);
-        Node_Force[temp_Node_B][2] += temp_force*deltaz/temp_Node_distance-Damping_coefficient*(Node_Velocity[temp_Node_A][2]-Node_Velocity[temp_Node_B][2]);
-    }
-    // End of Membrane Node Pair forces
-}

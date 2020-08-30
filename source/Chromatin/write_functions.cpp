@@ -13,53 +13,6 @@ using std::string;
 using std::endl;
 using std::cout;
 
-//void Chromatin::write_parameters(int MD_Step){
-//    string traj_file_name;
-//
-//    traj_file_name="Results/CM_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(index)+"_"+file_time+".txt";
-//    std::ofstream Trajectory;
-//
-//    Trajectory.open(traj_file_name.c_str(), std::ios::app);
-//    Trajectory << std:: fixed;
-//
-////    for (int i=0; i<Num_of_Nodes-2; i++) {
-////        for (int j=i+2; Num_of_Nodes; j++) {
-////            Trajectory<<Contact_Matrix[i][j]<<"\t";
-////        }
-////        Trajectory<<"\n";
-////    }
-//}
-
-void Chromatin::packing_traj (void){
-    string energy_file_name;
-    string traj_file_name;
-    
-    traj_file_name="Results/Relaxation/Packing_"+GenConst::trajectory_file_name+"Chromatin_"+std::to_string(index)+"_"+file_time+".xyz";
-    
-    std::ofstream Trajectory;
-    
-    Trajectory.open(traj_file_name.c_str(), std::ios::app);
-    Trajectory << std:: fixed;
-    Trajectory <<Num_of_Nodes<<endl;
-    Trajectory << " nodes  "<<endl;
-    for(int j=0; j< Num_of_Nodes; j++) // saving trajectory
-    {
-        Trajectory << "chem" <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<<std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
-    }
-    
-}
-
-void Chromatin::write_traj (string traj_name, string label){
-    std::ofstream Trajectory;
-    Trajectory.open(traj_name.c_str(), std::ios::app);
-    Trajectory << std:: fixed;
-    vector<string> ABC = {"_A", "_B", "_C", "_D", "_E", "_F", "_G"};
-    for(int j=0; j< Num_of_Nodes;j++) // saving trajectory
-    {
-        Trajectory << label + ABC[ABC_index[j]] <<std::setprecision(5)<< std::setw(20)<<Node_Position[j][0]<< std::setw(20)<<Node_Position[j][1]<< std::setw(20)<<Node_Position[j][2]<<endl;
-    }
-}
-
 void Chromatin::export_for_resume(int MD_step){
     std::ofstream write_resume_file;
     string resume_file_name="Results/Resumes/Resume_Chromatin_"+std::to_string(index)+"_";

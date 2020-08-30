@@ -52,10 +52,6 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
-  
-
-    ECM_Node_neighbour_list.resize(Num_of_Nodes);
-    
     cout<<endl;
     check();
 

@@ -39,9 +39,7 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int i, int 
             }
         }
     }
-    if (act.Actin_Membrane_shared_Node_list.size() == j) {
-        act.Actin_Membrane_shared_Node_list.push_back(Act_Mem_shared_Node_list);
-    }
+    
     act.Num_of_Actin_Membrane_shared_Nodes.push_back(int(Act_Mem_shared_Node_list.size()));
     
     cout<<"\n# of shared nodes between actin " << i << " and membrane " << j << " = "<<act.Num_of_Actin_Membrane_shared_Nodes[j]<<endl;

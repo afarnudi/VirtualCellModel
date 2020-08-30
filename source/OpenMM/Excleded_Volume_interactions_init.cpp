@@ -53,23 +53,6 @@ if (GenConst::Periodic_box) {
     }
     
  
-    
-    
-//    ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-//                                                             + atoms[*it_2].radius ) );
-//    ExcludedVolumes[index]->addPerParticleParameter("sigma");
-//    cout<<"sigma = 0.5*("<<atoms[*it_1].radius<<" + "<<atoms[*it_2].radius<<") = "<<0.5*( atoms[*it_1].radius
-//                                                                                       + atoms[*it_2].radius )<<endl;
-//    if (GenConst::Periodic_box) {
-//        ExcludedVolumes[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
-//    } else {
-//        ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-//    }
-//
-//
-//    ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
-//                                                    + atoms[*it_2].radius ) );
-    
     ExcludedVolumes[index]-> addInteractionGroup(set_1[set_1_index], set_2[set_2_index]);
 }
 

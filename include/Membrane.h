@@ -42,32 +42,24 @@ class Membrane
 {
     
 protected:
-    /** Store the label(pdb) used to write to the trajectory file */
-    int mem_index;
-    /*variables*/
-    //    void Normal_direction_Identifier(double x, double y, double z);
-    //    void Rescale(double rescale_factor);
-    void potential_1 (void);
-    void potential_2 (void);
-    
+    /**Store the label(pdb) used to write to the trajectory file */
     std::string label;
-    
-    double volume;
-    double surface_area;
-    
+    /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
     /*variables*/
+    /**Store the volume of the membrane*/
+    double volume;
+    /**Store the surface area of the membrane*/
+    double surface_area;
+    
+    
+    /*variables*/
+    /**Number of nodes in the membrane.*/
     int Num_of_Nodes;
     /*constants*/
     ///This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
-    int MD_num_of_Relaxation_steps=200000;
-    int MD_correction_steps=2000;
-
-
-    int Num_of_Free_Bonds=0; //this variable is set for defining the bonds which we dont want to consider the triangles formed by them.
-    bool fixing_com=0; //this flag indicates that if we want to keep the center of mass as a physical point to apply the forces on it or not.
-
+    
     std::map<std::string, double> param_map;
     
     std::string Mesh_file_name="None";
@@ -76,13 +68,6 @@ protected:
     double sigma_LJ_12_6=0;
     double epsilon_LJ_12_6=0;
     
-    bool Relaxation=false;
-    //    bool Shift= false;
-    bool Relax_with_actin=false;
-    int Relaxation_Process_Model=1; /// 1 represents the relaxation Processes without node correction and 2 includes node corrections.
-    int correction_progress;
-    double ECM_interaction_cut_off=0;
-    double vesicle_interaction_cut_off=10;
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy=0.0;
     double Total_Kinetic_Energy;
@@ -106,37 +91,19 @@ protected:
     double Y_scale=0;
     double Z_scale=0;
     
-    double ECM_interaction_strength=1;
-    
-    
-    double vesicle_interaction_strength=30;
-    double vesicle_interaction_sigma=3;
     double Average_Node_Distance();
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
-    void read_membrabe_input(std::string input_file);
+    
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
-    void node_distance_correction(void);
-    //    void Normal_direction_Identifier(double x, double y, double z);
-    
-    
     void FENE_log (void);
-    void Hookian (void);
     void custom (void);
-    void Relaxation_potential(void);
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
-//    void Bending_potetial(void);
-    //    void Bending_potetial_2(void);
     void Bending_potetial_2(double theta_0);
     
     double Total_Bending_Energy = 0.0;
-    
-    void export_relaxed(int MD_step);
-    int membrane_counter;
-    //    bool rescale=0;
-    
     
 public:
     //Analysis funcs/vars:
@@ -182,8 +149,6 @@ public:
     
     vector<vector<vector<double> > > pdb_frames;
     vector<vector<double> > spherical_positions;
-//    int z_node_index = -1;
-//    int y_node_index = -1;
     
     void set_com_to_zero(){
         update_COM_position();
@@ -204,26 +169,17 @@ public:
     double get_new_nominal_length(void){
         return Update_nominal_length;
     }
-    ///Call all initilisation members and initilise openmm handles.
-    void initilise_openmm(void);
-    ///node-node hard sphere interaction.
-    void excluded_volume(void);
-    
-    
-    double min_radius_after_relaxation;
     
     std::string output_file_neme;
     std::string file_time;
-    bool particle_type=0; // True means the object is a particle and false means it is a vesicle
     
-    vector<vector<double> >Node_Position;
-    vector<vector<int> > Triangle_list;
+    vector<vector<double> > Node_Position;
+    vector<vector<int> >    Triangle_list;
     //List that stores the IDs of triangles that are neighbours.
-    vector<vector<int> > Triangle_pair_list;
+    vector<vector<int> >    Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
-    vector<vector<int> > Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
-    vector<vector<int> >Free_Bonds; //this variable is set for defining the bonds which we dont want to consider the triangles formed by them.
-    vector<vector<int> > Triangle_Pair_Nodes;
+    vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
+    vector<vector<int> >    Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     
@@ -267,20 +223,11 @@ public:
     double surface_area_voronoi=0;
     
     vector<int> Bond_triangle_neighbour_indices ;
-    //    vector<double>DamperCheck;
-    vector<double>SinusCheck;
-    void Damper_check(int MD_step);
+    
     void check(void);
     void check_radius_update_values(void);
-    vector<vector<int> > ECM_Node_neighbour_list;
-    vector<vector<int> > Vesicle_Node_neighbour_list;
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
-    //int Membrane_num_of_Node_Pair_Counter();// Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
-    //void Membrane_num_of_Node_Pair_Counter_2();//Hoda: no need to this function after modifying Membrane_Triangle_Pair_and_Edges_Identifier
     void Elastic_Force_Calculator(double theta_0);
-    void MD_Evolution_beginning (double MD_Time_Step);
-    void MD_Evolution_end (double MD_Time_Step);
-    void ConstantSurfaceForceLocalTriangles ();
     /**Construct a vector that lists all the neighbours of  each node and their respective index in the 'Node_Bond_list'.
      */
     void Node_neighbour_list_constructor();
@@ -323,33 +270,16 @@ public:
     void import_config(std::string config_file_name);
     void set_map_parameter(std::string param_name, double param_value);
     void generate_report(void);
-    void export_velocities(int MD_step);
-    void Thermostat_2(double MD_KT);
-    void Thermostat_N6(double MD_KT);
-    void Thermostat_Bussi(double MD_KT);
-    void calculate_mesh_properties(void);
-    void relaxation_traj (void);
-    void write_traj (std::string traj_name);
-    void write_traj (std::string traj_name, std::string label);
-    void write_parameters(int MD_Step);
-    void omega_calculator(void);
-    void omega_calculator_2(void);
-    void equilibrate (void);
+
     void write_pov_traj(std::string traj_name, std::string label, int currentstep);
-    double Average_velocity_squared();
-    double Omega[3]={0};
     
-    
-    
-    int **Normal_direction; //??? (These 2 elements should be defined and explained)
     int spring_model=2;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
     double Spring_coefficient=10.0*GenConst::MD_T*GenConst::K; // streching constant
     double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
-    double K_surfaceConstant_local=100.0;
-    double Spring_force_cutt_off=1000.0;
+    
     double Shift_in_X_direction=0.0; //???
     double Shift_in_Z_direction=0.0; //???
     double Shift_in_Y_direction=0.0; //???
@@ -361,11 +291,9 @@ public:
     double kx=10;
     double ky=10;
     double kz=10;
-    //bool =0;
+    
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
-    
-    bool on_or_off_Spring_force_cutt_off=0; //??? I add it myself because virus should not have cut off
     
     /**Returns the last saved volume*/
     double return_volume(void){
@@ -404,8 +332,7 @@ public:
     std::string get_label(void){
         return label;
     }
-    void Relax_1(void);
-    void Relax_2(void);
+//    void Relax_1(void);
     
     
     /** \brief public access to total number of membrane nodes.
@@ -511,15 +438,7 @@ public:
         
         
     }
-    
-    int  get_Relaxation_Process_Model(void){
-        return Relaxation_Process_Model;
-    }
-    bool  get_Relaxation_flag(void){
-        return Relaxation;
-    }
-    
-    
+
     
     void shift_velocity (double vx, double vy, double vz){
         for (int i=0; i<Num_of_Nodes; i++) {
@@ -547,16 +466,6 @@ public:
     /**Set the current state (OpenMM) of the class.*/
     void set_state(MyAtomInfo all_atoms[], int atom_count);
     
-    void calculate_average_force(void){
-        double average_force_x=0, average_force_y=0, average_force_z=0;
-        for(int j=0 ; j<Num_of_Nodes ; j++){
-            average_force_x+=Node_Force[j][0];
-            average_force_y+=Node_Force[j][1];
-            average_force_z+=Node_Force[j][2];
-            
-        }
-        cout<<"\n\naverage_force_x="<<average_force_x/Num_of_Nodes<<"\naverage_force_y="<<average_force_y/Num_of_Nodes<<"\naverage_force_z="<<average_force_z/Num_of_Nodes<<endl;
-    }
     void set_file_time(char* buffer){
         file_time=buffer;
     }
@@ -566,21 +475,7 @@ public:
     double get_node_radius(void){
         return Node_radius;
     }
-    double get_ECM_interaction_cut_off(void){
-        return ECM_interaction_cut_off;
-    }
-    double get_ECM_interaction_strength(void){
-        return ECM_interaction_strength;
-    }
-    double get_vesicle_interaction_cut_off(void){
-        return vesicle_interaction_cut_off;
-    }
-    double get_vesicle_interaction_sigma(void){
-        return vesicle_interaction_sigma;
-    }/**Returns epsilon for lennard-Jones interaction between the nodes of  2 membranes.*/
-    double get_vesicle_interaction_strength(void){
-        return vesicle_interaction_strength;
-    }
+    
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
@@ -609,21 +504,6 @@ public:
         COM_position[0]/=Num_of_Nodes;
         COM_position[2]/=Num_of_Nodes;
         COM_position[1]/=Num_of_Nodes;
-    }
-    double get_min_radius_after_relaxation(void){
-        return min_radius_after_relaxation;
-    }
-    bool get_relax_with_actin_flag(void){
-        return Relax_with_actin;
-    }
-    int get_correction_progress(void){
-        return correction_progress;}
-    bool bending_coefficient_status(void){
-        if (Bending_coefficient !=0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     /** This function shifts the whole membrane.*/
     void shift_position (double x, double y, double z) {

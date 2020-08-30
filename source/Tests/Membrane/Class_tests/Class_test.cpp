@@ -73,7 +73,7 @@ std::vector<std::vector<double> > Lboxdims;
 }
 
 using namespace std;
-struct MemClassTest : protected testing::Test{
+struct MemClassTest : testing::Test{
     //setup
     Membrane* Mem = new Membrane;
     

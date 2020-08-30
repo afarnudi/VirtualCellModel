@@ -143,10 +143,6 @@ public:
     void import_config(std::string config_file_name);
     void set_map_parameter(std::string param_name, double param_value);
     void Elastic_Force_Calculator(void);
-    void MD_Evolution_beginning (double MD_Time_Step);
-    void MD_Evolution_end (double MD_Time_Step);
-    void Thermostat_Bussi(double MD_T);
-    void write_traj (std::string traj_name, std::string label);
     void generate_report();
     void export_for_resume(int MD_step);
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);

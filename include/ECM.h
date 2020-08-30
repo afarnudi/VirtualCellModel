@@ -117,9 +117,6 @@ private:
 public:
     
     void import_config(std::string config_file_name);
-    void MD_Evolution_beginning (double MD_Time_Step);
-    void MD_Evolution_end (double MD_Time_Step);
-    void write_traj (std::string traj_name, std::string label);
     void generate_report(void);
     void export_for_resume(int MD_step);
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
