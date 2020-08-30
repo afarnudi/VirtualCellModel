@@ -208,7 +208,7 @@ void consistency_check(ArgStruct &args){
 //                cout<<"This option is not available at the moment\nUse -h for more information.\n";
 //                exit(5);
                 
-                cout<<TWWARN<<"This option is under development. Prceed with the trial version.\n";
+                cout<<TWWARN<<"This option is under development. Prceed with the trial version.\n"<<TRESET;
 
                 if (args.analysis_filename == "" ) {
                     cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";

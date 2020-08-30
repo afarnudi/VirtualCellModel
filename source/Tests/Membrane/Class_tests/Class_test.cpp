@@ -9,46 +9,47 @@
 
 
 namespace GenConst {
-int MD_num_of_steps;
+int    MD_num_of_steps;
 double Simulation_Time_In_Ps;
-int MD_traj_save_step;
+int    MD_traj_save_step;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
 double MD_T;
 double K;
-int MD_thrmo_step;
-int MC_step;
-int Mem_fluidity;
-bool Periodic_box;
+int    MD_thrmo_step;
+int    MC_step;
+int    Mem_fluidity;
+bool   Periodic_box;
 double Lbox;
-bool Periodic_condtion_status;
-int Num_of_Membranes;
-int Num_of_Chromatins;
-int Num_of_Actins;
-int Num_of_ECMs;
-int Num_of_pointparticles;
-std::string trajectory_file_name;;
+bool   Periodic_condtion_status;
+int    Num_of_Membranes;
+int    Num_of_Chromatins;
+int    Num_of_Actins;
+int    Num_of_ECMs;
+int    Num_of_pointparticles;
+string trajectory_file_name;;
+string force_file_name;;
 double Buffer_temperature;
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool Interaction_map;
-std::string Interaction_map_file_name;
-bool Excluded_volume_interaction;
-bool OpenMM;
+bool   Interaction_map;
+string Interaction_map_file_name;
+bool   Excluded_volume_interaction;
+bool   OpenMM;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
-std::string Membrane_label;
-std::string Actin_label;
-std::string Chromatin_label;
-std::string ECM_label;
-int Integrator_type;
+string Membrane_label;
+string Actin_label;
+string Chromatin_label;
+string ECM_label;
+int    Integrator_type;
 double frictionInPs;
 double temperature;
-bool CreateCheckpoint;
-bool Load_from_checkpoint;
-std::string Checkpoint_path;
-std::string Checkpoint_file_name;
-bool ChromatinVirtualSites;
+bool   CreateCheckpoint;
+bool   Load_from_checkpoint;
+string Checkpoint_path;
+string Checkpoint_file_name;
+bool   ChromatinVirtualSites;
 
 
 bool   write_bonds_to_PDB;
@@ -60,12 +61,15 @@ int    CMMotionRemoverStep;
 bool   Wantvoronoi;
 bool   Testmode;
 
+
 double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
 
+
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
+std::vector<std::vector<double> > Lboxdims;
 }
 
 using namespace std;
