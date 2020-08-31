@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ylmintegral',['Ylmintegral',['../classLMParameterized.html#a1b81693d8eb36d22fc6322553695248f',1,'LMParameterized']]]
+  ['_7emyopenmmdata_944',['~MyOpenMMData',['../struct_my_open_m_m_data.html#a8b18e9a40611765e2c966495e2a339bb',1,'MyOpenMMData']]]
 ];
