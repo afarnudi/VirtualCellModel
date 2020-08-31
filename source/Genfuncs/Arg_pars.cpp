@@ -49,10 +49,9 @@ ArgStruct cxxparser(int argc, char **argv){
         .show_positional_help();
         
         options
-//                .allow_unrecognised_options()
+        //                .allow_unrecognised_options()
         .add_options()
         ("h,help", "Print help")
-        ("a,analysis", "Takes 2 or 3 to perform Membrane mode analysis in 3D or 2D. 3D analysis decomposes Membrnae surface undulations into Real Spherical Harmonic (RSH) modes, U_lm. l and m are integers where l is defined between 0 and lmax, and m between -l and l.", cxxopts::value<int>(), "int")
         
         ("pdbfile", "Path to Membrane pdb file that contain ONLY a single Membrane. Example: path/to/my/pdbfile.pdb", cxxopts::value<std::vector<std::string>>(),"Path+file")
         
@@ -91,11 +90,6 @@ ArgStruct cxxparser(int argc, char **argv){
             exit(0);
         }
         
-        if (result.count("analysis"))
-        {
-            args.analysis_dim = result["analysis"].as<int>();
-            args.analysis_mode = true;
-        }
         if (result.count("pdbfile"))
         {
             auto& ff = result["pdbfile"].as<std::vector<std::string>>();
@@ -172,120 +166,120 @@ ArgStruct cxxparser(int argc, char **argv){
 
 void consistency_check(ArgStruct &args){
     cout<<endl;
-    if (args.analysis_mode) {
-        if (args.analysis_dim != 2 && args.analysis_dim !=3) {
-            cout<<"Analysis dimension option "<<TWWARN<<"not supported"<<TRESET<<".\nUse -h for more information"<<endl;
-            exit(2);
-        } else {
-            if (args.analysis_dim == 3) {
-                cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
-                if (args.analysis_filename == "" ) {
-                    cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
-                    exit(3);
-                } else {
-                    cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
-                }
-                cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
-                
-                if (args.num_ang_avg !=1 && args.z_node !=-1) {
-                    cout<<"\"angavg\" and \"alignaxes\" "<<TWWARN<<"cannot be used simultaneously"<<TRESET<<". Run help (-h, --help) for more inforamtion."<<endl;
-                    exit(4);
-                }else {
-                    if (args.analysis_averaging_option == 1) {
-                        cout<<"Average over random rotations:"<<TGREEN<<" ON"<<TRESET<<endl;
-                        cout<<"Number of random rotations: "<<args.num_ang_avg<<endl;
-                    }else if (args.analysis_averaging_option == 2) {
-                        cout<<"Material frame reference: "<<TGREEN<<"ON"<<TRESET<<endl;
-                        cout<<"Node index on the Z axis: "<<args.z_node<<endl;
-                        cout<<"Node inedx on the Z-Y plane: "<<args.zy_node<<endl;
-                        
-                    }
-                }
-                
-            }
-            if (args.analysis_dim == 2) {
-                cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
-//                cout<<"This option is not available at the moment\nUse -h for more information.\n";
-//                exit(5);
-                
-                cout<<TWWARN<<"This option is under development. Prceed with the trial version.\n"<<TRESET;
-
-                if (args.analysis_filename == "" ) {
-                    cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
-                    exit(3);
-                } else {
-                    cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
-                }
-                
-                
-                
-                
-            }
-            
-            if (args.membane_labels.size()==0) {
-                cout<<TWARN<<"\n!!!Warning"<<TRESET<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed.\n"<<endl;
+    
+    if (args.analysis_dim != 2 && args.analysis_dim !=3) {
+        cout<<"Analysis dimension option "<<TWWARN<<"not supported"<<TRESET<<".\nUse -h for more information"<<endl;
+        exit(2);
+    } else {
+        if (args.analysis_dim == 3) {
+            cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
+            if (args.analysis_filename == "" ) {
+                cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
+                exit(3);
             } else {
-                check_membrane_labels(args);
+                cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
             }
-            build_output_names(args);
+            cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
             
-            cout<<"Output file(s):\n";
-            for (int i=0; i<args.output_filename.size(); i++) {
-                cout<<"\t"<<TFILE<<args.output_filename[i]<<TRESET<<endl;
+            if (args.num_ang_avg !=1 && args.z_node !=-1) {
+                cout<<"\"angavg\" and \"alignaxes\" "<<TWWARN<<"cannot be used simultaneously"<<TRESET<<". Run help (-h, --help) for more inforamtion."<<endl;
+                exit(4);
+            }else {
+                if (args.analysis_averaging_option == 1) {
+                    cout<<"Average over random rotations:"<<TGREEN<<" ON"<<TRESET<<endl;
+                    cout<<"Number of random rotations: "<<args.num_ang_avg<<endl;
+                }else if (args.analysis_averaging_option == 2) {
+                    cout<<"Material frame reference: "<<TGREEN<<"ON"<<TRESET<<endl;
+                    cout<<"Node index on the Z axis: "<<args.z_node<<endl;
+                    cout<<"Node inedx on the Z-Y plane: "<<args.zy_node<<endl;
+                    
+                }
             }
             
-            if (args.analysis_dim==3) {
-                string meshpath;
-                cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for 3D analysis."<<endl;
-                if (args.membane_labels.size()<2) {
-                    cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+        }
+        if (args.analysis_dim == 2) {
+            cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
+            //                cout<<"This option is not available at the moment\nUse -h for more information.\n";
+            //                exit(5);
+            
+            cout<<TWWARN<<"This option is under development. Prceed with the trial version.\n"<<TRESET;
+            
+            if (args.analysis_filename == "" ) {
+                cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
+                exit(3);
+            } else {
+                cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
+            }
+            
+            
+            
+            
+        }
+        
+        if (args.membane_labels.size()==0) {
+            cout<<TWARN<<"\n!!!Warning"<<TRESET<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed.\n"<<endl;
+        } else {
+            check_membrane_labels(args);
+        }
+        build_output_names(args);
+        
+        cout<<"Output file(s):\n";
+        for (int i=0; i<args.output_filename.size(); i++) {
+            cout<<"\t"<<TFILE<<args.output_filename[i]<<TRESET<<endl;
+        }
+        
+        if (args.analysis_dim==3) {
+            string meshpath;
+            cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for 3D analysis."<<endl;
+            if (args.membane_labels.size()<2) {
+                cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+                cout<<TFILE;
+                cin>>meshpath;
+                cout<<TRESET;
+                std::ifstream read_mesh;
+                read_mesh.open(meshpath.c_str());
+                while (!read_mesh) {
+                    std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
+                    cin>>meshpath;
+                    read_mesh.open(meshpath.c_str());
+                }
+                args.Mesh_files.push_back(meshpath);
+            } else {
+                cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+                for (int i=0; i<args.membane_labels.size(); i++) {
+                    cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
                     cout<<TFILE;
                     cin>>meshpath;
                     cout<<TRESET;
                     std::ifstream read_mesh;
                     read_mesh.open(meshpath.c_str());
-                    while (!read_mesh) {
+                    if (!read_mesh) {
                         std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
-                        cin>>meshpath;
-                        read_mesh.open(meshpath.c_str());
-                    }
-                    args.Mesh_files.push_back(meshpath);
-                } else {
-                    cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
-                    for (int i=0; i<args.membane_labels.size(); i++) {
-                        cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
-                        cout<<TFILE;
-                        cin>>meshpath;
-                        cout<<TRESET;
-                        std::ifstream read_mesh;
-                        read_mesh.open(meshpath.c_str());
-                        if (!read_mesh) {
-                            std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
-                            i--;
-                        } else {
-                            args.Mesh_files.push_back(meshpath);
-                        }
+                        i--;
+                    } else {
+                        args.Mesh_files.push_back(meshpath);
                     }
                 }
-                
             }
             
-            if (args.framelimits_beg==0 && args.framelimits_end==0) {
-                cout<<"All frames will be analysied."<<endl;
-            } else if (args.framelimits_beg==0) {
-                cout<<"Frames from the beginning to frame "<<args.framelimits_end<<" will be analysed."<<endl;
-                
-            } else if (args.framelimits_end==0) {
-                cout<<"Frames from "<<args.framelimits_beg<<" to the end will be analysed."<<endl;
-            } else if (args.framelimits_end == args.framelimits_beg+1){
-                cout<<"Frame "<<args.framelimits_beg<<" will be analysed."<<endl;
-            } else {
-                cout<<"Frames from "<<args.framelimits_beg<<" to "<<args.framelimits_end<<" will be analysed."<<endl;
-            }
         }
-        cout<<endl;
         
+        if (args.framelimits_beg==0 && args.framelimits_end==0) {
+            cout<<"All frames will be analysied."<<endl;
+        } else if (args.framelimits_beg==0) {
+            cout<<"Frames from the beginning to frame "<<args.framelimits_end<<" will be analysed."<<endl;
+            
+        } else if (args.framelimits_end==0) {
+            cout<<"Frames from "<<args.framelimits_beg<<" to the end will be analysed."<<endl;
+        } else if (args.framelimits_end == args.framelimits_beg+1){
+            cout<<"Frame "<<args.framelimits_beg<<" will be analysed."<<endl;
+        } else {
+            cout<<"Frames from "<<args.framelimits_beg<<" to "<<args.framelimits_end<<" will be analysed."<<endl;
+        }
     }
+    cout<<endl;
+    
+    
 }
 
 void build_output_names(ArgStruct &args){

@@ -5,7 +5,7 @@ using namespace std;
 
 void read_interaction_map(vector<vector<int> > &inter_map){
     
-    int map_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins + GenConst::Num_of_pointparticles;
+    int map_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins ;
     inter_map.resize(map_size);
     for (int i=0; i<map_size; i++) {
         inter_map[i].resize(map_size,0);

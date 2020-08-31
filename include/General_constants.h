@@ -66,7 +66,6 @@ namespace GenConst {
     extern double Bussi_tau;
     /**Actin-membrane LJ-like interaction strength. Default 400*/
     extern double Actin_Membrane_Bond_Coefficient;
-    extern int Num_of_pointparticles;
     /**Specifies if an interaction map is provided by the user or not. deafult false.*/
     extern bool Interaction_map;
     /**Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".*/
