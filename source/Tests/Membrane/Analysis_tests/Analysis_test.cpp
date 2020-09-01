@@ -81,7 +81,7 @@ struct MemAnalysisTest : public testing::Test{
         
         ArgStruct args;
         
-        args.analysis_mode=true;
+        
         args.analysis_dim = 3;
         args.analysis_averaging_option = 0;
         args.num_ang_avg= 1;
@@ -174,7 +174,7 @@ TEST_F( SurfaceIntegral, UnitVector){
 TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz121){
     ArgStruct args;
     
-    args.analysis_mode=true;
+    
     args.analysis_dim = 3;
     args.analysis_averaging_option = 0;
     args.num_ang_avg= 1;
@@ -198,7 +198,7 @@ TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz121){
 
 TEST_F( SurfaceIntegral, OmegaEllipsoidxyz121){
     ArgStruct args;
-    args.analysis_mode=true;
+    
     args.analysis_dim = 3;
     args.analysis_averaging_option = 0;
     args.num_ang_avg= 1;
@@ -223,7 +223,7 @@ TEST_F( SurfaceIntegral, OmegaEllipsoidxyz121){
 
 TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz123){
     ArgStruct args;
-    args.analysis_mode=true;
+    
     args.analysis_dim = 3;
     args.analysis_averaging_option = 0;
     args.num_ang_avg= 1;
@@ -246,7 +246,7 @@ TEST_F( SurfaceIntegral, VoronoiAreaSumEllipsoidxyz123){
 
 TEST_F( SurfaceIntegral, OmegaEllipsoidxyz123){
     ArgStruct args;
-    args.analysis_mode=true;
+    
     args.analysis_dim = 3;
     args.analysis_averaging_option = 0;
     args.num_ang_avg= 1;
@@ -291,7 +291,7 @@ protected:
     LMParameterized() {
         bool Include_Membrane = false;
         ArgStruct args;
-        args.analysis_mode=true;
+        
         args.analysis_dim = 3;
         args.analysis_averaging_option = 0;
         args.num_ang_avg= 1;

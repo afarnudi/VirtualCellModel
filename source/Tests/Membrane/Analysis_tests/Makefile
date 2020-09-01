@@ -16,8 +16,7 @@ LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib -L/usr/local/lib
 LIBS= -lOpenMM -lgtest -lgtest_main
 #LIBS= -lgtest -lgtest_main
 
-#SRCFILES=$(wildcard $(SRCDIR)/Tests/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Chromatin/*.cpp) $(wildcard $(SRCDIR)/Membrane_Particle/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp) $(wildcard $(SRCDIR)/Genfuncs/*.cpp)
-SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Analysis_tests/*.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/resamplekin.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp 
+SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Analysis_tests/Analysis_test.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/resamplekin.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp 
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 
