@@ -14,11 +14,6 @@ std::complex<double> Membrane::calc_complex_ylmthetaphi(int l,  int  m, double t
 }
 
 
-
-
-
-
-
 double Membrane::calc_real_ylmthetaphi(int l,  int  m, double theta, double phi){
     std::complex<double> ylm;
     

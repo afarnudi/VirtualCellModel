@@ -24,6 +24,7 @@ void Membrane::load_pdb_frame(int frame, ArgStruct args){
     update_COM_position();
     set_com_to_zero();
     
+    
     if (args.analysis_averaging_option == 1) {
         srand (time(NULL));
         double scratch = rand();
@@ -38,6 +39,7 @@ void Membrane::load_pdb_frame(int frame, ArgStruct args){
     
     
     update_spherical_positions();
+    calculate_dOmega();
     calculate_surface_area_with_voronoi();
 }
 
@@ -165,6 +167,26 @@ void Membrane::calculate_real_ulm(ArgStruct args){
     
 }
 
+void Membrane::calculate_dOmega(void){
+    vector<vector<double> > Node_position_copy (Node_Position);
+    vector<vector<double> > spherical_positions_copy (spherical_positions);
+    
+    node_dOmega.clear();
+    node_dOmega.resize(Num_of_Nodes,0);
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        spherical_positions[i][0]=1;
+        Node_Position[i] = convert_spherical_to_cartesian(spherical_positions[i]);
+    }
+    
+    calculate_surface_area_with_voronoi();
+    for (int i=0; i<Num_of_Nodes; i++) {
+        node_dOmega[i] = node_voronoi_area[i];
+        Node_Position[i] = Node_position_copy[i];
+        spherical_positions[i] = spherical_positions_copy[i];
+    }
+}
+
 void Membrane::write_ulm(ArgStruct args, int file_index){
     std::ofstream wdata;
     wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
@@ -186,3 +208,4 @@ void Membrane::write_ulm(ArgStruct args, int file_index){
     }
 //    cout<<args.output_filename<<" written"<<endl;
 }
+

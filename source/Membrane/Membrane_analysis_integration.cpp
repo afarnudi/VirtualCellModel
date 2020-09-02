@@ -9,10 +9,7 @@
 
 
 using namespace std::complex_literals;
-
 using namespace std;
-
-
 
 vector<double> Membrane::get_ulmYlm_vectorlist_for_mesh(){
     
@@ -56,27 +53,22 @@ vector<double> Membrane::get_real_ylm_vectorlist_for_mesh(int ell, int m){
 std::complex<double> Membrane::calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<std::complex<double> > vectorlist2){
     std::complex<double> sum=0;
     for(int i=0;i<Num_of_Nodes;i++){
-        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
-        /(spherical_positions[i][0]*spherical_positions[i][0]);;
+        sum += vectorlist1[i]*vectorlist2[i]*node_dOmega[i];;
     }
     return sum;
 }
 std::complex<double> Membrane::calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<double> vectorlist2){
     std::complex<double> sum=0;
     for(int i=0;i<Num_of_Nodes;i++){
-        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
-        /(spherical_positions[i][0]*spherical_positions[i][0]);;
+        sum += vectorlist1[i]*vectorlist2[i]*node_dOmega[i];;
     }
     return sum;
 }
 
 double Membrane::calc_vectorlist_vectorlist_surface_integral(vector<double> vectorlist1, vector<double> vectorlist2){
-    double radius = sqrt( surface_area_voronoi/(M_PI*4) );
     double sum=0;
     for(int i=0;i<Num_of_Nodes;i++){
-//        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]
-//        /(spherical_positions[i][0]*spherical_positions[i][0]);;
-        sum += vectorlist1[i]*vectorlist2[i]*node_voronoi_area[i]/(radius*radius);;
+        sum += vectorlist1[i]*vectorlist2[i]*node_dOmega[i];;
     }
     return sum;
 }

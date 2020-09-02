@@ -87,7 +87,7 @@ void Membrane::update_spherical_positions(){
     
     for (int i=0; i<Num_of_Nodes; i++) {
         spherical_positions[i].resize(3,0);
-        spherical_positions[i] = convert_cartesian_to_spherical(Node_Position[i][0],                                                                       Node_Position[i][1],
+        spherical_positions[i] = convert_cartesian_to_spherical(Node_Position[i][0],                                                                  Node_Position[i][1],
                                                                 Node_Position[i][2]);
     }
 }

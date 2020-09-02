@@ -9,7 +9,7 @@
 #include "Membrane.h"
 
 void Membrane::Node_neighbour_list_constructor(){
-    
+    Node_neighbour_list.clear();
     Node_neighbour_list.resize(Num_of_Nodes);
     Node_neighbour_list_respective_bond_index.resize(Num_of_Nodes);
     
@@ -24,7 +24,7 @@ void Membrane::Node_neighbour_list_constructor(){
 }
 
 void Membrane::Bond_triangle_neighbour_list_constructor(){
-    
+    Bond_triangle_neighbour_indices.clear();
     Bond_triangle_neighbour_indices.resize(Num_of_Node_Pairs, -1);
     
     for (int i=0; i<Num_of_Node_Pairs; i++) {

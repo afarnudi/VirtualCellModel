@@ -55,7 +55,7 @@ protected:
     
     /*variables*/
     /**Number of nodes in the membrane.*/
-    int Num_of_Nodes;
+    int Num_of_Nodes=0;
     /*constants*/
     ///This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
@@ -112,6 +112,8 @@ public:
     void rotate_particle_to_axes(ArgStruct args);
     void update_spherical_positions();
     void analysis_init(std::string Mesh_path);
+    void calculate_dOmega(void);
+    vector<double> node_dOmega;
     
     void load_pdb_frame(int frame, ArgStruct args);
     void import_pdb_frames(ArgStruct args, int file_index);
@@ -311,7 +313,7 @@ public:
     void calculate_surface_area_with_voronoi(void);
     
     /**Returns the last saved surface area*/
-    double return_surface_area(void){
+    double get_surface_area(void){
         return surface_area;
     }
     /**Return the new node radius 'end update time' in Ps.*/

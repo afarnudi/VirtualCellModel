@@ -69,7 +69,7 @@ void collect_data(MyAtomInfo atoms[],
         }
         
         mem_volume  = mems[0].return_volume();
-        mem_surface = mems[0].return_surface_area();
+        mem_surface = mems[0].get_surface_area();
         bending_energy = mems[0].calculate_bending_energy();
     } else {
         voronoi_area.resize(1,0);

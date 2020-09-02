@@ -95,7 +95,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
     
 //    if (GenConst::Wantvoronoi){
-        node_voronoi_area.resize(Num_of_Nodes,0);
+//        node_voronoi_area.resize(Num_of_Nodes,0);
 //    }
     shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
     if (!GenConst::Testmode) {
@@ -113,6 +113,7 @@ void Membrane::initialise(std::string Mesh_file_name){
 void Membrane::analysis_init(std::string Mesh_path){
     string mesh_extension = Mesh_path;
     mesh_extension.erase(mesh_extension.begin(),mesh_extension.end()-3 );
+    
     if (mesh_extension=="ply"){
         read_ply_file(Mesh_path);
     } else {
@@ -127,8 +128,8 @@ void Membrane::analysis_init(std::string Mesh_path){
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
+//    check();
     
-    node_voronoi_area.resize(Num_of_Nodes,0);
-    
+//    node_voronoi_area.resize(Num_of_Nodes,0);
     
 }

@@ -12,7 +12,6 @@ int get_pdb_num_of_atoms(std::string filename, std::string label){
         exit(EXIT_FAILURE);
     }
     std::string line;
-    
     int num_atoms = 0;
     bool finished_frame=false;
     getline(read_pdb, line);

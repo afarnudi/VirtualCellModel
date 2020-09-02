@@ -1,3 +1,4 @@
+Testmode	1
 MD_num_of_steps	10000
 Simulation_Time_In_Ps	0
 MD_traj_save_step	1000
@@ -42,7 +43,6 @@ CMMotionRemoverStep	10
 CreateCheckpoint	1
 MC_step	0
 Wantvoronoi	0
-Testmode	0
 MCBarostatPressure	0
 MCBarostatTemperature	-1
 MCBarostatFrequency	0

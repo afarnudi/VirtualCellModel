@@ -101,7 +101,6 @@ string Checkpoint_path;
 string Checkpoint_file_name;
 bool   ChromatinVirtualSites;
 
-
 bool   write_bonds_to_PDB;
 bool   WantEnergy;
 bool   WantForce;
@@ -211,7 +210,6 @@ int main(int argc, char **argv)
             cout<<"3D Analysis"<<endl;
             Membranes[i].import_pdb_frames(args, i);
             
-            vector<vector<double> > ulm;
             if (!GenConst::Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }

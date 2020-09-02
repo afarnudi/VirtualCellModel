@@ -13,7 +13,7 @@ void Membrane::read_gmesh_file (std::string gmesh_file)
         read>> temp_string;
     }
     read>> Num_of_Nodes;
-	
+    Node_Position.clear();
 	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
     Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
 		for(int i=0;i<Num_of_Nodes;i++)
@@ -43,7 +43,7 @@ void Membrane::read_gmesh_file (std::string gmesh_file)
     read>> temp_string;
     read>> temp_int;
     Num_of_Triangles=temp_int;
-    
+    Triangle_list.clear();
     vector<int> push;
     push.resize(3);
     for(int i=0;i<Num_of_Triangles;i++)
@@ -164,7 +164,7 @@ void Membrane::read_ply_file (std::string ply_file)
         read>> temp_string;
     }
     read>> Num_of_Nodes;
-	
+    Node_Position.clear();
 	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
     Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
     for(int i=0;i<Num_of_Nodes;i++)
@@ -197,7 +197,7 @@ void Membrane::read_ply_file (std::string ply_file)
     }
     
     // In this section the Node list that make up triangles on the outer membrane and nucleus are read from the  ply file.
-   
+    Triangle_list.clear();
     vector<int> push;
     push.resize(3);
     for(int i=0;i<Num_of_Triangles;i++)

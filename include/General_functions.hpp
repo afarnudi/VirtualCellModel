@@ -38,7 +38,9 @@ void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono
                        std::chrono::time_point<std::chrono::system_clock> chrono_clock_end);
 
 std::vector<double> convert_cartesian_to_spherical(double x, double y, double z);
+std::vector<double> convert_cartesian_to_spherical(std::vector<double> xyz);
 std::vector<double> convert_spherical_to_cartesian(double r, double theta, double phi);
+std::vector<double> convert_spherical_to_cartesian(std::vector<double> r_theta_phi);
 
 std::string get_pdb_first_label(std::string filename);
 int get_pdb_num_of_atoms(std::string filename, std::string label);

@@ -110,6 +110,20 @@ std::vector<double> convert_cartesian_to_spherical(double x, double y, double z)
     return r_theta_phi;
 }
 
+std::vector<double> convert_cartesian_to_spherical(std::vector<double> xyz){
+    std::vector<double> r_theta_phi;
+    r_theta_phi.resize(3,0);
+    
+    bg::model::point<double, 3, bg::cs::spherical<bg::radian> > p1;
+    bg::model::point<double, 3, bg::cs::cartesian> p3(xyz[0],xyz[1],xyz[2]);
+    bg::transform(p3, p1);
+    
+    r_theta_phi[0] = p1.get<2>();
+    r_theta_phi[1] = p1.get<1>();
+    r_theta_phi[2] = p1.get<0>();
+    return r_theta_phi;
+}
+
 std::vector<double> convert_spherical_to_cartesian(double r, double theta, double phi){
     std::vector<double> xyz;
     xyz.resize(3,0);
@@ -124,3 +138,16 @@ std::vector<double> convert_spherical_to_cartesian(double r, double theta, doubl
     return xyz;
 }
 
+std::vector<double> convert_spherical_to_cartesian(std::vector<double> r_theta_phi){
+    std::vector<double> xyz;
+    xyz.resize(3,0);
+    
+    bg::model::point<double, 3, bg::cs::spherical<bg::radian> > p1(r_theta_phi[2],r_theta_phi[1],r_theta_phi[0]);
+    bg::model::point<double, 3, bg::cs::cartesian> p3;
+    bg::transform(p1, p3);
+    
+    xyz[0] = p3.get<0>();
+    xyz[1] = p3.get<1>();
+    xyz[2] = p3.get<2>();
+    return xyz;
+}

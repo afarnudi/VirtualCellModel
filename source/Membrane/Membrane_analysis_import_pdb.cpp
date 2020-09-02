@@ -10,11 +10,13 @@ void Membrane::import_pdb_frames(ArgStruct args, int file_index){
     if (label == "") {
         label = get_pdb_first_label(args.analysis_filename);
     }
-    cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
+    if (!GenConst::Testmode) {
+        cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
+    }
+    
     if (args.analysis_dim==3) {
         analysis_init(args.Mesh_files[file_index]);
     }
-    
     
     ifstream read_pdb;
     read_pdb.open(args.analysis_filename.c_str());
@@ -26,6 +28,7 @@ void Membrane::import_pdb_frames(ArgStruct args, int file_index){
     read_pdb.seekg(std::ios::beg);
     int num_of_frames = args.framelimits_end-args.framelimits_beg;
     
+    pdb_frames.clear();
     pdb_frames.resize(num_of_frames);
     for (int i=0; i<num_of_frames; i++) {
         pdb_frames[i].resize(Num_of_Nodes);

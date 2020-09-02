@@ -12,7 +12,7 @@ void Membrane::Node_Bonds_identifier(void){
     
     vector<int> push;
     push.resize(2);
-    
+    Node_Bond_list.clear();
 //    int temp_Membrane_num_of_Node_Pairs=0;
     int triangle_Node_A, triangle_Node_B, triangle_Node_C;
     
@@ -70,7 +70,6 @@ void Membrane::Node_Bonds_identifier(void){
         repeatednumber2=0;
         repeatednumber3=0;
     }
-    
     
     Num_of_Node_Pairs=int(Node_Bond_list.size());
     

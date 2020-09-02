@@ -16,7 +16,7 @@ LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib -L/usr/local/lib
 LIBS= -lOpenMM -lgtest -lgtest_main
 #LIBS= -lgtest -lgtest_main
 
-SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Analysis_tests/Analysis_test.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/resamplekin.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp 
+SRCFILES=$(wildcard $(SRCDIR)/Tests/Membrane/Analysis_tests/Analysis_test.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(SRCDIR)/Genfuncs/General_functions.cpp $(SRCDIR)/Genfuncs/map_constructors.cpp $(SRCDIR)/Genfuncs/interaction_map_reader.cpp $(SRCDIR)/Genfuncs/General_pdb_functions.cpp  
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 DEPFILES=$(wildcard $(INCDIR)/*.hpp) $(wildcard $(INCDIR)/*.h)
 

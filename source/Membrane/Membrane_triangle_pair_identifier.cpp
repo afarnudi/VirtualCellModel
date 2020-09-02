@@ -10,7 +10,8 @@
 #include "Membrane.h"
 
 void Membrane::Triangle_pair_identifier(void){
-    
+    Triangle_Pair_Nodes.clear();
+    Triangle_pair_list.clear();
     Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
     
     vector<int> temp_triangle_pair;
@@ -159,7 +160,7 @@ void Membrane::Triangle_pair_identifier(void){
         }
     }
     if (Triangle_pair_list.size()!=Num_of_Triangle_Pairs) {
-        cout<<"Triangle_pair_list.size()!=Num_of_Triangle_Pairs"<<endl;
+        cout<<"Triangle_pair_list.size()!=Num_of_Triangle_Pairs\nTriangle_pair_list.size() "<<Triangle_pair_list.size()<<"\nNum_of_Triangle_Pairs "<<Num_of_Triangle_Pairs<<endl;
     }
     
 //    for (int i=0; i<Num_of_Triangle_Pairs; i++) {
