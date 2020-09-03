@@ -251,7 +251,7 @@ void myWritePDBFrame(int frameNum,
     }
     
     // visualize bonds in pdb file
-    if(frameNum==1)
+    if(frameNum==0)
     {
     if (GenConst::write_bonds_to_PDB) {
         for (int n=0; bonds[n].type != EndOfList; ++n){
@@ -378,9 +378,9 @@ void hill_update(MyOpenMMData* omm,
             if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
             {
                // parameters[1] = 350 ;
-                parameters[1] = parameters[1]+15;
+                parameters[1] = parameters[1]+25;
                 double a = parameters[1];
-                parameters[1] = fmin(60, a);
+                parameters[1] = fmin(80, a);
             }
             else
             {
@@ -390,9 +390,9 @@ void hill_update(MyOpenMMData* omm,
 //                parameters[1] = (-1) * fmin(150, a);
                 
                 
-                parameters[1] = parameters[1]+4;
+                parameters[1] = parameters[1]+6;
                 double a = parameters[1];
-                parameters[1] = fmin(15, a);
+                parameters[1] = fmin(20, a);
                 
                 
             }
@@ -402,9 +402,9 @@ void hill_update(MyOpenMMData* omm,
             if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
             {
               //  parameters[1] = 50 ;
-                parameters[1] = parameters[1]+4;
+                parameters[1] = parameters[1]+6;
                 double a = parameters[1];
-                parameters[1] = fmin(15, a);
+                parameters[1] = fmin(20, a);
                 
 //                parameters[1] = parameters[1]+50;
 //                               double a = parameters[1];
@@ -417,69 +417,69 @@ void hill_update(MyOpenMMData* omm,
 //                double a = parameters[1];
 //                parameters[1] = (-1) * fmin(60, a);
                 
-                parameters[1] = parameters[1]+15;
+                parameters[1] = parameters[1]+25;
                                double a = parameters[1];
-                               parameters[1] = fmin(60, a);
+                               parameters[1] = fmin(80, a);
                 
             }
         }
         
         
         
-         if( 0.5*(atoms[atom1].posInNm[0] + atoms[atom2].posInNm[0]) < time_dependant_data->COM[0] )
-                {
-                    if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
-                    {
-                       //parameters[1] = -140 ;
-                        
-                                        parameters[1] = (-1)*parameters[1]+40;
-                                        double a = parameters[1];
-                                        parameters[1] = (-1) * fmin(230, a);
-
-                    }
-                    else
-                    {
-                        //parameters[1] = -70 ;
-                        parameters[1] = (-1)*parameters[1]+20;
-                        double a = parameters[1];
-                        parameters[1] = (-1) * fmin(100, a);
-                        
-                        
-//                        parameters[1] = parameters[1]+4;
+//         if( 0.5*(atoms[atom1].posInNm[0] + atoms[atom2].posInNm[0]) < time_dependant_data->COM[0] )
+//                {
+//                    if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
+//                    {
+//                       //parameters[1] = -140 ;
+//
+//                                        parameters[1] = (-1)*parameters[1]+40;
+//                                        double a = parameters[1];
+//                                        parameters[1] = (-1) * fmin(230, a);
+//
+//                    }
+//                    else
+//                    {
+//                        //parameters[1] = -70 ;
+//                        parameters[1] = (-1)*parameters[1]+20;
 //                        double a = parameters[1];
-//                        parameters[1] = fmin(15, a);
-                        
-                        
-                    }
-                }
-                else
-                {
-                    if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
-                    {
-                      // parameters[1] = -140 ;
-                        
-                        parameters[1] = (-1)*parameters[1]+40;
-                                                         double a = parameters[1];
-                                                         parameters[1] = (-1) * fmin(230, a);
-
-                        
-        //                parameters[1] = parameters[1]+50;
-        //                               double a = parameters[1];
-        //                               parameters[1] = fmin(320, a);
-                    }
-                    else
-                    {
-                       // parameters[1] = -70 ;
-        parameters[1] = (-1)*parameters[1]+20;
-                             double a = parameters[1];
-                             parameters[1] = (-1) * fmin(100, a);
-                        
-//                        parameters[1] = parameters[1]+15;
-//                                       double a = parameters[1];
-//                                       parameters[1] = fmin(60, a);
-                        
-                    }
-                }
+//                        parameters[1] = (-1) * fmin(100, a);
+//
+//
+////                        parameters[1] = parameters[1]+4;
+////                        double a = parameters[1];
+////                        parameters[1] = fmin(15, a);
+//
+//
+//                    }
+//                }
+//                else
+//                {
+//                    if(0.5*(atoms[atom1].posInNm[1] + atoms[atom2].posInNm[1]) < time_dependant_data->COM[1] )
+//                    {
+//                      // parameters[1] = -140 ;
+//
+//                        parameters[1] = (-1)*parameters[1]+40;
+//                                                         double a = parameters[1];
+//                                                         parameters[1] = (-1) * fmin(230, a);
+//
+//
+//        //                parameters[1] = parameters[1]+50;
+//        //                               double a = parameters[1];
+//        //                               parameters[1] = fmin(320, a);
+//                    }
+//                    else
+//                    {
+//                       // parameters[1] = -70 ;
+//        parameters[1] = (-1)*parameters[1]+20;
+//                             double a = parameters[1];
+//                             parameters[1] = (-1) * fmin(100, a);
+//
+////                        parameters[1] = parameters[1]+15;
+////                                       double a = parameters[1];
+////                                       parameters[1] = fmin(60, a);
+//
+//                    }
+//                }
         
         
         
