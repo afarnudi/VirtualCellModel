@@ -280,8 +280,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     int device_id=0;
     if (device_properties.size()>1) {
-        cout<<"Please choose a device (index): \n";
+        cout<<"Please choose a device (index): \n"<<TFILE;
         std::cin>>device_id;
+        cout<<TRESET;
     }
     
     // Choose an Integrator for advancing time, and a Context connecting the

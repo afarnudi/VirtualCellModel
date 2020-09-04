@@ -52,7 +52,7 @@ ArgStruct cxxparser(int argc, char **argv){
         //                .allow_unrecognised_options()
         .add_options()
         ("h,help", "Print help")
-        
+        ("analysis", "3 for 3D analysis and 2 for 2D", cxxopts::value<int>(),"int")
         ("pdbfile", "Path to Membrane pdb file that contain ONLY a single Membrane. Example: path/to/my/pdbfile.pdb", cxxopts::value<std::vector<std::string>>(),"Path+file")
         
         ("lmax", "The maximum mode number (l) the RSH amplitudes are measured for. This is a very expensive analysis since the number of angular modes (m) grow very rapidly (2*l+1) with l. Default 20.", cxxopts::value<int>(), "int")
@@ -88,6 +88,11 @@ ArgStruct cxxparser(int argc, char **argv){
         {
             std::cout << options.help() << std::endl;
             exit(0);
+        }
+        
+        if (result.count("analysis"))
+        {
+            args.analysis_dim=result["analysis"].as<int>();
         }
         
         if (result.count("pdbfile"))
