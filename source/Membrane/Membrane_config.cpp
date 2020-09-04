@@ -40,13 +40,13 @@ void Membrane::import_config(string config_file_name){
                 
                 if (stoi(split[1])==0) {
                     if (!GenConst::Testmode) {
-                        cout<<"Resume flag "<<TRED<<"off"<<TRESET<<". Looking for membrane config parameters.\n";
+                        cout<<"Resume flag "<<TOFF<<"off"<<TRESET<<". Looking for membrane config parameters.\n";
                     }
                     
                 } else {
                     resume=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag "<<TGREEN"on"<<TRESET". Membrane will resume using the '"<<resume_file_name<<"' file.\n";
+                    cout<<"Resume flag "<<TON"on"<<TRESET". Membrane will resume using the '"<<resume_file_name<<"' file.\n";
                 }
             } else if (split[0]=="Mesh_file_name") {
                 if (split[1]=="1"){

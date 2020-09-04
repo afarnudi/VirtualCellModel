@@ -13,7 +13,7 @@ void ECM::import_config(string config_file_name){
     int dimension=2;
     
     if (read_config_file.is_open()) {
-        cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TGREEN<<"successfully"<<TRESET".\n";
+        cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TSUCCESS<<"successfully"<<TRESET".\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -38,11 +38,11 @@ void ECM::import_config(string config_file_name){
                 //                        set_parameter(general_param_map, param_name, param_value);
                 //                general_param_map[param_name]=param_value;
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag "<<TRED<<"off"<<TRESET<<". Looking for ECM config parameters.\n";
+                    cout<<"Resume flag "<<TOFF<<"off"<<TRESET<<". Looking for ECM config parameters.\n";
                 } else {
                     resume=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag "<<TGREEN<<"on"<<TGREEN<<". ECM will resume using the '"<<TFILE<<resume_file_name<<TRESET<<"' file.\n";
+                    cout<<"Resume flag "<<TON<<"on"<<TRESET<<". ECM will resume using the '"<<TFILE<<resume_file_name<<TRESET<<"' file.\n";
                 }
             } else if (split[0]=="Mesh_file_name") {
                 Mesh_file_name=split[2];

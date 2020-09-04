@@ -33,7 +33,7 @@ void Chromatin::initialise(void){
 //        Contact_Matrix[i].resize(Num_of_Nodes, 0);
 //    }
     
-    cout<<TGREEN<<"Chromatin class initiated.\n"<<TRESET<<
+    cout<<TSUCCESS<<"Chromatin class initiated.\n"<<TRESET<<
                   "**************************\n"<<endl;
     
 }

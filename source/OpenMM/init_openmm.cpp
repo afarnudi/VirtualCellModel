@@ -173,7 +173,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         pbcxyz[2][2]=0;
         
         system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
-        cout<<"Periodic Boundry Condition "<<TGREEN<<"On"<<TRESET<<endl;
+        cout<<"Periodic Boundry Condition "<<TON<<"On"<<TRESET<<endl;
         cout<<"Periodic vectors (X,Y,Z):\n";
         cout<<TGRAY;
         for (int i=0; i<3; i++) {
@@ -181,7 +181,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         cout<<TRESET;
     } else {
-        cout<<"Periodic Boundry Condition "<<TRED<<"Off"<<TRESET<<endl;
+        cout<<"Periodic Boundry Condition "<<TOFF<<"Off"<<TRESET<<endl;
     }
     
     

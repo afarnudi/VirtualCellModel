@@ -141,10 +141,17 @@ namespace GenConst {
 #define TCYAN    "\e[38;5;123m"      /* Cyan */
 #define TWHITE   "\e[38;5;255m"      /* White */
 #define TORANGE  "\e[38;5;214m"      /* Orange */
+#define T‌GB      "\e[38;5;50m"       /* Greenish Blue */
+#define T‌DARKGB  "\e[38;5;6m"        /* Dark Greenish Blue */
+#define T‌PURPLE  "\e[38;5;93m"       /* Purple */
+#define T‌LGREEN  "\e[38;5;155m"      /* Light Green */
+#define T‌BORANGE "\e[38;5;166m"      /* Blood Orange */
 
 #define TSUCCESS TGREEN
+#define TON      TGREEN
 #define TFAILED  TRED
-#define TFILE    "\e[38;5;6m"
+#define TOFF     TRED
+#define TFILE    T‌DARKGB
 #define TWARN    TYELLOW
 #define TWWARN   TBLINK<<TRED
 
@@ -152,11 +159,11 @@ namespace GenConst {
 #define TACT     TCYAN
 #define TECM     TORANGE
 #define TCHR     TPINK
-#define TOMM     "\e[38;5;50m"
+#define TOMM     T‌GB
 
-#define TOCL     "\e[38;5;93m"
-#define TCUD     "\e[38;5;155m"
-#define TCPU     "\e[38;5;166m"
+#define TOCL     T‌PURPLE
+#define TCUD     T‌LGREEN
+#define TCPU     T‌BORANGE
 
 
 #endif /* General_constants_h */

@@ -15,7 +15,7 @@ void Chromatin::import_config(string config_file_name){
     
     if (read_config_file.is_open()) {
         if (!GenConst::Testmode) {
-            cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TGREEN<<"successfully"<<TRESET<<".\n";
+            cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TSUCCESS<<"successfully"<<TRESET<<".\n";
         }
         string line;
         int line_num=0;
@@ -39,11 +39,11 @@ void Chromatin::import_config(string config_file_name){
             if (split[0]=="Resume") {
                 
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag "<<TRED<<"off"<<TRESET<<".\n";
+                    cout<<"Resume flag "<<TOFF<<"off"<<TRESET<<".\n";
                 } else {
                     resume_flag=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag "<<TGREEN<<"on"<<TRESET<<". Chromatin will resume using the '"<<TFILE<<resume_file_name<<TRESET<<" file.\n";
+                    cout<<"Resume flag "<<TON<<"on"<<TRESET<<". Chromatin will resume using the '"<<TFILE<<resume_file_name<<TRESET<<" file.\n";
                 }
             } else if(split[0]=="epsilon"){
                 if (split.size()<num_of_node_types + 1) {
@@ -70,11 +70,11 @@ void Chromatin::import_config(string config_file_name){
                 }
             } else if(split[0]=="Import_coordinates"){
                 if (stoi(split[1])==0) {
-                    cout<<"Import flag "<<TRED<<"off"<<TRESET". The Chromatins will be initiated using the config parameters.\n";
+                    cout<<"Import flag "<<TOFF<<"off"<<TRESET". The Chromatins will be initiated using the config parameters.\n";
                 } else {
                     import_flag=true;
                     import_file_name=split[2];
-                    cout<<"Import flag "<<TGREEN<<"on"<<TRESET<<". importing coordinatesfrom '"<<TFILE<<import_file_name<<TRESET<<"'.\n";
+                    cout<<"Import flag "<<TON<<"on"<<TRESET<<". importing coordinatesfrom '"<<TFILE<<import_file_name<<TRESET<<"'.\n";
                 }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);

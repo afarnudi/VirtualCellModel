@@ -57,6 +57,6 @@ void ECM::initialise(int dimension){
         label += std::to_string(index);
     }
     
-    cout<<TGREEN<<"\nECM class initiated.\n"<<TRESET<<
+    cout<<TSUCCESS<<"\nECM class initiated.\n"<<TRESET<<
                     "********************\n"<<endl;
 }

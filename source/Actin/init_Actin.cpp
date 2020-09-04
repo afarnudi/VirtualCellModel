@@ -73,6 +73,6 @@ void Actin::initialise(int type){
         label += std::to_string(index);
     }
     
-    cout<<TGREEN<<"\nActin class initiated.\n"<<TRESET<<
+    cout<<TSUCCESS<<"\nActin class initiated.\n"<<TRESET<<
                   "************************\n"<<endl;
 }

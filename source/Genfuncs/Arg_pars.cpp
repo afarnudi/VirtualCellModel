@@ -172,7 +172,7 @@ void consistency_check(ArgStruct &args){
         exit(2);
     } else {
         if (args.analysis_dim == 3) {
-            cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
+            cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
             if (args.analysis_filename == "" ) {
                 cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
                 exit(3);
@@ -186,10 +186,10 @@ void consistency_check(ArgStruct &args){
                 exit(4);
             }else {
                 if (args.analysis_averaging_option == 1) {
-                    cout<<"Average over random rotations:"<<TGREEN<<" ON"<<TRESET<<endl;
+                    cout<<"Average over random rotations:"<<TON<<" ON"<<TRESET<<endl;
                     cout<<"Number of random rotations: "<<args.num_ang_avg<<endl;
                 }else if (args.analysis_averaging_option == 2) {
-                    cout<<"Material frame reference: "<<TGREEN<<"ON"<<TRESET<<endl;
+                    cout<<"Material frame reference: "<<TON<<"ON"<<TRESET<<endl;
                     cout<<"Node index on the Z axis: "<<args.z_node<<endl;
                     cout<<"Node inedx on the Z-Y plane: "<<args.zy_node<<endl;
                     
@@ -198,7 +198,7 @@ void consistency_check(ArgStruct &args){
             
         }
         if (args.analysis_dim == 2) {
-            cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TGREEN<<"ON\n"<<TRESET;
+            cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
             //                cout<<"This option is not available at the moment\nUse -h for more information.\n";
             //                exit(5);
             
