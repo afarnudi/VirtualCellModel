@@ -67,7 +67,10 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 string sigma = "sigma" + GenConst::Membrane_label + std::to_string(i) + GenConst::Membrane_label + std::to_string(i) ;
                 double new_sig = (a * time * 1000 + b);
                 new_radius = new_sig;
-                omm->context->setParameter(sigma, new_sig);
+                if (interaction_map[i][i]!=0) {
+                    omm->context->setParameter(sigma, new_sig);
+                }
+                
                 
                 for (int ch=0; ch<chromos.size(); ch++) {
                     if (interaction_map[ch+1][0]==2) {
@@ -89,7 +92,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
         
         mem_count += membranes[i].get_num_of_nodes();
     }
-    //    cout<<"2*new_radius = "<<2*new_radius<<endl;
+//    cout<<"2*new_radius = "<<2*new_radius<<endl<<endl;;
     int mem_bond_count=0;
     for (int i=0; i<membranes.size(); i++) {
         if (membranes[i].get_new_node_radius() != -1) {

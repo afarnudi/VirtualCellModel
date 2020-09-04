@@ -65,10 +65,6 @@ void Membrane::import_config(string config_file_name){
                 Shift_position_xyzVector[1] = stod(split[2]);
                 Shift_position_xyzVector[2] = stod(split[3]);
                 
-                if (!GenConst::Testmode) {
-                    cout<<"Shift_position_xyzVector "<<Shift_position_xyzVector[0]<<" "<<Shift_position_xyzVector[1]<<" "<<Shift_position_xyzVector[2]<<endl;
-                }
-                
             } else if (split[0]=="Shift_velocities_xyzVector") {
                 Shift_velocities_xyzVector[0] = stod(split[1]);
                 Shift_velocities_xyzVector[1] = stod(split[2]);
@@ -146,30 +142,18 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="epsilon_LJ_12_6"){
         epsilon_LJ_12_6=param_value;
     } else if(param_name=="Update_radius"){
-        
-        New_node_radius = param_value;
-        
+        New_Radius = param_value;
     } else if(param_name=="Begin_update_time_in_Ps"){
-        
         Begin_update_time_in_Ps = param_value;
-        
     } else if(param_name=="End_update_time_in_Ps"){
-        
         End_update_time_in_Ps = param_value;
-    } else if(param_name=="Update_nominal_length"){
-        
-        Update_nominal_length = param_value;
     } else if(param_name=="FENE_min"){
-        
         FENE_min = param_value;
     } else if(param_name=="FENE_max"){
-        
         FENE_max = param_value;
     } else if(param_name=="FENE_eps"){
-        
         FENE_epsilon = param_value;
     } else if(param_name=="FENE_k"){
-        
         FENE_k = param_value;
     } else if(param_name=="init_random_rotation"){
         if (int(param_value) == 0) {

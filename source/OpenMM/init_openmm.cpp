@@ -206,7 +206,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     std::vector<std::map<std::string, std::string> > device_properties;
     if (platform.getName() == "OpenCL") {
-        cout<<TOCL<<"Available devices on the "<<platform.getName()<<" platform:\n";
+        cout<<"Available devices on the "<<TOCL<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
@@ -219,15 +219,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : ";
+                    cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
                     for (auto & name : platform_devices){
                         if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
                             continue;
                         } else {
-                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+                            cout<<"\t"<<name<<"\t"<<TOCL<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
                         }
                     }
-                    cout<<"------------------------"<<endl;
+                    cout<<TRESET<<"------------------------"<<endl;
                     counter++;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
@@ -236,7 +236,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             }
         }
     } else if (platform.getName() == "CUDA") {
-        cout<<TCUD<<"Available devices on the "<<platform.getName()<<" platform:\n";
+        cout<<"Available devices on the "<<TCUD<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
@@ -249,15 +249,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : ";
+                    cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
                     for (auto & name : platform_devices){
                         if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
                             continue;
                         } else {
-                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+                            cout<<"\t"<<name<<"\t"<<TCUD<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
                         }
                     }
-                    cout<<"------------------------"<<endl;
+                    cout<<TRESET<<"------------------------"<<endl;
                     counter++;
                     device_properties.push_back(temp_device_properties);
                 } catch (const std::exception& e) {
@@ -271,13 +271,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
         OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
         std::vector<std::string> platform_devices = platform.getPropertyNames();
-        cout<<TCPU<<"CPU properties:\n";
+        cout<<TCPU<<"CPU"<<TRESET<<" properties:\n";
         for (auto & name : platform_devices){
-            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+            cout<<"\t"<<name<<"\t"<<TCPU<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
         }
-        cout<<endl;
+        cout<<TRESET<<"------------------------"<<endl;
     }
-    cout<<TRESET;
+    
     int device_id=0;
     if (device_properties.size()>1) {
         cout<<"Please choose a device (index): \n";

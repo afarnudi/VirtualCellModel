@@ -73,9 +73,10 @@ protected:
     double Total_Kinetic_Energy;
     double Radius=0;
     double Node_radius=0;
+    double New_Radius=-1;
     double New_node_radius=-1;
     double Begin_update_time_in_Ps=0;
-    double Update_nominal_length=-1;
+    
     double End_update_time_in_Ps=0;
     double COM_velocity[3]={0};
     double COM_position[3]={0};
@@ -167,10 +168,7 @@ public:
     double get_new_node_radius(void){
         return New_node_radius;
     }
-    /**Returns the spring nominal length update value (set value in the configuration file). */
-    double get_new_nominal_length(void){
-        return Update_nominal_length;
-    }
+    
     
     std::string output_file_neme;
     std::string file_time;
@@ -521,6 +519,19 @@ public:
         Z_in+=z;
     }
     
+    void update_average_Membrane_radius(void){
+        Radius=0;
+        update_COM_position();
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Radius += sqrt( (Node_Position[i][0]-COM_position[0])*(Node_Position[i][0]-COM_position[0])
+                           +(Node_Position[i][1]-COM_position[1])*(Node_Position[i][1]-COM_position[1])
+                           +(Node_Position[i][2]-COM_position[2])*(Node_Position[i][2]-COM_position[2]) );
+        }
+        Radius/=Num_of_Nodes;
+    }
+    double get_average_Membrane_radius(void){
+        return Radius;
+    }
 };
 
 #endif // MEMBRANE_H

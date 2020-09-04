@@ -46,18 +46,20 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
     
     cout<<"\nOther properties:\n";
+    update_average_Membrane_radius();
     cout<<"\nRadius\t"<<Radius<<endl;
     Triangle_pair_identifier();
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
-    cout<<endl;
     check();
     
-    if (New_node_radius!=-1) {
+    if (New_Radius!=-1) {
+        double ratio = Radius/Node_radius;
+        New_node_radius = New_Radius/ratio;
         if (!GenConst::Testmode) {
-            cout<<TWARN<<"Membrane radius is set to change from "<<Node_radius<<" to "<<New_node_radius<<". The proccess will begin at "<<Begin_update_time_in_Ps<<" Ps and end at "<<End_update_time_in_Ps<<" Ps."<<TRESET<<endl;
+            cout<<TWARN<<"Membrane radius is set to change from "<<TRESET<<Radius<<TWARN<<" to "<<TRESET<<New_Radius<<TWARN<<". The proccess will begin at "<<TRESET<<Begin_update_time_in_Ps<<TWARN<<" Ps and end at "<<TRESET<<End_update_time_in_Ps<<TWARN<<" Ps. The new node radius will scale respectivly from "<<TRESET<<Node_radius<<TWARN<<" to "<<TRESET<<New_node_radius<<TWARN<<"."<<TRESET<<endl;
         }
         check_radius_update_values();
     }
@@ -88,7 +90,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (initial_random_rotation_coordinates){
         if (!GenConst::Testmode) {
-            cout<<TWARN<<"Randomly rotating the mesh\n"<<TRESET;
+            cout<<TWARN<<"\nRandomly rotating the mesh\n"<<TRESET;
         }
         
         srand (time(NULL));
@@ -105,8 +107,6 @@ void Membrane::initialise(std::string Mesh_file_name){
 //    }
     shift_position(Shift_position_xyzVector[0], Shift_position_xyzVector[1], Shift_position_xyzVector[2]);
     if (!GenConst::Testmode) {
-        cout<<"Bending energy = "<<calculate_bending_energy()<<endl;
-        
         cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<
                         "\n*************************\n"<<endl;
     }

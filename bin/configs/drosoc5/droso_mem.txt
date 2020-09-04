@@ -1,0 +1,20 @@
+Mesh_file_name	2	Mesh/icospheres/10_1002n.ply
+init_random_rotation	1
+
+Node_Mass	5
+
+spring_model	2
+Spring_coefficient	 0.06 //0.31 
+
+Bending_coefficient	 100 //57.74 
+
+Shift_positions_xyzVector 5000 5000 5000
+
+rescale_factor	4500 //1027.5  //872
+
+sigma_LJ_12_6	150
+epsilon_LJ_12_6	0.01
+
+Update_radius	2500
+Begin_update_time_in_Ps	5
+End_update_time_in_Ps	100

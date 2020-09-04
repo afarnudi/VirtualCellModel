@@ -1,0 +1,18 @@
+Mesh_file_name	2	Mesh/icospheres/4_162n.ply //Mesh/5.ply //Mesh/6.ply
+Node_Mass	5
+Node_radius	5
+
+spring_model	2
+Spring_coefficient	 0.31 //0.01 //0.73 //10 //50  //200
+Bending_coefficient	 57.74 //70 //10  //2000
+
+Shift_in_X_direction	30
+Shift_in_Y_direction	30
+Shift_in_Z_direction	30
+
+Downward_speed	0
+
+rescale_factor	10
+
+sigma_LJ_12_6	8
+epsilon_LJ_12_6	0.01

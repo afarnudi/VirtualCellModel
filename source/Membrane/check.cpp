@@ -32,7 +32,7 @@ void Membrane::check(void){
     }
     if (!GenConst::Testmode) {
         cout<<"Node pair (bond) distances:\n";
-        cout<<"Max "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
+        cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
     }
     
     if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
@@ -42,17 +42,24 @@ void Membrane::check(void){
 }
 
 void Membrane::check_radius_update_values(void){
+    
+    
     if (Node_radius != New_node_radius)  {
         if (Begin_update_time_in_Ps == End_update_time_in_Ps) {
-            cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end of the membrane node radius update time are equal. Please set different values for the paprameters.\n";
+            cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end of the membrane radius update time are equal. Please set different values for the paprameters.\n";
             exit(EXIT_FAILURE);
         }
         if (Begin_update_time_in_Ps > End_update_time_in_Ps) {
-            cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end time of the membrane node radius update times are not in chronological order.\n";
+            cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end time of the membrane radius update times are not in chronological order.\n";
             exit(EXIT_FAILURE);
         }
     } else {
-        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The initial ("<<Node_radius<<") and final ("<<New_node_radius<<") node radii are equal. The simulation will proceed without a radius update."<<endl;
+        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The initial ("<<Node_radius<<") and final ("<<New_node_radius<<") Membrnae radii are equal."<<TWWARN<<"\nThe simulation will proceed without a radius update."<<TRESET<<endl;
         New_node_radius =-1;
     }
+    if(End_update_time_in_Ps>GenConst::Simulation_Time_In_Ps) {
+        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The Membrane radius update end time ("<<TWARN<<End_update_time_in_Ps<<TRESET" Ps) exceeds the simulation run time ("<<TWARN<<GenConst::Simulation_Time_In_Ps<<TRESET<<" Ps)."<<endl;
+        exit(0);
+    }
+    
 }
