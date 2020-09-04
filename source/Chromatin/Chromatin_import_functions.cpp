@@ -4,7 +4,7 @@ using std::cout;
 using std::endl;
 
 void Chromatin::import_coordinates(string import_file_name){
-//    cout<<"Importing the Chromatin from the resume file:"<<endl;
+    cout<<TPINK<<"Importing Chromatin coordinates:"<<endl;
 //    cout<<import_file_name<<endl<<endl;
     std::ifstream read_coordinate_file;
     
@@ -12,7 +12,7 @@ void Chromatin::import_coordinates(string import_file_name){
     if ( read_coordinate_file.is_open() ) {
         cout << "\nCoordinate file opened "<<TSUCCESS<<"successfully. \n\n"<<TRESET;
     }else{
-        cout << TFAILED<<"Unable to read"<<TRESET<<" coordinate file.\n";
+        cout << TFAILED<<"Unable to read"<<TRESET<<" '"<<TFILE<<import_file_name<<TRESET<<"' coordinate file.\n";
         exit(EXIT_FAILURE);
     }
     
@@ -51,7 +51,7 @@ void Chromatin::import_coordinates(string import_file_name){
     cout<<"Average bond length\t"<<bond_length<<endl;
     cout<<TWARN<<"Node forces set to zero"<<TRESET<<endl;
     
-    shift_node_positions();
+    
     
     
     if (rescale_factor!=1 && rescale_factor!=0) {
@@ -77,7 +77,7 @@ void Chromatin::import_coordinates(string import_file_name){
     
     ABC_index.resize(Num_of_Nodes);
     pdb_label_check();
-    
+    shift_node_positions();
     cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
 }
 

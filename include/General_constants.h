@@ -129,33 +129,34 @@ namespace GenConst {
     extern std::vector<std::vector<double> > Lboxdims;
 }
 
-#define TRESET   "\033[0m"
-#define TBLINK   "\033[5m"
-#define TBOLD    "\033[1m"       /* Bold */
-#define TBLACK   "\033[30m"      /* Black */
-#define TGRAY    "\033[90m"      /* Gray */
-#define TRED     "\033[91m"      /* Red */
-#define TGREEN   "\033[92m"      /* Green */
-#define TYELLOW  "\033[93m"      /* Yellow */
-#define TBLUE    "\033[94m"      /* Blue */
-#define TPINK    "\033[95m"      /* Magenta */
-#define TCYAN    "\033[96m"      /* Cyan */
-#define TWHITE   "\033[97m"      /* White */
-
-#define TBBLACK   "\033[40m"      /* Black */
-#define TBGRAY    "\033[100m"      /* Gray */
-#define TBRED     "\033[101m"      /* Red */
-#define TBGREEN   "\033[102m"      /* Green */
-#define TBYELLOW  "\033[103m"      /* Yellow */
-#define TBBLUE    "\033[104m"      /* Blue */
-#define TBMAGENTA "\033[105m"      /* Magenta */
-#define TBCYAN    "\033[106m"      /* Cyan */
-#define TBWHITE   "\033[107m"      /* White */
+#define TRESET   "\e[0m"             /* Reset */
+#define TBLINK   "\e[5m"             /* Blink */
+#define TBOLD    "\e[1m"             /* Bold */
+#define TGRAY    "\e[38;5;249m"      /* Gray */
+#define TRED     "\e[38;5;196m"      /* Red */
+#define TGREEN   "\e[38;5;118m"      /* Green */
+#define TYELLOW  "\e[38;5;226m"      /* Yellow */
+#define TBLUE    "\e[38;5;33m"       /* Blue */
+#define TPINK    "\e[38;5;200m"      /* Pink */
+#define TCYAN    "\e[38;5;123m"      /* Cyan */
+#define TWHITE   "\e[38;5;255m"      /* White */
+#define TORANGE  "\e[38;5;214m"      /* Orange */
 
 #define TSUCCESS TGREEN
 #define TFAILED  TRED
-#define TFILE    TGRAY
+#define TFILE    "\e[38;5;6m"
 #define TWARN    TYELLOW
-#define TWWARN   TRED
+#define TWWARN   TBLINK<<TRED
+
+#define TMEM     TBLUE
+#define TACT     TCYAN
+#define TECM     TORANGE
+#define TCHR     TPINK
+#define TOMM     "\e[38;5;50m"
+
+#define TOCL     "\e[38;5;93m"
+#define TCUD     "\e[38;5;155m"
+#define TCPU     "\e[38;5;166m"
+
 
 #endif /* General_constants_h */

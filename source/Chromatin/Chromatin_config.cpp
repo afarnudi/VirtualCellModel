@@ -14,7 +14,9 @@ void Chromatin::import_config(string config_file_name){
     GenConst::ChromatinVirtualSites = false;
     
     if (read_config_file.is_open()) {
-        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+        if (!GenConst::Testmode) {
+            cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TGREEN<<"successfully"<<TRESET<<".\n";
+        }
         string line;
         int line_num=0;
         string comment="//";
@@ -41,11 +43,11 @@ void Chromatin::import_config(string config_file_name){
                 } else {
                     resume_flag=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag on. Chromatin will resume using the '"<<resume_file_name<<" file.\n";
+                    cout<<"Resume flag "<<TGREEN<<"on"<<TRESET<<". Chromatin will resume using the '"<<TFILE<<resume_file_name<<TRESET<<" file.\n";
                 }
             } else if(split[0]=="epsilon"){
                 if (split.size()<num_of_node_types + 1) {
-                    cout<<"Too few arguments for the Lenard Jones epsilon interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 0.\n";
+                    cout<<TWWARN<<"Warning!!!"<<TRESET<<"Too few arguments for the Lenard Jones epsilon interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 0.\n";
                     
                     for (int i=0; i<split.size(); i++) {
                         epsilon_LJ[i]=stod(split[i+1]);
@@ -57,7 +59,7 @@ void Chromatin::import_config(string config_file_name){
                 }
             } else if(split[0]=="sigma"){
                 if (split.size()<num_of_node_types + 1) {
-                    cout<<"Too few arguments for the Lenard Jones sigma interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 1.5x node_radius \n";
+                    cout<<TWWARN<<"Warning!!!"<<TRESET<<"Too few arguments for the Lenard Jones sigma interaction of node types.\nNeed "<<num_of_node_types<<" argumens.\n "<<split.size()-1<<" was provided.\nWill resume chromatin interactions with default value, 1.5x node_radius \n";
                     for (int i=0; i<split.size(); i++) {
                         sigma_LJ[i]=stod(split[i+1]);
                     }
@@ -68,11 +70,11 @@ void Chromatin::import_config(string config_file_name){
                 }
             } else if(split[0]=="Import_coordinates"){
                 if (stoi(split[1])==0) {
-                    cout<<"Import flag off. The Chromatins will be initiated using the config parameters.\n";
+                    cout<<"Import flag "<<TRED<<"off"<<TRESET". The Chromatins will be initiated using the config parameters.\n";
                 } else {
                     import_flag=true;
                     import_file_name=split[2];
-                    cout<<"Import flag "<<TGREEN<<"on"<<TRESET<<". importing coordinatesfrom '"<<TFILE<<import_file_name<<TRESET<<".\n";
+                    cout<<"Import flag "<<TGREEN<<"on"<<TRESET<<". importing coordinatesfrom '"<<TFILE<<import_file_name<<TRESET<<"'.\n";
                 }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);

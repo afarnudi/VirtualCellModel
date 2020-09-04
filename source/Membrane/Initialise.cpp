@@ -11,7 +11,7 @@
 void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
     if (!GenConst::Testmode) {
-        cout<<TBLUE<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
+        cout<<TMEM<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
     }
     
    
@@ -54,9 +54,15 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     cout<<endl;
     check();
-
-    check_radius_update_values();
-    shift_velocity(x_speed, y_speed, z_speed);
+    
+    if (New_node_radius!=-1) {
+        if (!GenConst::Testmode) {
+            cout<<TWARN<<"Membrane radius is set to change from "<<Node_radius<<" to "<<New_node_radius<<". The proccess will begin at "<<Begin_update_time_in_Ps<<" Ps and end at "<<End_update_time_in_Ps<<" Ps."<<TRESET<<endl;
+        }
+        check_radius_update_values();
+    }
+    
+    shift_velocity(Shift_velocities_xyzVector[0], Shift_velocities_xyzVector[1], Shift_velocities_xyzVector[2]);
     
     
     //limiting the labels to 4 charachters for use in the pdb writer
@@ -75,7 +81,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (spring_model == 1) {
         if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
-            cout<<TBLINK<<TWWARN<<"Warning"<<TRESET<<". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+            cout<<TWWARN<<"Warning"<<TRESET<<". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
             exit(EXIT_FAILURE);
         }
     }
@@ -97,11 +103,12 @@ void Membrane::initialise(std::string Mesh_file_name){
 //    if (GenConst::Wantvoronoi){
 //        node_voronoi_area.resize(Num_of_Nodes,0);
 //    }
-    shift_position(Shift_in_X_direction, Shift_in_Y_direction, Shift_in_Z_direction);
+    shift_position(Shift_position_xyzVector[0], Shift_position_xyzVector[1], Shift_position_xyzVector[2]);
     if (!GenConst::Testmode) {
         cout<<"Bending energy = "<<calculate_bending_energy()<<endl;
         
-        cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<"\n******************************\n\n";
+        cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<
+                        "\n*************************\n"<<endl;
     }
     
 
@@ -128,8 +135,4 @@ void Membrane::analysis_init(std::string Mesh_path){
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
-//    check();
-    
-//    node_voronoi_area.resize(Num_of_Nodes,0);
-    
 }

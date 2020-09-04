@@ -241,12 +241,12 @@ void Membrane::generate_report()
     Report<<"Spring coefficient\t"<<Spring_coefficient<<endl;
     Report<<"Bending coefficient\t"<<Bending_coefficient<<endl;
     Report<<"Damping coefficient\t"<<Damping_coefficient<<endl;
-    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
-    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
-    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
-    Report<<"x_speed\t"<<x_speed<<endl;
-    Report<<"y_speed\t"<<y_speed<<endl;
-    Report<<"z_speed\t"<<z_speed<<endl;
+    Report<<"Shift_in_X_direction\t"<<Shift_position_xyzVector[0]<<endl;
+    Report<<"Shift_in_Y_direction\t"<<Shift_position_xyzVector[1]<<endl;
+    Report<<"Shift_in_Z_direction\t"<<Shift_position_xyzVector[2]<<endl;
+    Report<<"x_speed\t"<<Shift_velocities_xyzVector[0]<<endl;
+    Report<<"y_speed\t"<<Shift_velocities_xyzVector[1]<<endl;
+    Report<<"z_speed\t"<<Shift_velocities_xyzVector[2]<<endl;
     Report<<"X_in_mem\t"<<X_in<<endl;
     Report<<"Y_in_mem\t"<<Y_in<<endl;
     Report<<"Z_in_mem\t"<<Z_in<<endl;

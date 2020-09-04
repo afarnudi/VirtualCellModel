@@ -217,6 +217,19 @@ TEST_F( SurfaceIntegral, OmegaEllipsoidxyz123){
     EXPECT_NEAR(integral , 4*M_PI,0.09);
 }
 
+TEST_F( SurfaceIntegral, Omegapotatoe){
+    args.analysis_filename = "potatoe_3frames.pdb";
+    args.Mesh_files[0]="potatoe.ply";
+    
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    vector<double>  unit_vector;
+    unit_vector.resize(Membranes[0]->get_num_of_nodes(), 1);
+    double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(unit_vector, unit_vector);
+    EXPECT_NEAR(integral , 4*M_PI,0.042);
+}
+
 
 //******************************************************************************
 //******************** Spherical Harmonics Mode Generator  *********************

@@ -33,12 +33,12 @@ void Chromatin::build_random_chain(void){
         Node_Force[i].resize(3,0);
         Node_Position[i].resize(3,0);
     }
-    const double PI  =3.141592653589793238463;
+//    const double PI  =3.141592653589793238463;
     int attempt_counter=0;
     
     for (int i=1; i<Num_of_Nodes; i++) {
-        double theta=((double)rand()/(double)RAND_MAX)*PI;
-        double phi=((double)rand()/(double)RAND_MAX)*2*PI;
+        double theta=((double)rand()/(double)RAND_MAX)*M_PI;
+        double phi=((double)rand()/(double)RAND_MAX)*2*M_PI;
         double temp_x=Node_Position[i-1][0]+Node_radius*2*sin(theta)*cos(phi);
         double temp_y=Node_Position[i-1][1]+Node_radius*2*sin(theta)*sin(phi);
         double temp_z=Node_Position[i-1][2]+Node_radius*2*cos(theta);

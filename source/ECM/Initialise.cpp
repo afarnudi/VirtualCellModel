@@ -11,7 +11,7 @@
 
 void ECM::initialise(int dimension){
 //    T_Kinetic_Energy.resize(100);
-    cout<<"Initialising the ECM Class..."<<endl;
+    cout<<TECM<<"Initialising the ECM Class..."<<TRESET<<endl;
     if (dimension == 2) {
         read_gmesh_file_2D(Mesh_file_name);
     } else if (dimension == 3){
@@ -57,6 +57,6 @@ void ECM::initialise(int dimension){
         label += std::to_string(index);
     }
     
-    cout<<"\nECM class initiated.\n******************************\n\n";
-    //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
+    cout<<TGREEN<<"\nECM class initiated.\n"<<TRESET<<
+                    "********************\n"<<endl;
 }

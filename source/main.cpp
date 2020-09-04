@@ -307,7 +307,7 @@ int main(int argc, char **argv)
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
     
-    cout<<"\nBeginnig the OpenMM section:\n";
+    cout<<TCYAN<<"\nBeginnig the OpenMM section:\n"<<TRESET;
     std::string   platformName;
     int atom_count=0;
     int bond_count=0;
@@ -321,8 +321,8 @@ int main(int argc, char **argv)
     Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
     Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
     
-    cout<<"num_of_atoms = "<<num_of_atoms<<endl;
-    cout<<"num_of_bonds = "<<num_of_bonds<<endl;
+    cout<<num_of_atoms<<" Atoms"<<endl;
+    cout<<num_of_bonds<<" Bonds"<<endl;
     
     all_atoms[num_of_atoms].type         =EndOfList;
     all_bonds[num_of_bonds].type         =EndOfList;
@@ -392,7 +392,7 @@ int main(int argc, char **argv)
     // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
     // usage and runtime errors are caught and reported.
     
-    cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+    cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name+buffer<<TRESET<<endl;
     //        GenConst::Lbox = 200;
     
     try {
@@ -418,12 +418,22 @@ int main(int argc, char **argv)
             //Need to retrive all information from the checkpoint and relay them to the respective classes.
         }
         
-        cout<< "file name: "<<GenConst::trajectory_file_name+buffer<<endl;
+        cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name+buffer<<TRESET<<endl<<endl;
         // Run the simulation:
         //  (1) Write the first line of the PDB file and the initial configuration.
         //  (2) Run silently entirely within OpenMM between reporting intervals.
         //  (3) Write a PDB frame when the time comes.
-        printf("REMARK  Using OpenMM platform %s\n", platformName.c_str());
+        
+        cout<<"REMARK  Using OpenMM platform "<<TBOLD;
+        if (platformName=="OpenCL") {
+            cout<<TOCL;
+        } else if (platformName=="CUDA"){
+            cout<<TCUD;
+        } else {
+            cout<<TCPU;
+        }
+        cout<<platformName.c_str()<<TRESET<<endl;
+
         std::filebuf wfb;
         wfb.open (ckeckpoint_name.c_str(),std::ios::out);
         std::ostream wcheckpoint(&wfb);
@@ -479,7 +489,6 @@ int main(int argc, char **argv)
                 if(GenConst::WriteVelocitiesandForces){
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
-                
                 
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name , force_name);
                 //                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);

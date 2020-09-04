@@ -52,7 +52,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Note: the System owns the force objects and will take care of deleting them;
     // don't do it yourself!
     
-    cout<<"Defining interactions...\n";
+    cout<<TOMM<<"Defining interactions..."<<TRESET<<endl;;
     
     
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
@@ -173,10 +173,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         pbcxyz[2][2]=0;
         
         system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+        cout<<"Periodic Boundry Condition "<<TGREEN<<"On"<<TRESET<<endl;
+        cout<<"Periodic vectors (X,Y,Z):\n";
+        cout<<TGRAY;
         for (int i=0; i<3; i++) {
             cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
         }
-        cout<<"usesPeriodicBoundaryConditions = "<<system.usesPeriodicBoundaryConditions()<<endl;
+        cout<<TRESET;
+    } else {
+        cout<<"Periodic Boundry Condition "<<TRED<<"Off"<<TRESET<<endl;
     }
     
     
@@ -186,20 +191,22 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
-    cout<<"OpenMM available platforms:\nPlatform name  Estimated speed\n";
+    cout<<TOMM<<"\nOpenMM available platforms:\n"<<TGRAY<<"Index Name \t  Speed (Estimated)\n"<<TRESET;
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
         OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
-        cout<<std::to_string(i)<<"- "<<platform.getName().c_str()<<"\t\t"<<platform.getSpeed()<<endl;
+        cout<<" ("<<TBOLD<<std::to_string(i)<<TRESET<<")  "<<platform.getName().c_str()<<
+        "\t   "<<platform.getSpeed()<<endl;
     }
     int platform_id=0;
-    cout<<"Please choose a pltform (index): \n";
+    cout<<"Please choose a pltform (index): \n"<<TFILE;
     std::cin>>platform_id;
+    cout<<TRESET;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
     
     
     std::vector<std::map<std::string, std::string> > device_properties;
     if (platform.getName() == "OpenCL") {
-        cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
+        cout<<TOCL<<"Available devices on the "<<platform.getName()<<" platform:\n";
         int counter=0;
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
@@ -229,7 +236,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             }
         }
     } else if (platform.getName() == "CUDA") {
-        cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
+        cout<<TCUD<<"Available devices on the "<<platform.getName()<<" platform:\n";
         int counter=0;
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
@@ -264,13 +271,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
         OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
         std::vector<std::string> platform_devices = platform.getPropertyNames();
-        cout<<"CPU properties:\n";
+        cout<<TCPU<<"CPU properties:\n";
         for (auto & name : platform_devices){
             cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
         }
         cout<<endl;
     }
-    
+    cout<<TRESET;
     int device_id=0;
     if (device_properties.size()>1) {
         cout<<"Please choose a device (index): \n";
@@ -362,12 +369,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     
-    cout<<params.size()<<endl;
+    cout<<TGRAY<<params.size()<<endl;
     for(auto elem : params)
     {
         cout << elem.first << " " << elem.second << "\n";
     }
-    cout<<"\n";
+    cout<<"\n"<<TRESET;
     
     return omm;
 }

@@ -20,7 +20,8 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         }
         
         
-        
+        cout<<TMEM<<"Membrane "<<i<<TRESET<<endl;
+        cout<<"Bond potential:";
         Bonds* bonds = convert_membrane_bond_info_to_openmm(membranes[i]);
         for (int j=0; j<membranes[i].get_num_of_node_pairs(); j++) {
             all_bonds[j+bond_count]=bonds[j];
@@ -29,7 +30,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
             
         }
         
-        
+        cout<<"Dihedral potential:";
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
         for (int j=0; j<membranes[i].get_num_of_triangle_pairs(); j++) {
             all_dihedrals[j+dihe_count]=dihedrals[j];
@@ -57,7 +58,7 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
     for (int i=0; i<acts.size(); i++) {
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
-        
+        cout<<TACT<<"Actin "<<i<<TRESET<<endl;
         MyAtomInfo* atoms = convert_Actin_position_to_openmm(acts[i]);
         for (int j=0;j<acts[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
@@ -65,7 +66,7 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
         }
         
         
-        
+        cout<<"Bond potential:";
         Bonds* bonds = convert_Actin_bond_info_to_openmm(acts[i],atoms);
         for (int j=0; j<(4*acts[i].get_num_of_node_pairs() + 4*acts[i].get_num_of_abp_pairs() +4*acts[i].get_num_of_MT_pairs() ); j++) {
             all_bonds[j+bond_count]=bonds[j];
@@ -96,7 +97,7 @@ void OpenMM_ActMem_info_relay (vector<Actin>          acts,
     for (int i=0; i<acts.size(); i++) {
         for (int k=0; k<membranes.size(); k++) {
             
-            
+            cout<<TACT<<"Actin "<<i<<TRESET<<" and "<<TMEM<<"Membrane "<<k<<TRESET<<" Bounded."<<endl;
             Bonds* bonds = convert_ActMem_bond_info_to_openmm(acts[i], k);
             for (int j=0; j<acts[i].return_num_of_actin_membrane_shared_nodes(k); j++) {
                 all_bonds[j+bond_count]=bonds[j];
@@ -128,7 +129,7 @@ void OpenMM_ECM_info_relay (vector<ECM>            ecms,
     for (int i=0; i<ecms.size(); i++) {
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
-        
+        cout<<TECM<<"ECM "<<i<<TRESET<<endl;
         MyAtomInfo* atoms = convert_ECM_position_to_openmm(ecms[i]);
         for (int j=0;j<ecms[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
@@ -136,7 +137,7 @@ void OpenMM_ECM_info_relay (vector<ECM>            ecms,
         }
         
         
-        
+        cout<<"Bond potential:";
         Bonds* bonds = convert_ECM_bond_info_to_openmm(ecms[i] , atoms);
         
         for (int j=0; j<ecms[i].get_num_of_node_pairs(); j++) {
@@ -166,7 +167,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
     for (int i=0; i<chromos.size(); i++) {
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
-        
+        cout<<TCHR<<"Chromatin "<<i<<TRESET<<endl;
         MyAtomInfo* atoms = convert_Chromatin_position_to_openmm(chromos[i]);
         
         
@@ -190,7 +191,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                 exit(EXIT_FAILURE);
             }
         }
-        
+        cout<<"Bond potential:";
         Bonds* bonds = convert_Chromatin_bond_info_to_openmm(chromos[i]);
         
         for (int j=0; j<chromos[i].get_num_of_bonds(); j++) {

@@ -240,6 +240,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
             Node_Position[i][1]+=Shift_in_Y_direction;
             Node_Position[i][2]+=Shift_in_Z_direction;
         }
+//        std::cout<<"Chromatin positions shifted to:\n"<<Shift_in_X_direction<<" "<<Shift_in_Y_direction<<" "<<Shift_in_Z_direction<<std::endl;
     }
     void shift_node_velocities(void){
         for (int i=0; i<Num_of_Nodes; i++) {
