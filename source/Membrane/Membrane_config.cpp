@@ -9,6 +9,9 @@ void Membrane::import_config(string config_file_name){
     ifstream read_config_file(config_file_name.c_str());
     bool resume=false;
     
+    Shift_position_xyzVector.resize(3,0);
+    Shift_velocities_xyzVector.resize(3,0);
+    
     if (read_config_file.is_open()) {
         if (!GenConst::Testmode) {
             cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TSUCCESS<<"successfully"<<TRESET<<".\n";
@@ -57,6 +60,24 @@ void Membrane::import_config(string config_file_name){
                     cout<<"The '"<<TFILE<<Mesh_file_name<<TRESET<<"' file will be used to initilise the Membrane.\n";
                 }
                 
+            } else if (split[0]=="Shift_positions_xyzVector") {
+                Shift_position_xyzVector[0] = stod(split[1]);
+                Shift_position_xyzVector[1] = stod(split[2]);
+                Shift_position_xyzVector[2] = stod(split[3]);
+                
+                if (!GenConst::Testmode) {
+                    cout<<"Shift_position_xyzVector "<<Shift_position_xyzVector[0]<<" "<<Shift_position_xyzVector[1]<<" "<<Shift_position_xyzVector[2]<<endl;
+                }
+                
+            } else if (split[0]=="Shift_velocities_xyzVector") {
+                Shift_velocities_xyzVector[0] = stod(split[1]);
+                Shift_velocities_xyzVector[1] = stod(split[2]);
+                Shift_velocities_xyzVector[2] = stod(split[3]);
+                
+                if (!GenConst::Testmode) {
+                    cout<<"Shift_velocities_xyzVector "<<Shift_velocities_xyzVector[0]<<" "<<Shift_velocities_xyzVector[1]<<" "<<Shift_velocities_xyzVector[2]<<endl;
+                }
+                
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
             }
@@ -98,18 +119,6 @@ void Membrane::set_map_parameter(string param_name, double param_value){
         Bending_coefficient=param_value;
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
-    } else if (param_name=="Shift_in_X_direction"){
-        Shift_in_X_direction=param_value;
-    } else if (param_name=="Shift_in_Y_direction"){
-        Shift_in_Y_direction=param_value;
-    } else if (param_name=="Shift_in_Z_direction"){
-        Shift_in_Z_direction=param_value;
-    } else if (param_name=="x_speed"){
-        x_speed=param_value;
-    } else if (param_name=="y_speed"){
-        y_speed=param_value;
-    } else if (param_name=="z_speed"){
-        z_speed=param_value;
     } else if (param_name=="ext_force"){
         ext_force_model=param_value;
     } else if (param_name=="x_force_constant"){

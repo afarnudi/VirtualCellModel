@@ -13,7 +13,7 @@ using std::endl;
 
 void Actin::initialise(int type){
 //    T_Kinetic_Energy.resize(100);
-    cout<<"Initialising the Actin Class..."<<endl;
+    cout<<TACT<<"Initialising the Actin Class..."<<TRESET<<endl;
     if(type==1){
     read_gmesh_file(Mesh_file_name);
     }
@@ -73,6 +73,6 @@ void Actin::initialise(int type){
         label += std::to_string(index);
     }
     
-    cout<<"\nActin class initiated.\n******************************\n\n";
-    //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
+    cout<<TGREEN<<"\nActin class initiated.\n"<<TRESET<<
+                  "************************\n"<<endl;
 }

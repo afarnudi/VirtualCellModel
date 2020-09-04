@@ -13,7 +13,7 @@ void ECM::import_config(string config_file_name){
     int dimension=2;
     
     if (read_config_file.is_open()) {
-        cout<<"'"<<config_file_name<<"' file opened successfully.\n";
+        cout<<"'"<<TFILE<<config_file_name<<TRESET<<"' file opened "<<TGREEN<<"successfully"<<TRESET".\n";
         string line;
         int line_num=0;
         string comment="//";
@@ -38,20 +38,20 @@ void ECM::import_config(string config_file_name){
                 //                        set_parameter(general_param_map, param_name, param_value);
                 //                general_param_map[param_name]=param_value;
                 if (stoi(split[1])==0) {
-                    cout<<"Resume flag off. Looking for ECM config parameters.\n";
+                    cout<<"Resume flag "<<TRED<<"off"<<TRESET<<". Looking for ECM config parameters.\n";
                 } else {
                     resume=true;
                     resume_file_name=split[2];
-                    cout<<"Resume flag on. ECM will resume using the '"<<resume_file_name<<"' file.\n";
+                    cout<<"Resume flag "<<TGREEN<<"on"<<TGREEN<<". ECM will resume using the '"<<TFILE<<resume_file_name<<TRESET<<"' file.\n";
                 }
             } else if (split[0]=="Mesh_file_name") {
                 Mesh_file_name=split[2];
                 dimension=stoi(split[1]);
-                cout<<"The '"<<Mesh_file_name<<"' file will be used to initilise the ECM.\n";
+                cout<<"The '"<<TFILE<<Mesh_file_name<<TRESET<<"' file will be used to initilise the ECM.\n";
                 if (dimension==2) {
-                    cout<<"The '"<<Mesh_file_name<<"' will be initialised as a 2D mesh.";
+                    cout<<"The '"<<TFILE<<Mesh_file_name<<TRESET<<"' will be initialised as a 2D mesh.";
                 } else if (dimension==3){
-                    cout<<"The '"<<Mesh_file_name<<"' will be initialised as a 3D mesh.";
+                    cout<<"The '"<<TFILE<<Mesh_file_name<<TRESET<<"' will be initialised as a 3D mesh.";
                 }
             } else {
                 set_map_parameter(split[0], param_map[split[0]]);
@@ -63,11 +63,11 @@ void ECM::import_config(string config_file_name){
         
         
     } else {//End of if (read_config_file.is_open())
-        cout<<"Couldn't open the '"<<config_file_name<<"' file.\n";
+        cout<<TWWARN<<"Couldn't open the '"<<TFILE<<config_file_name<<TRESET<<"' file.\n";
         exit(EXIT_FAILURE);
     }
     if(!resume && Mesh_file_name=="non"){
-        cout<<"The 'Resume' parameter located in the Membrane config file is not set! Resume should be set to 0 for a membrane initilisation or set to 1 if the membrane is to be imported from a 'resume' file. Please edit the membrane config file and run the programme again.\n\nIn case this is a new run, please provide the meshfile name in the mebrane confi file.\n";
+        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The 'Resume' parameter located in the Membrane config file is not set! Resume should be set to 0 for a membrane initilisation or set to 1 if the membrane is to be imported from a 'resume' file. Please edit the membrane config file and run the programme again.\n\nIn case this is a new run, please provide the meshfile name in the mebrane confi file.\n";
         exit(EXIT_FAILURE);
     }
     if (resume) {

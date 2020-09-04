@@ -40,37 +40,30 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         
     }
     if(bonds[0].type==2){
-        cout<<"bond potential: Harmonic "<<endl;
-        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" Harmonic "<<endl;
+        cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     
     if (bonds[0].type == 1) {
-        cout<< "bond potential: FENE"<<endl;
+        cout<< " FENE"<<endl;
 //        cout<<"attraction coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
 //        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
 //        cout<<"lmin(Nm)\tlmax(Nm)\tK_FENE   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].K_FENE<<"\t"<<bonds[0].FENE_le1inNm<<endl;
     }
     
     if(bonds[0].type == 3){
-        cout<<"bond potential: X4Harmonic "<<endl;
-        cout<<"spring coeficient (KJ . Nm^-4 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient()  <<endl;
-        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" X4Harmonic "<<endl;
+        cout<<"\tCoeficient (KJ . Nm^-4 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient()  <<endl;
     }
     
     if(bonds[0].type == 4){
-        cout<<"Membrane bond potential: Kelvin-Voigt "<<endl;
-        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" Kelvin-Voigt "<<endl;
+        cout<<"\tCoeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     if(bonds[0].type==5){
-        cout<<"bond potential: realHarmonic "<<endl;
-        cout<<"spring coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" realHarmonic "<<endl;
+        cout<<"\tCoeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
     }
-    
-    cout<<endl;
-    
     
     
     
@@ -388,25 +381,26 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     
     
     if(bonds[0].type==2){
-        cout<<"Actin bond potential: Harmonic "<<endl;
+        cout<<" Harmonic "<<endl;
+        cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<act.get_spring_stiffness_coefficient() <<endl;
     }
     
     if(bonds[0].type == 4){
-        cout<<"Actin bond potential: Kelvin-Voigt "<<endl;
-        //cout<<"spring coeficient (KJ per Nanometer4) ="<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
-        //cout<<"bending coeficient (KJ per Nanometer2)="<<mem.get_bending_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
+        cout<<" Kelvin-Voigt "<<endl;
+        cout<<"\tCoeficient (KJ.Nm^-4) = "<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
     
     if(bonds[act_num_bonds].type == 6){
-        cout<<"Actin Contractile element with constant force "<< act.get_contractile_force()<< endl;
+        cout<<"Contractile element with constant force "<<endl;
+        cout<<"\tContractile force? (?units?) = "<<act.get_contractile_force()<< endl;
     }
     
     if(bonds[2*act_num_bonds].type == 7){
-        cout<<"Actin Contractile element with k1 and k2 "<< act.get_contractile_k1()<< " and " << act.get_contractile_k2()<< endl;
-        cout<<"Actin Contractile element with rmin and rmax "<< act.get_contractile_rmin() * act.get_avg_node_dist()<< " and " << act.get_contractile_rmax() * act.get_avg_node_dist()<< endl;
+        cout<<" Contractile elements"<<endl;
+        cout<<"\tk1 and k2 ? (?units?) = "<< act.get_contractile_k1()<< " , " << act.get_contractile_k2()<< endl;
+        cout<<"\trmin and rmax (Nm) = "<< act.get_contractile_rmin() * act.get_avg_node_dist()<< " , " << act.get_contractile_rmax() * act.get_avg_node_dist()<< endl;
     }
     
-    cout<<endl;
     
     return bonds;
 }
@@ -453,8 +447,10 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm , MyAtomInfo* atoms) {
         switch (bonds[i].type) {
                 //FENE
             case 1:
-                ecm.set_FENE_param(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
-                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient();
+//                ecm.set_FENE_param(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
+//                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient();
+                cout<<TWWARN<<"FENE not set"<<TRESET<<endl;
+                exit(0);
                 break;
                 //Harmonic
             case 2:
@@ -470,7 +466,10 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm , MyAtomInfo* atoms) {
                 
                 
         }
-        
+        if(bonds[0].type==2){
+            cout<<" Harmonic "<<endl;
+            cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<ecm.get_spring_stiffness_coefficient() <<endl;
+        }
         
     }
 
@@ -513,18 +512,22 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
                 
                 
             }
-            vector<vector<int> > virtual_bond_list = chromo.get_virtual_bonds();
+        if(bonds[0].type==2){
+            cout<<" Harmonic "<<endl;
+            cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<chromo.get_spring_stiffness_coefficient() <<endl;
+        }
+        vector<vector<int> > virtual_bond_list = chromo.get_virtual_bonds();
+        
+        int list_counter=0;
+        for (int i=num_of_real_bonds+1; i<chromo_num_bonds; i++) {
             
-            int list_counter=0;
-            for (int i=num_of_real_bonds+1; i<chromo_num_bonds; i++) {
-                
-                bonds[i].type = -2;
-                bonds[i].atoms[0]=virtual_bond_list[list_counter][0];
-                bonds[i].atoms[1]=virtual_bond_list[list_counter][1];
-                bonds[i].class_label = chromo.get_label() + chromo.get_label();
-                bonds[i].nominalLengthInNm=0;
-                bonds[i].stiffnessInKJPerNm2=0;
-            }
+            bonds[i].type = -2;
+            bonds[i].atoms[0]=virtual_bond_list[list_counter][0];
+            bonds[i].atoms[1]=virtual_bond_list[list_counter][1];
+            bonds[i].class_label = chromo.get_label() + chromo.get_label();
+            bonds[i].nominalLengthInNm=0;
+            bonds[i].stiffnessInKJPerNm2=0;
+        }
     }
     return bonds;
 }

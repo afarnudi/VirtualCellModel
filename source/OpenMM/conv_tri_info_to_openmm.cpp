@@ -21,8 +21,8 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         diatoms[i].bendingStiffnessinKJ = mem.get_bending_stiffness_coefficient();
         diatoms[i].class_label = mem.get_label();
     }
-    //End of list
-//    diatoms[mem_num_tris].type=-1;
+    cout<<" harmonic"<<endl;
+    cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     
     return diatoms;
 }

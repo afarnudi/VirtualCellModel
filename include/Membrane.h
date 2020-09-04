@@ -72,7 +72,7 @@ protected:
     double Total_Potential_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
-    double Node_radius=1;
+    double Node_radius=0;
     double New_node_radius=-1;
     double Begin_update_time_in_Ps=0;
     double Update_nominal_length=-1;
@@ -282,12 +282,14 @@ public:
     double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     
-    double Shift_in_X_direction=0.0; //???
-    double Shift_in_Z_direction=0.0; //???
-    double Shift_in_Y_direction=0.0; //???
-    double x_speed=0.0; //???
-    double y_speed=0.0;
-    double z_speed=0.0;
+    vector<double> Shift_position_xyzVector;
+    vector<double> Shift_velocities_xyzVector;
+//    double Shift_in_X_direction=0.0; //???
+//    double Shift_in_Z_direction=0.0; //???
+//    double Shift_in_Y_direction=0.0; //???
+//    double x_speed=0.0; //???
+//    double y_speed=0.0;
+//    double z_speed=0.0;
     
     int ext_force_model=0;
     double kx=10;
