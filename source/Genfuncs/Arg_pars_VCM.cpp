@@ -15,6 +15,9 @@
 
 using namespace std;
 
+void configfile_parser(string configfilename);
+vector<string> check_for_comments(string line);
+
 ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
     ArgStruct_VCM args;
     string programme_name =argv[0];
@@ -53,6 +56,11 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
             configfile_generator( result["g"].as<int>() );
             exit(0);
         }
+        if (result.count("c"))
+        {
+            configfile_parser(result["c"].as<string>() );
+            exit(0);
+        }
     } catch (const cxxopts::OptionException& e)
     {
         std::cout << "error parsing options: " << e.what() << std::endl;
@@ -60,4 +68,53 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
     }
     
     return args;
+}
+
+void configfile_parser(string configfilename){
+    ifstream readconfig(configfilename.c_str());
+    if (readconfig.is_open()) {
+        
+        string line;
+        int line_num=0;
+        
+        while(getline(readconfig, line)){
+            line_num++;
+            
+            if(line.empty()){
+                continue;
+            }
+            
+            vector<string> split = check_for_comments(line);
+            for (int i=0; i<split.size(); i++) {
+                cout<<split[i]<<" ";
+            }
+            cout<<endl;
+        }
+    } else {
+        string errorMessage = "Write Error: Could not create '"+configfilename+"'";
+        throw std::runtime_error(errorMessage);
+    }
+}
+
+vector<string> check_for_comments(string line){
+    char comment='#';
+    
+    istringstream iss(line);
+    vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
+    
+    
+    
+    if (split[0][0] == comment) {
+        split.clear();
+        return split;
+    }else{
+        for (int i=0; i<split.size(); i++) {
+            if (split[i][0]==comment) {
+                split.erase(split.begin()+i,split.end());
+                return split;
+            }
+        }
+    }
+    
+    return split;
 }
