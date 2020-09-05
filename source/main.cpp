@@ -61,18 +61,14 @@
 
 
 namespace GenConst {
-int    MD_num_of_steps;  //***********OLDCODE
 double Simulation_Time_In_Ps;
-int    MD_traj_save_step;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
-double MD_T;
-double K;
-int    MD_thrmo_step;
 int    MC_step;
 int    Mem_fluidity;
 bool   Periodic_box;
 double Lbox;
+double Simulation_box_length;
 bool   Periodic_condtion_status;
 int    Num_of_Membranes;
 int    Num_of_Chromatins;
@@ -129,6 +125,8 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
+    cout<<TRESET;
+    ArgStruct_VCM args;
     
     // get the current time.
     time_t t = time(0);
@@ -141,12 +139,14 @@ int main(int argc, char **argv)
     
     string general_file_name="General_param_map.txt";
     
-   
+    if (argc>1) {
+        args = cxxparser_vcm(argc, argv);
+    } else {
         cout<<TBOLD<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
         cout<<TFILE;
         cin>>general_file_name;
         cout<<TRESET;
-   
+    }
     
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
@@ -433,7 +433,7 @@ int main(int argc, char **argv)
             cout<<TCPU;
         }
         cout<<platformName.c_str()<<TRESET<<endl;
-
+        
         std::filebuf wfb;
         wfb.open (ckeckpoint_name.c_str(),std::ios::out);
         std::ostream wcheckpoint(&wfb);

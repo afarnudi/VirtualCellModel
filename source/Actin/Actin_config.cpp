@@ -98,11 +98,11 @@ void Actin::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="MT_spring_model"){
         MT_spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){
-        Spring_coefficient=param_value*GenConst::MD_T;
+        Spring_coefficient=param_value;
     } else if (param_name=="abp_Spring_coefficient"){
-        abp_Spring_coefficient=param_value*GenConst::MD_T;
+        abp_Spring_coefficient=param_value;
     } else if (param_name=="MT_Spring_coefficient"){
-        MT_Spring_coefficient=param_value*GenConst::MD_T;
+        MT_Spring_coefficient=param_value;
     } else if (param_name=="Contractile_force"){
         Contractile_force=param_value;
     } else if (param_name=="Contractile_model"){

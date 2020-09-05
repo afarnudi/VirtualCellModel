@@ -124,8 +124,8 @@ std::vector<std::vector<double> > Lboxdims;
 
 int main(int argc, char **argv)
 {
-    ArgStruct args;
-    args = cxxparser(argc, argv);
+    ArgStruct_Analysis args;
+    args = cxxparser_analysis(argc, argv);
     
     // get the current time.
     time_t t = time(0);

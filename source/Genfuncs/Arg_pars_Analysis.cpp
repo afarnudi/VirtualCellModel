@@ -15,13 +15,13 @@
 
 using namespace std;
 
-void consistency_check(ArgStruct &args);
-void build_output_names(ArgStruct &args);
-void check_membrane_labels(ArgStruct &args);
+void consistency_check(ArgStruct_Analysis &args);
+void build_output_names(ArgStruct_Analysis &args);
+void check_membrane_labels(ArgStruct_Analysis &args);
 
 
-ArgStruct cxxparser(int argc, char **argv){
-    ArgStruct args;
+ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
+    ArgStruct_Analysis args;
     string programme_name =argv[0];
     try
     {
@@ -169,7 +169,7 @@ ArgStruct cxxparser(int argc, char **argv){
     
 }
 
-void consistency_check(ArgStruct &args){
+void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
     
     if (args.analysis_dim != 2 && args.analysis_dim !=3) {
@@ -287,7 +287,7 @@ void consistency_check(ArgStruct &args){
     
 }
 
-void build_output_names(ArgStruct &args){
+void build_output_names(ArgStruct_Analysis &args){
     if (args.analysis_dim ==3) {
         if (args.extension=="") {
             args.extension="_ulmt.txt";
@@ -311,7 +311,7 @@ void build_output_names(ArgStruct &args){
     
 }
 
-void check_membrane_labels(ArgStruct &args){
+void check_membrane_labels(ArgStruct_Analysis &args){
     if (args.membane_labels.size()!=0) {
         for (int i=0; i<args.membane_labels.size()-1; i++) {
             string label = args.membane_labels[i];

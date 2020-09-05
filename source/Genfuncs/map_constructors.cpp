@@ -174,12 +174,6 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
             } // End of for (int i=0; i<split.size(); i++) {
             
         } //End of while(getline(read_config_file, line)){
-        if (GenConst::Report_Interval_In_Fs==0) {
-            GenConst::Report_Interval_In_Fs = GenConst::MD_traj_save_step*GenConst::Step_Size_In_Fs;
-        }
-        if (GenConst::Simulation_Time_In_Ps==0) {
-            GenConst::Simulation_Time_In_Ps = GenConst::MD_num_of_steps*GenConst::Step_Size_In_Fs;
-        }
         if (!GenConst::Testmode) {
             cout<<endl;
         }
@@ -194,20 +188,10 @@ void read_general_parameters(string input_file_name, vector<string> &membrane_co
 void set_parameter(map<string, double> &general_param_map, string param_name, double param_value){
     
     map<string, double>::iterator it;
-    if (param_name=="MD_num_of_steps") {
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_num_of_steps=it->second;
-        }
-    } else if (param_name=="Simulation_Time_In_Ps"){
+    if (param_name=="Simulation_Time_In_Ps"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Simulation_Time_In_Ps=it->second;
-        }
-    } else if (param_name=="MD_traj_save_step"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_traj_save_step=it->second;
         }
     } else if (param_name=="Report_Interval_In_Fs"){
         it = general_param_map.find(param_name);
@@ -218,22 +202,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::Step_Size_In_Fs=it->second;
-        }
-    } else if (param_name=="MD_T"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_T=it->second;
-            GenConst::Buffer_temperature=GenConst::MD_T;
-        }
-    } else if (param_name=="K"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::K=it->second;
-        }
-    } else if(param_name=="MD_thrmo_step"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::MD_thrmo_step=it->second;
         }
     } else if (param_name=="MC_step"){
         it = general_param_map.find(param_name);
@@ -284,25 +252,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         } else {
             GenConst::Num_of_ECMs=0;
         }
-    } else if (param_name=="Bussi_tau"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::Bussi_tau=it->second;
-        }
-    } else if (param_name=="Actin_Membrane_Bond_Coefficient"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::Actin_Membrane_Bond_Coefficient=it->second;
-        }
-    } else if (param_name=="excluded_volume_interaction"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            if (it->second == 0) {
-                GenConst::Excluded_volume_interaction= false;
-            } else {
-                GenConst::Excluded_volume_interaction= true;
-            }
-        }
     } else if (param_name=="Interaction_map"){
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
@@ -331,16 +280,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
         it = general_param_map.find(param_name);
         if (it != general_param_map.end()){
             GenConst::ECM_label="ecm";
-        }
-    } else if (param_name=="sigma_LJ_12_6"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::sigma_LJ_12_6=it->second;
-        }
-    } else if (param_name=="epsilon_LJ_12_6"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            GenConst::epsilon_LJ_12_6=it->second;
         }
     } else if (param_name=="Integrator_type"){
         it = general_param_map.find(param_name);
@@ -435,15 +374,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
                 GenConst::Wantvoronoi = false;
             } else {
                 GenConst::Wantvoronoi = true;
-            }
-        }
-    } else if (param_name=="Testmode"){
-        it = general_param_map.find(param_name);
-        if (it != general_param_map.end()){
-            if (it->second == 0) {
-                GenConst::Testmode = false;
-            } else {
-                GenConst::Testmode = true;
             }
         }
     } else if (param_name=="MCBarostatPressure"){

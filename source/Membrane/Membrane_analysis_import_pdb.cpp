@@ -4,7 +4,7 @@
 
 using std::string;
 
-void Membrane::import_pdb_frames(ArgStruct args, int file_index){
+void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
     string label = args.membane_labels[file_index];
     Num_of_Nodes      = get_pdb_num_of_atoms(args.analysis_filename, label);
     if (label == "") {

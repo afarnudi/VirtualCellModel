@@ -14,7 +14,7 @@
 
 using namespace std;
 
-struct ArgStruct
+struct ArgStruct_Analysis
 {
     int analysis_dim = 0;
     int analysis_averaging_option = 0;
@@ -32,7 +32,13 @@ struct ArgStruct
     vector<string> Mesh_files;
 };
 
-ArgStruct cxxparser(int argc, char **argv);
+struct ArgStruct_VCM
+{
+    
+};
+
+ArgStruct_Analysis cxxparser_analysis(int argc, char **argv);
+ArgStruct_VCM      cxxparser_vcm(int argc, char **argv);
 
 
 #endif /* OpenMM_structs_h */

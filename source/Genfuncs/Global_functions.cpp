@@ -26,10 +26,6 @@
  @date March 2008
  */
 
-///
-/// This function will linearly change the temperature from "Buffer_temperature" to "MD_T" set in the General Constants in ?? MD steps.
-///
-
 const int EndOfList=-1;
 using std::vector;
 
@@ -78,15 +74,6 @@ void collect_data(MyAtomInfo atoms[],
     write_data2(atoms, buffer, mem_volume, mem_surface, bending_energy, voronoi_area);
 }
 
-
-void set_temperature(int MD_step, double temperature, int buffer){
-    if (MD_step < buffer) {
-        double slope=temperature/double(buffer);
-        GenConst::Buffer_temperature=MD_step*slope;
-    } else {
-        GenConst::Buffer_temperature=GenConst::MD_T;
-    }
-}
 
 using std::string;
 using std::endl;

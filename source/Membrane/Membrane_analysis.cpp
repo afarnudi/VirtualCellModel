@@ -14,7 +14,7 @@ using namespace std;
 
 
 
-void Membrane::load_pdb_frame(int frame, ArgStruct args){
+void Membrane::load_pdb_frame(int frame, ArgStruct_Analysis args){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
             Node_Position[i][j] = pdb_frames[frame][i][j];
@@ -45,7 +45,7 @@ void Membrane::load_pdb_frame(int frame, ArgStruct args){
 
 
 
-void Membrane::calculate_ulm(ArgStruct args){
+void Membrane::calculate_ulm(ArgStruct_Analysis args){
     int ell_max = args.ell_max;
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();
@@ -106,7 +106,7 @@ void Membrane::calculate_ulm(ArgStruct args){
     //    cout<<endl;
 }
 
-void Membrane::calculate_real_ulm(ArgStruct args){
+void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
     int ell_max = args.ell_max;
     if(ulm_avg.size() != ell_max+1){
         ulm_avg.clear();
@@ -187,7 +187,7 @@ void Membrane::calculate_dOmega(void){
     }
 }
 
-void Membrane::write_ulm(ArgStruct args, int file_index){
+void Membrane::write_ulm(ArgStruct_Analysis args, int file_index){
     std::ofstream wdata;
     wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
 

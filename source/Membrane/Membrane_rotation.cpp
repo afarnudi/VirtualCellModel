@@ -93,7 +93,7 @@ void Membrane::update_spherical_positions(){
 }
 
 
-void Membrane::rotate_particle_to_axes(ArgStruct args){
+void Membrane::rotate_particle_to_axes(ArgStruct_Analysis args){
     
     //find the angles of the node that used to be on the z axis
     vector<double> r_theta_phi;

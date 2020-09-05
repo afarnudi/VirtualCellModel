@@ -12,22 +12,12 @@
 #include <vector>
 
 namespace GenConst {
-    /**MD total number of steps. Default 10000*/
-    extern int MD_num_of_steps;
     /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/
     extern double Simulation_Time_In_Ps;
-    /**Trajectory saving rate in number of steps. Default 1000*/
-    extern int MD_traj_save_step;
     /**Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.*/
     extern double Report_Interval_In_Fs;
     /** Integration step size (fs).  Default 0.001*/
     extern double Step_Size_In_Fs;
-    /**Tempreture. Default 1*/
-    extern double MD_T;
-    /**Boltzman's constant. Default 1*/
-    extern double K;
-    /**During every 'MD_thermo_step' the thermostat will be applied to the system. Default 200*/
-    extern int MD_thrmo_step;
     /**During every 'MC_step' the MC step will be applied to the membrane mesh. Default 100*/
     extern int MC_step;
     extern int Mem_fluidity;
@@ -35,7 +25,7 @@ namespace GenConst {
     extern bool Periodic_box;
     /**he size of the simulation box (cube). If Periodic_box  == False the default value will be set to zero (here -1 will trigger this proccess).*/
     extern double Lbox;
-    
+    extern double Simulation_box_length;
     /**Number of membranes in the system followed by the directory of their respective configuration files. All membranes will be configured using the first configuration file if only one is provided. Default 0.*/
     extern int Num_of_Membranes;
     /**Number of chromatins in the system followed by the directory of their respective configuration files. All chromatins will be configured using the first configuration file if only one is provided. Default 0.*/
@@ -54,28 +44,16 @@ namespace GenConst {
      * Type 2 : Langevin, temperature and frictionCoeff need to be set as well.
      *Default 0*/
     extern int Integrator_type;
-    
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
     extern double frictionInPs;
-    
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     extern double temperature;
-    
-    extern double Buffer_temperature;
-    /**Bussi tau will controll the fluctuation of the kinetic energy in the Bussi et. al. thermostat. Default 10*/
-    extern double Bussi_tau;
-    /**Actin-membrane LJ-like interaction strength. Default 400*/
-    extern double Actin_Membrane_Bond_Coefficient;
     /**Specifies if an interaction map is provided by the user or not. deafult false.*/
     extern bool Interaction_map;
     /**Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".*/
     extern std::string Interaction_map_file_name;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.*/
     extern bool Excluded_volume_interaction;
-    /**Set Lennard-Jones 12 6 sigma.*/
-    extern double sigma_LJ_12_6;
-    /**Set Lennard-Jones 12 6 epsilon.*/
-    extern double epsilon_LJ_12_6;
     /**Set Membrane class label. An index will be assigned during runtime. Default mem*/
     extern std::string Membrane_label;
     /**Set Actin class label. An index will be assigned during runtime. Default act*/

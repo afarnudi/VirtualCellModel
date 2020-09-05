@@ -35,4 +35,6 @@ void set_parameter(map<string, double> &general_param_map, string param_name, do
  */
 void read_interaction_map(vector<vector<int> > &inter_map);
 
+void configfile_generator(int status);
+
 #endif /* maps_hpp */

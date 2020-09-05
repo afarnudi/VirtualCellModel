@@ -110,14 +110,14 @@ public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
     void rotate_coordinates(double theta, double phi);
-    void rotate_particle_to_axes(ArgStruct args);
+    void rotate_particle_to_axes(ArgStruct_Analysis args);
     void update_spherical_positions();
     void analysis_init(std::string Mesh_path);
     void calculate_dOmega(void);
     vector<double> node_dOmega;
     
-    void load_pdb_frame(int frame, ArgStruct args);
-    void import_pdb_frames(ArgStruct args, int file_index);
+    void load_pdb_frame(int frame, ArgStruct_Analysis args);
+    void import_pdb_frames(ArgStruct_Analysis args, int file_index);
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
     void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
@@ -138,12 +138,12 @@ public:
     
     
     
-    void calculate_ulm(ArgStruct args);
-    void calculate_real_ulm(ArgStruct args);
+    void calculate_ulm(ArgStruct_Analysis args);
+    void calculate_real_ulm(ArgStruct_Analysis args);
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm(ArgStruct args, int file_index);
+    void write_ulm(ArgStruct_Analysis args, int file_index);
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
@@ -276,8 +276,8 @@ public:
     int spring_model=2;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
-    double Spring_coefficient=10.0*GenConst::MD_T*GenConst::K; // streching constant
-    double Bending_coefficient=20.0*GenConst::MD_T*GenConst::K; // bending constant
+    double Spring_coefficient=0.;
+    double Bending_coefficient=0.;
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     
     vector<double> Shift_position_xyzVector;

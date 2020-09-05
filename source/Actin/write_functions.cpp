@@ -38,12 +38,6 @@ void Actin::generate_report()
     Report<<"Simulation_Time_In_Ps\t"<<GenConst::Simulation_Time_In_Ps<<endl;
     Report<<"Step_Size_In_Fs\t"<<GenConst::Step_Size_In_Fs<<endl;
     Report<<"Report_Interval_In_Fs\t"<<GenConst::Report_Interval_In_Fs<<endl;
-    Report<<"MD_num_of_steps\t"<<GenConst::MD_num_of_steps<<endl;
-    Report<<"MD_traj_save_step\t"<<GenConst::MD_traj_save_step<<endl;
-    Report<<"K\t"<<GenConst::K<<endl;
-    Report<<"MD_T\t"<<GenConst::MD_T<<endl;
-    Report<<"MD_thrmo_step\t"<<GenConst::MD_thrmo_step<<endl;
-    Report<<"Bussi_tau\t"<<GenConst::Bussi_tau<<endl;
     Report<<"MC_step\t"<<GenConst::MC_step<<endl;
     Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
     Report<<"Lbox\t"<<GenConst::Lbox<<endl;
