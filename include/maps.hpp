@@ -61,17 +61,9 @@ struct GeneralParameters{
         values[1] ="#Writes velocities and forces (cheap) of particles during each ReportIntervalInFs time point to the disk. Default false";
         GenParams["WriteVelocitiesForces"] = values;
         
-        values[0] ="false";
-        values[1] ="#Writes velocities and forces (cheap) of particles during each ReportIntervalInFs time point to the disk. Default false";
-        GenParams["WriteVelocitiesForces"] = values;
-        
         values[0] ="true";
         values[1] ="#Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true";
         GenParams["ReportEnergy"] = values;
-        
-        values[0] ="V";
-        values[1] ="#Set the integrator type. 'Temperature' and 'FrictionCoeff' need to be set for Langevin and Brownian. V: Verlet. B: Brownian. L: Langevin. Default value 'V'.";
-        GenParams["Integrator"] = values;
         
         values[0] ="10";
         values[1] ="#The number of steps that the centre of mass velocity is set to zero using OpenMM's CMMotionRemover. Default 10";
@@ -104,6 +96,10 @@ struct GeneralParameters{
         values[0] ="5";
         values[1] ="#The friction coefficient which couples the system to the heat bath (in inverse pico seconds). Required by the Brownian and Langevin integrators. Default value 5.";
         GenParams["FrictionInPs"] = values;
+        
+        values[0] ="V";
+        values[1] ="#Set the integrator type. 'Temperature' and 'FrictionCoeff' need to be set for Langevin and Brownian. V: Verlet. B: Brownian. L: Langevin. Default value 'V'.";
+        GenParams["Integrator"] = values;
         
         values[0] ="1000";
         values[1] ="#Simulation enviroment size (cube). Default value 1000.";

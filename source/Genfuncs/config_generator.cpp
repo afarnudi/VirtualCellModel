@@ -28,14 +28,14 @@ void configfile_generator(int status){
     write_configs.open(genfilename.c_str());
     if (status==0) {
         
-        write_configs<<"-General Parameters"<<endl<<endl;
+        write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
         for (auto const& it : defaultparams.GenParams)
         {
-            write_configs<<"#"<<it.first<<" "<<it.second[0];
             if (comments) {
-                write_configs<<" "<<it.second[1];
+                write_configs<<it.second[1]<<endl;
             }
+            write_configs<<"#"<<it.first<<" "<<it.second[0]<<endl;
             write_configs<<endl;
         }
         exit(0);
