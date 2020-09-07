@@ -69,7 +69,7 @@ void matrix_inverse (double mat[3][3]){
 }
 
 void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C){
-    double p1p2[3], p1p3[3], n[3], D;
+    double p1p2[3], p1p3[3], n[3];//, D;
     for(int i=0; i<3; i++){
         p1p2[i]=points[0][i]-points[1][i];
         p1p3[i]=points[0][i]-points[2][i];

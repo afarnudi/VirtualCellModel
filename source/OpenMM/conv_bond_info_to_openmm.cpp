@@ -167,8 +167,8 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     }
     
     
-    int n1=0;
-    int n2=0;
+//    int n1=0;
+//    int n2=0;
     
     for (int i=4*act_num_bonds; i<(4*act_num_bonds + act_abp_bonds); i++) {
        

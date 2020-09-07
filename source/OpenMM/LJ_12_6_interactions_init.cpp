@@ -2,7 +2,7 @@
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
 
-const int EndOfList=-1;
+//const int EndOfList=-1;
 using OpenMM::Vec3;
 using std::vector;
 using std::set;

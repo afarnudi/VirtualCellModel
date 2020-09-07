@@ -532,6 +532,117 @@ public:
     double get_average_Membrane_radius(void){
         return Radius;
     }
+    
+    map<string, vector<string> > Params;
+    vector<string> insertOrder;
+    vector<string> values;
+    Membrane(){
+        values.resize(2);
+        
+        values[0] ="Path/to/my/meshfile.extension";
+        values[1] ="#Path to the mesh file. Supported formats: Blender's ply and Gmsh 2. The Membrnae class cannot be initilised without a mesh file.";
+        Params["MeshFile"] = values;
+        insertOrder.push_back("MeshFile");
+        
+        values[0] ="1";
+        values[1] ="#Mass asssigned to each node. Default value 1.";
+        Params["NodeMass"] = values;
+        insertOrder.push_back("NodeMass");
+        
+        values[0] ="0";
+        values[1] ="#Radius assigned to each node. If 0, half of the average bond distance of nodes will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        Params["NodeRadius"] = values;
+        insertOrder.push_back("NodeRadius");
+        
+        values[0] ="0 0 0";
+        values[1] ="#X, Y, Z components of a vector used to translate all coordinates of the Mesh befor beginning the simluation.";
+        Params["CoordinateTranslateVector"] = values;
+        insertOrder.push_back("CoordinateTranslateVector");
+        
+        values[0] ="H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. Default H";
+        Params["SpringModel"] = values;
+        insertOrder.push_back("SpringModel");
+        
+        values[0] ="0";
+        values[1] ="#Set the bond potential rigidity coefficient. Default value 0.";
+        Params["SpringCoeff"] = values;
+        insertOrder.push_back("SpringCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the damping coefficient for non harmonic potentials. Default value 0.";
+        Params["DampingCoeff"] = values;
+        insertOrder.push_back("DampingCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
+        Params["BendingCoeff"] = values;
+        insertOrder.push_back("BendingCoeff");
+        
+        values[0] ="1";
+        values[1] ="#Used to scale the Membrane coordinates. Default 1";
+        Params["Scale"] = values;
+        insertOrder.push_back("Scale");
+        
+        values[0] ="1 1 1";
+        values[1] ="#Used to scale the Mesh in the X, Y, znd Z direction.";
+        Params["XYZscale"] = values;
+        insertOrder.push_back("XYZscale");
+        
+        values[0] ="0";
+        values[1] ="#begin the simulation with a random orientation. Default value 0";
+        Params["InitRandomRotation"] = values;
+        insertOrder.push_back("InitRandomRotation");
+        
+        values[0] ="0 0 0";
+        values[1] ="#X, Y, Z coordinates of a point inside the Membrane (usually the geometrical centre) used to build normal vectors on the trianular mesh that point to the outside of the Membrane. This proccess is only performed once when the Membrane is imported from the mesh file.";
+        Params["XYZinMembrane"] = values;
+        insertOrder.push_back("XYZinMembrane");
+        
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value 0. If the Memebrane is interacting with another class, the Sigma between them will be calculated as the average of the class's sigmas: Sigma {Membrane & A} = 0.5(sigma{Membrane}+Sigma{A})";
+        Params["LJsigma"] = values;
+        insertOrder.push_back("LJsigma");
+        
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*+epsillon{A}).";
+        Params["LJepsilon"] = values;
+        insertOrder.push_back("LJepsilon");
+        
+        values[0] ="0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceModel"] = values;
+        insertOrder.push_back("ExtForceModel");
+        
+        values[0] ="-1";
+        values[1] ="#Set if you want to change (linear) the Radius of the Membrane to change to a new value during the simulation. Default value is negative, indicating no change.";
+        Params["UpdateRadius"] = values;
+        insertOrder.push_back("UpdateRadius");
+        
+        values[0] ="0";
+        values[1] ="#The Membrane radius will begin changing to the user provided value at this time point during the simulation (measured in pico seconds).";
+        Params["UpdateBeginTimeInPs"] = values;
+        insertOrder.push_back("UpdateBeginTimeInPs");
+        
+        values[0] ="0";
+        values[1] ="#The Membrane radius will finish updating at this time point during the simulation (measured in pico seconds).";
+        Params["UpdateEndTimeInPs"] = values;
+        insertOrder.push_back("UpdateEndTimeInPs");
+        
+        
+        
+        
+    }
+    
+    map<string, vector<string> > get_map(){
+        return Params;
+    }
+    vector<string > get_insertOrder(){
+        return insertOrder;
+    }
+    void assign_key_value(string key, string value){
+        Params[key][0]=value;
+    }
 };
 
 #endif // MEMBRANE_H

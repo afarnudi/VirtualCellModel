@@ -5,7 +5,7 @@
 
 void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,int triangle_B, int new_neighbour_dihedrals[4][6], MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals){
    // check_monte_carlo=1;
-    const int EndOfList=-1;
+//    const int EndOfList=-1;
     int u1=Triangle_Pair_Nodes[initial_pair][0];
     int c2=Triangle_Pair_Nodes[initial_pair][1];
     int c3= Triangle_Pair_Nodes[initial_pair][2];

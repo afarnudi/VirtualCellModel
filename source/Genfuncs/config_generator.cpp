@@ -11,7 +11,8 @@
 //#include <iomanip>
 //#include <iterator>
 #include "General_constants.h"
-#include "maps.hpp"
+#include "Membrane.h"
+#include "Configfile.hpp"
 
 using namespace std ;
 
@@ -30,12 +31,30 @@ void configfile_generator(int status){
         
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
-        for (auto const& it : defaultparams.GenParams)
-        {
+        for (auto & element : defaultparams.insertOrder) {
             if (comments) {
-                write_configs<<it.second[1]<<endl;
+                write_configs<<defaultparams.GenParams[element][1]<<endl;
             }
-            write_configs<<"#"<<it.first<<" "<<it.second[0]<<endl;
+            write_configs<<element<<" "<<defaultparams.GenParams[element][0]<<endl;
+            write_configs<<endl;
+        }
+//        for (auto const& it : defaultparams.GenParams)
+//        {
+//            if (comments) {
+//                write_configs<<it.second[1]<<endl;
+//            }
+//            write_configs<<it.first<<" "<<it.second[0]<<endl;
+//            write_configs<<endl;
+//        }
+        write_configs<<"-Membrane"<<endl<<endl;
+        Membrane mem;
+        auto map = mem.get_map();
+        auto order = mem.get_insertOrder();
+        for (auto & element : order) {
+            if (comments) {
+                write_configs<<map[element][1]<<endl;
+            }
+            write_configs<<element<<" "<<map[element][0]<<endl;
             write_configs<<endl;
         }
         exit(0);

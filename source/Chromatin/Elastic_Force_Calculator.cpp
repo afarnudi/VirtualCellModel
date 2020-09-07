@@ -18,12 +18,12 @@ void Chromatin::Force_Calculator_2(void)
     }
     
     double deltax,deltay,deltaz,Node_distance,temp_force;
-    double temp_potential_energy = 0.0, epsilon;
+    double temp_potential_energy = 0.0;//, epsilon;
     int Node_A, Node_B;
-    double le1=2.3*Node_radius;
-    double lmin=2.*Node_radius;
+//    double le1=2.3*Node_radius;
+//    double lmin=2.*Node_radius;
     
-    double Threshold_force=10;
+//    double Threshold_force=10;
     
     for (int k=0 ; k< Num_of_Nodes-2 ; k++)
     {

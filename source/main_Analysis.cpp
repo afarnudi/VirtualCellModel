@@ -226,6 +226,7 @@ int main(int argc, char **argv)
                 
                 cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
+            cout<<endl;
             Membranes[0].write_ulm(args, i);
             return 3;
         } else if(args.analysis_dim==2){
@@ -244,6 +245,7 @@ int main(int argc, char **argv)
                 
                 cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
+            cout<<endl;
             return 2;
         }
     }

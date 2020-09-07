@@ -1,7 +1,7 @@
 #include "OpenMM_funcs.hpp"
 
 
-const int EndOfList=-1;
+//const int EndOfList=-1;
 using OpenMM::Vec3;
 void add_particles_to_system_and_forces(const MyAtomInfo                       atoms[],
                                         vector<Vec3>                          &initialPosInNm,

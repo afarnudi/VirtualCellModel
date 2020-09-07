@@ -89,6 +89,10 @@ namespace GenConst {
     //non config file parameters
 //    extern std::vector<std::vector<std::vector<double> > > data;
     extern std::vector<double> data_colection_times;
+
+    extern std::vector<double> PeriodicBoxVector0;
+    extern std::vector<double> PeriodicBoxVector1;
+    extern std::vector<double> PeriodicBoxVector2;
     
     //1/0 true/false if you want/don't want to calculate and write the voronoi area associated with Membrane nodes in the properties output file. Default 0
     extern bool Wantvoronoi;

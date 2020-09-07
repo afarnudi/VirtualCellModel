@@ -18,7 +18,7 @@ using namespace std;
 void consistency_check(ArgStruct_Analysis &args);
 void build_output_names(ArgStruct_Analysis &args);
 void check_membrane_labels(ArgStruct_Analysis &args);
-
+string check_if_file_exists(string filename);
 
 ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
     ArgStruct_Analysis args;
@@ -179,9 +179,11 @@ void consistency_check(ArgStruct_Analysis &args){
         if (args.analysis_dim == 3) {
             cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
             if (args.analysis_filename == "" ) {
-                cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
-                exit(3);
+//                cout<<"Analysis file (path+file) "<<TWWARN<<"not provided"<<TRESET<<". Use -h for more information.\n";
+                string errorMessage = "Analysis file (path+file) not provided. Use -h for more information.";
+                throw std::runtime_error(errorMessage);
             } else {
+                args.analysis_filename = check_if_file_exists(args.analysis_filename);
                 cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
             }
             cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
@@ -241,13 +243,8 @@ void consistency_check(ArgStruct_Analysis &args){
                 cout<<TFILE;
                 cin>>meshpath;
                 cout<<TRESET;
-                std::ifstream read_mesh;
-                read_mesh.open(meshpath.c_str());
-                while (!read_mesh) {
-                    std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
-                    cin>>meshpath;
-                    read_mesh.open(meshpath.c_str());
-                }
+                
+                meshpath = check_if_file_exists(meshpath);
                 args.Mesh_files.push_back(meshpath);
             } else {
                 cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
@@ -285,6 +282,19 @@ void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
     
     
+}
+
+string check_if_file_exists(string filename){
+    ifstream infile(filename.c_str());
+    bool loop=infile.is_open();
+    string entree = filename;
+    while( !loop ){
+        cout<<"'"<<TBOLD<<TWARN<<filename<<TRESET<<"' does not exist. Please try again:\n"<<TBLINK<<">> "<<TRESET;
+        cin>>entree;
+        ifstream infiletemp(entree.c_str());
+        loop=infiletemp.is_open();
+    }
+    return entree;
 }
 
 void build_output_names(ArgStruct_Analysis &args){

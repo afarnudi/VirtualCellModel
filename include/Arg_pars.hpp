@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -32,13 +33,9 @@ struct ArgStruct_Analysis
     vector<string> Mesh_files;
 };
 
-struct ArgStruct_VCM
-{
-    
-};
 
-ArgStruct_Analysis cxxparser_analysis(int argc, char **argv);
-ArgStruct_VCM      cxxparser_vcm(int argc, char **argv);
+ArgStruct_Analysis  cxxparser_analysis(int argc, char **argv);
+string              cxxparser_vcm(int argc, char **argv);
 
 
 #endif /* OpenMM_structs_h */

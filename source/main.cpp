@@ -41,6 +41,7 @@
 #include "OpenMM_funcs.hpp"
 #include "General_class_functions.h"
 #include "Arg_pars.hpp"
+#include "Configfile.hpp"
 
 //#include "Tests.hpp"
 
@@ -112,6 +113,10 @@ double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
 
+std::vector<double> PeriodicBoxVector0;
+std::vector<double> PeriodicBoxVector1;
+std::vector<double> PeriodicBoxVector2;
+
 
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
@@ -126,8 +131,6 @@ const int EndOfList=-1;
 int main(int argc, char **argv)
 {
     cout<<TRESET;
-    ArgStruct_VCM args;
-    
     // get the current time.
     time_t t = time(0);
     auto chrono_clock_start = chrono::steady_clock::now();
@@ -137,17 +140,27 @@ int main(int argc, char **argv)
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
+    string configfilename;
     string general_file_name="General_param_map.txt";
     
-    if (argc>1) {
-        args = cxxparser_vcm(argc, argv);
-    } else {
+    configfilename = cxxparser_vcm(argc, argv);
+    
+    
+    
+    if (configfilename == "None") {
         cout<<TBOLD<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
         cout<<TFILE;
         cin>>general_file_name;
+//        cin>>configfilename;
         cout<<TRESET;
     }
     
+    //Parse the configfile:
+//    map<string, vector<string> > config_lines =read_configfile(configfilename);
+//    get_class_numbers(config_lines);
+//    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
+//    exit(0);
+    //
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
