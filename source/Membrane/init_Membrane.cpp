@@ -66,7 +66,6 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     shift_velocity(Shift_velocities_xyzVector[0], Shift_velocities_xyzVector[1], Shift_velocities_xyzVector[2]);
     
-    
     //limiting the labels to 4 charachters for use in the pdb writer
     while (label.length()>3) {
         label.pop_back();
@@ -83,8 +82,11 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (spring_model == 1) {
         if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
-            cout<<TWWARN<<"Warning"<<TRESET<<". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
-            exit(EXIT_FAILURE);
+            string errorMessage = TWARN;
+            errorMessage+="Warning";
+            errorMessage+= TRESET;
+            errorMessage+= ". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+            throw std::runtime_error(errorMessage);
         }
     }
     
@@ -101,7 +103,6 @@ void Membrane::initialise(std::string Mesh_file_name){
 //        cout<<"phi  : "<<phi<<"\n";
         rotate_coordinates(theta, phi);
     }
-    
 //    if (GenConst::Wantvoronoi){
 //        node_voronoi_area.resize(Num_of_Nodes,0);
 //    }

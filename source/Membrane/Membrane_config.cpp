@@ -1,7 +1,133 @@
 #include <sstream>
 #include "Membrane.h"
+#include "Configfile.hpp"
 #include "General_constants.h"
 using namespace std;
+
+void Membrane::import_config(vector<string> configlines){
+    
+    //first line is the 'key'
+    configlines.erase(configlines.begin());
+    
+    //replace the default values with the parameters read from the Config file
+    for (int i=0; i<configlines.size(); i++) {
+        if(configlines[i].size()!=0){
+            vector<string> split = split_and_check_for_comments(configlines[i]);
+            if (split.size()!=0) {
+                map<string, vector<string> >::iterator it;
+                it = Params.find(split[0]);
+                //Only replace parameters that actually exist in the Membrane parameters and ignor anythin else;
+                if (it != Params.end()) {
+                    configlines[i].erase(configlines[i].begin(),configlines[i].begin()+int(split[0].size()) );
+                    it->second[0] = configlines[i];
+                } else {
+                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Membrane parameter."<<TRESET<<endl;
+                }
+            }
+        }
+    }
+    //Tell the class how to inturpret the strings in the config file
+    assign_parameters();
+    //Check if all the parameters are consistant with the physics/Class enviroment
+    consistancy_check();
+    //Call the initiliser from the old code
+    initialise(Mesh_file_name);
+}
+
+void Membrane::consistancy_check(){
+    ifstream readmesh(Mesh_file_name.c_str());
+    if (!readmesh.is_open()) {
+        string errorMessage = TWARN;
+        errorMessage +="Read Error: Could not read '"+Mesh_file_name+"'";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+}
+
+void Membrane::assign_parameters(void){
+    for (auto const& it : Params){
+        vector<string> split = split_and_check_for_comments(it.second[0]);
+        
+        if (it.first == "MeshFile") {
+            string extension = split[0];
+            extension.erase(extension.begin(),extension.begin()+extension.find('.')+1);
+            if (extension == "ply") {
+                mesh_format=2;
+            } else if (extension == "msh"){
+                mesh_format=1;
+            } else{
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand the \""+extension+"\" format. Please use the Blender (ply) or Gmesh 2 (msh).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            Mesh_file_name = split[0];
+        } else if (it.first == "NodeMass") {
+            Node_Mass = stod(split[0]);
+        } else if (it.first == "NodeRadius") {
+            Node_radius = stod(split[0]);
+        } else if (it.first == "SpringModel") {
+            if (split[0]=="H") {
+                spring_model = 2;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "SpringCoeff") {
+            Spring_coefficient = stod(split[0]);
+        } else if (it.first == "DampingCoeff") {
+            Damping_coefficient = stod(split[0]);
+        } else if (it.first == "BendingCoeff") {
+            Bending_coefficient = stod(split[0]);
+        } else if (it.first == "ExtForceModel") {
+            ext_force_model = stoi(split[0]);
+        } else if (it.first == "XYZinMembrane") {
+            X_in = stod(split[0]);
+            Y_in = stod(split[1]);
+            Z_in = stod(split[2]);
+        } else if (it.first == "XYZscale") {
+            X_scale = stod(split[0]);
+            Y_scale = stod(split[1]);
+            Z_scale = stod(split[2]);
+        } else if (it.first == "Scale") {
+            rescale_factor = stod(split[0]);
+        } else if (it.first == "LJsigma") {
+            sigma_LJ_12_6 = stod(split[0]);
+        } else if (it.first == "LJepsilon") {
+            epsilon_LJ_12_6 = stod(split[0]);
+        } else if (it.first == "UpdateRadius") {
+            New_Radius = stod(split[0]);
+        } else if (it.first == "UpdateBeginTimeInPs") {
+            Begin_update_time_in_Ps = stod(split[0]);
+        } else if (it.first == "UpdateEndTimeInPs") {
+            End_update_time_in_Ps = stod(split[0]);
+        } else if (it.first == "InitRandomRotation") {
+            if(split[0]=="true"){
+                initial_random_rotation_coordinates=true;
+            } else if (split[0]=="false"){
+                initial_random_rotation_coordinates=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "VelocityShiftVector") {
+            Shift_velocities_xyzVector.resize(3,0);
+            Shift_velocities_xyzVector[0] = stod(split[0]);
+            Shift_velocities_xyzVector[1] = stod(split[1]);
+            Shift_velocities_xyzVector[2] = stod(split[2]);
+        } else if (it.first == "CoordinateTranslateVector") {
+            Shift_position_xyzVector.resize(3,0);
+            Shift_position_xyzVector[0] = stod(split[0]);
+            Shift_position_xyzVector[1] = stod(split[1]);
+            Shift_position_xyzVector[2] = stod(split[2]);
+        }
+        
+    }
+}
 
 void Membrane::import_config(string config_file_name){
     map<string, double>::iterator it;

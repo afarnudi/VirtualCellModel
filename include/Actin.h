@@ -452,6 +452,34 @@ public:
         COM_position[2]/=Num_of_Nodes;
         COM_position[1]/=Num_of_Nodes;
     }
+    
+    std::map<string, vector<string> > Params;
+    vector<string> insertOrder;
+    vector<string> values;
+    Actin(){
+        values.resize(2);
+        
+        values[0] ="value 0";
+        values[1] ="#This is a parameter example for Actin with default value 'value 0'.";
+        Params["ActinSampleParam0"] = values;
+        insertOrder.push_back("ActinSampleParam0");
+        
+        values[0] ="value 1";
+        values[1] ="#This is a parameter example for Actin with default value 'value 1'.";
+        Params["ActinSampleParam1"] = values;
+        insertOrder.push_back("ActinSampleParam1");
+        
+    }
+    
+    std::map<string, vector<string> > get_map(){
+        return Params;
+    }
+    vector<string > get_insertOrder(){
+        return insertOrder;
+    }
+    void assign_key_value(string key, string value){
+        Params[key][0]=value;
+    }
 };
 
 #endif // MEMBRANE_H

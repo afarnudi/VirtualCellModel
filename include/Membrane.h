@@ -37,6 +37,7 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::string;
 
 class Membrane
 {
@@ -268,6 +269,7 @@ public:
     //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(std::string import_file_name);
     void import_config(std::string config_file_name);
+    void import_config(vector<string> configlines);
     void set_map_parameter(std::string param_name, double param_value);
     void generate_report(void);
 
@@ -533,7 +535,7 @@ public:
         return Radius;
     }
     
-    map<string, vector<string> > Params;
+    std::map<string, vector<string> > Params;
     vector<string> insertOrder;
     vector<string> values;
     Membrane(){
@@ -558,6 +560,11 @@ public:
         values[1] ="#X, Y, Z components of a vector used to translate all coordinates of the Mesh befor beginning the simluation.";
         Params["CoordinateTranslateVector"] = values;
         insertOrder.push_back("CoordinateTranslateVector");
+        
+        values[0] ="0 0 0";
+        values[1] ="#Vx, Vy, Vz components of a vector used to add to all initial node velocities befor beginning the simluation.";
+        Params["VelocityShiftVector"] = values;
+        insertOrder.push_back("VelocityShiftVector");
         
         values[0] ="H";
         values[1] ="#Set the bond potential. 'H' for harmonic. Default H";
@@ -589,8 +596,8 @@ public:
         Params["XYZscale"] = values;
         insertOrder.push_back("XYZscale");
         
-        values[0] ="0";
-        values[1] ="#begin the simulation with a random orientation. Default value 0";
+        values[0] ="false";
+        values[1] ="#begin the simulation with a random orientation. Default value false";
         Params["InitRandomRotation"] = values;
         insertOrder.push_back("InitRandomRotation");
         
@@ -634,15 +641,14 @@ public:
         
     }
     
-    map<string, vector<string> > get_map(){
+    std::map<string, vector<string> > get_map(){
         return Params;
     }
     vector<string > get_insertOrder(){
         return insertOrder;
     }
-    void assign_key_value(string key, string value){
-        Params[key][0]=value;
-    }
+    void assign_parameters(void);
+    void consistancy_check(void);
 };
 
 #endif // MEMBRANE_H

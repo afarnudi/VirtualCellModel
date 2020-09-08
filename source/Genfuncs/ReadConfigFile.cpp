@@ -15,37 +15,6 @@
 
 using namespace std;
 
-void get_class_numbers(map<string, vector<string> > config_lines){
-    GenConst::Num_of_Membranes=0;
-    GenConst::Num_of_Actins=0;
-    GenConst::Num_of_ECMs=0;
-    GenConst::Num_of_Chromatins=0;
-    
-    
-    if (config_lines["-Membrane"].size()!=0) {
-        GenConst::Num_of_Membranes=count_class_numbers(config_lines["-Membrane"]);
-    }
-    if (config_lines["-Membrane"].size()!=0) {
-        GenConst::Num_of_Actins=count_class_numbers(config_lines["-Actin"]);
-    }
-    if (config_lines["-Membrane"].size()!=0) {
-        GenConst::Num_of_ECMs=count_class_numbers(config_lines["-ECM"]);
-    }
-    if (config_lines["-Membrane"].size()!=0) {
-        GenConst::Num_of_Chromatins=count_class_numbers(config_lines["-Chromatin"]);
-    }
-}
-int count_class_numbers(vector<string> config_lines){
-    int class_count=0;
-    for (auto & element : config_lines) {
-        auto split = split_and_check_for_comments(element);
-        if (split[0][0]=='-') {
-            class_count++;
-        }
-    }
-    return class_count;
-}
-
 map<string, vector<string> > read_configfile(string configfilename){
     FLAGindex flagindex;
     auto FLAG = flagindex.FLAG;
@@ -82,22 +51,62 @@ map<string, vector<string> > read_configfile(string configfilename){
                 case 4:
                     FLAGlines[key].push_back(line);
                     break;
+                case 5:
+                    FLAGlines[key].push_back(line);
+                    break;
                     
                 default:
                     continue;
             }
         }
     } else {
-        string errorMessage = "Write Error: Could not create '"+configfilename+"'";
+        string errorMessage = TWARN;
+        errorMessage +="Read Error: Could not read '"+configfilename+"'";
+        errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
     return FLAGlines;
 }
 
+vector<vector<string>> sort_class_configs(vector<string> lines){
+    vector<vector<string>> class_configs;
+    int count = count_class_numbers(lines);
+    int class_order = -1;
+    if (count>1) {
+        map<string, int> class_labels;
+        vector<vector<string>> temp_configs;
+        for (auto &line:lines){
+            vector<string> split = split_and_check_for_comments(line);
+            if (split.size()>0) {
+                if (split[0][0]=='-') {
+                    class_order++;
+                    if (split.size()>1) {
+                        class_labels[split[1]]=class_order;
+                    } else {
+                        class_labels[to_string(class_order)]=class_order;
+                    }
+                    
+                    temp_configs.resize(class_order+1);
+                    temp_configs[class_order].push_back(line);
+                } else {
+                    
+                    temp_configs[class_order].push_back(line);
+                }
+            }
+        }
+        class_configs=check_and_apply_inheritance(temp_configs,class_labels);
+    } else {
+        class_configs.push_back(lines);
+    }
+    
+    return class_configs;
+}
+
+
 void parse_genconfig_parameters(vector<string> lines){
     GeneralParameters values;
     //first line is the key
-    lines[0].erase(lines[0].begin(),lines[0].end());
+    lines.erase(lines.begin()+0);
     for (int i=0; i<lines.size(); i++) {
         if(lines[i].size()!=0){
             vector<string> split = split_and_check_for_comments(lines[i]);
@@ -112,56 +121,15 @@ void parse_genconfig_parameters(vector<string> lines){
         }
         
     }
+    GenConst::Membrane_label="mem";
+    GenConst::Actin_label="act";
+    GenConst::ECM_label="ecm";
+    GenConst::Chromatin_label="chr";
+    
     assign_general_parameters(values);
-}
-int checkflag(string line, map<string, int> FLAG, map<string, vector<string> > &FLAGlines, int flag){
     
-    vector<string> split = split_and_check_for_comments(line);
-    if (split[0][0]=='-') {
-        map<string, int>::iterator it;
-        it = FLAG.find(split[0]);
-        if (it != FLAG.end()){
-            flag =it->second;
-            return flag;
-            
-        } else {
-            return -1;
-        }
-    }
-    return flag;
 }
 
-string getmapkey(map<string, int> FLAG, int value){
-    for (auto &i : FLAG) {
-       if (i.second == value) {
-           return i.first;
-       }
-    }
-    return "";
-}
-
-vector<string> split_and_check_for_comments(string line){
-    char comment='#';
-    
-    istringstream iss(line);
-    vector<string> split(istream_iterator<string>{iss}, istream_iterator<string>());
-    
-    
-    
-    if (split[0][0] == comment) {
-        split.clear();
-        return split;
-    }else{
-        for (int i=0; i<split.size(); i++) {
-            if (split[i][0]==comment) {
-                split.erase(split.begin()+i,split.end());
-                return split;
-            }
-        }
-    }
-    
-    return split;
-}
 void assign_general_parameters(GeneralParameters &defaults){
     for (auto const& it : defaults.GenParams)
     {
@@ -205,7 +173,9 @@ void assign_general_parameters(GeneralParameters &defaults){
             } else if (split[0]=="false"){
                 stat=false;
             } else {
-                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                string errorMessage = TWARN;
+                errorMessage+="Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
             GenConst::WantEnergy=stat;

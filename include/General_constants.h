@@ -10,6 +10,7 @@
 #define General_constants_h
 #include <string>
 #include <vector>
+#include <map>
 
 namespace GenConst {
     /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/

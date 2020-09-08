@@ -15,6 +15,17 @@
 
 using namespace std;
 
+struct INTERindex{
+    map<string, int> INTERACTION;
+    
+    INTERindex(){
+        INTERACTION["0"]=0;
+        INTERACTION["LJ"]=1;
+        INTERACTION["EV"]=2;
+    }
+};
+
+
 struct FLAGindex{
     map<string, int> FLAG;
     
@@ -24,6 +35,7 @@ struct FLAGindex{
         FLAG["-Actin"]=2;
         FLAG["-ECM"]=3;
         FLAG["-Chromatin"]=4;
+        FLAG["-InteractionTable"]=5;
         
     }
 };
@@ -95,8 +107,8 @@ struct GeneralParameters{
         GenParams["MCBarostatFrequency"] = values;
         insertOrder.push_back("MCBarostatFrequency");
         
-        values[0] ="10";
-        values[1] ="#The number of steps that the centre of mass velocity is set to zero using OpenMM's CMMotionRemover. Default 10";
+        values[0] ="0";
+        values[1] ="#The number of steps that the centre of mass velocity is set to zero using OpenMM's CMMotionRemover. Default 0";
         GenParams["CMMotionRemoverStep"] = values;
         insertOrder.push_back("CMMotionRemoverStep");
         
@@ -130,7 +142,7 @@ struct GeneralParameters{
         GenParams["MCStep"] = values;
         insertOrder.push_back("MCStep");
         
-        values[0] ="100";
+        values[0] ="0";
         values[1] ="#This option is not available. Note to the developer: This should be moved to the Membrane. Default value 100.";
         GenParams["MemFluidity"] = values;
         insertOrder.push_back("MemFluidity");

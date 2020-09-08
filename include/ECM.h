@@ -24,6 +24,7 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::string;
 
 class ECM {
 private:
@@ -346,6 +347,35 @@ public:
         //        lmin=Min_node_pair_length*0.95;
         //        le0=lmin+3*(lmax-lmin)/4;
         //        le1=lmin+(lmax-lmin)/4;
+    }
+    
+    std::map<string, vector<string> > Params;
+    vector<string> insertOrder;
+    vector<string> values;
+    ECM(){
+        values.resize(2);
+        
+        values[0] ="value 0";
+        values[1] ="#This is a parameter example for ECM with default value 'value 0'.";
+        Params["ECMSampleParam0"] = values;
+        insertOrder.push_back("ECMSampleParam0");
+        
+        values[0] ="value 1";
+        values[1] ="#This is a parameter example for ECM with default value 'value 1'.";
+        Params["ECMSampleParam1"] = values;
+        insertOrder.push_back("ECMSampleParam1");
+        
+        
+    }
+    
+    std::map<string, vector<string> > get_map(){
+        return Params;
+    }
+    vector<string > get_insertOrder(){
+        return insertOrder;
+    }
+    void assign_key_value(string key, string value){
+        Params[key][0]=value;
     }
 };
 

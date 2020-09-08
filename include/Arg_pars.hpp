@@ -13,8 +13,6 @@
 #include <vector>
 #include <map>
 
-using namespace std;
-
 struct ArgStruct_Analysis
 {
     int analysis_dim = 0;
@@ -22,20 +20,20 @@ struct ArgStruct_Analysis
     int num_ang_avg= 1;
     int z_node=-1;
     int zy_node=-1;
-    string analysis_filename;
-    vector<string> membane_labels;
+    std::string analysis_filename;
+    std::vector<std::string> membane_labels;
     int ell_max =20;
-    string extension;
-    vector<string> output_filename;
+    std::string extension;
+    std::vector<std::string> output_filename;
     int framelimits_beg=0;
     int framelimits_end=0;
     int num_atoms_per_frame=0;
-    vector<string> Mesh_files;
+    std::vector<std::string> Mesh_files;
 };
 
 
 ArgStruct_Analysis  cxxparser_analysis(int argc, char **argv);
-string              cxxparser_vcm(int argc, char **argv);
+std::string         cxxparser_vcm(int argc, char **argv);
 
 
 #endif /* OpenMM_structs_h */

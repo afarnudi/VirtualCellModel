@@ -155,12 +155,7 @@ int main(int argc, char **argv)
         cout<<TRESET;
     }
     
-    //Parse the configfile:
-//    map<string, vector<string> > config_lines =read_configfile(configfilename);
-//    get_class_numbers(config_lines);
-//    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
-//    exit(0);
-    //
+    
     clock_t tStart = clock();//Time the programme
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
@@ -168,10 +163,16 @@ int main(int argc, char **argv)
     vector<string> ecm_config_list;
     vector<string> pointparticle_config_list;
     
-    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
     
+//    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+//    Parse the configfile:
+    map<string, vector<string> > config_lines =read_configfile(configfilename);
+    get_class_numbers(config_lines);
+    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
+//    exit(0);
     vector<vector<int> > interaction_map;
-    read_interaction_map(interaction_map);
+//    read_interaction_map(interaction_map);
+    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
     
     ofstream Trajectory;
     //    ofstream calcforce_l0;
@@ -183,24 +184,21 @@ int main(int argc, char **argv)
     
     
     vector<Membrane> Membranes;
-    vector<std::set<int> > membrane_set;
+    vector<std::set<int> >  membrane_set;
+    vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
+    
     
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
-    
+    vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
+
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
+    vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
     
     vector<Chromatin> Chromatins;
-    //    vector<std::set<int> > chromatin_set;
     vector<vector<std::set<int> > > chromatin_set;
-    
-    
-    bool Include_Membrane  = false;
-    bool Include_Chromatin = false;
-    bool Include_Actin     = false;
-    bool Include_ECM       = false;
-    bool Include_pointparticle = false;
+    vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
     
     int num_of_atoms=0;
     int num_of_bonds=0;
@@ -208,7 +206,6 @@ int main(int argc, char **argv)
     
     if (!GenConst::Load_from_checkpoint) {
         if (GenConst::Num_of_Membranes!=0) {
-            Include_Membrane = true;
             Membranes.resize(GenConst::Num_of_Membranes);
             membrane_set.resize(GenConst::Num_of_Membranes);
             for (int i=0; i<GenConst::Num_of_Membranes; i++) {
@@ -216,14 +213,14 @@ int main(int argc, char **argv)
                 Membranes[i].set_label(label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
-                Membranes[i].import_config(membrane_config_list[i]);
-                Membranes[i].generate_report();
+//                Membranes[i].import_config(membrane_config_list[i]);
+                Membranes[i].import_config(membrane_configs[i]);
+//                Membranes[i].generate_report();
             }
         }
         
-        
         if (GenConst::Num_of_Actins!=0) {
-            Include_Actin = true;
+//            Include_Actin = true;
             
             Actins.resize(GenConst::Num_of_Actins);
             actin_set.resize(GenConst::Num_of_Actins);
@@ -232,13 +229,14 @@ int main(int argc, char **argv)
                 Actins[i].set_label(label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
+                //SAJAD:: write a new import function
                 Actins[i].import_config(actin_config_list[i]);
-                Actins[i].generate_report();
+//                Actins[i].generate_report();
             }
         }
         
         if (GenConst::Num_of_ECMs!=0){
-            Include_ECM=true;
+//            Include_ECM=true;
             
             ECMs.resize(GenConst::Num_of_ECMs);
             ecm_set.resize(GenConst::Num_of_ECMs);
@@ -247,15 +245,16 @@ int main(int argc, char **argv)
                 ECMs[i].set_label(label);
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
+                //SAJAD:: write a new import function
                 ECMs[i].import_config(ecm_config_list[i]);
-                ECMs[i].generate_report();
+//                ECMs[i].generate_report();
             }
             
         }
         
         
         if (GenConst::Num_of_Chromatins!=0) {
-            Include_Chromatin = true;
+//            Include_Chromatin = true;
             
             Chromatins.resize(GenConst::Num_of_Chromatins);
             chromatin_set.resize(GenConst::Num_of_Chromatins);
@@ -266,12 +265,12 @@ int main(int argc, char **argv)
                 Chromatins[i].set_index(i);
                 Chromatins[i].import_config(chromatin_config_list[i]);
                 chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
-                Chromatins[i].generate_report();
+//                Chromatins[i].generate_report();
             }
         }
         
         
-        if (Include_Membrane) {
+        if (GenConst::Num_of_Membranes!=0) {
             for (int i=0; i<Membranes.size(); i++) {
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
                 num_of_bonds        += Membranes[i].get_num_of_node_pairs();
@@ -279,19 +278,19 @@ int main(int argc, char **argv)
             }
         }
         
-        if (Include_Actin) {
+        if (GenConst::Num_of_Actins!=0) {
             for (int i=0; i<Actins.size(); i++) {
                 num_of_atoms        += Actins[i].get_num_of_nodes();
                 num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
             }
         }
-        if (Include_ECM) {
+        if (GenConst::Num_of_ECMs!=0) {
             for (int i=0; i<ECMs.size(); i++) {
                 num_of_atoms += ECMs[i].get_num_of_nodes();
                 num_of_bonds += ECMs[i].get_num_of_node_pairs();
             }
         }
-        if (Include_Chromatin) {
+        if (GenConst::Num_of_Chromatins!=0) {
             for (int i=0; i<Chromatins.size(); i++) {
                 num_of_atoms    += Chromatins[i].get_num_of_nodes();
                 num_of_bonds    += Chromatins[i].get_num_of_bonds();
@@ -299,8 +298,8 @@ int main(int argc, char **argv)
         }
         
         
-        if (Include_Membrane){
-            if (Include_Actin){
+        if (GenConst::Num_of_Membranes!=0){
+            if (GenConst::Num_of_Actins!=0){
                 for (int i=0; i<GenConst::Num_of_Actins; i++) {
                     for (int j=0; j<GenConst::Num_of_Membranes; j++) {
                         Actin_Membrane_shared_Node_Identifier(Actins[i],Membranes[j],i,j);
@@ -341,7 +340,7 @@ int main(int argc, char **argv)
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     
-    if (Include_Membrane) {
+    if (GenConst::Num_of_Membranes!=0) {
         OpenMM_membrane_info_relay(Membranes,
                                    membrane_set,
                                    all_atoms,
@@ -355,7 +354,7 @@ int main(int argc, char **argv)
     mem_atom_count = atom_count;
     
     
-    if (Include_Actin) {
+    if (GenConst::Num_of_Actins!=0) {
         OpenMM_Actin_info_relay(Actins,
                                 actin_set,
                                 all_atoms,
@@ -367,7 +366,7 @@ int main(int argc, char **argv)
     }
     
     
-    if (Include_Membrane  && Include_Actin) {
+    if (GenConst::Num_of_Membranes!=0  && GenConst::Num_of_Actins!=0) {
         OpenMM_ActMem_info_relay(Actins,
                                  Membranes,
                                  all_bonds,
@@ -376,7 +375,7 @@ int main(int argc, char **argv)
         
     }
     
-    if (Include_ECM) {
+    if (GenConst::Num_of_ECMs!=0) {
         OpenMM_ECM_info_relay(ECMs,
                               ecm_set,
                               all_atoms,
@@ -386,7 +385,7 @@ int main(int argc, char **argv)
                               bond_count,
                               dihe_count);
     }
-    if (Include_Chromatin) {
+    if (GenConst::Num_of_Chromatins!=0) {
         OpenMM_Chromatin_info_relay(Chromatins,
                                     chromatin_set,
                                     all_atoms,
