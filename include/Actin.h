@@ -141,6 +141,7 @@ public:
     
     //Member headers
     void import_config(std::string config_file_name);
+    void import_config(vector<string> configlines);
     void set_map_parameter(std::string param_name, double param_value);
     void Elastic_Force_Calculator(void);
     void generate_report();

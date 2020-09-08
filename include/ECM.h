@@ -118,6 +118,7 @@ private:
 public:
     
     void import_config(std::string config_file_name);
+    void import_config(vector<string> configlines);
     void generate_report(void);
     void export_for_resume(int MD_step);
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);

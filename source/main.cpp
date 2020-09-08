@@ -236,8 +236,9 @@ int main(int argc, char **argv)
                 Actins[i].set_label(label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
-                //SAJAD:: write a new import function
+                //    Comment
                 Actins[i].import_config(actin_config_list[i]);
+                //    Uncomment
 //                Actins[i].import_config(actin_configs[i]);
             }
         }
