@@ -163,16 +163,18 @@ int main(int argc, char **argv)
     vector<string> ecm_config_list;
     vector<string> pointparticle_config_list;
     
-    
-//    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
-//    Parse the configfile:
-    map<string, vector<string> > config_lines =read_configfile(configfilename);
-    get_class_numbers(config_lines);
-    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
-//    exit(0);
+//    Comment
+    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+//    Uncomment
+//    map<string, vector<string> > config_lines =read_configfile(configfilename);
+//    get_class_numbers(config_lines);
+//    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
+
     vector<vector<int> > interaction_map;
-//    read_interaction_map(interaction_map);
-    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
+    //    Comment
+    read_interaction_map(interaction_map);
+//    Uncomment
+//    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
     
     ofstream Trajectory;
     //    ofstream calcforce_l0;
@@ -185,20 +187,24 @@ int main(int argc, char **argv)
     
     vector<Membrane> Membranes;
     vector<std::set<int> >  membrane_set;
-    vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
+    //    Uncomment
+//    vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
     
     
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
-    vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
+    //    Uncomment
+//    vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
 
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
-    vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
+//        Uncomment
+//    vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
     
     vector<Chromatin> Chromatins;
     vector<vector<std::set<int> > > chromatin_set;
-    vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
+    //    Uncomment
+//    vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
     
     int num_of_atoms=0;
     int num_of_bonds=0;
@@ -213,9 +219,10 @@ int main(int argc, char **argv)
                 Membranes[i].set_label(label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
-//                Membranes[i].import_config(membrane_config_list[i]);
-                Membranes[i].import_config(membrane_configs[i]);
-//                Membranes[i].generate_report();
+                //    Comment
+                Membranes[i].import_config(membrane_config_list[i]);
+                //    Uncomment
+//                Membranes[i].import_config(membrane_configs[i]);
             }
         }
         
@@ -231,7 +238,7 @@ int main(int argc, char **argv)
                 Actins[i].set_index(i);
                 //SAJAD:: write a new import function
                 Actins[i].import_config(actin_config_list[i]);
-//                Actins[i].generate_report();
+//                Actins[i].import_config(actin_configs[i]);
             }
         }
         
@@ -247,7 +254,7 @@ int main(int argc, char **argv)
                 ECMs[i].set_index(i);
                 //SAJAD:: write a new import function
                 ECMs[i].import_config(ecm_config_list[i]);
-//                ECMs[i].generate_report();
+//                ECMs[i].import_config(ecm_configs[i]);
             }
             
         }
@@ -265,7 +272,6 @@ int main(int argc, char **argv)
                 Chromatins[i].set_index(i);
                 Chromatins[i].import_config(chromatin_config_list[i]);
                 chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
-//                Chromatins[i].generate_report();
             }
         }
         
