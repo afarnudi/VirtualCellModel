@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     
     
     if (configfilename == "None") {
-        cout<<TBOLD<<"\nHi!\nPlease enter the path (relative to the binary file) + name of the config file:\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
+        cout<<TBOLD<<"\nHi!\nPlease enter the path + name of the configuration file. If you do not have a configuration file, run \""<<argv[0]<<" -h\" for more options.\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
         cout<<TFILE;
         cin>>general_file_name;
 //        cin>>configfilename;

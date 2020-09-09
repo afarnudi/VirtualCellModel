@@ -333,15 +333,76 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     Chromatin(){
         values.resize(2);
         
-        values[0] ="value 0";
-        values[1] ="#This is a parameter example for Chromatin with default value 'value 0'.";
-        Params["ChromatinSampleParam0"] = values;
-        insertOrder.push_back("ChromatinSampleParam0");
+        values[0] ="path/to/my/coordinates.txt";
+        values[1] ="#Path to a text file from which the X, Y, Z, Vx, Vy, and Vz of the chromatin nodes can be imported. Default path/to/my/coordinates.txt";
+        Params["ImportCoordinates"] = values;
+        insertOrder.push_back("ImportCoordinates");
         
-        values[0] ="value 1";
-        values[1] ="#This is a parameter example for Chromatin with default value 'value 1'.";
-        Params["ChromatinSampleParam1"] = values;
-        insertOrder.push_back("ChromatinSampleParam1");
+        values[0] ="10";
+        values[1] ="#Number of Chromatin nodes on a generated self avoiding random chain . If you are importing coordinates, this parameter will be ignored. Default 10";
+        Params["GenerateRandomChain"] = values;
+        insertOrder.push_back("GenerateRandomChain");
+        
+        values[0] ="10";
+        values[1] ="#Number of node types on the chain. For more than one node type, multiple LJsigma and LJepsillon can be defined to customise long range interactions. Default 10";
+        Params["NodeTypes"] = values;
+        insertOrder.push_back("NodeTypes");
+        
+        
+        values[0] ="1";
+        values[1] ="#Mass asssigned to each node. Default value 1";
+        Params["NodeMass"] = values;
+        insertOrder.push_back("NodeMass");
+        
+        values[0] ="0";
+        values[1] ="#Radius assigned to each node. If 0, half of the average bond distance of nodes will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        Params["NodeRadius"] = values;
+        insertOrder.push_back("NodeRadius");
+        
+        values[0] ="H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. Default H.";
+        Params["SpringModel"] = values;
+        insertOrder.push_back("SpringModel");
+        
+        values[0] ="2000";
+        values[1] ="#Set the bond potential rigidity coefficient. Default value 2000.";
+        Params["SpringCoeff"] = values;
+        insertOrder.push_back("SpringCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the damping coefficient for non harmonic potentials. Default value 0.";
+        Params["DampingCoeff"] = values;
+        insertOrder.push_back("DampingCoeff");
+        
+        values[0] ="0 0 0";
+        values[1] ="#X, Y, Z components of a vector used to translate all coordinates befor beginning the simluation.";
+        Params["CoordinateTranslateVector"] = values;
+        insertOrder.push_back("CoordinateTranslateVector");
+        
+        values[0] ="0 0 0";
+        values[1] ="#Vx, Vy, Vz components of a vector used to add to all initial node velocities befor beginning the simluation.";
+        Params["VelocityShiftVector"] = values;
+        insertOrder.push_back("VelocityShiftVector");
+        
+        values[0] ="1";
+        values[1] ="#Used to scale the Chromatin coordinates. Default 1";
+        Params["Scale"] = values;
+        insertOrder.push_back("Scale");
+        
+        values[0] ="0";
+        values[1] ="#If the chromatin node radius is smaller than the node distances along the chain, The VirtualBondLength (the chain bond length) will be used to put virtual chromatin nodes between the real nodes to mimic a cylinder. Default 0";
+        Params["VirtualBondLength"] = values;
+        insertOrder.push_back("VirtualBondLength");
+        
+        values[0] ="0";
+        values[1] ="#If the VirtualBondLength is set, the VirtualBondRadius will be used to defing the radius of the virtual chromatin nodes. Default 0";
+        Params["VirtualBondRadius"] = values;
+        insertOrder.push_back("VirtualBondRadius");
+        
+        values[0] ="false";
+        values[1] ="#If \"true\" The programme will find the best VirtualBondRadius that fits the parameters (NodeRadius and VirtualBondLength). Default 0";
+        Params["OptimiseBondRadius"] = values;
+        insertOrder.push_back("OptimiseBondRadius");
         
         
     }
