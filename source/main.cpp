@@ -164,17 +164,17 @@ int main(int argc, char **argv)
     vector<string> pointparticle_config_list;
     
 //    Comment
-    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+//    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
 //    Uncomment
-//    map<string, vector<string> > config_lines =read_configfile(configfilename);
-//    get_class_numbers(config_lines);
-//    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
+    map<string, vector<string> > config_lines =read_configfile(configfilename);
+    get_class_numbers(config_lines);
+    parse_genconfig_parameters(config_lines["-GeneralParameters"]);
 
     vector<vector<int> > interaction_map;
     //    Comment
-    read_interaction_map(interaction_map);
+//    read_interaction_map(interaction_map);
 //    Uncomment
-//    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
+    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
     
     ofstream Trajectory;
     //    ofstream calcforce_l0;
@@ -188,23 +188,23 @@ int main(int argc, char **argv)
     vector<Membrane> Membranes;
     vector<std::set<int> >  membrane_set;
     //    Uncomment
-//    vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
+    vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
     
     
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
     //    Uncomment
-//    vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
+    vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
 
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
 //        Uncomment
-//    vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
+    vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
     
     vector<Chromatin> Chromatins;
     vector<vector<std::set<int> > > chromatin_set;
     //    Uncomment
-//    vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
+    vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
     
     int num_of_atoms=0;
     int num_of_bonds=0;
@@ -220,9 +220,9 @@ int main(int argc, char **argv)
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
                 //    Comment
-                Membranes[i].import_config(membrane_config_list[i]);
+//                Membranes[i].import_config(membrane_config_list[i]);
                 //    Uncomment
-//                Membranes[i].import_config(membrane_configs[i]);
+                Membranes[i].import_config(membrane_configs[i]);
             }
         }
         
@@ -237,9 +237,9 @@ int main(int argc, char **argv)
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
                 //    Comment
-                Actins[i].import_config(actin_config_list[i]);
+//                Actins[i].import_config(actin_config_list[i]);
                 //    Uncomment
-//                Actins[i].import_config(actin_configs[i]);
+                Actins[i].import_config(actin_configs[i]);
             }
         }
         
@@ -254,8 +254,8 @@ int main(int argc, char **argv)
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
                 //SAJAD:: write a new import function
-                ECMs[i].import_config(ecm_config_list[i]);
-//                ECMs[i].import_config(ecm_configs[i]);
+//                ECMs[i].import_config(ecm_config_list[i]);
+                ECMs[i].import_config(ecm_configs[i]);
             }
             
         }

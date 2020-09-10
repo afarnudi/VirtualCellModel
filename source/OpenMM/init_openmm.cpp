@@ -358,7 +358,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         
         
-        }
+    }
     
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);

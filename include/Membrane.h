@@ -621,6 +621,11 @@ public:
         Params["ExtForceModel"] = values;
         insertOrder.push_back("ExtForceModel");
         
+        values[0] ="0 0 0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceRigidity"] = values;
+        insertOrder.push_back("ExtForceRigidity");
+        
         values[0] ="-1";
         values[1] ="#Set if you want to change (linear) the Radius of the Membrane to change to a new value during the simulation. Default value is negative, indicating no change.";
         Params["UpdateRadius"] = values;

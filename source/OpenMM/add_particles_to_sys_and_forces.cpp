@@ -10,7 +10,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                         OpenMM::System                        &system){
     int EndOfList=-1;
-    std::vector<double> sigma_ev;
+//    std::vector<double> sigma_ev;
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
         system.addParticle(atoms[n].mass);
@@ -26,8 +26,8 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         initialVelInNmperPs.push_back(velocityInNmperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
-        std::vector<double> sigma_ev;
-        sigma_ev.push_back(atoms[n].radius);
+//        std::vector<double> sigma_ev;
+//        sigma_ev.push_back(atoms[n].radius);
         
         for (int i=0; i<ExcludedVolumes.size(); i++) {
             ExcludedVolumes[i]->addParticle();
