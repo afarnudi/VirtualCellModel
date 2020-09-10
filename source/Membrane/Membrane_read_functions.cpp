@@ -152,18 +152,22 @@ void Membrane::import(std::string import_file_name){
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 }
 
-
+using namespace std;
 void Membrane::read_ply_file (std::string ply_file)
 {
     ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(ply_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary ply file intigers. We never use these intigers in the actual programme.
     std::string temp_string;
-    for (int i=0; i<18; i++)
-    {
-        read>> temp_string;
-    }
-    read>> Num_of_Nodes;
+    getline(read, temp_string);
+    getline(read, temp_string);
+    getline(read, temp_string);
+    getline(read, temp_string);
+    std::istringstream iss(temp_string);
+    vector<std::string> words(std::istream_iterator<std::string>{iss}, istream_iterator<std::string>());
+    Num_of_Nodes= stoi(words[words.size()-1]);
+    
+    
     Node_Position.clear();
 	Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
     Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
@@ -172,16 +176,15 @@ void Membrane::read_ply_file (std::string ply_file)
             Node_Velocity[i].resize(3,0);
             Node_Force[i].resize(3,0);
     }
-    for (int i=0; i<11; i++)
-    {
-        read>> temp_string;
-    }
-    read>>Num_of_Triangles;
-    
-    for (int i=0; i<6; i++)
-    {
-        read>> temp_string;
-    }
+    getline(read, temp_string);
+    getline(read, temp_string);
+    getline(read, temp_string);
+    getline(read, temp_string);
+    std::istringstream iss2(temp_string);
+    vector<std::string> words2(std::istream_iterator<std::string>{iss2}, istream_iterator<std::string>());
+    Num_of_Triangles =stoi(words2[words2.size()-1]);
+    getline(read, temp_string);
+    getline(read, temp_string);
     // In this section the Node coordinates are read from the ply file.
     vector<double> temp_node_position;
     temp_node_position.resize(3);

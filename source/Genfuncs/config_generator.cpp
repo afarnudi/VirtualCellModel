@@ -32,7 +32,7 @@ void configfile_generator(int status){
     write_configs.open(genfilename.c_str());
     if (status==0) {
         write_configs<<"#This is the VCM configuration template."<<endl;
-        write_configs<<"#Whatever following \"\#\" will be ignored by the programme."<<endl;
+        write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
         write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl;
         write_configs<<"#Note: If you have multiple instances of one class with only a couple of deviations, you can inherit the configrations from another class of the same kind:"<<endl;
         write_configs<<"#Example:"<<endl;

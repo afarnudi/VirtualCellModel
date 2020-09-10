@@ -22,8 +22,6 @@ void Membrane::initialise(std::string Mesh_file_name){
         read_ply_file(Mesh_file_name);
     }
     output_file_neme=Mesh_file_name;
-    
-    Radius= sqrt((Node_Position[0][0]-X_in)*(Node_Position[0][0]-X_in) + (Node_Position[0][1]-Y_in)*(Node_Position[0][1]-Y_in) + (Node_Position[0][2]-Z_in)*(Node_Position[0][2]-Z_in));
     if (!GenConst::Testmode) {
         
         cout<<"Number of ... :\n";
