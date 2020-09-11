@@ -7,6 +7,12 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
     [ "Chromatin.h", "_chromatin_8h.html", [
       [ "Chromatin", "class_chromatin.html", "class_chromatin" ]
     ] ],
+    [ "Configfile.hpp", "_configfile_8hpp.html", "_configfile_8hpp" ],
+    [ "ConfigfileStructs.hpp", "_configfile_structs_8hpp.html", [
+      [ "INTERindex", "struct_i_n_t_e_rindex.html", "struct_i_n_t_e_rindex" ],
+      [ "FLAGindex", "struct_f_l_a_gindex.html", "struct_f_l_a_gindex" ],
+      [ "GeneralParameters", "struct_general_parameters.html", "struct_general_parameters" ]
+    ] ],
     [ "ECM.h", "_e_c_m_8h.html", [
       [ "ECM", "class_e_c_m.html", "class_e_c_m" ]
     ] ],
@@ -27,6 +33,5 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
       [ "MyOpenMMData", "struct_my_open_m_m_data.html", "struct_my_open_m_m_data" ],
       [ "TimeDependantData", "struct_time_dependant_data.html", "struct_time_dependant_data" ]
     ] ],
-    [ "Tests.hpp", "_tests_8hpp.html", null ],
     [ "write_functions.hpp", "write__functions_8hpp.html", "write__functions_8hpp" ]
 ];

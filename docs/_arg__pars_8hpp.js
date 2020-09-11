@@ -1,5 +1,6 @@
 var _arg__pars_8hpp =
 [
-    [ "ArgStruct", "struct_arg_struct.html", "struct_arg_struct" ],
-    [ "cxxparser", "_arg__pars_8hpp.html#a4d41efe65a93697adcf4194d186d0d22", null ]
+    [ "ArgStruct_Analysis", "struct_arg_struct___analysis.html", "struct_arg_struct___analysis" ],
+    [ "cxxparser_analysis", "_arg__pars_8hpp.html#a80150c3f4b237b73d9ccd2de2fbd9b28", null ],
+    [ "cxxparser_vcm", "_arg__pars_8hpp.html#a58fdc9ea520a25c5e8ea6497b93d5be8", null ]
 ];

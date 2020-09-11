@@ -1,18 +1,13 @@
 var searchData=
 [
-  ['k_1048',['K',['../namespace_gen_const.html#a80679742796064a242391cd8e3c067d0',1,'GenConst']]],
-  ['k_5ff0_1049',['k_F0',['../struct_bonds.html#af0f1c19acf7d42da95fc64e42ae7e3c5',1,'Bonds']]],
-  ['k_5fforce_1050',['k_force',['../struct_time_dependant_data.html#acaf2b82bb023c0a0369a9a8300a9db18',1,'TimeDependantData']]],
-  ['k_5fstepnum_1051',['k_stepnum',['../struct_time_dependant_data.html#afe862adda4f9325cd8e8b64cf31912b2',1,'TimeDependantData']]],
-  ['kelvin_5fdamping_5fcoefficient_1052',['Kelvin_Damping_Coefficient',['../class_actin.html#a28af6190e678533430f3b8c54aa35dcb',1,'Actin::Kelvin_Damping_Coefficient()'],['../class_e_c_m.html#aeafd3fc91efcd934416080db4114f100',1,'ECM::Kelvin_Damping_Coefficient()']]],
-  ['kelvin_5fstepnum_1053',['Kelvin_stepnum',['../struct_time_dependant_data.html#a8e5d4009bbba02bfeabb746393b9d3e3',1,'TimeDependantData']]],
-  ['kelvin_5fvoigt_1054',['Kelvin_Voigt',['../struct_time_dependant_data.html#a04750d565dc20a250924f250e77da152',1,'TimeDependantData']]],
-  ['kelvin_5fvoigt_5fdamp_1055',['Kelvin_Voigt_damp',['../struct_time_dependant_data.html#a47ce75a249b06cfb26bf61f120baa661',1,'TimeDependantData']]],
-  ['kelvin_5fvoigt_5fdistinnm_1056',['Kelvin_Voigt_distInNm',['../struct_time_dependant_data.html#aa5a021970b4d5558f137180590745fab',1,'TimeDependantData']]],
-  ['kelvin_5fvoigt_5finitnominal_5flength_5finnm_1057',['Kelvin_Voigt_initNominal_length_InNm',['../struct_time_dependant_data.html#ad3e49324aa777171e42e56281a100071',1,'TimeDependantData']]],
-  ['kelvin_5fvoigtbond_1058',['Kelvin_VoigtBond',['../struct_time_dependant_data.html#a534577fc9ff214a2c1fa07a7215db475',1,'TimeDependantData']]],
-  ['kforce_1059',['kForce',['../struct_time_dependant_data.html#a0563f3b752e0802fa5dda1507673cc36',1,'TimeDependantData']]],
-  ['kx_1060',['kx',['../class_actin.html#a22b8c69be3045b05e747cf0dd4447582',1,'Actin::kx()'],['../class_e_c_m.html#ac0863e302931739181fe2ec739ab59c0',1,'ECM::kx()'],['../class_membrane.html#aa55e9c7e82f55c78653206ad26d86378',1,'Membrane::kx()']]],
-  ['ky_1061',['ky',['../class_actin.html#a2960f2156e3506f757c8af75b8b7a032',1,'Actin::ky()'],['../class_e_c_m.html#a5f7184d0f149dff7bba0484c4eb4a5d1',1,'ECM::ky()'],['../class_membrane.html#a870a200fcaead7f7778d1f6d5d6f11a3',1,'Membrane::ky()']]],
-  ['kz_1062',['kz',['../class_actin.html#afde34daa54b0d59cadf994fa14226dc5',1,'Actin::kz()'],['../class_e_c_m.html#a6fc7bfd4b28fd9b0804cf6fef02fe2af',1,'ECM::kz()'],['../class_membrane.html#a70054ec84f5834913bc47bc472171bab',1,'Membrane::kz()']]]
+  ['index_1109',['index',['../class_actin.html#a66989b5321a1b32a626b1dc0aac5dc18',1,'Actin::index()'],['../class_chromatin.html#a85489adce03d53f16fb237f416f2db08',1,'Chromatin::index()'],['../class_e_c_m.html#a029f7f1e380d97c0a4b513cdce2e8716',1,'ECM::index()'],['../class_membrane.html#a7b4f77c0a72b328eb22a0cb8d0f4765a',1,'Membrane::index()']]],
+  ['initial_5frandom_5frotation_5fcoordinates_1110',['initial_random_rotation_coordinates',['../class_membrane.html#af4aed07a220670af04664e976b4a0f11',1,'Membrane']]],
+  ['initposinnm_1111',['initPosInNm',['../struct_my_atom_info.html#aa9b791366453c3b969b3bb40cb83e9a0',1,'MyAtomInfo']]],
+  ['insertorder_1112',['insertOrder',['../class_actin.html#a5c42638fd8e592e96d6b6392b4a1735f',1,'Actin::insertOrder()'],['../class_chromatin.html#a12baf49429bfe45e3553652a519eb408',1,'Chromatin::insertOrder()'],['../struct_general_parameters.html#a84b1466876080735140a5d034ec2a578',1,'GeneralParameters::insertOrder()'],['../class_e_c_m.html#ae918ba4f3bca189a40ee1b1b68ea4f44',1,'ECM::insertOrder()'],['../class_membrane.html#a03800c3fef4030b201892568e227c9b5',1,'Membrane::insertOrder()']]],
+  ['integrator_1113',['integrator',['../struct_my_open_m_m_data.html#a471489f3c9bd1e5a54fc5202b71b6b96',1,'MyOpenMMData']]],
+  ['integrator_5ftype_1114',['Integrator_type',['../namespace_gen_const.html#aac105e3a7fd6172ca631f1272e4e8f04',1,'GenConst']]],
+  ['interaction_1115',['INTERACTION',['../struct_i_n_t_e_rindex.html#af78b91207a6cb4117f95dd135434f373',1,'INTERindex']]],
+  ['interaction_5fmap_1116',['Interaction_map',['../namespace_gen_const.html#ad847e6f5e498c18806f453d643ee8b1e',1,'GenConst']]],
+  ['interaction_5fmap_5ffile_5fname_1117',['Interaction_map_file_name',['../namespace_gen_const.html#aedb50c4da8ab08fd59098cc57795536a',1,'GenConst']]],
+  ['interaction_5frange_1118',['interaction_range',['../class_e_c_m.html#aea9e216085fca7c7ed0d44841a22545d',1,'ECM']]]
 ];
