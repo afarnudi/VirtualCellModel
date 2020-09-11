@@ -67,7 +67,7 @@ namespace GenConst {
     extern bool CreateCheckpoint;
     /**Load the context from OpenMM checkpoint (binary file). Default flase*/
     extern bool Load_from_checkpoint;
-    /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/*/
+    /**Load the context from OpenMM checkpoint (binary file. Default ./Results/Resumes/OpenMM/ */
     extern std::string Checkpoint_path;
     /**name of the OpenMM checkpoint file (binary file)*/
     extern std::string Checkpoint_file_name;
@@ -87,8 +87,6 @@ namespace GenConst {
     /**The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10*/
     extern int CMMotionRemoverStep;
     
-    //non config file parameters
-//    extern std::vector<std::vector<std::vector<double> > > data;
     extern std::vector<double> data_colection_times;
 
     extern std::vector<double> PeriodicBoxVector0;

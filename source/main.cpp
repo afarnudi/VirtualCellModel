@@ -453,6 +453,14 @@ int main(int argc, char **argv)
         }
         cout<<platformName.c_str()<<TRESET<<endl;
         
+        
+        std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
+        std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
+        std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
+        std::string Reporname="Results/"+GenConst::trajectory_file_name+buffer+"_report.txt";
+        generate_report(config_lines, Reporname);
+        
+        
         std::filebuf wfb;
         wfb.open (ckeckpoint_name.c_str(),std::ios::out);
         std::ostream wcheckpoint(&wfb);
@@ -462,9 +470,6 @@ int main(int argc, char **argv)
         chrono_clock_start = chrono::steady_clock::now();
         chrono_sys_clock_start = chrono::system_clock::now();
         
-        std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
-        std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
-        std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
         
         
         //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);

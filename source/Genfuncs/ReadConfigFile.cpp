@@ -12,6 +12,10 @@
 #include "Arg_pars.hpp"
 #include "cxxopts.hpp"
 #include "Configfile.hpp"
+#include "Membrane.h"
+#include "Actin.h"
+#include "ECM.h"
+#include "Chromatin.h"
 
 using namespace std;
 
@@ -125,6 +129,7 @@ void parse_genconfig_parameters(vector<string> lines){
     GenConst::Actin_label="act";
     GenConst::ECM_label="ecm";
     GenConst::Chromatin_label="chr";
+    GenConst::Checkpoint_path = "Results/Resumes/OpenMM/";
     
     assign_general_parameters(values);
     
@@ -229,3 +234,124 @@ void assign_general_parameters(GeneralParameters &defaults){
 }
 
 
+void generate_report(map<string, vector<string> > config_lines, string Reporname){
+    ofstream write_report;
+    write_report.open(Reporname.c_str());
+    
+    //First write everything under -GeneralParameters in the config file
+    for (auto &i : config_lines["-GeneralParameters"]) {
+        write_report<<i<<endl;
+    }
+    
+    write_report<<"#Default values that where used:"<<endl;
+    //Now fill in the defaults missing from the configfile
+    GeneralParameters values;
+    for (auto &param: values.GenParams){
+        bool add =true;
+        for (auto  &cparam: config_lines["-GeneralParameters"]) {
+            vector<string> split = split_and_check_for_comments(cparam);
+            if (split[0] == param.first) {
+                add =false;
+                break;
+            }
+        }
+        if (add) {
+            write_report<<param.first<<" "<<param.second[0]<<endl;
+        }
+    }
+    
+    if (GenConst::Num_of_Membranes!=0) {
+        write_report<<endl;
+        for (auto &i : config_lines["-Membrane"]) {
+            write_report<<i<<endl;
+        }
+        
+        write_report<<"#Default values that where used:"<<endl;
+        //Now fill in the defaults missing from the configfile
+        Membrane mem;
+        for (auto &param: mem.get_map()){
+            bool add =true;
+            for (auto  &cparam: config_lines["-Membrane"]) {
+                vector<string> split = split_and_check_for_comments(cparam);
+                if (split[0] == param.first) {
+                    add =false;
+                    break;
+                }
+            }
+            if (add) {
+                write_report<<param.first<<" "<<param.second[0]<<endl;
+            }
+        }
+    }
+    if (GenConst::Num_of_Actins!=0) {
+        write_report<<endl;
+        for (auto &i : config_lines["-Actin"]) {
+            write_report<<i<<endl;
+        }
+        
+        write_report<<"#Default values that where used:"<<endl;
+        //Now fill in the defaults missing from the configfile
+        Actin act;
+        for (auto &param: act.get_map()){
+            bool add =true;
+            for (auto  &cparam: config_lines["-Actin"]) {
+                vector<string> split = split_and_check_for_comments(cparam);
+                if (split[0] == param.first) {
+                    add =false;
+                    break;
+                }
+            }
+            if (add) {
+                write_report<<param.first<<" "<<param.second[0]<<endl;
+            }
+        }
+    }
+    
+    if (GenConst::Num_of_ECMs!=0) {
+        write_report<<endl;
+        for (auto &i : config_lines["-ECM"]) {
+            write_report<<i<<endl;
+        }
+        
+        write_report<<"#Default values that where used:"<<endl;
+        //Now fill in the defaults missing from the configfile
+        ECM ecm;
+        for (auto &param: ecm.get_map()){
+            bool add =true;
+            for (auto  &cparam: config_lines["-ECM"]) {
+                vector<string> split = split_and_check_for_comments(cparam);
+                if (split[0] == param.first) {
+                    add =false;
+                    break;
+                }
+            }
+            if (add) {
+                write_report<<param.first<<" "<<param.second[0]<<endl;
+            }
+        }
+    }
+    
+    if (GenConst::Num_of_Chromatins!=0) {
+        write_report<<endl;
+        for (auto &i : config_lines["-Chromatin"]) {
+            write_report<<i<<endl;
+        }
+        
+        write_report<<"#Default values that where used:"<<endl;
+        //Now fill in the defaults missing from the configfile
+        Chromatin chromo;
+        for (auto &param: chromo.get_map()){
+            bool add =true;
+            for (auto  &cparam: config_lines["-Chromatin"]) {
+                vector<string> split = split_and_check_for_comments(cparam);
+                if (split[0] == param.first) {
+                    add =false;
+                    break;
+                }
+            }
+            if (add) {
+                write_report<<param.first<<" "<<param.second[0]<<endl;
+            }
+        }
+    }
+}

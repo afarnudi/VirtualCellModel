@@ -1,62 +1,70 @@
-//
-//  main.cpp
-//  NodesOnSphere
-//
-//  Created by Ali Farnudi on 09/09/2020.
-//  Copyright © 2020 Ali Farnudi. All rights reserved.
-//
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include <math.h>
 #include <algorithm>
 #include <algorithm>
+#include <chrono>
 
-#include "Openmm.h"
+#include "OpenMM.h"
 #include "Openmm_structs.h"
 
 using namespace std;
 
-void generate_random_coordinates(int         N,
-                                 MyAtomInfo *atoms);
-void myWritePDBFrame(int frameNum,
-                     double timeInPs,
-                     const MyAtomInfo atoms[],
-                     string traj_name);
-void myGetOpenMMState(MyOpenMMData* omm,
-                      double& timeInPs,
-                      MyAtomInfo atoms[]);
-MyOpenMMData* init_openmm(MyAtomInfo *atoms,
-                          double stepSizeInFs);
-void export_xyz(MyAtomInfo* atoms,
-                string traj_name);
+void generate_random_coordinates(int N, MyAtomInfo *atoms);
+void myWritePDBFrame(int frameNum, double timeInPs, const MyAtomInfo atoms[], string traj_name);
+void myGetOpenMMState(MyOpenMMData* omm, double& timeInPs, MyAtomInfo atoms[]);
+MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs);
+void export_xyz(MyAtomInfo* atoms, string traj_name);
+void print_wall_clock_time(double sim_duration_per_sec);
+void print_real_time(chrono::time_point<chrono::steady_clock> chrono_clock_start,
+                     chrono::time_point<chrono::steady_clock> chrono_clock_end);
+void print_system_time(chrono::time_point<chrono::system_clock> chrono_clock_start,
+                       chrono::time_point<chrono::system_clock> chrono_clock_end);
+
+
+
+
+
+
 int main(int argc, const char * argv[]) {
     
+    auto chrono_clock_start = chrono::steady_clock::now();
+    auto chrono_sys_clock_start = chrono::system_clock::now();
+    clock_t tStart = clock();//Time the programme
+    
     int N = 100, EndOfList=-1;
-    string pdbname = "NodesOnSphere.pdb";
     
     
     if (argc>1) {
         N = stoi(argv[1]);
     }
-    //extra nodes at the origin to keep everything constrained;
-    N+=2;
+    string pdbname = "USphere_"+to_string(N)+"d.pdb";
+    //extra node at the origin to keep everything constrained;
+    N++;
+    //extra -1 at the end of list
     MyAtomInfo* atoms     = new MyAtomInfo[N+1];
     atoms[N].type         =EndOfList;
     generate_random_coordinates(N, atoms);
     
     
+    
     float progressp=0;
     double Step_Size_In_Fs =1;
     int savetime = 0;
-    double Report_Interval_In_Fs= 10000;
     double Simulation_Time_In_Ps =1000;
+    double Report_Interval_In_Fs= 10000;
     int NumSilentSteps = (int)(Report_Interval_In_Fs / Step_Size_In_Fs + 0.5);
     try {
         MyOpenMMData* omm = new MyOpenMMData();
         omm = init_openmm(atoms, Step_Size_In_Fs);
         string platformName = omm->context->getPlatform().getName();
+        
+        
+        
+        tStart = clock();
+        chrono_clock_start = chrono::steady_clock::now();
+        chrono_sys_clock_start = chrono::system_clock::now();
         
         cout<<"REMARK  Using OpenMM platform ";
         cout<<platformName.c_str()<<endl;
@@ -105,17 +113,31 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
+    print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
+    print_real_time(chrono_clock_start, chrono::steady_clock::now());
+    print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
+    
     export_xyz(atoms,pdbname);
     
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
 void export_xyz(MyAtomInfo* atoms,
                 string traj_name){
+    traj_name.erase(traj_name.end()-3,traj_name.end());
+    traj_name+="xyz";
     int EndOfList=-1;
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"w");
-    int index=0;
     for (int n=1; atoms[n].type != EndOfList; ++n){
         
         fprintf(pFile,"%8.3f %8.3f %8.3f\n",
@@ -144,7 +166,7 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
     
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     
-    for (int n=3; atoms[n].type != EndOfList; ++n) {
+    for (int n=1; atoms[n].type != EndOfList; ++n) {
         HarmonicBond->addBond(0, n, 1, 20000);
     }
     system.addForce(HarmonicBond);
@@ -300,40 +322,25 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
 
 void generate_random_coordinates(int N, MyAtomInfo* atoms){
     
-    for (int i=0; i<3; i++) {
-        atoms[i].type=0;
-        atoms[i].pdb = "memb";
-        atoms[i].energyInKJ = 0;
-        atoms[i].symbol = 'M';
-        atoms[i].velocityInNmperPs[0]=0;
-        atoms[i].velocityInNmperPs[1]=0;
-        atoms[i].velocityInNmperPs[2]=0;
-        atoms[i].radius=sqrt(4./N);
-    }
-    atoms[1].initPosInNm[0]=0;
-    atoms[1].initPosInNm[1]=0;
-    atoms[1].initPosInNm[2]=0;
-    atoms[1].posInNm[0]=0;
-    atoms[1].posInNm[1]=0;
-    atoms[1].posInNm[2]=0;
-    atoms[1].mass=0;
+    char pdblabel[]={'m','e','m','b'};
     
-    atoms[1].initPosInNm[0]=0;
-    atoms[1].initPosInNm[1]=0;
-    atoms[1].initPosInNm[2]=-1;
-    atoms[1].posInNm[0]=0;
-    atoms[1].posInNm[1]=0;
-    atoms[1].posInNm[2]=-1;
-    atoms[1].mass=0;
+    atoms[0].type=0;
+    atoms[0].pdb = pdblabel;
+    atoms[0].energyInKJ = 0;
+    atoms[0].symbol = 'M';
+    atoms[0].velocityInNmperPs[0]=0;
+    atoms[0].velocityInNmperPs[1]=0;
+    atoms[0].velocityInNmperPs[2]=0;
+    atoms[0].radius=sqrt(4./N);
+    atoms[0].initPosInNm[0]=0;
+    atoms[0].initPosInNm[1]=0;
+    atoms[0].initPosInNm[2]=0;
+    atoms[0].posInNm[0]=0;
+    atoms[0].posInNm[1]=0;
+    atoms[0].posInNm[2]=0;
+    atoms[0].mass=0;
     
-    atoms[2].initPosInNm[0]=0;
-    atoms[2].initPosInNm[1]=0;
-    atoms[2].initPosInNm[2]=1;
-    atoms[2].posInNm[0]=0;
-    atoms[2].posInNm[1]=0;
-    atoms[2].posInNm[2]=1;
-    
-    for (int i=3; i<N; i++) {
+    for (int i=1; i<N; i++) {
         vector<double> xyz(3,0);
         double theta=((double)rand()/(double)RAND_MAX)*M_PI;
         double phi=((double)rand()/(double)RAND_MAX)*2*M_PI;
@@ -356,7 +363,7 @@ void generate_random_coordinates(int N, MyAtomInfo* atoms){
             continue;
         }
         atoms[i].type=0;
-        atoms[i].pdb = "memb";
+        atoms[i].pdb = pdblabel;
         atoms[i].energyInKJ = 0;
         atoms[i].symbol = 'M';
         atoms[i].initPosInNm[0]=sin(theta)*cos(phi);
@@ -371,6 +378,7 @@ void generate_random_coordinates(int N, MyAtomInfo* atoms){
         atoms[i].mass=1;
         atoms[i].radius=sqrt(4./N);
     }
+    atoms[N].type=-1;
     
     
     
@@ -430,3 +438,57 @@ void myGetOpenMMState(MyOpenMMData* omm,
     }
 }
 
+
+void print_wall_clock_time(double sim_duration_per_sec){
+    
+    double sec_per_day     =60*60*24;
+    double sec_per_hour    =60*60;
+    double sec_per_min     =60;
+    
+    
+    int days =  sim_duration_per_sec/sec_per_day;
+    sim_duration_per_sec -= days * sec_per_day;
+    
+    int hours = sim_duration_per_sec/sec_per_hour;
+    sim_duration_per_sec -= hours * sec_per_hour;
+    
+    int mins = sim_duration_per_sec/sec_per_min ;
+    sim_duration_per_sec -= mins * sec_per_min;
+    
+    printf("Wall clock time of the simulation:\n");
+    //            printf("%.2f Days,\n%.2f Hours,\n%.2f Minutes,\n%.2f Seconds\n", days,hours,mins,sim_duration_per_sec);
+    printf("%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
+}
+
+
+void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
+                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end){
+    
+    auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
+    int secs;
+    int hours;
+    int mins;
+    cout << "\nchrono::steady_clock runtime: \n";
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
+    cout << hours << "\tHours\n";
+    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
+    cout << mins - hours * 60 << "\tMinutes\n";
+    secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
+    cout << secs - mins * 60 << "\tSeconds\n";
+}
+
+void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
+                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end){
+    
+    auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
+    int secs;
+    int hours;
+    int mins;
+    cout << "\nchrono::system_clock runtime: \n";
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
+    cout << hours << "\tHours\n";
+    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
+    cout << mins - hours * 60 << "\tMinutes\n";
+    secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
+    cout << secs - mins * 60 << "\tSeconds\n";
+}
