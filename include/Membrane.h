@@ -180,6 +180,7 @@ public:
     vector<vector<int> >    Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
+    vector<double>          Node_Bond_distances;
     vector<vector<int> >    Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -352,6 +353,10 @@ public:
     /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
     int get_node_pair(int bond_num, int node_id){
         return Node_Bond_list[bond_num][node_id];
+    }
+    /**Return the distance between node pair index. This list is initiated at the begining of the simulation.*/
+    int get_node_pair_distance(int bond_num){
+        return Node_Bond_distances[bond_num];
     }
     /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
     double get_node_mass(void){
