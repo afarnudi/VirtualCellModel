@@ -21,5 +21,5 @@ Please visit our [installation] page for more information.
 
 [installation]: https://afarnudi.github.io/Membrane_OBJ/md__doxygen__installation.html
 [VCM]: https://afarnudi.github.io/Membrane_OBJ/index.html
-[openMM] http://openmm.org "OpenMM"
-[Boost]https://www.boost.org
+[openMM]: http://openmm.org "OpenMM"
+[Boost]: https://www.boost.org
