@@ -256,6 +256,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a522229db4c05a0a927c1c9ac3bf29915"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a522229db4c05a0a927c1c9ac3bf29915">get_node_pair</a> (int bond_num, int node_id)</td></tr>
 <tr class="memdesc:a522229db4c05a0a927c1c9ac3bf29915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the id(int) of the nodes in the bonds.  <a href="class_membrane.html#a522229db4c05a0a927c1c9ac3bf29915">More...</a><br /></td></tr>
 <tr class="separator:a522229db4c05a0a927c1c9ac3bf29915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30248e98be1f9072bd62493481916fb5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a30248e98be1f9072bd62493481916fb5">get_node_pair_distance</a> (int bond_num)</td></tr>
+<tr class="memdesc:a30248e98be1f9072bd62493481916fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the distance between node pair index.  <a href="class_membrane.html#a30248e98be1f9072bd62493481916fb5">More...</a><br /></td></tr>
+<tr class="separator:a30248e98be1f9072bd62493481916fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b6e284f4bba349da2ddc1c14f914dc7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a7b6e284f4bba349da2ddc1c14f914dc7">get_node_mass</a> (void)</td></tr>
 <tr class="memdesc:a7b6e284f4bba349da2ddc1c14f914dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the node mass.  <a href="class_membrane.html#a7b6e284f4bba349da2ddc1c14f914dc7">More...</a><br /></td></tr>
 <tr class="separator:a7b6e284f4bba349da2ddc1c14f914dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -379,6 +382,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad4f0d5f17a9f50e1505e4264ba6e139a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a653506414e86b70ec87450c4639abaa5"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a653506414e86b70ec87450c4639abaa5">Node_Bond_list</a></td></tr>
 <tr class="separator:a653506414e86b70ec87450c4639abaa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0708c2399c065f006e493340e7fded53"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a0708c2399c065f006e493340e7fded53">Node_Bond_distances</a></td></tr>
+<tr class="separator:a0708c2399c065f006e493340e7fded53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16c7d8283b2b53178f1c0c8c8a3fe0cf"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#a16c7d8283b2b53178f1c0c8c8a3fe0cf">Triangle_Pair_Nodes</a></td></tr>
 <tr class="separator:a16c7d8283b2b53178f1c0c8c8a3fe0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6661af8931b8e555f4cb9fbdcb394d0"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membrane.html#ac6661af8931b8e555f4cb9fbdcb394d0">Node_Velocity</a></td></tr>
@@ -2301,6 +2306,35 @@ Protected Attributes</h2></td></tr>
 
 <p>Return the id(int) of the nodes in the bonds. </p>
 <p>The id of each node in the bond list is stored in the first (0) and the second (1) id slot. </p>
+
+</div>
+</div>
+<a id="a30248e98be1f9072bd62493481916fb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30248e98be1f9072bd62493481916fb5">&#9670;&nbsp;</a></span>get_node_pair_distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Membrane::get_node_pair_distance </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bond_num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the distance between node pair index. </p>
+<p>This list is initiated at the begining of the simulation. </p>
 
 </div>
 </div>
@@ -4475,6 +4509,20 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0708c2399c065f006e493340e7fded53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0708c2399c065f006e493340e7fded53">&#9670;&nbsp;</a></span>Node_Bond_distances</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Membrane::Node_Bond_distances</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a653506414e86b70ec87450c4639abaa5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a653506414e86b70ec87450c4639abaa5">&#9670;&nbsp;</a></span>Node_Bond_list</h2>
 
@@ -5299,7 +5347,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_membrane.html">Membrane</a></li>
-    <li class="footer">Generated on Fri Sep 11 2020 15:28:45 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+    <li class="footer">Generated on Sat Sep 12 2020 13:05:23 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
   </ul>
 </div>
 </body>

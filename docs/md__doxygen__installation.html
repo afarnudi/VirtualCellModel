@@ -89,11 +89,12 @@ $(document).ready(function(){initNavTree('md__doxygen__installation.html',''); i
 <div class="title">Installing VCM </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>VCM is a software package written in C++. It currently runs on MacOS and Linux. To build it you need a c++ compiler (g++, llvm, etc). VCM uses OpenMM as its main engin. If you don't have OpenMM please read the next section. If you already have OpenMM installed, you need to:</p>
-<p>STEP 1: Clone the Membrane_OBJ project from our <a href="https://github.com/afarnudi/Membrane_OBJ" title="github">github</a> page.</p>
-<p>STEP 2: Change directory to Membrane_OBJ.</p>
-<p>STEP 3: Run makefile by typing 'make'. You may need to modify the make file depending on the openmm installation directory on your machine if OpenMM is installed in a differnet directory than /usr/local/openmm/.</p>
-<p>STEP 4: Run ./VCM -h for help.</p>
+<div class="textblock"><p>VCM is a software package written in C++. It currently runs on MacOS and Linux. To build it you need a c++ compiler (g++, llvm, etc). VCM uses <a href="http://openmm.org" title="OpenMM">OpenMM</a> as its main engin. If you don't have OpenMM please read the next section. If you already have OpenMM installed, you need to:</p>
+<p>STEP 1: Install the <a href="https://www.boost.org">Boost</a> library</p>
+<p>STEP 2: Clone the Membrane_OBJ project from our <a href="https://github.com/afarnudi/Membrane_OBJ" title="github">github</a> page.</p>
+<p>STEP 3: Change directory to Membrane_OBJ.</p>
+<p>STEP 4: Run makefile by typing 'make'. You may need to modify the make file depending on the openmm installation directory on your machine if OpenMM is installed in a differnet directory than /usr/local/openmm/.</p>
+<p>STEP 5: Run ./VCM -h for help.</p>
 <h1><a class="anchor" id="autotoc_md30"></a>
 OpenMM</h1>
 <p>The Vertual Cell Model package takes advantage of OpenMM as its main molecular dynamics engine. Please use the instructions on the <a href="http://openmm.org" title="OpenMM">OpenMM</a> webpage to install OpenMM.</p>
@@ -104,7 +105,7 @@ OpenMM</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Sep 11 2020 15:28:45 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+    <li class="footer">Generated on Sat Sep 12 2020 13:05:23 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
   </ul>
 </div>
 </body>
