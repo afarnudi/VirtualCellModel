@@ -67,8 +67,8 @@ var NAVTREEINDEX3 =
 "functions_d.html":[6,2,0,3],
 "functions_e.html":[6,2,0,4],
 "functions_f.html":[6,2,0,5],
-"functions_func.html":[6,2,1],
 "functions_func.html":[6,2,1,0],
+"functions_func.html":[6,2,1],
 "functions_func_b.html":[6,2,1,1],
 "functions_func_c.html":[6,2,1,2],
 "functions_func_e.html":[6,2,1,3],
@@ -101,8 +101,8 @@ var NAVTREEINDEX3 =
 "functions_t.html":[6,2,0,17],
 "functions_u.html":[6,2,0,18],
 "functions_v.html":[6,2,0,19],
-"functions_vars.html":[6,2,2],
 "functions_vars.html":[6,2,2,0],
+"functions_vars.html":[6,2,2],
 "functions_vars_b.html":[6,2,2,1],
 "functions_vars_c.html":[6,2,2,2],
 "functions_vars_d.html":[6,2,2,3],
@@ -166,6 +166,7 @@ var NAVTREEINDEX3 =
 "md__doxygen__i_d_e__setup.html#autotoc_md28":[3,2],
 "md__doxygen__installation.html":[4],
 "md__doxygen__installation.html#autotoc_md30":[4,0],
+"md__doxygen__installation.html#autotoc_md31":[4,1],
 "namespace_gen_const.html":[5,0,0],
 "namespacemembers.html":[5,1,0],
 "namespacemembers_vars.html":[5,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "struct_my_open_m_m_data.html#a30021edc64e76e4a8383eff123e10319":[6,0,11,8],
 "struct_my_open_m_m_data.html#a471489f3c9bd1e5a54fc5202b71b6b96":[6,0,11,7],
 "struct_my_open_m_m_data.html#a50a7654af50ee04f08a9f8cd07298724":[6,0,11,11],
-"struct_my_open_m_m_data.html#a5284fe93e3178234282fdbad2d80c07e":[6,0,11,5],
-"struct_my_open_m_m_data.html#a8b18e9a40611765e2c966495e2a339bb":[6,0,11,1]
+"struct_my_open_m_m_data.html#a5284fe93e3178234282fdbad2d80c07e":[6,0,11,5]
 };

@@ -12,6 +12,15 @@ STEP 4: Run makefile by typing 'make'. You may need to modify the make file depe
 
 STEP 5: Run ./VCM -h for help.
 
+## Update VCM ##
+To update VCM:
+
+STEP 1: Delete the binary output file
+
+STEP 2: Enter:  
+``` console
+make clean;make -j4
+```
 
 ## OpenMM ##
 The Vertual Cell Model package takes advantage of OpenMM as its main molecular dynamics engine. Please use the instructions on the [OpenMM] webpage to install OpenMM. 

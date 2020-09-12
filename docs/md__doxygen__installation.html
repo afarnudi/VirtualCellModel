@@ -96,6 +96,11 @@ $(document).ready(function(){initNavTree('md__doxygen__installation.html',''); i
 <p>STEP 4: Run makefile by typing 'make'. You may need to modify the make file depending on the openmm installation directory on your machine if OpenMM is installed in a differnet directory than /usr/local/openmm/.</p>
 <p>STEP 5: Run ./VCM -h for help.</p>
 <h1><a class="anchor" id="autotoc_md30"></a>
+Update VCM</h1>
+<p>To update VCM:</p>
+<p>STEP 1: Delete the binary output file</p>
+<p>STEP 2: Enter: </p><div class="fragment"><div class="line">make clean;make -j4</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md31"></a>
 OpenMM</h1>
 <p>The Vertual Cell Model package takes advantage of OpenMM as its main molecular dynamics engine. Please use the instructions on the <a href="http://openmm.org" title="OpenMM">OpenMM</a> webpage to install OpenMM.</p>
 <p>Note: Please install the C++ API. If you have already installed OpenMM with 'Conda' on your system you still need to install the C++ API from the source code (more information on <a href="http://openmm.org" title="OpenMM">OpenMM</a> website). You may need to install additional software packages (OpenCL, FFTW,SWIG, etc) depending on your choice of platforms (GPU, CPU). </p>
@@ -105,7 +110,7 @@ OpenMM</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Sep 12 2020 13:05:23 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+    <li class="footer">Generated on Sat Sep 12 2020 13:13:18 for The Virtual Cell Model by <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
   </ul>
 </div>
 </body>

@@ -52,7 +52,8 @@ var NAVTREE =
       [ "Create a directory for your results", "md__doxygen__i_d_e__setup.html#autotoc_md28", null ]
     ] ],
     [ "Installing VCM", "md__doxygen__installation.html", [
-      [ "OpenMM", "md__doxygen__installation.html#autotoc_md30", null ]
+      [ "Update VCM", "md__doxygen__installation.html#autotoc_md30", null ],
+      [ "OpenMM", "md__doxygen__installation.html#autotoc_md31", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -87,7 +88,7 @@ var NAVTREEINDEX =
 "class_actin.html#a3da7cae31225a5b796fbb98870df03b2",
 "class_e_c_m.html#a1c990881dae9203c2cb64471997ec90b",
 "class_membrane.html#abe50bfd82f67d5fa2ed233a9ba7631fc",
-"struct_my_open_m_m_data.html#abd6cf5b786c5093aca60cbbb82506b4e"
+"struct_my_open_m_m_data.html#a8b18e9a40611765e2c966495e2a339bb"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
