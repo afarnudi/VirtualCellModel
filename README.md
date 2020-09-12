@@ -7,7 +7,9 @@ Please visit the [VCM] website for more information.
 
 # Download and install
 Required softwares:
+
 [openMM]
+
 [Boost]
 
 Step 1: Clone.
