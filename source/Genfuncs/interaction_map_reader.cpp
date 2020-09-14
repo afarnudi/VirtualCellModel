@@ -16,11 +16,22 @@ vector<vector<int> > parse_interactiontable_parameters(vector<string> lines){
     }
     
     int row =1;
-    lines[0].erase(lines[0].begin(),lines[0].end());
-//    for (auto & line : lines) {
+    //erase the header
+    lines.erase(lines.begin());
+    
     for (int i=0; i<table_size ; i++) {
+        
         string line = lines[i];
+        cout<<i<<" ";
+        cout<<line<<endl;
         vector<string> split = split_and_check_for_comments(line);
+        for(auto &i:split){
+            cout<<"-"<<i<<"- ";
+        }
+        cout<<endl;
+        if (split.size()==0) {
+            i--;
+        }
         if (split.size()>0) {
             if (is_interaction(split[1])) {
                 for (int i=0; i<row; i++) {
@@ -29,10 +40,12 @@ vector<vector<int> > parse_interactiontable_parameters(vector<string> lines){
                 row++;
             }
         }
-        if (row == table_size) {
+        //I have placed this here for the programme to stop if there is a bigger table in the config file;
+        if (row-1 == table_size) {
             break;
         }
     }
+    
     return inter_table;
 }
 
