@@ -32,12 +32,16 @@ private: //(if we define these constants as private members of the class, we can
     double Spring_coefficient=10.0; // stretching constant
     double Damping_coefficient=0.0; // Viscosity of the Membrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were involved).
     double Spring_force_cut_off=1000.0;
-    double Shift_in_X_direction=0.0; //???
-    double Shift_in_Z_direction=0.0; //???
-    double Shift_in_Y_direction=0.0; //???
-    double x_speed=0.0; //???
-    double y_speed=0.0;
-    double z_speed=0.0;
+    /**Trnaslate the initial location of all nodes before the simulaiton begins.*/
+    vector<double> Shift_position_xyzVector;
+    /**Add velocity vector to the initial velocity of nodes before the simulaiton begins.*/
+    vector<double> Shift_velocities_xyzVector;
+//    double Shift_in_X_direction=0.0; //???
+//    double Shift_in_Z_direction=0.0; //???
+//    double Shift_in_Y_direction=0.0; //???
+//    double x_speed=0.0; //???
+//    double y_speed=0.0;
+//    double z_speed=0.0;
     vector<vector<int > > virtual_bond_pairs;
     
     double bond_length=0;
@@ -48,6 +52,10 @@ private: //(if we define these constants as private members of the class, we can
     int    num_of_total_bonds=0;
     
     double rescale_factor=1;
+    
+    bool importcoordiantes = false;
+    string import_file_name;
+    bool ExportGeneratedCoordinates = false;
     
     double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -126,6 +134,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
 //    void Thermostat_Bussi(double MD_T);
     void Results (string label);
     void build_random_chain(void);
+    void random_walk_gen(double velocity_COM[3]);
     void Force_Calculator();
     void Force_Calculator_2();
     void FENE(void);
@@ -145,6 +154,9 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     double get_bond_length(void){
         return bond_length;
     }
+    
+    /** Export position and velocities to txt file. This file can be later imported to initiate the chromatin.*/
+    void export_coordinates(void);
     
     /**return a 2 dimentional list where the first column of each row is the index  of the virtual site on the chromatin and the second and third column correspond to the real sites that are needed for coordiante calculations. the weights can be obtained through the "get_Vsite_binding_weight_list" member.  */
     vector<vector<int> > get_Vsite_and_bindings_list(void){
@@ -236,17 +248,17 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     }
     void shift_node_positions(void){
         for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]+=Shift_in_X_direction;
-            Node_Position[i][1]+=Shift_in_Y_direction;
-            Node_Position[i][2]+=Shift_in_Z_direction;
+            Node_Position[i][0]+=Shift_position_xyzVector[0];
+            Node_Position[i][1]+=Shift_position_xyzVector[1];
+            Node_Position[i][2]+=Shift_position_xyzVector[2];
         }
 //        std::cout<<"Chromatin positions shifted to:\n"<<Shift_in_X_direction<<" "<<Shift_in_Y_direction<<" "<<Shift_in_Z_direction<<std::endl;
     }
     void shift_node_velocities(void){
         for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Velocity[i][0]+=x_speed;
-            Node_Velocity[i][1]+=y_speed;
-            Node_Velocity[i][2]+=z_speed;
+            Node_Velocity[i][0]+=Shift_velocities_xyzVector[0];
+            Node_Velocity[i][1]+=Shift_velocities_xyzVector[1];
+            Node_Velocity[i][2]+=Shift_velocities_xyzVector[2];
         }
     }
     int get_num_of_nodes(void){
@@ -338,16 +350,30 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         Params["ImportCoordinates"] = values;
         insertOrder.push_back("ImportCoordinates");
         
-        values[0] ="10";
+        values[0] ="0";
         values[1] ="#Number of Chromatin nodes on a generated self avoiding random chain . If you are importing coordinates, this parameter will be ignored. Default 10";
         Params["GenerateRandomChain"] = values;
         insertOrder.push_back("GenerateRandomChain");
         
-        values[0] ="10";
+        values[0] ="false";
+        values[1] ="#If \"true\" The programme will write the generated coordinates that can be imported later. Default false";
+        Params["ExportGeneratedCoordinates"] = values;
+        insertOrder.push_back("ExportGeneratedCoordinates");
+        
+        values[0] ="1";
         values[1] ="#Number of node types on the chain. For more than one node type, multiple LJsigma and LJepsillon can be defined to customise long range interactions. Default 10";
         Params["NodeTypes"] = values;
         insertOrder.push_back("NodeTypes");
         
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value 0. If the Chromatin is interacting with another class, the Sigma between them will be calculated as the average of the class's sigmas: Sigma {Chromatin & A} = 0.5(sigma{Chromatin}+Sigma{A}).  \n#If the chromatin has more than 1 node type, additional LJ sigmas should be provided, if not the default value (2.5*node radius) will be assigned to them. Example for 3 node types: LJsigma 1 3 2.5";
+        Params["LJsigma"] = values;
+        insertOrder.push_back("LJsigma");
+        
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the Chromatin is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Chromatin & A} = sqrt(epsillon{Chromatin}*+epsillon{A}). \n#If the chromatin has more than 1 node type, additional LJ epsiolnes should be provided, if not the default value (0) will be assigned to them. Example for 3 node types: LJepsilon 2 4 7";
+        Params["LJepsilon"] = values;
+        insertOrder.push_back("LJepsilon");
         
         values[0] ="1";
         values[1] ="#Mass asssigned to each node. Default value 1";
@@ -405,6 +431,8 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("OptimiseBondRadius");
         
         
+        
+        
     }
     
     std::map<string, vector<string> > get_map(){
@@ -416,6 +444,8 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     void assign_key_value(string key, string value){
         Params[key][0]=value;
     }
+    void assign_parameters(void);
+    void consistancy_check(void);
 };
 
 #endif // CHROMATIN_H

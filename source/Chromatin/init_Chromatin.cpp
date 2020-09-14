@@ -23,11 +23,17 @@ void Chromatin::initialise(void){
     });
     cout<<TPINK<<"\nInitialising the Chromatin Class..."<<TRESET<<endl;
     build_random_chain();
+    cout<<"Generated a self avoiding random walk chain."<<endl;
     shift_node_positions();
+    cout<<"Shifted positions. to "<<Shift_position_xyzVector[0]<< " "<<Shift_position_xyzVector[1]<< " "<<Shift_position_xyzVector[2]<< " " <<endl;
     shift_node_velocities();
+    cout<<"Shifted velocities."<<endl;
     
     pdb_label_check();
     
+    if (ExportGeneratedCoordinates) {
+        export_coordinates();
+    }
 //    Contact_Matrix.resize(Num_of_Nodes);
 //    for (int i=0; i<Num_of_Nodes; i++) {
 //        Contact_Matrix[i].resize(Num_of_Nodes, 0);

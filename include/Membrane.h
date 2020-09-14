@@ -447,7 +447,7 @@ public:
         
         
     }
-
+    
     
     void shift_velocity (double vx, double vy, double vz){
         for (int i=0; i<Num_of_Nodes; i++) {

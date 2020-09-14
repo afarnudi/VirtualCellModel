@@ -1,8 +1,8 @@
+#include <sstream>
+
 #include "Chromatin.h"
 
-using std::cout;
-using std::endl;
-
+using namespace std;
 void Chromatin::import_coordinates(string import_file_name){
     cout<<TPINK<<"Importing Chromatin coordinates:"<<endl;
 //    cout<<import_file_name<<endl<<endl;
@@ -26,9 +26,37 @@ void Chromatin::import_coordinates(string import_file_name){
     
     double temp_vector[3];
     
-    while (true) {
-        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
-        if (read_coordinate_file.eof()) break;
+//    while (true) {
+//        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
+//        if (read_coordinate_file.eof()) break;
+//        Node_Position.push_back(read_double);
+//        if (Num_of_Nodes>0) {
+//            temp_vector[0] = Node_Position[Num_of_Nodes][0]-Node_Position[Num_of_Nodes-1][0];
+//            temp_vector[1] = Node_Position[Num_of_Nodes][1]-Node_Position[Num_of_Nodes-1][1];
+//            temp_vector[2] = Node_Position[Num_of_Nodes][2]-Node_Position[Num_of_Nodes-1][2];
+//
+//            bond_length += vector_length(temp_vector);
+//        }
+//
+//        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
+//        Node_Velocity.push_back(read_double);
+//        Node_Force.push_back(zero_double);
+//
+//        Num_of_Nodes++;
+//    }
+    
+    string line;
+    while (!read_coordinate_file.eof()) {
+        getline(read_coordinate_file, line);
+        istringstream iss(line);
+        vector<string> words(istream_iterator<string>{iss}, istream_iterator<string>());
+        if (words.size()!=6) {
+            break;
+        }
+        read_double[0]=stod(words[0]);
+        read_double[1]=stod(words[1]);
+        read_double[2]=stod(words[2]);
+        
         Node_Position.push_back(read_double);
         if (Num_of_Nodes>0) {
             temp_vector[0] = Node_Position[Num_of_Nodes][0]-Node_Position[Num_of_Nodes-1][0];
@@ -37,14 +65,15 @@ void Chromatin::import_coordinates(string import_file_name){
             
             bond_length += vector_length(temp_vector);
         }
+        read_double[0]=stod(words[3]);
+        read_double[1]=stod(words[4]);
+        read_double[2]=stod(words[5]);
         
-        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
         Node_Velocity.push_back(read_double);
         Node_Force.push_back(zero_double);
         
         Num_of_Nodes++;
     }
-    
     cout<<"Number of nodes\t"<<Num_of_Nodes<<endl;
     
     bond_length/=Num_of_Nodes-1.0;

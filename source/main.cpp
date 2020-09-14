@@ -271,7 +271,7 @@ int main(int argc, char **argv)
                 Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
-                Chromatins[i].import_config(chromatin_config_list[i]);
+                Chromatins[i].import_config(chromatin_configs[i]);
                 chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
             }
         }

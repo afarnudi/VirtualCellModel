@@ -118,9 +118,9 @@ void Chromatin::generate_report(void)
         Report<<"Membrane Spring Model:\tHoukian"<<endl;
         
     }
-    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
-    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
-    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
+//    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
+//    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
+//    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
     
     Report<<"num of node types = "<<num_of_node_types<<endl;
     Report<<"epsilon_LJ\tsigma_LJ\n--------------------\n";
@@ -129,3 +129,23 @@ void Chromatin::generate_report(void)
     }
     
 }
+
+void Chromatin::export_coordinates(void){
+    std::string traj_name="Results/"+GenConst::trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+".txt";
+    
+    std::ofstream exportcoords;
+    exportcoords.open(traj_name.c_str());
+    
+    if (!exportcoords.is_open()){
+        string errorMessage = TWARN;
+        errorMessage+="I can't write the chromatin initial coordinates to storage. \nPath: "+traj_name;
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    for (int i=0; i<Num_of_Nodes; i++) {
+        
+        exportcoords<<std::fixed << std::setprecision(8)<<Node_Position[i][0]<<" "<<Node_Position[i][1]<<" "<<Node_Position[i][2]<<" "<<Node_Velocity[i][0]<<" "<<Node_Velocity[i][2]<<" "<<Node_Velocity[i][3]<<"\n";
+    }
+    exportcoords.close();
+}
+

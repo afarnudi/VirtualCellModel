@@ -14,13 +14,14 @@ using std::cout;
 using std::endl;
 
 
+
 void Chromatin::build_random_chain(void){
     
     if (bond_length == 0) {
         bond_length = Node_radius*2.1;
     }
     
-    Node_Position.resize(Num_of_Nodes);
+    
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
     
@@ -31,10 +32,51 @@ void Chromatin::build_random_chain(void){
     {
         Node_Velocity[i].resize(3,0);
         Node_Force[i].resize(3,0);
-        Node_Position[i].resize(3,0);
     }
 //    const double PI  =3.141592653589793238463;
+    int attempt=0;
+    cout<<endl;
+    try{
+      random_walk_gen(velocity_COM);
+    }
+    catch (int e){
+      
+        attempt++;
+//        cout<<"attempt "<<attempt<<endl;
+        printf("attempt # %d \r",attempt);
+        cout<< std::flush;
+        cout<<"attempt "<<attempt<<endl;
+        if (attempt>2000) {
+            cout<<endl;
+            cout<<"I have tried and I can't generate a self avoiding chain with these parameters. \n";
+            exit(0);
+        }
+        random_walk_gen(velocity_COM);
+    }
+    cout<<endl;
+    velocity_COM[0]/=Num_of_Nodes;
+    velocity_COM[1]/=Num_of_Nodes;
+    velocity_COM[2]/=Num_of_Nodes;
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        for (int j=0; j<3; j++) {
+            Node_Velocity[i][j] -= velocity_COM[j];
+        }
+    }
+}
+
+void Chromatin::random_walk_gen(double velocity_COM[3]){
+    
+    velocity_COM[0]=0;
+    velocity_COM[1]=0;
+    velocity_COM[2]=0;
+    Node_Position.clear();
+    Node_Position.resize(Num_of_Nodes);
+    for(auto &pos:Node_Position){
+        pos.resize(3,0);
+    }
     int attempt_counter=0;
+    srand(time(NULL));
     
     for (int i=1; i<Num_of_Nodes; i++) {
         double theta=((double)rand()/(double)RAND_MAX)*M_PI;
@@ -51,8 +93,8 @@ void Chromatin::build_random_chain(void){
                 accept_random_step=false;
                 attempt_counter++;
                 if (attempt_counter>1000) {
-                    cout<<"The chromatin has reached a dead end (chain length = "<<i<<" ) before reaching the set node number"<<Num_of_Nodes<<"\n";
-                    exit(EXIT_FAILURE);
+//                    cout<<"The chromatin has reached a dead end (chain length = "<<i<<" ) before reaching the set node number"<<Num_of_Nodes<<"\n";
+                    throw 0;
                 }
                 break;
             }
@@ -73,17 +115,4 @@ void Chromatin::build_random_chain(void){
             velocity_COM[2] += Node_Velocity[i][2];
         }
     } // for (int i=1; i<Num_of_Nodes; i++)
-    
-    
-    
-    
-    velocity_COM[0]/=Num_of_Nodes;
-    velocity_COM[1]/=Num_of_Nodes;
-    velocity_COM[2]/=Num_of_Nodes;
-    
-    for (int i=0; i<Num_of_Nodes; i++) {
-        for (int j=0; j<3; j++) {
-            Node_Velocity[i][j] -= velocity_COM[j];
-        }
-    }
 }

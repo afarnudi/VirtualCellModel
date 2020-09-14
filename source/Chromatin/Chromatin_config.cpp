@@ -7,7 +7,6 @@ using namespace std;
 void Chromatin::import_config(vector<string> configlines){
     //first line is the 'key'
     configlines.erase(configlines.begin());
-    
     //replace the default values with the parameters read from the Config file
     for (int i=0; i<configlines.size(); i++) {
         if(configlines[i].size()!=0){
@@ -15,22 +14,191 @@ void Chromatin::import_config(vector<string> configlines){
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);
-                //Only replace parameters that actually exist in the Membrane parameters and ignor anythin else;
+                //Only replace parameters that actually exist in the Chromatin parameters and ignor anythin else;
                 if (it != Params.end()) {
                     configlines[i].erase(configlines[i].begin(),configlines[i].begin()+int(split[0].size()) );
                     it->second[0] = configlines[i];
                 } else {
-                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Membrane parameter."<<TRESET<<endl;
+                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Chromatin parameter."<<TRESET<<endl;
                 }
             }
         }
     }
     //Tell the class how to inturpret the strings in the config file
-//    assign_parameters();
+    assign_parameters();
     //Check if all the parameters are consistant with the physics/Class enviroment
-//    consistancy_check();
+    consistancy_check();
     //Call the initiliser from the old code
+    if (importcoordiantes) {
+        import_coordinates(import_file_name);
+    } else {
+        initialise();
+    }
 //    initialise(Mesh_file_name);
+}
+void Chromatin::consistancy_check(){
+    if (importcoordiantes) {
+        
+        if (Num_of_Nodes != 0) {
+            string errorMessage = TWARN;
+            errorMessage +="The chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". You cannot select both simultaniously. Consult the template configuration for more information.";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        } else {
+            ifstream readcoords(import_file_name.c_str());
+            if (!readcoords.is_open()) {
+                string errorMessage = TWARN;
+                errorMessage +="Read Error: Could not read '"+import_file_name+"'";
+                errorMessage +=TRESET;
+                throw std::runtime_error(errorMessage);
+                
+            }
+        }
+    } else if (Num_of_Nodes == 0){
+        string errorMessage = TWARN;
+        errorMessage +="The chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". Non was selected. Consult the template configuration for more information.";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    epsilon_LJ.resize(num_of_node_types,0);
+    sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
+    for (auto const& it : Params){
+            vector<string> split = split_and_check_for_comments(it.second[0]);
+            
+        if (it.first == "LJsigma") {
+            sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
+            if (split.size()==1) {
+                if (split[0] != "0") {
+                    sigma_LJ[0]= stod(split[0]);
+                }
+            } else {
+                if (split.size()>num_of_node_types) {
+                    cout<<TWARN<<"Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". The first "<<num_of_node_types<<" will be used: ";
+                    for (int i=0; i<num_of_node_types; i++) {
+                        cout<<TBOLD<<split[i]<<" ";
+                        sigma_LJ[i] = stod(split[i]);
+                    }
+                    cout<<TRESET<<endl;
+                } else if (split.size()>num_of_node_types){
+                    cout<<TWARN<<"Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". Will fill with default values:";
+                    for (int i=0; i<split.size(); i++) {
+                        sigma_LJ[i] = stod(split[i]);
+                        cout<<TBOLD<<split[i]<<" ";
+                    }
+                    for (int i=split.size(); i<num_of_node_types; i++) {
+                        cout<<TBOLD<<sigma_LJ[i]<<" ";
+                    }
+                    cout<<TRESET<<endl;
+                }
+                
+            }
+        } else if (it.first == "LJepsilon"){
+            epsilon_LJ.resize(num_of_node_types,0);
+            if (split.size()==1) {
+                if (split[0] != "0") {
+                    epsilon_LJ[0]= stod(split[0]);
+                }
+            } else {
+                if (split.size()>num_of_node_types) {
+                    cout<<TWARN<<"Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". The first "<<num_of_node_types<<" will be used: ";
+                    for (int i=0; i<num_of_node_types; i++) {
+                        cout<<TBOLD<<split[i]<<" ";
+                        epsilon_LJ[i] = stod(split[i]);
+                    }
+                    cout<<TRESET<<endl;
+                    
+                } else if (split.size()>num_of_node_types){
+                    cout<<TWARN<<"Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". Will fill with default values:";
+                    for (int i=0; i<split.size(); i++) {
+                        epsilon_LJ[i] = stod(split[i]);
+                        cout<<TBOLD<<split[i]<<" ";
+                    }
+                    for (int i=split.size(); i<num_of_node_types; i++) {
+                        cout<<TBOLD<<epsilon_LJ[i]<<" ";
+                    }
+                    cout<<TRESET<<endl;
+                }
+                
+            }
+        }
+        
+    }
+    
+    
+}
+void Chromatin::assign_parameters(void){
+    for (auto const& it : Params){
+        vector<string> split = split_and_check_for_comments(it.second[0]);
+        
+        if (it.first == "ImportCoordinates") {
+            if (split[0] != "path/to/my/coordinates.txt") {
+                importcoordiantes =true;
+                string filepathe = split[0];
+                
+                import_file_name = split[0];
+            }
+        } else if (it.first == "GenerateRandomChain") {
+            Num_of_Nodes = stoi(split[0]);
+        } else if (it.first == "ExportGeneratedCoordinates") {
+            if(split[0]=="true"){
+                ExportGeneratedCoordinates=true;
+            } else if (split[0]=="false"){
+                ExportGeneratedCoordinates=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "NodeTypes") {
+            num_of_node_types = stoi(split[0]);
+        } else if (it.first == "NodeMass") {
+            Node_Mass = stod(split[0]);
+        } else if (it.first == "NodeRadius") {
+            Node_radius = stod(split[0]);
+        } else if (it.first == "SpringModel") {
+            if (split[0]=="H") {
+                spring_model = 2;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "SpringCoeff") {
+            Spring_coefficient = stod(split[0]);
+        } else if (it.first == "DampingCoeff") {
+            Damping_coefficient = stod(split[0]);
+        } else if (it.first == "CoordinateTranslateVector") {
+            Shift_position_xyzVector.resize(3,0);
+            Shift_position_xyzVector[0] = stod(split[0]);
+            Shift_position_xyzVector[1] = stod(split[1]);
+            Shift_position_xyzVector[2] = stod(split[2]);
+        } else if (it.first == "VelocityShiftVector") {
+            Shift_velocities_xyzVector.resize(3,0);
+            Shift_velocities_xyzVector[0] = stod(split[0]);
+            Shift_velocities_xyzVector[1] = stod(split[1]);
+            Shift_velocities_xyzVector[2] = stod(split[2]);
+        } else if (it.first == "Scale") {
+            rescale_factor = stod(split[0]);
+        } else if (it.first == "VirtualBondLength") {
+            bond_length = stod(split[0]);
+        } else if (it.first == "VirtualBondRadius") {
+            bond_radius = stod(split[0]);
+        } else if (it.first == "OptimiseBondRadius") {
+            if(split[0]=="true"){
+                optimise_bond_radius=true;
+            } else if (split[0]=="false"){
+                optimise_bond_radius=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        }
+        
+    }
 }
 
 void Chromatin::import_config(string config_file_name){
@@ -42,6 +210,8 @@ void Chromatin::import_config(string config_file_name){
     bool resume_flag=false;
     bool import_flag=false;
     GenConst::ChromatinVirtualSites = false;
+    Shift_position_xyzVector.resize(3,0);
+    Shift_velocities_xyzVector.resize(3,0);
     
     if (read_config_file.is_open()) {
         if (!GenConst::Testmode) {
@@ -156,6 +326,7 @@ void Chromatin::import_config(string config_file_name){
 void Chromatin::set_map_parameter(string param_name, double param_value){
     
     //    map<string, double>::iterator it;
+    
     if (param_name=="Node_Mass") {
         Node_Mass=param_value;
     } else if (param_name=="Node_radius"){
@@ -167,17 +338,17 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
     } else if (param_name=="Damping_coefficient"){
         Damping_coefficient=param_value;
     } else if (param_name=="Shift_in_X_direction"){
-        Shift_in_X_direction=param_value;
+        Shift_position_xyzVector[0]=param_value;
     } else if (param_name=="Shift_in_Y_direction"){
-        Shift_in_Y_direction=param_value;
+        Shift_position_xyzVector[1]=param_value;
     } else if (param_name=="Shift_in_Z_direction"){
-        Shift_in_Z_direction=param_value;
+        Shift_position_xyzVector[2]=param_value;
     } else if (param_name=="x_speed"){
-        x_speed=param_value;
+        Shift_velocities_xyzVector[0]=param_value;
     } else if (param_name=="y_speed"){
-        y_speed=param_value;
+        Shift_velocities_xyzVector[1]=param_value;
     } else if (param_name=="z_speed"){
-        z_speed=param_value;
+        Shift_velocities_xyzVector[2]=param_value;
     } else if (param_name=="rescale_factor"){
         rescale_factor=param_value;
     } else if (param_name=="Num_of_Nodes" && Num_of_Nodes==0){
