@@ -22,13 +22,8 @@ vector<vector<int> > parse_interactiontable_parameters(vector<string> lines){
     for (int i=0; i<table_size ; i++) {
         
         string line = lines[i];
-        cout<<i<<" ";
-        cout<<line<<endl;
         vector<string> split = split_and_check_for_comments(line);
-        for(auto &i:split){
-            cout<<"-"<<i<<"- ";
-        }
-        cout<<endl;
+        
         if (split.size()==0) {
             i--;
         }
