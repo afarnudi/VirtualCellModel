@@ -56,12 +56,7 @@ void Membrane::generate_ulm_mode(int Ell, int M, double uLM, double radius){
     for(int i=0;i<Num_of_Nodes;i++){
         spherical_positions[i][0] = radius*(1+uLM*real(ylmlist[i]));
         Node_Position[i]=convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
-//        Node_Position[i][0]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-//        *cos(spherical_positions[i][2]);
-//        Node_Position[i][1]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-//        *sin(spherical_positions[i][2]);
-//        Node_Position[i][2]=spherical_positions[i][0]*cos(spherical_positions[i][1]);
-        
+
     }
     
 }
@@ -85,16 +80,34 @@ void Membrane::generate_ulm_mode_real(int Ell, int M, double uLM, double radius)
         
         spherical_positions[i][0] = radius*(1+uLM*ylmlist[i]);
         Node_Position[i]=convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
-//        Node_Position[i][0]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-//        *cos(spherical_positions[i][2]);
-//        Node_Position[i][1]=spherical_positions[i][0]*sin(spherical_positions[i][1])
-//        *sin(spherical_positions[i][2]);
-//        Node_Position[i][2]=spherical_positions[i][0]*cos(spherical_positions[i][1]);
-        
+
     }
     set_com_to_zero();
     calculate_surface_area_with_voronoi();
 }
 
-
+void Membrane::add_ulm_mode_real(int Ell, int M, double uLM, double radius){
+    
+    if (Ell<0){
+        cout<<"\nl must be positive"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    if (abs(M)>Ell){
+        cout<<"\n |m| cannot be larger than l"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    
+    vector<double> ylmlist = get_real_ylm_vectorlist_for_mesh(Ell, M);
+    for(int i=0;i<Num_of_Nodes;i++){
+        vector<double> add_coordinates;
+        add_coordinates.resize(3,0);
+        spherical_positions[i][0] += radius*(uLM*ylmlist[i]);
+        
+        Node_Position[i] = convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
+        
+    }
+    set_com_to_zero();
+    calculate_surface_area_with_voronoi();
+}
 

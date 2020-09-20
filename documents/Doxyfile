@@ -64,7 +64,8 @@ INPUT                  =  ../include \
 			  ./Doxygen/Coding_Style.md \
 			  ./Doxygen/Commenting_Style.md \
 			  ./Doxygen/IDE_Setup.md \
-			  ./Doxygen/Installation.md
+			  ./Doxygen/Installation.md \
+			  ./Doxygen/Quick_Start.md
 
 EXCLUDE		       =  ../include/cxxopts.hpp
 

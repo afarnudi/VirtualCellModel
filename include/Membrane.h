@@ -122,6 +122,7 @@ public:
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
     void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
+    void add_ulm_mode_real(int Ell, int M, double uLM, double radius);
     
     void myWritePDBFrame(int frameNum, std::string traj_name);
     std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<std::complex<double> > vectorlist2);
@@ -547,7 +548,7 @@ public:
         values.resize(2);
         
         values[0] ="Path/to/my/meshfile.extension";
-        values[1] ="#Path to the mesh file. Supported formats: Blender's ply and Gmsh 2. The Membrnae class cannot be initilised without a mesh file.";
+        values[1] ="#Path to the mesh file. Supported formats: Blender's ply and Gmsh 2. The Membrane class cannot be initilised without a mesh file.";
         Params["MeshFile"] = values;
         insertOrder.push_back("MeshFile");
         

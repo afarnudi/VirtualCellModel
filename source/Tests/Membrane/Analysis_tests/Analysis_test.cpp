@@ -9,45 +9,42 @@
 
 
 namespace GenConst {
-int MD_num_of_steps;
 double Simulation_Time_In_Ps;
-int MD_traj_save_step;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
-double MD_T;
-double K;
-int MD_thrmo_step;
-int MC_step;
-int Mem_fluidity;
-bool Periodic_box;
+int    MC_step;
+int    Mem_fluidity;
+bool   Periodic_box;
 double Lbox;
-bool Periodic_condtion_status;
-int Num_of_Membranes;
-int Num_of_Chromatins;
-int Num_of_Actins;
-int Num_of_ECMs;
-std::string trajectory_file_name;;
-double Buffer_temperature;
+double Simulation_box_length;
+bool   Periodic_condtion_status;
+int    Num_of_Membranes;
+int    Num_of_Chromatins;
+int    Num_of_Actins;
+int    Num_of_ECMs;
+string trajectory_file_name;;
+string force_file_name;;
+double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool Interaction_map;
-std::string Interaction_map_file_name;
-bool Excluded_volume_interaction;
+bool   Interaction_map;
+string Interaction_map_file_name;
+bool   Excluded_volume_interaction;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
-std::string Membrane_label;
-std::string Actin_label;
-std::string Chromatin_label;
-std::string ECM_label;
-int Integrator_type;
+string Membrane_label;
+string Actin_label;
+string Chromatin_label;
+string ECM_label;
+int    Integrator_type;
 double frictionInPs;
 double temperature;
-bool CreateCheckpoint;
-bool Load_from_checkpoint;
-std::string Checkpoint_path;
-std::string Checkpoint_file_name;
-bool ChromatinVirtualSites;
-std::string force_file_name;
+bool   CreateCheckpoint;
+bool   Load_from_checkpoint;
+string Checkpoint_path;
+string Checkpoint_file_name;
+bool   ChromatinVirtualSites;
+
 
 bool   write_bonds_to_PDB;
 bool   WantEnergy;
@@ -58,9 +55,14 @@ int    CMMotionRemoverStep;
 bool   Wantvoronoi;
 bool   Testmode;
 
+
 double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
+
+std::vector<double> PeriodicBoxVector0;
+std::vector<double> PeriodicBoxVector1;
+std::vector<double> PeriodicBoxVector2;
 
 
 //    std::vector<std::vector<std::vector<double> > > data;
@@ -69,7 +71,7 @@ std::vector<std::vector<double> > Lboxdims;
 }
 
 
-ArgStruct args;
+ArgStruct_Analysis args;
 
 using namespace std;
 struct MemAnalysisTest : public testing::Test{
@@ -229,8 +231,114 @@ TEST_F( SurfaceIntegral, Omegapotatoe){
     double integral = Membranes[0]->calc_vectorlist_vectorlist_surface_integral(unit_vector, unit_vector);
     EXPECT_NEAR(integral , 4*M_PI,0.042);
 }
+using reconstruction = MemAnalysisTest;
+TEST_F( reconstruction, Potatoereconstruction){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    
+    Membranes[0]->calculate_real_ulm(args);
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, sqrt(Membranes[0]->ulm_avg[ell][m+ell]), radius);
+        }
+    }
+    
+//    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+//        cout<<Membranes[0]->get_node_position(i,0)<<" "<<
+//              Membranes[0]->get_node_position(i,1)<<" "<<
+//              Membranes[0]->get_node_position(i,2)<<endl;
+//    }
+//    exit(0);
+}
 
+TEST_F( reconstruction, modezero){
+    args.analysis_filename = "10_1002n3frames.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    
+    for (auto &coord: Membranes[0]->spherical_positions){
+        coord[0] = radius;
+        
+    }
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        Membranes[0]->Node_Position[i]=convert_spherical_to_cartesian(Membranes[0]->spherical_positions[i]);
+    }
+    Membranes[0]->calculate_real_ulm(args);
+    
 
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            EXPECT_NEAR(Membranes[0]->ulm_avg[ell][m+ell], 0, 0.00000000000001);
+        }
+    }
+}
+
+TEST_F( reconstruction, CompositeMode){
+    args.analysis_filename = "10_1002n3frames.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    args.ell_max=20;
+    vector<double> us;
+    vector<double> ells;
+    vector<double> ms;
+    
+    us.push_back(0.01); ells.push_back(1); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(1); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(1); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(2); ms.push_back(-1);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(2);
+    us.push_back(0.03); ells.push_back(3); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(3);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(3);
+    us.push_back(0.01); ells.push_back(8); ms.push_back(8);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-5);
+    us.push_back(0.01); ells.push_back(10); ms.push_back(2);
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args);
+    
+    for (int i=0; i<ells.size(); i++) {
+        EXPECT_NEAR(Membranes[0]->ulm_avg[ells[i]][ells[i]+ms[i]], us[i]*us[i], us[i]*us[i]*0.024);
+    }
+    for (int ell=11; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            EXPECT_NEAR(Membranes[0]->ulm_avg[ell][ell+m], 0, 0.0000001);
+            
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, sqrt(Membranes[0]->ulm_avg[ell][m+ell]), radius);
+        }
+    }
+    
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        cout<<Membranes[0]->get_node_position(i,0)<<" "<<
+        Membranes[0]->get_node_position(i,1)<<" "<<
+        Membranes[0]->get_node_position(i,2)<<endl;
+    }
+    exit(0);
+}
 //******************************************************************************
 //******************** Spherical Harmonics Mode Generator  *********************
 //******************************************************************************
@@ -299,7 +407,8 @@ protected:
     
     double Realevaluate_u (int l1, int m1, int l2, int m2, double u, double r){
         
-        Membranes[0]->generate_ulm_mode_real(l2, m2, u, r);
+        Membranes[0]->generate_ulm_mode_real(l2, m2, 0, r);
+        Membranes[0]->add_ulm_mode_real(l2, m2, u, r);
         
         vector<double> membrane_radii_list = Membranes[0]->get_ulmYlm_vectorlist_for_mesh();
         
@@ -314,6 +423,7 @@ protected:
 
 /** Real Spherical harmonics Normality*/
 TEST_P(LMParameterized, RYlmxRYlmzzzNormality){
+    exit(0);
     EllM params = GetParam();
     double test_value = RealYlmintegral(params.l2, params.m2, params.l2, params.m2);
     

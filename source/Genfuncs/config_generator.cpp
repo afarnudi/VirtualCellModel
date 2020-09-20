@@ -26,11 +26,12 @@ bool   include_comments(void);
 void configfile_generator(int status){
     
     string genfilename = get_configfile_name();
-    bool comments      = include_comments();
+    
     
     ofstream write_configs;
     write_configs.open(genfilename.c_str());
     if (status==0) {
+        bool comments      = include_comments();
         write_configs<<"#This is the VCM configuration template."<<endl;
         write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
         write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl;
@@ -137,20 +138,179 @@ void configfile_generator(int status){
     }
     else if (status==1)
     {
+        write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
+        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl;
+        write_configs<<"#Note: If you have multiple instances of one class with only a couple of deviations, you can inherit the configrations from another class of the same kind:"<<endl;
+        write_configs<<"#Example:"<<endl;
+        write_configs<<"#-Membrane A"<<endl;
+        write_configs<<"#list of configurations"<<endl;
+        write_configs<<"#-Membrane B :: A"<<endl;
+        write_configs<<"#Settings that differ"<<endl;
+        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl<<endl;
+        write_configs<<"-GeneralParameters"<<endl<<endl;
+        GeneralParameters defaultparams;
+    
+        string input;
+        cout<<"VCM will generate all output files with the following format:\n"
+              "Prefix+Date+time+file_identifier.extension\n"
+              "The Date+time will be determined at the beginning of each simulation using the machine's clock. You may use a \"Prefix\" to customise the outputfiles."<<endl;
+        cout<<"Please enter a \"Prefix\":\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cin>>input;
+        defaultparams.GenParams["OutputFileName"][0]=input;
+        cout<<TRESET;
+        
+        cout<<"Please set the simulation time length masured in pico seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cin>>input;
+        defaultparams.GenParams["SimulationTimeInPs"][0]=input;
+        cout<<TRESET;
+        
+        cout<<"Please set the Integration step size measured in femto seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cin>>input;
+        defaultparams.GenParams["StepSizeInFs"][0]=input;
+        cout<<TRESET;
+        
+        cout<<"Please set how often you want to save the trajectories, etc to disk. The time intervales are measured in femto seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cin>>input;
+        defaultparams.GenParams["ReportIntervalInFs"][0]=input;
+        cout<<TRESET;
         
         
+        for (int i =0; i<4; i++) {
+            write_configs<<defaultparams.insertOrder[i]<<" "<<defaultparams.GenParams[defaultparams.insertOrder[i]][0]<<endl;
+            write_configs<<endl;
+        }
+        for (int i =4; i<defaultparams.insertOrder.size(); i++) {
+            write_configs<<"#"<<defaultparams.insertOrder[i]<<" "<<defaultparams.GenParams[defaultparams.insertOrder[i]][0]<<endl;
+        }
+        write_configs<<endl;
         
+        int all_class_count=0;
+        int number_of_membranes=0;
+        cout<<"How many membranes do you want to simulate?\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cin>>input;
+        number_of_membranes = stoi(input);
+        all_class_count+=number_of_membranes;
+        cout<<TRESET<<endl;
+        
+        if (number_of_membranes!=0) {
+            vector<Membrane> mems;
+            mems.resize(number_of_membranes);
+            cout<<"Configurating Membrane 0"<<endl;
+            write_configs<<"-Membrane 0"<<endl<<endl;
+            
+            cout<<"Please set the path to the mesh file. Supported formats: Blender's ply and Gmsh 2:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+            cin>>input;
+            mems[0].Params["MeshFile"][0]=input;
+            cout<<TRESET;
+            
+            write_configs<<mems[0].insertOrder[0]<<" "<<mems[0].Params[mems[0].insertOrder[0]][0]<<endl;
+            write_configs<<endl;
+            
+            cout<<"Please set the bond potential (harmonic) coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+            cin>>input;
+            mems[0].Params["SpringCoeff"][0]=input;
+            cout<<TRESET;
+            
+            write_configs<<mems[0].insertOrder[6]<<" "<<mems[0].Params[mems[0].insertOrder[6]][0]<<endl;
+            write_configs<<endl;
+            
+            cout<<"Please set the bending potential (harmonic dihedral) rigidity coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+            cin>>input;
+            mems[0].Params["BendingCoeff"][0]=input;
+            cout<<TRESET;
+            
+            write_configs<<mems[0].insertOrder[8]<<" "<<mems[0].Params[mems[0].insertOrder[8]][0]<<endl;
+            write_configs<<endl;
+            
+            for (int i =1; i<6; i++) {
+                write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
+            }
+            write_configs<<"#"<<mems[0].insertOrder[7]<<" "<<mems[0].Params[mems[0].insertOrder[7]][0]<<endl;
+            for (int i =9; i<mems[0].insertOrder.size(); i++) {
+                write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
+            }
+            write_configs<<endl;
+            for (int memid=1; memid<number_of_membranes; memid++) {
+                cout<<"Configurating Membrane "<<memid<<endl;
+                string entree;
+                bool inherit = false;
+                cout<<"Do you wish to inherit configurations from another Membrane (y,n)? ";
+                cin>>entree;
+                cout<<TRESET;
+                if (entree == "y" || entree == "yes" || entree=="Yes") {
+                    inherit=true;
+                    cout<<"Please enter the Memebrane id:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+                    cin>>input;
+                    cout<<TRESET;
+                    write_configs<<"-Membrane "<<memid<<" :: "<<stoi(input)<<endl<<endl;
+                    auto map = mems[memid].get_map();
+                    auto order = mems[memid].get_insertOrder();
+                    for (auto & element : order) {
+                        write_configs<<"#"<<element<<" "<<map[element][0]<<endl;
+                    }
+                    write_configs<<endl;
+                } else {
+                
+                    cout<<"Configurating Membrane "<<memid<<endl;
+                    write_configs<<"-Membrane "<<memid<<endl<<endl;
+                    
+                    cout<<"Please set the path to the mesh file. Supported formats: Blender's ply and Gmsh 2:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+                    cin>>input;
+                    mems[0].Params["MeshFile"][0]=input;
+                    cout<<TRESET;
+                    
+                    write_configs<<mems[0].insertOrder[0]<<" "<<mems[0].Params[mems[0].insertOrder[0]][0]<<endl;
+                    write_configs<<endl;
+                    
+                    cout<<"Please set the bond potential (harmonic) coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+                    cin>>input;
+                    mems[0].Params["SpringCoeff"][0]=input;
+                    cout<<TRESET;
+                    
+                    write_configs<<mems[0].insertOrder[6]<<" "<<mems[0].Params[mems[0].insertOrder[6]][0]<<endl;
+                    write_configs<<endl;
+                    
+                    cout<<"Please set the bending potential (harmonic dihedral) rigidity coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+                    cin>>input;
+                    mems[0].Params["BendingCoeff"][0]=input;
+                    cout<<TRESET;
+                    
+                    write_configs<<mems[0].insertOrder[8]<<" "<<mems[0].Params[mems[0].insertOrder[8]][0]<<endl;
+                    write_configs<<endl;
+                    
+                    for (int i =1; i<6; i++) {
+                        write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
+                    }
+                    write_configs<<"#"<<mems[0].insertOrder[7]<<" "<<mems[0].Params[mems[0].insertOrder[7]][0]<<endl;
+                    for (int i =9; i<mems[0].insertOrder.size(); i++) {
+                        write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
+                    }
+                    write_configs<<endl;
+                }
+                
+            }
+        }
+        
+        write_configs<<"-InteractionTable"<<endl<<endl;
+        
+        
+        for (int i=0; i<all_class_count; i++) {
+            if (i<number_of_membranes) {
+                write_configs<<"M"<<i;
+            }
+            for (int j=0; j<i+1; j++) {
+                write_configs<<" 0";
+            }
+            write_configs<<endl;
+        }
+        
+        write_configs<<endl;
+        write_configs<<"#Non-bonded interactions:"<<endl;
+        write_configs<<"#0:  No interaction."<<endl;
+        write_configs<<"#LJ: Lennard Jones 12-6."<<endl;
+        write_configs<<"#EV: Excluded Volume interaction (Shifted Lennard Jones 12-6)."<<endl;
     }
     
-    else if (status==2)
-    {
-        
-    }
-    
-    else if (status==3)
-    {
-        
-    }
     
 }
 

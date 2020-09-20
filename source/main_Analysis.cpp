@@ -1,17 +1,3 @@
-/** @file doxygen_example.cpp
- @author Lastname:Firstname:A00123456:cscxxxxx
- @version Revision 1.1
- @brief Illustrates doxygen-style comments for documenting a C++
- program file and the functions in that file.
- @details If you want to add any further detailed description of
- what is in the file, then place it here (after the first statement)
- and it will appear in the detailed description section of the HTML
- output description for the file.
- @date Monday, September 19, 2011
- */
-
-/// \file
-
 #include <stdio.h>
 #include <ctime>
 #include <sstream>
@@ -44,14 +30,6 @@
 
 //#include "Tests.hpp"
 
-/** -----------------------------------------------------------------------------
- *                           OpenMM-USING CODE
- * -----------------------------------------------------------------------------
- * The OpenMM API is visible only at this point and below. Normally this would
- * be in a separate compilation module; we're including it here for simplicity.
- * -----------------------------------------------------------------------------
- */
-
 // Suppress irrelevant warnings from Microsoft's compiler.
 #ifdef _MSC_VER
 #pragma warning(disable:4996)   // sprintf is unsafe
@@ -61,7 +39,6 @@
 
 
 namespace GenConst {
-int    MD_num_of_steps;  //***********OLDCODE
 double Simulation_Time_In_Ps;
 int    MD_traj_save_step;
 double Report_Interval_In_Fs;
@@ -80,7 +57,6 @@ int    Num_of_Actins;
 int    Num_of_ECMs;
 string trajectory_file_name;;
 string force_file_name;;
-double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
 bool   Interaction_map;
