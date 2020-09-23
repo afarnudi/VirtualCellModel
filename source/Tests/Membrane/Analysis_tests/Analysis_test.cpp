@@ -232,31 +232,6 @@ TEST_F( SurfaceIntegral, Omegapotatoe){
     EXPECT_NEAR(integral , 4*M_PI,0.042);
 }
 using reconstruction = MemAnalysisTest;
-TEST_F( reconstruction, Potatoereconstruction){
-    args.analysis_filename = "potatoe2_3frames.pdb";
-    args.Mesh_files[0]="potatoe2.ply";
-    Membranes[0]->import_pdb_frames(args, 0);
-    Membranes[0]->load_pdb_frame(0, args);
-    
-    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
-    
-    Membranes[0]->calculate_real_ulm(args);
-    
-    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
-    
-    for (int ell=0; ell<args.ell_max+1; ell++) {
-        for (int m=-ell; m<ell+1; m++) {
-            Membranes[0]->add_ulm_mode_real(ell, m, sqrt(Membranes[0]->ulm_avg[ell][m+ell]), radius);
-        }
-    }
-    
-//    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
-//        cout<<Membranes[0]->get_node_position(i,0)<<" "<<
-//              Membranes[0]->get_node_position(i,1)<<" "<<
-//              Membranes[0]->get_node_position(i,2)<<endl;
-//    }
-//    exit(0);
-}
 
 TEST_F( reconstruction, modezero){
     args.analysis_filename = "10_1002n3frames.pdb";
@@ -282,13 +257,193 @@ TEST_F( reconstruction, modezero){
     }
 }
 
-TEST_F( reconstruction, CompositeMode){
+TEST_F( reconstruction, CompositeMode13U0p0123Surface){
+    args.analysis_filename = "10_1002n3frames.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    
+    
+    vector<double> us;
+    vector<double> ells;
+    vector<double> ms;
+    
+    us.push_back(0.01); ells.push_back(1); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(1); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(1); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(2); ms.push_back(-1);
+    us.push_back(0.03); ells.push_back(2); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(2); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(2);
+    us.push_back(0.01); ells.push_back(3); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(3); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(4); ms.push_back(0);
+    us.push_back(0.03); ells.push_back(4); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(5); ms.push_back(-4);
+    us.push_back(0.02); ells.push_back(5); ms.push_back(3);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(0);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(4);
+    us.push_back(0.02); ells.push_back(6); ms.push_back(-5);
+    us.push_back(0.03); ells.push_back(6); ms.push_back(6);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(3);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(4);
+    us.push_back(0.03); ells.push_back(7); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(7); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(8); ms.push_back(8);
+    us.push_back(0.03); ells.push_back(8); ms.push_back(-3);
+    us.push_back(0.02); ells.push_back(8); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-9);
+    us.push_back(0.02); ells.push_back(9); ms.push_back(-7);
+    us.push_back(0.03); ells.push_back(9); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(10);
+    us.push_back(0.03); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(4);
+    
+    //Generate mode
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double r0S = sqrt(Membranes[0] -> get_surface_area()/(4*M_PI));
+    double AreaS = 0;
+    double VolumeS = 0;
+    double OriginalAreaS=Membranes[0]->get_surface_area();
+    double OriginalVolumeS=Membranes[0]->get_volume();
+    double u0S = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        AreaS += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        AreaS += ulm2_m_avg[ell];
+        VolumeS += ulm2_m_avg[ell];
+    }
+    
+    AreaS *= r0S*r0S;
+    AreaS += 4*M_PI*r0S*r0S*(1+u0S)*(1+u0S);
+    
+    VolumeS *= r0S*r0S*r0S;
+    VolumeS += 4*M_PI*r0S*r0S*r0S*(1+u0S)*(1+u0S)*(1+u0S)/3.;
+    
+    //Reset
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->calculate_volume_and_surface_area();
+    
+    //Generate mode
+    radius = cbrt(3*Membranes[0]->get_volume()/(4*M_PI));
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double r0V = cbrt(3*Membranes[0] -> get_volume()/(4*M_PI));
+    double AreaV = 0;
+    double VolumeV = 0;
+    double OriginalAreaV=Membranes[0]->get_surface_area();
+    double OriginalVolumeV=Membranes[0]->get_volume();
+    double u0V = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    ulm2_m_avg.clear();
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=2; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        AreaV += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        AreaV += ulm2_m_avg[ell];
+        VolumeV += ulm2_m_avg[ell];
+    }
+    
+    AreaV *= r0V*r0V;
+    AreaV += 4*M_PI*r0V*r0V*(1+u0V)*(1+u0V);
+    
+    VolumeV *= r0V*r0V*r0V;
+    VolumeV += 4*M_PI*r0V*r0V*r0V*(1+u0V)*(1+u0V)*(1+u0V)/3.;
+    
+    
+    //Reset
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->update_average_Membrane_radius();
+    
+    //Generate mode
+    radius = Membranes[0]->get_average_Membrane_radius();
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double r0R = Membranes[0] -> get_average_Membrane_radius();
+    double AreaR = 0;
+    double VolumeR = 0;
+    double OriginalAreaR=Membranes[0]->get_surface_area();
+    double OriginalVolumeR=Membranes[0]->get_volume();
+    double u0R = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    ulm2_m_avg.clear();
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=2; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        AreaR += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        AreaR += ulm2_m_avg[ell];
+        VolumeR += ulm2_m_avg[ell];
+    }
+    AreaR *= r0R*r0R;
+    AreaR += 4*M_PI*r0R*r0R*(1+u0R)*(1+u0R);
+    
+    VolumeR *= r0R*r0R*r0R;
+    VolumeR += 4*M_PI*r0R*r0R*r0R*(1+u0R)*(1+u0R)*(1+u0R)/3.;
+    
+    EXPECT_NEAR(AreaR,OriginalAreaR, 0.000001);
+    EXPECT_NEAR(AreaS,OriginalAreaS, 0.000001);
+    EXPECT_NEAR(AreaV,OriginalAreaV, 0.000001);
+    
+    EXPECT_NEAR(VolumeR,OriginalVolumeR, 0.000001);
+    EXPECT_NEAR(VolumeS,OriginalVolumeS, 0.000001);
+    EXPECT_NEAR(VolumeV,OriginalVolumeV, 0.000001);
+    
+    cout<< abs(AreaR-OriginalAreaR)/OriginalAreaR<<"\t"<<abs(VolumeR-OriginalVolumeR)/OriginalVolumeR<<endl;
+    cout<< abs(AreaS-OriginalAreaS)/OriginalAreaS<<"\t"<<abs(VolumeS-OriginalVolumeS)/OriginalVolumeS<<endl;
+    cout<< abs(AreaV-OriginalAreaV)/OriginalAreaV<<"\t"<<abs(VolumeV-OriginalVolumeV)/OriginalVolumeV<<endl;
+    
+}
+
+TEST_F( reconstruction, CompositeMode13U0p0123RMSDS){
     args.analysis_filename = "10_1002n3frames.pdb";
     args.Mesh_files[0]="10_1002n.ply";
     Membranes[0]->import_pdb_frames(args, 0);
     Membranes[0]->load_pdb_frame(0, args);
     
-    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
     args.ell_max=20;
     vector<double> us;
     vector<double> ells;
@@ -298,47 +453,1113 @@ TEST_F( reconstruction, CompositeMode){
     us.push_back(0.02); ells.push_back(1); ms.push_back(1);
     us.push_back(0.03); ells.push_back(1); ms.push_back(-1);
     us.push_back(0.01); ells.push_back(2); ms.push_back(-1);
+    us.push_back(0.03); ells.push_back(2); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(2); ms.push_back(2);
     us.push_back(0.02); ells.push_back(3); ms.push_back(2);
+    us.push_back(0.01); ells.push_back(3); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(1);
     us.push_back(0.03); ells.push_back(3); ms.push_back(-3);
     us.push_back(0.01); ells.push_back(4); ms.push_back(3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(4); ms.push_back(0);
+    us.push_back(0.03); ells.push_back(4); ms.push_back(1);
     us.push_back(0.03); ells.push_back(5); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(5); ms.push_back(-4);
+    us.push_back(0.02); ells.push_back(5); ms.push_back(3);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(5);
     us.push_back(0.01); ells.push_back(6); ms.push_back(0);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(4);
+    us.push_back(0.02); ells.push_back(6); ms.push_back(-5);
+    us.push_back(0.03); ells.push_back(6); ms.push_back(6);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(-2);
     us.push_back(0.02); ells.push_back(7); ms.push_back(3);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(4);
+    us.push_back(0.03); ells.push_back(7); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(7); ms.push_back(-1);
     us.push_back(0.01); ells.push_back(8); ms.push_back(8);
+    us.push_back(0.03); ells.push_back(8); ms.push_back(-3);
+    us.push_back(0.02); ells.push_back(8); ms.push_back(5);
     us.push_back(0.01); ells.push_back(9); ms.push_back(-5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-9);
+    us.push_back(0.02); ells.push_back(9); ms.push_back(-7);
+    us.push_back(0.03); ells.push_back(9); ms.push_back(-3);
     us.push_back(0.01); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(10);
+    us.push_back(0.03); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(4);
     
+    //Generate mode
+    Membranes[0]->calculate_volume_and_surface_area();
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
     Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
     for (int i=0; i<ells.size(); i++) {
         Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
     }
     
-    Membranes[0] -> calculate_real_ulm(args);
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
     
-    for (int i=0; i<ells.size(); i++) {
-        EXPECT_NEAR(Membranes[0]->ulm_avg[ells[i]][ells[i]+ms[i]], us[i]*us[i], us[i]*us[i]*0.024);
-    }
-    for (int ell=11; ell<args.ell_max+1; ell++) {
-        for (int m=-ell; m<ell+1; m++) {
-            EXPECT_NEAR(Membranes[0]->ulm_avg[ell][ell+m], 0, 0.0000001);
-            
+    //calculate RMSD
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
         }
     }
     
     Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
     for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
-            Membranes[0]->add_ulm_mode_real(ell, m, sqrt(Membranes[0]->ulm_avg[ell][m+ell]), radius);
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
         }
     }
     
+    double RMSD=0;
     for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
-        cout<<Membranes[0]->get_node_position(i,0)<<" "<<
-        Membranes[0]->get_node_position(i,1)<<" "<<
-        Membranes[0]->get_node_position(i,2)<<endl;
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
     }
-    exit(0);
+//    exit(0);
+    
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    EXPECT_NEAR(RMSD, 0, 0.00000001);
 }
+
+TEST_F( reconstruction, CompositeMode13U0p0123RMSDR){
+    args.analysis_filename = "10_1002n3frames.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    args.ell_max=20;
+    vector<double> us;
+    vector<double> ells;
+    vector<double> ms;
+    
+    us.push_back(0.01); ells.push_back(1); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(1); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(1); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(2); ms.push_back(-1);
+    us.push_back(0.03); ells.push_back(2); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(2); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(2);
+    us.push_back(0.01); ells.push_back(3); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(3); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(4); ms.push_back(0);
+    us.push_back(0.03); ells.push_back(4); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(5); ms.push_back(-4);
+    us.push_back(0.02); ells.push_back(5); ms.push_back(3);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(0);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(4);
+    us.push_back(0.02); ells.push_back(6); ms.push_back(-5);
+    us.push_back(0.03); ells.push_back(6); ms.push_back(6);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(3);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(4);
+    us.push_back(0.03); ells.push_back(7); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(7); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(8); ms.push_back(8);
+    us.push_back(0.03); ells.push_back(8); ms.push_back(-3);
+    us.push_back(0.02); ells.push_back(8); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-9);
+    us.push_back(0.02); ells.push_back(9); ms.push_back(-7);
+    us.push_back(0.03); ells.push_back(9); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(10);
+    us.push_back(0.03); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(4);
+    
+    //Generate mode
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = Membranes[0]->get_average_Membrane_radius();
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //calculate RMSD
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    EXPECT_NEAR(RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, CompositeMode13U0p0123RMSDV){
+    args.analysis_filename = "10_1002n3frames.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    args.ell_max=20;
+    vector<double> us;
+    vector<double> ells;
+    vector<double> ms;
+    
+    us.push_back(0.01); ells.push_back(1); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(1); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(1); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(2); ms.push_back(-1);
+    us.push_back(0.03); ells.push_back(2); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(2); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(2);
+    us.push_back(0.01); ells.push_back(3); ms.push_back(0);
+    us.push_back(0.02); ells.push_back(3); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(3); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(3);
+    us.push_back(0.01); ells.push_back(4); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(4); ms.push_back(0);
+    us.push_back(0.03); ells.push_back(4); ms.push_back(1);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(5); ms.push_back(-4);
+    us.push_back(0.02); ells.push_back(5); ms.push_back(3);
+    us.push_back(0.03); ells.push_back(5); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(0);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(4);
+    us.push_back(0.02); ells.push_back(6); ms.push_back(-5);
+    us.push_back(0.03); ells.push_back(6); ms.push_back(6);
+    us.push_back(0.01); ells.push_back(6); ms.push_back(-2);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(3);
+    us.push_back(0.02); ells.push_back(7); ms.push_back(4);
+    us.push_back(0.03); ells.push_back(7); ms.push_back(-2);
+    us.push_back(0.01); ells.push_back(7); ms.push_back(-1);
+    us.push_back(0.01); ells.push_back(8); ms.push_back(8);
+    us.push_back(0.03); ells.push_back(8); ms.push_back(-3);
+    us.push_back(0.02); ells.push_back(8); ms.push_back(5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-5);
+    us.push_back(0.01); ells.push_back(9); ms.push_back(-9);
+    us.push_back(0.02); ells.push_back(9); ms.push_back(-7);
+    us.push_back(0.03); ells.push_back(9); ms.push_back(-3);
+    us.push_back(0.01); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(10);
+    us.push_back(0.03); ells.push_back(10); ms.push_back(2);
+    us.push_back(0.02); ells.push_back(10); ms.push_back(4);
+    
+    //Generate mode
+    Membranes[0]->calculate_volume_and_surface_area();
+    double radius = cbrt(3*Membranes[0]->get_volume()/(4*M_PI));
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int i=0; i<ells.size(); i++) {
+        Membranes[0]->add_ulm_mode_real(ells[i], ms[i], us[i], radius);
+    }
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //calculate RMSD
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    EXPECT_NEAR(RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g72k50y036r100calcmodeswithR){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = Membranes[0] -> get_average_Membrane_radius();
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g72k50y036r100calcmodeswithS){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = sqrt(Original_Surface/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g72k50y036r100calcmodeswithV){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = cbrt(3*Original_Volume/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g72k50y036r100RMSDS){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g72k50y036r100RMSDR){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = Membranes[0]->get_average_Membrane_radius();
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g72k50y036r100RMSDV){
+    args.analysis_filename = "10_1002ng72k50y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = cbrt(3*Membranes[0]->get_volume()/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g715k5y036r100calcmodeswithR){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = Membranes[0] -> get_average_Membrane_radius();
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g715k5y036r100calcmodeswithS){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = sqrt(Original_Surface/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g715k5y036r100calcmodeswithV){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = cbrt(3*Original_Volume/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, g715k5y036r100RMSDS){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g715k5y036r100RMSDR){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = Membranes[0]->get_average_Membrane_radius();
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, g715k5y036r100RMSDV){
+    args.analysis_filename = "10_1002ng715k5y0.36r100.pdb";
+    args.Mesh_files[0]="10_1002n.ply";
+    args.framelimits_beg=45;
+    args.framelimits_end=46;
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = cbrt(3*Membranes[0]->get_volume()/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    EXPECT_NEAR(0.01*RMSD, 0, 0.00000001);
+}
+
+
+TEST_F( reconstruction, Potatoereconstruction){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    
+    Membranes[0]->calculate_real_ulm(args);
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, sqrt(Membranes[0]->ulm_avg[ell][m+ell]), radius);
+        }
+    }
+}
+TEST_F( reconstruction, potatoe2calcmodeswithR){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = Membranes[0] -> get_average_Membrane_radius();
+    cout<<" r0 "<<r0<<endl;
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, potatoe2calcmodeswithS){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = sqrt(Original_Surface/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, potatoe2calcmodeswithV){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_volume_and_surface_area();
+    Membranes[0] -> update_average_Membrane_radius();
+    double Original_Volume  = Membranes[0] -> get_volume();
+    double Original_Surface = Membranes[0] -> get_surface_area();
+    double r0 = cbrt(3*Original_Volume/(4*M_PI));
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //Calculate Surface area and Volume using the calculated modes
+    double Area = 0;
+    double Volume = 0;
+    double u0 = Membranes[0]->ulm_temp_for_analysis[0][0]/(sqrt(4*M_PI));
+    
+    vector<double> ulm2_m_avg;
+    ulm2_m_avg.resize(args.ell_max+1,0);
+    for (int ell=1; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            ulm2_m_avg[ell]+=Membranes[0]->ulm_avg[ell][m+ell];
+        }
+        ulm2_m_avg[ell] /= 2.*ell+1.;
+        Area += ulm2_m_avg[ell]*(1.+ell*(ell+1.)/2.);
+        Area += ulm2_m_avg[ell];
+        Volume += ulm2_m_avg[ell];
+    }
+    
+    Area *= r0*r0;
+    Area += 4*M_PI*r0*r0*(1+u0)*(1+u0);
+    
+    Volume *= r0*r0*r0;
+    Volume += 4*M_PI*r0*r0*r0*(1+u0)*(1+u0)*(1+u0)/3.;
+    
+    EXPECT_NEAR(Area,Original_Surface, 0.000001);
+    EXPECT_NEAR(Volume,Original_Volume, 0.000001);
+    
+    cout<< abs(Area-Original_Surface)/Original_Surface<<"\t"<<abs(Volume-Original_Volume)/Original_Volume<<endl;
+}
+
+TEST_F( reconstruction, potatoe2RMSDS){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'S', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = sqrt(Membranes[0]->surface_area_voronoi/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    double factor = 1./1.33833;
+    EXPECT_NEAR(factor*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, potatoe2RMSDR){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'R', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = Membranes[0]->get_average_Membrane_radius();
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    double factor = 1./1.33833;
+    EXPECT_NEAR(factor*RMSD, 0, 0.00000001);
+}
+
+TEST_F( reconstruction, potatoe2RMSDV){
+    args.analysis_filename = "potatoe2_3frames.pdb";
+    args.Mesh_files[0]="potatoe2.ply";
+    Membranes[0]->import_pdb_frames(args, 0);
+    Membranes[0]->load_pdb_frame(0, args);
+    Membranes[0]->rescale_membrane(0.01);
+    args.ell_max=20;
+    
+    Membranes[0] -> calculate_real_ulm(args, 'V', true);
+    
+    //calculate RMSD
+    Membranes[0]->calculate_volume_and_surface_area();
+    Membranes[0]->update_average_Membrane_radius();
+    double radius = cbrt(3*Membranes[0]->get_volume()/(4*M_PI));
+    Membranes[0] ->convert_spherical_positions_to_cartisian();
+    vector<vector<double> > old_xyz;
+    old_xyz.resize(Membranes[0]->get_num_of_nodes());
+    for (int i=0; i<old_xyz.size(); i++) {
+        old_xyz[i].resize(3,0);
+        for (int j=0; j<3; j++) {
+            old_xyz[i][j]=Membranes[0]->get_node_position(i,j);
+        }
+    }
+    
+    Membranes[0]->generate_ulm_mode_real(0, 0, 0, radius);
+    for (int ell=0; ell<args.ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            Membranes[0]->add_ulm_mode_real(ell, m, Membranes[0]->ulm_temp_for_analysis[ell][m+ell], radius);
+        }
+    }
+    double RMSD=0;
+    for (int i=0; i<Membranes[0]->get_num_of_nodes(); i++) {
+        for (int j=0; j<3; j++) {
+            RMSD += (Membranes[0]->get_node_position(i,j)-old_xyz[i][j])*(Membranes[0]->get_node_position(i,j)-old_xyz[i][j]);
+//            cout<<Membranes[0]->get_node_position(i,j)<<" ";
+        }
+//        cout<<endl;
+    }
+//    exit(0);
+    RMSD/=old_xyz.size();
+    RMSD = sqrt(RMSD);
+    
+    //The 0.01 scale is just there because I wanted to compare the results with one from a unit sphere analysis.
+    double factor = 1./1.33833;
+    EXPECT_NEAR(factor*RMSD, 0, 0.00000001);
+}
+
+
 //******************************************************************************
 //******************** Spherical Harmonics Mode Generator  *********************
 //******************************************************************************
