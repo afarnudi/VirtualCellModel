@@ -171,6 +171,19 @@ void assign_general_parameters(GeneralParameters &defaults){
             GenConst::frictionInPs=stod(split[0]);
         } else if (it.first == "Temperature") {
             GenConst::temperature=stod(split[0]);
+        } else if (it.first == "WriteBondsPDB") {
+            bool stat;
+            if (split[0]=="true") {
+                stat=true;
+            } else if (split[0]=="false"){
+                stat=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            GenConst::write_bonds_to_PDB=stat;
         } else if (it.first == "ReportEnergy") {
             bool stat;
             if (split[0]=="true") {

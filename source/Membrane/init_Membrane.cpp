@@ -110,7 +110,8 @@ void Membrane::initialise(std::string Mesh_file_name){
                         "\n*************************\n"<<endl;
     }
     
-
+//    calculate_bending_energy();
+//    exit(0);
     //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
 
 

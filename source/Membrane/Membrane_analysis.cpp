@@ -166,6 +166,70 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
     }
     
 }
+void Membrane::calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool clear){
+    int ell_max = args.ell_max;
+    
+    if(ulm_avg.size() != ell_max+1 || clear){
+        ulm_avg.clear();
+        ulm_std.clear();
+        ulm_avg.resize(ell_max+1);
+        ulm_std.resize(ell_max+1);
+        for (int ell=0; ell<ell_max+1; ell++) {
+            ulm_avg[ell].resize(2*ell+1,0);
+            ulm_std[ell].resize(2*ell+1,0);
+        }
+        if (!GenConst::Testmode) {
+            cout<<"cleared ulm\n";
+        }
+    }
+    
+    
+    if(args.analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    
+    
+    vector<vector< double > > ulm_avg_frame;
+    ulm_avg_frame.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_avg_frame[ell].resize(2*ell+1);
+        
+        for (int m=0; m<2*ell+1; m++) {
+            ulm_avg_frame[ell][m]=0;
+        }
+    }
+    
+    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh(Requiv);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        //        cout<<ell<<" out of "<<ell_max<<"\r";
+        for (int m=-ell; m<ell+1; m++) {
+            
+            vector<double>  Realylm = get_real_ylm_vectorlist_for_mesh(ell, m);
+            ulm_avg_frame[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(Realylm, membrane_radii_list);
+            
+        }
+    }
+    
+    ulm_temp_for_analysis.clear();
+    ulm_temp_for_analysis.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_temp_for_analysis[ell].resize(2*ell+1,0);
+        for (int m=-ell; m<ell+1; m++) {
+            double ulm = ulm_avg_frame[ell][m+ell];
+            ulm_avg[ell][m+ell] += ulm*ulm;
+            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+            
+            ulm_temp_for_analysis[ell][m+ell] = ulm;
+            
+        }
+    }
+    
+}
 
 void Membrane::calculate_dOmega(void){
     vector<vector<double> > Node_position_copy (Node_Position);

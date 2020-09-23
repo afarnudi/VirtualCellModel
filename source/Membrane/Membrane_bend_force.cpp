@@ -84,7 +84,11 @@ double Membrane::calculate_bending_energy(){
         
         double N1_length=vector_length(N1), N2_length=vector_length(N2);
         double N1dotN2 = innerproduct(N1, N2)/(N1_length*N2_length);
-        Total_Bending_Energy += 1-N1dotN2;
+        double angleInRad = acos(N1dotN2);
+        double spontaneousAngleInRad = SpontaneousTriangleBendingInDegrees*M_PI/180.;
+        double cosPotentialAngle = cos(angleInRad-(spontaneousAngleInRad-M_PI));
+        Total_Bending_Energy += 1-cosPotentialAngle;
+//        cout<<N1dotN2<<", ";
     }  // end of 'for-i'
     Total_Bending_Energy *= Bending_coefficient;
     

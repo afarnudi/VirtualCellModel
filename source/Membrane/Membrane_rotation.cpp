@@ -92,6 +92,16 @@ void Membrane::update_spherical_positions(){
     }
 }
 
+void Membrane::convert_spherical_positions_to_cartisian(){
+    Node_Position.clear();
+    Node_Position.resize(Num_of_Nodes);
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        Node_Position[i].resize(3,0);
+        Node_Position[i] = convert_spherical_to_cartesian(spherical_positions[i][0], spherical_positions[i][1], spherical_positions[i][2]);
+    }
+}
+
 
 void Membrane::rotate_particle_to_axes(ArgStruct_Analysis args){
     

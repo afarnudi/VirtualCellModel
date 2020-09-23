@@ -113,6 +113,7 @@ public:
     void rotate_coordinates(double theta, double phi);
     void rotate_particle_to_axes(ArgStruct_Analysis args);
     void update_spherical_positions();
+    void convert_spherical_positions_to_cartisian();
     void analysis_init(std::string Mesh_path);
     void calculate_dOmega(void);
     vector<double> node_dOmega;
@@ -131,6 +132,7 @@ public:
     vector<std::complex<double> > get_ylm_vectorlist_for_mesh(int ell, int m, bool complex_conjugate);
     vector<double> get_real_ylm_vectorlist_for_mesh(int ell, int m);
     vector<double> get_ulmYlm_vectorlist_for_mesh();
+    vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
     
     
     std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
@@ -142,6 +144,7 @@ public:
     
     void calculate_ulm(ArgStruct_Analysis args);
     void calculate_real_ulm(ArgStruct_Analysis args);
+    void calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool clear);
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
@@ -149,6 +152,7 @@ public:
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
+    vector<vector<double> > ulm_temp_for_analysis;
   
     
     
@@ -282,6 +286,7 @@ public:
     //    vector <double> T_Kinetic_Energy;
     double Spring_coefficient=0.;
     double Bending_coefficient=0.;
+    double SpontaneousTriangleBendingInDegrees=0.;
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     
     vector<double> Shift_position_xyzVector;
@@ -302,11 +307,11 @@ public:
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
     /**Returns the last saved volume*/
-    double return_volume(void){
+    double get_volume(void){
         return volume;
     }
     /**Calculate the voronoi area of  each  node and return a list that indicated the voronoi area of each node.*/
-    vector<double> return_voronoi_node_area(){
+    vector<double> get_voronoi_node_area(){
         calculate_surface_area_with_voronoi();
         return node_voronoi_area;
     }
@@ -330,6 +335,15 @@ public:
     }
     
     double rescale_factor=1;
+    
+    void rescale_membrane(double factor){
+        for(auto &pos: Node_Position){
+            for(auto &coord: pos){
+                coord *=factor;
+            }
+        }
+        update_average_Membrane_radius();
+    }
     /** Assigns the label(pdb) used to write to the trajectory files. */
     void set_label(std::string lab){
         label=lab;
@@ -379,6 +393,11 @@ public:
     double get_bending_stiffness_coefficient(void){
         return Bending_coefficient;
     }
+    /**Return the spontaneous bending angle between triangle pairs in radians. */
+    double get_spontaneous_angle_in_Rad(void){
+        return SpontaneousTriangleBendingInDegrees*M_PI/180.;
+    }
+    
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_triangle_pairs(){
         return int(Triangle_Pair_Nodes.size());
@@ -591,6 +610,11 @@ public:
         values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
         Params["BendingCoeff"] = values;
         insertOrder.push_back("BendingCoeff");
+        
+        values[0] ="180";
+        values[1] ="#Set the spontaneus bending angle (in degrees) between two triangle pairs on the mesh. Default 180";
+        Params["SpontaneousTriangleBendingInDegrees"] = values;
+        insertOrder.push_back("SpontaneousTriangleBendingInDegrees");
         
         values[0] ="1";
         values[1] ="#Used to scale the Membrane coordinates. Default 1";

@@ -61,10 +61,10 @@ void collect_data(MyAtomInfo atoms[],
     if (mems.size()!=0) {
         mems[0].calculate_volume_and_surface_area();
         if (GenConst::Wantvoronoi) {
-            voronoi_area = mems[0].return_voronoi_node_area();
+            voronoi_area = mems[0].get_voronoi_node_area();
         }
         
-        mem_volume  = mems[0].return_volume();
+        mem_volume  = mems[0].get_volume();
         mem_surface = mems[0].get_surface_area();
         bending_energy = mems[0].calculate_bending_energy();
     } else {

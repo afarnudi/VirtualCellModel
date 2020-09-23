@@ -81,6 +81,8 @@ void Membrane::assign_parameters(void){
             Damping_coefficient = stod(split[0]);
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
+        } else if (it.first == "SpontaneousTriangleBendingInDegrees") {
+            SpontaneousTriangleBendingInDegrees = stod(split[0]);
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {

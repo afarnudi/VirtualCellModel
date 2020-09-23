@@ -58,6 +58,7 @@ struct Dihedrals{
     std::string class_label;
     std::vector<int> atoms;
     double bendingStiffnessinKJ;
+    double spontaneousBendingAngleInRad;
 };
 
 /** -----------------------------------------------------------------------------
