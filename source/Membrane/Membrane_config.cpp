@@ -42,6 +42,14 @@ void Membrane::consistancy_check(){
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    
+    if (Node_Bond_distances_stat!= "Au" && Node_Bond_distances_stat!= "Av") {
+        try {
+            Node_Bond_Nominal_Length= stod(Node_Bond_distances_stat);
+        } catch (...) {
+            cout<<TWWARN<<"Invalid input"<<TRESET<<" for the \"NominalLength\" ("<<TFILE<<Node_Bond_distances_stat<<TRESET<<"). Please try again.\nExample inputs: Au , Av , or just an input value (example 2.678)"<<endl;
+        }
+    }
 }
 
 void Membrane::assign_parameters(void){
@@ -81,6 +89,8 @@ void Membrane::assign_parameters(void){
             Damping_coefficient = stod(split[0]);
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
+        } else if (it.first == "NominalLength") {
+            Node_Bond_distances_stat = split[0];
         } else if (it.first == "SpontaneousTriangleBendingInDegrees") {
             SpontaneousTriangleBendingInDegrees = stod(split[0]);
         } else if (it.first == "ExtForceModel") {

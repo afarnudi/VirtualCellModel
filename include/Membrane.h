@@ -186,6 +186,8 @@ public:
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
     vector<double>          Node_Bond_distances;
+    string                  Node_Bond_distances_stat;
+    double                  Node_Bond_Nominal_Length=-1;
     vector<vector<int> >    Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -232,6 +234,7 @@ public:
     vector<int> Bond_triangle_neighbour_indices ;
     
     void check(void);
+    void set_bond_nominal_length(void);
     void check_radius_update_values(void);
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     void Elastic_Force_Calculator(double theta_0);
@@ -610,6 +613,11 @@ public:
         values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
         Params["BendingCoeff"] = values;
         insertOrder.push_back("BendingCoeff");
+        
+        values[0] ="Au";
+        values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
+        Params["NominalLength"] = values;
+        insertOrder.push_back("NominalLength");
         
         values[0] ="180";
         values[1] ="#Set the spontaneus bending angle (in degrees) between two triangle pairs on the mesh. Default 180";

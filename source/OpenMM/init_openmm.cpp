@@ -332,7 +332,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 omm->system->setParticleMass(i, 0);
                 
                 OpenMM::TwoParticleAverageSite* vsite_pars;
-                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);
+                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);//I think the last one should be atoms[i].Vsite_weights[1]
                 
                 omm->system->setVirtualSite(i, vsite_pars);
             }

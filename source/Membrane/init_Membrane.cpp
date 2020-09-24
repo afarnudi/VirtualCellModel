@@ -14,8 +14,6 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<TMEM<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
     }
     
-   
-
     if (mesh_format==1){
         read_gmesh_file(Mesh_file_name);
     }else if (mesh_format==2){
@@ -52,6 +50,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     Bond_triangle_neighbour_list_constructor();
     
     check();
+    set_bond_nominal_length();
     
     if (New_Radius!=-1) {
         double ratio = Radius/Node_radius;
@@ -109,12 +108,6 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<
                         "\n*************************\n"<<endl;
     }
-    
-//    calculate_bending_energy();
-//    exit(0);
-    //        cout<< "Average node distance is   "<<Average_Membrane_Node_Distance()<<endl;
-
-
 }
 
 void Membrane::analysis_init(std::string Mesh_path){

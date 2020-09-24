@@ -13,13 +13,10 @@ void Membrane::check(void){
     Min_node_pair_length=1000;
     Max_node_pair_length=0;
     Average_node_pair_length=0;
-    Node_Bond_distances.clear();
-    Node_Bond_distances.resize(Num_of_Node_Pairs);
     
     for (int i=0; i<(Num_of_Node_Pairs); i++) {
         double dist=0;
         dist=sqrt((Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])*(Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])+(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])*(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])+(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2])*(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2]));
-        Node_Bond_distances[i]=dist;
         Average_node_pair_length+=dist;
         
         if (Min_node_pair_length>dist) {
