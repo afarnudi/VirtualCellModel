@@ -115,6 +115,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
                       double& potential_energyInKJ,
                       MyAtomInfo atoms[])
 {
+
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
     infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
@@ -125,16 +126,13 @@ void myGetOpenMMState(MyOpenMMData* omm,
         infoMask += OpenMM::State::Forces;
     }
     // Forces are also available (and cheap).
-
     const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
-    
     
     timeInPs = state.getTime(); // OpenMM time is in ps already
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = state.getPositions();
     const std::vector<Vec3>& velInNmperPs  = state.getVelocities();
-    const std::vector<Vec3>& Forces        = state.getForces();
     
     if (GenConst::Periodic_box) {
         Vec3 Lboxx, Lboxy, Lboxz;
@@ -153,17 +151,25 @@ void myGetOpenMMState(MyOpenMMData* omm,
         }
     }
     
-    
     for (int i=0; i < (int)positionsInNm.size(); ++i){
         for (int j=0; j < 3; ++j){
             atoms[i].posInNm[j] = positionsInNm[i][j];
             atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
-            if (GenConst::WantForce) {
-                atoms[i].force[j]    = Forces[i][j];
+            
+        }
+    }
+    if (GenConst::WantForce) {
+        const std::vector<Vec3>& Forces = state.getForces();
+        for (int i=0; i < (int)positionsInNm.size(); ++i){
+            for (int j=0; j < 3; ++j){
+                atoms[i].posInNm[j] = positionsInNm[i][j];
+                atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
+                if (GenConst::WantForce) {
+                    atoms[i].force[j]    = Forces[i][j];
+                }
             }
         }
     }
-    
     
     // If energy has been requested, obtain it in kJ/mol.
     energyInKJ = 0;
@@ -172,8 +178,6 @@ void myGetOpenMMState(MyOpenMMData* omm,
         energyInKJ = state.getPotentialEnergy() + state.getKineticEnergy();
         potential_energyInKJ = state.getPotentialEnergy();
     }
-    
-    
     
 }
 

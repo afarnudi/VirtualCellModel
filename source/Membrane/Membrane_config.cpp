@@ -47,7 +47,14 @@ void Membrane::consistancy_check(){
         try {
             Node_Bond_Nominal_Length= stod(Node_Bond_distances_stat);
         } catch (...) {
-            cout<<TWWARN<<"Invalid input"<<TRESET<<" for the \"NominalLength\" ("<<TFILE<<Node_Bond_distances_stat<<TRESET<<"). Please try again.\nExample inputs: Au , Av , or just an input value (example 2.678)"<<endl;
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"NominalLength\" (";
+            errorMessage+=TFILE;
+            errorMessage+=Node_Bond_distances_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 2.678)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
         }
     }
 }
@@ -71,7 +78,18 @@ void Membrane::assign_parameters(void){
             }
             Mesh_file_name = split[0];
         } else if (it.first == "NodeMass") {
-            Node_Mass = stod(split[0]);
+            try {
+                Node_Mass = stod(split[0]);
+            } catch (...) {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: Invalid input for the \"NodeMass\", expected a number but got \"";
+                errorMessage+=TFILE;
+                errorMessage+=split[0];
+                errorMessage+=TWARN;
+                errorMessage+="\". Please try again.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "NodeRadius") {
             Node_radius = stod(split[0]);
         } else if (it.first == "SpringModel") {
@@ -104,7 +122,7 @@ void Membrane::assign_parameters(void){
             Y_scale = stod(split[1]);
             Z_scale = stod(split[2]);
         } else if (it.first == "Scale") {
-            rescale_factor = stod(split[0]);
+                rescale_factor = stod(split[0]);
         } else if (it.first == "LJsigma") {
             sigma_LJ_12_6 = stod(split[0]);
         } else if (it.first == "LJepsilon") {

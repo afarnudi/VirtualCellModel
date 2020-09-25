@@ -190,7 +190,6 @@ int main(int argc, char **argv)
     //    Uncomment
     vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
     
-    
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
     //    Uncomment
@@ -222,7 +221,13 @@ int main(int argc, char **argv)
                 //    Comment
 //                Membranes[i].import_config(membrane_config_list[i]);
                 //    Uncomment
-                Membranes[i].import_config(membrane_configs[i]);
+                try{
+                    Membranes[i].import_config(membrane_configs[i]);
+                }
+                catch(const std::exception& e) {
+                    printf("EXCEPTION: %s\n", e.what());
+                    return 0;
+                }
             }
         }
         
@@ -239,7 +244,13 @@ int main(int argc, char **argv)
                 //    Comment
 //                Actins[i].import_config(actin_config_list[i]);
                 //    Uncomment
-                Actins[i].import_config(actin_configs[i]);
+                try {
+                    Actins[i].import_config(actin_configs[i]);
+                }
+                catch(const std::exception& e) {
+                    printf("EXCEPTION: %s\n", e.what());
+                    return 0;
+                }
             }
         }
         
@@ -255,7 +266,13 @@ int main(int argc, char **argv)
                 ECMs[i].set_index(i);
                 //SAJAD:: write a new import function
 //                ECMs[i].import_config(ecm_config_list[i]);
-                ECMs[i].import_config(ecm_configs[i]);
+                try {
+                    ECMs[i].import_config(ecm_configs[i]);
+                }
+                catch(const std::exception& e) {
+                    printf("EXCEPTION: %s\n", e.what());
+                    return 0;
+                }
             }
             
         }
@@ -271,13 +288,20 @@ int main(int argc, char **argv)
                 Chromatins[i].set_label(label);
                 Chromatins[i].set_file_time(buffer);
                 Chromatins[i].set_index(i);
+                try {
                 Chromatins[i].import_config(chromatin_configs[i]);
+                }
+                catch(const std::exception& e) {
+                    printf("EXCEPTION: %s\n", e.what());
+                    return 0;
+                }
                 chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
             }
         }
         
         
         if (GenConst::Num_of_Membranes!=0) {
+            
             for (int i=0; i<Membranes.size(); i++) {
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
                 num_of_bonds        += Membranes[i].get_num_of_node_pairs();
@@ -545,14 +569,17 @@ int main(int argc, char **argv)
                 //
             }
             //                cout<<"CreateCheckpoint\n";
+            
             if (GenConst::CreateCheckpoint) {
                 omm->context->createCheckpoint(wcheckpoint);
                 //End: Exporting congiguration of classes for simulation resume.
             }
             
-            if (time >= GenConst::Simulation_Time_In_Ps)
+            if (time >= GenConst::Simulation_Time_In_Ps){
                 break;
+            }
             //                cout<<"myStepWithOpenMM\n";
+            
             myStepWithOpenMM(omm,time_dependant_data, all_atoms, NumSilentSteps, total_step_num);
             
             if (100*time/GenConst::Simulation_Time_In_Ps>progressp){
@@ -564,11 +591,10 @@ int main(int argc, char **argv)
                 progress++;
             }
             
+            
             if (check_for_membrane_update(Membranes, time, last_update_time)) {
                 updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
             }
-            
-            
             
             
             //                if (time>100 && set_spring) {
@@ -597,7 +623,6 @@ int main(int argc, char **argv)
             
             //if(progress==0 or progress==25 or progress==50 or progress==75){
             
-            
             if ( int(time*1000/GenConst::Step_Size_In_Fs) >= MCCalcTime and GenConst::Mem_fluidity !=0){
                 
                 //Membranes[0].check_the_flip(omm, all_bonds , all_dihedrals);
@@ -607,7 +632,6 @@ int main(int argc, char **argv)
                 
                 MCCalcTime += MCCalcstep;
             }
-            
             if(frame%50==2 and  GenConst::Mem_fluidity !=0){
                 
                 cout<<"\n total monte_carlo tries  "<<MC_total_tries<<endl;
