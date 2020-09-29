@@ -628,7 +628,7 @@ public:
         Params["BendingCoeff"] = values;
         insertOrder.push_back("BendingCoeff");
         
-        values[0] ="Au";
+        values[0] ="Av";
         values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
         Params["NominalLengthInNm"] = values;
         insertOrder.push_back("NominalLengthInNm");
