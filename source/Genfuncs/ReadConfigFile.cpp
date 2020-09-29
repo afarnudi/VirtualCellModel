@@ -80,7 +80,7 @@ vector<vector<string>> sort_class_configs(vector<string> lines){
         map<string, int> class_labels;
         vector<vector<string>> temp_configs;
         for (auto &line:lines){
-            vector<string> split = split_and_check_for_comments(line);
+            vector<string> split = split_and_check_for_comments(line, "Class config sorter: ");
             if (split.size()>0) {
                 if (split[0][0]=='-') {
                     class_order++;
@@ -113,7 +113,7 @@ void parse_genconfig_parameters(vector<string> lines){
     lines.erase(lines.begin()+0);
     for (int i=0; i<lines.size(); i++) {
         if(lines[i].size()!=0){
-            vector<string> split = split_and_check_for_comments(lines[i]);
+            vector<string> split = split_and_check_for_comments(lines[i], "General config parser: ");
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = values.GenParams.find(split[0]);
@@ -138,7 +138,7 @@ void parse_genconfig_parameters(vector<string> lines){
 void assign_general_parameters(GeneralParameters &defaults){
     for (auto const& it : defaults.GenParams)
     {
-        vector<string> split = split_and_check_for_comments(it.second[0]);
+        vector<string> split = split_and_check_for_comments(it.second[0], "General parameters: "+it.first);
         
         if (it.first == "SimulationTimeInPs") {
             GenConst::Simulation_Time_In_Ps=stod(split[0]);
@@ -262,7 +262,7 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
     for (auto &param: values.GenParams){
         bool add =true;
         for (auto  &cparam: config_lines["-GeneralParameters"]) {
-            vector<string> split = split_and_check_for_comments(cparam);
+            vector<string> split = split_and_check_for_comments(cparam, "General parameters Reporter: Default values: ");
             if (split[0] == param.first) {
                 add =false;
                 break;
@@ -285,7 +285,7 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
         for (auto &param: mem.get_map()){
             bool add =true;
             for (auto  &cparam: config_lines["-Membrane"]) {
-                vector<string> split = split_and_check_for_comments(cparam);
+                vector<string> split = split_and_check_for_comments(cparam, "Membrane Reporter: Default values: ");
                 if (split[0] == param.first) {
                     add =false;
                     break;
@@ -308,7 +308,7 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
         for (auto &param: act.get_map()){
             bool add =true;
             for (auto  &cparam: config_lines["-Actin"]) {
-                vector<string> split = split_and_check_for_comments(cparam);
+                vector<string> split = split_and_check_for_comments(cparam, "Actin Reporter: Default values: ");
                 if (split[0] == param.first) {
                     add =false;
                     break;
@@ -332,7 +332,7 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
         for (auto &param: ecm.get_map()){
             bool add =true;
             for (auto  &cparam: config_lines["-ECM"]) {
-                vector<string> split = split_and_check_for_comments(cparam);
+                vector<string> split = split_and_check_for_comments(cparam, "ECM Reporter: Default values: ");
                 if (split[0] == param.first) {
                     add =false;
                     break;
@@ -356,7 +356,7 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
         for (auto &param: chromo.get_map()){
             bool add =true;
             for (auto  &cparam: config_lines["-Chromatin"]) {
-                vector<string> split = split_and_check_for_comments(cparam);
+                vector<string> split = split_and_check_for_comments(cparam, "Chromatin Reporter: Default values: ");
                 if (split[0] == param.first) {
                     add =false;
                     break;
@@ -367,4 +367,8 @@ void generate_report(map<string, vector<string> > config_lines, string Reporname
             }
         }
     }
+    for (auto &i : config_lines["-InteractionTable"]) {
+        write_report<<"AA "<<i<<endl;
+    }
+    
 }

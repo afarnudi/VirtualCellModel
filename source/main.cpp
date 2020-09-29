@@ -218,9 +218,6 @@ int main(int argc, char **argv)
                 Membranes[i].set_label(label);
                 Membranes[i].set_file_time(buffer);
                 Membranes[i].set_index(i);
-                //    Comment
-//                Membranes[i].import_config(membrane_config_list[i]);
-                //    Uncomment
                 try{
                     Membranes[i].import_config(membrane_configs[i]);
                 }
@@ -370,6 +367,7 @@ int main(int argc, char **argv)
     all_atoms[num_of_atoms].type         =EndOfList;
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
+    
     
     if (GenConst::Num_of_Membranes!=0) {
         OpenMM_membrane_info_relay(Membranes,

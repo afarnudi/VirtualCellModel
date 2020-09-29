@@ -10,7 +10,7 @@ void Chromatin::import_config(vector<string> configlines){
     //replace the default values with the parameters read from the Config file
     for (int i=0; i<configlines.size(); i++) {
         if(configlines[i].size()!=0){
-            vector<string> split = split_and_check_for_comments(configlines[i]);
+            vector<string> split = split_and_check_for_comments(configlines[i], "Chromatin: Config reader");
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);
@@ -63,7 +63,7 @@ void Chromatin::consistancy_check(){
     epsilon_LJ.resize(num_of_node_types,0);
     sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
     for (auto const& it : Params){
-            vector<string> split = split_and_check_for_comments(it.second[0]);
+            vector<string> split = split_and_check_for_comments(it.second[0], it.first);
             
         if (it.first == "LJsigma") {
             sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
@@ -128,7 +128,7 @@ void Chromatin::consistancy_check(){
 }
 void Chromatin::assign_parameters(void){
     for (auto const& it : Params){
-        vector<string> split = split_and_check_for_comments(it.second[0]);
+        vector<string> split = split_and_check_for_comments(it.second[0], "Chroamtin: "+it.first);
         
         if (it.first == "ImportCoordinates") {
             if (split[0] != "path/to/my/coordinates.txt") {

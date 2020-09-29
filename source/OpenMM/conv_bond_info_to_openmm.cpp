@@ -8,12 +8,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
         bonds[i].class_label = mem.get_label() + mem.get_label();
-//        if (mem.get_new_node_radius()!=-1) {
-//            bonds[i].nominalLengthInNm=mem.get_node_pair_distance(i);
-//        } else {
-//            bonds[i].nominalLengthInNm=2*mem.get_new_node_radius();
-//        }
-        bonds[i].nominalLengthInNm=mem.get_node_pair_distance(i);
+        bonds[i].nominalLengthInNm=mem.get_node_pair_distance_in_Nm(i);
         
         switch (bonds[i].type) {
                 //FENE

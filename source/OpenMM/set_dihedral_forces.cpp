@@ -19,9 +19,13 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             DFs_classes.insert(dihedrals[i].class_label);
             DFs_index++;
             
-            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1+cos("+ std::to_string(dihedrals[i].spontaneousBendingAngleInRad) +"-""dihedral(p1,p2,p3,p4)))"));
-            DihedralForces[DFs_index]->addPerBondParameter("K_bend");
+            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle) )"));
+//            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(dihedral(p1,p2,p3,p4))"));
             
+            DihedralForces[DFs_index]->addPerBondParameter("K_bend");
+            DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
+          
+//
             if (GenConst::Periodic_box) {
                 DihedralForces[DFs_index]->setUsesPeriodicBoundaryConditions(true);
             }
@@ -30,7 +34,10 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             
         }
         
-        vector<double> parameters={dihedrals[i].bendingStiffnessinKJ};
+        vector<double> parameters;
+        parameters.push_back(dihedrals[i].bendingStiffnessinKJ);
+        parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
+       
         DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
     }
 }

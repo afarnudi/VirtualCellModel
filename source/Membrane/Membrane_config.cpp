@@ -12,7 +12,7 @@ void Membrane::import_config(vector<string> configlines){
     //replace the default values with the parameters read from the Config file
     for (int i=0; i<configlines.size(); i++) {
         if(configlines[i].size()!=0){
-            vector<string> split = split_and_check_for_comments(configlines[i]);
+            vector<string> split = split_and_check_for_comments(configlines[i], "Membrane: Config reader");
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);
@@ -45,10 +45,10 @@ void Membrane::consistancy_check(){
     
     if (Node_Bond_distances_stat!= "Au" && Node_Bond_distances_stat!= "Av") {
         try {
-            Node_Bond_Nominal_Length= stod(Node_Bond_distances_stat);
+            Node_Bond_Nominal_Length_in_Nm= stod(Node_Bond_distances_stat);
         } catch (...) {
             string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"NominalLength\" (";
+            errorMessage+="Membrane config parser: Invalid input for the \"NominalLengthInNm\" (";
             errorMessage+=TFILE;
             errorMessage+=Node_Bond_distances_stat;
             errorMessage+=TWARN;
@@ -57,12 +57,36 @@ void Membrane::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    
+    if (Triangle_pair_angle_stat!= "Au" && Triangle_pair_angle_stat!= "Av") {
+        try {
+            Triangle_pair_Nominal_angle_in_degrees= stod(Triangle_pair_angle_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"SpontaneousTriangleBendingAngleInDegrees\" (";
+            errorMessage+=TFILE;
+            errorMessage+=Triangle_pair_angle_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 180)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
 }
 
 void Membrane::assign_parameters(void){
     for (auto const& it : Params){
-        vector<string> split = split_and_check_for_comments(it.second[0]);
-        
+        vector<string> split = split_and_check_for_comments(it.second[0], "Membrane: "+it.first);
+        if (split.size()==0) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \""+it.first+"\". Value in configuration file";
+            errorMessage+=TFILE;
+            errorMessage+=it.second[0];
+            errorMessage+=TWARN;
+            errorMessage+=". Please check the template and try again.";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
         if (it.first == "MeshFile") {
             string extension = split[0];
             extension.erase(extension.begin(),extension.begin()+extension.find('.')+1);
@@ -107,10 +131,10 @@ void Membrane::assign_parameters(void){
             Damping_coefficient = stod(split[0]);
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
-        } else if (it.first == "NominalLength") {
+        } else if (it.first == "NominalLengthInNm") {
             Node_Bond_distances_stat = split[0];
-        } else if (it.first == "SpontaneousTriangleBendingInDegrees") {
-            SpontaneousTriangleBendingInDegrees = stod(split[0]);
+        } else if (it.first == "SpontaneousTriangleBendingAngleInDegrees") {
+            Triangle_pair_angle_stat = split[0];
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {

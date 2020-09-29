@@ -12,7 +12,7 @@ void ECM::import_config(vector<string> configlines){
     //replace the default values with the parameters read from the Config file
     for (int i=0; i<configlines.size(); i++) {
         if(configlines[i].size()!=0){
-            vector<string> split = split_and_check_for_comments(configlines[i]);
+            vector<string> split = split_and_check_for_comments(configlines[i], "ECM: Config reader");
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);

@@ -219,6 +219,9 @@ void myWritePDBFrame(int frameNum,
             timeInPs,
             energyInKJ,
             potential_energyInKJ);
+//    cout<<endl;
+//    cout<<"kbend*angle "<<potential_energyInKJ<<endl;
+//    cout<<"thetha "<<potential_energyInKJ*180/M_PI<<endl;
     int index=0;
     string hist = atoms[0].pdb;
     if (atoms[0].class_label == "Chromatin") {

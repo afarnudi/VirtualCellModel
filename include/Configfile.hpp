@@ -18,7 +18,7 @@ using namespace std;
 
 void configfile_generator(int status);
 
-vector<string> split_and_check_for_comments(string line);
+vector<string> split_and_check_for_comments(string line, string statement);
 int checkflag(string line, map<string, int> FLAG, map<string, vector<string> > &FLAGlines, int flag);
 string getmapkey(map<string, int> FLAG, int value);
 

@@ -51,6 +51,8 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     check();
     set_bond_nominal_length();
+    set_dihedral_atoms();
+    set_bending_nominal_angle();
     
     if (New_Radius!=-1) {
         double ratio = Radius/Node_radius;

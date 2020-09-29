@@ -16,7 +16,7 @@
 using namespace std;
 vector<vector<string> > check_and_apply_inheritance(vector<vector<string> > configs, map<string, int> labels){
     for (auto &conflines: configs) {
-        vector<string> split = split_and_check_for_comments(conflines[0]);
+        vector<string> split = split_and_check_for_comments(conflines[0], "Class config copy: ");
         if (split.size()>3) {
             string daughter = split[1];
             string mother = split[3];
@@ -28,9 +28,9 @@ vector<vector<string> > check_and_apply_inheritance(vector<vector<string> > conf
             configs[labels[daughter]]= configs[labels[mother]];
             configs[labels[daughter]][0]=copy[0];
             for (int i=1; i<copy.size();i++){
-                vector<string> copysplit = split_and_check_for_comments(copy[i]);
+                vector<string> copysplit = split_and_check_for_comments(copy[i], "Class config copy: ");
                 for (int j=0; j<configs[labels[daughter]].size(); j++) {
-                    vector<string> daughtersplit = split_and_check_for_comments(configs[labels[daughter]][j]);
+                    vector<string> daughtersplit = split_and_check_for_comments(configs[labels[daughter]][j], "Class config copy: ");
                     if (daughtersplit[0]==copysplit[0]) {
                         configs[labels[daughter]].erase(configs[labels[daughter]].begin()+j);
                     }
@@ -68,7 +68,7 @@ void get_class_numbers(map<string, vector<string> > config_lines){
 int count_class_numbers(vector<string> config_lines){
     int class_count=0;
     for (auto & element : config_lines) {
-        auto split = split_and_check_for_comments(element);
+        auto split = split_and_check_for_comments(element, "Class conter: ");
         if (split[0][0]=='-') {
             class_count++;
         }
@@ -88,7 +88,7 @@ void check_class_label(string classname, string label, map<string, int> label_ma
 }
 
 int checkflag(string line, map<string, int> FLAG, map<string, vector<string> > &FLAGlines, int flag){
-    vector<string> split = split_and_check_for_comments(line);
+    vector<string> split = split_and_check_for_comments(line, "Class identifier: ");
     if (split[0][0]=='-') {
         map<string, int>::iterator it;
         it = FLAG.find(split[0]);
@@ -112,7 +112,7 @@ string getmapkey(map<string, int> FLAG, int value){
     return "";
 }
 
-vector<string> split_and_check_for_comments(string line){
+vector<string> split_and_check_for_comments(string line, string statement){
     char comment='#';
     vector<string> empty;
     if(!line.empty()){
@@ -120,7 +120,12 @@ vector<string> split_and_check_for_comments(string line){
         vector<string> words(istream_iterator<string>{iss}, istream_iterator<string>());
         
         
-        
+        if (words.size()==0) {
+            string errorMessage = TWARN;
+            errorMessage+="Config parser: No/Invalid input for the \""+statement+"\". Please consult the template and try again.";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
         if (words[0][0] == comment) {
             words.clear();
             return words;

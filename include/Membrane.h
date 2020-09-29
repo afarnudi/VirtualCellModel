@@ -106,7 +106,7 @@ protected:
     void Bending_potetial_2(double theta_0);
     
     double Total_Bending_Energy = 0.0;
-    
+    vector<vector< int > > dihedral_atoms;
 public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
@@ -185,9 +185,14 @@ public:
     vector<vector<int> >    Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
-    vector<double>          Node_Bond_distances;
+    vector<double>          Node_Bond_distances_in_Nm;
     string                  Node_Bond_distances_stat;
-    double                  Node_Bond_Nominal_Length=-1;
+    double                  Node_Bond_Nominal_Length_in_Nm=-1;
+    
+    vector<double>          Triangle_pair_angles_in_radians;
+    string                  Triangle_pair_angle_stat;
+    double                  Triangle_pair_Nominal_angle_in_degrees=-1;
+    
     vector<vector<int> >    Triangle_Pair_Nodes;
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
@@ -235,6 +240,8 @@ public:
     
     void check(void);
     void set_bond_nominal_length(void);
+    void set_bending_nominal_angle(void);
+    void set_dihedral_atoms(void);
     void check_radius_update_values(void);
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     void Elastic_Force_Calculator(double theta_0);
@@ -306,7 +313,6 @@ public:
     double ky=10;
     double kz=10;
     
-    double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
     /**Returns the last saved volume*/
@@ -373,8 +379,8 @@ public:
         return Node_Bond_list[bond_num][node_id];
     }
     /**Return the distance between node pair index. This list is initiated at the begining of the simulation.*/
-    int get_node_pair_distance(int bond_num){
-        return Node_Bond_distances[bond_num];
+    double get_node_pair_distance_in_Nm(int bond_num){
+        return Node_Bond_distances_in_Nm[bond_num];
     }
     /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
     double get_node_mass(void){
@@ -397,9 +403,12 @@ public:
         return Bending_coefficient;
     }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
-    double get_spontaneous_angle_in_Rad(void){
-        return SpontaneousTriangleBendingInDegrees*M_PI/180.;
+    double get_spontaneous_angle_in_Rad(int nodePairIndex){
+        return Triangle_pair_angles_in_radians[nodePairIndex];
     }
+    /**Return the spontaneous bending angle between triangle pairs in radians. */
+    
+    
     
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_triangle_pairs(){
@@ -408,6 +417,11 @@ public:
     /**Return the node IDs of the dihedral angles.*/
     vector<int> get_traingle_pair_nodes_list(int triangle_pair){
         return Triangle_Pair_Nodes[triangle_pair];
+    }
+    
+    /**Return the node IDs of the dihedral angles.*/
+    vector<int> get_dihedral_atoms_list(int index){
+        return dihedral_atoms[index];
     }
     /**Return the node ID of the dihedral angles member.*/
     int get_traingle_pair_node(int triangle_pair, int index){
@@ -616,13 +630,13 @@ public:
         
         values[0] ="Au";
         values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
-        Params["NominalLength"] = values;
-        insertOrder.push_back("NominalLength");
+        Params["NominalLengthInNm"] = values;
+        insertOrder.push_back("NominalLengthInNm");
         
         values[0] ="180";
-        values[1] ="#Set the spontaneus bending angle (in degrees) between two triangle pairs on the mesh. Default 180";
-        Params["SpontaneousTriangleBendingInDegrees"] = values;
-        insertOrder.push_back("SpontaneousTriangleBendingInDegrees");
+        values[1] ="#Set the nominal angle (in degrees) of the mesh triangle pair potential using: 1) Au: The initial angles  of the mesh triangles; 2) Av: The average triangle pair angles; 3) \"value\": Where you type a specific  value.";
+        Params["SpontaneousTriangleBendingAngleInDegrees"] = values;
+        insertOrder.push_back("SpontaneousTriangleBendingAngleInDegrees");
         
         values[0] ="1";
         values[1] ="#Used to scale the Membrane coordinates. Default 1";

@@ -22,7 +22,7 @@ vector<vector<int> > parse_interactiontable_parameters(vector<string> lines){
     for (int i=0; i<table_size ; i++) {
         
         string line = lines[i];
-        vector<string> split = split_and_check_for_comments(line);
+        vector<string> split = split_and_check_for_comments(line, "Interaction table: Config reader");
         
         if (split.size()==0) {
             i--;
