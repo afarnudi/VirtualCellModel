@@ -21,7 +21,10 @@ void ECM::import_config(vector<string> configlines){
                     configlines[i].erase(configlines[i].begin(),configlines[i].begin()+int(split[0].size()) );
                     it->second[0] = configlines[i];
                 } else {
-                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Membrane parameter."<<TRESET<<endl;
+                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a ECM parameter."<<TRESET<<endl;
+                    cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
+                    string anykey;
+                    cin>>anykey;
                 }
             }
         }

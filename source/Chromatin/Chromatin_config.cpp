@@ -20,6 +20,9 @@ void Chromatin::import_config(vector<string> configlines){
                     it->second[0] = configlines[i];
                 } else {
                     cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Chromatin parameter."<<TRESET<<endl;
+                    cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
+                    string anykey;
+                    cin>>anykey;
                 }
             }
         }

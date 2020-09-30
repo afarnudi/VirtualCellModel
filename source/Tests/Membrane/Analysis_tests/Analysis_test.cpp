@@ -134,6 +134,12 @@ TEST_F( MemAnalysisTest, Radius){
     EXPECT_NEAR( radius , 1, 0.00002);
 }
 
+TEST_F( MemAnalysisTest, RadiusWeighted){
+    
+    Membranes[0]->get_membrane_weighted_radius();
+//    EXPECT_NEAR( radius , 1, 0.00002);
+}
+
 TEST_F( MemAnalysisTest, VoronoiAreaSum){
     
     double integral =0;

@@ -522,6 +522,22 @@ public:
         return Node_radius;
     }
     
+    double get_membrane_weighted_radius(void){
+        
+        vector< double> unit;
+        unit.resize(Num_of_Nodes,1);
+        vector<double> radii;
+        radii.resize(Num_of_Nodes,0);
+        for (int i=0; i<Num_of_Nodes; i++) {
+            radii[i]= spherical_positions[i][0];
+        }
+        double weighted_radius_sum = calc_vectorlist_vectorlist_surface_integral(radii,unit);
+        weighted_radius_sum/=4*M_PI;
+        cout<<weighted_radius_sum<<endl;
+//        exit(0);
+        return 0;
+    }
+    
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
