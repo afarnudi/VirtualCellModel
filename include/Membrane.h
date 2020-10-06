@@ -291,7 +291,6 @@ public:
     //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(std::string import_file_name);
     void import_config(vector<string> configlines);
-    void generate_report(void);
 
     void write_pov_traj(std::string traj_name, std::string label, int currentstep);
     

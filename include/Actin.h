@@ -142,7 +142,6 @@ public:
     //Member headers
     void import_config(vector<string> configlines);
     void Elastic_Force_Calculator(void);
-    void generate_report();
     void export_for_resume(int MD_step);
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
     /**Set the current state (OpenMM) of the class.*/

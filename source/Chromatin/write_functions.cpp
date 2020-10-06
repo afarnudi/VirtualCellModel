@@ -69,67 +69,6 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
     }
 }
 
-void Chromatin::generate_report(void)
-{
-    std::string Report_file_name;
-    Report_file_name= "Results/Reports/Report_Chromatin_" + std::to_string(index) + "_";
-    Report_file_name+=file_time;
-    Report_file_name+=".txt";
-    
-    std::ofstream Report;
-    Report.open(Report_file_name.c_str());
-    
-    if (!Report.is_open()){
-        cout<<"Couldn't generate report. Please check that the required directories exist. The required directory should be ./bin/Results/Reports or ./Results/Reports"<<endl;
-        Report.close();
-        cout<<"Generating report in an alternative directory:\nbin/Results/Reports/"<<endl;
-        Report_file_name= "bin/Results/Reports/Report_Chromatin_" + std::to_string(index) + "_";
-        Report_file_name+=file_time;
-        Report_file_name+=".txt";
-        Report.open(Report_file_name.c_str());
-    }
-    
-    Report<< std:: fixed;
-    Report<<"MD Params in the general configuration file:\n---------------\n";
-    Report<<"Simulation_Time_In_Ps\t"<<GenConst::Simulation_Time_In_Ps<<endl;
-    Report<<"Step_Size_In_Fs\t"<<GenConst::Step_Size_In_Fs<<endl;
-    Report<<"Report_Interval_In_Fs\t"<<GenConst::Report_Interval_In_Fs<<endl;
-    Report<<"MC_step\t"<<GenConst::MC_step<<endl;
-    Report<<"Mem_fluidity\t"<<GenConst::Mem_fluidity<<endl;
-    Report<<"Lbox\t"<<GenConst::Lbox<<endl;
-    Report<<"Periodic_box\t"<<GenConst::Periodic_box<<endl;
-    Report<<"trajectory_file_name\t"<<GenConst::trajectory_file_name<<endl;
-    
-    
-    Report<<"Chromatin Params:\n---------------\n";
-    Report<<"Num_of_Nodes\t"<<Num_of_Nodes<<endl;
-    Report<<"Node_Mass\t"<<Node_Mass<<endl;
-    Report<<"Node_radius\t"<<Node_radius<<endl;
-    Report<<"Spring model\t"<<spring_model<<endl;
-    Report<<"Spring coefficient\t"<<Spring_coefficient<<endl;
-    Report<<"Damping coefficient\t"<<Damping_coefficient<<endl;
-    if (spring_model==1)
-    {
-        Report<<"Membrane Spring Model:\tFENE"<<endl;
-        
-    }
-    if (spring_model==2)
-    {
-        Report<<"Membrane Spring Model:\tHoukian"<<endl;
-        
-    }
-//    Report<<"Shift_in_X_direction\t"<<Shift_in_X_direction<<endl;
-//    Report<<"Shift_in_Y_direction\t"<<Shift_in_Y_direction<<endl;
-//    Report<<"Shift_in_Z_direction\t"<<Shift_in_Z_direction<<endl;
-    
-    Report<<"num of node types = "<<num_of_node_types<<endl;
-    Report<<"epsilon_LJ\tsigma_LJ\n--------------------\n";
-    for (int i=0; i<num_of_node_types; i++) {
-        Report<<std::to_string(i)<<" "<<epsilon_LJ[i]<<"\t"<<sigma_LJ[i]<<endl;
-    }
-    
-}
-
 void Chromatin::export_coordinates(void){
     std::string traj_name="Results/"+GenConst::trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+".txt";
     
