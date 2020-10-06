@@ -35,7 +35,6 @@
 #include "General_functions.hpp"
 #include "write_functions.hpp"
 #include "interaction.hpp"
-#include "maps.hpp"
 #include "Global_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
@@ -156,45 +155,31 @@ int main(int argc, char **argv)
     
     
     clock_t tStart = clock();//Time the programme
-//    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
-//    Uncomment
+
     map<string, vector<string> > config_lines =read_configfile(configfilename);
     get_class_numbers(config_lines);
     parse_genconfig_parameters(config_lines["-GeneralParameters"]);
 
     vector<vector<int> > interaction_map;
-    //    Comment
-//    read_interaction_map(interaction_map);
-//    Uncomment
+    
     interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
     
-    ofstream Trajectory;
-    //    ofstream calcforce_l0;
-    //    ofstream calcforce_delta;
-    //    calcforce_l0.open("calcforce_l0", ios::app);
-    //    calcforce_delta.open("calcforce_delta", ios::app);
-    string traj_file_name=GenConst::trajectory_file_name+".xyz";
     string ckeckpoint_name=GenConst::trajectory_file_name+"_Checkpoint";
-    
     
     vector<Membrane> Membranes;
     vector<std::set<int> >  membrane_set;
-    //    Uncomment
     vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
     
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
-    //    Uncomment
     vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
 
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
-//        Uncomment
     vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
     
     vector<Chromatin> Chromatins;
     vector<vector<std::set<int> > > chromatin_set;
-    //    Uncomment
     vector<vector<string> > chromatin_configs =sort_class_configs(config_lines["-Chromatin"]);
     
     int num_of_atoms=0;
@@ -221,8 +206,6 @@ int main(int argc, char **argv)
         }
         
         if (GenConst::Num_of_Actins!=0) {
-//            Include_Actin = true;
-            
             Actins.resize(GenConst::Num_of_Actins);
             actin_set.resize(GenConst::Num_of_Actins);
             for (int i=0; i<GenConst::Num_of_Actins; i++) {
@@ -230,9 +213,6 @@ int main(int argc, char **argv)
                 Actins[i].set_label(label);
                 Actins[i].set_file_time(buffer);
                 Actins[i].set_index(i);
-                //    Comment
-//                Actins[i].import_config(actin_config_list[i]);
-                //    Uncomment
                 try {
                     Actins[i].import_config(actin_configs[i]);
                 }
@@ -244,8 +224,6 @@ int main(int argc, char **argv)
         }
         
         if (GenConst::Num_of_ECMs!=0){
-//            Include_ECM=true;
-            
             ECMs.resize(GenConst::Num_of_ECMs);
             ecm_set.resize(GenConst::Num_of_ECMs);
             for (int i=0; i<GenConst::Num_of_ECMs; i++) {
@@ -253,8 +231,6 @@ int main(int argc, char **argv)
                 ECMs[i].set_label(label);
                 ECMs[i].set_file_time(buffer);
                 ECMs[i].set_index(i);
-                //SAJAD:: write a new import function
-//                ECMs[i].import_config(ecm_config_list[i]);
                 try {
                     ECMs[i].import_config(ecm_configs[i]);
                 }
@@ -268,8 +244,6 @@ int main(int argc, char **argv)
         
         
         if (GenConst::Num_of_Chromatins!=0) {
-//            Include_Chromatin = true;
-            
             Chromatins.resize(GenConst::Num_of_Chromatins);
             chromatin_set.resize(GenConst::Num_of_Chromatins);
             for (int i=0; i<GenConst::Num_of_Chromatins; i++) {

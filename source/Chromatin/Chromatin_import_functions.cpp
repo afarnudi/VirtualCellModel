@@ -29,27 +29,6 @@ void Chromatin::import_coordinates(string import_file_name){
     vector<double> zero_double;
     zero_double.resize(3,0);
     
-    double temp_vector[3];
-    
-//    while (true) {
-//        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
-//        if (read_coordinate_file.eof()) break;
-//        Node_Position.push_back(read_double);
-//        if (Num_of_Nodes>0) {
-//            temp_vector[0] = Node_Position[Num_of_Nodes][0]-Node_Position[Num_of_Nodes-1][0];
-//            temp_vector[1] = Node_Position[Num_of_Nodes][1]-Node_Position[Num_of_Nodes-1][1];
-//            temp_vector[2] = Node_Position[Num_of_Nodes][2]-Node_Position[Num_of_Nodes-1][2];
-//
-//            bond_length += vector_length(temp_vector);
-//        }
-//
-//        read_coordinate_file>>read_double[0]>>read_double[1]>>read_double[2];
-//        Node_Velocity.push_back(read_double);
-//        Node_Force.push_back(zero_double);
-//
-//        Num_of_Nodes++;
-//    }
-    
     string line;
     while (!read_coordinate_file.eof()) {
         getline(read_coordinate_file, line);
@@ -78,29 +57,6 @@ void Chromatin::import_coordinates(string import_file_name){
     }
     cout<<"Number of nodes\t"<<Num_of_Nodes<<endl;
     
-    
-    
-//    cout<<TWARN<<"Node forces set to zero"<<TRESET<<endl;
-    
-    
-    
-    
-    //bond_length changed to a Au Av implamentation
-//    if (bond_radius> 0.0001) {
-//        if (bond_length<2) {
-//            cout<<"Bond length is shorter than the node diameter. The relative parameters, bond_length and node_radius, can be adjusted in the chromatin configuration file.\n";
-//            exit(EXIT_FAILURE);
-//        } else {
-//            cout<<"will generate virtual spheres in between node beads to prevent bonds from slipping through each other.\n";
-//            generate_virtual_sites();
-//        }
-//    }
-//
-//    ABC_index.resize(Num_of_Nodes);
-//    pdb_label_check();
-//    shift_node_positions();
-//    shift_node_velocities();
-//    cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
 }
 
 void Chromatin::import_resume(string import_file_name){

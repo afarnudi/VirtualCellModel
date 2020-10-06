@@ -140,9 +140,7 @@ public:
     vector<int> Num_of_Actin_Membrane_shared_Nodes;
     
     //Member headers
-    void import_config(std::string config_file_name);
     void import_config(vector<string> configlines);
-    void set_map_parameter(std::string param_name, double param_value);
     void Elastic_Force_Calculator(void);
     void generate_report();
     void export_for_resume(int MD_step);

@@ -102,7 +102,6 @@ private:
     void Node_Bond_identifier_3D_square(void);
     
     void initialise(int dimension);
-    void set_map_parameter(std::string param_name, double param_value);
     void Node_neighbour_list_constructor(void);
     
 //    void read_input(string input_file);
@@ -117,7 +116,6 @@ private:
     
 public:
     
-    void import_config(std::string config_file_name);
     void import_config(vector<string> configlines);
     void generate_report(void);
     void export_for_resume(int MD_step);

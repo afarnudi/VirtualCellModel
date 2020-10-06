@@ -131,9 +131,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     
     void import_resume(string import_file_name);
     void import_coordinates(string import_file_name);
-    void import_config(string config_file_name);
     void import_config(vector<string> configlines);
-    void set_map_parameter(string param_name, double param_value);
     void generate_report(void);
 //    void Thermostat_2(double MD_KT);
 //    void Thermostat_N6(double MD_KT);
