@@ -252,9 +252,10 @@ void assign_general_parameters(GeneralParameters &defaults){
 }
 
 
-void generate_report(map<string, vector<string> > config_lines, string Reporname){
+void generate_report(map<string, vector<string> > config_lines){
+    string Reportname = GenConst::trajectory_file_name+"_report.txt";
     ofstream write_report;
-    write_report.open(Reporname.c_str());
+    write_report.open(Reportname.c_str());
     
     //First write everything under -GeneralParameters in the config file
     for (auto &i : config_lines["-GeneralParameters"]) {

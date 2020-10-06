@@ -398,10 +398,7 @@ int main(int argc, char **argv)
     
     // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
     // usage and runtime errors are caught and reported.
-    assign_project_directories(buffer);
-    cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl;
-    //        GenConst::Lbox = 200;
-    
+
     try {
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();
@@ -424,8 +421,13 @@ int main(int argc, char **argv)
             //wrok in progress.
             //Need to retrive all information from the checkpoint and relay them to the respective classes.
         }
-        
+        assign_project_directories(buffer);
         cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl<<endl;
+        
+        //export generated chromatin coordinates; The export happens only if the chromatin is set to export coordinates in it's configuration.
+        for (int ich=0;ich<Chromatins.size();ich++) {
+            Chromatins[ich].export_coordinates();
+        }
         // Run the simulation:
         //  (1) Write the first line of the PDB file and the initial configuration.
         //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -442,13 +444,9 @@ int main(int argc, char **argv)
         cout<<platformName.c_str()<<TRESET<<endl;
         
         
-        std::string traj_name=GenConst::trajectory_file_name+".pdb";
-        std::string force_name=GenConst::trajectory_file_name+".pdb";
-        std::string traj_namexyz=GenConst::trajectory_file_name+".xyz";
         std::string Reporname=GenConst::trajectory_file_name+"_report.txt";
         
-//        traj_name = assign_project_directories();
-        generate_report(config_lines, Reporname);
+        generate_report(config_lines);
         
         
         std::filebuf wfb;
@@ -489,7 +487,7 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = GenConst::temperature;
         
-        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds, traj_name , force_name);
+        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
         for (int frame=1; ; ++frame) {
             
             double time, energyInKJ, potential_energyInKJ;
@@ -503,9 +501,7 @@ int main(int argc, char **argv)
                     collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 }
                 
-                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name , force_name);
-                //                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds, traj_name);
-                //                writeXYZFrame(atom_count, all_atoms, traj_namexyz);
+                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 
                 //Begin: Exporting congiguration of classes for simulation .
                 Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
@@ -603,6 +599,9 @@ int main(int argc, char **argv)
                 cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
+            
+            
+            //testing
             
         }
         

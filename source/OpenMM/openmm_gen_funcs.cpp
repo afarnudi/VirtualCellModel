@@ -207,11 +207,11 @@ void myWritePDBFrame(int frameNum,
                      double energyInKJ,
                      double potential_energyInKJ,
                      const MyAtomInfo atoms[],
-                     const Bonds bonds[],
-                     std::string traj_name,
-                     std::string force_name)
+                     const Bonds bonds[])
 {
     int EndOfList=-1;
+    
+    string traj_name= GenConst::trajectory_file_name+".pdb";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
@@ -276,49 +276,6 @@ void myWritePDBFrame(int frameNum,
     
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);
-
-
-
-
-    // write forces and potential energy on Force.pdb
-    FILE* sFile;
-    sFile = fopen (force_name.c_str(),"a");
-    
-    fprintf(sFile,"MODEL     %d\n", frameNum);
-    fprintf(sFile,"REMARK 250 time=%.3f ps; energy=%.3f kcal/mole\n",
-            timeInPs, potential_energyInKJ);
-
-    for (int n=0; atoms[n].type != EndOfList; ++n){
-            string new_label = atoms[n].pdb;
-            if (atoms[n].class_label == "Chromatin") {
-                new_label.pop_back();
-            }
-            if (atoms[n].class_label == "ECM") {
-                new_label.pop_back();
-            }
-
-            if (hist != new_label) {
-                index++;
-                hist = new_label;
-            }
-            fprintf(sFile,"ATOM  %5d %4s ETH %c   %4.0f %8.1f%8.1f%8.1f%6.2f%6.2f          %c\n",
-    //        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f %8.3f%8.3f%8.3f%6.2f%6.1f\n",
-                    n+1,
-                    atoms[n].pdb,
-                    chain[index],
-                    double(index),
-                    atoms[n].force[0],
-                    atoms[n].force[1],
-                    atoms[n].force[2],
-                    atoms[n].stretching_energy,
-                    atoms[n].energyInKJ,
-                    atoms[n].symbol);
-        }
-    
-    fprintf(sFile,"ENDMDL\n");
-    fclose (sFile);
-
-
 }
 
 void writeXYZFrame  (int atom_count,

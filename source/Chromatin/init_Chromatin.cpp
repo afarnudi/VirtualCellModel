@@ -51,9 +51,7 @@ void Chromatin::initialise(void){
     
     pdb_label_check();
     
-    if (ExportGeneratedCoordinates) {
-        export_coordinates();
-    }
+    
 //    Contact_Matrix.resize(Num_of_Nodes);
 //    for (int i=0; i<Num_of_Nodes; i++) {
 //        Contact_Matrix[i].resize(Num_of_Nodes, 0);

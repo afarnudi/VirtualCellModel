@@ -35,7 +35,7 @@ void assign_general_parameters(GeneralParameters &defaults);
 
 vector<vector<int> > parse_interactiontable_parameters(vector<string> lines);
 
-void generate_report(map<string, vector<string> > config_lines, string Reporname);
+void generate_report(map<string, vector<string> > config_lines);
 
 #endif /* OpenMM_structs_h */
 

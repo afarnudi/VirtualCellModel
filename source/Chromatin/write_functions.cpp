@@ -70,21 +70,24 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
 }
 
 void Chromatin::export_coordinates(void){
-    std::string traj_name="Results/"+GenConst::trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+".txt";
-    
-    std::ofstream exportcoords;
-    exportcoords.open(traj_name.c_str());
-    
-    if (!exportcoords.is_open()){
-        string errorMessage = TWARN;
-        errorMessage+="I can't write the chromatin initial coordinates to storage. \nPath: "+traj_name;
-        errorMessage+= TRESET;
-        throw std::runtime_error(errorMessage);
-    }
-    for (int i=0; i<Num_of_Nodes; i++) {
+    if (ExportGeneratedCoordinates) {
+        std::string traj_name=GenConst::trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+"_exported_coords.txt";
         
-        exportcoords<<std::fixed << std::setprecision(8)<<Node_Position[i][0]<<" "<<Node_Position[i][1]<<" "<<Node_Position[i][2]<<" "<<Node_Velocity[i][0]<<" "<<Node_Velocity[i][2]<<" "<<Node_Velocity[i][3]<<"\n";
+        std::ofstream exportcoords;
+        exportcoords.open(traj_name.c_str());
+        
+        if (!exportcoords.is_open()){
+            string errorMessage = TWARN;
+            errorMessage+="I can't write the chromatin initial coordinates to storage. \nPath: "+traj_name;
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        for (int i=0; i<Num_of_Nodes; i++) {
+            
+            exportcoords<<std::fixed << std::setprecision(8)<<Node_Position[i][0]<<" "<<Node_Position[i][1]<<" "<<Node_Position[i][2]<<" "<<Node_Velocity[i][0]<<" "<<Node_Velocity[i][2]<<" "<<Node_Velocity[i][3]<<"\n";
+        }
+        exportcoords.close();
     }
-    exportcoords.close();
+    
 }
 
