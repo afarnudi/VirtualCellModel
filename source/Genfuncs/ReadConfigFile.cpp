@@ -120,6 +120,11 @@ void parse_genconfig_parameters(vector<string> lines){
                 if (it != values.GenParams.end()) {
                     lines[i].erase(lines[i].begin(),lines[i].begin()+int(split[0].size()) );
                     it->second[0] = lines[i];
+                } else {
+                    cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a GeneralParameter."<<TRESET<<endl;
+                    cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
+                    getchar();
+                    cout<<TRESET;
                 }
             }
         }
@@ -238,8 +243,8 @@ void assign_general_parameters(GeneralParameters &defaults){
             GenConst::PeriodicBoxVector2.push_back(stod(split[0]));
             GenConst::PeriodicBoxVector2.push_back(stod(split[1]));
             GenConst::PeriodicBoxVector2.push_back(stod(split[2]));
-        } else if (it.first == "OutputFileName") {
-            GenConst::trajectory_file_name = split[0];
+        } else if (it.first == "ProjectName") {
+            GenConst::ProjectName = split[0];
         }
         
         

@@ -22,8 +22,9 @@ private: //(if we define these constants as private members of the class, we can
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy;
-    double Node_radius=1;
     
+    double Node_radius=0;
+    string Node_radius_stat;
     int index;
     int spring_model=0;
     
@@ -44,7 +45,8 @@ private: //(if we define these constants as private members of the class, we can
 //    double z_speed=0.0;
     vector<vector<int > > virtual_bond_pairs;
     
-    double bond_length=0;
+    vector<double> BondNominalLengths;
+    string BondNominalLength_stat;
     double bond_radius=0;
     bool   optimise_bond_radius=false;
     int    num_virtual_sites_per_bond=0;
@@ -53,8 +55,10 @@ private: //(if we define these constants as private members of the class, we can
     
     double rescale_factor=1;
     
-    bool importcoordiantes = false;
+    bool ImportCoordinates   = false;
+    bool GenerateRandomChain = false;
     string import_file_name;
+    int  limit_import=0; //limit for the number of lines read when importing coordinates from file.
     bool ExportGeneratedCoordinates = false;
     
     double com[3]; //center of mass
@@ -103,8 +107,10 @@ private: //(if we define these constants as private members of the class, we can
 //    void reset_com_velocity(void);
     int generate_virtual_sites(void);
     
-public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     
+public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
+    /**Set the Nominal length of bonds according to the bond_length_stat*/
+    void set_bond_nominal_lengths(void);
     void pdb_label_check(void);
     
     double COM_velocity[3];
@@ -151,8 +157,8 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     //=========================================================================================================
     
     /**return the chromatin node-node distance.*/
-    double get_bond_length(void){
-        return bond_length;
+    double get_bond_nominal_length(int bond_index){
+        return BondNominalLengths[bond_index];
     }
     
     /** Export position and velocities to txt file. This file can be later imported to initiate the chromatin.*/
@@ -346,7 +352,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         values.resize(2);
         
         values[0] ="path/to/my/coordinates.txt";
-        values[1] ="#Path to a text file from which the X, Y, Z, Vx, Vy, and Vz of the chromatin nodes can be imported. Default path/to/my/coordinates.txt";
+        values[1] ="#Path to a text file from which the X, Y, Z, Vx, Vy, and Vz of the chromatin nodes can be imported. If you wish to import only a specific number of lines (coordinates) you may specify an intger after the path. Example:  path/to/my/coordinates.txt 20";
         Params["ImportCoordinates"] = values;
         insertOrder.push_back("ImportCoordinates");
         
@@ -380,8 +386,8 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         Params["NodeMass"] = values;
         insertOrder.push_back("NodeMass");
         
-        values[0] ="0";
-        values[1] ="#Radius assigned to each node. If 0, half of the average bond distance of nodes will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        values[0] ="Av";
+        values[1] ="#Radius assigned to each node. Legal Values 1) Av, half of the average bond distance of nodes or 2) \"a value\". The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
         Params["NodeRadius"] = values;
         insertOrder.push_back("NodeRadius");
         
@@ -390,10 +396,15 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         
-        values[0] ="2000";
+        values[0] ="200000";
         values[1] ="#Set the bond potential rigidity coefficient. Default value 2000.";
         Params["SpringCoeff"] = values;
         insertOrder.push_back("SpringCoeff");
+        
+        values[0] ="Au";
+        values[1] ="#Set the rest length of the springs using: 1) Au: The initial bond lengths at time 0; 2) Av: The average bond lengths at time 0; 3) \"value\": Where you type a specific  value.\n#Note: When using the GenerateRandomChain option, the only the value input option can be used for the NominalLengthInNm.";
+        Params["NominalLengthInNm"] = values;
+        insertOrder.push_back("NominalLengthInNm");
         
         values[0] ="0";
         values[1] ="#Set the damping coefficient for non harmonic potentials. Default value 0.";

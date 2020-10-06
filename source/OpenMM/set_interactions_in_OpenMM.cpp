@@ -133,14 +133,14 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         cout<<"modified ev "<<endl;
                     }
                     else{
-                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
-                    
-                    index = int(ExcludedVolumes.size()-1);
-//
-                    // Add the list of atom pairs that are excluded from the excluded volume force.
-                    add_exclusion(ExcludedVolumes[index], exclude_bonds);
-                    
-                    system.addForce(ExcludedVolumes[index]);
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
+                        
+                        index = int(ExcludedVolumes.size()-1);
+                        //
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        add_exclusion(ExcludedVolumes[index], exclude_bonds);
+                        
+                        system.addForce(ExcludedVolumes[index]);
                     
                     }
                     

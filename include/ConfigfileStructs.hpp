@@ -52,10 +52,10 @@ struct GeneralParameters{
     GeneralParameters(){
         values.resize(2);
         
-        values[0] ="VCProject_";
-        values[1] ="#Set the Output file prefix. Outputfile format: Prefix+Date+time.extension";
-        GenParams["OutputFileName"] = values;
-        insertOrder.push_back("OutputFileName");
+        values[0] ="VCProject";
+        values[1] ="#Set the Project Directory. Outputfile format: Results/ProjectName/Date_time_instanceId/Date_time_instanceId.extension";
+        GenParams["ProjectName"] = values;
+        insertOrder.push_back("ProjectName");
         
         values[0] ="10";
         values[1] ="#Simulation time length masured in pico seconds. Default value 10.";

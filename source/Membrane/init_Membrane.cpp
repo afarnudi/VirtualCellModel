@@ -53,13 +53,9 @@ void Membrane::initialise(std::string Mesh_file_name){
     set_bond_nominal_length();
     set_dihedral_atoms();
     set_bending_nominal_angle();
+    set_node_radius();
     
     if (New_Radius!=-1) {
-        double ratio = Radius/Node_radius;
-        New_node_radius = New_Radius/ratio;
-        if (!GenConst::Testmode) {
-            cout<<TWARN<<"Membrane radius is set to change from "<<TRESET<<Radius<<TWARN<<" to "<<TRESET<<New_Radius<<TWARN<<". The proccess will begin at "<<TRESET<<Begin_update_time_in_Ps<<TWARN<<" Ps and end at "<<TRESET<<End_update_time_in_Ps<<TWARN<<" Ps. The new node radius will scale respectivly from "<<TRESET<<Node_radius<<TWARN<<" to "<<TRESET<<New_node_radius<<TWARN<<"."<<TRESET<<endl;
-        }
         check_radius_update_values();
     }
     

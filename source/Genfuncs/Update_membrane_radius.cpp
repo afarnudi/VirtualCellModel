@@ -10,20 +10,16 @@ using std::vector;
 using std::set;
 
 bool check_for_membrane_update(vector<Membrane>    &membranes,
-                               double               time,
-                               double              &last_update_time)
+                               double               time
+                               )
 {
     
     bool update_mem = false;
     for (int mem_index=0; mem_index<membranes.size(); mem_index++) {
-        if (membranes[mem_index].get_new_node_radius() != -1 &&
+        if (membranes[mem_index].get_update_status() &&
             time > membranes[mem_index].get_Begin_update_time_in_Ps()   ) {
             if (time < membranes[mem_index].get_End_update_time_in_Ps()) {
-                //                if (time - last_update_time > 0.3) {
-                last_update_time = time;
                 update_mem = true;
-                //                }
-                
             }
         }
     }
@@ -46,18 +42,19 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
     int mem_count=0;
     
     double t1, t2, r, rnew, dt, a, b;
-    double new_radius=0;
+    double new_node_radius=0;
+    int mem_bond_count=0;
     
     for (int i=0; i<membranes.size(); i++) {
-        if (membranes[i].get_new_node_radius() != -1) {
+        if (membranes[i].get_update_status()) {
             if (time > membranes[i].get_Begin_update_time_in_Ps() &&
                 time < membranes[i].get_End_update_time_in_Ps()         )
             {
                 // All calculations in Fs
                 t1   = membranes[i].get_Begin_update_time_in_Ps()*1000;
                 t2   = membranes[i].get_End_update_time_in_Ps()*1000;
-                r    = membranes[i].get_node_radius();
-                rnew = membranes[i].get_new_node_radius();
+                r    = membranes[i].get_average_Membrane_radius();
+                rnew = membranes[i].get_new_Membrane_radius();
                 dt   = t2-t1;
                 // sigma_ev = a * time + b
                 a    = (rnew - r)/dt;
@@ -65,8 +62,10 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 
                 
                 string sigma = "sigma" + GenConst::Membrane_label + std::to_string(i) + GenConst::Membrane_label + std::to_string(i) ;
-                double new_sig = (a * time * 1000 + b);
-                new_radius = new_sig;
+                double mem_radius_at_current_time = (a * time * 1000 + b);
+                double new_sig = 0.5*membranes[i].get_avg_node_dist()*mem_radius_at_current_time/r;
+                new_node_radius = new_sig;
+//                cout<<"new_node_radius "<<new_node_radius<<endl;
                 if (interaction_map[i][i]!=0) {
                     omm->context->setParameter(sigma, new_sig);
                 }
@@ -75,37 +74,34 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 for (int ch=0; ch<chromos.size(); ch++) {
                     if (interaction_map[ch+1][0]==2) {
                         sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
-                        //                    new_sig = (new_sig + chromos[ch].get_node_radius())/2.0;
+//                        new_sig = (new_sig + chromos[ch].get_node_radius())*0.5;
                         omm->context->setParameter(sigma, new_sig);
                     } else if (interaction_map[ch+1][0]==1){
                         for (int chind=0; chind < chromos[ch].get_num_of_node_types(); chind++) {
                             sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + std::to_string(chind) + GenConst::Membrane_label + std::to_string(i) ;
-                            omm->context->setParameter(sigma, new_sig);
+                            omm->context->setParameter(sigma, (new_sig + chromos[ch].get_node_radius())*0.5);
                         }
                         
                     }
                     
                 }
                 
+                for (int k=mem_bond_count; k < mem_bond_count+ membranes[i].get_num_of_node_pairs(); k++) {
+                    int atom1, atom2 ;
+                    double length, stiffness;
+                    omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
+                    double old_length = membranes[i].get_node_pair_distance_in_Nm(k);
+                    double scaled_length = old_length*mem_radius_at_current_time/r;
+                    
+                    omm->harmonic->setBondParameters(k, atom1, atom2, scaled_length, stiffness);
+                }
+                mem_bond_count += membranes[i].get_num_of_node_pairs();
             }
         }
         
         mem_count += membranes[i].get_num_of_nodes();
     }
-//    cout<<"2*new_radius = "<<2*new_radius<<endl<<endl;;
-    int mem_bond_count=0;
-    for (int i=0; i<membranes.size(); i++) {
-        if (membranes[i].get_new_node_radius() != -1) {
-            for (int k=mem_bond_count; k < mem_bond_count+ membranes[i].get_num_of_node_pairs(); k++) {
-                int atom1, atom2 ;
-                double length, stiffness;
-                omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
-                omm->harmonic->setBondParameters(k, atom1, atom2, 2*new_radius, stiffness);
-            }
-        }
-        mem_bond_count += membranes[i].get_num_of_node_pairs();
-    }
-    
+
     omm->harmonic->updateParametersInContext(*omm->context);
     
 }

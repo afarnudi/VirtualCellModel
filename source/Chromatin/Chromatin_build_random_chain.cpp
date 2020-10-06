@@ -17,9 +17,6 @@ using std::endl;
 
 void Chromatin::build_random_chain(void){
     
-    if (bond_length == 0) {
-        bond_length = Node_radius*2.1;
-    }
     
     
     Node_Velocity.resize(Num_of_Nodes);
@@ -63,6 +60,8 @@ void Chromatin::build_random_chain(void){
             Node_Velocity[i][j] -= velocity_COM[j];
         }
     }
+    
+    cout<<"Generated a self avoiding random walk chain."<<endl;
 }
 
 void Chromatin::random_walk_gen(double velocity_COM[3]){
@@ -78,21 +77,23 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
     int attempt_counter=0;
     srand(time(NULL));
     
+    double bond_length = stod(BondNominalLength_stat);
+    
     for (int i=1; i<Num_of_Nodes; i++) {
         double theta=((double)rand()/(double)RAND_MAX)*M_PI;
         double phi=((double)rand()/(double)RAND_MAX)*2*M_PI;
-        double temp_x=Node_Position[i-1][0]+Node_radius*2*sin(theta)*cos(phi);
-        double temp_y=Node_Position[i-1][1]+Node_radius*2*sin(theta)*sin(phi);
-        double temp_z=Node_Position[i-1][2]+Node_radius*2*cos(theta);
+        double temp_x=Node_Position[i-1][0]+bond_length*sin(theta)*cos(phi);
+        double temp_y=Node_Position[i-1][1]+bond_length*sin(theta)*sin(phi);
+        double temp_z=Node_Position[i-1][2]+bond_length*cos(theta);
         
         bool accept_random_step=true;
         for (int k=0; k<i-1; k++) {
             double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
-            if (temp_dist<Node_radius*2.1){
+            if (temp_dist<Node_radius*2.){
                 i--;
                 accept_random_step=false;
                 attempt_counter++;
-                if (attempt_counter>1000) {
+                if (attempt_counter>2000) {
 //                    cout<<"The chromatin has reached a dead end (chain length = "<<i<<" ) before reaching the set node number"<<Num_of_Nodes<<"\n";
                     throw 0;
                 }

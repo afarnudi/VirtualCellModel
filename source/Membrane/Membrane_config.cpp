@@ -23,8 +23,8 @@ void Membrane::import_config(vector<string> configlines){
                 } else {
                     cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Membrane parameter."<<TRESET<<endl;
                     cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
-                    string anykey;
-                    cin>>anykey;
+                    getchar();
+                    cout<<TRESET;
                 }
             }
         }
@@ -75,6 +75,20 @@ void Membrane::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    if (Node_radius_stat!= "Au" && Node_radius_stat!= "Av") {
+        try {
+            double test = stod(Node_radius_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"NodeRadius\" (";
+            errorMessage+=TFILE;
+            errorMessage+=Node_radius_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 100)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
 }
 
 void Membrane::assign_parameters(void){
@@ -118,7 +132,7 @@ void Membrane::assign_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
         } else if (it.first == "NodeRadius") {
-            Node_radius = stod(split[0]);
+            Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = 2;
@@ -289,7 +303,7 @@ void Membrane::set_map_parameter(string param_name, double param_value){
     if (param_name=="Node_Mass") {
         Node_Mass=param_value;
     }else if (param_name=="Node_radius"){
-        Node_radius=param_value;
+        Node_radius_stat=param_value;
     } else if (param_name=="spring_model"){
         spring_model=param_value;
     } else if (param_name=="Spring_coefficient"){

@@ -23,8 +23,8 @@ void ECM::import_config(vector<string> configlines){
                 } else {
                     cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a ECM parameter."<<TRESET<<endl;
                     cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
-                    string anykey;
-                    cin>>anykey;
+                    getchar();
+                    cout<<TRESET;
                 }
             }
         }

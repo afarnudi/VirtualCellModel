@@ -73,12 +73,14 @@ protected:
     double Total_Potential_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
-    double Node_radius=0;
+    string Node_radius_stat;
+    vector<double> Node_radius;
     double New_Radius=-1;
     double New_node_radius=-1;
     double Begin_update_time_in_Ps=0;
-    
     double End_update_time_in_Ps=0;
+    bool   update_radius_stat=false;
+    
     double COM_velocity[3]={0};
     double COM_position[3]={0};
     
@@ -171,10 +173,13 @@ public:
     double calculate_bending_energy(void);
     
     /**Returns the node radius update value (set value in the configuration file). */
-    double get_new_node_radius(void){
-        return New_node_radius;
+    double get_new_radius(void){
+        return New_Radius;
     }
-    
+    /**Returns whether the Membrane is setup for radius change (true) or not (false). */
+    bool get_update_status(void){
+        return update_radius_stat;
+    }
     
     std::string output_file_neme;
     std::string file_time;
@@ -240,6 +245,7 @@ public:
     
     void check(void);
     void set_bond_nominal_length(void);
+    void set_node_radius(void);
     void set_bending_nominal_angle(void);
     void set_dihedral_atoms(void);
     void check_radius_update_values(void);
@@ -518,8 +524,8 @@ public:
     void set_index(int ind){
         index=ind;
     }
-    double get_node_radius(void){
-        return Node_radius;
+    double get_node_radius(int index){
+        return Node_radius[index];
     }
     
     double get_membrane_weighted_radius(void){
@@ -592,6 +598,9 @@ public:
     double get_average_Membrane_radius(void){
         return Radius;
     }
+    double get_new_Membrane_radius(void){
+        return New_Radius;
+    }
     
     std::map<string, vector<string> > Params;
     vector<string> insertOrder;
@@ -609,8 +618,8 @@ public:
         Params["NodeMass"] = values;
         insertOrder.push_back("NodeMass");
         
-        values[0] ="0";
-        values[1] ="#Radius assigned to each node. If 0, half of the average bond distance of nodes will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        values[0] ="Au";
+        values[1] ="#Radius assigned to each node. If Av, half of the average bond distance of nodes will be used. If Au, half of the average of bonds connected to each node in the initial mesh will be used. If a value is inputed, the value will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
         Params["NodeRadius"] = values;
         insertOrder.push_back("NodeRadius");
         

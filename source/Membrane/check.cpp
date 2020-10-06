@@ -27,9 +27,6 @@ void Membrane::check(void){
         }
     }
     Average_node_pair_length/=(Num_of_Node_Pairs);
-    if (Node_radius==0) {
-        Node_radius=Average_node_pair_length/2.;
-    }
     if (!GenConst::Testmode) {
         cout<<"Node pair (bond) distances:\n";
         cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
@@ -44,7 +41,8 @@ void Membrane::check(void){
 void Membrane::check_radius_update_values(void){
     
     
-    if (Node_radius != New_node_radius)  {
+    
+    if (abs(Radius - New_Radius)>0.1)  {
         if (Begin_update_time_in_Ps == End_update_time_in_Ps) {
             cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end of the membrane radius update time are equal. Please set different values for the paprameters.\n";
             exit(EXIT_FAILURE);
@@ -53,13 +51,28 @@ void Membrane::check_radius_update_values(void){
             cout<<TWWARN<<"Warning!!!"<<TRESET<<"The beginning and end time of the membrane radius update times are not in chronological order.\n";
             exit(EXIT_FAILURE);
         }
+        update_radius_stat=true;
     } else {
-        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The initial ("<<Node_radius<<") and final ("<<New_node_radius<<") Membrnae radii are equal."<<TWWARN<<"\nThe simulation will proceed without a radius update."<<TRESET<<endl;
-        New_node_radius =-1;
+        cout<<TWWARN<<"\nWarning!!!"<<TRESET<<"The initial ("<<Radius<<") and final ("<<New_Radius<<") Membrnae radii are equal."<<TWWARN<<"\nThe simulation will proceed without a radius update."<<TRESET<<endl;
+        update_radius_stat=false;
     }
     if(End_update_time_in_Ps>GenConst::Simulation_Time_In_Ps) {
         cout<<TWWARN<<"Warning!!!"<<TRESET<<"The Membrane radius update end time ("<<TWARN<<End_update_time_in_Ps<<TRESET" Ps) exceeds the simulation run time ("<<TWARN<<GenConst::Simulation_Time_In_Ps<<TRESET<<" Ps)."<<endl;
         exit(0);
+    }
+    
+    if (update_radius_stat) {
+        double ratio = Radius/New_Radius;
+        
+        if (!GenConst::Testmode) {
+            cout<<TWARN<<"Membrane radius is set to change from "<<TRESET<<Radius<<TWARN<<" to "<<TRESET<<New_Radius<<TWARN<<". The proccess will begin at "<<TRESET<<Begin_update_time_in_Ps<<TWARN<<" Ps and end at "<<TRESET<<End_update_time_in_Ps<<TWARN<<" Ps. The new node radii will scale respectivly";
+            if (Node_radius_stat=="Au") {
+                cout<<"."<<TRESET<<endl;
+            } else{
+                cout<<" from "<<TRESET<<Node_radius[0]<<TWARN<<" to "<<TRESET<<Node_radius[0]/ratio<<TWARN<<"."<<TRESET<<endl;
+            }
+            
+        }
     }
     
 }

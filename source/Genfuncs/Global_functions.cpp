@@ -85,7 +85,7 @@ void write_data(MyAtomInfo atoms[],
                 double bending_energy){
     
     
-    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_vels_forces.txt";
+    string traj_file_name=GenConst::trajectory_file_name+"_vels_forces.txt";
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     
@@ -107,7 +107,7 @@ void write_data2(MyAtomInfo atoms[],
                  vector<double> voronoi_area){
     
     
-    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+"_properties.txt";
+    string traj_file_name=GenConst::trajectory_file_name+"_properties.txt";
     std::ofstream wdata;
     wdata.open(traj_file_name.c_str(), std::ios::app);
     

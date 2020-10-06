@@ -5,7 +5,12 @@
 using namespace std;
 void Chromatin::import_coordinates(string import_file_name){
     cout<<TPINK<<"Importing Chromatin coordinates:"<<endl;
-//    cout<<import_file_name<<endl<<endl;
+    
+    if (limit_import!=0) {
+        cout<<"will only import the first "<<TFILE<<limit_import<<TRESET<<" coordinates."<<endl;
+    }
+    
+    
     std::ifstream read_coordinate_file;
     
     read_coordinate_file.open(import_file_name.c_str());
@@ -16,7 +21,7 @@ void Chromatin::import_coordinates(string import_file_name){
         exit(EXIT_FAILURE);
     }
     
-    bond_length=0;
+    
     Num_of_Nodes=0;
     vector<double> read_double;
     read_double.resize(3);
@@ -58,13 +63,7 @@ void Chromatin::import_coordinates(string import_file_name){
         read_double[2]=stod(words[2]);
         
         Node_Position.push_back(read_double);
-        if (Num_of_Nodes>0) {
-            temp_vector[0] = Node_Position[Num_of_Nodes][0]-Node_Position[Num_of_Nodes-1][0];
-            temp_vector[1] = Node_Position[Num_of_Nodes][1]-Node_Position[Num_of_Nodes-1][1];
-            temp_vector[2] = Node_Position[Num_of_Nodes][2]-Node_Position[Num_of_Nodes-1][2];
-            
-            bond_length += vector_length(temp_vector);
-        }
+        
         read_double[0]=stod(words[3]);
         read_double[1]=stod(words[4]);
         read_double[2]=stod(words[5]);
@@ -73,41 +72,35 @@ void Chromatin::import_coordinates(string import_file_name){
         Node_Force.push_back(zero_double);
         
         Num_of_Nodes++;
+        if (Num_of_Nodes==limit_import) {
+            break;
+        }
     }
     cout<<"Number of nodes\t"<<Num_of_Nodes<<endl;
     
-    bond_length/=Num_of_Nodes-1.0;
-    cout<<"Average bond length\t"<<bond_length<<endl;
-    cout<<TWARN<<"Node forces set to zero"<<TRESET<<endl;
+    
+    
+//    cout<<TWARN<<"Node forces set to zero"<<TRESET<<endl;
     
     
     
     
-    if (rescale_factor!=1 && rescale_factor!=0) {
-        for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]*=rescale_factor;
-            Node_Position[i][1]*=rescale_factor;
-            Node_Position[i][2]*=rescale_factor;
-        }
-        bond_length *= rescale_factor;
-        cout<<"Average bond length rescaled to: \t"<<bond_length<<endl;
-        
-    }
-    
-    if (bond_radius> 0.0001) {
-        if (bond_length<2) {
-            cout<<"Bond length is shorter than the node diameter. The relative parameters, bond_length and node_radius, can be adjusted in the chromatin configuration file.\n";
-            exit(EXIT_FAILURE);
-        } else {
-            cout<<"will generate virtual spheres in between node beads to prevent bonds from slipping through each other.\n";
-            generate_virtual_sites();
-        }
-    }
-    
-    ABC_index.resize(Num_of_Nodes);
-    pdb_label_check();
-    shift_node_positions();
-    cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
+    //bond_length changed to a Au Av implamentation
+//    if (bond_radius> 0.0001) {
+//        if (bond_length<2) {
+//            cout<<"Bond length is shorter than the node diameter. The relative parameters, bond_length and node_radius, can be adjusted in the chromatin configuration file.\n";
+//            exit(EXIT_FAILURE);
+//        } else {
+//            cout<<"will generate virtual spheres in between node beads to prevent bonds from slipping through each other.\n";
+//            generate_virtual_sites();
+//        }
+//    }
+//
+//    ABC_index.resize(Num_of_Nodes);
+//    pdb_label_check();
+//    shift_node_positions();
+//    shift_node_velocities();
+//    cout<<TSUCCESS<<"\n\nChromatin class initiated.\n"<<TRESET;
 }
 
 void Chromatin::import_resume(string import_file_name){

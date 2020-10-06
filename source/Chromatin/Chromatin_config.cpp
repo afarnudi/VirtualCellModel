@@ -21,8 +21,8 @@ void Chromatin::import_config(vector<string> configlines){
                 } else {
                     cout<<TWARN<<"Note: \""<<TFILE<<split[0]<<TWARN<<"\" is not a Chromatin parameter."<<TRESET<<endl;
                     cout<<"If you wish to edit the configfile, exit. If not, press any key to continue."<<endl;
-                    string anykey;
-                    cin>>anykey;
+                    getchar();
+                    cout<<TRESET;
                 }
             }
         }
@@ -32,37 +32,104 @@ void Chromatin::import_config(vector<string> configlines){
     //Check if all the parameters are consistant with the physics/Class enviroment
     consistancy_check();
     //Call the initiliser from the old code
-    if (importcoordiantes) {
-        import_coordinates(import_file_name);
-    } else {
-        initialise();
-    }
+    initialise();
+    
 //    initialise(Mesh_file_name);
 }
 void Chromatin::consistancy_check(){
-    if (importcoordiantes) {
-        
-        if (Num_of_Nodes != 0) {
+    
+    if (Node_radius_stat!="Av") {
+        try {
+            int test = stoi(Node_radius_stat);
+        } catch (...) {
             string errorMessage = TWARN;
-            errorMessage +="The chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". You cannot select both simultaniously. Consult the template configuration for more information.";
+            errorMessage+="Chromatin config parser: Invalid input for the \"NodeRadius\" (";
+            errorMessage+=TFILE;
+            errorMessage+=Node_radius_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Av , or just an input integer (example 100)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        Node_radius=stoi(Node_radius_stat);
+    }
+    
+    if (BondNominalLength_stat!= "Au" && BondNominalLength_stat!= "Av") {
+        try {
+            double test = stod(BondNominalLength_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Chromatin config parser: Invalid input for the \"NominalLengthInNm\" (";
+            errorMessage+=TFILE;
+            errorMessage+=BondNominalLength_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 100)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
+    
+    if (ImportCoordinates) {
+        
+        if (GenerateRandomChain) {
+            string errorMessage = TWARN;
+            errorMessage +="The Chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". You cannot select both simultaniously. Please consult the template configuration for more information.";
             errorMessage +=TRESET;
             throw std::runtime_error(errorMessage);
         } else {
             ifstream readcoords(import_file_name.c_str());
             if (!readcoords.is_open()) {
                 string errorMessage = TWARN;
-                errorMessage +="Read Error: Could not read '"+import_file_name+"'";
+                errorMessage +="Chromatin config parser: Read Error: Could not read '"+import_file_name+"'";
                 errorMessage +=TRESET;
                 throw std::runtime_error(errorMessage);
                 
             }
         }
-    } else if (Num_of_Nodes == 0){
+    } else if (GenerateRandomChain){
+        if (BondNominalLength_stat== "Au" || BondNominalLength_stat== "Av") {
+            string errorMessage = TWARN;
+            errorMessage +="Chromatin config parser: Cannot generate a random walk path without a step size. Please specify a value for \"NominalLengthInNm\".";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        if (Node_radius_stat== "Av") {
+            string errorMessage = TWARN;
+            errorMessage +="Chromatin config parser: Cannot generate a random walk. Please specify a value for \"NodeRadius\". This value is used to make sure generated node coordinates do not overlap.";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        if (stod(BondNominalLength_stat)<2*stod(Node_radius_stat)) {
+            string errorMessage = TWARN;
+            errorMessage +="Chromatin config parser: Cannot generate a random walk. Since the \"NodeRadius\" is used to make sure generated node coordinates do not overlap, It cannot be greater than half of the NominalLengthInNm.\n\nNominalLengthInNm = ";
+            errorMessage +=TFILE;
+            errorMessage +=BondNominalLength_stat;
+            errorMessage +=TWARN;
+            errorMessage +="\nNodeRadius = ";
+            errorMessage +=TFILE;
+            errorMessage +=Node_radius_stat;
+            errorMessage +=TWARN;
+            errorMessage +="\n\nPlease edit the configurations and try again.";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+    } else {
         string errorMessage = TWARN;
-        errorMessage +="The chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". Non was selected. Consult the template configuration for more information.";
+        errorMessage +="The Chromatin can be initiated either by \"ImportCoordinates\" or \"GenerateRandomChain\". Non was selected. Please consult the template configuration for more information.";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    
+    
+    
+    
+    
+    
+    
+    
     epsilon_LJ.resize(num_of_node_types,0);
     sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
     for (auto const& it : Params){
@@ -134,14 +201,42 @@ void Chromatin::assign_parameters(void){
         vector<string> split = split_and_check_for_comments(it.second[0], "Chroamtin: "+it.first);
         
         if (it.first == "ImportCoordinates") {
-            if (split[0] != "path/to/my/coordinates.txt") {
-                importcoordiantes =true;
-                string filepathe = split[0];
-                
-                import_file_name = split[0];
+            if (split.size()>0) {
+                if (split[0]!="path/to/my/coordinates.txt") {
+                    import_file_name = split[0];
+                    ImportCoordinates =true;
+                }
+                if (split.size()==2){
+                    limit_import = stoi(split[1]);
+                }
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Chromatin config parser: Invalid number of inputs for the \"ImportCoordinates\". Expected 1 or 2 inputs, got (";
+                errorMessage+=TFILE;
+                errorMessage+=split.size();
+                errorMessage+=TWARN;
+                errorMessage+="). Please consult the template configuration for more information and try again.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
             }
+            
+            
         } else if (it.first == "GenerateRandomChain") {
-            Num_of_Nodes = stoi(split[0]);
+            if (split.size() == 0) {
+                string errorMessage = TWARN;
+                errorMessage+="Chromatin config parser: Invalid input for the \"GenerateRandomChain\". Expected an integer, got non.";
+                errorMessage+="Please try again.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            } else {
+                if (split[0]!="0") {
+                    GenerateRandomChain = true;
+                    Num_of_Nodes = stoi(split[0]);
+                }
+                
+            }
+        } else if (it.first == "NominalLengthInNm") {
+            BondNominalLength_stat = split[0];
         } else if (it.first == "ExportGeneratedCoordinates") {
             if(split[0]=="true"){
                 ExportGeneratedCoordinates=true;
@@ -158,7 +253,7 @@ void Chromatin::assign_parameters(void){
         } else if (it.first == "NodeMass") {
             Node_Mass = stod(split[0]);
         } else if (it.first == "NodeRadius") {
-            Node_radius = stod(split[0]);
+            Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = 2;
@@ -185,7 +280,9 @@ void Chromatin::assign_parameters(void){
         } else if (it.first == "Scale") {
             rescale_factor = stod(split[0]);
         } else if (it.first == "VirtualBondLength") {
-            bond_length = stod(split[0]);
+            //Need to rewrite this part with the nominal length edition.
+//            BondNominalLength_stat = split[0];
+//            bond_length = stod(split[0]);
         } else if (it.first == "VirtualBondRadius") {
             bond_radius = stod(split[0]);
         } else if (it.first == "OptimiseBondRadius") {
@@ -361,7 +458,7 @@ void Chromatin::set_map_parameter(string param_name, double param_value){
         epsilon_LJ.resize(num_of_node_types,0);
         sigma_LJ.resize(num_of_node_types,2.5*Node_radius);
     } else if (param_name=="bond_length"){
-        bond_length=param_value;
+//        bond_length=param_value;
     } else if (param_name=="bond_radius"){
         bond_radius=param_value;
     } else if (param_name=="optimise_bond_radius"){

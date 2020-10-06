@@ -75,8 +75,9 @@ int    Num_of_Membranes;
 int    Num_of_Chromatins;
 int    Num_of_Actins;
 int    Num_of_ECMs;
-string trajectory_file_name;;
-string force_file_name;;
+string trajectory_file_name;
+string ProjectName;
+string force_file_name;
 double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
@@ -145,25 +146,16 @@ int main(int argc, char **argv)
     
     configfilename = cxxparser_vcm(argc, argv);
     
-    
-    
     if (configfilename == "None") {
         cout<<TBOLD<<"\nHi!\nPlease enter the path + name of the configuration file. If you do not have a configuration file, run \""<<argv[0]<<" -h\" for more options.\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
         cout<<TFILE;
-        cin>>general_file_name;
-//        cin>>configfilename;
+        cin>>configfilename;
         cout<<TRESET;
+
     }
     
     
     clock_t tStart = clock();//Time the programme
-    vector<string> membrane_config_list;
-    vector<string> chromatin_config_list;
-    vector<string> actin_config_list;
-    vector<string> ecm_config_list;
-    vector<string> pointparticle_config_list;
-    
-//    Comment
 //    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
 //    Uncomment
     map<string, vector<string> > config_lines =read_configfile(configfilename);
@@ -181,8 +173,8 @@ int main(int argc, char **argv)
     //    ofstream calcforce_delta;
     //    calcforce_l0.open("calcforce_l0", ios::app);
     //    calcforce_delta.open("calcforce_delta", ios::app);
-    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-    string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
+    string traj_file_name=GenConst::trajectory_file_name+".xyz";
+    string ckeckpoint_name=GenConst::trajectory_file_name+"_Checkpoint";
     
     
     vector<Membrane> Membranes;
@@ -432,8 +424,8 @@ int main(int argc, char **argv)
     
     // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
     // usage and runtime errors are caught and reported.
-    
-    cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name+buffer<<TRESET<<endl;
+    assign_project_directories(buffer);
+    cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl;
     //        GenConst::Lbox = 200;
     
     try {
@@ -459,7 +451,7 @@ int main(int argc, char **argv)
             //Need to retrive all information from the checkpoint and relay them to the respective classes.
         }
         
-        cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name+buffer<<TRESET<<endl<<endl;
+        cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl<<endl;
         // Run the simulation:
         //  (1) Write the first line of the PDB file and the initial configuration.
         //  (2) Run silently entirely within OpenMM between reporting intervals.
@@ -476,10 +468,12 @@ int main(int argc, char **argv)
         cout<<platformName.c_str()<<TRESET<<endl;
         
         
-        std::string traj_name="Results/"+GenConst::trajectory_file_name+buffer+".pdb";
-        std::string force_name="Results/Force"+GenConst::trajectory_file_name+buffer+".pdb";
-        std::string traj_namexyz="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-        std::string Reporname="Results/"+GenConst::trajectory_file_name+buffer+"_report.txt";
+        std::string traj_name=GenConst::trajectory_file_name+".pdb";
+        std::string force_name=GenConst::trajectory_file_name+".pdb";
+        std::string traj_namexyz=GenConst::trajectory_file_name+".xyz";
+        std::string Reporname=GenConst::trajectory_file_name+"_report.txt";
+        
+//        traj_name = assign_project_directories();
         generate_report(config_lines, Reporname);
         
         
@@ -513,7 +507,6 @@ int main(int argc, char **argv)
         cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
         
         int total_step_num = 0;
-        double last_update_time=0;
         
         
         bool expanding = false;
@@ -590,7 +583,7 @@ int main(int argc, char **argv)
             }
             
             
-            if (check_for_membrane_update(Membranes, time, last_update_time)) {
+            if (check_for_membrane_update(Membranes, time)) {
                 updateOpenMMforces(Membranes, Chromatins, omm, time, all_atoms, all_bonds, membrane_set, interaction_map);
             }
             

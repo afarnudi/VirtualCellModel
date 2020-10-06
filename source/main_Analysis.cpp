@@ -55,8 +55,9 @@ int    Num_of_Membranes;
 int    Num_of_Chromatins;
 int    Num_of_Actins;
 int    Num_of_ECMs;
-string trajectory_file_name;;
-string force_file_name;;
+string trajectory_file_name;
+string ProjectName;
+string force_file_name;
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
 bool   Interaction_map;
@@ -123,8 +124,8 @@ int main(int argc, char **argv)
     read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
     
     ofstream Trajectory;
-    string traj_file_name="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
-    string ckeckpoint_name=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
+    string traj_file_name;//="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
+    string ckeckpoint_name;//=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
     
     
     vector<Membrane> Membranes;

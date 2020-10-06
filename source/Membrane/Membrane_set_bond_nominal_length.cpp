@@ -11,8 +11,7 @@
 
 void Membrane::set_bond_nominal_length(void){
     Node_Bond_distances_in_Nm.clear();
-    Node_Bond_distances_in_Nm.resize(Num_of_Node_Pairs);
-    
+    Node_Bond_distances_in_Nm.resize(Num_of_Node_Pairs,0);
     if (Node_Bond_distances_stat=="Au") {
         
         for (int i=0; i<Num_of_Node_Pairs; i++) {
@@ -30,10 +29,6 @@ void Membrane::set_bond_nominal_length(void){
             Node_Bond_distances_in_Nm[i] = Node_Bond_Nominal_Length_in_Nm;
         }
     }
-    
-    
-    
-    
     
     
 }

@@ -55,13 +55,13 @@ void get_class_numbers(map<string, vector<string> > config_lines){
     if (config_lines["-Membrane"].size()!=0) {
         GenConst::Num_of_Membranes=count_class_numbers(config_lines["-Membrane"]);
     }
-    if (config_lines["-Membrane"].size()!=0) {
+    if (config_lines["-Actin"].size()!=0) {
         GenConst::Num_of_Actins=count_class_numbers(config_lines["-Actin"]);
     }
-    if (config_lines["-Membrane"].size()!=0) {
+    if (config_lines["-ECM"].size()!=0) {
         GenConst::Num_of_ECMs=count_class_numbers(config_lines["-ECM"]);
     }
-    if (config_lines["-Membrane"].size()!=0) {
+    if (config_lines["-Chromatin"].size()!=0) {
         GenConst::Num_of_Chromatins=count_class_numbers(config_lines["-Chromatin"]);
     }
 }

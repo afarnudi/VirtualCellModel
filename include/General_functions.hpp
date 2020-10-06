@@ -48,4 +48,8 @@ int get_pdb_num_of_atoms(std::string filename, std::string label);
 int get_pdb_num_of_atoms(std::string filename);
 int get_pdb_num_of_frames(std::string filename, int num_atoms);
 
+
+
+void assign_project_directories(char* buffer);
+
 #endif /* General_functions_hpp */

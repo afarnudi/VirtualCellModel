@@ -228,7 +228,6 @@ void Membrane::generate_report()
     Report<<"\nMembrane Params:\n---------------\n";
     Report<<"Mesh_file_name\t"<<Mesh_file_name<<endl;
     Report<<"Node_Mass\t"<<Node_Mass<<endl;
-    Report<<"Node_radius\t"<<Node_radius<<endl;
     Report<<"Membrane Radius\t"<<Radius<<endl;
     Report<<"spring_model\t"<<spring_model;
     if (spring_model==1){

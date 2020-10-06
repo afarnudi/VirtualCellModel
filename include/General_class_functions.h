@@ -19,8 +19,7 @@ void Export_classes_for_resume(std::vector<Membrane>  &membranes,
 using std::set;
 
 bool check_for_membrane_update(vector<Membrane>    &membranes,
-                               double               time,
-                               double              &last_update_time);
+                               double               time);
 
 void updateOpenMMforces(vector<Membrane>                &membranes,
                         vector<Chromatin>                chromos,

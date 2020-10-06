@@ -478,34 +478,34 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
     Bonds* bonds = new Bonds[chromo_num_bonds];
     
     
-    cout<<"chromo_num_bonds = "<<chromo_num_bonds<<endl;
+//    cout<<"\nchromo_num_bonds = "<<chromo_num_bonds<<endl;
     if (chromo_num_bonds != 0) {
         int num_of_real_bonds = chromo.get_num_of_real_site()-1;
-            int num_virtual_sites_per_bond= chromo.get_num_of_virtual_sites_per_bond();
-            //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
-            //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
-            for (int i=0; i<num_of_real_bonds; i++) {
-                bonds[i].type = chromo.get_spring_model();
-                bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
-                bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
-        //        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
-        //        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
-                bonds[i].class_label = chromo.get_label() + chromo.get_label();
-                switch (bonds[i].type) {
-                        //FENE
-                    case 1:
-                        //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
-                        //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                        break;
-                        //Harmonic
-                    case 2:
-                        bonds[i].nominalLengthInNm=chromo.get_bond_length();
-                        bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
-                        break;
-                        
-                        
-                }
-                
+        int num_virtual_sites_per_bond= chromo.get_num_of_virtual_sites_per_bond();
+        //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
+        //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
+        for (int i=0; i<num_of_real_bonds; i++) {
+            bonds[i].type = chromo.get_spring_model();
+            bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
+            bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
+            //        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
+            //        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
+            bonds[i].class_label = chromo.get_label() + chromo.get_label();
+            switch (bonds[i].type) {
+                    //FENE
+                case 1:
+                    //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
+                    //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
+                    break;
+                    //Harmonic
+                case 2:
+                    bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
+                    bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
+                    break;
+                    
+                    
+            }
+            
                 
             }
         if(bonds[0].type==2){
