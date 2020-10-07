@@ -28,6 +28,10 @@ void Membrane::calculate_surface_area_with_voronoi(){
     triangle1_node_C,
     triangle2_node_D;
     
+    update_COM_position();
+    vector<vector<vector<double> > > adjacent_trangle_normal_vec_list;
+    adjacent_trangle_normal_vec_list.resize(Num_of_Node_Pairs);
+    
     vector<vector<double> > cot_theta_list;
     cot_theta_list.resize(Num_of_Node_Pairs);
     
@@ -41,6 +45,20 @@ void Membrane::calculate_surface_area_with_voronoi(){
         
         cot_theta_list[i][0] = calc_theta_angle_ABC(triangle1_node_C, triangle1_node_A, triangle1_node_B );
         cot_theta_list[i][1] = calc_theta_angle_ABC(triangle2_node_D, triangle1_node_A, triangle1_node_B );
+        
+        
+        adjacent_trangle_normal_vec_list[i].resize(2);
+        double AB[3], AC[3], AD[3];
+        
+        for (int j=0; j<3; j++) {
+            AB[j] = Node_Position[triangle1_node_B][j] - Node_Position[triangle1_node_A][j];
+            AC[j] = Node_Position[triangle1_node_C][j] - Node_Position[triangle1_node_A][j];
+            AD[j] = Node_Position[triangle2_node_D][j] - Node_Position[triangle1_node_A][j];
+        }
+        
+        
+        
+        
     }
     
     surface_area_voronoi=0;

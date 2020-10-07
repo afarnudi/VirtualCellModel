@@ -600,9 +600,21 @@ int main(int argc, char **argv)
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
             
-            
-            //testing
-            
+            myGetOpenMMState2(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
+//            //testing
+//            const OpenMM::System* tempsys = &omm->context->getSystem();
+//            int numFroces =tempsys->getNumForces();
+//            cout<<"Num of forces "<<numFroces<<endl;
+//            for (int i=0; i<numFroces; i++) {
+//                const OpenMM::Force* force;
+//                force = &tempsys->getForce(i);
+//                int forcegroup = force->getForceGroup();
+//                cout<<"getForceGroup "<<forcegroup<<endl;
+//                cout<<omm->EV[0]->getNumParticles()<<endl;
+//
+//            }
+//
+//            exit(0);
         }
         
         cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";

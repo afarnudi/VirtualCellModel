@@ -459,3 +459,38 @@ void hill_update(MyOpenMMData* omm,
     time_dependant_data->Hill_force[j]->updateParametersInContext(*omm->context);
     }
 }
+
+
+
+
+
+void myGetOpenMMState2(MyOpenMMData* omm,
+                      double& timeInPs,
+                      double& energyInKJ,
+                      double& potential_energyInKJ,
+                      MyAtomInfo atoms[])
+{
+    
+    int infoMask = 0;
+    infoMask = OpenMM::State::Forces;
+    const OpenMM::State state1 = omm->context->getState(infoMask,GenConst::Periodic_box, 20);
+    timeInPs = state1.getTime(); // OpenMM time is in ps already
+    const std::vector<Vec3>& Forces1 = state1.getForces();
+    
+    
+    
+    int EndOfList=-1;
+    string traj_name= GenConst::trajectory_file_name+"mem0ch0_force.txt";
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile,"REMARK 250 time=%.3f ps; Atom index, Force x, y, z, in KJ/(mole.Nm)\n",
+            timeInPs);
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+        fprintf(pFile,"%5d   %8.3f   %8.3f   %8.3f\n",
+                n+1,
+                Forces1[n][0],
+                Forces1[n][1],
+                Forces1[n][2]);
+    }
+    fclose (pFile);
+}
