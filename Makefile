@@ -1,5 +1,5 @@
 TARGET=VCM
-CXXFLAGS=-std=c++14 -O2
+CXXFLAGS=-std=c++14 -O3
 CXX=g++
 
 # CXXFLAGS=-std=c++14 -O3
@@ -7,15 +7,17 @@ CXX=g++
 
 #OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
 OpenMM_INSTALL_DIR=/usr/local/openmm
+
+Boost_LIB_Dir = /usr/local/lib
 BINDIR=bin
 SRCDIR=source
 INCDIR=include
 OBJDIR=objects
 
 
-INCDIRS=-I$(INCDIR) -I$(OpenMM_INSTALL_DIR)/include
-LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib  
-LIBS= -lOpenMM 
+INCDIRS=-I$(INCDIR) -I$(OpenMM_INSTALL_DIR)/include 
+LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib -L$(Boost_LIB_Dir) 
+LIBS= -lOpenMM -lboost_filesystem
 
 SRCFILES=$(wildcard $(SRCDIR)/main.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp) $(wildcard $(SRCDIR)/Genfuncs/*.cpp) 
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
