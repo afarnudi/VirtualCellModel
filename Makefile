@@ -1,15 +1,31 @@
 TARGET=VCM
 CXXFLAGS=-std=c++14 -O3
-CXX=clang
-
+#CXX=clang
 # CXXFLAGS=-std=c++14 -O3
 # CXX=icpc
 
 #OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
 OpenMM_INSTALL_DIR=/usr/local/openmm
 
+OSNAME := $(shell uname -s)
+
+Boost_LIB_Mac_Dir = /usr/local/lib
+Boost_LIB_Lin_Dir = /usr/lib/x86_64-linux-gnu
+
+MacLIBS= -lOpenMM -lboost_filesystem
+LinLIBS= -lOpenMM -lboost_filesystem -lboost_system
+
+ifeq ($(OSNAME),Darwin)
+  Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
+  LIBS = $(MacLIBS)
+  CXX = g++  
+else
+  Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
+  LIBS = $(LinLIBS)
+  CXX = clang
+endif
 #Boost_LIB_Dir = /usr/local/lib
-Boost_LIB_Dir = /usr/lib/x86_64-linux-gnu
+#Boost_LIB_Dir = /usr/lib/x86_64-linux-gnu
 
 BINDIR=bin
 SRCDIR=source
@@ -19,7 +35,7 @@ OBJDIR=objects
 
 INCDIRS=-I$(INCDIR) -I$(OpenMM_INSTALL_DIR)/include 
 LIB_DIR=-L$(OpenMM_INSTALL_DIR)/lib -L$(Boost_LIB_Dir) 
-LIBS= -lOpenMM -lboost_filesystem -lboost_system
+#LIBS= -lOpenMM -lboost_filesystem #-lboost_system
 
 SRCFILES=$(wildcard $(SRCDIR)/main.cpp) $(wildcard $(SRCDIR)/Membrane/*.cpp) $(wildcard $(SRCDIR)/Chromatin/*.cpp) $(wildcard $(SRCDIR)/Actin/*.cpp) $(wildcard $(SRCDIR)/ECM/*.cpp) $(wildcard $(SRCDIR)/Membrane_Actin/*.cpp) $(wildcard $(SRCDIR)/OpenMM/*.cpp) $(wildcard $(SRCDIR)/Genfuncs/*.cpp) 
 OBJFILES=$(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
