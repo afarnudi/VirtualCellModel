@@ -149,14 +149,15 @@ void configfile_generator(int status){
         write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl<<endl;
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
-    
+        cout<<TFILE;
         string input;
+        cout<<TRESET;
         cout<<"VCM will generate all output files with the following format:\n"
-              "Prefix+Date+time+file_identifier.extension\n"
-              "The Date+time will be determined at the beginning of each simulation using the machine's clock. You may use a \"Prefix\" to customise the outputfiles."<<endl;
-        cout<<"Please enter a \"Prefix\":\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+              "ProjectName/Date+time+index/Date+time+index+file_identifier.extension\n"
+              "The Date+time will be determined at the beginning of each simulation using the machine's clock. You may use a \"ProjectName\" to customise the outputfiles."<<endl;
+        cout<<"Please enter a \"ProjectName\":\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
         cin>>input;
-        defaultparams.GenParams["OutputFileName"][0]=input;
+        defaultparams.GenParams["ProjectName"][0]=input;
         cout<<TRESET;
         
         cout<<"Please set the simulation time length masured in pico seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
@@ -318,7 +319,9 @@ void configfile_generator(int status){
 string get_configfile_name(void){
     string genfilename;
     cout<<"Please, enter the configuration file name:\n"<<TBLINK<<TBOLD<<">> "<<TRESET;
+    cout<<TFILE;
     cin>>genfilename;
+    cout<<TRESET;
     if (genfilename=="") {
         cout<<"Will use default: 'MyConfigfile.txt'"<<endl;
         genfilename="c";
@@ -329,12 +332,16 @@ string get_configfile_name(void){
     while( loop ){
         string entree;
         cout<<"'"<<TBOLD<<TWARN<<genfilename<<TRESET<<"' already exists. Do you want to overwrite it (y,n)?"<<endl;
+        cout<<TFILE;
         cin>>entree;
+        cout<<TRESET;
         if (entree == "y" || entree == "yes" || entree=="Yes") {
             loop=false;
         } else {
             cout<<"Please, enter another name:\n"<<TBLINK<<TBOLD<<">> "<<TRESET;
+            cout<<TFILE;
             cin>>genfilename;
+            cout<<TRESET;
             ifstream infiletemp(genfilename.c_str());
             loop=infiletemp.is_open();
         }
