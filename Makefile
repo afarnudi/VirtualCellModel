@@ -20,7 +20,6 @@ ifeq ($(OSNAME),Darwin)
   LIBS = $(MacLIBS)
   CXX = g++  
 else
-  OpenMM_INSTALL_DIR += /scratch/alifarnudi/local/openmm
   Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
   LIBS = $(LinLIBS)
   CXX = clang
