@@ -600,7 +600,7 @@ int main(int argc, char **argv)
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
             
-            myGetOpenMMState2(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
+            myGetOpenMMState2(omm, time, energyInKJ, potential_energyInKJ, Membranes, all_atoms);
 //            //testing
 //            const OpenMM::System* tempsys = &omm->context->getSystem();
 //            int numFroces =tempsys->getNumForces();

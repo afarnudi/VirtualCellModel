@@ -60,6 +60,7 @@ void          myGetOpenMMState2(MyOpenMMData*,
                                 double&      time,
                                 double&      energy,
                                 double&      potential_energy,
+                                vector<Membrane> mems,
                                 MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------

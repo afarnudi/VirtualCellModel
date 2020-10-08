@@ -237,7 +237,7 @@ public:
      *Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ]  = i, p
      */
     vector<vector<int> > Node_neighbour_list_respective_bond_index;
-    
+    vector<vector<double> > node_voronoi_normal_vec;
     vector<double> node_voronoi_area;
     double surface_area_voronoi=0;
     
@@ -344,6 +344,15 @@ public:
     /**Return the new node radius 'begin update time' in Ps.*/
     double get_Begin_update_time_in_Ps(void){
         return Begin_update_time_in_Ps;
+    }
+    /**return normal vector of each node. The normal vector of node N is the average of vectors normal to triangles that have node N as one of their vertices. It is garanteed that the vector will point away from the Membrane centre of mass.*/
+    vector<double> get_node_normal_vec(int node){
+        return node_voronoi_normal_vec[node];
+    }
+    
+    /**return the voronoi area associated with each node.*/
+    double get_node_voronoi_area(int node){
+        return node_voronoi_area[node];
     }
     
     double rescale_factor=1;

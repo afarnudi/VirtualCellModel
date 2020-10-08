@@ -29,8 +29,8 @@ void Membrane::calculate_surface_area_with_voronoi(){
     triangle2_node_D;
     
     update_COM_position();
-    vector<vector<vector<double> > > adjacent_trangle_normal_vec_list;
-    adjacent_trangle_normal_vec_list.resize(Num_of_Node_Pairs);
+    vector<vector<double> > bond_normal_vec_list;
+    bond_normal_vec_list.resize(Num_of_Node_Pairs);
     
     vector<vector<double> > cot_theta_list;
     cot_theta_list.resize(Num_of_Node_Pairs);
@@ -47,15 +47,39 @@ void Membrane::calculate_surface_area_with_voronoi(){
         cot_theta_list[i][1] = calc_theta_angle_ABC(triangle2_node_D, triangle1_node_A, triangle1_node_B );
         
         
-        adjacent_trangle_normal_vec_list[i].resize(2);
-        double AB[3], AC[3], AD[3];
+        bond_normal_vec_list[i].resize(3,0);
+        double AB[3], AC[3], AD[3], outwardvector[3];
+        double ABxAC[3], ABxAD[3];
         
         for (int j=0; j<3; j++) {
             AB[j] = Node_Position[triangle1_node_B][j] - Node_Position[triangle1_node_A][j];
             AC[j] = Node_Position[triangle1_node_C][j] - Node_Position[triangle1_node_A][j];
             AD[j] = Node_Position[triangle2_node_D][j] - Node_Position[triangle1_node_A][j];
+            outwardvector[j] = Node_Position[triangle1_node_A][j] - COM_position[j];
         }
         
+        crossvector(ABxAC, AB, AC);
+        crossvector(ABxAD, AB, AD);
+        
+        if (innerproduct(outwardvector, ABxAC)<0) {
+            ABxAC[0]=-ABxAC[0];
+            ABxAC[1]=-ABxAC[1];
+            ABxAC[2]=-ABxAC[2];
+        }
+        if (innerproduct(outwardvector, ABxAD)<0) {
+            ABxAD[0]=-ABxAD[0];
+            ABxAD[1]=-ABxAD[1];
+            ABxAD[2]=-ABxAD[2];
+        }
+        double veclength=0;
+        for (int j=0; j<3; j++) {
+            bond_normal_vec_list[i][j] = ABxAC[j]+ABxAD[j];
+            veclength += bond_normal_vec_list[i][j]*bond_normal_vec_list[i][j];
+        }
+        veclength  =sqrt(veclength);
+        for (int j=0; j<3; j++) {
+            bond_normal_vec_list[i][j] /= veclength;
+        }
         
         
         
@@ -65,10 +89,13 @@ void Membrane::calculate_surface_area_with_voronoi(){
     node_voronoi_area.clear();
     node_voronoi_area.resize(Num_of_Nodes,0);
     
+    node_voronoi_normal_vec.clear();
+    node_voronoi_normal_vec.resize(Num_of_Nodes);
+    
     for (int i=0; i<Num_of_Nodes; i++) {
-//        node_voronoi_area[i]=0;
+        node_voronoi_normal_vec[i].resize(3,0);
         for (int j=0; j<Node_neighbour_list[i].size(); j++) {
-            //            cout<<"Node_neighbour_list["<<i<<"]["<<j<<"]="<<node_pair_vec[i][j]<<endl;
+            
             int node_1 = i;
             int node_2 = Node_neighbour_list[node_1][j];
             int bond12 = Node_neighbour_list_respective_bond_index[node_1][j];
@@ -77,9 +104,23 @@ void Membrane::calculate_surface_area_with_voronoi(){
                                 Node_Position[node_1][1]-Node_Position[ node_2 ][1],
                                 Node_Position[node_1][2]-Node_Position[ node_2 ][2]};
             node_voronoi_area[i] += 0.125 * vector_length(bond_vec)* vector_length(bond_vec)* (cot_theta_list[bond12 ][0] + cot_theta_list[bond12 ][1]);
+            
+            
+            for (int k=0; k<3; k++) {
+                node_voronoi_normal_vec[i][k] += bond_normal_vec_list[bond12][k];
+            }
+            
         }
-        surface_area_voronoi += node_voronoi_area[i];
         
+        surface_area_voronoi += node_voronoi_area[i];
+        double nodevec[3]={node_voronoi_normal_vec[i][0],
+                           node_voronoi_normal_vec[i][1],
+                           node_voronoi_normal_vec[i][2]};
+        
+        double veclength = vector_length(nodevec);
+        for (auto &coord: node_voronoi_normal_vec[i]){
+            coord/=veclength;
+        }
         
     }
 }

@@ -468,6 +468,7 @@ void myGetOpenMMState2(MyOpenMMData* omm,
                       double& timeInPs,
                       double& energyInKJ,
                       double& potential_energyInKJ,
+                      vector<Membrane> mems,
                       MyAtomInfo atoms[])
 {
     
@@ -477,20 +478,22 @@ void myGetOpenMMState2(MyOpenMMData* omm,
     timeInPs = state1.getTime(); // OpenMM time is in ps already
     const std::vector<Vec3>& Forces1 = state1.getForces();
     
+    mems[0].calculate_surface_area_with_voronoi();
     
     
-    int EndOfList=-1;
-    string traj_name= GenConst::trajectory_file_name+"mem0ch0_force.txt";
-    FILE* pFile;
-    pFile = fopen (traj_name.c_str(),"a");
-    fprintf(pFile,"REMARK 250 time=%.3f ps; Atom index, Force x, y, z, in KJ/(mole.Nm)\n",
-            timeInPs);
-    for (int n=0; atoms[n].type != EndOfList; ++n){
-        fprintf(pFile,"%5d   %8.3f   %8.3f   %8.3f\n",
-                n+1,
-                Forces1[n][0],
-                Forces1[n][1],
-                Forces1[n][2]);
+    
+    double pressure=0;
+    for (int n=0; n< mems[0].get_num_of_nodes(); ++n){
+        double Force[3]={Forces1[n][0],Forces1[n][1],Forces1[n][2]};
+        vector<double>  norm = mems[0].get_node_normal_vec(n);
+        double Normal[3]={norm[0],norm[1],norm[2]};
+        double normalForce = innerproduct(Force, Normal);
+        pressure += normalForce/mems[0].get_node_voronoi_area(n);
     }
-    fclose (pFile);
+    
+    string traj_name= GenConst::trajectory_file_name+"ch0mem0_pressure.txt";
+    std::ofstream write_pressure;
+    write_pressure.open(traj_name.c_str(),std::ios_base::app);
+//    write_pressure<<"REMARK 250 time="<<timeInPs<<" ps; Average pressure in KJ/(mole.Nm^3)\n";
+    write_pressure<<timeInPs<<"\t"<<pressure<<endl;
 }

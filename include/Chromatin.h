@@ -61,7 +61,6 @@ private: //(if we define these constants as private members of the class, we can
     int  limit_import=0; //limit for the number of lines read when importing coordinates from file.
     bool ExportGeneratedCoordinates = false;
     
-    double com[3]; //center of mass
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
     string output_file_name;
