@@ -480,8 +480,6 @@ void myGetOpenMMState2(MyOpenMMData* omm,
     
     mems[0].calculate_surface_area_with_voronoi();
     
-    
-    
     double pressure=0;
     for (int n=0; n< mems[0].get_num_of_nodes(); ++n){
         double Force[3]={Forces1[n][0],Forces1[n][1],Forces1[n][2]};
@@ -490,7 +488,7 @@ void myGetOpenMMState2(MyOpenMMData* omm,
         double normalForce = innerproduct(Force, Normal);
         pressure += normalForce/mems[0].get_node_voronoi_area(n);
     }
-    
+    cout<<"pressure "<<pressure<<endl;
     string traj_name= GenConst::trajectory_file_name+"ch0mem0_pressure.txt";
     std::ofstream write_pressure;
     write_pressure.open(traj_name.c_str(),std::ios_base::app);
