@@ -446,7 +446,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
-                    ExcludedVolumes[index]->setForceGroup(20);
+                    ExcludedVolumes[index]->setForceGroup(7);
+//                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
                     
                     system.addForce(ExcludedVolumes[index]);
                     break;
