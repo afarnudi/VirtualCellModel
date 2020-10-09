@@ -624,7 +624,7 @@ public:
         Params["NodeMass"] = values;
         insertOrder.push_back("NodeMass");
         
-        values[0] ="Au";
+        values[0] ="Av";
         values[1] ="#Radius assigned to each node. If Av, half of the average bond distance of nodes will be used. If Au, half of the average of bonds connected to each node in the initial mesh will be used. If a value is inputed, the value will be used. The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
         Params["NodeRadius"] = values;
         insertOrder.push_back("NodeRadius");
