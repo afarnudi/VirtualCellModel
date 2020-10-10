@@ -1,12 +1,27 @@
 TARGET=VCM_Analysis
 CXXFLAGS=-std=c++14 -O2
-CXX=g++
-
-# CXXFLAGS=-std=c++14 -O3
-# CXX=icpc
 
 #OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
 OpenMM_INSTALL_DIR=/usr/local/openmm
+
+OSNAME := $(shell uname -s)
+
+Boost_LIB_Mac_Dir = /usr/local/lib
+Boost_LIB_Lin_Dir = /usr/lib/x86_64-linux-gnu
+
+MacLIBS= -lOpenMM -lboost_filesystem
+LinLIBS= -lOpenMM -lboost_filesystem -lboost_system
+
+ifeq ($(OSNAME),Darwin)
+  Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
+  LIBS = $(MacLIBS)
+  CXX = g++  
+else
+  Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
+  LIBS = $(LinLIBS)
+  CXX = clang++
+endif
+
 BINDIR=bin
 SRCDIR=source
 INCDIR=include
