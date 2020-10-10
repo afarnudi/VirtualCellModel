@@ -56,6 +56,12 @@ void          myGetOpenMMState(MyOpenMMData*,
                                double&      energy,
                                double&      potential_energy,
                                MyAtomInfo   atoms[]);
+void          myGetOpenMMState2(MyOpenMMData*,
+                                double&      time,
+                                double&      energy,
+                                double&      potential_energy,
+                                vector<Membrane> mems,
+                                MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM

@@ -21,7 +21,6 @@
 #include "General_functions.hpp"
 #include "write_functions.hpp"
 #include "interaction.hpp"
-#include "maps.hpp"
 #include "Global_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
@@ -113,20 +112,12 @@ int main(int argc, char **argv)
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
-    string general_file_name="General_param_map.txt";
-    
     vector<string> membrane_config_list;
     vector<string> chromatin_config_list;
     vector<string> actin_config_list;
     vector<string> ecm_config_list;
-    vector<string> pointparticle_config_list;
     
-    read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
-    
-    ofstream Trajectory;
-    string traj_file_name;//="Results/"+GenConst::trajectory_file_name+buffer+".xyz";
     string ckeckpoint_name;//=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
-    
     
     vector<Membrane> Membranes;
     vector<std::set<int> > membrane_set;
@@ -138,7 +129,6 @@ int main(int argc, char **argv)
     vector<std::set<int> > ecm_set;
     
     vector<Chromatin> Chromatins;
-    //    vector<std::set<int> > chromatin_set;
     vector<vector<std::set<int> > > chromatin_set;
     
     

@@ -600,9 +600,8 @@ int main(int argc, char **argv)
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
             
-            
-            //testing
-            
+//            myGetOpenMMState2(omm, time, energyInKJ, potential_energyInKJ, Membranes, all_atoms);
+
         }
         
         cout<<"[ 100% ]\t time: "<<GenConst::Simulation_Time_In_Ps<<"Ps\n";
