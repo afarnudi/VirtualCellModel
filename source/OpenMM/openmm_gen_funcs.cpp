@@ -459,3 +459,45 @@ void hill_update(MyOpenMMData* omm,
     time_dependant_data->Hill_force[j]->updateParametersInContext(*omm->context);
     }
 }
+
+
+
+
+
+void myGetOpenMMState2(MyOpenMMData* omm,
+                      double& timeInPs,
+                      double& energyInKJ,
+                      double& potential_energyInKJ,
+                      vector<Membrane> mems,
+                      MyAtomInfo atoms[])
+{
+    
+    int infoMask = 0;
+    infoMask += OpenMM::State::Forces;
+    
+    const OpenMM::State state1 = omm->context->getState(infoMask,GenConst::Periodic_box, 0b1000'0000);
+    timeInPs = state1.getTime(); // OpenMM time is in ps already
+    const std::vector<Vec3>& Forces1 = state1.getForces();
+    
+    mems[0].calculate_surface_area_with_voronoi();
+    
+    double pressure=0;
+    for (int n=0; n< mems[0].get_num_of_nodes(); ++n){
+        double Force[3]={Forces1[n][0],Forces1[n][1],Forces1[n][2]};
+        
+        
+        vector<double>  norm = mems[0].get_node_normal_vec(n);
+        double Normal[3]={norm[0],norm[1],norm[2]};
+        
+        
+        
+        double normalForce = abs( innerproduct(Force, Normal) );
+        pressure += normalForce/mems[0].get_node_voronoi_area(n);
+        
+        
+    }
+    string traj_name= GenConst::trajectory_file_name+"ch0mem0_pressure.txt";
+    std::ofstream write_pressure;
+    write_pressure.open(traj_name.c_str(),std::ios_base::app);
+    write_pressure<<timeInPs<<"\t"<<pressure<<endl;
+}
