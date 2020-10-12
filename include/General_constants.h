@@ -109,6 +109,8 @@ namespace GenConst {
     
     /**The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
     extern std::vector<std::vector<double> > Lboxdims;
+    /**A string containing the selected platform information during runtime.*/
+    extern std::string hardwareReport;
 }
 
 #define TRESET   "\e[0m"             /* Reset */

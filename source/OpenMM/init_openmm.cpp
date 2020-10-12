@@ -291,12 +291,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         cout<<TRESET;
     }
     
-    std::string hardname= GenConst::trajectory_file_name+"_hardware_runtime.txt";
-    std::ofstream write_report;
-    write_report.open(hardname.c_str(),std::ios_base::app);
-    write_report<<"Running on the "<<platform.getName()<<" platform:\n";;
+    GenConst::hardwareReport ="Running on the "+platform.getName()+" platform:\n";
     if (platform.getName() != "CPU") {
-        write_report<<device_properties_report[device_id];
+        GenConst::hardwareReport+=device_properties_report[device_id]+"\n";
     } else {
         OpenMM::System tsystem;
         tsystem.addParticle(1.0);
@@ -304,18 +301,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         OpenMM::Context tcontext(tsystem, tinegrator, platform);
         std::vector<std::string> tplatform_devices = platform.getPropertyNames();
         for (auto & name : tplatform_devices){
-            write_report<<"\t"<<name<<"\t"<<TCPU<<platform.getPropertyValue(tcontext, name)<<TRESET<<endl;
+            GenConst::hardwareReport+="\t"+name+"\t"+platform.getPropertyValue(tcontext, name)+"\n";
         }
     }
-    write_report<<"------------------------"<<endl;
-    write_report<<endl;
-    
-    
-    
-    
-    
-    
-    
+    GenConst::hardwareReport+="------------------------\n\n";
     
     
     // Choose an Integrator for advancing time, and a Context connecting the
