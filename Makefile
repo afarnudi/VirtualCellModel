@@ -61,4 +61,3 @@ GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 clean: 
 	rm -rf $(GARBAGE)
 	rm bin/VCM
-
