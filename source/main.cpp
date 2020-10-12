@@ -121,6 +121,8 @@ std::vector<double> PeriodicBoxVector2;
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
 std::vector<std::vector<double> > Lboxdims;
+
+std::string hardwareReport;
 }
 
 
@@ -423,6 +425,12 @@ int main(int argc, char **argv)
         }
         assign_project_directories(buffer);
         cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl<<endl;
+        
+        ofstream write_hardwareReport;
+        string hardwarereportpath =GenConst::trajectory_file_name+"_hardware_runtime.txt";
+        write_hardwareReport.open(hardwarereportpath.c_str(),std::ios_base::app);
+        write_hardwareReport<<GenConst::hardwareReport;
+        write_hardwareReport<<endl;
         
         //export generated chromatin coordinates; The export happens only if the chromatin is set to export coordinates in it's configuration.
         for (int ich=0;ich<Chromatins.size();ich++) {

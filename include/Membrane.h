@@ -354,7 +354,10 @@ public:
     double get_node_voronoi_area(int node){
         return node_voronoi_area[node];
     }
-    
+    /**Return the sum of the voronoi area of each node.*/
+    double get_surface_area_voronoi(){
+        return surface_area_voronoi;
+    }
     double rescale_factor=1;
     
     void rescale_membrane(double factor){

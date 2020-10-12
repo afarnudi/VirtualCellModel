@@ -203,7 +203,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     cout<<TRESET;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
     
-    
+    std::vector<std::string> device_properties_report;
     std::vector<std::map<std::string, std::string> > device_properties;
     if (platform.getName() == "OpenCL") {
         cout<<"Available devices on the "<<TOCL<<platform.getName()<<TRESET<<" platform:\n";
@@ -211,6 +211,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
                 try {
+                    std::string report;
                     std::map<std::string, std::string> temp_device_properties;
                     temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
                     temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
@@ -224,12 +225,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
                             continue;
                         } else {
+                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
                             cout<<"\t"<<name<<"\t"<<TOCL<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
                         }
                     }
                     cout<<TRESET<<"------------------------"<<endl;
                     counter++;
                     device_properties.push_back(temp_device_properties);
+                    device_properties_report.push_back(report);
                 } catch (const std::exception& e) {
                     
                 }
@@ -241,6 +244,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         for (int i=0; i<10; i++) {
             for (int j=0; j<10; j++) {
                 try {
+                    std::string report;
                     std::map<std::string, std::string> temp_device_properties;
                     temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
                     temp_device_properties["CudaDeviceIndex"]=std::to_string(j);
@@ -254,12 +258,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                         if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
                             continue;
                         } else {
+                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
                             cout<<"\t"<<name<<"\t"<<TCUD<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
                         }
                     }
                     cout<<TRESET<<"------------------------"<<endl;
                     counter++;
                     device_properties.push_back(temp_device_properties);
+                    device_properties_report.push_back(report);
                 } catch (const std::exception& e) {
                     
                 }
@@ -284,6 +290,22 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         std::cin>>device_id;
         cout<<TRESET;
     }
+    
+    GenConst::hardwareReport ="Running on the "+platform.getName()+" platform:\n";
+    if (platform.getName() != "CPU") {
+        GenConst::hardwareReport+=device_properties_report[device_id]+"\n";
+    } else {
+        OpenMM::System tsystem;
+        tsystem.addParticle(1.0);
+        OpenMM::VerletIntegrator tinegrator(stepSizeInFs * OpenMM::PsPerFs);
+        OpenMM::Context tcontext(tsystem, tinegrator, platform);
+        std::vector<std::string> tplatform_devices = platform.getPropertyNames();
+        for (auto & name : tplatform_devices){
+            GenConst::hardwareReport+="\t"+name+"\t"+platform.getPropertyValue(tcontext, name)+"\n";
+        }
+    }
+    GenConst::hardwareReport+="------------------------\n\n";
+    
     
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
