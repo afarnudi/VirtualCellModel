@@ -97,6 +97,8 @@ std::vector<double> PeriodicBoxVector2;
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
 std::vector<std::vector<double> > Lboxdims;
+
+std::string hardwareReport;
 }
 
 
