@@ -502,3 +502,65 @@ void myGetOpenMMState2(MyOpenMMData* omm,
     write_pressure.open(traj_name.c_str(),std::ios_base::app);
     write_pressure<<timeInPs<<"\t"<<pressure<<endl;
 }
+
+
+void myWritePSF(int   num_of_atoms,
+                int   num_of_bonds,
+                const MyAtomInfo   atoms[],
+                const Bonds        bonds[])
+{
+    int EndOfList=-1;
+    
+    string traj_name= GenConst::trajectory_file_name+".psf";
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile," PSF\n\n");
+    fprintf(pFile,"       1  !TITLE\n");
+    fprintf(pFile," vmd files (psf,pdb) for VCM\n\n");
+    fprintf(pFile,"   %5d !NATOM\n",num_of_atoms);
+    
+    
+    int index=0;
+    string hist = atoms[0].pdb;
+    if (atoms[0].class_label == "Chromatin") {
+        hist.pop_back();
+    }
+    char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+    
+    //    double occ=1;
+    for (int n=0; atoms[n].type != EndOfList; ++n){
+        string new_label = atoms[n].pdb;
+        if (atoms[n].class_label == "Chromatin") {
+            new_label.pop_back();
+        }
+        if (atoms[n].class_label == "ECM") {
+            new_label.pop_back();
+        }
+
+        if (hist != new_label) {
+            index++;
+            hist = new_label;
+        }
+//        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
+        fprintf(pFile,"   %5d POLY%5d POLY %4s CEL1 %10.2f    %10.2f 1\n",
+                n+1,
+                index,
+                atoms[n].pdb,
+                1.0,
+                atoms[n].mass);
+    }
+    fprintf(pFile,"\n");
+    fprintf(pFile,"   %5d !NBOND\n",num_of_bonds);
+    int endline_counter=0;
+        for (int n=0; bonds[n].type != EndOfList; ++n){
+            fprintf(pFile,"   %5d   %5d",
+                    bonds[n].atoms[0]+1,
+                    bonds[n].atoms[1]+1);
+            endline_counter++;
+            if (endline_counter>3) {
+                endline_counter=0;
+                fprintf(pFile,"\n");
+            }
+        }
+    fclose (pFile);
+}

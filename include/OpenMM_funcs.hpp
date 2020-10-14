@@ -124,6 +124,15 @@ void myWritePDBFrame(int                frameNum,
                      double             potential_energy,
                      const MyAtomInfo   atoms[],
                      const Bonds        bonds[]);
+/**                               PSF FILE WRITER
+ * Given state data at the beginning of the simulation, output a protein structure file.
+ */
+void myWritePSF(int   num_of_atoms,
+                int   num_of_bonds,
+                const MyAtomInfo   atoms[],
+                const Bonds        bonds[]);
+
+
 
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.
