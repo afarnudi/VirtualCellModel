@@ -496,6 +496,8 @@ int main(int argc, char **argv)
         double initTemp = GenConst::temperature;
         
         myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+        myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
+        exit(0);
         for (int frame=1; ; ++frame) {
             
             double time, energyInKJ, potential_energyInKJ;
