@@ -98,8 +98,6 @@ string Checkpoint_path;
 string Checkpoint_file_name;
 bool   ChromatinVirtualSites;
 
-
-bool   write_bonds_to_PDB;
 bool   WantEnergy;
 bool   WantForce;
 bool   WriteVelocitiesandForces;

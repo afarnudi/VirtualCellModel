@@ -73,8 +73,6 @@ namespace GenConst {
     /**name of the OpenMM checkpoint file (binary file)*/
     extern std::string Checkpoint_file_name;
     
-    extern bool write_bonds_to_PDB;
-    /**Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true*/
     extern bool   WantEnergy;
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
     extern bool   WantForce;

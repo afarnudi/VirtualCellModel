@@ -118,11 +118,6 @@ struct GeneralParameters{
         insertOrder.push_back("ReportEnergy");
         
         values[0] ="false";
-        values[1] ="#Write the bond information of the first frame to the pdb. Default false";
-        GenParams["WriteBondsPDB"] = values;
-        insertOrder.push_back("WriteBondsPDB");
-        
-        values[0] ="false";
         values[1] ="#Writes velocities and forces (cheap) of particles during each ReportIntervalInFs time point to the disk. Default false";
         GenParams["WriteVelocitiesForces"] = values;
         insertOrder.push_back("WriteVelocitiesForces");

@@ -257,22 +257,6 @@ void myWritePDBFrame(int frameNum,
 //                atoms[n].symbol);
     }
     
-    // visualize bonds in pdb file
-    if(frameNum==0 && GenConst::write_bonds_to_PDB)
-    {
-    
-        for (int n=0; bonds[n].type != EndOfList; ++n){
-            if(bonds[n].atoms[0] < bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
-            }
-            if(bonds[n].atoms[0] > bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
-            }
-        }
-    
-    }
     
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);
