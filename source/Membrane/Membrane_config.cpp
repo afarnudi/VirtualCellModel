@@ -185,6 +185,17 @@ void Membrane::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+        } else if (it.first == "WantGeometricProps") {
+            if(split[0]=="true"){
+                WantGeometricProps=true;
+            } else if (split[0]=="false"){
+                WantGeometricProps=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "VelocityShiftVector") {
             Shift_velocities_xyzVector.resize(3,0);
             Shift_velocities_xyzVector[0] = stod(split[0]);

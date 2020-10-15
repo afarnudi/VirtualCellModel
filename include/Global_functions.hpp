@@ -29,9 +29,8 @@ using std::string;
 using std::vector;
 
 void collect_data(MyAtomInfo atoms[],
-                  string buffer,
-                  vector<Chromatin> chromos,
-                  vector<Membrane> mems,
+                  vector<Chromatin> &chromos,
+                  vector<Membrane>  &mems,
                   double timeInPs);
 
 

@@ -8,12 +8,12 @@
 #include "ECM.h"
 #include "Chromatin.h"
 
-void Export_classes_for_resume(std::vector<Membrane>  &membranes,
-                               std::vector<Actin>     &actins,
-                               std::vector<ECM>       &ecms,
-                               std::vector<Chromatin> &chromatins,
-                               double                  time,
-                               MyAtomInfo*             all_atoms);
+void Update_classes(std::vector<Membrane>  &membranes,
+                    std::vector<Actin>     &actins,
+                    std::vector<ECM>       &ecms,
+                    std::vector<Chromatin> &chromatins,
+                    double                  time,
+                    MyAtomInfo*             all_atoms);
 
 
 using std::set;

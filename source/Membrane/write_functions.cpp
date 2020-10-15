@@ -189,3 +189,18 @@ void Membrane::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count
     }
     write_resume_file<<Max_node_pair_length<<"\t"<<Min_node_pair_length<<"\t"<<Average_node_pair_length<<endl;
 }
+
+void Membrane::write_geometrics(){
+    calculate_volume_and_surface_area();
+    calculate_surface_area_with_voronoi();
+    string geo_file_name=GenConst::trajectory_file_name+"_"+label+"_GeoProps.txt";
+    std::ofstream wgeo;
+    wgeo.open(geo_file_name.c_str(), std::ios::app);
+    
+    wgeo<<"NodeIndex NodeNormalVectorComponenets Nx Ny Nz NodeVoronoiAreaInNm2"<<endl;
+    wgeo<<"timeInPs "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"  Volume_(Nm^3) "<<volume<<"  Area_(Nm^2) "<<surface_area_voronoi<<endl;;
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        wgeo<<i<<"\t"<<node_voronoi_normal_vec[i][0]<<"\t"<<node_voronoi_normal_vec[i][1]<<"\t"<<node_voronoi_normal_vec[i][2]<<"\t"<<node_voronoi_area[i]<<endl;
+    }
+}

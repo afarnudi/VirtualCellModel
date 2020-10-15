@@ -503,12 +503,13 @@ int main(int argc, char **argv)
             myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
             
             if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
+                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
-                collect_data(all_atoms, buffer, Chromatins, Membranes, time);
+                collect_data(all_atoms, Chromatins, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 
                 //Begin: Exporting congiguration of classes for simulation .
-//                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
+                
                 
                 savetime += Savingstep;
                 
