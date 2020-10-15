@@ -100,7 +100,7 @@ bool   ChromatinVirtualSites;
 
 bool   WantEnergy;
 bool   WantForce;
-bool   WriteVelocitiesandForces;
+bool   WantVelocity;
 bool   CMMotionRemover;
 int    CMMotionRemoverStep;
 bool   Wantvoronoi;
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
         
         myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
-        exit(0);
+        
         for (int frame=1; ; ++frame) {
             
             double time, energyInKJ, potential_energyInKJ;
@@ -504,17 +504,11 @@ int main(int argc, char **argv)
             
             if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
                 
-                
-                if(GenConst::WriteVelocitiesandForces){
-                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
-                }
-                
+                collect_data(all_atoms, buffer, Chromatins, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 
                 //Begin: Exporting congiguration of classes for simulation .
-                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
-                
-                
+//                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 savetime += Savingstep;
                 

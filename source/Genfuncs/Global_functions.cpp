@@ -30,15 +30,10 @@ const int EndOfList=-1;
 using std::vector;
 
 
-void write_data(MyAtomInfo atoms[],
-                string buffer,
-                double volume,
-                double area,
-                double bending_energy);
 //void write_CM(string buffer, vector<Chromatin> chromos);
 //double calculate_pressure(vector<Membrane> mems);
 
-void write_data2(   MyAtomInfo atoms[],
+void write_data(   MyAtomInfo atoms[],
                  string buffer,
                  double volume,
                  double area,
@@ -71,7 +66,7 @@ void collect_data(MyAtomInfo atoms[],
         voronoi_area.resize(1,0);
     }
     //    write_data(atoms, buffer, mem_volume, mem_surface, bending_energy);
-    write_data2(atoms, buffer, mem_volume, mem_surface, bending_energy, voronoi_area);
+    write_data(atoms, buffer, mem_volume, mem_surface, bending_energy, voronoi_area);
 }
 
 
@@ -79,27 +74,6 @@ using std::string;
 using std::endl;
 
 void write_data(MyAtomInfo atoms[],
-                string buffer,
-                double volume,
-                double area,
-                double bending_energy){
-    
-    
-    string traj_file_name=GenConst::trajectory_file_name+"_vels_forces.txt";
-    std::ofstream wdata;
-    wdata.open(traj_file_name.c_str(), std::ios::app);
-    
-    wdata<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx, vy, vz(Nm/Ps) fx, fy, fz(KJ/Nm) Volume="<<volume<<" (Nm^3) Area="<<area<<" (Nm^2) bending_energy="<<bending_energy<<" (KJ)\n";
-    for (int t=0; atoms[t].type != EndOfList; t++) {
-        wdata<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
-        if (GenConst::WantForce) {
-            wdata<<"\t"<<atoms[t].force[0] << "\t" << atoms[t].force[1] << "\t" << atoms[t].force[2];
-        }
-        wdata<<"\n";
-    }
-}
-
-void write_data2(MyAtomInfo atoms[],
                  string buffer,
                  double volume,
                  double area,
@@ -136,5 +110,16 @@ void write_data2(MyAtomInfo atoms[],
             wdata<<"\t"<<voronoi_area[t];
         }
         wdata<<"\n";
+    }
+    if (GenConst::WantVelocity) {
+        string vel_file_name=GenConst::trajectory_file_name+"_vels.txt";
+        std::ofstream wvel;
+        wvel.open(vel_file_name.c_str(), std::ios::app);
+        
+        wvel<<"time: "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<"\tvx, vy, vz (Nm/Ps)\n";
+        for (int t=0; atoms[t].type != EndOfList; t++) {
+            wvel<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
+            wvel<<"\n";
+        }
     }
 }

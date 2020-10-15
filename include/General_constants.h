@@ -77,7 +77,7 @@ namespace GenConst {
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
     extern bool   WantForce;
     /**Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
-    extern bool   WriteVelocitiesandForces;
+    extern bool   WantVelocity;
     /**Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false*/
     extern bool CMMotionRemover;
 

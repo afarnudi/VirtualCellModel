@@ -189,7 +189,7 @@ void assign_general_parameters(GeneralParameters &defaults){
                 throw std::runtime_error(errorMessage);
             }
             GenConst::WantEnergy=stat;
-        } else if (it.first == "WriteVelocitiesForces") {
+        } else if (it.first == "WantVelocity") {
             bool stat;
             if (split[0]=="true") {
                 stat=true;
@@ -199,8 +199,7 @@ void assign_general_parameters(GeneralParameters &defaults){
                 string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
                 throw std::runtime_error(errorMessage);
             }
-            GenConst::WantForce=stat;
-            GenConst::WriteVelocitiesandForces=stat;
+            GenConst::WantVelocity=stat;
         } else if (it.first == "CMMotionRemover") {
             GenConst::CMMotionRemoverStep=stoi(split[0]);
             if (stoi(split[0])>0) {
