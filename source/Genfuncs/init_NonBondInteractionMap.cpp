@@ -1,6 +1,8 @@
+
 #include "Interaction_table.hpp"
 
 using namespace std;
+
 NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     inter_config_type["0"]=0;
     inter_config_type_reverse[0]="0";
@@ -49,6 +51,7 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
         force_label[i].resize(table_size);
     }
     lines.erase(lines.begin());
+    
     for (int i=0; i<table_size ; i++) {
         
         string line = lines[i];
@@ -57,17 +60,20 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
         if (split.size()==0) {
             i--;
         }
+        
         if (split.size()>0) {
-            
-                for (int i=0; i<row; i++) {
+                for (int i=0; i<rows; i++) {
                     if (is_interaction(split[i+1])) {
-                        inter_table[row-1][i] = inter_config_type[split[1+i]]%1000;
+                        inter_table[rows-1][i] = inter_config_type[split[1+i]]%1000;
                         if (inter_config_type[split[1+i]]>1000) {
-                            force_report[row-1][i] = true;
-                            force_sum++;
+                            force_report[rows-1][i] = true;
                         } else {
-                            force_report[row-1][i] = false;
+                            force_report[rows-1][i] = false;
                         }
+                        if (inter_config_type[split[1+i]]!=0) {
+                            force_sum++;
+                        }
+                        
                     } else {
                         string errorMessage = TWARN;
                         errorMessage+="Interaction Table parser: \""+split[i+1]+"\" not defined. Use the template generator for information on how to write the interaction table.";
@@ -75,21 +81,21 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
                         throw std::runtime_error(errorMessage);
                     }
                 }
-                row++;
+                rows++;
         }
         //I have placed this here for the programme to stop if there is a bigger table in the config file;
-        if (row-1 == table_size) {
+        if (rows-1 == table_size) {
             break;
         }
-        check_force_consistency();
+        
     }
-    
-    
+    check_force_consistency();
 }
 void NonBondInteractionMap::check_force_consistency(){
     if (force_sum!=0) {
         GenConst::WantForce=true;
     }
+    
     
     if (force_sum>32) {
         string errorMessage = TWARN;
