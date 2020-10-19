@@ -122,9 +122,6 @@ void myGetOpenMMState(MyOpenMMData* omm,
     if (GenConst::WantEnergy) {
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
-    if (GenConst::WantForce) {
-        infoMask += OpenMM::State::Forces;
-    }
     // Forces are also available (and cheap).
     const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
     
@@ -158,18 +155,18 @@ void myGetOpenMMState(MyOpenMMData* omm,
             
         }
     }
-    if (GenConst::WantForce) {
-        const std::vector<Vec3>& Forces = state.getForces();
-        for (int i=0; i < (int)positionsInNm.size(); ++i){
-            for (int j=0; j < 3; ++j){
-                atoms[i].posInNm[j] = positionsInNm[i][j];
-                atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
-                if (GenConst::WantForce) {
-                    atoms[i].force[j]    = Forces[i][j];
-                }
-            }
-        }
-    }
+//    if (GenConst::WantForce) {
+//        const std::vector<Vec3>& Forces = state.getForces();
+//        for (int i=0; i < (int)positionsInNm.size(); ++i){
+//            for (int j=0; j < 3; ++j){
+//                atoms[i].posInNm[j] = positionsInNm[i][j];
+//                atoms[i].velocityInNmperPs[j] = velInNmperPs[i][j];
+//                if (GenConst::WantForce) {
+//                    atoms[i].force[j]    = Forces[i][j];
+//                }
+//            }
+//        }
+//    }
     
     // If energy has been requested, obtain it in kJ/mol.
     energyInKJ = 0;
@@ -257,22 +254,6 @@ void myWritePDBFrame(int frameNum,
 //                atoms[n].symbol);
     }
     
-    // visualize bonds in pdb file
-    if(frameNum==0 && GenConst::write_bonds_to_PDB)
-    {
-    
-        for (int n=0; bonds[n].type != EndOfList; ++n){
-            if(bonds[n].atoms[0] < bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[0]+1,bonds[n].atoms[1]+1);
-            }
-            if(bonds[n].atoms[0] > bonds[n].atoms[1])
-            {
-                fprintf(pFile, "CONECT%5d%5d\n",bonds[n].atoms[1]+1,bonds[n].atoms[0]+1);
-            }
-        }
-    
-    }
     
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);

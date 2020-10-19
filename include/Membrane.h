@@ -109,6 +109,10 @@ protected:
     
     double Total_Bending_Energy = 0.0;
     vector<vector< int > > dihedral_atoms;
+    
+    /**write geometrical properties if it is true.*/
+    bool WantGeometricProps=false;
+    
 public:
     //Analysis funcs/vars:
     bool initial_random_rotation_coordinates = false;
@@ -169,6 +173,13 @@ public:
             }
         }
     }
+    /**Return the geometrical properties write status*/
+    bool get_GeometricProps_flag(){
+        return WantGeometricProps;
+    }
+    
+    void write_geometrics();
+    
     /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
     double calculate_bending_energy(void);
     
@@ -686,6 +697,11 @@ public:
         values[1] ="#begin the simulation with a random orientation. Default value false";
         Params["InitRandomRotation"] = values;
         insertOrder.push_back("InitRandomRotation");
+        
+        values[0] ="false";
+        values[1] ="#Write geometrical characteristics of the Membrane. It includes The Membrane volume, surface area, voronoi area of each node, normal vector of each node at the savinig time step. Default value false";
+        Params["WantGeometricProps"] = values;
+        insertOrder.push_back("WantGeometricProps");
         
         values[0] ="0 0 0";
         values[1] ="#X, Y, Z coordinates of a point inside the Membrane (usually the geometrical centre) used to build normal vectors on the trianular mesh that point to the outside of the Membrane. This proccess is only performed once when the Membrane is imported from the mesh file.";

@@ -12,7 +12,24 @@
 #include <vector>
 #include <map>
 
+struct PotentialModelIndex{
+    std::map<std::string, int> Model;
+    
+    PotentialModelIndex(){
+        Model["FENE"] = 1;
+        Model["Harmonic"] = 2;
+        Model["Kelvin-Voigt"] = 3;
+        Model["Maxwell"] = 4;
+        Model["HarmonicX4"] = 5;
+        Model["RealHarmonic"] = 26;
+        
+    }
+};
+
+
 namespace GenConst {
+    /**A struct that stores differnet potential indexies.*/
+    extern PotentialModelIndex potential;
     /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/
     extern double Simulation_Time_In_Ps;
     /**Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.*/
@@ -50,10 +67,6 @@ namespace GenConst {
     extern double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     extern double temperature;
-    /**Specifies if an interaction map is provided by the user or not. deafult false.*/
-    extern bool Interaction_map;
-    /**Path to the interaction map (including the file name). if set to zero no class instances will interact with one another. Set to 1 and provide a path to the "interaction_map.txt" file.  Default = "interaction_map.txt".*/
-    extern std::string Interaction_map_file_name;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.*/
     extern bool Excluded_volume_interaction;
     /**Set Membrane class label. An index will be assigned during runtime. Default mem*/
@@ -73,13 +86,11 @@ namespace GenConst {
     /**name of the OpenMM checkpoint file (binary file)*/
     extern std::string Checkpoint_file_name;
     
-    extern bool write_bonds_to_PDB;
-    /**Collect energy parameters for the potentials (expensive) during each Report_Interval_In_Fs time point. Default true*/
     extern bool   WantEnergy;
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
     extern bool   WantForce;
     /**Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
-    extern bool   WriteVelocitiesandForces;
+    extern bool   WantVelocity;
     /**Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false*/
     extern bool CMMotionRemover;
 

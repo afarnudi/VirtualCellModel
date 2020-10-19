@@ -41,6 +41,7 @@
 #include "General_class_functions.h"
 #include "Arg_pars.hpp"
 #include "Configfile.hpp"
+#include "Interaction_table.hpp"
 
 //#include "Tests.hpp"
 
@@ -61,6 +62,7 @@
 
 
 namespace GenConst {
+PotentialModelIndex potential;
 double Simulation_Time_In_Ps;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
@@ -80,8 +82,6 @@ string force_file_name;
 double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool   Interaction_map;
-string Interaction_map_file_name;
 bool   Excluded_volume_interaction;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
@@ -98,11 +98,9 @@ string Checkpoint_path;
 string Checkpoint_file_name;
 bool   ChromatinVirtualSites;
 
-
-bool   write_bonds_to_PDB;
 bool   WantEnergy;
 bool   WantForce;
-bool   WriteVelocitiesandForces;
+bool   WantVelocity;
 bool   CMMotionRemover;
 int    CMMotionRemoverStep;
 bool   Wantvoronoi;
@@ -162,9 +160,7 @@ int main(int argc, char **argv)
     get_class_numbers(config_lines);
     parse_genconfig_parameters(config_lines["-GeneralParameters"]);
 
-    vector<vector<int> > interaction_map;
-    
-    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
+    NonBondInteractionMap interaction_map(config_lines["-InteractionTable"]);
     
     string ckeckpoint_name=GenConst::trajectory_file_name+"_Checkpoint";
     
@@ -497,7 +493,7 @@ int main(int argc, char **argv)
         
         myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
-        exit(0);
+        
         for (int frame=1; ; ++frame) {
             
             double time, energyInKJ, potential_energyInKJ;
@@ -505,17 +501,12 @@ int main(int argc, char **argv)
             myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
             
             if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
+                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
-                
-                if(GenConst::WriteVelocitiesandForces){
-                    collect_data(all_atoms, buffer, Chromatins, Membranes, time);
-                }
-                
+                collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 
                 //Begin: Exporting congiguration of classes for simulation .
-                Export_classes_for_resume(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
-                
                 
                 
                 savetime += Savingstep;

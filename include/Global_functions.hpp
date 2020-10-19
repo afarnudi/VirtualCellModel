@@ -16,6 +16,7 @@
 #include "Chromatin.h"
 #include "Membrane.h"
 #include "OpenMM_structs.h"
+#include "Interaction_table.hpp"
 
 /// \file
 
@@ -28,10 +29,10 @@ void set_temperature(int MD_step, double temperature, int buffer);
 using std::string;
 using std::vector;
 
-void collect_data(MyAtomInfo atoms[],
-                  string buffer,
-                  vector<Chromatin> chromos,
-                  vector<Membrane> mems,
+void collect_data(MyOpenMMData*,
+                  MyAtomInfo atoms[],
+                  NonBondInteractionMap intertable,
+                  vector<Membrane>  &mems,
                   double timeInPs);
 
 

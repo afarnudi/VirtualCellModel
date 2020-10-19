@@ -7,13 +7,14 @@
 #include "Actin.h"
 #include "ECM.h"
 #include "Chromatin.h"
+#include "Interaction_table.hpp"
 
-void Export_classes_for_resume(std::vector<Membrane>  &membranes,
-                               std::vector<Actin>     &actins,
-                               std::vector<ECM>       &ecms,
-                               std::vector<Chromatin> &chromatins,
-                               double                  time,
-                               MyAtomInfo*             all_atoms);
+void Update_classes(std::vector<Membrane>  &membranes,
+                    std::vector<Actin>     &actins,
+                    std::vector<ECM>       &ecms,
+                    std::vector<Chromatin> &chromatins,
+                    double                  time,
+                    MyAtomInfo*             all_atoms);
 
 
 using std::set;
@@ -28,7 +29,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
                         vector<set<int> >               &membrane_set,
-                        vector<vector<int> >             interaction_map);
+                        NonBondInteractionMap            interaction_map);
 
 void expand(vector<Chromatin>                chromos,
             MyOpenMMData*                    omm);

@@ -34,6 +34,7 @@ void parse_genconfig_parameters(vector<string> lines);
 void assign_general_parameters(GeneralParameters &defaults);
 
 vector<vector<int> > parse_interactiontable_parameters(vector<string> lines);
+vector<vector<bool> > parse_non_bond_force_report_status(vector<string> lines);
 
 void generate_report(map<string, vector<string> > config_lines);
 

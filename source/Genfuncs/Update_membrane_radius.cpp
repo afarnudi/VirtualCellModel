@@ -4,6 +4,7 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include "Interaction_table.hpp"
 
 using OpenMM::Vec3;
 using std::vector;
@@ -36,7 +37,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
                         vector<set<int> >               &membrane_set,
-                        vector<vector<int> >            interaction_map)
+                        NonBondInteractionMap            interaction_map)
 {
     
     int mem_count=0;
@@ -66,17 +67,17 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 double new_sig = 0.5*membranes[i].get_avg_node_dist()*mem_radius_at_current_time/r;
                 new_node_radius = new_sig;
 //                cout<<"new_node_radius "<<new_node_radius<<endl;
-                if (interaction_map[i][i]!=0) {
+                if (interaction_map.get_interacton_type(i,i)!="None") {
                     omm->context->setParameter(sigma, new_sig);
                 }
                 
                 
                 for (int ch=0; ch<chromos.size(); ch++) {
-                    if (interaction_map[ch+1][0]==2) {
+                    if (interaction_map.get_interacton_type(ch+1,0)=="Excluded-Volume") {
                         sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
 //                        new_sig = (new_sig + chromos[ch].get_node_radius())*0.5;
                         omm->context->setParameter(sigma, new_sig);
-                    } else if (interaction_map[ch+1][0]==1){
+                    } else if (interaction_map.get_interacton_type(ch+1,0)=="Lennard-Jones"){
                         for (int chind=0; chind < chromos[ch].get_num_of_node_types(); chind++) {
                             sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + std::to_string(chind) + GenConst::Membrane_label + std::to_string(i) ;
                             omm->context->setParameter(sigma, (new_sig + chromos[ch].get_node_radius())*0.5);

@@ -1,12 +1,12 @@
 #include "General_class_functions.h"
 
 
-void Export_classes_for_resume(std::vector<Membrane>   &membranes,
-                               std::vector<Actin>      &actins,
-                               std::vector<ECM>        &ecms,
-                               std::vector<Chromatin>  &chromatins,
-                               double                   time,
-                               MyAtomInfo*              all_atoms)
+void Update_classes(std::vector<Membrane>   &membranes,
+                    std::vector<Actin>      &actins,
+                    std::vector<ECM>        &ecms,
+                    std::vector<Chromatin>  &chromatins,
+                    double                   time,
+                    MyAtomInfo*              all_atoms)
 {
     int atom_count=0;
     int bond_count=0;

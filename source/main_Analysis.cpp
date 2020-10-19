@@ -39,6 +39,7 @@
 
 namespace GenConst {
 double Simulation_Time_In_Ps;
+PotentialModelIndex potential;
 int    MD_traj_save_step;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
@@ -59,8 +60,6 @@ string ProjectName;
 string force_file_name;
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool   Interaction_map;
-string Interaction_map_file_name;
 bool   Excluded_volume_interaction;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
@@ -80,7 +79,7 @@ bool   ChromatinVirtualSites;
 bool   write_bonds_to_PDB;
 bool   WantEnergy;
 bool   WantForce;
-bool   WriteVelocitiesandForces;
+bool   WantVelocity;
 bool   CMMotionRemover;
 int    CMMotionRemoverStep;
 bool   Wantvoronoi;

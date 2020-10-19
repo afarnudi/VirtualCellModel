@@ -135,7 +135,7 @@ void Membrane::assign_parameters(void){
             Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
-                spring_model = 2;
+                spring_model = GenConst::potential.Model["Harmonic"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";
@@ -179,6 +179,17 @@ void Membrane::assign_parameters(void){
                 initial_random_rotation_coordinates=true;
             } else if (split[0]=="false"){
                 initial_random_rotation_coordinates=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "WantGeometricProps") {
+            if(split[0]=="true"){
+                WantGeometricProps=true;
+            } else if (split[0]=="false"){
+                WantGeometricProps=false;
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";

@@ -14,6 +14,7 @@
 #include "ECM.h"
 #include "Actin.h"
 #include "Chromatin.h"
+#include "Interaction_table.hpp"
 
 
 /** This function and an opaque structure are used to interface our main
@@ -32,7 +33,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  std::vector<std::set<int> >    &ecm_set,
 //                                 std::vector<std::set<int> >    &chromatin_set,
                                  std::vector<std::vector<std::set<int> >  >    &chromatin_set,
-                                 std::vector<std::vector<int> > interaction_map);
+                                 NonBondInteractionMap                 &interaction_map
+                                 );
 
 
 
@@ -357,7 +359,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<std::set<int> >                &actin_set,
                       vector<std::set<int> >                &ecm_set,
                       vector<vector<std::set<int> > >       &chromatin_set,
-                      vector<vector<int> >                   interaction_map,
+                      NonBondInteractionMap                 &interaction_map,
                       vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,

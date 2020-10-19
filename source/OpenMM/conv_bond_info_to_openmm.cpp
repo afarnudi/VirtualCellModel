@@ -10,58 +10,44 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].class_label = mem.get_label() + mem.get_label();
         bonds[i].nominalLengthInNm=mem.get_node_pair_distance_in_Nm(i);
         
-        switch (bonds[i].type) {
-                //FENE
-            case 1:
-                mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
-                break;
-                //Harmonic
-            case 2:
-                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
-                break;
-                //HarmonicX4
-            case 3:
-                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
-                break;
-                //Kelvin-Voigt
-            case 4:
-                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
-                break;
-                
-            case 5:
-                bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
-                break;
+        if (bonds[i].type == GenConst::potential.Model["FENE"]) {
+            mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
+        } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == GenConst::potential.Model["HarmonicX4"]){
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == GenConst::potential.Model["Kelvin-Voigt"]){
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == GenConst::potential.Model["RealHarmonic"]){
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         }
         
-        
     }
-    if(bonds[0].type==2){
+    if(bonds[0].type==GenConst::potential.Model["Harmonic"]){
         cout<<" Harmonic "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     
-    if (bonds[0].type == 1) {
+    if (bonds[0].type == GenConst::potential.Model["FENE"]) {
         cout<< " FENE"<<endl;
 //        cout<<"attraction coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
 //        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
 //        cout<<"lmin(Nm)\tlmax(Nm)\tK_FENE   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].K_FENE<<"\t"<<bonds[0].FENE_le1inNm<<endl;
     }
     
-    if(bonds[0].type == 3){
+    if(bonds[0].type == GenConst::potential.Model["HarmonicX4"]){
         cout<<" X4Harmonic "<<endl;
         cout<<"\tCoeficient (KJ . Nm^-4 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient()  <<endl;
     }
     
-    if(bonds[0].type == 4){
+    if(bonds[0].type == GenConst::potential.Model["Kelvin-Voigt"]){
         cout<<" Kelvin-Voigt "<<endl;
         cout<<"\tCoeficient (KJ . Nm^-2 . mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
-    if(bonds[0].type==5){
+    if(bonds[0].type == GenConst::potential.Model["RealHarmonic"]){
         cout<<" realHarmonic "<<endl;
         cout<<"\tCoeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
     }
-    
-    
     
     return bonds;
 }
@@ -78,30 +64,16 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         bonds[i].atoms[0]=act.get_node_pair(i, 0);
         bonds[i].atoms[1]=act.get_node_pair(i, 1);
         bonds[i].class_label = act.get_label() + act.get_label();
-        switch (bonds[i].type) {
-                //FENE
-            case 1:
-                //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
-                //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                break;
-                //Harmonic
-            case 2:
-                // bonds[i].nominalLengthInNm=act.get_avg_node_dist();
-                bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
-                bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
-
-                break;
-                
-                //Kelvin-Voigt
-            case 4:
-                //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
-                bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
-                bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
-                bonds[i].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
-                
-                break;
-                
+        
+        if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+            bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
+            bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == GenConst::potential.Model["Kelvin-Voigt"]){
+            bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
+            bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
+            bonds[i].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
         }
+        
         
         
     }
@@ -376,12 +348,12 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     
     
     
-    if(bonds[0].type==2){
+    if(bonds[0].type==GenConst::potential.Model["Harmonic"]){
         cout<<" Harmonic "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<act.get_spring_stiffness_coefficient() <<endl;
     }
     
-    if(bonds[0].type == 4){
+    if(bonds[0].type == GenConst::potential.Model["Kelvin-Voigt"]){
         cout<<" Kelvin-Voigt "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-4) = "<< act.get_spring_stiffness_coefficient() * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm<<endl;
     }
@@ -439,34 +411,23 @@ Bonds* convert_ECM_bond_info_to_openmm(ECM ecm , MyAtomInfo* atoms) {
         double dist;
         dist = sqrt((atoms[ bonds[i].atoms[0] ].initPosInNm[0] - atoms[ bonds[i].atoms[1] ].initPosInNm[0]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[0] - atoms[ bonds[i].atoms[1] ].initPosInNm[0]) + (atoms[ bonds[i].atoms[0] ].initPosInNm[1] - atoms[ bonds[i].atoms[1] ].initPosInNm[1]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[1] - atoms[ bonds[i].atoms[1] ].initPosInNm[1]) + (atoms[ bonds[i].atoms[0] ].initPosInNm[2] - atoms[ bonds[i].atoms[1] ].initPosInNm[2]) * (atoms[ bonds[i].atoms[0] ].initPosInNm[2] - atoms[ bonds[i].atoms[1] ].initPosInNm[2])) ;
         
-        
-        switch (bonds[i].type) {
-                //FENE
-            case 1:
-//                ecm.set_FENE_param(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
-//                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient();
-                cout<<TWWARN<<"FENE not set"<<TRESET<<endl;
-                exit(0);
-                break;
-                //Harmonic
-            case 2:
-                //bonds[i].nominalLengthInNm=ecm.get_avg_node_dist();
-                bonds[i].nominalLengthInNm=dist;
-                
-                
-                bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient() +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) * ecm.get_stiffness_gradient_x()
-                +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[1] + atoms[bonds[i].atoms[1]].initPosInNm[1]) * ecm.get_stiffness_gradient_y()
-                +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[2] + atoms[bonds[i].atoms[1]].initPosInNm[2]) * ecm.get_stiffness_gradient_z();
-               
-                break;
-                
-                
-        }
-        if(bonds[0].type==2){
-            cout<<" Harmonic "<<endl;
-            cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<ecm.get_spring_stiffness_coefficient() <<endl;
+        if (bonds[i].type == GenConst::potential.Model["FENE"]) {
+            cout<<TWWARN<<"FENE not set"<<TRESET<<endl;
+            exit(0);
+        } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+            bonds[i].nominalLengthInNm=dist;
+            
+            
+            bonds[i].stiffnessInKJPerNm2=ecm.get_spring_stiffness_coefficient() +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) * ecm.get_stiffness_gradient_x()
+            +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[1] + atoms[bonds[i].atoms[1]].initPosInNm[1]) * ecm.get_stiffness_gradient_y()
+            +0.5*(atoms[bonds[i].atoms[0]].initPosInNm[2] + atoms[bonds[i].atoms[1]].initPosInNm[2]) * ecm.get_stiffness_gradient_z();
         }
         
+    }
+    
+    if(bonds[0].type==GenConst::potential.Model["Harmonic"]){
+        cout<<" Harmonic "<<endl;
+        cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<ecm.get_spring_stiffness_coefficient() <<endl;
     }
 
     return bonds;
@@ -491,24 +452,18 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
             //        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;
             //        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
             bonds[i].class_label = chromo.get_label() + chromo.get_label();
-            switch (bonds[i].type) {
-                    //FENE
-                case 1:
-                    //                act.set_FENE_param(bonds[i].FENE_le0, bonds[i].FENE_le1, bonds[i].FENE_lmin, bonds[i].FENE_lmax);
-                    //                bonds[i].stiffnessInKcalPerAngstrom2=act.get_spring_stiffness_coefficient();
-                    break;
-                    //Harmonic
-                case 2:
-                    bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
-                    bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
-                    break;
-                    
-                    
+            
+            if (bonds[i].type == GenConst::potential.Model["FENE"]) {
+                cout<<TWWARN<<"FENE not set"<<TRESET<<endl;
+                exit(0);
+            } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+                bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
+                bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
             }
             
                 
-            }
-        if(bonds[0].type==2){
+        }
+        if(bonds[0].type==GenConst::potential.Model["Harmonic"]){
             cout<<" Harmonic "<<endl;
             cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<chromo.get_spring_stiffness_coefficient() <<endl;
         }

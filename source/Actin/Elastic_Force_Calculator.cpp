@@ -23,11 +23,11 @@ void Actin::Elastic_Force_Calculator(void)
         double a[3]={delta_x, delta_y, delta_z};
         distance = vector_length(a);
         
-        if (spring_model == 0) {
+        if (spring_model == GenConst::potential.Model["Harmonic"]) {
             force = Hookian(distance, initial_distance);
-        } else if (spring_model == 1){
+        } else if (spring_model == GenConst::potential.Model["Kelvin-Voigt"]){
             force = Kelvin(distance, i);
-        } else if (spring_model == 2){
+        } else if (spring_model == GenConst::potential.Model["Maxwell"]){
             force = Maxwell(distance, i);
         }
         force/= distance;

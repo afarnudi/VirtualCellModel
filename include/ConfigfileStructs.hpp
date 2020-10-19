@@ -15,17 +15,6 @@
 
 using namespace std;
 
-struct INTERindex{
-    map<string, int> INTERACTION;
-    
-    INTERindex(){
-        INTERACTION["0"]=0;
-        INTERACTION["LJ"]=1;
-        INTERACTION["EV"]=2;
-    }
-};
-
-
 struct FLAGindex{
     map<string, int> FLAG;
     
@@ -118,14 +107,9 @@ struct GeneralParameters{
         insertOrder.push_back("ReportEnergy");
         
         values[0] ="false";
-        values[1] ="#Write the bond information of the first frame to the pdb. Default false";
-        GenParams["WriteBondsPDB"] = values;
-        insertOrder.push_back("WriteBondsPDB");
-        
-        values[0] ="false";
-        values[1] ="#Writes velocities and forces (cheap) of particles during each ReportIntervalInFs time point to the disk. Default false";
-        GenParams["WriteVelocitiesForces"] = values;
-        insertOrder.push_back("WriteVelocitiesForces");
+        values[1] ="#Write the particle velocities (cheap) fora each  ReportIntervalInFs time point. Default false";
+        GenParams["WantVelocity"] = values;
+        insertOrder.push_back("WantVelocity");
         
         values[0] ="1000 0 0";
         values[1] ="#Periodic box vector (1 of 3). Default value (1000, 0, 0).";
