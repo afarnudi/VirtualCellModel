@@ -158,9 +158,9 @@ void assign_general_parameters(GeneralParameters &defaults){
         } else if (it.first == "SimulationBoxLength") {
             GenConst::Lbox=stod(split[0]);
             if (int(GenConst::Lbox) == 0) {
-                GenConst::Periodic_box=true;
-            } else {
                 GenConst::Periodic_box=false;
+            } else {
+                GenConst::Periodic_box=true;
             }
         } else if (it.first == "Integrator") {
             int type=-1;
