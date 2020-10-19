@@ -3,19 +3,36 @@
 using namespace std;
 NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     inter_config_type["0"]=0;
+    inter_config_type_reverse[0]="0";
     inter_type_name[0]="None";
+    
     inter_config_type["LJ"]=1;
+    inter_config_type_reverse[1]="LJ";
     inter_type_name[1]="Lennard-Jones";
+    
     inter_config_type["EV"]=2;
+    inter_config_type_reverse[2]="EV";
     inter_type_name[2]="Excluded-Volume";
+    
     inter_config_type["3"]=3;
+    inter_config_type_reverse[3]="3";
     inter_type_name[3]="Lennard-Jones3";
+    
     inter_config_type["4"]=4;
+    inter_config_type_reverse[4]="4";
     inter_type_name[4]="Lennard-Jones4";
+    
     inter_config_type["5"]=5;
+    inter_config_type_reverse[5]="5";
     inter_type_name[5]="Lennard-Jones5";
+    
     inter_config_type["LJCS"]=6;
+    inter_config_type_reverse[6]="LJCS";
     inter_type_name[6]="Lennard-JonesChromatinSpecial0";
+    
+    
+    
+    
     
     inter_config_type["LJR"]=1001;
     inter_config_type["EVR"]=1002;
@@ -25,9 +42,11 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     
     inter_table.resize(table_size);
     force_report.resize(table_size);
+    force_label.resize(table_size);
     for (int i=0; i<table_size; i++) {
         inter_table[i].resize(table_size,0);
         force_report[i].resize(table_size,0);
+        force_label[i].resize(table_size);
     }
     lines.erase(lines.begin());
     for (int i=0; i<table_size ; i++) {
@@ -68,10 +87,34 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     
 }
 void NonBondInteractionMap::check_force_consistency(){
+    if (force_sum!=0) {
+        GenConst::WantForce=true;
+    }
+    
     if (force_sum>32) {
         string errorMessage = TWARN;
         errorMessage+="Force Reporter: cannot report more than 31 forces. This limitation is set by OpenMM. Please edit the interaction table and try again.";
         errorMessage+= TRESET;
         throw std::runtime_error(errorMessage);
     }
+}
+
+int NonBondInteractionMap::setForceGroup(int row, int col){
+    ForceGroupCount++;
+    forceGroupLabel[ForceGroupCount]=force_label[row][col]+"_"+inter_config_type_reverse[inter_table[row][col]];
+    forceGroupIndex[ForceGroupCount]=ForceGroupCount;
+    return forceGroupIndex[ForceGroupCount];
+}
+
+int NonBondInteractionMap::setForceGroup(int row, int col, int chromotype){
+    ForceGroupCount++;
+    forceGroupLabel[ForceGroupCount]=force_label[row][col]+"_"+inter_config_type_reverse[inter_table[row][col]]+to_string(chromotype);
+    forceGroupIndex[ForceGroupCount]=ForceGroupCount;
+    return forceGroupIndex[ForceGroupCount];
+}
+
+
+int NonBondInteractionMap::get_ForceGroup(int index){
+    int forcegroup = 1 << forceGroupIndex[index];
+    return forcegroup;
 }

@@ -23,7 +23,6 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       OpenMM::System                        &system
                       ){
     
-    
     vector<std::set<int>> sp_nodes;
     vector<std::set<int>> ns_nodes;
     sp_nodes.resize(1);
@@ -122,6 +121,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i,j));
+                }
+                
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, membrane_set, membrane_set, i, j, GenConst::Membrane_label , GenConst::Membrane_label);
                 
@@ -131,6 +134,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i,j));
+                }
             }
             
         }
@@ -169,6 +175,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, membrane_set, i, j, GenConst::Actin_label , GenConst::Membrane_label);
                 
@@ -177,6 +186,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             }
         }
         
@@ -201,6 +213,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, actin_set, actin_set, i, j-class_count_j, GenConst::Actin_label , GenConst::Actin_label);
                 
@@ -210,6 +225,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             }
             
         }
@@ -249,6 +267,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, membrane_set, i, j, GenConst::ECM_label , GenConst::Membrane_label);
                 index = int(ExcludedVolumes.size()-1);
@@ -257,6 +278,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Lennard-Jones3"){
                 init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, ecm_set, ns_nodes, i, j , GenConst::ECM_label , GenConst::Membrane_label);
 
@@ -323,6 +347,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, actin_set, i, j-class_count_j, GenConst::ECM_label, GenConst::Actin_label);
                 index = int(ExcludedVolumes.size()-1);
@@ -331,6 +358,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                }
             }
             
         }
@@ -357,6 +387,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(LJ_12_6_interactions[index], exclude_bonds);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, ecm_set, ecm_set, i, j-class_count_j, GenConst::ECM_label , GenConst::ECM_label);
                 index = int(ExcludedVolumes.size()-1);
@@ -365,6 +398,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 add_exclusion(ExcludedVolumes[index], exclude_bonds);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             }
         }
     }
@@ -383,6 +419,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             int index;
             string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
             interaction_map.set_force_label(i + class_count_i, j, GenConst::Chromatin_label + std::to_string(i) +  GenConst::Membrane_label  + std::to_string(j));
+            
             if (interaction_name == "Lennard-Jones") {
                 for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
                     init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, GenConst::Chromatin_label, GenConst::Membrane_label);
@@ -392,6 +429,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     system.addForce(LJ_12_6_interactions[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j,chromo_type));
+                    }
                 }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, GenConst::Chromatin_label , GenConst::Membrane_label);
@@ -404,6 +444,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
 //                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             }
             
             
@@ -422,7 +465,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             int index;
             string interaction_name = interaction_map.get_interacton_type(i + class_count_j, j);
-            interaction_map.set_force_label(i + class_count_i, j, GenConst::Chromatin_label + std::to_string(i) +  GenConst::Actin_label  + std::to_string(j-class_count_j));
+            interaction_map.set_force_label(i + class_count_j, j, GenConst::Chromatin_label + std::to_string(i) +  GenConst::Actin_label  + std::to_string(j-class_count_j));
             if (interaction_name == "Lennard-Jones") {
                 init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , GenConst::Chromatin_label , GenConst::Actin_label);
                 index = int(LJ_12_6_interactions.size()-1);
@@ -432,6 +475,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j, j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Actin_label);
                 
@@ -442,6 +488,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                }
             }
             
         }
@@ -468,6 +517,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
                 
                 system.addForce(LJ_12_6_interactions[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Excluded-Volume"){
                 init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::ECM_label);
                 index = int(ExcludedVolumes.size()-1);
@@ -477,6 +529,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             }
             
         }
@@ -557,6 +612,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                 
                 system.addForce(ExcludedVolumes[index]);
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                }
             } else if (interaction_name == "Lennard-JonesChromatinSpecial0"){
                 if (i == j-class_count_j) {
                     for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {

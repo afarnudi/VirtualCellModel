@@ -27,16 +27,19 @@
  */
 
 const int EndOfList=-1;
-using std::vector;
+using namespace std;
 
 
 //void write_CM(string buffer, vector<Chromatin> chromos);
 //double calculate_pressure(vector<Membrane> mems);
 
-void write_data(   MyAtomInfo atoms[]);
+void write_data(MyOpenMMData* omm,
+                MyAtomInfo atoms[],
+                NonBondInteractionMap intertable);
 
-void collect_data(MyAtomInfo atoms[],
-                  vector<Chromatin> &chromos,
+void collect_data(MyOpenMMData* omm,
+                  MyAtomInfo atoms[],
+                  NonBondInteractionMap intertable,
                   vector<Membrane>  &mems,
                   double timeInPs){
     
@@ -48,14 +51,14 @@ void collect_data(MyAtomInfo atoms[],
         }
     }
     
-    write_data(atoms);
+    write_data(omm, atoms, intertable);
 }
 
+using OpenMM::Vec3;
 
-using std::string;
-using std::endl;
-
-void write_data(MyAtomInfo atoms[]){
+void write_data(MyOpenMMData* omm,
+                MyAtomInfo atoms[],
+                NonBondInteractionMap intertable){
     
     if (GenConst::WantVelocity) {
         string vel_file_name=GenConst::trajectory_file_name+"_vels.txt";
@@ -69,4 +72,43 @@ void write_data(MyAtomInfo atoms[]){
             wvel<<"\n";
         }
     }
+    if (GenConst::WantForce) {
+        int infoMask = 0;
+        infoMask += OpenMM::State::Forces;     // for pot. energy (expensive)
+        
+        const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
+        const std::vector<Vec3>& Forces = state.getForces();
+        
+        ofstream write_total_force;
+        string totalforcepath =GenConst::trajectory_file_name+"_Net_Force.txt";
+        write_total_force.open(totalforcepath.c_str(),std::ios_base::app);
+        write_total_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
+        write_total_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+        
+        for (int t=0; t < (int)Forces.size(); ++t){
+            write_total_force<<t<<"\t"<<Forces[t][0] << "\t" << Forces[t][1] << "\t" << Forces[t][2];
+            write_total_force<<"\n";
+        }
+        
+        for (int i=1; i<intertable.get_ForceGroupCount()+1; i++) {
+            
+            const OpenMM::State statei = omm->context->getState(infoMask,GenConst::Periodic_box, intertable.get_ForceGroup(i));
+            const std::vector<Vec3>& Forcesi = statei.getForces();
+            
+            
+            ofstream write_force;
+            string forcepath =GenConst::trajectory_file_name+"_"+intertable.get_ForceGroupLabel(i)+".txt";
+            write_force.open(forcepath.c_str(),std::ios_base::app);
+            write_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
+            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+            for (int t=0; t < (int)Forcesi.size(); ++t){
+                write_force<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
+                write_force<<"\n";
+            }
+        }
+        
+        
+    }
+    
+    
 }

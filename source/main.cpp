@@ -503,7 +503,7 @@ int main(int argc, char **argv)
             if ( int(time*1000/GenConst::Step_Size_In_Fs) > savetime ) {
                 Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
-                collect_data(all_atoms, Chromatins, Membranes, time);
+                collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 
                 //Begin: Exporting congiguration of classes for simulation .
