@@ -2,13 +2,14 @@
 #include <gtest/gtest.h>
 #include <string>
 
-#include "maps.hpp"
+//#include "maps.hpp"
 #include "Membrane.h"
 #include "General_functions.hpp"
 #include "Arg_pars.hpp"
 
 
 namespace GenConst {
+PotentialModelIndex potential;
 double Simulation_Time_In_Ps;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
@@ -22,13 +23,12 @@ int    Num_of_Membranes;
 int    Num_of_Chromatins;
 int    Num_of_Actins;
 int    Num_of_ECMs;
-string trajectory_file_name;;
-string force_file_name;;
+string trajectory_file_name;
+string ProjectName;
+string force_file_name;
 double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool   Interaction_map;
-string Interaction_map_file_name;
 bool   Excluded_volume_interaction;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
@@ -45,11 +45,9 @@ string Checkpoint_path;
 string Checkpoint_file_name;
 bool   ChromatinVirtualSites;
 
-
-bool   write_bonds_to_PDB;
 bool   WantEnergy;
 bool   WantForce;
-bool   WriteVelocitiesandForces;
+bool   WantVelocity;
 bool   CMMotionRemover;
 int    CMMotionRemoverStep;
 bool   Wantvoronoi;
@@ -68,6 +66,8 @@ std::vector<double> PeriodicBoxVector2;
 //    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
 std::vector<std::vector<double> > Lboxdims;
+
+std::string hardwareReport;
 }
 
 
@@ -94,7 +94,6 @@ struct MemAnalysisTest : public testing::Test{
         args.num_atoms_per_frame=1002;
         args.Mesh_files.push_back("10_1002n.ply");
         
-        string general_file_name="General_param_map.txt";
         vector<string> membrane_config_list;
         vector<string> chromatin_config_list;
         vector<string> actin_config_list;
@@ -103,7 +102,7 @@ struct MemAnalysisTest : public testing::Test{
         
         
         GenConst::Testmode=true;
-        read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+//        read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
         
         
         GenConst::Num_of_Membranes=1;
@@ -1603,7 +1602,7 @@ protected:
         
         
         GenConst::Testmode=true;
-        read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
+//        read_general_parameters(general_file_name, membrane_config_list, chromatin_config_list, actin_config_list, ecm_config_list, pointparticle_config_list);
         
         
         GenConst::Num_of_Membranes=1;

@@ -135,7 +135,7 @@ void Membrane::assign_parameters(void){
             Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
-                spring_model = 2;
+                spring_model = GenConst::potential.Model["Harmonic"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";

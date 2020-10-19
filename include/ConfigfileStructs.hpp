@@ -15,17 +15,6 @@
 
 using namespace std;
 
-struct INTERindex{
-    map<string, int> INTERACTION;
-    
-    INTERindex(){
-        INTERACTION["0"]=0;
-        INTERACTION["LJ"]=1;
-        INTERACTION["EV"]=2;
-    }
-};
-
-
 struct FLAGindex{
     map<string, int> FLAG;
     

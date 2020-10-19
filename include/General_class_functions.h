@@ -7,6 +7,7 @@
 #include "Actin.h"
 #include "ECM.h"
 #include "Chromatin.h"
+#include "Interaction_table.hpp"
 
 void Update_classes(std::vector<Membrane>  &membranes,
                     std::vector<Actin>     &actins,
@@ -28,7 +29,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                         MyAtomInfo                       atoms[],
                         Bonds*                           bonds,
                         vector<set<int> >               &membrane_set,
-                        vector<vector<int> >             interaction_map);
+                        NonBondInteractionMap            interaction_map);
 
 void expand(vector<Chromatin>                chromos,
             MyOpenMMData*                    omm);

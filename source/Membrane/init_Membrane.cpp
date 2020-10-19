@@ -75,7 +75,7 @@ void Membrane::initialise(std::string Mesh_file_name){
         label += std::to_string(index);
     }
     
-    if (spring_model == 1) {
+    if (spring_model == GenConst::potential.Model["FENE"]) {
         if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
             string errorMessage = TWARN;
             errorMessage+="Warning";

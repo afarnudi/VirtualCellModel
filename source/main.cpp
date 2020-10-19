@@ -41,6 +41,7 @@
 #include "General_class_functions.h"
 #include "Arg_pars.hpp"
 #include "Configfile.hpp"
+#include "Interaction_table.hpp"
 
 //#include "Tests.hpp"
 
@@ -61,6 +62,7 @@
 
 
 namespace GenConst {
+PotentialModelIndex potential;
 double Simulation_Time_In_Ps;
 double Report_Interval_In_Fs;
 double Step_Size_In_Fs;
@@ -80,8 +82,6 @@ string force_file_name;
 double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool   Interaction_map;
-string Interaction_map_file_name;
 bool   Excluded_volume_interaction;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
@@ -160,9 +160,7 @@ int main(int argc, char **argv)
     get_class_numbers(config_lines);
     parse_genconfig_parameters(config_lines["-GeneralParameters"]);
 
-    vector<vector<int> > interaction_map;
-    
-    interaction_map = parse_interactiontable_parameters(config_lines["-InteractionTable"]);
+    NonBondInteractionMap interaction_map(config_lines["-InteractionTable"]);
     
     string ckeckpoint_name=GenConst::trajectory_file_name+"_Checkpoint";
     

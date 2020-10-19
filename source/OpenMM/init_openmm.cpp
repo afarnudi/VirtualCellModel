@@ -33,9 +33,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  vector<set<int> >      &membrane_set,
                                  vector<set<int> >      &actin_set,
                                  vector<set<int> >      &ecm_set,
-                                 vector<vector<set<int> >  >    &chromatin_set,
-                                 //                                 vector<set<int> >      &chromatin_set,
-                                 vector<vector<int> >   interaction_map)
+                                 vector<vector<set<int> > > &chromatin_set,
+                                 NonBondInteractionMap  &interaction_map)
 {
     const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
