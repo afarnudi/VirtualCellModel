@@ -505,8 +505,7 @@ int main(int argc, char **argv)
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                cout<<GenConst::WantForce<<endl;
-                exit(0);
+                
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 
