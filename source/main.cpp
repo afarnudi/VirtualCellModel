@@ -505,7 +505,8 @@ int main(int argc, char **argv)
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                
+                cout<<GenConst::WantForce<<endl;
+                exit(0);
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 
@@ -600,8 +601,6 @@ int main(int argc, char **argv)
                 cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
-            
-//            myGetOpenMMState2(omm, time, energyInKJ, potential_energyInKJ, Membranes, all_atoms);
 
         }
         

@@ -20,14 +20,10 @@
 
 using namespace std;
 
-struct INTERindex{
-    
-};
-
 class NonBondInteractionMap{
     bool   status = false;
     int table_size=0;
-    int row =1;
+    int rows =1;
     int force_sum=0;
     int ForceGroupCount=0;
     
@@ -49,7 +45,6 @@ class NonBondInteractionMap{
         }
         return verdict;
     }
-    
 public:
     NonBondInteractionMap(vector<string> lines);
     
