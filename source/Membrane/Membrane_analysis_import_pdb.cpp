@@ -18,6 +18,9 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
         analysis_init(args.Mesh_files[file_index]);
     }
     
+    
+    
+    
     std::ifstream read_pdb;
     read_pdb.open(args.analysis_filename.c_str());
     if (!read_pdb) {

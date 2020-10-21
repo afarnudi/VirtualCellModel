@@ -113,47 +113,11 @@ int main(int argc, char **argv)
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
-    vector<string> membrane_config_list;
-    vector<string> chromatin_config_list;
-    vector<string> actin_config_list;
-    vector<string> ecm_config_list;
-    
-    string ckeckpoint_name;//=GenConst::Checkpoint_path+GenConst::trajectory_file_name+buffer;
-    
     vector<Membrane> Membranes;
-    vector<std::set<int> > membrane_set;
     
-    vector<Actin> Actins;
-    vector<std::set<int> > actin_set;
-    
-    vector<ECM> ECMs;
-    vector<std::set<int> > ecm_set;
-    
-    vector<Chromatin> Chromatins;
-    vector<vector<std::set<int> > > chromatin_set;
-    
-    
-    bool Include_Membrane  = false;
-    bool Include_Actin     = false;
-    
-    int num_of_bonds=0;
-    
-    Include_Membrane = true;
-    GenConst::Num_of_Membranes=1;
+    GenConst::Num_of_Membranes=int(args.Mesh_files.size());
     Membranes.resize(GenConst::Num_of_Membranes);
-    membrane_set.resize(GenConst::Num_of_Membranes);
-    
-    
-    if (Include_Membrane){
-        if (Include_Actin){
-            for (int i=0; i<GenConst::Num_of_Actins; i++) {
-                for (int j=0; j<GenConst::Num_of_Membranes; j++) {
-                    num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
-                }
-                
-            } //for (int i=0; i<GenConst::Num_of_Actins; i++)
-        }
-    } // End of if (Include_Membrane)
+
     
     
     
@@ -182,6 +146,9 @@ int main(int argc, char **argv)
             
             if (!GenConst::Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
+            }
+            if (args.MeshMinimisation) {
+                Membranes[i].get_ground_state_from_mesh(args);
             }
             for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
                 
