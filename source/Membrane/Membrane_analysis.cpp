@@ -151,6 +151,9 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
             
             vector<double>  Realylm = get_real_ylm_vectorlist_for_mesh(ell, m);
             ulm_avg_frame[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(Realylm, membrane_radii_list);
+            if (args.MeshMinimisation) {
+                ulm_avg_frame[ell][m+ell]-=ulm_Mesh[ell][m+ell];
+            }
             
         }
     }

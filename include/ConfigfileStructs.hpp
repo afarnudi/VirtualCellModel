@@ -61,8 +61,8 @@ struct GeneralParameters{
         GenParams["ReportIntervalInFs"] = values;
         insertOrder.push_back("ReportIntervalInFs");
         
-        values[0] ="1000";
-        values[1] ="#Simulation enviroment size (cube). Default value 1000.";
+        values[0] ="0";
+        values[1] ="#Simulation enviroment size (cube). Default value 0.";
         GenParams["SimulationBoxLength"] = values;
         insertOrder.push_back("SimulationBoxLength");
         
