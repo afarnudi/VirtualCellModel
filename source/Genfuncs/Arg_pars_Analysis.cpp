@@ -78,6 +78,8 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
          "73)                                               "
          , cxxopts::value<std::vector<int>>(),"int,int")
         ("memlabels", "The label(s) used to represent the memebrane(s) in the pdb file. The label(s) will also be used to distinguish between output files. Example (Note: irelevant flags are omited):               ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0,mem1            Output files: mydirectory/mypdb_mem0_myUlms.myextension and mydirectory/mypdb_mem1_myUlms.myextension", cxxopts::value<std::vector<std::string>>(),"mem0")
+        
+        ("m,mesh_minimisation", "Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the Mesh.")
         ;
         //      I have put this here so that parser throuws an exception when an extra argument is put in the command line that is not associated with any flags
         options.parse_positional({""});
@@ -155,6 +157,10 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             {
                 args.membane_labels.push_back(f) ;
             }
+        }
+        if (result.count("m"))
+        {
+            args.MeshMinimisation = true ;
         }
         
         consistency_check(args);
@@ -246,6 +252,34 @@ void consistency_check(ArgStruct_Analysis &args){
                 
                 meshpath = check_if_file_exists(meshpath);
                 args.Mesh_files.push_back(meshpath);
+                
+//                bool valid_answer = false;
+//                string yn_answer;
+//                cout<<"Real Spherical harmonics amplitutes are calculated relative to the ground state of the system. The default ground state is a sphere with the same surface area as the Membrane. Do you want to change the ground state to the shape of the Mesh? (y,n)"<<endl;
+//                cout<<TFILE;
+//                cin>>yn_answer;
+//                cout<<TRESET;
+//                if (yn_answer=="y") {
+//                    args.MeshMinimisation.push_back(true);
+//                    valid_answer=true;
+//                } else if (yn_answer=="n") {
+//                    args.MeshMinimisation.push_back(false);
+//                    valid_answer=true;
+//                }
+//                while (!valid_answer) {
+//                    cout<<"Please enter y or n"<<endl;
+//                    cout<<TFILE;
+//                    cin>>yn_answer;
+//                    cout<<TRESET;
+//                    if (yn_answer=="y") {
+//                        args.MeshMinimisation.push_back(true);
+//                        valid_answer=true;
+//                    } else if (yn_answer=="n") {
+//                        args.MeshMinimisation.push_back(false);
+//                        valid_answer=true;
+//                    }
+//                }
+                
             } else {
                 cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
                 for (int i=0; i<args.membane_labels.size(); i++) {

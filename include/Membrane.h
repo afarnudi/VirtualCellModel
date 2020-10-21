@@ -121,6 +121,7 @@ public:
     void update_spherical_positions();
     void convert_spherical_positions_to_cartisian();
     void analysis_init(std::string Mesh_path);
+    void get_ground_state_from_mesh(ArgStruct_Analysis args);
     void calculate_dOmega(void);
     vector<double> node_dOmega;
     
@@ -158,6 +159,7 @@ public:
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
+    vector<vector<double> > ulm_Mesh;
     vector<vector<double> > ulm_temp_for_analysis;
   
     
