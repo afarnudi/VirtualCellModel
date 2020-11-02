@@ -136,8 +136,9 @@ void parse_genconfig_parameters(vector<string> lines){
     GenConst::Chromatin_label="chr";
     GenConst::Checkpoint_path = "Results/Resumes/OpenMM/";
     
-    assign_general_parameters(values);
     
+    assign_general_parameters(values);
+//    general_parameters_consistency_check(values);
 }
 
 void assign_general_parameters(GeneralParameters &defaults){
