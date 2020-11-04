@@ -274,7 +274,6 @@ MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo){
         myatominfo[i].mass=chromo.get_node_mass();
         myatominfo[i].radius=chromo.get_node_radius();
         
-        
         if (GenConst::ChromatinVirtualSites) {
             if (counter < v_list.size()) {
                 if (v_list[counter][0] == i) {

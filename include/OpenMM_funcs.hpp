@@ -319,7 +319,8 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       int                                   set_1_index,
                                       int                                   set_2_index,
                                       string                                set_1_name,
-                                      string                                set_2_name);
+                                      string                                set_2_name,
+                                      bool                                  use_max_radius);
 //overload for inter chromatin class interactions contatining different node types.
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                       atoms[],

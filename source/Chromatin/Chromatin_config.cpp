@@ -51,7 +51,7 @@ void Chromatin::consistancy_check(){
             errorMessage+= TRESET;
             throw std::runtime_error(errorMessage);
         }
-        Node_radius=stoi(Node_radius_stat);
+        Node_radius=stod(Node_radius_stat);
     }
     
     if (BondNominalLength_stat!= "Au" && BondNominalLength_stat!= "Av") {
