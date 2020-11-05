@@ -39,32 +39,15 @@ map<string, vector<string> > read_configfile(string configfilename){
             
             flag = checkflag(line, FLAG, FLAGlines, flag);
             string key = getmapkey(FLAG, flag);
-            switch (flag) {
-                case 0:
-                    FLAGlines[key].push_back(line);
-                    break;
-                case 1:
-                    FLAGlines[key].push_back(line);
-                    break;
-                case 2:
-                    FLAGlines[key].push_back(line);
-                    break;
-                case 3:
-                    FLAGlines[key].push_back(line);
-                    break;
-                case 4:
-                    FLAGlines[key].push_back(line);
-                    break;
-                case 5:
-                    FLAGlines[key].push_back(line);
-                    break;
-                    
-                default:
-                    string errorMessage = TWARN;
-                    errorMessage +="Read Error: Config Parser: No such class as '"+line+"'";
-                    errorMessage +=TRESET;
-                    throw std::runtime_error(errorMessage);
+            if (flag != -1) {
+                FLAGlines[key].push_back(line);
+            } else {
+                string errorMessage = TWARN;
+                errorMessage +="Read Error: Config Parser: No such class as '"+line+"'";
+                errorMessage +=TRESET;
+                throw std::runtime_error(errorMessage);
             }
+            
         }
     } else {
         string errorMessage = TWARN;
@@ -72,6 +55,7 @@ map<string, vector<string> > read_configfile(string configfilename){
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    
     return FLAGlines;
 }
 
