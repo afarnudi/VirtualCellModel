@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "OpenMM_structs.h"
 
 struct ArgStruct_Analysis
 {
@@ -33,9 +34,15 @@ struct ArgStruct_Analysis
     bool MeshMinimisation = false;
 };
 
+struct ArgStruct_VCM
+{
+    std::string  configfilename;
+    PlatformInfo platforminfo;
+    bool platforminput = false;
+};
 
 ArgStruct_Analysis  cxxparser_analysis(int argc, char **argv);
-std::string         cxxparser_vcm(int argc, char **argv);
+ArgStruct_VCM       cxxparser_vcm(int argc, char **argv);
 
 
 #endif /* OpenMM_structs_h */

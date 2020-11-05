@@ -434,7 +434,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     }
                 }
             } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, GenConst::Chromatin_label , GenConst::Membrane_label);
+                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, GenConst::Chromatin_label , GenConst::Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
@@ -479,7 +479,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j, j));
                 }
             } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Actin_label);
+                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::Actin_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 
                 index = int(ExcludedVolumes.size()-1);
                 
@@ -521,7 +521,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::ECM_label);
+                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, GenConst::Chromatin_label , GenConst::ECM_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.

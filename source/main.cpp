@@ -121,6 +121,7 @@ std::vector<double> data_colection_times;
 std::vector<std::vector<double> > Lboxdims;
 
 std::string hardwareReport;
+
 }
 
 
@@ -143,20 +144,21 @@ int main(int argc, char **argv)
     string configfilename;
     string general_file_name="General_param_map.txt";
     
-    configfilename = cxxparser_vcm(argc, argv);
+    ArgStruct_VCM userinputs = cxxparser_vcm(argc, argv);
     
-    if (configfilename == "None") {
+    if (userinputs.configfilename == "None") {
         cout<<TBOLD<<"\nHi!\nPlease enter the path + name of the configuration file. If you do not have a configuration file, run \""<<argv[0]<<" -h\" for more options.\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
         cout<<TFILE;
         cin>>configfilename;
         cout<<TRESET;
+        userinputs.configfilename=configfilename;
 
     }
     
     
     clock_t tStart = clock();//Time the programme
 
-    map<string, vector<string> > config_lines =read_configfile(configfilename);
+    map<string, vector<string> > config_lines =read_configfile(userinputs.configfilename);
     get_class_numbers(config_lines);
     parse_genconfig_parameters(config_lines["-GeneralParameters"]);
 
@@ -401,7 +403,7 @@ int main(int argc, char **argv)
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();
         if (!GenConst::Load_from_checkpoint) {
-            omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, interaction_map);
+            omm = myInitializeOpenMM(all_atoms, GenConst::Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
         } else {
             std::filebuf rfb;
             string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;

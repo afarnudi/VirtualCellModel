@@ -34,19 +34,19 @@ class NonBondInteractionMap{
     vector<vector<int> >     inter_table;
     vector<vector<bool> >    force_report;
     vector<vector<string> >  force_label;
+    vector<vector<bool> >    use_max_radius;
     
     map<int, string>         forceGroupLabel;
     map<int, int>            forceGroupIndex;
     
-    bool is_interaction(string word){
-        bool verdict = false;
-        if (inter_config_type.count(word)>0) {
-            verdict = true;
-        }
-        return verdict;
-    }
+    bool is_interaction(string word);
+    bool needs_report(string word);
+    bool optimise_radius(string word);
+    
 public:
     NonBondInteractionMap(vector<string> lines);
+    
+    int parse_interacton_type(string word);
     
     string get_interacton_type(int row,int col){
         return inter_type_name[inter_table[row][col]];
@@ -78,6 +78,7 @@ public:
     
     int get_ForceGroup(int index);
     
+    bool get_radius_optimisation_status(int row, int col);
 };
 
 

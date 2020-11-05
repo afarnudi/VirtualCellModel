@@ -31,8 +31,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
-//                                 std::vector<std::set<int> >    &chromatin_set,
                                  std::vector<std::vector<std::set<int> >  >    &chromatin_set,
+                                 ArgStruct_VCM                          userinputs,
                                  NonBondInteractionMap                 &interaction_map
                                  );
 
@@ -319,7 +319,8 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       int                                   set_1_index,
                                       int                                   set_2_index,
                                       string                                set_1_name,
-                                      string                                set_2_name);
+                                      string                                set_2_name,
+                                      bool                                  use_max_radius);
 //overload for inter chromatin class interactions contatining different node types.
 void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                       const MyAtomInfo                       atoms[],
@@ -397,4 +398,10 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                          vector<OpenMM::CustomCompoundBondForce*>  &DihedralForces,
                          OpenMM::System                            &system
                          );
+
+void print_platform_info(void);
+PlatformInfo get_platform_info(void);
+void get_platform_info(PlatformInfo &platforminfo);
+void generateHardwareReport (PlatformInfo platforminfo);
+
 #endif

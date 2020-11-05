@@ -60,7 +60,10 @@ map<string, vector<string> > read_configfile(string configfilename){
                     break;
                     
                 default:
-                    continue;
+                    string errorMessage = TWARN;
+                    errorMessage +="Read Error: Config Parser: No such class as '"+line+"'";
+                    errorMessage +=TRESET;
+                    throw std::runtime_error(errorMessage);
             }
         }
     } else {
@@ -136,8 +139,9 @@ void parse_genconfig_parameters(vector<string> lines){
     GenConst::Chromatin_label="chr";
     GenConst::Checkpoint_path = "Results/Resumes/OpenMM/";
     
-    assign_general_parameters(values);
     
+    assign_general_parameters(values);
+//    general_parameters_consistency_check(values);
 }
 
 void assign_general_parameters(GeneralParameters &defaults){

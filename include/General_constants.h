@@ -122,6 +122,7 @@ namespace GenConst {
     extern std::vector<std::vector<double> > Lboxdims;
     /**A string containing the selected platform information during runtime.*/
     extern std::string hardwareReport;
+
 }
 
 #define TRESET   "\e[0m"             /* Reset */

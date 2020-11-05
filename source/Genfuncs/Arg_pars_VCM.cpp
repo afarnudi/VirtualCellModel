@@ -12,6 +12,7 @@
 #include "Arg_pars.hpp"
 #include "cxxopts.hpp"
 #include "Configfile.hpp"
+#include "OpenMM_funcs.hpp"
 
 using namespace std;
 
@@ -20,9 +21,10 @@ using namespace std;
 
 
 
-string cxxparser_vcm(int argc, char **argv){
+ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
     string programme_name =argv[0];
-    string configfilename = "None";
+    ArgStruct_VCM userinputs;
+    userinputs.configfilename = "None";
     try
     {
         
@@ -41,6 +43,10 @@ string cxxparser_vcm(int argc, char **argv){
         ("g", "Configuration generator. 0: generate the template. 1: Generate a customised configuration.", cxxopts::value<int>(),"int")
         ("c",
         "Path to the configuration file.", cxxopts::value<std::string>())
+        ("a,availablePlatforms",
+        "generate flags for available platforms.")
+        ("platformID", "ID of platform to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
+        ("platformDeviceID", "ID of platform device to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
         ;
         
         options.parse_positional({"configfile"});
@@ -60,8 +66,21 @@ string cxxparser_vcm(int argc, char **argv){
         }
         if (result.count("c"))
         {
-            configfilename =result["c"].as<string>() ;
-//            configlines = read_configfile(result["c"].as<string>() );
+            userinputs.configfilename =result["c"].as<string>() ;
+        }
+        if (result.count("a"))
+        {
+            print_platform_info();
+            exit(0);
+        }
+        if (result.count("platformID"))
+        {
+            userinputs.platforminfo.platform_id =result["platformID"].as<int>() ;
+            userinputs.platforminput=true;
+        }
+        if (result.count("platformDeviceID"))
+        {
+            userinputs.platforminfo.platform_device_id =result["platformDeviceID"].as<int>() ;
         }
     } catch (const cxxopts::OptionException& e)
     {
@@ -69,7 +88,7 @@ string cxxparser_vcm(int argc, char **argv){
         exit(6);
     }
     
-    return configfilename;
+    return userinputs;
 }
 
 

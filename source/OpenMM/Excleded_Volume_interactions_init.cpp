@@ -102,7 +102,8 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       int                                    set_1_index,
                                       int                                    set_2_index,
                                       string                                 set_1_name,
-                                      string                                 set_2_name){
+                                      string                                 set_2_name,
+                                      bool                                   use_max_radius){
     
     set<int> compined_set;
     for (int i=0; i<set_1[set_1_index].size(); i++) {
@@ -120,8 +121,13 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     
     
     int index = ExcludedVolumes.size()-1;
+    if (use_max_radius) {
+        ExcludedVolumes[index]->addGlobalParameter(sigma,   max( atoms[*it_1].radius
+                                                                 , atoms[*it_2].radius ) );
+    } else {
         ExcludedVolumes[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
                                                                  + atoms[*it_2].radius ) );
+    }
     ExcludedVolumes[index]->addGlobalParameter(epsilon,   1);
     
     if (GenConst::Periodic_box) {
@@ -129,8 +135,14 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
     } else {
         ExcludedVolumes[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     }
+    
+    if (use_max_radius) {
+        ExcludedVolumes[index]-> setCutoffDistance( 2.5 * max( atoms[*it_1].radius
+                                                         , atoms[*it_2].radius ) );
+    } else {
         ExcludedVolumes[index]-> setCutoffDistance( 2.5 * ( atoms[*it_1].radius
                                                          + atoms[*it_2].radius ) );
+    }
     
     ExcludedVolumes[index]-> addInteractionGroup(compined_set, set_2[set_2_index]);
 }

@@ -36,19 +36,21 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     
     
     
-    inter_config_type["LJR"]=1001;
-    inter_config_type["EVR"]=1002;
-    inter_config_type["LJCSR"]=1006;
+//    inter_config_type["LJR"]=1001;
+//    inter_config_type["EVR"]=1002;
+//    inter_config_type["LJCSR"]=1006;
     
     table_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins;
     
     inter_table.resize(table_size);
     force_report.resize(table_size);
     force_label.resize(table_size);
+    use_max_radius.resize(table_size);
     for (int i=0; i<table_size; i++) {
         inter_table[i].resize(table_size,0);
         force_report[i].resize(table_size,0);
         force_label[i].resize(table_size);
+        use_max_radius[i].resize(table_size,0);
     }
     lines.erase(lines.begin());
     
@@ -64,16 +66,21 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
         if (split.size()>0) {
                 for (int i=0; i<rows; i++) {
                     if (is_interaction(split[i+1])) {
-                        inter_table[rows-1][i] = inter_config_type[split[1+i]]%1000;
-                        if (inter_config_type[split[1+i]]>1000) {
+                        inter_table[rows-1][i] = parse_interacton_type(split[1+i]);
+                        
+                        if (needs_report(split[1+i])) {
                             force_report[rows-1][i] = true;
+                            force_sum++;
                         } else {
                             force_report[rows-1][i] = false;
                         }
-                        if (inter_config_type[split[1+i]]!=0) {
-                            force_sum++;
-                        }
                         
+                        if (optimise_radius(split[1+i])) {
+                            use_max_radius[rows-1][i] = true;
+                        } else {
+                            use_max_radius[rows-1][i] = false;
+                        }
+                       
                     } else {
                         string errorMessage = TWARN;
                         errorMessage+="Interaction Table parser: \""+split[i+1]+"\" not defined. Use the template generator for information on how to write the interaction table.";
@@ -90,16 +97,17 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
         
     }
     check_force_consistency();
-}
+    
+};
 void NonBondInteractionMap::check_force_consistency(){
     if (force_sum!=0) {
         GenConst::WantForce=true;
     }
     
     
-    if (force_sum>32) {
+    if (force_sum>31) {
         string errorMessage = TWARN;
-        errorMessage+="Force Reporter: cannot report more than 31 forces. This limitation is set by OpenMM. Please edit the interaction table and try again.";
+        errorMessage+="Force Reporter: cannot report more than 30 forces. This limitation is set by OpenMM. Please edit the interaction table and try again.";
         errorMessage+= TRESET;
         throw std::runtime_error(errorMessage);
     }
@@ -123,4 +131,56 @@ int NonBondInteractionMap::setForceGroup(int row, int col, int chromotype){
 int NonBondInteractionMap::get_ForceGroup(int index){
     int forcegroup = 1 << forceGroupIndex[index];
     return forcegroup;
+}
+
+bool NonBondInteractionMap::is_interaction(string word){
+    bool verdict = false;
+    string ups_digits;
+    for (auto &a: word){
+        if (isupper(a) || isdigit(a)) {
+            ups_digits+=a;
+        }
+    }
+    if (inter_config_type.count(ups_digits)>0) {
+        verdict = true;
+    }
+    return verdict;
+}
+
+bool NonBondInteractionMap::needs_report(string word){
+    bool verdict = false;
+    string lows;
+    for (auto &a: word){
+        if (a == 'r') {
+            verdict = true;
+        }
+    }
+    return verdict;
+}
+
+bool NonBondInteractionMap::optimise_radius(string word){
+    bool verdict = false;
+    string lows;
+    for (auto &a: word){
+        if (a == 'm') {
+            verdict = true;
+        }
+    }
+    return verdict;
+}
+
+
+int NonBondInteractionMap::parse_interacton_type(string word){
+    string interaction;
+    for (auto &a: word){
+        if (isupper(a) || isdigit(a)) {
+            interaction+=a;
+        }
+    }
+    return inter_config_type[interaction];
+}
+
+
+bool NonBondInteractionMap::get_radius_optimisation_status(int row, int col){
+    return use_max_radius[row][col];
 }
