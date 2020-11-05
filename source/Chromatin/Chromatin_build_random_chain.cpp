@@ -89,7 +89,8 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
         bool accept_random_step=true;
         for (int k=0; k<i-1; k++) {
             double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
-            if (temp_dist<Node_radius*2.1){
+            // set the minimum distance to the r_min of the Lennard-Jones potential.
+            if (temp_dist<Node_radius*2.25){
                 i--;
                 accept_random_step=false;
                 attempt_counter++;
