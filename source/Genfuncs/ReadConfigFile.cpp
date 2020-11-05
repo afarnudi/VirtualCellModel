@@ -60,7 +60,10 @@ map<string, vector<string> > read_configfile(string configfilename){
                     break;
                     
                 default:
-                    continue;
+                    string errorMessage = TWARN;
+                    errorMessage +="Read Error: Config Parser: No such class as '"+line+"'";
+                    errorMessage +=TRESET;
+                    throw std::runtime_error(errorMessage);
             }
         }
     } else {
