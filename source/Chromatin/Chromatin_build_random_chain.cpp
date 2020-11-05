@@ -110,6 +110,9 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
             Node_Position[i][1] = temp_y;
             Node_Position[i][2] = temp_z;
             
+            Node_Velocity[i][0]=0;
+            Node_Velocity[i][1]=0;
+            Node_Velocity[i][2]=0;
 //            Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
 //            Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
 //            Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
