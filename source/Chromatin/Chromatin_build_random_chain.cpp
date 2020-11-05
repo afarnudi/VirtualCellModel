@@ -80,7 +80,11 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
     double bond_length = stod(BondNominalLength_stat);
     
     for (int i=1; i<Num_of_Nodes; i++) {
+        rand();
+        rand();
         double theta=((double)rand()/(double)RAND_MAX)*M_PI;
+        rand();
+        rand();
         double phi=((double)rand()/(double)RAND_MAX)*2*M_PI;
         double temp_x=Node_Position[i-1][0]+bond_length*sin(theta)*cos(phi);
         double temp_y=Node_Position[i-1][1]+bond_length*sin(theta)*sin(phi);
@@ -89,13 +93,15 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
         bool accept_random_step=true;
         for (int k=0; k<i-1; k++) {
             double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
-            if (temp_dist<Node_radius*2.){
+            if (temp_dist<Node_radius*2.1){
                 i--;
                 accept_random_step=false;
                 attempt_counter++;
                 if (attempt_counter>2000) {
-//                    cout<<"The chromatin has reached a dead end (chain length = "<<i<<" ) before reaching the set node number"<<Num_of_Nodes<<"\n";
-                    throw 0;
+                    string errorMessage = TWARN;
+                    errorMessage+="Chroamtin coordinate generator: Self Avoiding Random Walk: "+std::to_string(attempt_counter)+"attempts failed in generating a SAW chain. Please try a shorter chain or the seed.";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
                 }
                 break;
             }
