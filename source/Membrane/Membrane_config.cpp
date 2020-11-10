@@ -89,6 +89,7 @@ void Membrane::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    
 }
 
 void Membrane::assign_parameters(void){
@@ -136,9 +137,11 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = GenConst::potential.Model["Harmonic"];
+            } else if (split[0]=="N") {
+                spring_model = GenConst::potential.Model["None"];
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";
+                errorMessage+="Membrane config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
@@ -146,6 +149,17 @@ void Membrane::assign_parameters(void){
             Spring_coefficient = stod(split[0]);
         } else if (it.first == "DampingCoeff") {
             Damping_coefficient = stod(split[0]);
+        } else if (it.first == "BendingModel") {
+            if (split[0]=="N") {
+                bending_model = GenConst::potential.Model["None"];
+            } else if (split[0]=="cosine") {
+                bending_model = GenConst::potential.Model["Dihedral"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), and N (None).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
         } else if (it.first == "NominalLengthInNm") {

@@ -404,4 +404,8 @@ PlatformInfo get_platform_info(void);
 void get_platform_info(PlatformInfo &platforminfo);
 void generateHardwareReport (PlatformInfo platforminfo);
 
+
+
+
+
 #endif

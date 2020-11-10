@@ -38,11 +38,11 @@ void Chromatin::initialise(void){
         return rand() % r;
     });
     
-    
-    
-    
     set_bond_nominal_lengths();
     
+    if (spring_model == GenConst::potential.Model["None"]) {
+        cout<<TWARN<<"\nChromatin spring model is set to 'None'."<<TRESET<<endl;
+    }
     
     shift_node_positions();
     cout<<"Shifted positions. to "<<Shift_position_xyzVector[0]<< " "<<Shift_position_xyzVector[1]<< " "<<Shift_position_xyzVector[2]<< " " <<endl;

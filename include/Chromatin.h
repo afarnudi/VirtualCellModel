@@ -173,9 +173,6 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     
     /**return chromatin number of bonds. If there are no virtual site this number is  Num_of_Nodes-1. In the presence of Virtual Sites this number is reduced to [(Num_of_Nodes + num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1)]-1*/
     double get_num_of_bonds(void){
-        if ( (spring_model == 2) && (Spring_coefficient < 0.00001) ) {
-            return 0;
-        }
         if (!GenConst::ChromatinVirtualSites) {
             num_of_total_bonds = Num_of_Nodes-1;
             return num_of_total_bonds;
@@ -388,7 +385,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("NodeRadius");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for harmonic. Default H.";
+        values[1] ="#Set the bond potential. 'H' for Harmonic, 'N' for None. Default H.";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         

@@ -143,14 +143,14 @@ void Chromatin::consistancy_check(){
                 }
             } else {
                 if (split.size()>num_of_node_types) {
-                    cout<<TWARN<<"Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". The first "<<num_of_node_types<<" will be used: ";
+                    cout<<TWARN<<"Chromatin config check: LJsigma: Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". The first "<<num_of_node_types<<" will be used: ";
                     for (int i=0; i<num_of_node_types; i++) {
                         cout<<TBOLD<<split[i]<<" ";
                         sigma_LJ[i] = stod(split[i]);
                     }
                     cout<<TRESET<<endl;
                 } else if (split.size()>num_of_node_types){
-                    cout<<TWARN<<"Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". Will fill with default values:";
+                    cout<<TWARN<<"Chromatin config check: LJsigma: Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJsigma\". Will fill with default values:";
                     for (int i=0; i<split.size(); i++) {
                         sigma_LJ[i] = stod(split[i]);
                         cout<<TBOLD<<split[i]<<" ";
@@ -170,7 +170,7 @@ void Chromatin::consistancy_check(){
                 }
             } else {
                 if (split.size()>num_of_node_types) {
-                    cout<<TWARN<<"Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". The first "<<num_of_node_types<<" will be used: ";
+                    cout<<TWARN<<"Chromatin config check: LJepsilon: Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". The first "<<num_of_node_types<<" will be used: ";
                     for (int i=0; i<num_of_node_types; i++) {
                         cout<<TBOLD<<split[i]<<" ";
                         epsilon_LJ[i] = stod(split[i]);
@@ -178,7 +178,7 @@ void Chromatin::consistancy_check(){
                     cout<<TRESET<<endl;
                     
                 } else if (split.size()>num_of_node_types){
-                    cout<<TWARN<<"Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". Will fill with default values:";
+                    cout<<TWARN<<"Chromatin config check: LJepsilon: Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". Will fill with default values:";
                     for (int i=0; i<split.size(); i++) {
                         epsilon_LJ[i] = stod(split[i]);
                         cout<<TBOLD<<split[i]<<" ";
@@ -244,7 +244,7 @@ void Chromatin::assign_parameters(void){
                 ExportGeneratedCoordinates=false;
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+="Chromatin config parser: ExportGeneratedCoordinates: I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
@@ -257,9 +257,11 @@ void Chromatin::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = GenConst::potential.Model["Harmonic"];
+            } else if (split[0]=="N") {
+                spring_model = GenConst::potential.Model["None"];
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic).";
+                errorMessage+="Chromatin config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), N (None).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
@@ -292,7 +294,7 @@ void Chromatin::assign_parameters(void){
                 optimise_bond_radius=false;
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+="Chromatin config parser: OptimiseBondRadius: I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
