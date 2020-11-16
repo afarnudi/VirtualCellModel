@@ -9,6 +9,7 @@ using std::vector;
 using std::set;
 
 void print_platform_info(void){
+    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
     PlatformInfo platforminfo = get_platform_info();
@@ -123,6 +124,8 @@ PlatformInfo get_platform_info(void)
         std::cin>>device_id;
         cout<<TRESET;
     }
+    
+    cout<<"device flags:\n--platformID "<<platforminfo.platform_id<<" --platformDeviceID "<<platforminfo.platform_device_id<<endl;
     
     
     

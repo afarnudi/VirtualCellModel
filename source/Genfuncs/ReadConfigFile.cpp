@@ -347,8 +347,9 @@ void generate_report(map<string, vector<string> > config_lines){
             }
         }
     }
+    write_report<<endl;
     for (auto &i : config_lines["-InteractionTable"]) {
-        write_report<<"AA "<<i<<endl;
+        write_report<<i<<endl;
     }
     
 }

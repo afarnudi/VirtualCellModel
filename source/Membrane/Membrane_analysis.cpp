@@ -284,6 +284,19 @@ void Membrane::get_ground_state_from_mesh(ArgStruct_Analysis args){
     update_COM_position();
     set_com_to_zero();
     
+    if (args.analysis_averaging_option == 1) {
+        srand (time(NULL));
+        double scratch = rand();
+        scratch = rand();
+    }else if(args.analysis_averaging_option == 2){
+        if(args.z_node == -1 || args.zy_node == -1){
+            cout<<"No nodes specified for aligning.\n the nodes must be specfied with the '--align_axes flag z,y' where z is the node index to be aligned with the  z axis (when the com is in the origin (0,0,0) )and y is the index of the node that will then be rotated to lie on the zy plane.\n";
+            exit(EXIT_FAILURE);
+        }
+        rotate_particle_to_axes(args);
+    }
+    
+    
     update_spherical_positions();
     calculate_dOmega();
     calculate_surface_area_with_voronoi();

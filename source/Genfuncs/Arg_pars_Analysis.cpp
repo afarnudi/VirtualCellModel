@@ -208,6 +208,9 @@ void consistency_check(ArgStruct_Analysis &args){
                     
                 }
             }
+            if (args.MeshMinimisation) {
+                args.analysis_averaging_option = 2;
+            }
             
         }
         if (args.analysis_dim == 2) {
