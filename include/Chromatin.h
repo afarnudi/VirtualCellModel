@@ -385,7 +385,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("NodeRadius");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for Harmonic, 'N' for None. Default H.";
+        values[1] ="#Set the bond potential. 'H' for Harmonic, 'FENE' for a finitely extensible nonlinear elastic model. 'N' for None. Default H.";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         

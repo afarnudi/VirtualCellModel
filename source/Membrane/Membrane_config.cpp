@@ -137,6 +137,8 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = GenConst::potential.Model["Harmonic"];
+            } else if (split[0]=="FENE") {
+                spring_model = GenConst::potential.Model["FENE"];
             } else if (split[0]=="N") {
                 spring_model = GenConst::potential.Model["None"];
             } else {

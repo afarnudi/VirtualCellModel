@@ -3,6 +3,9 @@
 Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     const int mem_num_bonds = mem.get_num_of_node_pairs();
     Bonds* bonds = new Bonds[mem_num_bonds];
+    
+    bool fenepotential =false;
+    bool harmonicpotential =false;
     for (int i=0; i<mem_num_bonds; i++) {
         bonds[i].type = mem.get_spring_model();
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
@@ -11,8 +14,12 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].nominalLengthInNm=mem.get_node_pair_distance_in_Nm(i);
         
         if (bonds[i].type == GenConst::potential.Model["FENE"]) {
-//            mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].k_FENE_inKJpermol);
+            fenepotential =true;
+            bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
+            bonds[i].k_FENE_inKJpermol = 30*GenConst::BoltzmannKJpermolkelvin*GenConst::temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
+            bonds[i].epsilon_FENE_inKJpermol = GenConst::BoltzmannKJpermolkelvin*GenConst::temperature;
         } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+            harmonicpotential=true;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == GenConst::potential.Model["HarmonicX4"]){
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
@@ -23,16 +30,13 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         }
         
     }
-    if(bonds[0].type==GenConst::potential.Model["Harmonic"]){
+    if(harmonicpotential){
         cout<<" Harmonic "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     
-    if (bonds[0].type == GenConst::potential.Model["FENE"]) {
+    if (fenepotential) {
         cout<< " FENE"<<endl;
-        //        cout<<"attraction coeficient (KJ . Nm^-2 . mol^-1 ) = "<<mem.get_spring_stiffness_coefficient() <<endl;
-        //        cout<<"bending coeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
-        //        cout<<"lmin(Nm)\tlmax(Nm)\tK_FENE   \tle1(Nm)\n"<<bonds[0].FENE_lmininNm<<"\t"<<bonds[0].FENE_lmaxinNm<<"\t"<<bonds[0].K_FENE<<"\t"<<bonds[0].FENE_le1inNm<<endl;
     }
     
     if(bonds[0].type == GenConst::potential.Model["HarmonicX4"]){

@@ -661,7 +661,7 @@ public:
         insertOrder.push_back("VelocityShiftVector");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for harmonic. 'N' for no potential. Default H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'N' for no potential. Default H";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         
