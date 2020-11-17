@@ -89,13 +89,16 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
         bool accept_random_step=true;
         for (int k=0; k<i-1; k++) {
             double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
-            if (temp_dist<Node_radius*2.){
+            // set the minimum distance to the r_min of the Lennard-Jones potential.
+            if (temp_dist<Node_radius*2.25){
                 i--;
                 accept_random_step=false;
                 attempt_counter++;
                 if (attempt_counter>2000) {
-//                    cout<<"The chromatin has reached a dead end (chain length = "<<i<<" ) before reaching the set node number"<<Num_of_Nodes<<"\n";
-                    throw 0;
+                    string errorMessage = TWARN;
+                    errorMessage+="Chroamtin coordinate generator: Self Avoiding Random Walk: "+std::to_string(attempt_counter)+"attempts failed in generating a SAW chain. Please try a shorter chain or the seed.";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
                 }
                 break;
             }
@@ -108,12 +111,15 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
             Node_Position[i][1] = temp_y;
             Node_Position[i][2] = temp_z;
             
-            Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
-            Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
-            Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
-            velocity_COM[0] += Node_Velocity[i][0];
-            velocity_COM[1] += Node_Velocity[i][1];
-            velocity_COM[2] += Node_Velocity[i][2];
+            Node_Velocity[i][0]=0;
+            Node_Velocity[i][1]=0;
+            Node_Velocity[i][2]=0;
+//            Node_Velocity[i][0]=((double)rand()/(double)RAND_MAX)*2-1;
+//            Node_Velocity[i][1]=((double)rand()/(double)RAND_MAX)*2-1;
+//            Node_Velocity[i][2]=((double)rand()/(double)RAND_MAX)*2-1;
+//            velocity_COM[0] += Node_Velocity[i][0];
+//            velocity_COM[1] += Node_Velocity[i][1];
+//            velocity_COM[2] += Node_Velocity[i][2];
         }
     } // for (int i=1; i<Num_of_Nodes; i++)
 }

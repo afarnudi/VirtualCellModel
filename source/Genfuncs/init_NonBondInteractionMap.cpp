@@ -31,14 +31,7 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     inter_config_type["LJCS"]=6;
     inter_config_type_reverse[6]="LJCS";
     inter_type_name[6]="Lennard-JonesChromatinSpecial0";
-    
-    
-    
-    
-    
-//    inter_config_type["LJR"]=1001;
-//    inter_config_type["EVR"]=1002;
-//    inter_config_type["LJCSR"]=1006;
+
     
     table_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins;
     
@@ -59,8 +52,25 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
         string line = lines[i];
         vector<string> split = split_and_check_for_comments(line, "Interaction table: Config reader");
         
+        
+        
         if (split.size()==0) {
-            i--;
+            if (i==lines.size()) {
+                string errorMessage = TWARN;
+                errorMessage+="Number of interaction table rows does not match the number of classes. Expected ";
+                errorMessage+=TFILE;
+                errorMessage+=to_string(table_size);
+                errorMessage+=TWARN;
+                errorMessage+=", got ";
+                errorMessage+=TFILE;
+                errorMessage+=to_string(rows-1);
+                errorMessage+=TWARN;
+                errorMessage+=". Please edit the interaction table and try again.";
+                errorMessage+=TWARN;
+                throw std::runtime_error(errorMessage);
+            } else {
+                i--;
+            }
         }
         
         if (split.size()>0) {

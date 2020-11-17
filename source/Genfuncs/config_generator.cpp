@@ -34,14 +34,8 @@ void configfile_generator(int status){
         bool comments      = include_comments();
         write_configs<<"#This is the VCM configuration template."<<endl;
         write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
-        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl;
-        write_configs<<"#Note: If you have multiple instances of one class with only a couple of deviations, you can inherit the configrations from another class of the same kind:"<<endl;
-        write_configs<<"#Example:"<<endl;
-        write_configs<<"#-Membrane A"<<endl;
-        write_configs<<"#list of configurations"<<endl;
-        write_configs<<"#-Membrane B :: A"<<endl;
-        write_configs<<"#Settings that differ"<<endl;
-        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl<<endl;
+        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
+        
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
         for (auto & element : defaultparams.insertOrder) {
@@ -131,6 +125,21 @@ void configfile_generator(int status){
             write_configs<<"#Excluded volume interaction is set between all Chromatins and Membrane calsses. Also, the interaction is set for each class memeber, that is the Chromatin or Membrane nodes cannot cross themselves."<<endl;
             write_configs<<"#The ECM is set to have Lennard jones interaction with Membrane 1."<<endl;
             write_configs<<"#All other classes have no non-bonded interactions."<<endl;
+            write_configs<<endl<<endl;
+            write_configs<<"#Note: If you have multiple instances of one class that have almost the same configurations but differ in just a couple, you can use the inheritance feature. The inheritance feature allows you to copy configurations from one class and add/overwiwte new configrations. Inheritance can only be applied to classes of the same kind:"<<endl;
+            write_configs<<"#Example:"<<endl;
+            write_configs<<"#-Membrane A"<<endl;
+            write_configs<<"#config1 10"<<endl;
+            write_configs<<"#config2 true"<<endl;
+            write_configs<<"#config3 200"<<endl;
+            write_configs<<"#-Membrane B :: A"<<endl;
+            write_configs<<"#config2 false"<<endl;
+            write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl;
+            write_configs<<"#The programme will interpret Membrane B as follows:"<<endl;
+            write_configs<<"#-Membrane B"<<endl;
+            write_configs<<"#config1 10"<<endl;
+            write_configs<<"#config2 false"<<endl;
+            write_configs<<"#config3 200"<<endl<<endl;
         }
         
         
@@ -139,14 +148,7 @@ void configfile_generator(int status){
     else if (status==1)
     {
         write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
-        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl;
-        write_configs<<"#Note: If you have multiple instances of one class with only a couple of deviations, you can inherit the configrations from another class of the same kind:"<<endl;
-        write_configs<<"#Example:"<<endl;
-        write_configs<<"#-Membrane A"<<endl;
-        write_configs<<"#list of configurations"<<endl;
-        write_configs<<"#-Membrane B :: A"<<endl;
-        write_configs<<"#Settings that differ"<<endl;
-        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl<<endl;
+        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
         cout<<TFILE;
@@ -310,6 +312,22 @@ void configfile_generator(int status){
         write_configs<<"#0:  No interaction."<<endl;
         write_configs<<"#LJ: Lennard Jones 12-6."<<endl;
         write_configs<<"#EV: Excluded Volume interaction (Shifted Lennard Jones 12-6)."<<endl;
+        
+        write_configs<<endl<<endl;
+        write_configs<<"#Note: If you have multiple instances of one class that have almost the same configurations but differ in just a couple, you can use the inheritance feature. The inheritance feature allows you to copy configurations from one class and add/overwiwte new configrations. Inheritance can only be applied to classes of the same kind:"<<endl;
+        write_configs<<"#Example:"<<endl;
+        write_configs<<"#-Membrane A"<<endl;
+        write_configs<<"#config1 10"<<endl;
+        write_configs<<"#config2 true"<<endl;
+        write_configs<<"#config3 200"<<endl;
+        write_configs<<"#-Membrane B :: A"<<endl;
+        write_configs<<"#config2 false"<<endl;
+        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl;
+        write_configs<<"#The programme will interpret Membrane B as follows:"<<endl;
+        write_configs<<"#-Membrane B"<<endl;
+        write_configs<<"#config1 10"<<endl;
+        write_configs<<"#config2 false"<<endl;
+        write_configs<<"#config3 200"<<endl<<endl;
     }
     
     

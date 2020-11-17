@@ -83,6 +83,8 @@ void Membrane::initialise(std::string Mesh_file_name){
             errorMessage+= ". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
             throw std::runtime_error(errorMessage);
         }
+    } else if (spring_model == GenConst::potential.Model["None"]) {
+        cout<<TWARN<<"\nMembrnae spring model is set to 'None'."<<TRESET<<endl;
     }
     
     if (initial_random_rotation_coordinates){

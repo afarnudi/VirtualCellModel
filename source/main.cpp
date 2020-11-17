@@ -313,7 +313,7 @@ int main(int argc, char **argv)
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
     
-    cout<<TCYAN<<"\nBeginnig the OpenMM section:\n"<<TRESET;
+    cout<<TCYAN<<"\nBeginning the OpenMM section:\n"<<TRESET;
     std::string   platformName;
     int atom_count=0;
     int bond_count=0;
@@ -327,8 +327,7 @@ int main(int argc, char **argv)
     Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
     Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
     
-    cout<<num_of_atoms<<" Atoms"<<endl;
-    cout<<num_of_bonds<<" Bonds"<<endl;
+    
     
     all_atoms[num_of_atoms].type         =EndOfList;
     all_bonds[num_of_bonds].type         =EndOfList;
@@ -390,6 +389,12 @@ int main(int argc, char **argv)
                                     bond_count,
                                     dihe_count);
     }
+    
+    print_statistics(num_of_atoms,
+                     num_of_bonds,
+                     num_of_dihedrals,
+                     Membranes,
+                     Chromatins);
     
     
     //autocorrelation calculations:

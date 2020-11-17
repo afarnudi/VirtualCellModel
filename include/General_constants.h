@@ -16,12 +16,22 @@ struct PotentialModelIndex{
     std::map<std::string, int> Model;
     
     PotentialModelIndex(){
+        Model["None"] = 0;
         Model["FENE"] = 1;
         Model["Harmonic"] = 2;
         Model["Kelvin-Voigt"] = 3;
         Model["Maxwell"] = 4;
         Model["HarmonicX4"] = 5;
+        Model["Contractile"] = 6;
+        Model["Harmonic_minmax"] = 7;
+        Model["hill"] = 8;
+        Model["KFs"] = 9;
+        
+        
         Model["RealHarmonic"] = 26;
+        Model["Dihedral"] = 27;
+        Model["Virtual"] = 28;
+        
         
     }
 };

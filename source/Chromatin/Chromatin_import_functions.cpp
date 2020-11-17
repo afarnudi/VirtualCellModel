@@ -15,7 +15,7 @@ void Chromatin::import_coordinates(string import_file_name){
     
     read_coordinate_file.open(import_file_name.c_str());
     if ( read_coordinate_file.is_open() ) {
-        cout << "\nCoordinate file opened "<<TSUCCESS<<"successfully. \n\n"<<TRESET;
+        cout << "Coordinate file opened "<<TSUCCESS<<"successfully. \n\n"<<TRESET;
     }else{
         cout << TFAILED<<"Unable to read"<<TRESET<<" '"<<TFILE<<import_file_name<<TRESET<<"' coordinate file.\n";
         exit(EXIT_FAILURE);

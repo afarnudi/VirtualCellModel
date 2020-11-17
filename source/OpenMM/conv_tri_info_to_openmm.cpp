@@ -13,7 +13,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         vector<int> tri_pair_nodes(mem.get_dihedral_atoms_list(i));
 
         diatoms[i].atoms.resize(4);
-        diatoms[i].type=0;
+        diatoms[i].type=mem.get_bending_model();
         diatoms[i].atoms[0]=tri_pair_nodes[0];
         diatoms[i].atoms[1]=tri_pair_nodes[1];
         diatoms[i].atoms[2]=tri_pair_nodes[2];
@@ -23,7 +23,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         diatoms[i].class_label = mem.get_label();
         diatoms[i].spontaneousBendingAngleInRad = mem.get_spontaneous_angle_in_Rad(i);
     }
-    cout<<" harmonic"<<endl;
+    cout<<" Cosine(dihedral)"<<endl;
     cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     
     return diatoms;

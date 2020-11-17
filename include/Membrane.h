@@ -307,7 +307,8 @@ public:
 
     void write_pov_traj(std::string traj_name, std::string label, int currentstep);
     
-    int spring_model=2;
+    int spring_model=0;
+    int bending_model=0;
     int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
     double Spring_coefficient=0.;
@@ -458,6 +459,10 @@ public:
     /**Return input spring model, used to setup the openmm system for the bonds.*/
     int get_spring_model(void){
         return spring_model;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_bending_model(void){
+        return bending_model;
     }
     /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
     double get_sigma_LJ_12_6(void){
@@ -656,7 +661,7 @@ public:
         insertOrder.push_back("VelocityShiftVector");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for harmonic. Default H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. 'N' for no potential. Default H";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         
@@ -669,6 +674,11 @@ public:
         values[1] ="#Set the damping coefficient for non harmonic potentials. Default value 0.";
         Params["DampingCoeff"] = values;
         insertOrder.push_back("DampingCoeff");
+        
+        values[0] ="cosine";
+        values[1] ="#Set the dihedral potential (cosine dihedral angle). Default cosine";
+        Params["BendingModel"] = values;
+        insertOrder.push_back("BendingModel");
         
         values[0] ="0";
         values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";

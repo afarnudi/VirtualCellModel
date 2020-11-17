@@ -37,7 +37,7 @@ void Chromatin::set_bond_nominal_lengths(void){
         }
         
     }
-    
+    Average_node_pair_length/=Num_of_Nodes;
     if (BondNominalLength_stat=="Au") {
         if (!GenConst::Testmode) {
             cout<<"Node pair (bond) distances:\n";
