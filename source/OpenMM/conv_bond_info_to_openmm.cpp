@@ -11,7 +11,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].nominalLengthInNm=mem.get_node_pair_distance_in_Nm(i);
         
         if (bonds[i].type == GenConst::potential.Model["FENE"]) {
-            mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].FENE_k);
+//            mem.set_FENE_param_2(bonds[i].FENE_lmininNm, bonds[i].FENE_lmaxinNm, bonds[i].FENE_epsilon, bonds[i].k_FENE_inKJpermol);
         } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == GenConst::potential.Model["HarmonicX4"]){
@@ -432,6 +432,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
     Bonds* bonds = new Bonds[chromo_num_bonds];
     
     bool harmonicpotential =false;
+    bool fenepotential =false;
     //    cout<<"\nchromo_num_bonds = "<<chromo_num_bonds<<endl;
     if (chromo_num_bonds != 0) {
         int num_of_real_bonds = chromo.get_num_of_real_site()-1;
@@ -447,8 +448,12 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
             bonds[i].class_label = chromo.get_label() + chromo.get_label();
             
             if (bonds[i].type == GenConst::potential.Model["FENE"]) {
-                cout<<TWWARN<<"FENE not set"<<TRESET<<endl;
-                exit(0);
+                fenepotential =true;
+                bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
+                bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
+                bonds[i].k_FENE_inKJpermol = 30*GenConst::BoltzmannKJpermolkelvin*GenConst::temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
+                bonds[i].epsilon_FENE_inKJpermol = GenConst::BoltzmannKJpermolkelvin*GenConst::temperature;
+                
             } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
                 harmonicpotential = true;
                 bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);

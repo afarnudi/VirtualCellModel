@@ -16,6 +16,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::System                        &system
                        ){
     
+    bool FENEBondForce=false;
     bool HarmonicBondForce=false;
     bool Kelvin_VoigtBondForce=false;
     bool Hill_Force=false;
@@ -45,19 +46,21 @@ void set_bonded_forces(Bonds*                                 bonds,
                 FENE_classes.insert(bonds[i].class_label);
                 FENE_index++;
                 
-                FENEs.push_back(new OpenMM::CustomBondForce("4*ep*( (s/r)^12-(s/r)^6 + 0.25) -0.5*K_fene*R*R*log(1-(r*r/(R*R) ))"));
+                FENEs.push_back(new OpenMM::CustomBondForce("-0.5*K_fene*R0*R0*log(1-(r*r/(R0*R0)))*step(0.99*R0-r)+4*epsilon_fene*((sigma_fene/r)^12-(sigma_fene/r)^6+0.25)*step(cut_fene-r)"));
                 
-                FENEs[FENE_index]->addPerBondParameter("s");
-                FENEs[FENE_index]->addPerBondParameter("R");
-                FENEs[FENE_index]->addPerBondParameter("ep");
                 FENEs[FENE_index]->addPerBondParameter("K_fene");
+                FENEs[FENE_index]->addPerBondParameter("R0");
+                FENEs[FENE_index]->addPerBondParameter("epsilon_fene");
+                FENEs[FENE_index]->addPerBondParameter("sigma_fene");
+                FENEs[FENE_index]->addPerBondParameter("cut_fene");
                 
                 system.addForce(FENEs[FENE_index]);
             }
-            vector<double> parameters={bonds[i].FENE_lmininNm,
-                                       bonds[i].FENE_lmaxinNm,
-                                       bonds[i].FENE_epsilon,
-                                       bonds[i].FENE_k
+            vector<double> parameters={bonds[i].k_FENE_inKJpermol,
+                                       bonds[i].FENER0inNm,
+                                       bonds[i].epsilon_FENE_inKJpermol,
+                                       bonds[i].nominalLengthInNm,
+                                       bonds[i].nominalLengthInNm*(pow(2,1./6.))
                                        };
             
             FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);

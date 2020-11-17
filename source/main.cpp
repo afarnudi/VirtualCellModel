@@ -92,6 +92,7 @@ string ECM_label;
 int    Integrator_type;
 double frictionInPs;
 double temperature;
+double BoltzmannKJpermolkelvin;
 bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;

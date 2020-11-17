@@ -45,7 +45,7 @@ struct Bonds{
    // double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
     double dampInKJPsPerNm2;
-    double FENE_lmaxinNm, FENE_lmininNm, FENE_k, FENE_epsilon;
+    double FENER0inNm, epsilon_FENE_inKJpermol, k_FENE_inKJpermol;
     double F0;
     double r_min,r_max;
     double hill_co;

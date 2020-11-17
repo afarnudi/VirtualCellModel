@@ -129,6 +129,8 @@ void parse_genconfig_parameters(vector<string> lines){
 }
 
 void assign_general_parameters(GeneralParameters &defaults){
+    GenConst::BoltzmannKJpermolkelvin = 0.008314459920816468;
+    
     for (auto const& it : defaults.GenParams)
     {
         vector<string> split = split_and_check_for_comments(it.second[0], "General parameters: "+it.first);

@@ -77,6 +77,8 @@ namespace GenConst {
     extern double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     extern double temperature;
+    /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
+    extern double BoltzmannKJpermolkelvin;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.*/
     extern bool Excluded_volume_interaction;
     /**Set Membrane class label. An index will be assigned during runtime. Default mem*/
