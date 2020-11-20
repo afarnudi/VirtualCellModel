@@ -57,6 +57,9 @@ private: //(if we define these constants as private members of the class, we can
     
     bool ImportCoordinates   = false;
     bool GenerateRandomChain = false;
+    bool GenerateSelfAvoidingChain = false;
+    bool RestrictGeneratedChainRadius_stat=false;
+    double RestrictGeneratedChainRadius=0;
     string import_file_name;
     int  limit_import=0; //limit for the number of lines read when importing coordinates from file.
     bool ExportGeneratedCoordinates = false;
@@ -353,6 +356,15 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         values[1] ="#Number of Chromatin nodes on a generated self avoiding random chain . If you are importing coordinates, this parameter will be ignored. Default 10";
         Params["GenerateRandomChain"] = values;
         insertOrder.push_back("GenerateRandomChain");
+        
+        values[0] ="N";
+        values[1] ="#The radius of the sphere the generated coordinates are restricted in. The node radius is taken into account when generating coordinates with this restriction Default N for no restrictions.";
+        Params["RestrictGeneratedChainRadius"] = values;
+        insertOrder.push_back("RestrictGeneratedChainRadius");
+        values[0] ="false";
+        values[1] ="#If \"true\" The programme will generate a self avoiding random chain with respect to the node radius. Default false";
+        Params["GenerateSelfAvoidingChain"] = values;
+        insertOrder.push_back("GenerateSelfAvoidingChain");
         
         values[0] ="false";
         values[1] ="#If \"true\" The programme will write the generated coordinates that can be imported later. Default false";

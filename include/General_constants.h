@@ -160,12 +160,12 @@ namespace GenConst {
 #define TFAILED  TRED
 #define TOFF     TRED
 #define TFILE    TDARKGB
-#define TWARN    TYELLOW
+#define TWARN    TORANGE
 #define TWWARN   TBLINK<<TRED
 
 #define TMEM     TBLUE
 #define TACT     TCYAN
-#define TECM     TORANGE
+#define TECM     TDARKGB
 #define TCHR     TPINK
 #define TOMM     TGB
 

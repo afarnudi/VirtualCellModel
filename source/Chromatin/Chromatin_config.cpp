@@ -123,6 +123,12 @@ void Chromatin::consistancy_check(){
         throw std::runtime_error(errorMessage);
     }
     
+    if (RestrictGeneratedChainRadius_stat==true && RestrictGeneratedChainRadius < Node_radius ) {
+        string errorMessage = TWARN;
+        errorMessage +="Chromatin config parser: The Chromatin's node radius cannot be larger than the restricted radius.";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
     
     
     
@@ -235,8 +241,24 @@ void Chromatin::assign_parameters(void){
                 }
                 
             }
+        } else if (it.first == "RestrictGeneratedChainRadius") {
+            if (split[0]!="N") {
+                RestrictGeneratedChainRadius_stat=true;
+                RestrictGeneratedChainRadius = stod(split[0]);
+            }
         } else if (it.first == "NominalLengthInNm") {
             BondNominalLength_stat = split[0];
+        } else if (it.first == "GenerateSelfAvoidingChain") {
+            if(split[0]=="true"){
+                GenerateSelfAvoidingChain=true;
+            } else if (split[0]=="false"){
+                GenerateSelfAvoidingChain=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Chromatin config parser: GenerateSelfAvoidingChain: I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "ExportGeneratedCoordinates") {
             if(split[0]=="true"){
                 ExportGeneratedCoordinates=true;
