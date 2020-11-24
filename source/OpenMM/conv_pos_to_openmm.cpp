@@ -76,7 +76,7 @@ MyAtomInfo* convert_Actin_position_to_openmm(Actin act){
         myatominfo[i].posInNm[1]=act.get_node_position(i, 1);
         myatominfo[i].posInNm[2]=act.get_node_position(i, 2);
         myatominfo[i].mass=act.get_node_mass();
-        myatominfo[i].radius=act.get_node_radius();
+        myatominfo[i].radius=act.get_node_radius(i);
         myatominfo[i].ext_force_model=act.get_ext_force_model();
         myatominfo[i].ext_force_constants[0]=act.get_kx();
         myatominfo[i].ext_force_constants[1]=act.get_ky();

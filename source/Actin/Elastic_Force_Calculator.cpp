@@ -14,7 +14,7 @@ void Actin::Elastic_Force_Calculator(void)
         node_A=Node_Bond_list[i][0];
         node_B=Node_Bond_list[i][1];
         
-        initial_distance = Node_Bond_relaxed_length[i];
+        initial_distance = Node_Bond_Nominal_Length_in_Nm[i];
         
         delta_x = Node_Position[node_B][0]-Node_Position[node_A][0];
         delta_y = Node_Position[node_B][1]-Node_Position[node_A][1];

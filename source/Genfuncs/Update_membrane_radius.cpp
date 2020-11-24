@@ -91,7 +91,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                     int atom1, atom2 ;
                     double length, stiffness;
                     omm->harmonic->getBondParameters(k, atom1, atom2, length, stiffness);
-                    double old_length = membranes[i].get_node_pair_distance_in_Nm(k);
+                    double old_length = membranes[i].get_node_pair_Nominal_Length_in_Nm(k);
                     double scaled_length = old_length*mem_radius_at_current_time/r;
                     
                     omm->harmonic->setBondParameters(k, atom1, atom2, scaled_length, stiffness);

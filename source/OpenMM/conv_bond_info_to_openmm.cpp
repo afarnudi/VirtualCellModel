@@ -11,7 +11,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
         bonds[i].class_label = mem.get_label() + mem.get_label();
-        bonds[i].nominalLengthInNm=mem.get_node_pair_distance_in_Nm(i);
+        bonds[i].nominalLengthInNm=mem.get_node_pair_Nominal_Length_in_Nm(i);
         
         if (bonds[i].type == GenConst::potential.Model["FENE"]) {
             fenepotential =true;
@@ -65,7 +65,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     bool KelvinVoigtpotential = false;
     bool Contractilepotential = false;
     bool Harmonic_minmaxpotential = false;
-    
+    bool fenepotential=false;
     
     
     Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
@@ -77,270 +77,278 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         bonds[i].atoms[1]=act.get_node_pair(i, 1);
         bonds[i].class_label = act.get_label() + act.get_label();
         
-        if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
+        if (bonds[i].type == GenConst::potential.Model["FENE"]) {
+            fenepotential =true;
+            bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
+            bonds[i].k_FENE_inKJpermol = 30*GenConst::BoltzmannKJpermolkelvin*GenConst::temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
+            bonds[i].epsilon_FENE_inKJpermol = GenConst::BoltzmannKJpermolkelvin*GenConst::temperature;
+        } else if (bonds[i].type == GenConst::potential.Model["Harmonic"]){
             harmonicpotential= true;
-            bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
+            bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i) * act.get_act_r0factor();
             bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == GenConst::potential.Model["Kelvin-Voigt"]){
             KelvinVoigtpotential = true;
-            bonds[i].nominalLengthInNm=act.get_act_relaxlength(i) * act.get_act_r0factor();
+            bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i) * act.get_act_r0factor();
             bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
             bonds[i].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+        } else if (bonds[i].type == GenConst::potential.Model["Contractile"]){
+            Contractilepotential = true;
         }
         
         
         
     }
-    
-    
     
     
     //Contractile element parallel to bond spring
-    for (int i=act_num_bonds; i<(2*act_num_bonds); i++) {
-        int model = act.get_contractile_model();
-        switch (model) {
-            case 1:
-                bonds[i].type = GenConst::potential.Model["Contractile"];
-                Contractilepotential = true;
-                break;
-            case 2:
-                bonds[i].type = GenConst::potential.Model["hill"];
-                break;
-            case 3:
-                bonds[i].type = GenConst::potential.Model["KFs"];
-                break;
+    if (Contractilepotential) {
+        for (int i=act_num_bonds; i<(2*act_num_bonds); i++) {
+            int model = act.get_contractile_model();
+            switch (model) {
+                case 1:
+                    bonds[i].type = GenConst::potential.Model["Contractile"];
+                    Contractilepotential = true;
+                    break;
+                case 2:
+                    bonds[i].type = GenConst::potential.Model["hill"];
+                    break;
+                case 3:
+                    bonds[i].type = GenConst::potential.Model["KFs"];
+                    break;
+            }
+            bonds[i].k_F0 = 4;
+            //bonds[i].type = 6;
+            bonds[i].atoms[0]=act.get_node_pair(i-act_num_bonds, 0);
+            bonds[i].atoms[1]=act.get_node_pair(i-act_num_bonds, 1);
+            bonds[i].class_label = act.get_label() + act.get_label();
+            
+            //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+            bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i-act_num_bonds) * act.get_act_r0factor();
+            bonds[i].F0 = act.get_contractile_force();
+            bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm ;
+            bonds[i].r_max = act.get_contractile_rmax() * bonds[i].nominalLengthInNm;
+            //bonds[i].hill_co = act.get_hill_co();
+            bonds[i].hill_co = act.get_contractile_hill_co();
         }
-        bonds[i].k_F0 = 4;
-        //bonds[i].type = 6;
-        bonds[i].atoms[0]=act.get_node_pair(i-act_num_bonds, 0);
-        bonds[i].atoms[1]=act.get_node_pair(i-act_num_bonds, 1);
-        bonds[i].class_label = act.get_label() + act.get_label();
         
-        //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
-        bonds[i].nominalLengthInNm=act.get_act_relaxlength(i-act_num_bonds) * act.get_act_r0factor();
-        bonds[i].F0 = act.get_contractile_force();
-        bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm ;
-        bonds[i].r_max = act.get_contractile_rmax() * bonds[i].nominalLengthInNm;
-        //bonds[i].hill_co = act.get_hill_co();
-        bonds[i].hill_co = act.get_contractile_hill_co();
+        //Contractile spring
+        for (int i=2*act_num_bonds; i<(3*act_num_bonds); i++) {
+            bonds[i].type = GenConst::potential.Model["Harmonic"];
+            bonds[i+act_num_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
+            bonds[i].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
+            bonds[i].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
+            bonds[i+act_num_bonds].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
+            bonds[i+act_num_bonds].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
+            bonds[i].class_label = act.get_label() + act.get_label();
+            bonds[i+act_num_bonds].class_label = act.get_label() + act.get_label();
+            
+            //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
+            bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i-2*act_num_bonds) * act.get_act_r0factor();
+            bonds[i].stiffnessInKJPerNm2 = act.get_contractile_k1();
+            bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm;
+            bonds[i].r_max = bonds[i].nominalLengthInNm;
+            //bonds[i].r_max = act.get_avg_node_dist();
+            
+            bonds[i+act_num_bonds].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i-2*act_num_bonds) * act.get_act_r0factor();
+            bonds[i+act_num_bonds].stiffnessInKJPerNm2 = act.get_contractile_k2();
+            bonds[i+act_num_bonds].r_min = bonds[i+act_num_bonds].nominalLengthInNm;
+            bonds[i+act_num_bonds].r_max = act.get_contractile_rmax() * bonds[i+act_num_bonds].nominalLengthInNm;
+        }
+        
+        
+        //    int n1=0;
+        //    int n2=0;
+        
+        for (int i=4*act_num_bonds; i<(4*act_num_bonds + act_abp_bonds); i++) {
+            
+            int model = act.get_abp_model();
+            switch (model) {
+                case 1:
+                    bonds[i].type = GenConst::potential.Model["Contractile"];
+                    Contractilepotential = true;
+                    break;
+                case 2:
+                    bonds[i].type = GenConst::potential.Model["hill"];
+                    break;
+                case 3:
+                    bonds[i].type = GenConst::potential.Model["KFs"];
+                    break;
+            }
+            
+            bonds[i].k_F0 = 4;
+            
+            
+            //bonds[i].type = 6;
+            bonds[i].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+            bonds[i].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+            bonds[i].class_label = act.get_label() + act.get_label();
+            
+            bonds[i].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+            
+            
+            
+            bonds[i].F0 = act.get_abp_force();
+            
+            //        if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
+            //        {
+            //            bonds[i].F0 =  act.get_abp_force();
+            //            n1++;
+            //        }
+            //        else
+            //        {
+            //            bonds[i].F0 = 10*act.get_abp_force();
+            //            n2++;
+            //        }
+            
+            
+            bonds[i].r_min = act.get_abp_rmin() * bonds[i].nominalLengthInNm;
+            bonds[i].r_max = act.get_abp_rmax() * bonds[i].nominalLengthInNm;
+            bonds[i].hill_co = act.get_abp_hill_co();
+            
+            
+            
+            bonds[i+act_abp_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
+            bonds[i+act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+            bonds[i+act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+            bonds[i+act_abp_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+            bonds[i+act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k1();
+            bonds[i+act_abp_bonds].r_min = act.get_abp_rmin() * bonds[i+act_abp_bonds].nominalLengthInNm;
+            bonds[i+act_abp_bonds].r_max = bonds[i+act_abp_bonds].nominalLengthInNm;
+            
+            
+            
+            bonds[i+2*act_abp_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
+            bonds[i+2*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+            bonds[i+2*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+            bonds[i+2*act_abp_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+2*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+            bonds[i+2*act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k2();
+            bonds[i+2*act_abp_bonds].r_min = bonds[i+2*act_abp_bonds].nominalLengthInNm;
+            bonds[i+2*act_abp_bonds].r_max = act.get_abp_rmax() * bonds[i+2*act_abp_bonds].nominalLengthInNm;
+            
+            
+            
+            
+            
+            bonds[i+3*act_abp_bonds].type = act.get_abp_spring_model();
+            bonds[i+3*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
+            bonds[i+3*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
+            bonds[i+3*act_abp_bonds].class_label = act.get_label() + act.get_label();
+            
+            if (bonds[i+3*act_abp_bonds].type == GenConst::potential.Model["Harmonic"]) {
+                bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+                bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
+            } else if (bonds[i+3*act_abp_bonds].type == GenConst::potential.Model["Kelvin-Voigt"]){
+                bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
+                bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
+                bonds[i+3*act_abp_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        for (int i=4*act_num_bonds+ 4*act_abp_bonds; i<(4*act_num_bonds + 4*act_abp_bonds + act_MT_bonds); i++) {
+            
+            int model = act.get_MT_model();
+            switch (model) {
+                case 1:
+                    bonds[i].type = GenConst::potential.Model["Contractile"];
+                    Contractilepotential = true;
+                    break;
+                case 2:
+                    bonds[i].type = GenConst::potential.Model["hill"];
+                    break;
+                case 3:
+                    bonds[i].type = GenConst::potential.Model["KFs"];
+                    break;
+            }
+            
+            bonds[i].k_F0 = 4;
+            
+            
+            //bonds[i].type = 6;
+            bonds[i].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i].class_label = act.get_label() + act.get_label();
+            
+            bonds[i].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            
+            
+            
+            bonds[i].F0 = act.get_MT_force();
+            
+            //            if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
+            //            {
+            //                bonds[i].F0 =  act.get_MT_force();
+            //                n1++;
+            //            }
+            //            else
+            //            {
+            //                bonds[i].F0 = 5*act.get_MT_force();
+            //                n2++;
+            //            }
+            
+            
+            bonds[i].r_min = act.get_MT_rmin() * bonds[i].nominalLengthInNm;
+            bonds[i].r_max = act.get_MT_rmax() * bonds[i].nominalLengthInNm;
+            bonds[i].hill_co = act.get_MT_hill_co();
+            
+            
+            
+            bonds[i+act_MT_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
+            bonds[i+act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+act_MT_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            bonds[i+act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k1();
+            bonds[i+act_MT_bonds].r_min = act.get_MT_rmin() * bonds[i+act_MT_bonds].nominalLengthInNm;
+            bonds[i+act_MT_bonds].r_max = bonds[i+act_MT_bonds].nominalLengthInNm;
+            
+            
+            
+            bonds[i+2*act_MT_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
+            bonds[i+2*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+2*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+2*act_MT_bonds].class_label = act.get_label() + act.get_label();
+            
+            bonds[i+2*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+            bonds[i+2*act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k2();
+            bonds[i+2*act_MT_bonds].r_min = bonds[i+2*act_MT_bonds].nominalLengthInNm;
+            bonds[i+2*act_MT_bonds].r_max = act.get_MT_rmax() * bonds[i+2*act_MT_bonds].nominalLengthInNm;
+            
+            
+            
+            
+            
+            bonds[i+3*act_MT_bonds].type = act.get_MT_spring_model();
+            bonds[i+3*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
+            bonds[i+3*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
+            bonds[i+3*act_MT_bonds].class_label = act.get_label() + act.get_label();
+            
+            if (bonds[i+3*act_MT_bonds].type == GenConst::potential.Model["Harmonic"]) {
+                bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+                bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
+            } else if (bonds[i+3*act_MT_bonds].type == GenConst::potential.Model["Kelvin-Voigt"]){
+                bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
+                bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
+                bonds[i+3*act_MT_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
+            }
+            
+            
+            
+            
+        }
+        
+        
     }
-    
-    //Contractile spring
-    for (int i=2*act_num_bonds; i<(3*act_num_bonds); i++) {
-        bonds[i].type = GenConst::potential.Model["Harmonic"];
-        bonds[i+act_num_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
-        bonds[i].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
-        bonds[i].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
-        bonds[i+act_num_bonds].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
-        bonds[i+act_num_bonds].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
-        bonds[i].class_label = act.get_label() + act.get_label();
-        bonds[i+act_num_bonds].class_label = act.get_label() + act.get_label();
-        
-        //bonds[i].nominalLengthInNm=act.get_avg_node_dist();
-        bonds[i].nominalLengthInNm=act.get_act_relaxlength(i-2*act_num_bonds) * act.get_act_r0factor();
-        bonds[i].stiffnessInKJPerNm2 = act.get_contractile_k1();
-        bonds[i].r_min = act.get_contractile_rmin() * bonds[i].nominalLengthInNm;
-        bonds[i].r_max = bonds[i].nominalLengthInNm;
-        //bonds[i].r_max = act.get_avg_node_dist();
-        
-        bonds[i+act_num_bonds].nominalLengthInNm=act.get_act_relaxlength(i-2*act_num_bonds) * act.get_act_r0factor();
-        bonds[i+act_num_bonds].stiffnessInKJPerNm2 = act.get_contractile_k2();
-        bonds[i+act_num_bonds].r_min = bonds[i+act_num_bonds].nominalLengthInNm;
-        bonds[i+act_num_bonds].r_max = act.get_contractile_rmax() * bonds[i+act_num_bonds].nominalLengthInNm;
-    }
-    
-    
-    //    int n1=0;
-    //    int n2=0;
-    
-    for (int i=4*act_num_bonds; i<(4*act_num_bonds + act_abp_bonds); i++) {
-        
-        int model = act.get_abp_model();
-        switch (model) {
-            case 1:
-                bonds[i].type = GenConst::potential.Model["Contractile"];
-                Contractilepotential = true;
-                break;
-            case 2:
-                bonds[i].type = GenConst::potential.Model["hill"];
-                break;
-            case 3:
-                bonds[i].type = GenConst::potential.Model["KFs"];
-                break;
-        }
-        
-        bonds[i].k_F0 = 4;
-        
-        
-        //bonds[i].type = 6;
-        bonds[i].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
-        bonds[i].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
-        bonds[i].class_label = act.get_label() + act.get_label();
-        
-        bonds[i].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
-        
-        
-        
-        bonds[i].F0 = act.get_abp_force();
-        
-        //        if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
-        //        {
-        //            bonds[i].F0 =  act.get_abp_force();
-        //            n1++;
-        //        }
-        //        else
-        //        {
-        //            bonds[i].F0 = 10*act.get_abp_force();
-        //            n2++;
-        //        }
-        
-        
-        bonds[i].r_min = act.get_abp_rmin() * bonds[i].nominalLengthInNm;
-        bonds[i].r_max = act.get_abp_rmax() * bonds[i].nominalLengthInNm;
-        bonds[i].hill_co = act.get_abp_hill_co();
-        
-        
-        
-        bonds[i+act_abp_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
-        bonds[i+act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
-        bonds[i+act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
-        bonds[i+act_abp_bonds].class_label = act.get_label() + act.get_label();
-        
-        bonds[i+act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
-        bonds[i+act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k1();
-        bonds[i+act_abp_bonds].r_min = act.get_abp_rmin() * bonds[i+act_abp_bonds].nominalLengthInNm;
-        bonds[i+act_abp_bonds].r_max = bonds[i+act_abp_bonds].nominalLengthInNm;
-        
-        
-        
-        bonds[i+2*act_abp_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
-        bonds[i+2*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
-        bonds[i+2*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
-        bonds[i+2*act_abp_bonds].class_label = act.get_label() + act.get_label();
-        
-        bonds[i+2*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
-        bonds[i+2*act_abp_bonds].stiffnessInKJPerNm2 = act.get_abp_k2();
-        bonds[i+2*act_abp_bonds].r_min = bonds[i+2*act_abp_bonds].nominalLengthInNm;
-        bonds[i+2*act_abp_bonds].r_max = act.get_abp_rmax() * bonds[i+2*act_abp_bonds].nominalLengthInNm;
-        
-        
-        
-        
-        
-        bonds[i+3*act_abp_bonds].type = act.get_abp_spring_model();
-        bonds[i+3*act_abp_bonds].atoms[0]=act.get_abp_pair(i-4*act_num_bonds, 0);
-        bonds[i+3*act_abp_bonds].atoms[1]=act.get_abp_pair(i-4*act_num_bonds, 1);
-        bonds[i+3*act_abp_bonds].class_label = act.get_label() + act.get_label();
-        
-        if (bonds[i+3*act_abp_bonds].type = GenConst::potential.Model["Harmonic"]) {
-            bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
-            bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
-        } else if (bonds[i+3*act_abp_bonds].type = GenConst::potential.Model["Kelvin-Voigt"]){
-            bonds[i+3*act_abp_bonds].nominalLengthInNm=act.get_abp_r0factor() * act.get_abp_relaxlength(i-4*act_num_bonds) ;
-            bonds[i+3*act_abp_bonds].stiffnessInKJPerNm2=act.get_abp_spring_stiffness_coefficient();
-            bonds[i+3*act_abp_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    for (int i=4*act_num_bonds+ 4*act_abp_bonds; i<(4*act_num_bonds + 4*act_abp_bonds + act_MT_bonds); i++) {
-        
-        int model = act.get_MT_model();
-        switch (model) {
-            case 1:
-                bonds[i].type = GenConst::potential.Model["Contractile"];
-                Contractilepotential = true;
-                break;
-            case 2:
-                bonds[i].type = GenConst::potential.Model["hill"];
-                break;
-            case 3:
-                bonds[i].type = GenConst::potential.Model["KFs"];
-                break;
-        }
-        
-        bonds[i].k_F0 = 4;
-        
-        
-        //bonds[i].type = 6;
-        bonds[i].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
-        bonds[i].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
-        bonds[i].class_label = act.get_label() + act.get_label();
-        
-        bonds[i].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
-        
-        
-        
-        bonds[i].F0 = act.get_MT_force();
-        
-        //            if( (0.5*(atoms[bonds[i].atoms[0]].initPosInNm[0] + atoms[bonds[i].atoms[1]].initPosInNm[0]) ) >0  )
-        //            {
-        //                bonds[i].F0 =  act.get_MT_force();
-        //                n1++;
-        //            }
-        //            else
-        //            {
-        //                bonds[i].F0 = 5*act.get_MT_force();
-        //                n2++;
-        //            }
-        
-        
-        bonds[i].r_min = act.get_MT_rmin() * bonds[i].nominalLengthInNm;
-        bonds[i].r_max = act.get_MT_rmax() * bonds[i].nominalLengthInNm;
-        bonds[i].hill_co = act.get_MT_hill_co();
-        
-        
-        
-        bonds[i+act_MT_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
-        bonds[i+act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
-        bonds[i+act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
-        bonds[i+act_MT_bonds].class_label = act.get_label() + act.get_label();
-        
-        bonds[i+act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
-        bonds[i+act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k1();
-        bonds[i+act_MT_bonds].r_min = act.get_MT_rmin() * bonds[i+act_MT_bonds].nominalLengthInNm;
-        bonds[i+act_MT_bonds].r_max = bonds[i+act_MT_bonds].nominalLengthInNm;
-        
-        
-        
-        bonds[i+2*act_MT_bonds].type = GenConst::potential.Model["Harmonic_minmax"];
-        bonds[i+2*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
-        bonds[i+2*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
-        bonds[i+2*act_MT_bonds].class_label = act.get_label() + act.get_label();
-        
-        bonds[i+2*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
-        bonds[i+2*act_MT_bonds].stiffnessInKJPerNm2 = act.get_MT_k2();
-        bonds[i+2*act_MT_bonds].r_min = bonds[i+2*act_MT_bonds].nominalLengthInNm;
-        bonds[i+2*act_MT_bonds].r_max = act.get_MT_rmax() * bonds[i+2*act_MT_bonds].nominalLengthInNm;
-        
-        
-        
-        
-        
-        bonds[i+3*act_MT_bonds].type = act.get_MT_spring_model();
-        bonds[i+3*act_MT_bonds].atoms[0]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 0);
-        bonds[i+3*act_MT_bonds].atoms[1]=act.get_MT_pair(i-4*act_num_bonds - 4*act_abp_bonds, 1);
-        bonds[i+3*act_MT_bonds].class_label = act.get_label() + act.get_label();
-        
-        if (bonds[i+3*act_MT_bonds].type == GenConst::potential.Model["Harmonic"]) {
-            bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
-            bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
-        } else if (bonds[i+3*act_MT_bonds].type == GenConst::potential.Model["Kelvin-Voigt"]){
-            bonds[i+3*act_MT_bonds].nominalLengthInNm=act.get_MT_r0factor() * act.get_MT_relaxlength(i-4*act_num_bonds - 4*act_abp_bonds) ;
-            bonds[i+3*act_MT_bonds].stiffnessInKJPerNm2=act.get_MT_spring_stiffness_coefficient();
-            bonds[i+3*act_MT_bonds].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
-        }
-        
-        
-        
-        
-    }
-    
     
     
     if(harmonicpotential){

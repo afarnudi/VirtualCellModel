@@ -17,11 +17,11 @@ double Actin::Hookian (double distance, double initial_distance){
 
 double Actin::Kelvin(double distance, int bond_index){
     
-    double initial_distance=Node_Bond_relaxed_length[bond_index];
+    double initial_distance=Node_Bond_Nominal_Length_in_Nm[bond_index];
     
     Total_Potential_Energy += 0.5*Spring_coefficient*(distance-initial_distance)*(distance-initial_distance);
     
-    Node_Bond_relaxed_length[bond_index] +=  GenConst::Step_Size_In_Fs*( (distance-initial_distance)/distance )/Kelvin_Damping_Coefficient;
+    Node_Bond_Nominal_Length_in_Nm[bond_index] +=  GenConst::Step_Size_In_Fs*( (distance-initial_distance)/distance )/Kelvin_Damping_Coefficient;
 //    if (bond_index == 0) {
 //        cout<<"Node_Bond_relaxed_length[bond_index]="<<Node_Bond_relaxed_length[bond_index]<<endl;
 //    }
@@ -31,10 +31,10 @@ double Actin::Kelvin(double distance, int bond_index){
 
 double Actin::Maxwell(double distance, int bond_index){
     
-    double initial_distance=Node_Bond_relaxed_length[bond_index];
+    double initial_distance=Node_Bond_Nominal_Length_in_Nm[bond_index];
     double gamma_0 = (distance/initial_distance) - 1;
     
-    Node_Bond_relaxed_length[bond_index] +=  Dashpot_Viscosity*(distance-initial_distance)*(1-exp_tau);
+    Node_Bond_Nominal_Length_in_Nm[bond_index] +=  Dashpot_Viscosity*(distance-initial_distance)*(1-exp_tau);
     //    if (bond_index == 0) {
     //        cout<<"Node_Bond_relaxed_length[bond_index]="<<Node_Bond_relaxed_length[bond_index]<<endl;
     //    }
