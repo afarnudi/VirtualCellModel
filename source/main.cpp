@@ -427,6 +427,9 @@ int main(int argc, char **argv)
             //wrok in progress.
             //Need to retrive all information from the checkpoint and relay them to the respective classes.
         }
+        
+        
+        
         assign_project_directories(buffer);
         cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl<<endl;
         

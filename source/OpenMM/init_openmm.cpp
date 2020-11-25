@@ -128,6 +128,43 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
     
     
+    //pbcgel begin
+//    cout<<"GenConst::Lbox "<<GenConst::Lbox<<endl;
+    vector<vector<int> > pbcbonds;
+    vector<int> pair;
+    pair.resize(2,0);
+    pair[0]=42; pair[1]=48;
+    pbcbonds.push_back(pair);
+    pair[0]=43; pair[1]=49;
+    pbcbonds.push_back(pair);
+    pair[0]=44; pair[1]=46;
+    pbcbonds.push_back(pair);
+    pair[0]=45; pair[1]=47;
+    pbcbonds.push_back(pair);
+    pair[0]=50; pair[1]=51;
+    pbcbonds.push_back(pair);
+    pair[0]=52; pair[1]=53;
+    pbcbonds.push_back(pair);
+    pair[0]=54; pair[1]=55;
+    pbcbonds.push_back(pair);
+    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
+    pbcharmonic->addGlobalParameter("k_pbc",10000);
+    system.addForce(pbcharmonic);
+    
+    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
+        pbcharmonic->addBond(pbcbonds[pbcind][0]+1002, pbcbonds[pbcind][1]+1002);
+        if (GenConst::Periodic_box) {
+            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
+        }
+//        omm->harmonic->addBond(pbcbonds[pbcind][0]+1002, pbcbonds[pbcind][1]+1002,
+//                              0,
+//                              1000);
+    }
+//
+//    if (GenConst::Periodic_box) {
+//        HarmonicBond->setUsesPeriodicBoundaryConditions(true);
+//    }
+    //pbcgel end
     
     
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;

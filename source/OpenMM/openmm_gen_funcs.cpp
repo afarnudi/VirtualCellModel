@@ -123,7 +123,8 @@ void myGetOpenMMState(MyOpenMMData* omm,
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
     // Forces are also available (and cheap).
-    const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
+    const OpenMM::State state = omm->context->getState(infoMask);
+//    const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
     
     timeInPs = state.getTime(); // OpenMM time is in ps already
     
