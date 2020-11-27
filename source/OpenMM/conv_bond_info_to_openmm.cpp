@@ -67,8 +67,8 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     bool Harmonic_minmaxpotential = false;
     bool fenepotential=false;
     
-    
-    Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
+    Bonds* bonds = new Bonds[act_num_bonds];
+//    Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
     //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
     //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
     for (int i=0; i<act_num_bonds; i++) {

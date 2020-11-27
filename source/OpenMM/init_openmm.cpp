@@ -101,8 +101,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     //OpenMM::HarmonicAngleForce*     HarmonicAngle = new OpenMM::HarmonicAngleForce();
     
     
-    
-    
     set_bonded_forces(bonds,
                       HarmonicBond,
                       Kelvin_VoigtBond,
@@ -150,9 +148,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
     pbcharmonic->addGlobalParameter("k_pbc",10000);
     system.addForce(pbcharmonic);
-    
+    int memnodes;
+    if (membrane_set.size()!=0) {
+        memnodes= membrane_set[0].size();
+    } else {
+        memnodes=0;
+    }
     for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
-        pbcharmonic->addBond(pbcbonds[pbcind][0]+1002, pbcbonds[pbcind][1]+1002);
+        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
         if (GenConst::Periodic_box) {
             pbcharmonic->setUsesPeriodicBoundaryConditions(true);
         }

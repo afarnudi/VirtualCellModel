@@ -276,7 +276,8 @@ int main(int argc, char **argv)
         if (GenConst::Num_of_Actins!=0) {
             for (int i=0; i<Actins.size(); i++) {
                 num_of_atoms        += Actins[i].get_num_of_nodes();
-                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
+//                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
+                num_of_bonds        += Actins[i].get_num_of_node_pairs();
             }
         }
         if (GenConst::Num_of_ECMs!=0) {
@@ -306,7 +307,7 @@ int main(int argc, char **argv)
         } // End of if (Include_Membrane)
     }
     
-    
+    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
     int progress=0;
