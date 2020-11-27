@@ -112,6 +112,12 @@ double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
 
+bool MCAnisoBarostatOn;
+std::vector<double> MCAnisoBarostatPressure;
+double MCAnisoBarostatTemperature;
+std::vector<bool> MCAnisoBarostatScaleXYZ;
+int MCAnisoBarostatFrequency;
+
 std::vector<double> PeriodicBoxVector0;
 std::vector<double> PeriodicBoxVector1;
 std::vector<double> PeriodicBoxVector2;

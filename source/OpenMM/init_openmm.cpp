@@ -160,13 +160,13 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
 //    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
-    bool anisotropicbarostat=true;
-    if (anisotropicbarostat) {
-        double basepressure = 0.0005;
-        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
-        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
-        omm->system->addForce(AnisoMCBarostat);
-    }
+//    bool anisotropicbarostat=true;
+//    if (anisotropicbarostat) {
+//        double basepressure = 0.0005;
+//        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
+//        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
+//        omm->system->addForce(AnisoMCBarostat);
+//    }
     
     //pbcgel end
     
@@ -277,6 +277,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(GenConst::MCBarostatPressure, GenConst::MCBarostatTemperature, GenConst::MCBarostatFrequency);
         omm->system->addForce(MCBarostat);
+    }
+    if (GenConst::MCAnisoBarostatOn) {
+        
+        const Vec3 anisotropicpressure(GenConst::MCAnisoBarostatPressure[0],GenConst::MCAnisoBarostatPressure[1],GenConst::MCAnisoBarostatPressure[2]);
+        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, GenConst::MCAnisoBarostatTemperature, GenConst::MCAnisoBarostatScaleXYZ[0], GenConst::MCAnisoBarostatScaleXYZ[1], GenConst::MCAnisoBarostatScaleXYZ[2],GenConst::MCAnisoBarostatFrequency);
+        omm->system->addForce(AnisoMCBarostat);
     }
     
     for (int i=0; atoms[i].type != EndOfList; i++) {
