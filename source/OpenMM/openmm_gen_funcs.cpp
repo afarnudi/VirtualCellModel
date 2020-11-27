@@ -492,14 +492,17 @@ void myWritePSF(int   num_of_atoms,
     fprintf(pFile,"   %5d !NBOND\n",num_of_bonds);
     int endline_counter=0;
         for (int n=0; bonds[n].type != EndOfList; ++n){
-            fprintf(pFile,"   %5d   %5d",
-                    bonds[n].atoms[0]+1,
-                    bonds[n].atoms[1]+1);
-            endline_counter++;
-            if (endline_counter>3) {
-                endline_counter=0;
-                fprintf(pFile,"\n");
+            if (bonds[n].type != GenConst::potential.Model["None"]) {
+                fprintf(pFile,"   %5d   %5d",
+                        bonds[n].atoms[0]+1,
+                        bonds[n].atoms[1]+1);
+                endline_counter++;
+                if (endline_counter>3) {
+                    endline_counter=0;
+                    fprintf(pFile,"\n");
+                }
             }
+            
         }
     fclose (pFile);
 }
