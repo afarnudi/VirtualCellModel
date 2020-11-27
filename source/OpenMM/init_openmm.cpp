@@ -127,7 +127,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     //pbcgel begin
-//    cout<<"GenConst::Lbox "<<GenConst::Lbox<<endl;
     vector<vector<int> > pbcbonds;
     vector<int> pair;
     pair.resize(2,0);
@@ -159,14 +158,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         if (GenConst::Periodic_box) {
             pbcharmonic->setUsesPeriodicBoundaryConditions(true);
         }
-//        omm->harmonic->addBond(pbcbonds[pbcind][0]+1002, pbcbonds[pbcind][1]+1002,
-//                              0,
-//                              1000);
     }
-//
-//    if (GenConst::Periodic_box) {
-//        HarmonicBond->setUsesPeriodicBoundaryConditions(true);
-//    }
+//    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
+    bool anisotropicbarostat=true;
+    if (anisotropicbarostat) {
+        double basepressure = 0.0005;
+        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
+        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
+        omm->system->addForce(AnisoMCBarostat);
+    }
+    
     //pbcgel end
     
     
