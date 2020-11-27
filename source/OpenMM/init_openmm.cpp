@@ -127,38 +127,38 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     //pbcgel begin
-//    vector<vector<int> > pbcbonds;
-//    vector<int> pair;
-//    pair.resize(2,0);
-//    pair[0]=42; pair[1]=48;
-//    pbcbonds.push_back(pair);
-//    pair[0]=43; pair[1]=49;
-//    pbcbonds.push_back(pair);
-//    pair[0]=44; pair[1]=46;
-//    pbcbonds.push_back(pair);
-//    pair[0]=45; pair[1]=47;
-//    pbcbonds.push_back(pair);
-//    pair[0]=50; pair[1]=51;
-//    pbcbonds.push_back(pair);
-//    pair[0]=52; pair[1]=53;
-//    pbcbonds.push_back(pair);
-//    pair[0]=54; pair[1]=55;
-//    pbcbonds.push_back(pair);
-//    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
-//    pbcharmonic->addGlobalParameter("k_pbc",10000);
-//    system.addForce(pbcharmonic);
-//    int memnodes;
-//    if (membrane_set.size()!=0) {
-//        memnodes= membrane_set[0].size();
-//    } else {
-//        memnodes=0;
-//    }
-//    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
-//        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
-//        if (GenConst::Periodic_box) {
-//            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
-//        }
-//    }
+    vector<vector<int> > pbcbonds;
+    vector<int> pair;
+    pair.resize(2,0);
+    pair[0]=42; pair[1]=48;
+    pbcbonds.push_back(pair);
+    pair[0]=43; pair[1]=49;
+    pbcbonds.push_back(pair);
+    pair[0]=44; pair[1]=46;
+    pbcbonds.push_back(pair);
+    pair[0]=45; pair[1]=47;
+    pbcbonds.push_back(pair);
+    pair[0]=50; pair[1]=51;
+    pbcbonds.push_back(pair);
+    pair[0]=52; pair[1]=53;
+    pbcbonds.push_back(pair);
+    pair[0]=54; pair[1]=55;
+    pbcbonds.push_back(pair);
+    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
+    pbcharmonic->addGlobalParameter("k_pbc",10000);
+    system.addForce(pbcharmonic);
+    int memnodes;
+    if (membrane_set.size()!=0) {
+        memnodes= membrane_set[0].size();
+    } else {
+        memnodes=0;
+    }
+    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
+        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
+        if (GenConst::Periodic_box) {
+            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
+        }
+    }
 //    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
 //    bool anisotropicbarostat=true;
 //    if (anisotropicbarostat) {
