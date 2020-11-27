@@ -7,7 +7,7 @@ using std::endl;
 
 void Actin::read_gmesh_file (string gmesh_file)
 {
-    cout<<endl<<endl<<gmesh_file<<endl<<endl;
+//    cout<<endl<<endl<<gmesh_file<<endl<<endl;
     std::ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(gmesh_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary Gmesh generated intigers. We never use these intigers in the actual programme.
@@ -78,7 +78,7 @@ void Actin::read_gmesh_file (string gmesh_file)
 //for type 2 actin
 void Actin::read_gmesh_file_2 (string gmesh_file)
 {
-    cout<<endl<<endl<<gmesh_file<<endl<<endl;
+//    cout<<endl<<endl<<gmesh_file<<endl<<endl;
     std::ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
     read.open(gmesh_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
     int temp_int; // This is just a temp intiger charachter that we use to read unnecessary Gmesh generated intigers. We never use these intigers in the actual programme.
@@ -152,3 +152,52 @@ void Actin::read_gmesh_file_2 (string gmesh_file)
     //cout<<filaments[2][0]<<"and"<<filaments[2][1]<<'\n';
 }
 
+void Actin::read_actin_file(void){
+    std::ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
+    read.open(Mesh_file_name.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
+    int temp_int; // This is just a temp intiger charachter that we use to read unnecessary Gmesh generated intigers. We never use these intigers in the actual programme.
+    string temp_string;
+    
+    read>> temp_string;
+    read>> Num_of_Nodes;
+    
+    Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    for(int i=0;i<Num_of_Nodes;i++)
+        {
+            Node_Velocity[i].resize(3,0);
+            Node_Force[i].resize(3,0);
+        }
+
+    // In this section the Node coordinates are read from the Gmesh membrane generated file. These include both the Nodes on the Membrane and on the nucleus membrane.
+    vector<double> temp_node_position;
+    temp_node_position.resize(3);
+    for(int i=0;i<Num_of_Nodes;i++)
+    {
+        read>> temp_int;
+        read>> temp_node_position[0];
+        read>> temp_node_position[1];
+        read>> temp_node_position[2];
+        temp_node_position[0]*=rescale_factor;
+        temp_node_position[1]*=rescale_factor;
+        temp_node_position[2]*=rescale_factor;
+        Node_Position.push_back(temp_node_position);
+    }
+
+    read>> temp_string;
+    read>> Num_of_Node_Pairs;
+    
+    vector<int> temp_node_pair;
+    temp_node_pair.resize(2);
+    for(int i=0;i<Num_of_Node_Pairs;i++)
+    {
+        read>> temp_int;
+        read>> temp_node_pair[0];
+        read>> temp_node_pair[1];
+        temp_node_pair[0]--;
+        temp_node_pair[1]--;
+        
+        Node_Bond_list.push_back(temp_node_pair);
+    }
+    
+}

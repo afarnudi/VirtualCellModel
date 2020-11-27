@@ -92,6 +92,7 @@ string ECM_label;
 int    Integrator_type;
 double frictionInPs;
 double temperature;
+double BoltzmannKJpermolkelvin;
 bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;
@@ -110,6 +111,12 @@ bool   Testmode;
 double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
+
+bool MCAnisoBarostatOn;
+std::vector<double> MCAnisoBarostatPressure;
+double MCAnisoBarostatTemperature;
+std::vector<bool> MCAnisoBarostatScaleXYZ;
+int MCAnisoBarostatFrequency;
 
 std::vector<double> PeriodicBoxVector0;
 std::vector<double> PeriodicBoxVector1;
@@ -275,7 +282,8 @@ int main(int argc, char **argv)
         if (GenConst::Num_of_Actins!=0) {
             for (int i=0; i<Actins.size(); i++) {
                 num_of_atoms        += Actins[i].get_num_of_nodes();
-                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
+//                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
+                num_of_bonds        += Actins[i].get_num_of_node_pairs();
             }
         }
         if (GenConst::Num_of_ECMs!=0) {
@@ -305,7 +313,7 @@ int main(int argc, char **argv)
         } // End of if (Include_Membrane)
     }
     
-    
+    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
     int progress=0;
@@ -426,6 +434,9 @@ int main(int argc, char **argv)
             //wrok in progress.
             //Need to retrive all information from the checkpoint and relay them to the respective classes.
         }
+        
+        
+        
         assign_project_directories(buffer);
         cout<< "\nFile name: "<<TFILE<<GenConst::trajectory_file_name<<TRESET<<endl<<endl;
         

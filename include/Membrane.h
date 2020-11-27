@@ -203,9 +203,9 @@ public:
     vector<vector<int> >    Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
-    vector<double>          Node_Bond_distances_in_Nm;
-    string                  Node_Bond_distances_stat;
-    double                  Node_Bond_Nominal_Length_in_Nm=-1;
+    vector<double>          Node_Bond_Nominal_Length_in_Nm;
+    string                  Node_Bond_Nominal_Length_stat;
+    double                  Node_Bond_user_defined_Nominal_Length_in_Nm;
     
     vector<double>          Triangle_pair_angles_in_radians;
     string                  Triangle_pair_angle_stat;
@@ -309,7 +309,7 @@ public:
     
     int spring_model=0;
     int bending_model=0;
-    int mesh_format=1;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
+    string mesh_format;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     //    vector <double> T_Kinetic_Energy;
     double Spring_coefficient=0.;
     double Bending_coefficient=0.;
@@ -408,8 +408,8 @@ public:
         return Node_Bond_list[bond_num][node_id];
     }
     /**Return the distance between node pair index. This list is initiated at the begining of the simulation.*/
-    double get_node_pair_distance_in_Nm(int bond_num){
-        return Node_Bond_distances_in_Nm[bond_num];
+    double get_node_pair_Nominal_Length_in_Nm(int bond_num){
+        return Node_Bond_Nominal_Length_in_Nm[bond_num];
     }
     /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
     double get_node_mass(void){
@@ -661,12 +661,12 @@ public:
         insertOrder.push_back("VelocityShiftVector");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for harmonic. 'N' for no potential. Default H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'N' for no potential. Default H";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         
         values[0] ="0";
-        values[1] ="#Set the bond potential rigidity coefficient. Default value 0.";
+        values[1] ="#Set the bond potential rigidity coefficient in KJ.mol^-1.Nm^-3. Default value 0.";
         Params["SpringCoeff"] = values;
         insertOrder.push_back("SpringCoeff");
         

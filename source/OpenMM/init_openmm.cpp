@@ -101,8 +101,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     //OpenMM::HarmonicAngleForce*     HarmonicAngle = new OpenMM::HarmonicAngleForce();
     
     
-    
-    
     set_bonded_forces(bonds,
                       HarmonicBond,
                       Kelvin_VoigtBond,
@@ -128,6 +126,49 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // the second input is an integer, bondCutoff; OpenMM defines bondCutoff as "pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions".
     
     
+    //pbcgel begin
+//    vector<vector<int> > pbcbonds;
+//    vector<int> pair;
+//    pair.resize(2,0);
+//    pair[0]=42; pair[1]=48;
+//    pbcbonds.push_back(pair);
+//    pair[0]=43; pair[1]=49;
+//    pbcbonds.push_back(pair);
+//    pair[0]=44; pair[1]=46;
+//    pbcbonds.push_back(pair);
+//    pair[0]=45; pair[1]=47;
+//    pbcbonds.push_back(pair);
+//    pair[0]=50; pair[1]=51;
+//    pbcbonds.push_back(pair);
+//    pair[0]=52; pair[1]=53;
+//    pbcbonds.push_back(pair);
+//    pair[0]=54; pair[1]=55;
+//    pbcbonds.push_back(pair);
+//    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
+//    pbcharmonic->addGlobalParameter("k_pbc",10000);
+//    system.addForce(pbcharmonic);
+//    int memnodes;
+//    if (membrane_set.size()!=0) {
+//        memnodes= membrane_set[0].size();
+//    } else {
+//        memnodes=0;
+//    }
+//    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
+//        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
+//        if (GenConst::Periodic_box) {
+//            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
+//        }
+//    }
+//    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
+//    bool anisotropicbarostat=true;
+//    if (anisotropicbarostat) {
+//        double basepressure = 0.0005;
+//        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
+//        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
+//        omm->system->addForce(AnisoMCBarostat);
+//    }
+    
+    //pbcgel end
     
     
     vector<OpenMM::CustomCompoundBondForce*> DihedralForces;
@@ -236,6 +277,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
         OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(GenConst::MCBarostatPressure, GenConst::MCBarostatTemperature, GenConst::MCBarostatFrequency);
         omm->system->addForce(MCBarostat);
+    }
+    if (GenConst::MCAnisoBarostatOn) {
+        
+        const Vec3 anisotropicpressure(GenConst::MCAnisoBarostatPressure[0],GenConst::MCAnisoBarostatPressure[1],GenConst::MCAnisoBarostatPressure[2]);
+        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, GenConst::MCAnisoBarostatTemperature, GenConst::MCAnisoBarostatScaleXYZ[0], GenConst::MCAnisoBarostatScaleXYZ[1], GenConst::MCAnisoBarostatScaleXYZ[2],GenConst::MCAnisoBarostatFrequency);
+        omm->system->addForce(AnisoMCBarostat);
     }
     
     for (int i=0; atoms[i].type != EndOfList; i++) {

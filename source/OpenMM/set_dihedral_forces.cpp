@@ -28,9 +28,9 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
               
     //
-                if (GenConst::Periodic_box) {
-                    DihedralForces[DFs_index]->setUsesPeriodicBoundaryConditions(true);
-                }
+//                if (GenConst::Periodic_box) {
+//                    DihedralForces[DFs_index]->setUsesPeriodicBoundaryConditions(true);
+//                }
                 
                 system.addForce(DihedralForces[DFs_index]);
                 

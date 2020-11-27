@@ -66,8 +66,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
 //
 //    cout<<"sp nodes"<<sp_nodes[0].size()<< '\n';
 //    cout<<"ns nodes"<<ns_nodes[0].size()<< '\n';
-    
-    
+
     //srand(time(NULL));
     if (GenConst::Num_of_ECMs!=0) {
         for(set<int>::iterator it=ecm_set[0].begin(); it != ecm_set[0].end(); ++it)
@@ -147,13 +146,16 @@ void set_interactions(const MyAtomInfo                       atoms[],
     for (int i=0; i < GenConst::Num_of_Actins; i++) {
         
         //initialize external force for actin i
-        int ext_force_index;
-        bool is_force = init_ext_force(ext_force, atoms, actin_set, i , GenConst::Actin_label);
-        ext_force_index=int(ext_force.size()-1);
-        if(is_force)
-        {
-            system.addForce(ext_force[ext_force_index]);
-        }
+        
+        
+            int ext_force_index;
+            bool is_force = init_ext_force(ext_force, atoms, actin_set, i , GenConst::Actin_label);
+            ext_force_index=int(ext_force.size()-1);
+            if(is_force)
+            {
+                system.addForce(ext_force[ext_force_index]);
+            }
+        
         
         class_count_i = GenConst::Num_of_Membranes;
         class_count_j = 0;

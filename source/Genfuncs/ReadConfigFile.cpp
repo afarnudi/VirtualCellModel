@@ -32,13 +32,18 @@ map<string, vector<string> > read_configfile(string configfilename){
     if (readconfig.is_open()) {
         string line;
         while(getline(readconfig, line)){
-            
+            vector<string> split = split_and_check_for_comments(line, "reader: ");
             if(line.empty()){
+                continue;
+            } else if (split.size()==0){
                 continue;
             }
             
             flag = checkflag(line, FLAG, FLAGlines, flag);
             string key = getmapkey(FLAG, flag);
+            cout<<line<<endl;
+            cout<<flag<<endl;
+            cout<<key<<endl;
             if (flag != -1) {
                 FLAGlines[key].push_back(line);
             } else {
@@ -125,10 +130,36 @@ void parse_genconfig_parameters(vector<string> lines){
     
     
     assign_general_parameters(values);
-//    general_parameters_consistency_check(values);
+    general_parameters_consistency_check();
+}
+
+void general_parameters_consistency_check(void){
+    bool MCAnisoBarostatScalestat=false;
+    for (int i=0; i<3; i++) {
+        if (GenConst::MCAnisoBarostatPressure[i]!=0) {
+            GenConst::MCAnisoBarostatOn=true;
+        }
+        if (GenConst::MCAnisoBarostatScaleXYZ[i]!=false) {
+            MCAnisoBarostatScalestat=true;
+        }
+    }
+    if (GenConst::MCAnisoBarostatOn && !MCAnisoBarostatScalestat) {
+        string errorMessage = TWARN;
+        errorMessage +="General parameters consistency check: MCAnisoBarostat Non of the axes are allowed to scale. At least one axis has to be allowed to scale. Please edit the configurations and try again.\n";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    if (GenConst::MCAnisoBarostatOn && GenConst::MCBarostatPressure!=0) {
+        string errorMessage = TWARN;
+        errorMessage +="You cannot switch on the MCAnisoBarostat and MCBarostat simultaneously. Please edit the configurations and try again.\n";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
 }
 
 void assign_general_parameters(GeneralParameters &defaults){
+    GenConst::BoltzmannKJpermolkelvin = 0.008314459920816468;
+    
     for (auto const& it : defaults.GenParams)
     {
         vector<string> split = split_and_check_for_comments(it.second[0], "General parameters: "+it.first);
@@ -201,6 +232,26 @@ void assign_general_parameters(GeneralParameters &defaults){
             GenConst::MCBarostatTemperature=stod(split[0]);
         } else if (it.first == "MCBarostatFrequency") {
             GenConst::MCBarostatFrequency=stod(split[0]);
+        } else if (it.first == "MCAnisoBarostatPressure") {
+            GenConst::MCAnisoBarostatPressure.push_back(stod(split[0]));
+            GenConst::MCAnisoBarostatPressure.push_back(stod(split[1]));
+            GenConst::MCAnisoBarostatPressure.push_back(stod(split[2]));
+        } else if (it.first == "MCAnisoBarostatTemperature") {
+            GenConst::MCAnisoBarostatTemperature=stod(split[0]);
+        } else if (it.first == "MCAnisoBarostatScaleXYZ") {
+            for (int i=0; i<3; i++) {
+                bool stat;
+                if (split[i]=="true") {
+                    GenConst::MCAnisoBarostatScaleXYZ.push_back(true);
+                } else if (split[i]=="false"){
+                    GenConst::MCAnisoBarostatScaleXYZ.push_back(false);
+                } else {
+                    string errorMessage = "Configfile parameter parse error: MCAnisoBarostatPressure: Could not parse  '"+split[i]+"'. use 'true' or 'false'.";
+                    throw std::runtime_error(errorMessage);
+                }
+            }
+        } else if (it.first == "MCAnisoBarostatFrequency") {
+            GenConst::MCAnisoBarostatFrequency=stod(split[0]);
         } else if (it.first == "MCStep") {
             GenConst::MC_step=stoi(split[0]);
         } else if (it.first == "MemFluidity") {

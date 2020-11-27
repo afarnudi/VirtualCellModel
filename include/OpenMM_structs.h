@@ -45,7 +45,7 @@ struct Bonds{
    // double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
     double dampInKJPsPerNm2;
-    double FENE_lmaxinNm, FENE_lmininNm, FENE_k, FENE_epsilon;
+    double FENER0inNm, epsilon_FENE_inKJpermol, k_FENE_inKJpermol;
     double F0;
     double r_min,r_max;
     double hill_co;
@@ -113,9 +113,9 @@ struct TimeDependantData {
     std::vector<double> Kelvin_Voigt_damp;
     std::vector<double> hill_const_force;
     std::vector<double> hill_coefficient;
-    std::vector<std::vector<double>> Kelvin_Voigt_distInNm;
+    std::vector<std::vector<double> > Kelvin_Voigt_distInNm;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
-    std::vector<std::vector<std::vector<double>>> hill_distInNm;
+    std::vector<std::vector<std::vector<double> > > hill_distInNm;
     //std::vector<std::vector<double>> Contractile_initForce;
     
     std::vector<OpenMM::CustomExternalForce*> ext_force;

@@ -77,6 +77,8 @@ namespace GenConst {
     extern double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     extern double temperature;
+    /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
+    extern double BoltzmannKJpermolkelvin;
     /**Set the excluded volume interaction for nodes of class instances. 0 for no repulsion and 1 for excluded volume interaction. Default 0.*/
     extern bool Excluded_volume_interaction;
     /**Set Membrane class label. An index will be assigned during runtime. Default mem*/
@@ -128,6 +130,17 @@ namespace GenConst {
     /**The frequency at which the MonteCarloBarostat pressure changes should be attempted (in time steps). If zero MCBarostat will be disabled. Default 0.*/
     extern int MCBarostatFrequency;
     
+    /**The status of OpenMM's MonteCarloAnisotropicBarostat. Default off*/
+    extern bool MCAnisoBarostatOn;
+    /**The pressure acting on each axis (in bar) through OpenMM's MonteCarloAnisotropicBarostat. Default 0 0 0*/
+    extern std::vector<double> MCAnisoBarostatPressure;
+    /**The temperature at which OpenMM's MonteCarloAnisotropicBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
+    extern double MCAnisoBarostatTemperature;
+    /**Allow (or not allow) the X,Y, or Z dimension of the periodic box to change size through OpenMM's MonteCarloAnisotropicBarostat. Default fasle false false*/
+    extern std::vector<bool> MCAnisoBarostatScaleXYZ;
+    /**The frequency at which the MonteCarloAnisotropicBarostat pressure changes should be attempted (in time steps). If zero MCAnisoBarostat will be disabled. Default 0*/
+    extern int MCAnisoBarostatFrequency;
+
     /**The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
     extern std::vector<std::vector<double> > Lboxdims;
     /**A string containing the selected platform information during runtime.*/
@@ -158,12 +171,12 @@ namespace GenConst {
 #define TFAILED  TRED
 #define TOFF     TRED
 #define TFILE    TDARKGB
-#define TWARN    TYELLOW
+#define TWARN    TORANGE
 #define TWWARN   TBLINK<<TRED
 
 #define TMEM     TBLUE
 #define TACT     TCYAN
-#define TECM     TORANGE
+#define TECM     TDARKGB
 #define TCHR     TPINK
 #define TOMM     TGB
 

@@ -8,6 +8,64 @@
 
 #include "Actin.h"
 
+using namespace std;
+
+void add_bond_to_list (vector<vector<int> > tempbonds, vector<vector<int> > &Node_Bond_list){
+    for (int i=0; i<tempbonds.size(); i++) {
+        bool add=true;
+        for (int j=0; j<Node_Bond_list.size(); j++) {
+            if (tempbonds[i][0]==Node_Bond_list[j][0] && tempbonds[i][1]==Node_Bond_list[j][1]) {
+                add=false;
+                break;
+            }
+            if (tempbonds[i][0]==Node_Bond_list[j][1] && tempbonds[i][1]==Node_Bond_list[j][0]) {
+                add=false;
+                break;
+            }
+            
+        }
+        if (add) {
+            Node_Bond_list.push_back(tempbonds[i]);
+        }
+    }
+}
+
+void Actin::Node_Bond_identifier_3(void){
+    
+    Node_Bond_list.clear();
+    for(int i=0;i<Pyramid_Nodes.size();i++)
+    {
+        vector<vector<int> > tempbonds;
+        vector<int> push;
+        push.resize(2);
+        push[0]=Pyramid_Nodes[i][0];
+        push[1]=Pyramid_Nodes[i][1];
+        tempbonds.push_back(push);
+        push[0]=Pyramid_Nodes[i][0];
+        push[1]=Pyramid_Nodes[i][2];
+        tempbonds.push_back(push);
+        push[0]=Pyramid_Nodes[i][0];
+        push[1]=Pyramid_Nodes[i][3];
+        tempbonds.push_back(push);
+        push[0]=Pyramid_Nodes[i][1];
+        push[1]=Pyramid_Nodes[i][2];
+        tempbonds.push_back(push);
+        push[0]=Pyramid_Nodes[i][1];
+        push[1]=Pyramid_Nodes[i][3];
+        tempbonds.push_back(push);
+        push[0]=Pyramid_Nodes[i][2];
+        push[1]=Pyramid_Nodes[i][3];
+        tempbonds.push_back(push);
+        
+        add_bond_to_list(tempbonds,Node_Bond_list);
+        
+    }
+    
+    Num_of_Node_Pairs=int(Node_Bond_list.size());
+    cout<<"# of node pairs: "<<Num_of_Node_Pairs<<endl;
+}
+
+
 void Actin::Node_Bond_identifier(void){
     
     vector<int> push;

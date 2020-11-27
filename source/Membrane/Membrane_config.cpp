@@ -46,14 +46,14 @@ void Membrane::consistancy_check(){
         throw std::runtime_error(errorMessage);
     }
     
-    if (Node_Bond_distances_stat!= "Au" && Node_Bond_distances_stat!= "Av") {
+    if (Node_Bond_Nominal_Length_stat!= "Au" && Node_Bond_Nominal_Length_stat!= "Av") {
         try {
-            Node_Bond_Nominal_Length_in_Nm= stod(Node_Bond_distances_stat);
+            Node_Bond_user_defined_Nominal_Length_in_Nm= stod(Node_Bond_Nominal_Length_stat);
         } catch (...) {
             string errorMessage = TWARN;
             errorMessage+="Membrane config parser: Invalid input for the \"NominalLengthInNm\" (";
             errorMessage+=TFILE;
-            errorMessage+=Node_Bond_distances_stat;
+            errorMessage+=Node_Bond_Nominal_Length_stat;
             errorMessage+=TWARN;
             errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 2.678)";
             errorMessage+= TRESET;
@@ -108,10 +108,8 @@ void Membrane::assign_parameters(void){
         if (it.first == "MeshFile") {
             string extension = split[0];
             extension.erase(extension.begin(),extension.begin()+extension.find('.')+1);
-            if (extension == "ply") {
-                mesh_format=2;
-            } else if (extension == "msh"){
-                mesh_format=1;
+            if (extension == "ply" || extension == "msh") {
+                mesh_format=extension;
             } else{
                 string errorMessage = TWARN;
                 errorMessage+="I don't understand the \""+extension+"\" format. Please use the Blender (ply) or Gmesh 2 (msh).";
@@ -137,6 +135,8 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = GenConst::potential.Model["Harmonic"];
+            } else if (split[0]=="FENE") {
+                spring_model = GenConst::potential.Model["FENE"];
             } else if (split[0]=="N") {
                 spring_model = GenConst::potential.Model["None"];
             } else {
@@ -163,7 +163,7 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
         } else if (it.first == "NominalLengthInNm") {
-            Node_Bond_distances_stat = split[0];
+            Node_Bond_Nominal_Length_stat = split[0];
         } else if (it.first == "SpontaneousTriangleBendingAngleInDegrees") {
             Triangle_pair_angle_stat = split[0];
         } else if (it.first == "ExtForceModel") {

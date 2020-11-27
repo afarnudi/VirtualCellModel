@@ -36,6 +36,11 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds)
             temp.first =bonds[i_b].atoms[0];
             temp.second=bonds[i_b].atoms[1];
             //exclude_bonds.push_back(temp);
+//        if (i_b>3170) {
+//            cout<<i_b<<" type "<<bonds[i_b].type<<endl;
+//            
+//        }
+//        
         int j=0;
         bool flag = true;
         

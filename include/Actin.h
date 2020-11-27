@@ -25,10 +25,12 @@ private:
     
     std::string label;
     std::string Mesh_file_name;
+    std::string MeshType;
     std::map<std::string, double> param_map;
     
     double Node_Mass=1;
-    double Node_radius=1;
+    string Node_radius_stat;
+    vector<double> Node_radius;
     int spring_model=2;
     double Spring_coefficient=100;
     double Contractile_force =10;
@@ -66,15 +68,57 @@ private:
     double rescale_factor=1;
     double Damping_coefficient=0.5;
     
-    double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
-    double x_speed=0.0; //???
-    double y_speed=0.0;
-    double z_speed=0.0;
+    vector<double> Shift_position_xyzVector;
+    vector<double> Shift_velocities_xyzVector;
+//    double Shift_in_X_direction=0, Shift_in_Y_direction=0, Shift_in_Z_direction=0;
+//    double x_speed=0.0; //???
+//    double y_speed=0.0;
+//    double z_speed=0.0;
     
     int ext_force_model=0;
     double kx=10;
     double ky=10;
     double kz=10;
+    
+    void read_actin_file(void);
+    
+    /**Construct a vector that lists all the neighbours of  each node and their respective index in the 'Node_Bond_list'.
+     */
+    void Node_neighbour_list_constructor();
+    /**This list is used to store all the neighbours of nodes:
+     *Example:
+     *If node i has 4 neighbours:  m, n, o, p
+     *Then we find these neighbours  in the 'Node_neighbour_list' as follows:
+     *Node_neighbour_list [ i ][0] = m
+     *Node_neighbour_list [ i ][1] = n
+     *Node_neighbour_list [ i ][2] = o
+     *Node_neighbour_list [ i ][3] = p
+     */
+    vector<vector<int> > Node_neighbour_list;
+    /**This list is used to cross reference the neighbouring nodes to their respective index in the 'Node_neighbour_list'.
+     *Example:
+     *Suppose  node i has 4 neighbours:  m, n, o, p
+     *Then  we find  these  neighbours  in the 'Node_neighbour_list' as follows:
+     *Node_neighbour_list [ i ][0] = m
+     *Node_neighbour_list [ i ][1] = n
+     *Node_neighbour_list [ i ][2] = o
+     *Node_neighbour_list [ i ][3] = p
+     *
+     *Then the i'th index of the 'Node_neighbour_list_respective_bond_index' will also contain 4 elements:
+     *Node_neighbour_list_respective_bond_index [ i ][0] = index_1
+     *Node_neighbour_list_respective_bond_index [ i ][1] = index_2
+     *Node_neighbour_list_respective_bond_index [ i ][2] = index_3
+     *Node_neighbour_list_respective_bond_index [ i ][3] = index_4
+     *
+     *The index_#s will point to the index in the 'Node_Bond_list' that has stored the respective nodes as pairs:
+     *Node_Bond_list [ index_1 ][ 0 ] and Node_Bond_list [ index_1 ][ 1 ]  = i, m
+     *Node_Bond_list [ index_2 ][ 0 ] and Node_Bond_list [ index_2 ][ 1 ]  = i, n
+     *Node_Bond_list [ index_3 ][ 0 ] and Node_Bond_list [ index_3 ][ 1 ]  = i, o
+     *Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ]  = i, p
+     */
+    vector<vector<int> > Node_neighbour_list_respective_bond_index;
+    
+    string mesh_format;
     
     int Num_of_Nodes=0;
     vector<vector<double> >Node_Position;
@@ -93,7 +137,9 @@ private:
     int Num_of_abp_Pairs=0;
     vector<vector<int> > MT_Bond_list;
     int Num_of_MT_Pairs=0;
-    vector<double> Node_Bond_relaxed_length;
+    string  Node_Bond_Nominal_Length_stat;
+    double  Node_Bond_user_defined_Nominal_Length_in_Nm;
+    vector<double> Node_Bond_Nominal_Length_in_Nm;
     vector<double> abp_Bond_relaxed_length;
     vector<double> MT_Bond_relaxed_length;
     
@@ -118,16 +164,17 @@ private:
     
     
     //Private members:
-    void initialise(int type);
+    void initialise(std::string Mesh_file_name);
     void read_gmesh_file (std::string gmesh_file);
     void read_gmesh_file_2 (std::string gmesh_file);
     void Node_Bond_identifier(void);
     void Node_Bond_identifier_2(void);
-    void Node_Bond_relaxed_length_initialiser(void);
-    void abp_Bond_relaxed_length_initialiser(void);
-    void MT_Bond_relaxed_length_initialiser(void);
+    void Node_Bond_identifier_3(void);
+    
     double Hookian(double distance, double initial_distance);
     double Kelvin(double distance, int bond_index);
+    void set_bond_nominal_length(void);
+    void set_node_radius(void);
     void initialise_node_bond_relaxed_length(void);
     void initialise_abp_bond_relaxed_length(void);
     void initialise_MT_bond_relaxed_length(void);
@@ -140,6 +187,9 @@ public:
     vector<int> Num_of_Actin_Membrane_shared_Nodes;
     
     //Member headers
+
+    
+    
     void import_config(vector<string> configlines);
     void Elastic_Force_Calculator(void);
     void export_for_resume(int MD_step);
@@ -161,9 +211,9 @@ public:
         return label;
     }
     
-    double get_act_relaxlength(int bond_number)
+    double get_node_pair_Nominal_Length_in_Nm(int bond_number)
     {
-        return Node_Bond_relaxed_length[bond_number];
+        return Node_Bond_Nominal_Length_in_Nm[bond_number];
     }
     
     double get_abp_relaxlength(int bond_number)
@@ -183,16 +233,25 @@ public:
     double get_node_mass(void){
         return Node_Mass;
     }
-    double get_node_radius(void){
-        return Node_radius;
+    double get_node_radius(int index){
+        return Node_radius[index];
     }
-    void shift_node_positions(void){
+    /** This function shifts the whole actin.*/
+    void shift_position (double x, double y, double z) {
         for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]+=Shift_in_X_direction;
-            Node_Position[i][1]+=Shift_in_Y_direction;
-            Node_Position[i][2]+=Shift_in_Z_direction;
+            Node_Position[i][0]+=x;
+            Node_Position[i][1]+=y;
+            Node_Position[i][2]+=z;
         }
     }
+    void shift_velocity (double vx, double vy, double vz){
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Velocity[i][0]+=vx;
+            Node_Velocity[i][1]+=vy;
+            Node_Velocity[i][2]+=vz;
+        }
+    }
+    
     /**Returns the x (0), y (1), and z (2) velocities of the node index (number).*/
     double get_node_velocity(int node_number, int node_coordinate){
         return Node_Velocity[node_number][node_coordinate];
@@ -394,21 +453,6 @@ public:
         index=ind;
     }
     
-    
-    void shift_position (double x, double y, double z){
-        for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]+=x;
-            Node_Position[i][1]+=y;
-            Node_Position[i][2]+=z;
-        }
-    }
-    void shift_velocity (double vx, double vy, double vz){
-        for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Velocity[i][0]+=vx;
-            Node_Velocity[i][1]+=vy;
-            Node_Velocity[i][2]+=vz;
-        }
-    }
     int return_num_of_actin_membrane_shared_nodes(int j){
         return Num_of_Actin_Membrane_shared_Nodes[j];
     }
@@ -457,15 +501,65 @@ public:
     Actin(){
         values.resize(2);
         
-        values[0] ="value 0";
-        values[1] ="#This is a parameter example for Actin with default value 'value 0'.";
-        Params["ActinSampleParam0"] = values;
-        insertOrder.push_back("ActinSampleParam0");
+        values[0] ="Path/to/my/meshfile.extension";
+        values[1] ="#Path to the mesh file. Supported formats: Blender's ply, actin format .actin, and Gmsh 2. The Membrane class cannot be initilised without a mesh file.";
+        Params["MeshFile"] = values;
+        insertOrder.push_back("MeshFile");
         
-        values[0] ="value 1";
-        values[1] ="#This is a parameter example for Actin with default value 'value 1'.";
-        Params["ActinSampleParam1"] = values;
-        insertOrder.push_back("ActinSampleParam1");
+        values[0] ="normal";
+        values[1] ="#Mesh type defined by Sajjad takes options 'normal' and 'sajjad'.  default value normal";
+        Params["MeshType"] = values;
+        insertOrder.push_back("MeshType");
+        
+        values[0] ="1";
+        values[1] ="#Mass asssigned to each node. Default value 1";
+        Params["NodeMass"] = values;
+        insertOrder.push_back("NodeMass");
+        
+        values[0] ="Av";
+        values[1] ="#Radius assigned to each node. Legal Values 1) Av, half of the average bond distance of nodes or 2) \"a value\". The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        Params["NodeRadius"] = values;
+        insertOrder.push_back("NodeRadius");
+        
+        values[0] ="H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'kelvin' for the Kelvin-Voigt potential. 'N' for no potential. Default H";
+        Params["SpringModel"] = values;
+        insertOrder.push_back("SpringModel");
+        
+        values[0] ="0";
+        values[1] ="#Set the bond potential rigidity coefficient. Default value 0.";
+        Params["SpringCoeff"] = values;
+        insertOrder.push_back("SpringCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the Kelvin Damping Coefficient. Default value 0.";
+        Params["KelvinDampingCoeff"] = values;
+        insertOrder.push_back("KelvinDampingCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the Dashpot Viscosity. Default value 0.";
+        Params["DashpotViscosity"] = values;
+        insertOrder.push_back("DashpotViscosity");
+        
+        values[0] ="Au";
+        values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
+        Params["NominalLengthInNm"] = values;
+        insertOrder.push_back("NominalLengthInNm");
+        
+        values[0] ="1";
+        values[1] ="#Used to scale the Membrane coordinates. Default 1";
+        Params["Scale"] = values;
+        insertOrder.push_back("Scale");
+        
+        values[0] ="0 0 0";
+        values[1] ="#X, Y, Z components of a vector used to translate all coordinates of the Mesh befor beginning the simluation.";
+        Params["CoordinateTranslateVector"] = values;
+        insertOrder.push_back("CoordinateTranslateVector");
+        
+        values[0] ="0 0 0";
+        values[1] ="#Vx, Vy, Vz components of a vector used to add to all initial node velocities befor beginning the simluation.";
+        Params["VelocityShiftVector"] = values;
+        insertOrder.push_back("VelocityShiftVector");
         
     }
     
@@ -478,6 +572,13 @@ public:
     void assign_key_value(string key, string value){
         Params[key][0]=value;
     }
+    void assign_parameters(void);
+    void consistancy_check(void);
+    
+    
+    
+    
+    
 };
 
 #endif // MEMBRANE_H

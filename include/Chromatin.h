@@ -57,6 +57,9 @@ private: //(if we define these constants as private members of the class, we can
     
     bool ImportCoordinates   = false;
     bool GenerateRandomChain = false;
+    bool GenerateSelfAvoidingChain = false;
+    bool RestrictGeneratedChainRadius_stat=false;
+    double RestrictGeneratedChainRadius=0;
     string import_file_name;
     int  limit_import=0; //limit for the number of lines read when importing coordinates from file.
     bool ExportGeneratedCoordinates = false;
@@ -174,8 +177,13 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     /**return chromatin number of bonds. If there are no virtual site this number is  Num_of_Nodes-1. In the presence of Virtual Sites this number is reduced to [(Num_of_Nodes + num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1)]-1*/
     double get_num_of_bonds(void){
         if (!GenConst::ChromatinVirtualSites) {
-            num_of_total_bonds = Num_of_Nodes-1;
-            return num_of_total_bonds;
+            if (spring_model!=GenConst::potential.Model["None"]) {
+                num_of_total_bonds = Num_of_Nodes-1;
+                return num_of_total_bonds;
+            } else {
+                return 0;
+            }
+            
         } else {
             if (num_of_extra_VS_bonds==0){
                 calculate_extra_virtual_bonds();
@@ -354,6 +362,15 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         Params["GenerateRandomChain"] = values;
         insertOrder.push_back("GenerateRandomChain");
         
+        values[0] ="N";
+        values[1] ="#The radius of the sphere the generated coordinates are restricted in. The node radius is taken into account when generating coordinates with this restriction Default N for no restrictions.";
+        Params["RestrictGeneratedChainRadius"] = values;
+        insertOrder.push_back("RestrictGeneratedChainRadius");
+        values[0] ="false";
+        values[1] ="#If \"true\" The programme will generate a self avoiding random chain with respect to the node radius. Default false";
+        Params["GenerateSelfAvoidingChain"] = values;
+        insertOrder.push_back("GenerateSelfAvoidingChain");
+        
         values[0] ="false";
         values[1] ="#If \"true\" The programme will write the generated coordinates that can be imported later. Default false";
         Params["ExportGeneratedCoordinates"] = values;
@@ -385,7 +402,7 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("NodeRadius");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for Harmonic, 'N' for None. Default H.";
+        values[1] ="#Set the bond potential. 'H' for Harmonic, 'FENE' for a finitely extensible nonlinear elastic model. 'N' for None. Default H.";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         

@@ -14,9 +14,9 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<TMEM<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
     }
     
-    if (mesh_format==1){
+    if (mesh_format=="msh"){
         read_gmesh_file(Mesh_file_name);
-    }else if (mesh_format==2){
+    }else if (mesh_format=="ply"){
         read_ply_file(Mesh_file_name);
     }
     output_file_neme=Mesh_file_name;

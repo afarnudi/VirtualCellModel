@@ -17,11 +17,8 @@ using std::endl;
 
 void Chromatin::build_random_chain(void){
     
-    
-    
     Node_Velocity.resize(Num_of_Nodes);
     Node_Force.resize(Num_of_Nodes);
-    
     
     double velocity_COM[3]={0};
     
@@ -37,16 +34,16 @@ void Chromatin::build_random_chain(void){
       random_walk_gen(velocity_COM);
     }
     catch (int e){
-      
         attempt++;
 //        cout<<"attempt "<<attempt<<endl;
         printf("attempt # %d \r",attempt);
         cout<< std::flush;
         cout<<"attempt "<<attempt<<endl;
         if (attempt>2000) {
-            cout<<endl;
-            cout<<"I have tried and I can't generate a self avoiding chain with these parameters. \n";
-            exit(0);
+            string errorMessage = TWARN;
+            errorMessage+="Chromatin build_random_chain: I have tried and I can't generate a chain with these parameters. Please chech the parameters (node radius, nominal length, and restriction radius) and try again.";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
         }
         random_walk_gen(velocity_COM);
     }
@@ -61,10 +58,15 @@ void Chromatin::build_random_chain(void){
         }
     }
     
-    cout<<"Generated a self avoiding random walk chain."<<endl;
+    cout<<"Generated chain."<<endl;
 }
 
+void check_attempts(int &i, int &attempt_counter, int &step_back,int attempt_threshold, int step_back_threshold);
+
 void Chromatin::random_walk_gen(double velocity_COM[3]){
+    int attempt_threshold = 10000;
+    int step_back_threshold = 2000;
+    int step_back=0;
     
     velocity_COM[0]=0;
     velocity_COM[1]=0;
@@ -78,7 +80,18 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
     srand(time(NULL));
     
     double bond_length = stod(BondNominalLength_stat);
+    cout<<"Generating chain..."<<endl;
+    if (RestrictGeneratedChainRadius_stat) {
+        cout<<"Chain will be restricted to a sphere of radius "<<RestrictGeneratedChainRadius<<endl;
+    }
+    cout<<"Generate Self Avoiding Chain ";
+    if (GenerateSelfAvoidingChain) {
+        cout<<TON<<"On"<<endl;
+    } else {
+        cout<<TOFF<<"Off"<<endl;
+    }
     
+    cout<<endl;
     for (int i=1; i<Num_of_Nodes; i++) {
         double theta=((double)rand()/(double)RAND_MAX)*M_PI;
         double phi=((double)rand()/(double)RAND_MAX)*2*M_PI;
@@ -86,23 +99,28 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
         double temp_y=Node_Position[i-1][1]+bond_length*sin(theta)*sin(phi);
         double temp_z=Node_Position[i-1][2]+bond_length*cos(theta);
         
+        printf("i: %8d attempt: %8d  step back: %8d \r",i, attempt_counter, step_back);
+//        cout<<" i: "<<i<<" attempt: "<<attempt_counter<<" step back: "<<step_back<<"                             \r";
+        cout<< std::flush;
         bool accept_random_step=true;
-        for (int k=0; k<i-1; k++) {
-            double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
-            // set the minimum distance to the r_min of the Lennard-Jones potential.
-            if (temp_dist<Node_radius*2.25){
-                i--;
-                accept_random_step=false;
-                attempt_counter++;
-                if (attempt_counter>2000) {
-                    string errorMessage = TWARN;
-                    errorMessage+="Chroamtin coordinate generator: Self Avoiding Random Walk: "+std::to_string(attempt_counter)+"attempts failed in generating a SAW chain. Please try a shorter chain or the seed.";
-                    errorMessage+= TRESET;
-                    throw std::runtime_error(errorMessage);
+        if (GenerateSelfAvoidingChain) {
+            for (int k=0; k<i-1; k++) {
+                double temp_dist=sqrt( (temp_x-Node_Position[k][0])*(temp_x-Node_Position[k][0]) + (temp_y-Node_Position[k][1])*(temp_y-Node_Position[k][1]) + (temp_z-Node_Position[k][2])*(temp_z-Node_Position[k][2])  );
+                // set the minimum distance to the r_min of the Lennard-Jones potential.
+                if (temp_dist<Node_radius*2.25){
+                    accept_random_step=false;
+                    check_attempts(i, attempt_counter, step_back, attempt_threshold, step_back_threshold);
+                    break;
                 }
-                break;
+            } // for (int k=0; k<i; k++)
+        }
+        if (RestrictGeneratedChainRadius_stat && accept_random_step) {
+            double new_coord_dist=sqrt( (temp_x-Node_Position[0][0])*(temp_x-Node_Position[0][0]) + (temp_y-Node_Position[0][1])*(temp_y-Node_Position[0][1]) + (temp_z-Node_Position[0][2])*(temp_z-Node_Position[0][2])  );
+            if (new_coord_dist+Node_radius > RestrictGeneratedChainRadius) {
+                accept_random_step=false;
+                check_attempts(i, attempt_counter, step_back, attempt_threshold, step_back_threshold);
             }
-        } // for (int k=0; k<i; k++)
+        }
         
         if (accept_random_step) {
             attempt_counter=0;
@@ -122,4 +140,27 @@ void Chromatin::random_walk_gen(double velocity_COM[3]){
 //            velocity_COM[2] += Node_Velocity[i][2];
         }
     } // for (int i=1; i<Num_of_Nodes; i++)
+}
+
+void check_attempts(int &i, int &attempt_counter, int &step_back,int attempt_threshold, int step_back_threshold){
+    
+    i--;
+    attempt_counter++;
+    if (attempt_counter>attempt_threshold) {
+        if (step_back<step_back_threshold) {
+            attempt_counter=0;
+            i=0;
+            
+            step_back++;
+//                        cout<<" step back: "<<step_back<<" i: "<<i<<"\r";
+//                        cout<< std::flush;
+        } else {
+            string errorMessage = TWARN;
+            errorMessage+="Chroamtin coordinate generator: Self Avoiding Random Walk: "+std::to_string(step_back*attempt_threshold)+" attempts failed in generating a SAW chain. Please try a shorter chain. Longest chain generated: ";
+            errorMessage+=std::to_string(i);
+            errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            
+        }
+    }
 }

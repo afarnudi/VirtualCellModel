@@ -29,8 +29,10 @@ void Actin::check(void){
     }
     Average_node_pair_length/=Num_of_Node_Pairs;
     
-    cout<<"Max node distance="<<Max_node_pair_length<<"\tmin node distance="<<Min_node_pair_length<<"\tAverage node distance="<<Average_node_pair_length<<endl;
-
+    if (!GenConst::Testmode) {
+        cout<<"Node pair (bond) distances:\n";
+        cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
+    }
 }
 
 

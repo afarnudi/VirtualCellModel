@@ -96,6 +96,26 @@ struct GeneralParameters{
         GenParams["MCBarostatFrequency"] = values;
         insertOrder.push_back("MCBarostatFrequency");
         
+        values[0] ="0 0 0";
+        values[1] ="#The pressure acting on each axis (in bar) through OpenMM's MonteCarloAnisotropicBarostat. Default 0 0 0";
+        GenParams["MCAnisoBarostatPressure"] = values;
+        insertOrder.push_back("MCAnisoBarostatPressure");
+        
+        values[0] ="0";
+        values[1] ="#The temperature at which OpenMM's MonteCarloAnisotropicBarostat will think the system is being maintained (in Kelvin). Default thermostat's Temperature";
+        GenParams["MCAnisoBarostatTemperature"] = values;
+        insertOrder.push_back("MCAnisoBarostatTemperature");
+        
+        values[0] ="false false false";
+        values[1] ="#Allow (or not allow) the X,Y, or Z dimension of the periodic box to change size through OpenMM's MonteCarloAnisotropicBarostat. Default fasle false false";
+        GenParams["MCAnisoBarostatScaleXYZ"] = values;
+        insertOrder.push_back("MCAnisoBarostatScaleXYZ");
+        
+        values[0] ="0";
+        values[1] ="#The frequency at which the MonteCarloAnisotropicBarostat pressure changes should be attempted (in time steps). If zero MCAnisoBarostat will be disabled. Default 0";
+        GenParams["MCAnisoBarostatFrequency"] = values;
+        insertOrder.push_back("MCAnisoBarostatFrequency");
+        
         values[0] ="0";
         values[1] ="#The number of steps that the centre of mass velocity is set to zero using OpenMM's CMMotionRemover. Default 0";
         GenParams["CMMotionRemoverStep"] = values;
