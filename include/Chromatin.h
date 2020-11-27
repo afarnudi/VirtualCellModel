@@ -177,8 +177,13 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     /**return chromatin number of bonds. If there are no virtual site this number is  Num_of_Nodes-1. In the presence of Virtual Sites this number is reduced to [(Num_of_Nodes + num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1)]-1*/
     double get_num_of_bonds(void){
         if (!GenConst::ChromatinVirtualSites) {
-            num_of_total_bonds = Num_of_Nodes-1;
-            return num_of_total_bonds;
+            if (spring_model!=GenConst::potential.Model["None"]) {
+                num_of_total_bonds = Num_of_Nodes-1;
+                return num_of_total_bonds;
+            } else {
+                return 0;
+            }
+            
         } else {
             if (num_of_extra_VS_bonds==0){
                 calculate_extra_virtual_bonds();
