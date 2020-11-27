@@ -113,9 +113,9 @@ struct TimeDependantData {
     std::vector<double> Kelvin_Voigt_damp;
     std::vector<double> hill_const_force;
     std::vector<double> hill_coefficient;
-    std::vector<std::vector<double>> Kelvin_Voigt_distInNm;
+    std::vector<std::vector<double> > Kelvin_Voigt_distInNm;
     std::vector<double> Kelvin_Voigt_initNominal_length_InNm;
-    std::vector<std::vector<std::vector<double>>> hill_distInNm;
+    std::vector<std::vector<std::vector<double> > > hill_distInNm;
     //std::vector<std::vector<double>> Contractile_initForce;
     
     std::vector<OpenMM::CustomExternalForce*> ext_force;
