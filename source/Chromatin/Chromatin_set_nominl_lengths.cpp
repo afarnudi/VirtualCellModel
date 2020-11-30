@@ -58,3 +58,13 @@ void Chromatin::set_bond_nominal_lengths(void){
     }
     
 }
+
+void Chromatin::set_node_radius(void){
+    
+    if (Node_radius_stat=="Av") {
+        Node_radius=0.5*Average_node_pair_length;
+        cout<<"Node radius set to half of bond average distances."<<endl;
+    } else {
+        Node_radius=stod(Node_radius_stat);
+    }
+}
