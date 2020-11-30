@@ -113,6 +113,7 @@ private: //(if we define these constants as private members of the class, we can
 public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     /**Set the Nominal length of bonds according to the bond_length_stat*/
     void set_bond_nominal_lengths(void);
+    void set_node_radius(void);
     void pdb_label_check(void);
     
     double COM_velocity[3];
