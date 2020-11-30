@@ -39,6 +39,7 @@ void Chromatin::initialise(void){
     });
     
     set_bond_nominal_lengths();
+    set_node_radius();
     
     if (spring_model == GenConst::potential.Model["None"]) {
         cout<<TWARN<<"\nChromatin spring model is set to 'None'."<<TRESET<<endl;
@@ -56,7 +57,6 @@ void Chromatin::initialise(void){
 //    for (int i=0; i<Num_of_Nodes; i++) {
 //        Contact_Matrix[i].resize(Num_of_Nodes, 0);
 //    }
-    
     cout<<TSUCCESS<<"Chromatin class initiated.\n"<<TRESET<<
                   "**************************\n"<<endl;
     
