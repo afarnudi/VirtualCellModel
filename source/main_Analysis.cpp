@@ -70,6 +70,7 @@ string ECM_label;
 int    Integrator_type;
 double frictionInPs;
 double temperature;
+double BoltzmannKJpermolkelvin;
 bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;
@@ -89,6 +90,13 @@ bool   Testmode;
 double MCBarostatPressure;
 double MCBarostatTemperature;
 int    MCBarostatFrequency;
+
+bool MCAnisoBarostatOn;
+std::vector<double> MCAnisoBarostatPressure;
+double MCAnisoBarostatTemperature;
+std::vector<bool> MCAnisoBarostatScaleXYZ;
+int MCAnisoBarostatFrequency;
+
 
 std::vector<double> PeriodicBoxVector0;
 std::vector<double> PeriodicBoxVector1;
