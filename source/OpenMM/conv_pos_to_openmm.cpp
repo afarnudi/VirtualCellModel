@@ -32,7 +32,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].velocityInNmperPs[2]=mem.get_node_velocity(i, 2);
         myatominfo[i].mass=mem.get_node_mass();
         myatominfo[i].radius=mem.get_node_radius(i);
-        myatominfo[i].sigma_LJ_12_6=mem.get_sigma_LJ_12_6();
+        myatominfo[i].sigma_LJ_12_6=mem.get_node_radius(i);
         myatominfo[i].epsilon_LJ_12_6=mem.get_epsilon_LJ_12_6();
         myatominfo[i].ext_force_model=mem.get_ext_force_model();
         myatominfo[i].ext_force_constants[0]=mem.get_kx();
