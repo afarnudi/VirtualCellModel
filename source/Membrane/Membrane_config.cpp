@@ -178,9 +178,11 @@ void Membrane::assign_parameters(void){
             Z_scale = stod(split[2]);
         } else if (it.first == "Scale") {
                 rescale_factor = stod(split[0]);
-        } else if (it.first == "LJsigma") {
-            sigma_LJ_12_6 = stod(split[0]);
-        } else if (it.first == "LJepsilon") {
+        }
+//        else if (it.first == "LJsigma") {
+//            sigma_LJ_12_6 = stod(split[0]);
+//        }
+        else if (it.first == "LJepsilon") {
             epsilon_LJ_12_6 = stod(split[0]);
         } else if (it.first == "UpdateRadius") {
             New_Radius = stod(split[0]);
