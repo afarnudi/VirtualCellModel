@@ -117,7 +117,7 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
             ulm_avg[ell].resize(2*ell+1,0);
             ulm_std[ell].resize(2*ell+1,0);
         }
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<"cleared ulm\n";
         }
         
@@ -181,7 +181,7 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool cle
             ulm_avg[ell].resize(2*ell+1,0);
             ulm_std[ell].resize(2*ell+1,0);
         }
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<"cleared ulm\n";
         }
     }

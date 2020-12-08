@@ -134,11 +134,11 @@ void Membrane::assign_parameters(void){
             Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
-                spring_model = GenConst::potential.Model["Harmonic"];
+                spring_model = potentialModelIndex.Model["Harmonic"];
             } else if (split[0]=="FENE") {
-                spring_model = GenConst::potential.Model["FENE"];
+                spring_model = potentialModelIndex.Model["FENE"];
             } else if (split[0]=="N") {
-                spring_model = GenConst::potential.Model["None"];
+                spring_model = potentialModelIndex.Model["None"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";
@@ -151,9 +151,9 @@ void Membrane::assign_parameters(void){
             Damping_coefficient = stod(split[0]);
         } else if (it.first == "BendingModel") {
             if (split[0]=="N") {
-                bending_model = GenConst::potential.Model["None"];
+                bending_model = potentialModelIndex.Model["None"];
             } else if (split[0]=="cosine") {
-                bending_model = GenConst::potential.Model["Dihedral"];
+                bending_model = potentialModelIndex.Model["Dihedral"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), and N (None).";

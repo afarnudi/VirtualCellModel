@@ -20,7 +20,7 @@ void myWritePDBFrame(int frameNum,
 {
     int EndOfList=-1;
     
-    string traj_name= GenConst::trajectory_file_name+".pdb";
+    string traj_name= generalParameters.trajectory_file_name+".pdb";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile,"MODEL     %d\n", frameNum);
@@ -103,7 +103,7 @@ void myWritePSF(int   num_of_atoms,
 {
     int EndOfList=-1;
     
-    string traj_name= GenConst::trajectory_file_name+".psf";
+    string traj_name= generalParameters.trajectory_file_name+".psf";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     fprintf(pFile," PSF\n\n");
@@ -143,7 +143,7 @@ void myWritePSF(int   num_of_atoms,
     }
     num_of_bonds=0;
     for (int n=0; bonds[n].type != EndOfList; ++n){
-        if (bonds[n].type != GenConst::potential.Model["None"]) {
+        if (bonds[n].type != potentialModelIndex.Model["None"]) {
             num_of_bonds++;
         }
         
@@ -154,7 +154,7 @@ void myWritePSF(int   num_of_atoms,
     fprintf(pFile,"   %5d !NBOND\n",num_of_bonds);
     int endline_counter=0;
     for (int n=0; bonds[n].type != EndOfList; ++n){
-        if (bonds[n].type != GenConst::potential.Model["None"]) {
+        if (bonds[n].type != potentialModelIndex.Model["None"]) {
             fprintf(pFile,"   %5d   %5d",
                     bonds[n].atoms[0]+1,
                     bonds[n].atoms[1]+1);

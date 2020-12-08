@@ -14,7 +14,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
     for (int i=0; dihedrals[i].type != EndOfList; ++i) {
         
         
-        if (dihedrals[i].type == GenConst::potential.Model["Dihedral"]) {
+        if (dihedrals[i].type == potentialModelIndex.Model["Dihedral"]) {
             auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
             if (DFs_item == DFs_classes.end()) {
                 

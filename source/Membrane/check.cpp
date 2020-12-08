@@ -27,7 +27,7 @@ void Membrane::check(void){
         }
     }
     Average_node_pair_length/=(Num_of_Node_Pairs);
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<"Node pair (bond) distances:\n";
         cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
     }
@@ -56,15 +56,15 @@ void Membrane::check_radius_update_values(void){
         cout<<TWWARN<<"\nWarning!!!"<<TRESET<<"The initial ("<<Radius<<") and final ("<<New_Radius<<") Membrnae radii are equal."<<TWWARN<<"\nThe simulation will proceed without a radius update."<<TRESET<<endl;
         update_radius_stat=false;
     }
-    if(End_update_time_in_Ps>GenConst::Simulation_Time_In_Ps) {
-        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The Membrane radius update end time ("<<TWARN<<End_update_time_in_Ps<<TRESET" Ps) exceeds the simulation run time ("<<TWARN<<GenConst::Simulation_Time_In_Ps<<TRESET<<" Ps)."<<endl;
+    if(End_update_time_in_Ps>generalParameters.Simulation_Time_In_Ps) {
+        cout<<TWWARN<<"Warning!!!"<<TRESET<<"The Membrane radius update end time ("<<TWARN<<End_update_time_in_Ps<<TRESET" Ps) exceeds the simulation run time ("<<TWARN<<generalParameters.Simulation_Time_In_Ps<<TRESET<<" Ps)."<<endl;
         exit(0);
     }
     
     if (update_radius_stat) {
         double ratio = Radius/New_Radius;
         
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<TWARN<<"Membrane radius is set to change from "<<TRESET<<Radius<<TWARN<<" to "<<TRESET<<New_Radius<<TWARN<<". The proccess will begin at "<<TRESET<<Begin_update_time_in_Ps<<TWARN<<" Ps and end at "<<TRESET<<End_update_time_in_Ps<<TWARN<<" Ps. The new node radii will scale respectivly";
             if (Node_radius_stat=="Au") {
                 cout<<"."<<TRESET<<endl;

@@ -41,9 +41,9 @@ map<string, vector<string> > read_configfile(string configfilename){
             
             flag = checkflag(line, FLAG, FLAGlines, flag);
             string key = getmapkey(FLAG, flag);
-            cout<<line<<endl;
-            cout<<flag<<endl;
-            cout<<key<<endl;
+//            cout<<line<<endl;
+//            cout<<flag<<endl;
+//            cout<<key<<endl;
             if (flag != -1) {
                 FLAGlines[key].push_back(line);
             } else {
@@ -100,7 +100,6 @@ vector<vector<string>> sort_class_configs(vector<string> lines){
 
 
 void parse_genconfig_parameters(vector<string> lines){
-    GeneralParameters values;
     //first line is the key
     lines.erase(lines.begin()+0);
     for (int i=0; i<lines.size(); i++) {
@@ -108,8 +107,8 @@ void parse_genconfig_parameters(vector<string> lines){
             vector<string> split = split_and_check_for_comments(lines[i], "General config parser: ");
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
-                it = values.GenParams.find(split[0]);
-                if (it != values.GenParams.end()) {
+                it = generalParameters.GenParams.find(split[0]);
+                if (it != generalParameters.GenParams.end()) {
                     lines[i].erase(lines[i].begin(),lines[i].begin()+int(split[0].size()) );
                     it->second[0] = lines[i];
                 } else {
@@ -122,34 +121,31 @@ void parse_genconfig_parameters(vector<string> lines){
         }
         
     }
-    GenConst::Membrane_label="mem";
-    GenConst::Actin_label="act";
-    GenConst::ECM_label="ecm";
-    GenConst::Chromatin_label="chr";
+    
     GenConst::Checkpoint_path = "Results/Resumes/OpenMM/";
     
     
-    assign_general_parameters(values);
+    assign_general_parameters();
     general_parameters_consistency_check();
 }
 
 void general_parameters_consistency_check(void){
     bool MCAnisoBarostatScalestat=false;
     for (int i=0; i<3; i++) {
-        if (GenConst::MCAnisoBarostatPressure[i]!=0) {
-            GenConst::MCAnisoBarostatOn=true;
+        if (generalParameters.MCAnisoBarostatPressure[i]!=0) {
+            generalParameters.MCAnisoBarostatOn=true;
         }
-        if (GenConst::MCAnisoBarostatScaleXYZ[i]!=false) {
+        if (generalParameters.MCAnisoBarostatScaleXYZ[i]!=false) {
             MCAnisoBarostatScalestat=true;
         }
     }
-    if (GenConst::MCAnisoBarostatOn && !MCAnisoBarostatScalestat) {
+    if (generalParameters.MCAnisoBarostatOn && !MCAnisoBarostatScalestat) {
         string errorMessage = TWARN;
         errorMessage +="General parameters consistency check: MCAnisoBarostat Non of the axes are allowed to scale. At least one axis has to be allowed to scale. Please edit the configurations and try again.\n";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
-    if (GenConst::MCAnisoBarostatOn && GenConst::MCBarostatPressure!=0) {
+    if (generalParameters.MCAnisoBarostatOn && generalParameters.MCBarostatPressure!=0) {
         string errorMessage = TWARN;
         errorMessage +="You cannot switch on the MCAnisoBarostat and MCBarostat simultaneously. Please edit the configurations and try again.\n";
         errorMessage +=TRESET;
@@ -157,29 +153,29 @@ void general_parameters_consistency_check(void){
     }
 }
 
-void assign_general_parameters(GeneralParameters &defaults){
-    GenConst::BoltzmannKJpermolkelvin = 0.008314459920816468;
+void assign_general_parameters(void){
+//    generalParameters.BoltzmannKJpermolkelvin = 0.008314459920816468;
     
-    for (auto const& it : defaults.GenParams)
+    for (auto const& it : generalParameters.GenParams)
     {
         vector<string> split = split_and_check_for_comments(it.second[0], "General parameters: "+it.first);
         
         if (it.first == "SimulationTimeInPs") {
-            GenConst::Simulation_Time_In_Ps=stod(split[0]);
+            generalParameters.Simulation_Time_In_Ps=stod(split[0]);
         } else if (it.first == "ReportIntervalInFs") {
-            GenConst::Report_Interval_In_Fs=stod(split[0]);
+            generalParameters.Report_Interval_In_Fs=stod(split[0]);
         } else if (it.first == "StepSizeInFs") {
-            GenConst::Step_Size_In_Fs=stod(split[0]);
+            generalParameters.Step_Size_In_Fs=stod(split[0]);
         } else if (it.first == "MC_step") {
             GenConst::MC_step=stoi(split[0]);
         } else if (it.first == "Mem_fluidity") {
             GenConst::Mem_fluidity=stoi(split[0]);
         } else if (it.first == "SimulationBoxLength") {
-            GenConst::Lbox=stod(split[0]);
-            if (int(GenConst::Lbox) == 0) {
-                GenConst::Periodic_box=false;
+            generalParameters.Simulation_box_length=stod(split[0]);
+            if (int(generalParameters.Simulation_box_length) == 0) {
+                generalParameters.Periodic_condtion_status=false;
             } else {
-                GenConst::Periodic_box=true;
+                generalParameters.Periodic_condtion_status=true;
             }
         } else if (it.first == "Integrator") {
             int type=-1;
@@ -189,12 +185,14 @@ void assign_general_parameters(GeneralParameters &defaults){
                 type=1;
             } else if (split[0][0]=='L'){
                 type=2;
+            } else if (split[0][0]=='C'){
+                type=3;
             }
             GenConst::Integrator_type=type;
         } else if (it.first == "FrictionInPs") {
-            GenConst::frictionInPs=stod(split[0]);
+            generalParameters.frictionInPs=stod(split[0]);
         } else if (it.first == "Temperature") {
-            GenConst::temperature=stod(split[0]);
+            generalParameters.temperature=stod(split[0]);
         } else if (it.first == "ReportEnergy") {
             bool stat;
             if (split[0]=="true") {
@@ -207,7 +205,7 @@ void assign_general_parameters(GeneralParameters &defaults){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
-            GenConst::WantEnergy=stat;
+            generalParameters.WantEnergy=stat;
         } else if (it.first == "WantVelocity") {
             bool stat;
             if (split[0]=="true") {
@@ -218,58 +216,56 @@ void assign_general_parameters(GeneralParameters &defaults){
                 string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
                 throw std::runtime_error(errorMessage);
             }
-            GenConst::WantVelocity=stat;
+            generalParameters.WantVelocity=stat;
         } else if (it.first == "CMMotionRemover") {
-            GenConst::CMMotionRemoverStep=stoi(split[0]);
+            generalParameters.CMMotionRemoverStep=stoi(split[0]);
             if (stoi(split[0])>0) {
-                GenConst::CMMotionRemover = true;
+                generalParameters.CMMotionRemover = true;
             }
-        } else if (it.first == "FrictionInPs") {
-            GenConst::frictionInPs=stod(split[0]);
         } else if (it.first == "MCBarostatPressure") {
-            GenConst::MCBarostatPressure=stod(split[0]);
+            generalParameters.MCBarostatPressure=stod(split[0]);
         } else if (it.first == "MCBarostatTemperature") {
-            GenConst::MCBarostatTemperature=stod(split[0]);
+            generalParameters.MCBarostatTemperature=stod(split[0]);
         } else if (it.first == "MCBarostatFrequency") {
-            GenConst::MCBarostatFrequency=stod(split[0]);
+            generalParameters.MCBarostatFrequency=stod(split[0]);
         } else if (it.first == "MCAnisoBarostatPressure") {
-            GenConst::MCAnisoBarostatPressure.push_back(stod(split[0]));
-            GenConst::MCAnisoBarostatPressure.push_back(stod(split[1]));
-            GenConst::MCAnisoBarostatPressure.push_back(stod(split[2]));
+            generalParameters.MCAnisoBarostatPressure.push_back(stod(split[0]));
+            generalParameters.MCAnisoBarostatPressure.push_back(stod(split[1]));
+            generalParameters.MCAnisoBarostatPressure.push_back(stod(split[2]));
         } else if (it.first == "MCAnisoBarostatTemperature") {
-            GenConst::MCAnisoBarostatTemperature=stod(split[0]);
+            generalParameters.MCAnisoBarostatTemperature=stod(split[0]);
         } else if (it.first == "MCAnisoBarostatScaleXYZ") {
             for (int i=0; i<3; i++) {
                 bool stat;
                 if (split[i]=="true") {
-                    GenConst::MCAnisoBarostatScaleXYZ.push_back(true);
+                    generalParameters.MCAnisoBarostatScaleXYZ.push_back(true);
                 } else if (split[i]=="false"){
-                    GenConst::MCAnisoBarostatScaleXYZ.push_back(false);
+                    generalParameters.MCAnisoBarostatScaleXYZ.push_back(false);
                 } else {
                     string errorMessage = "Configfile parameter parse error: MCAnisoBarostatPressure: Could not parse  '"+split[i]+"'. use 'true' or 'false'.";
                     throw std::runtime_error(errorMessage);
                 }
             }
         } else if (it.first == "MCAnisoBarostatFrequency") {
-            GenConst::MCAnisoBarostatFrequency=stod(split[0]);
+            generalParameters.MCAnisoBarostatFrequency=stod(split[0]);
         } else if (it.first == "MCStep") {
             GenConst::MC_step=stoi(split[0]);
         } else if (it.first == "MemFluidity") {
             GenConst::Mem_fluidity=stoi(split[0]);
         } else if (it.first == "PeriodicBoxVector0") {
-            GenConst::PeriodicBoxVector0.push_back(stod(split[0]));
-            GenConst::PeriodicBoxVector0.push_back(stod(split[1]));
-            GenConst::PeriodicBoxVector0.push_back(stod(split[2]));
+            generalParameters.PeriodicBoxVector0.push_back(stod(split[0]));
+            generalParameters.PeriodicBoxVector0.push_back(stod(split[1]));
+            generalParameters.PeriodicBoxVector0.push_back(stod(split[2]));
         } else if (it.first == "PeriodicBoxVector1") {
-            GenConst::PeriodicBoxVector1.push_back(stod(split[0]));
-            GenConst::PeriodicBoxVector1.push_back(stod(split[1]));
-            GenConst::PeriodicBoxVector1.push_back(stod(split[2]));
+            generalParameters.PeriodicBoxVector1.push_back(stod(split[0]));
+            generalParameters.PeriodicBoxVector1.push_back(stod(split[1]));
+            generalParameters.PeriodicBoxVector1.push_back(stod(split[2]));
         } else if (it.first == "PeriodicBoxVector2") {
-            GenConst::PeriodicBoxVector2.push_back(stod(split[0]));
-            GenConst::PeriodicBoxVector2.push_back(stod(split[1]));
-            GenConst::PeriodicBoxVector2.push_back(stod(split[2]));
+            generalParameters.PeriodicBoxVector2.push_back(stod(split[0]));
+            generalParameters.PeriodicBoxVector2.push_back(stod(split[1]));
+            generalParameters.PeriodicBoxVector2.push_back(stod(split[2]));
         } else if (it.first == "ProjectName") {
-            GenConst::ProjectName = split[0];
+            generalParameters.ProjectName = split[0];
         }
         
         
@@ -278,7 +274,7 @@ void assign_general_parameters(GeneralParameters &defaults){
 
 
 void generate_report(map<string, vector<string> > config_lines){
-    string Reportname = GenConst::trajectory_file_name+"_report.txt";
+    string Reportname = generalParameters.trajectory_file_name+"_report.txt";
     ofstream write_report;
     write_report.open(Reportname.c_str());
     
@@ -304,7 +300,7 @@ void generate_report(map<string, vector<string> > config_lines){
         }
     }
     
-    if (GenConst::Num_of_Membranes!=0) {
+    if (generalParameters.Num_of_Membranes!=0) {
         write_report<<endl;
         for (auto &i : config_lines["-Membrane"]) {
             write_report<<i<<endl;
@@ -327,7 +323,7 @@ void generate_report(map<string, vector<string> > config_lines){
             }
         }
     }
-    if (GenConst::Num_of_Actins!=0) {
+    if (generalParameters.Num_of_Actins!=0) {
         write_report<<endl;
         for (auto &i : config_lines["-Actin"]) {
             write_report<<i<<endl;
@@ -351,7 +347,7 @@ void generate_report(map<string, vector<string> > config_lines){
         }
     }
     
-    if (GenConst::Num_of_ECMs!=0) {
+    if (generalParameters.Num_of_ECMs!=0) {
         write_report<<endl;
         for (auto &i : config_lines["-ECM"]) {
             write_report<<i<<endl;
@@ -375,7 +371,7 @@ void generate_report(map<string, vector<string> > config_lines){
         }
     }
     
-    if (GenConst::Num_of_Chromatins!=0) {
+    if (generalParameters.Num_of_Chromatins!=0) {
         write_report<<endl;
         for (auto &i : config_lines["-Chromatin"]) {
             write_report<<i<<endl;

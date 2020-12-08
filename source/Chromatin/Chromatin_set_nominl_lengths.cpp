@@ -39,20 +39,20 @@ void Chromatin::set_bond_nominal_lengths(void){
     }
     Average_node_pair_length/=Num_of_Nodes-1;
     if (BondNominalLength_stat=="Au") {
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<"Node pair (bond) distances:\n";
             cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
         }
     } else if (BondNominalLength_stat=="Av"){
         BondNominalLengths.clear();
         BondNominalLengths.resize(Num_of_Nodes-1,Average_node_pair_length);
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<"Average node pair (bond) distance "<<TFILE<<Average_node_pair_length<<TRESET<<" will be set for the spring nominal length."<<endl;
         }
     } else {
         BondNominalLengths.clear();
         BondNominalLengths.resize(Num_of_Nodes,stod(BondNominalLength_stat));
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<"User defined nominal length ("<<TFILE<<BondNominalLength_stat<<TRESET<<") will be used."<<endl;
         }
     }

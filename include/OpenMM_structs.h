@@ -96,6 +96,7 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
+    OpenMM::CustomIntegrator* CustomIntegrator;
 };
 
 

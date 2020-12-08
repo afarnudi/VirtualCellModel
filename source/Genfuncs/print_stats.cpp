@@ -14,16 +14,16 @@ void print_statistics(int num_of_atoms,
                       vector<Membrane> &Membranes,
                       vector<Chromatin> &Chromatins){
     
-    for (int i=0; i<GenConst::Num_of_Membranes; i++) {
-        if (Membranes[i].get_spring_model() == GenConst::potential.Model["None"]) {
+    for (int i=0; i<Membranes.size(); i++) {
+        if (Membranes[i].get_spring_model() == potentialModelIndex.Model["None"]) {
             num_of_bonds-=Membranes[i].get_num_of_node_pairs();
         }
-        if (Membranes[i].get_bending_model() == GenConst::potential.Model["None"]) {
+        if (Membranes[i].get_bending_model() == potentialModelIndex.Model["None"]) {
             num_of_dihedrals-=Membranes[i].get_num_of_triangle_pairs();
         }
     }
-    for (int i=0; i<GenConst::Num_of_Chromatins; i++) {
-        if (Chromatins[i].get_spring_model() == GenConst::potential.Model["None"]) {
+    for (int i=0; i<generalParameters.Num_of_Chromatins; i++) {
+        if (Chromatins[i].get_spring_model() == potentialModelIndex.Model["None"]) {
             num_of_bonds-=Chromatins[i].get_num_of_bonds();
         }
     }

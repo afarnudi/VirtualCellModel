@@ -47,22 +47,22 @@ vector<vector<string> > check_and_apply_inheritance(vector<vector<string> > conf
 
 
 void get_class_numbers(map<string, vector<string> > config_lines){
-    GenConst::Num_of_Membranes=0;
-    GenConst::Num_of_Actins=0;
-    GenConst::Num_of_ECMs=0;
-    GenConst::Num_of_Chromatins=0;
+    generalParameters.Num_of_Membranes=0;
+    generalParameters.Num_of_Actins=0;
+    generalParameters.Num_of_ECMs=0;
+    generalParameters.Num_of_Chromatins=0;
     
     if (config_lines["-Membrane"].size()!=0) {
-        GenConst::Num_of_Membranes=count_class_numbers(config_lines["-Membrane"]);
+        generalParameters.Num_of_Membranes=count_class_numbers(config_lines["-Membrane"]);
     }
     if (config_lines["-Actin"].size()!=0) {
-        GenConst::Num_of_Actins=count_class_numbers(config_lines["-Actin"]);
+        generalParameters.Num_of_Actins=count_class_numbers(config_lines["-Actin"]);
     }
     if (config_lines["-ECM"].size()!=0) {
-        GenConst::Num_of_ECMs=count_class_numbers(config_lines["-ECM"]);
+        generalParameters.Num_of_ECMs=count_class_numbers(config_lines["-ECM"]);
     }
     if (config_lines["-Chromatin"].size()!=0) {
-        GenConst::Num_of_Chromatins=count_class_numbers(config_lines["-Chromatin"]);
+        generalParameters.Num_of_Chromatins=count_class_numbers(config_lines["-Chromatin"]);
     }
 }
 int count_class_numbers(vector<string> config_lines){

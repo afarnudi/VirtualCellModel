@@ -31,7 +31,7 @@ vector<vector<string> > check_and_apply_inheritance(vector<vector<string> > conf
 
 map<string, vector<string> > read_configfile(string configfilename);
 void parse_genconfig_parameters(vector<string> lines);
-void assign_general_parameters(GeneralParameters &defaults);
+void assign_general_parameters(void);
 void general_parameters_consistency_check(void);
 
 vector<vector<int> > parse_interactiontable_parameters(vector<string> lines);

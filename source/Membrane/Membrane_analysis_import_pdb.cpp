@@ -10,7 +10,7 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
     if (label == "") {
         label = get_pdb_first_label(args.analysis_filename);
     }
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
     }
     

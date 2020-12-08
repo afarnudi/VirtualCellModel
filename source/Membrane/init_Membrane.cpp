@@ -10,7 +10,7 @@
 
 void Membrane::initialise(std::string Mesh_file_name){
 //    T_Kinetic_Energy.resize(100);
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<TMEM<<"\nInitialising the Membrane Class..."<<TRESET<<endl;
     }
     
@@ -20,7 +20,7 @@ void Membrane::initialise(std::string Mesh_file_name){
         read_ply_file(Mesh_file_name);
     }
     output_file_neme=Mesh_file_name;
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         
         cout<<"Number of ... :\n";
         cout<<"Nodes\t"<<Num_of_Nodes<<endl;
@@ -29,7 +29,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     Normal_direction_Identifier();
     Triangle_pair_counter();
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<"Triangle pairs\t"<<Num_of_Triangle_Pairs<<endl;
     }
     
@@ -37,7 +37,7 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<TWARN<<"Warning"<<TRESET<<"! some triangles have less or more neighbour than 3"<<endl;
     }
     Node_Bonds_identifier();
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<"Node pairs (Bonds) "<<Num_of_Node_Pairs<<endl;
     }
     
@@ -75,7 +75,7 @@ void Membrane::initialise(std::string Mesh_file_name){
         label += std::to_string(index);
     }
     
-    if (spring_model == GenConst::potential.Model["FENE"]) {
+    if (spring_model == potentialModelIndex.Model["FENE"]) {
         if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
             string errorMessage = TWARN;
             errorMessage+="Warning";
@@ -83,12 +83,12 @@ void Membrane::initialise(std::string Mesh_file_name){
             errorMessage+= ". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
             throw std::runtime_error(errorMessage);
         }
-    } else if (spring_model == GenConst::potential.Model["None"]) {
+    } else if (spring_model == potentialModelIndex.Model["None"]) {
         cout<<TWARN<<"\nMembrnae spring model is set to 'None'."<<TRESET<<endl;
     }
     
     if (initial_random_rotation_coordinates){
-        if (!GenConst::Testmode) {
+        if (!generalParameters.Testmode) {
             cout<<TWARN<<"\nRandomly rotating the mesh\n"<<TRESET;
         }
         
@@ -104,7 +104,7 @@ void Membrane::initialise(std::string Mesh_file_name){
 //        node_voronoi_area.resize(Num_of_Nodes,0);
 //    }
     shift_position(Shift_position_xyzVector[0], Shift_position_xyzVector[1], Shift_position_xyzVector[2]);
-    if (!GenConst::Testmode) {
+    if (!generalParameters.Testmode) {
         cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<
                         "\n*************************\n"<<endl;
     }

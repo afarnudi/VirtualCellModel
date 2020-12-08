@@ -148,7 +148,7 @@ void Membrane::monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihe
             //the coefficient 0.001987 is R (gas constant) and its unit is kcal*K^(-1)mole^(-1)
             //our energy calculatin unit is kcal*mol(-1)
             
-            if( double(rand()/RAND_MAX) < exp((-deltaE)/(0.0083*GenConst::temperature))){
+            if( double(rand()/RAND_MAX) < exp((-deltaE)/(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature))){
                 Accepted_Try_Counter+=1;
                 update_Membrane_class_and_openmm(initial_pair,triangle_A,triangle_B, new_neighbour_dihedrals, omm, bonds,  dihedrals);
 //                update =  true;

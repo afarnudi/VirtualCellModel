@@ -121,7 +121,7 @@ void Kelvin_Voigt_update(MyOpenMMData* omm,
     {
         time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInNm[1][i] - time_dependant_data->Kelvin_Voigt_distInNm[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInNm[1][i] - time_dependant_data->Kelvin_Voigt_distInNm[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * generalParameters.Step_Size_In_Fs) ;
         
         time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
@@ -274,3 +274,32 @@ void hill_update(MyOpenMMData* omm,
     }
 }
 
+
+void customLangevinIntegrator(MyOpenMMData* omm, double stepSizeInFs){
+//    double dt = stepSizeInFs* OpenMM::PsPerFs;
+//    double friction = GenConst::frictionInPs;
+//    double temperature = GenConst::temperature;
+//    double kB = GenConst::BoltzmannKJpermolkelvin;
+//    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+//
+//    omm->CustomIntegrator->addGlobalVariable("a", exp(-friction*dt));
+//    omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-2*friction*dt)));
+//    omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-friction*dt))/friction);
+//    omm->CustomIntegrator->addGlobalVariable("kT", kB*temperature);
+//    omm->CustomIntegrator->addUpdateContextState();
+//
+//    omm->CustomIntegrator->addComputePerDof("v", "v*a + c*f/m + b*sqrt(kT/m)*gaussian");
+//
+//    omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
+//    omm->CustomIntegrator->addConstrainVelocities();
+//    omm->CustomIntegrator->addConstrainPositions();
+    
+    
+    omm->CustomIntegrator->addPerDofVariable("x0", 0);
+    omm->CustomIntegrator->addUpdateContextState();
+    omm->CustomIntegrator->addComputePerDof("x0", "x");
+    omm->CustomIntegrator->addComputePerDof("v", "v+dt*f/m");
+    omm->CustomIntegrator->addComputePerDof("x", "x+dt*v");
+    omm->CustomIntegrator->addConstrainPositions();
+    omm->CustomIntegrator->addComputePerDof("v", "(x-x0)/dt");
+}

@@ -13,6 +13,7 @@ void print_platform_info(void){
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
     PlatformInfo platforminfo = get_platform_info();
+    cout<<"device flags:\n--platformID "<<platforminfo.platform_id<<" --platformDeviceID "<<platforminfo.platform_device_id<<endl;
     
 }
 
@@ -125,10 +126,6 @@ PlatformInfo get_platform_info(void)
         cout<<TRESET;
     }
     
-    cout<<"device flags:\n--platformID "<<platforminfo.platform_id<<" --platformDeviceID "<<platforminfo.platform_device_id<<endl;
-    
-    
-    
     return platforminfo;
 }
 
@@ -207,9 +204,9 @@ void get_platform_info(PlatformInfo &platforminfo)
 void generateHardwareReport (PlatformInfo platforminfo){
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     int stepSizeInFs =1;
-    GenConst::hardwareReport ="Running on the "+platform.getName()+" platform:\n";
+    generalParameters.hardwareReport ="Running on the "+platform.getName()+" platform:\n";
     if (platform.getName() != "CPU") {
-        GenConst::hardwareReport+=platforminfo.device_properties_report[platforminfo.platform_device_id]+"\n";
+        generalParameters.hardwareReport+=platforminfo.device_properties_report[platforminfo.platform_device_id]+"\n";
     } else {
         OpenMM::System tsystem;
         tsystem.addParticle(1.0);
@@ -217,8 +214,8 @@ void generateHardwareReport (PlatformInfo platforminfo){
         OpenMM::Context tcontext(tsystem, tinegrator, platform);
         std::vector<std::string> tplatform_devices = platform.getPropertyNames();
         for (auto & name : tplatform_devices){
-            GenConst::hardwareReport+="\t"+name+"\t"+platform.getPropertyValue(tcontext, name)+"\n";
+            generalParameters.hardwareReport+="\t"+name+"\t"+platform.getPropertyValue(tcontext, name)+"\n";
         }
     }
-    GenConst::hardwareReport+="------------------------\n\n";
+    generalParameters.hardwareReport+="------------------------\n\n";
 }

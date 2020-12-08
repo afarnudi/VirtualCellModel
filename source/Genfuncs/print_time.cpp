@@ -9,7 +9,7 @@
 #include "General_functions.hpp"
 
 void print_wall_clock_time(double sim_duration_per_sec){
-    std::string traj_name  = GenConst::trajectory_file_name+"_hardware_runtime.txt";
+    std::string traj_name  = generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
     
@@ -41,7 +41,7 @@ using std::cout;
 
 void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
                      std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end){
-    std::string hardname= GenConst::trajectory_file_name+"_hardware_runtime.txt";
+    std::string hardname= generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     std::ofstream write_report;
     write_report.open(hardname.c_str(),std::ios_base::app);
     
@@ -64,7 +64,7 @@ void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_c
 
 void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
                        std::chrono::time_point<std::chrono::system_clock> chrono_clock_end){
-    std::string hardname= GenConst::trajectory_file_name+"_hardware_runtime.txt";
+    std::string hardname= generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     std::ofstream write_report;
     write_report.open(hardname.c_str(),std::ios_base::app);
     

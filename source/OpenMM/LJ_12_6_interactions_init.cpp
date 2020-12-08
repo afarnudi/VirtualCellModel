@@ -39,7 +39,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6) );
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     } else {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
@@ -86,7 +86,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                                                                   + atoms[*it_2].sigma_LJ_12_6 ) );
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                  * atoms[*it_2].epsilon_LJ_12_6) );
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     } else {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
@@ -132,7 +132,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
                                                                    atoms[*it_2].sigma_LJ_12_6 ) );
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                  * atoms[*it_2].epsilon_LJ_12_6) );
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     } else {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
@@ -176,7 +176,7 @@ void init_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_int
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6) );
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
     } else {
         LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
@@ -279,7 +279,7 @@ void initdouble_LJ_12_6_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  8*sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6));
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
          LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
      } else {
          LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
@@ -327,7 +327,7 @@ void init_LJ_4_2_interaction(vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_inte
     
     LJ_12_6_interactions[index]->addGlobalParameter(epsilon,  sqrt(atoms[*it_1].epsilon_LJ_12_6
                                                                      * atoms[*it_2].epsilon_LJ_12_6));
-    if (GenConst::Periodic_box) {
+    if (generalParameters.Periodic_condtion_status) {
          LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
      } else {
          LJ_12_6_interactions[index]->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);

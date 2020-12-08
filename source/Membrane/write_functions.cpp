@@ -193,7 +193,7 @@ void Membrane::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count
 void Membrane::write_geometrics(){
     calculate_volume_and_surface_area();
     calculate_surface_area_with_voronoi();
-    string geo_file_name=GenConst::trajectory_file_name+"_"+label+"_GeoProps.txt";
+    string geo_file_name=generalParameters.trajectory_file_name+"_"+label+"_GeoProps.txt";
     std::ofstream wgeo;
     wgeo.open(geo_file_name.c_str(), std::ios::app);
     

@@ -62,7 +62,7 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 b    = (r*t2 - rnew* t1)/dt;
                 
                 
-                string sigma = "sigma" + GenConst::Membrane_label + std::to_string(i) + GenConst::Membrane_label + std::to_string(i) ;
+                string sigma = "sigma" + generalParameters.Membrane_label + std::to_string(i) + generalParameters.Membrane_label + std::to_string(i) ;
                 double mem_radius_at_current_time = (a * time * 1000 + b);
                 double new_sig = 0.5*membranes[i].get_avg_node_dist()*mem_radius_at_current_time/r;
                 new_node_radius = new_sig;
@@ -74,12 +74,12 @@ void updateOpenMMforces(vector<Membrane>                &membranes,
                 
                 for (int ch=0; ch<chromos.size(); ch++) {
                     if (interaction_map.get_interacton_type(ch+1,0)=="Excluded-Volume") {
-                        sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(i) ;
+                        sigma = "sigma" + generalParameters.Chromatin_label + std::to_string(ch) + generalParameters.Membrane_label + std::to_string(i) ;
 //                        new_sig = (new_sig + chromos[ch].get_node_radius())*0.5;
                         omm->context->setParameter(sigma, new_sig);
                     } else if (interaction_map.get_interacton_type(ch+1,0)=="Lennard-Jones"){
                         for (int chind=0; chind < chromos[ch].get_num_of_node_types(); chind++) {
-                            sigma = "sigma" + GenConst::Chromatin_label + std::to_string(ch) + std::to_string(chind) + GenConst::Membrane_label + std::to_string(i) ;
+                            sigma = "sigma" + generalParameters.Chromatin_label + std::to_string(ch) + std::to_string(chind) + generalParameters.Membrane_label + std::to_string(i) ;
                             omm->context->setParameter(sigma, (new_sig + chromos[ch].get_node_radius())*0.5);
                         }
                         
@@ -111,8 +111,8 @@ void expand(vector<Chromatin>                chromos,
             MyOpenMMData*                    omm)
 {
     for (int ch=0; ch<chromos.size(); ch++) {
-        string epsilon = "epsilon" + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(0) ;
-        string sigma   = "sigma"   + GenConst::Chromatin_label + std::to_string(ch) + GenConst::Membrane_label + std::to_string(0) ;
+        string epsilon = "epsilon" + generalParameters.Chromatin_label + std::to_string(ch) + generalParameters.Membrane_label + std::to_string(0) ;
+        string sigma   = "sigma"   + generalParameters.Chromatin_label + std::to_string(ch) + generalParameters.Membrane_label + std::to_string(0) ;
         omm->context->setParameter(epsilon, 0);
         omm->context->setParameter(sigma, 1000);
         

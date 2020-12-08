@@ -29,7 +29,7 @@ void assign_project_directories(char* buffer){
     if(!boost::filesystem::exists(pTrajectory)){
         boost::filesystem::create_directory(pTrajectory);
     }
-    trajectory +="/"+GenConst::ProjectName;
+    trajectory +="/"+generalParameters.ProjectName;
     pTrajectory=trajectory;
     if(!boost::filesystem::exists(pTrajectory)){
         boost::filesystem::create_directory(pTrajectory);
@@ -53,5 +53,5 @@ void assign_project_directories(char* buffer){
     trajectory+= buffer;
     trajectory+="_"+ID;
     cout<<trajectory<<endl;
-    GenConst::trajectory_file_name=trajectory;
+    generalParameters.trajectory_file_name=trajectory;
 }

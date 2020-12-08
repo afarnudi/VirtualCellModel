@@ -36,7 +36,74 @@ struct GeneralParameters{
     vector<string> insertOrder;
     vector<string> values;
     
+    string ProjectName;
+    /**A string containing the selected platform information during runtime.*/
+    string hardwareReport;
+    /**Name of the output file. Please note that the date and time the file is generated will be attached to this name.*/
+    string trajectory_file_name;
+    string Membrane_label="mem";
+    string Actin_label="act";
+    string ECM_label="ecm";
+    string Chromatin_label="chr";
     
+    /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
+    double BoltzmannKJpermolkelvin = 0.008314459920816468;
+    /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/
+    double Simulation_Time_In_Ps;
+    /**Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.*/
+    double Report_Interval_In_Fs;
+    /** Integration step size (fs).  Default 0.001*/
+    double Step_Size_In_Fs;
+    
+    int Num_of_Membranes;
+    int Num_of_Actins;
+    int Num_of_Chromatins;
+    int Num_of_ECMs;
+    
+    bool   WantEnergy;
+    /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
+    bool   WantForce;
+    /**Writes velocities and forces (cheap) of particles during each Report_Interval_In_Fs time point to the disk. Default false*/
+    bool   WantVelocity;
+    /**Make the velocity of the centre of mass (COM) zero by subtracting the COM velocity from all the particles' velocity after every CMMotionRemoverStep step. Default false*/
+    bool CMMotionRemover;
+    /**The number of steps where the centre of mass velocity is set to zero using the CMMotionRemover. Default 10*/
+    int CMMotionRemoverStep;
+    //1/0 true/false if you want/don't want to calculate and write the voronoi area associated with Membrane nodes in the properties output file. Default 0
+    bool Wantvoronoi;
+    //When in test mode, most of the console prints (std::cout) of the programme will be turned off for a better viewing of the test report. Deafault 0 (off)
+    bool Testmode;
+    
+    /**The pressure acting on the system (in bar) through OpenMM's MonteCarloBarostat. Default 0*/
+    double MCBarostatPressure;
+    /**The temperature at which OpenMM's MonteCarloBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
+    double MCBarostatTemperature;
+    /**The frequency at which the MonteCarloBarostat pressure changes should be attempted (in time steps). If zero MCBarostat will be disabled. Default 0.*/
+    int MCBarostatFrequency;
+    
+    /**The status of OpenMM's MonteCarloAnisotropicBarostat. Default off*/
+    bool MCAnisoBarostatOn;
+    /**The pressure acting on each axis (in bar) through OpenMM's MonteCarloAnisotropicBarostat. Default 0 0 0*/
+    vector<double> MCAnisoBarostatPressure;
+    /**The temperature at which OpenMM's MonteCarloAnisotropicBarostat will think the system is being maintained (in Kelvin). Default Thermostat temperature*/
+    double MCAnisoBarostatTemperature;
+    /**Allow (or not allow) the X,Y, or Z dimension of the periodic box to change size through OpenMM's MonteCarloAnisotropicBarostat. Default fasle false false*/
+    vector<bool> MCAnisoBarostatScaleXYZ;
+    /**The frequency at which the MonteCarloAnisotropicBarostat pressure changes should be attempted (in time steps). If zero MCAnisoBarostat will be disabled. Default 0*/
+    int MCAnisoBarostatFrequency;
+    
+    /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
+    double frictionInPs;
+    /**Set the temperature of the heat bath (in Kelvin). Default 300*/
+    double temperature;
+    
+    
+    double Simulation_box_length;
+    /**The simulation uses periodic boundary condition. Default False*/
+    bool Periodic_condtion_status;
+    vector<double> PeriodicBoxVector0;
+    vector<double> PeriodicBoxVector1;
+    vector<double> PeriodicBoxVector2;
     
     GeneralParameters(){
         values.resize(2);
