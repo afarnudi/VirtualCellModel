@@ -408,5 +408,6 @@ void customLangevinIntegrator(MyOpenMMData* omm,
                               double        stepSizeInFs);
 
 
+void set_pbcvectors(OpenMM::System &system);
 
 #endif

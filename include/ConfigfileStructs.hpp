@@ -92,6 +92,13 @@ struct GeneralParameters{
     /**The frequency at which the MonteCarloAnisotropicBarostat pressure changes should be attempted (in time steps). If zero MCAnisoBarostat will be disabled. Default 0*/
     int MCAnisoBarostatFrequency;
     
+    /**Set the integrator type. This flag is for the OpenMM integrators and will not function if the OpenMM engine is not selected.
+     * V: Verlet
+     * B: Brownian, temperature and frictionCoeff need to be set as well.
+     * L: Langevin, temperature and frictionCoeff need to be set as well.
+     * C: Langevin, temperature and frictionCoeff need to be set as well.
+     *Default V*/
+    string Integrator_type;
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
     double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
@@ -134,7 +141,7 @@ struct GeneralParameters{
         insertOrder.push_back("SimulationBoxLength");
         
         values[0] ="V";
-        values[1] ="#Set the integrator type. 'Temperature' and 'FrictionCoeff' need to be set for Langevin and Brownian. V: Verlet. B: Brownian. L: Langevin. Default value 'V'.";
+        values[1] ="#Set the integrator type. 'Temperature' and 'FrictionCoeff' needs to be set for Langevin and Brownian. V: Verlet. B: Brownian. L: Langevin. Default value 'V'.";
         GenParams["Integrator"] = values;
         insertOrder.push_back("Integrator");
         

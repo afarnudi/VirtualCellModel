@@ -77,7 +77,7 @@ double Actin_Membrane_Bond_Coefficient;
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
 
-int    Integrator_type;
+
 bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;
@@ -490,22 +490,22 @@ int main(int argc, char **argv)
             }
             
             
-            if (changeTemp) {
-                initTemp -= TempStep;
-                omm->Lintegrator->setTemperature(initTemp);
-                //                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
-                //                    map <string, double> params;
-                //                    params = omm->context->getParameters();
-                //
-                //                    cout<<"\nframe: "<<frame<<endl;
-                //                    cout<<params.size()<<endl;
-                //                    for(auto elem : params)
-                //                    {
-                //                       cout << elem.first << " " << elem.second << "\n";
-                //                    }
-                //                    cout<<"\n";
-                //
-            }
+//            if (changeTemp) {
+//                initTemp -= TempStep;
+//                omm->Lintegrator->setTemperature(initTemp);
+//                //                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
+//                //                    map <string, double> params;
+//                //                    params = omm->context->getParameters();
+//                //
+//                //                    cout<<"\nframe: "<<frame<<endl;
+//                //                    cout<<params.size()<<endl;
+//                //                    for(auto elem : params)
+//                //                    {
+//                //                       cout << elem.first << " " << elem.second << "\n";
+//                //                    }
+//                //                    cout<<"\n";
+//                //
+//            }
             //                cout<<"CreateCheckpoint\n";
             
             if (GenConst::CreateCheckpoint) {

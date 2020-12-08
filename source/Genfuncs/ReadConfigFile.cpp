@@ -178,17 +178,14 @@ void assign_general_parameters(void){
                 generalParameters.Periodic_condtion_status=true;
             }
         } else if (it.first == "Integrator") {
-            int type=-1;
-            if (split[0][0]=='V'){
-                type=0;
-            } else if (split[0][0]=='B'){
-                type=1;
+            generalParameters.Integrator_type="Verlet";
+            if (split[0][0]=='B'){
+                generalParameters.Integrator_type="Brownian";
             } else if (split[0][0]=='L'){
-                type=2;
+                generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){
-                type=3;
+                generalParameters.Integrator_type="Custom";
             }
-            GenConst::Integrator_type=type;
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);
         } else if (it.first == "Temperature") {

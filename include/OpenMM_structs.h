@@ -86,8 +86,12 @@ struct MyOpenMMData {
     MyOpenMMData() : system(0), context(0), integrator(0) {}
     ~MyOpenMMData() {delete context; delete integrator; delete system;}
     OpenMM::System*         system;
-    OpenMM::Integrator*     integrator;
-    OpenMM::LangevinIntegrator*     Lintegrator;
+    OpenMM::Integrator*           integrator;
+    OpenMM::VerletIntegrator*     VerletIntegrator;
+    OpenMM::BrownianIntegrator*   BrownianIntegrator;
+    OpenMM::LangevinIntegrator*   LangevinIntegrator;
+    OpenMM::CustomIntegrator*     CustomIntegrator;
+    
     OpenMM::Context*  context;
 
     OpenMM::HarmonicBondForce* harmonic;
@@ -96,7 +100,7 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
-    OpenMM::CustomIntegrator* CustomIntegrator;
+    
 };
 
 
