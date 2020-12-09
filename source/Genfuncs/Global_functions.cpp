@@ -60,8 +60,8 @@ void write_data(MyOpenMMData* omm,
                 MyAtomInfo atoms[],
                 NonBondInteractionMap intertable){
     
-    if (GenConst::WantVelocity) {
-        string vel_file_name=GenConst::trajectory_file_name+"_vels.txt";
+    if (generalParameters.WantVelocity) {
+        string vel_file_name=generalParameters.trajectory_file_name+"_vels.txt";
         std::ofstream wvel;
         wvel.open(vel_file_name.c_str(), std::ios::app);
         
@@ -72,15 +72,15 @@ void write_data(MyOpenMMData* omm,
             wvel<<"\n";
         }
     }
-    if (GenConst::WantForce) {
+    if (generalParameters.WantForce) {
         int infoMask = 0;
         infoMask += OpenMM::State::Forces;     // for pot. energy (expensive)
         
-        const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
+        const OpenMM::State state = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status);
         const std::vector<Vec3>& Forces = state.getForces();
         
         ofstream write_total_force;
-        string totalforcepath =GenConst::trajectory_file_name+"_Net_Force.txt";
+        string totalforcepath =generalParameters.trajectory_file_name+"_Net_Force.txt";
         write_total_force.open(totalforcepath.c_str(),std::ios_base::app);
         write_total_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
         write_total_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
@@ -92,12 +92,12 @@ void write_data(MyOpenMMData* omm,
         
         for (int i=1; i<intertable.get_ForceGroupCount()+1; i++) {
             
-            const OpenMM::State statei = omm->context->getState(infoMask,GenConst::Periodic_box, intertable.get_ForceGroup(i));
+            const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, intertable.get_ForceGroup(i));
             const std::vector<Vec3>& Forcesi = statei.getForces();
             
             
             ofstream write_force;
-            string forcepath =GenConst::trajectory_file_name+"_"+intertable.get_ForceGroupLabel(i)+".txt";
+            string forcepath =generalParameters.trajectory_file_name+"_"+intertable.get_ForceGroupLabel(i)+".txt";
             write_force.open(forcepath.c_str(),std::ios_base::app);
             write_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
             write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;

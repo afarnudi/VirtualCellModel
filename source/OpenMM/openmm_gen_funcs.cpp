@@ -64,13 +64,17 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             }
 
             
-            if ( omm->integrator != NULL ) {
-                
-                omm->integrator->step(1);
+            if ( generalParameters.Integrator_type=="Verlet" ) {
+                omm->VerletIntegrator->step(1);
                 total_step++;
-            } else {
-                
-                omm->Lintegrator->step(1);
+            } else if ( generalParameters.Integrator_type=="Brownian" ) {
+                omm->BrownianIntegrator->step(1);
+                total_step++;
+            } else if ( generalParameters.Integrator_type=="Langevin" ) {
+                omm->LangevinIntegrator->step(1);
+                total_step++;
+            } else if ( generalParameters.Integrator_type=="Custom" ) {
+                omm->CustomIntegrator->step(1);
                 total_step++;
             }
             
@@ -86,17 +90,20 @@ void myStepWithOpenMM(MyOpenMMData* omm,
     
     else
     {
-        if ( omm->integrator != NULL ) {
-            
-            omm->integrator->step(numSteps);
-            //        omm->context->computeVirtualSites();
-                    total_step += numSteps;
-        } else {
-            
-            omm->Lintegrator->step(numSteps);
-            //        omm->context->computeVirtualSites();
-                    total_step += numSteps;
+        if ( generalParameters.Integrator_type=="Verlet" ) {
+            omm->VerletIntegrator->step(numSteps);
+            total_step+=numSteps;
+        } else if ( generalParameters.Integrator_type=="Brownian" ) {
+            omm->BrownianIntegrator->step(numSteps);
+            total_step+=numSteps;
+        } else if ( generalParameters.Integrator_type=="Langevin" ) {
+            omm->LangevinIntegrator->step(numSteps);
+            total_step+=numSteps;
+        } else if ( generalParameters.Integrator_type=="Custom" ) {
+            omm->CustomIntegrator->step(numSteps);
+            total_step+=numSteps;
         }
+        
         
     }
     
@@ -121,7 +128,7 @@ void Kelvin_Voigt_update(MyOpenMMData* omm,
     {
         time_dependant_data->Kelvin_VoigtBond->getBondParameters(i, atom1, atom2, length, stiffness);
         
-        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInNm[1][i] - time_dependant_data->Kelvin_Voigt_distInNm[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * GenConst::Step_Size_In_Fs) ;
+        length = time_dependant_data->Kelvin_Voigt_initNominal_length_InNm[i] - (time_dependant_data->Kelvin_Voigt_distInNm[1][i] - time_dependant_data->Kelvin_Voigt_distInNm[0][i]) * (time_dependant_data->Kelvin_Voigt_damp[i] * OpenMM::FsPerPs / stiffness)/(time_dependant_data->Kelvin_stepnum * generalParameters.Step_Size_In_Fs) ;
         
         time_dependant_data->Kelvin_VoigtBond->setBondParameters(i, atom1, atom2, length, stiffness);
     }
@@ -274,3 +281,76 @@ void hill_update(MyOpenMMData* omm,
     }
 }
 
+
+void customLangevinIntegrator(MyOpenMMData* omm, double stepSizeInFs){
+//    double dt = stepSizeInFs* OpenMM::PsPerFs;
+//    double friction = GenConst::frictionInPs;
+//    double temperature = GenConst::temperature;
+//    double kB = GenConst::BoltzmannKJpermolkelvin;
+//    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+//
+//    omm->CustomIntegrator->addGlobalVariable("a", exp(-friction*dt));
+//    omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-2*friction*dt)));
+//    omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-friction*dt))/friction);
+//    omm->CustomIntegrator->addGlobalVariable("kT", kB*temperature);
+//    omm->CustomIntegrator->addUpdateContextState();
+//
+//    omm->CustomIntegrator->addComputePerDof("v", "v*a + c*f/m + b*sqrt(kT/m)*gaussian");
+//
+//    omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
+//    omm->CustomIntegrator->addConstrainVelocities();
+//    omm->CustomIntegrator->addConstrainPositions();
+    
+    
+    omm->CustomIntegrator->addPerDofVariable("x0", 0);
+    omm->CustomIntegrator->addUpdateContextState();
+    omm->CustomIntegrator->addComputePerDof("x0", "x");
+    omm->CustomIntegrator->addComputePerDof("v", "v+dt*f/m");
+    omm->CustomIntegrator->addComputePerDof("x", "x+dt*v");
+    omm->CustomIntegrator->addConstrainPositions();
+    omm->CustomIntegrator->addComputePerDof("v", "(x-x0)/dt");
+}
+
+void set_pbcvectors(OpenMM::System &system){
+    std::vector<Vec3> pbcxyz;
+    if (generalParameters.Periodic_condtion_status) {
+        pbcxyz.resize(3);
+        
+        pbcxyz[0][0]=generalParameters.Simulation_box_length;
+        pbcxyz[0][1]=0;
+        pbcxyz[0][2]=0;
+        
+        pbcxyz[1][0]=0;
+        pbcxyz[1][1]=generalParameters.Simulation_box_length;
+        pbcxyz[1][2]=0;
+        
+        pbcxyz[2][0]=0;
+        pbcxyz[2][1]=0;
+        pbcxyz[2][2]=generalParameters.Simulation_box_length;
+        
+        system.setDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+        
+        pbcxyz[0][0]=0;
+        pbcxyz[0][1]=0;
+        pbcxyz[0][2]=0;
+        
+        pbcxyz[1][0]=0;
+        pbcxyz[1][1]=0;
+        pbcxyz[1][2]=0;
+        
+        pbcxyz[2][0]=0;
+        pbcxyz[2][1]=0;
+        pbcxyz[2][2]=0;
+        
+        system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
+        cout<<"Periodic Boundry Condition "<<TON<<"On"<<TRESET<<endl;
+        cout<<"Periodic vectors (X,Y,Z):\n";
+        cout<<TGRAY;
+        for (int i=0; i<3; i++) {
+            cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
+        }
+        cout<<TRESET;
+    } else {
+        cout<<"Periodic Boundry Condition "<<TOFF<<"Off"<<TRESET<<endl;
+    }
+}

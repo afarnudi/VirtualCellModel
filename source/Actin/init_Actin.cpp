@@ -59,7 +59,7 @@ void Actin::initialise(string Mesh_file_name){
         initialise_MT_bond_relaxed_length();
     }
     tau_Maxwell_relax = Dashpot_Viscosity/Spring_coefficient;
-    exp_tau=exp(-GenConst::Step_Size_In_Fs/tau_Maxwell_relax);
+    exp_tau=exp(-generalParameters.Step_Size_In_Fs/tau_Maxwell_relax);
     
     
     if(MeshType=="sajjad")

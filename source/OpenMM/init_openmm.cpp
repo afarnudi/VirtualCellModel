@@ -127,46 +127,46 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     //pbcgel begin
-//    vector<vector<int> > pbcbonds;
-//    vector<int> pair;
-//    pair.resize(2,0);
-//    pair[0]=42; pair[1]=48;
-//    pbcbonds.push_back(pair);
-//    pair[0]=43; pair[1]=49;
-//    pbcbonds.push_back(pair);
-//    pair[0]=44; pair[1]=46;
-//    pbcbonds.push_back(pair);
-//    pair[0]=45; pair[1]=47;
-//    pbcbonds.push_back(pair);
-//    pair[0]=50; pair[1]=51;
-//    pbcbonds.push_back(pair);
-//    pair[0]=52; pair[1]=53;
-//    pbcbonds.push_back(pair);
-//    pair[0]=54; pair[1]=55;
-//    pbcbonds.push_back(pair);
-//    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
-//    pbcharmonic->addGlobalParameter("k_pbc",10000);
-//    system.addForce(pbcharmonic);
-//    int memnodes;
-//    if (membrane_set.size()!=0) {
-//        memnodes= membrane_set[0].size();
-//    } else {
-//        memnodes=0;
-//    }
-//    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
-//        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
-//        if (GenConst::Periodic_box) {
-//            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
-//        }
-//    }
-//    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
-//    bool anisotropicbarostat=true;
-//    if (anisotropicbarostat) {
-//        double basepressure = 0.0005;
-//        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
-//        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
-//        omm->system->addForce(AnisoMCBarostat);
-//    }
+    //    vector<vector<int> > pbcbonds;
+    //    vector<int> pair;
+    //    pair.resize(2,0);
+    //    pair[0]=42; pair[1]=48;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=43; pair[1]=49;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=44; pair[1]=46;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=45; pair[1]=47;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=50; pair[1]=51;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=52; pair[1]=53;
+    //    pbcbonds.push_back(pair);
+    //    pair[0]=54; pair[1]=55;
+    //    pbcbonds.push_back(pair);
+    //    OpenMM::CustomBondForce* pbcharmonic = new OpenMM::CustomBondForce("k_pbc*r^2");
+    //    pbcharmonic->addGlobalParameter("k_pbc",10000);
+    //    system.addForce(pbcharmonic);
+    //    int memnodes;
+    //    if (membrane_set.size()!=0) {
+    //        memnodes= membrane_set[0].size();
+    //    } else {
+    //        memnodes=0;
+    //    }
+    //    for (int pbcind=0; pbcind<pbcbonds.size(); pbcind++) {
+    //        pbcharmonic->addBond(pbcbonds[pbcind][0]+memnodes, pbcbonds[pbcind][1]+memnodes);
+    //        if (GenConst::Periodic_box) {
+    //            pbcharmonic->setUsesPeriodicBoundaryConditions(true);
+    //        }
+    //    }
+    //    MonteCarloAnisotropicBarostat(const Vec3 &defaultPressure, double defaultTemperature, bool scaleX = true, bool scaleY = true, bool scaleZ = true, int frequency = 25)
+    //    bool anisotropicbarostat=true;
+    //    if (anisotropicbarostat) {
+    //        double basepressure = 0.0005;
+    //        const Vec3 anisotropicpressure(basepressure,2*basepressure,2*basepressure);
+    //        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, 600,true,false,false,25);
+    //        omm->system->addForce(AnisoMCBarostat);
+    //    }
     
     //pbcgel end
     
@@ -180,52 +180,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->Dihedral = DihedralForces;
     }
     
-//    GenConst::Periodic_box=true;
-//    GenConst::Lbox=200;
-    std::vector<Vec3> pbcxyz;
-    
-    if (GenConst::Periodic_box) {
-        pbcxyz.resize(3);
-        
-        pbcxyz[0][0]=GenConst::Lbox;
-        pbcxyz[0][1]=0;
-        pbcxyz[0][2]=0;
-        
-        pbcxyz[1][0]=0;
-        pbcxyz[1][1]=GenConst::Lbox;
-        pbcxyz[1][2]=0;
-        
-        pbcxyz[2][0]=0;
-        pbcxyz[2][1]=0;
-        pbcxyz[2][2]=GenConst::Lbox;
-        
-        system.setDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
-        
-        pbcxyz[0][0]=0;
-        pbcxyz[0][1]=0;
-        pbcxyz[0][2]=0;
-        
-        pbcxyz[1][0]=0;
-        pbcxyz[1][1]=0;
-        pbcxyz[1][2]=0;
-        
-        pbcxyz[2][0]=0;
-        pbcxyz[2][1]=0;
-        pbcxyz[2][2]=0;
-        
-        system.getDefaultPeriodicBoxVectors(pbcxyz[0], pbcxyz[1], pbcxyz[2]);
-        cout<<"Periodic Boundry Condition "<<TON<<"On"<<TRESET<<endl;
-        cout<<"Periodic vectors (X,Y,Z):\n";
-        cout<<TGRAY;
-        for (int i=0; i<3; i++) {
-            cout<<i<<": "<<pbcxyz[i][0]<<"\t"<<pbcxyz[i][1]<<"\t"<<pbcxyz[i][2]<<"\n";
-        }
-        cout<<TRESET;
-    } else {
-        cout<<"Periodic Boundry Condition "<<TOFF<<"Off"<<TRESET<<endl;
-    }
-    
-    
+    set_pbcvectors(system);
     
     PlatformInfo platforminfo;
     if (userinputs.platforminput) {
@@ -237,51 +192,65 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     generateHardwareReport(platforminfo);
-
+    
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
     // positions we collected above. Initial velocities will be zero.
     
     
-    switch (GenConst::Integrator_type) {
-        case 0:
-            omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
-            break;
-            
-        case 1:
-            omm->integrator = new OpenMM::BrownianIntegrator(GenConst::temperature,
-                                                             GenConst::frictionInPs,
-                                                             stepSizeInFs * OpenMM::PsPerFs);
-            break;
-        case 2:
-            
-            //            omm->integrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
-            //                                                             GenConst::frictionInPs,
-            //                                                             stepSizeInFs * OpenMM::PsPerFs);
-            
-            omm->Lintegrator = new OpenMM::LangevinIntegrator(GenConst::temperature,
-                                                              GenConst::frictionInPs,
-                                                              stepSizeInFs * OpenMM::PsPerFs);
-            break;
+    
+    if (generalParameters.Integrator_type=="Verlet") {
+        omm->VerletIntegrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    } else if (generalParameters.Integrator_type=="Brownian"){
+        omm->BrownianIntegrator = new OpenMM::BrownianIntegrator(generalParameters.temperature,
+                                                                 generalParameters.frictionInPs,
+                                                                 stepSizeInFs * OpenMM::PsPerFs);
+    } else if (generalParameters.Integrator_type=="Langevin"){
+        omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
+                                                                 generalParameters.frictionInPs,
+                                                                 stepSizeInFs * OpenMM::PsPerFs);
+    } else if (generalParameters.Integrator_type=="Custom"){
+        //            customLangevinIntegrator(omm, stepSizeInFs);
+        
+        double dt = stepSizeInFs* OpenMM::PsPerFs;
+        double friction = generalParameters.frictionInPs;
+        double kBT = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+        omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+        
+        omm->CustomIntegrator->addGlobalVariable("a", exp(-0.5*friction*dt));
+        omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
+        omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
+        omm->CustomIntegrator->addGlobalVariable("kT", kBT);
+        
+        omm->CustomIntegrator->addUpdateContextState();
+        omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+        omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
+        omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+        
     }
-    if (GenConst::CMMotionRemover) {
+    
+    
+    
+    
+    //    cout<<"getNumPerDofVariables() "<<omm->CustomIntegrator->getNumPerDofVariables()<<endl;
+    if (generalParameters.CMMotionRemover) {
         OpenMM::CMMotionRemover* comremover;
-        comremover = new OpenMM::CMMotionRemover(GenConst::CMMotionRemoverStep);
+        comremover = new OpenMM::CMMotionRemover(generalParameters.CMMotionRemoverStep);
         omm->system->addForce(comremover);
     }
     
-    if (GenConst::MCBarostatFrequency != 0) {
-        if (GenConst::MCBarostatTemperature<0) {
-            GenConst::MCBarostatTemperature = GenConst::temperature;
+    if (generalParameters.MCBarostatFrequency != 0) {
+        if (generalParameters.MCBarostatTemperature<0) {
+            generalParameters.MCBarostatTemperature = generalParameters.temperature;
         }
-        OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(GenConst::MCBarostatPressure, GenConst::MCBarostatTemperature, GenConst::MCBarostatFrequency);
+        OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(generalParameters.MCBarostatPressure, generalParameters.MCBarostatTemperature, generalParameters.MCBarostatFrequency);
         omm->system->addForce(MCBarostat);
     }
-    if (GenConst::MCAnisoBarostatOn) {
+    if (generalParameters.MCAnisoBarostatOn) {
         
-        const Vec3 anisotropicpressure(GenConst::MCAnisoBarostatPressure[0],GenConst::MCAnisoBarostatPressure[1],GenConst::MCAnisoBarostatPressure[2]);
-        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, GenConst::MCAnisoBarostatTemperature, GenConst::MCAnisoBarostatScaleXYZ[0], GenConst::MCAnisoBarostatScaleXYZ[1], GenConst::MCAnisoBarostatScaleXYZ[2],GenConst::MCAnisoBarostatFrequency);
+        const Vec3 anisotropicpressure(generalParameters.MCAnisoBarostatPressure[0],generalParameters.MCAnisoBarostatPressure[1],generalParameters.MCAnisoBarostatPressure[2]);
+        OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, generalParameters.MCAnisoBarostatTemperature, generalParameters.MCAnisoBarostatScaleXYZ[0], generalParameters.MCAnisoBarostatScaleXYZ[1], generalParameters.MCAnisoBarostatScaleXYZ[2],generalParameters.MCAnisoBarostatFrequency);
         omm->system->addForce(AnisoMCBarostat);
     }
     
@@ -298,22 +267,25 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
     
-    
-    
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
-        if ( omm->integrator != NULL ) {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
-        } else {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform);
+        if (generalParameters.Integrator_type=="Verlet") {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="Brownian"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="Langevin"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="Custom"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         }
-        
-        
-        
     } else {
-        if ( omm->integrator != NULL ) {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        if ( generalParameters.Integrator_type=="Verlet" ) {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="Brownian"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="Langevin") {
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="Custom"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }
         
         
@@ -326,7 +298,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     platformName = omm->context->getPlatform().getName();
     
     const std::map <std::string, double> params = omm->context->getParameters();
-    
     
     
     cout<<TGRAY<<params.size()<<endl;

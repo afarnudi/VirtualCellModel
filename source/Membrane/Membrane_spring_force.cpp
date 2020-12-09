@@ -65,7 +65,7 @@ void Membrane::FENE_log (void){
 
         if(Node_distance>lmax || Node_distance<lmin)
         {
-            if (GenConst::Num_of_Actins == 0) {
+            if (generalParameters.Num_of_Actins == 0) {
                 cout<<"k == "<<k<<"\tNode distance = "<<Node_distance<<"\tF = "<<temp_force<<endl;
                 cout<<"Node A = "<<Node_A<<"\tNode B = "<<Node_B<<endl;
                 cout<<"The potential between the Membrane nodes is too weak for the current temperture of the system. Or the node potential cannot sustain the applied stress. As a result, a node pair distance has exceed the allowed regien defined by the node pairwise potential. Please adjust the configuration of the springs and restart the run.\n";

@@ -22,6 +22,59 @@ using namespace std ;
 string get_configfile_name(void);
 bool   include_comments(void);
 
+int get_index (vector<string> vec, string param){
+    vector<string>::iterator it = find(vec.begin(), vec.end(), param);
+    return int(distance(vec.begin(), it));
+}
+
+void write_mem_configs(ofstream &write_configs, vector<Membrane> &mems, int memid){
+    string input;
+    vector<int> excluded_indecies;
+    int index;
+    
+    write_configs<<"-Membrane "<<memid<<endl<<endl;
+    
+    cout<<"Please set the path to the mesh file. Supported formats: Blender's ply and Gmsh 2:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+    cin>>input;
+    mems[memid].Params["MeshFile"][0]=input;
+    cout<<TRESET;
+    index = get_index(mems[memid].insertOrder, "MeshFile");
+    excluded_indecies.push_back(index);
+    write_configs<<mems[memid].insertOrder[index]<<" "<<mems[memid].Params[mems[memid].insertOrder[index]][0]<<endl;
+    write_configs<<endl;
+    
+    cout<<"Please set the bond potential (harmonic) coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+    cin>>input;
+    mems[memid].Params["SpringCoeff"][0]=input;
+    cout<<TRESET;
+    index = get_index(mems[memid].insertOrder, "SpringCoeff");
+    excluded_indecies.push_back(index);
+    write_configs<<mems[memid].insertOrder[index]<<" "<<mems[memid].Params[mems[memid].insertOrder[index]][0]<<endl;
+    write_configs<<endl;
+    
+    cout<<"Please set the bending potential (harmonic dihedral) rigidity coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+    cin>>input;
+    mems[memid].Params["BendingCoeff"][0]=input;
+    cout<<TRESET;
+    index = get_index(mems[memid].insertOrder, "BendingCoeff");
+    excluded_indecies.push_back(index);
+    write_configs<<mems[memid].insertOrder[index]<<" "<<mems[memid].Params[mems[memid].insertOrder[index]][0]<<endl;
+    write_configs<<endl;
+    
+    for (int i =0; i<mems[memid].insertOrder.size(); i++) {
+        bool write = true;
+        for (auto &el: excluded_indecies){
+            if (el == i) {
+                write=false;
+                break;
+            }
+        }
+        if (write) {
+            write_configs<<"#"<<mems[memid].insertOrder[i]<<" "<<mems[memid].Params[mems[memid].insertOrder[i]][0]<<endl;
+        }
+    }
+    write_configs<<endl;
+}
 
 void configfile_generator(int status){
     
@@ -155,9 +208,10 @@ void configfile_generator(int status){
         string input;
         cout<<TRESET;
         cout<<"VCM will generate all output files with the following format:\n"
-              "ProjectName/Date+time+index/Date+time+index+file_identifier.extension\n"
-              "The Date+time will be determined at the beginning of each simulation using the machine's clock. You may use a \"ProjectName\" to customise the outputfiles."<<endl;
-        cout<<"Please enter a \"ProjectName\":\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+              "ProjectName/Date+time+index/Date+time+index+identifier.extension\n"
+              "The Date+time will be determined at the beginning of each simulation using the machine's clock. You may use a \"ProjectName\" to customise the output path."<<endl;
+        cout<<"Please enter the ProjectName:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+
         cin>>input;
         defaultparams.GenParams["ProjectName"][0]=input;
         cout<<TRESET;
@@ -198,43 +252,12 @@ void configfile_generator(int status){
         if (number_of_membranes!=0) {
             vector<Membrane> mems;
             mems.resize(number_of_membranes);
-            cout<<"Configurating Membrane 0"<<endl;
-            write_configs<<"-Membrane 0"<<endl<<endl;
+            cout<<TORANGE<<"Configurating Membrane "<<0<<TRESET<<endl;
             
-            cout<<"Please set the path to the mesh file. Supported formats: Blender's ply and Gmsh 2:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-            cin>>input;
-            mems[0].Params["MeshFile"][0]=input;
-            cout<<TRESET;
+            write_mem_configs(write_configs, mems, 0);
             
-            write_configs<<mems[0].insertOrder[0]<<" "<<mems[0].Params[mems[0].insertOrder[0]][0]<<endl;
-            write_configs<<endl;
-            
-            cout<<"Please set the bond potential (harmonic) coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-            cin>>input;
-            mems[0].Params["SpringCoeff"][0]=input;
-            cout<<TRESET;
-            
-            write_configs<<mems[0].insertOrder[6]<<" "<<mems[0].Params[mems[0].insertOrder[6]][0]<<endl;
-            write_configs<<endl;
-            
-            cout<<"Please set the bending potential (harmonic dihedral) rigidity coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-            cin>>input;
-            mems[0].Params["BendingCoeff"][0]=input;
-            cout<<TRESET;
-            
-            write_configs<<mems[0].insertOrder[8]<<" "<<mems[0].Params[mems[0].insertOrder[8]][0]<<endl;
-            write_configs<<endl;
-            
-            for (int i =1; i<6; i++) {
-                write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
-            }
-            write_configs<<"#"<<mems[0].insertOrder[7]<<" "<<mems[0].Params[mems[0].insertOrder[7]][0]<<endl;
-            for (int i =9; i<mems[0].insertOrder.size(); i++) {
-                write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
-            }
-            write_configs<<endl;
             for (int memid=1; memid<number_of_membranes; memid++) {
-                cout<<"Configurating Membrane "<<memid<<endl;
+                cout<<TORANGE<<"Configurating Membrane "<<memid<<TRESET<<endl;
                 string entree;
                 bool inherit = false;
                 cout<<"Do you wish to inherit configurations from another Membrane (y,n)? ";
@@ -253,42 +276,9 @@ void configfile_generator(int status){
                     }
                     write_configs<<endl;
                 } else {
-                
-                    cout<<"Configurating Membrane "<<memid<<endl;
-                    write_configs<<"-Membrane "<<memid<<endl<<endl;
                     
-                    cout<<"Please set the path to the mesh file. Supported formats: Blender's ply and Gmsh 2:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-                    cin>>input;
-                    mems[0].Params["MeshFile"][0]=input;
-                    cout<<TRESET;
+                    write_mem_configs(write_configs, mems, memid);
                     
-                    write_configs<<mems[0].insertOrder[0]<<" "<<mems[0].Params[mems[0].insertOrder[0]][0]<<endl;
-                    write_configs<<endl;
-                    
-                    cout<<"Please set the bond potential (harmonic) coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-                    cin>>input;
-                    mems[0].Params["SpringCoeff"][0]=input;
-                    cout<<TRESET;
-                    
-                    write_configs<<mems[0].insertOrder[6]<<" "<<mems[0].Params[mems[0].insertOrder[6]][0]<<endl;
-                    write_configs<<endl;
-                    
-                    cout<<"Please set the bending potential (harmonic dihedral) rigidity coefficient:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
-                    cin>>input;
-                    mems[0].Params["BendingCoeff"][0]=input;
-                    cout<<TRESET;
-                    
-                    write_configs<<mems[0].insertOrder[8]<<" "<<mems[0].Params[mems[0].insertOrder[8]][0]<<endl;
-                    write_configs<<endl;
-                    
-                    for (int i =1; i<6; i++) {
-                        write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
-                    }
-                    write_configs<<"#"<<mems[0].insertOrder[7]<<" "<<mems[0].Params[mems[0].insertOrder[7]][0]<<endl;
-                    for (int i =9; i<mems[0].insertOrder.size(); i++) {
-                        write_configs<<"#"<<mems[0].insertOrder[i]<<" "<<mems[0].Params[mems[0].insertOrder[i]][0]<<endl;
-                    }
-                    write_configs<<endl;
                 }
                 
             }

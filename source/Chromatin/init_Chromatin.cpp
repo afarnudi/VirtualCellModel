@@ -41,7 +41,7 @@ void Chromatin::initialise(void){
     set_bond_nominal_lengths();
     set_node_radius();
     
-    if (spring_model == GenConst::potential.Model["None"]) {
+    if (spring_model == potentialModelIndex.Model["None"]) {
         cout<<TWARN<<"\nChromatin spring model is set to 'None'."<<TRESET<<endl;
     }
     

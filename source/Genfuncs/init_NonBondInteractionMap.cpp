@@ -33,7 +33,7 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     inter_type_name[6]="Lennard-JonesChromatinSpecial0";
 
     
-    table_size = GenConst::Num_of_Membranes + GenConst::Num_of_Actins + GenConst::Num_of_ECMs + GenConst::Num_of_Chromatins;
+    table_size = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs + generalParameters.Num_of_Chromatins;
     
     inter_table.resize(table_size);
     force_report.resize(table_size);
@@ -111,7 +111,7 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
 };
 void NonBondInteractionMap::check_force_consistency(){
     if (force_sum!=0) {
-        GenConst::WantForce=true;
+        generalParameters.WantForce=true;
     }
     
     

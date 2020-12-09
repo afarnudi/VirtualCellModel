@@ -71,7 +71,7 @@ void Chromatin::export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_coun
 
 void Chromatin::export_coordinates(void){
     if (ExportGeneratedCoordinates) {
-        std::string traj_name=GenConst::trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+"_exported_coords.txt";
+        std::string traj_name=generalParameters.trajectory_file_name+file_time+"_chromatin_"+std::to_string(index)+"_exported_coords.txt";
         
         std::ofstream exportcoords;
         exportcoords.open(traj_name.c_str());

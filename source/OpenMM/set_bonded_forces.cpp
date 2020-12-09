@@ -39,7 +39,7 @@ void set_bonded_forces(Bonds*                                 bonds,
         
         const int*      atom = bonds[i].atoms;
         
-        if (bonds[i].type == GenConst::potential.Model["FENE"])
+        if (bonds[i].type == potentialModelIndex.Model["FENE"])
         {
             auto FENE_item = FENE_classes.find(bonds[i].class_label);
             if (FENE_item == FENE_classes.end()) {
@@ -69,7 +69,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
 //            }
         }
-        else if (bonds[i].type == GenConst::potential.Model["Harmonic"])
+        else if (bonds[i].type == potentialModelIndex.Model["Harmonic"])
         {
             HarmonicBondForce=true;
             // Note factor of 2 for stiffness below because Amber specifies the constant
@@ -82,7 +82,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                HarmonicBond->setUsesPeriodicBoundaryConditions(true);
 //            }
         }
-        else if (bonds[i].type == GenConst::potential.Model["HarmonicX4"])
+        else if (bonds[i].type == potentialModelIndex.Model["HarmonicX4"])
         {
             auto X4harmonic_item = X4harmonic_classes.find(bonds[i].class_label);
             if (X4harmonic_item == X4harmonic_classes.end()) {
@@ -107,7 +107,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
 //            }
         }
-        else if (bonds[i].type == GenConst::potential.Model["Kelvin-Voigt"])
+        else if (bonds[i].type == potentialModelIndex.Model["Kelvin-Voigt"])
         {
             Kelvin_VoigtBondForce=true;
             // Note factor of 2 for stiffness below because Amber specifies the constant
@@ -122,7 +122,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                Kelvin_VoigtBond->setUsesPeriodicBoundaryConditions(true);
 //            }
         }
-        else if (bonds[i].type == GenConst::potential.Model["Contractile"])
+        else if (bonds[i].type == potentialModelIndex.Model["Contractile"])
         {
             auto Contractile_item = Contractile_classes.find(bonds[i].class_label);
             if (Contractile_item == Contractile_classes.end()) {
@@ -158,7 +158,7 @@ void set_bonded_forces(Bonds*                                 bonds,
             //time_dependant_data->hill_coefficient = bonds[i].hill_co;
             //time_dependant_data->Contractile_force = bonds[i].F0;
         }
-        else if (bonds[i].type == GenConst::potential.Model["Harmonic_minmax"])
+        else if (bonds[i].type == potentialModelIndex.Model["Harmonic_minmax"])
         {
             auto Harmonic_minmax_item = Harmonic_minmax_classes.find(bonds[i].class_label);
             if (Harmonic_minmax_item == Harmonic_minmax_classes.end()) {
@@ -190,7 +190,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                      {
 //                          Harmonic_minmax[Harmonic_minmax_index]->setUsesPeriodicBoundaryConditions(true);
 //                      }
-        } else if (bonds[i].type == GenConst::potential.Model["hill"]){
+        } else if (bonds[i].type == potentialModelIndex.Model["hill"]){
             Hill_Force = true;
             auto Hill_item = Hill_classes.find(bonds[i].class_label);
             if (Hill_item == Hill_classes.end()) {
@@ -229,7 +229,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                          HillBonds[Hill_index]->setUsesPeriodicBoundaryConditions(true);
 //                      }
         }
-        else if (bonds[i].type == GenConst::potential.Model["KFs"]){
+        else if (bonds[i].type == potentialModelIndex.Model["KFs"]){
             k_Force = true;
             auto KF_item = KF_classes.find(bonds[i].class_label);
             if (KF_item == KF_classes.end()) {
