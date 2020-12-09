@@ -629,6 +629,13 @@ public:
         return New_Radius;
     }
     
+    void ranfomundulationgenerator(void);
+    bool AddRandomModes = false;
+    int NumberOfRandomModes;
+    int EllMaxOfRandomModes;
+    double UlmOfRandomModes;
+    
+    
     std::map<string, vector<string> > Params;
     vector<string> insertOrder;
     vector<string> values;
@@ -755,7 +762,10 @@ public:
         Params["UpdateEndTimeInPs"] = values;
         insertOrder.push_back("UpdateEndTimeInPs");
         
-        
+        values[0] ="4 0.01 20";
+        values[1] ="#NUL: The number (N), amplitude (U), maximum value of the modes (L) of randomly generated real spherical harmonic modes add to the existing Memebrane mesh.";
+        Params["NUL"] = values;
+        insertOrder.push_back("NUL");
         
         
     }

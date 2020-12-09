@@ -222,6 +222,11 @@ void Membrane::assign_parameters(void){
             Shift_position_xyzVector[0] = stod(split[0]);
             Shift_position_xyzVector[1] = stod(split[1]);
             Shift_position_xyzVector[2] = stod(split[2]);
+        } else if (it.first == "NUL") {
+            AddRandomModes=true;
+            NumberOfRandomModes = stoi(split[0]);
+            UlmOfRandomModes    = stod(split[1]);
+            EllMaxOfRandomModes = stoi(split[2]);
         }
         
     }

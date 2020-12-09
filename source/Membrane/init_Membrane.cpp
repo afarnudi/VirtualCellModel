@@ -49,6 +49,10 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
+    
+    if (AddRandomModes) {
+        ranfomundulationgenerator();
+    }
     check();
     set_bond_nominal_length();
     set_dihedral_atoms();
@@ -128,4 +132,27 @@ void Membrane::analysis_init(std::string Mesh_path){
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
+}
+
+
+void Membrane::ranfomundulationgenerator(void){
+    
+    
+    
+    
+    for (int i=0; i<NumberOfRandomModes; i++) {
+        double r = ((double) rand() / (RAND_MAX));
+        int Ell = rand() % (EllMaxOfRandomModes+1);
+        int M   = rand() % (Ell+1);
+        if (r<0.5) {
+            M*=-1;
+        }
+        update_spherical_positions();
+        calculate_dOmega();
+        calculate_surface_area_with_voronoi();
+        add_ulm_mode_real(Ell, M, UlmOfRandomModes, Radius);
+        cout<<"Ulm "<<UlmOfRandomModes<<"  Ell "<<Ell<<"  M "<<M<<endl;
+    }
+    
+    
 }
