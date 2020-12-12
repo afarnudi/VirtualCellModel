@@ -5,6 +5,7 @@
 //#include <iostream>
 //#include <fstream>
 #include <vector>
+#include <algorithm>
 
 //#include <math.h>
 //#include <map>

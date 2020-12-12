@@ -211,23 +211,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
     } else if (generalParameters.Integrator_type=="Custom"){
-        //            customLangevinIntegrator(omm, stepSizeInFs);
-        
-        double dt = stepSizeInFs* OpenMM::PsPerFs;
-        double friction = generalParameters.frictionInPs;
-        double kBT = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
-        omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
-        
-        omm->CustomIntegrator->addGlobalVariable("a", exp(-0.5*friction*dt));
-        omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
-        omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
-        omm->CustomIntegrator->addGlobalVariable("kT", kBT);
-        
-        omm->CustomIntegrator->addUpdateContextState();
-        omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
-        omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
-        omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
-        
+//        set_customLangevin(omm, stepSizeInFs);
+        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
     }
     
     
