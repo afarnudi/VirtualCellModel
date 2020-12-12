@@ -122,6 +122,7 @@ public:
     void convert_spherical_positions_to_cartisian();
     void analysis_init(std::string Mesh_path);
     void get_ground_state_from_mesh(ArgStruct_Analysis args);
+    void get_ground_state_from_frame(ArgStruct_Analysis args);
     void calculate_dOmega(void);
     vector<double> node_dOmega;
     

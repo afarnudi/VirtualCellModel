@@ -31,7 +31,10 @@ struct ArgStruct_Analysis
     int num_atoms_per_frame=0;
     std::vector<std::string> Mesh_files;
 //    std::vector<bool> MeshMinimisation;
-    bool MeshMinimisation = false;
+    bool MeshMinimisation  = false;
+    int  FrameMinimisation = -1;
+    
+    std::string meshpathinput = "None";
 };
 
 struct ArgStruct_VCM

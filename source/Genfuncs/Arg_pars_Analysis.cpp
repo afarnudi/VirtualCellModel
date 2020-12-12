@@ -79,7 +79,8 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
          , cxxopts::value<std::vector<int>>(),"int,int")
         ("memlabels", "The label(s) used to represent the memebrane(s) in the pdb file. The label(s) will also be used to distinguish between output files. Example (Note: irelevant flags are omited):               ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0,mem1            Output files: mydirectory/mypdb_mem0_myUlms.myextension and mydirectory/mypdb_mem1_myUlms.myextension", cxxopts::value<std::vector<std::string>>(),"mem0")
         
-        ("m,mesh_minimisation", "Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the Mesh.")
+        ("m,minimisedState", "Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the minimised state. Takes two options, 'Mesh' to use the mesh coordinates, or the frame number you wish to set as the minimised state.", cxxopts::value<string>(), "string or int")
+        ("meshfile", "path to the mesh file.", cxxopts::value<string>(), "Path+file")
         ;
         //      I have put this here so that parser throuws an exception when an extra argument is put in the command line that is not associated with any flags
         options.parse_positional({""});
@@ -122,8 +123,12 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             args.analysis_averaging_option=2;
             const auto values = result["alignaxes"].as<std::vector<int>>();
             if (values.size()!=2) {
-                cout<<TWWARN<<"Error: "<<TRESET<<"Expected 2 int arguments for \"alignaxes\", got "<<values.size()<<"\n Input format example: --alignaxes 2,4\nRun help (-h, --help) for more information."<<endl;
-                exit(1);
+                string errorMessage = TWARN;
+                errorMessage+="Error: "; errorMessage+=TRESET;
+                errorMessage+="Expected 2 int arguments for \"alignaxes\", got "; errorMessage+=TFILE;
+                errorMessage+=values.size(); errorMessage+=TRESET;
+                errorMessage+="\n Input format example: --alignaxes 2,4\nRun help (-h, --help) for more information.\n";
+                throw std::runtime_error(errorMessage);
             }
             args.z_node = values[0];
             args.zy_node= values[1];
@@ -136,15 +141,36 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         {
             const auto values = result["framelimits"].as<std::vector<int>>();
             if (values.size()!=2) {
-                cout<<TWWARN<<"Error: "<<TRESET<<"Expected 2 int arguments for \"framelimits\", got "<<values.size()<<"\n Run help (-h, --help) for more information."<<endl;
-                exit(1);
+                
+                string errorMessage = TWARN;
+                errorMessage+="Error: "; errorMessage+=TRESET;
+                errorMessage+="Expected 2 int arguments for \"framelimits\", got "; errorMessage+=TFILE;
+                errorMessage+=values.size(); errorMessage+=TRESET;
+                errorMessage+="\n Run help (-h, --help) for more information.\n";   errorMessage+=TRESET;
+                throw std::runtime_error(errorMessage);
+                
             } else if (values[0] > values[1] && values[1]!=0){
-                cout<<TWWARN<<"Error: "<<TRESET"Got "<<values[0]<<" as the beginning frame and "<<values[1]<<" as the end frame. Beginning frame cannot be larger than end frame.\n Run help (-h, --help) for more information."<<endl;
-                exit(1);
+                
+                string errorMessage = TWARN;
+                errorMessage+="Error: "; errorMessage+=TRESET;
+                errorMessage+="Got ";    errorMessage+=TFILE;
+                errorMessage+=values[0]; errorMessage+=TRESET;
+                errorMessage+=" as the beginning frame and ";  errorMessage+=TFILE;
+                errorMessage+=values[1]; errorMessage+=TRESET;
+                errorMessage+=" as the end frame. Beginning frame cannot be larger than end frame.\n Run help (-h, --help) for more information.\n";
+                throw std::runtime_error(errorMessage);
+                
             } else if (values[0]!=0 && values[1]!=0 ){
                 if (values[0]==values[1]) {
-                    cout<<TWWARN<<"Error: "<<TRESET<<"Beginning frame ("<<values[0]<<") and end frame ("<<values[0]<<") cannot point to the same frame number. If you wish to analyse frame number N, set the beginning frame to N and end frame to N+1.\n Run help (-h, --help) for more information."<<endl;
-                    exit(1);
+                    
+                    string errorMessage = TWARN;
+                    errorMessage+="Error: "; errorMessage+=TRESET;
+                    errorMessage+="Beginning frame ("; errorMessage+=TFILE;
+                    errorMessage+=values[0]; errorMessage+=TRESET;
+                    errorMessage+=") and end frame ("; errorMessage+=TFILE;
+                    errorMessage+=values[1]; errorMessage+=TRESET;
+                    errorMessage+=") cannot point to the same frame number. If you wish to analyse frame number N, set the beginning frame to N and end frame to N+1.\n Run help (-h, --help) for more information.\n";
+                    throw std::runtime_error(errorMessage);
                 }
             }
             args.framelimits_beg = values[0];
@@ -160,7 +186,27 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         }
         if (result.count("m"))
         {
-            args.MeshMinimisation = true ;
+            string input = result["minimisedState"].as<string>();
+            
+            if (input == "Mesh" || input == "mesh") {
+                args.MeshMinimisation = true;
+            } else {
+                try {
+                    args.FrameMinimisation = stoi(input);
+                } catch (...) {
+                    string errorMessage = TWARN;
+                    errorMessage+="Error: "; errorMessage+=TRESET;
+                    errorMessage+="Invalid input for the \"minimisedState\" ("; errorMessage+=TFILE;
+                    errorMessage+=input; errorMessage+=TRESET;
+                    errorMessage+="). Please try again.\nExample inputs: Mesh, mesh, or an integer (example 2).";
+                    throw std::runtime_error(errorMessage);
+                }
+                
+            }
+        }
+        if (result.count("meshfile"))
+        {
+            args.meshpathinput = result["meshfile"].as<string>();
         }
         
         consistency_check(args);
@@ -211,6 +257,9 @@ void consistency_check(ArgStruct_Analysis &args){
             if (args.MeshMinimisation) {
                 args.analysis_averaging_option = 2;
             }
+            if (args.FrameMinimisation>0) {
+                args.analysis_averaging_option = 2;
+            }
             
         }
         if (args.analysis_dim == 2) {
@@ -245,61 +294,67 @@ void consistency_check(ArgStruct_Analysis &args){
         }
         
         if (args.analysis_dim==3) {
-            string meshpath;
-            cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for 3D analysis."<<endl;
-            if (args.membane_labels.size()<2) {
-                cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
-                cout<<TFILE;
-                cin>>meshpath;
-                cout<<TRESET;
-                
-                meshpath = check_if_file_exists(meshpath);
-                args.Mesh_files.push_back(meshpath);
-                
-//                bool valid_answer = false;
-//                string yn_answer;
-//                cout<<"Real Spherical harmonics amplitutes are calculated relative to the ground state of the system. The default ground state is a sphere with the same surface area as the Membrane. Do you want to change the ground state to the shape of the Mesh? (y,n)"<<endl;
-//                cout<<TFILE;
-//                cin>>yn_answer;
-//                cout<<TRESET;
-//                if (yn_answer=="y") {
-//                    args.MeshMinimisation.push_back(true);
-//                    valid_answer=true;
-//                } else if (yn_answer=="n") {
-//                    args.MeshMinimisation.push_back(false);
-//                    valid_answer=true;
-//                }
-//                while (!valid_answer) {
-//                    cout<<"Please enter y or n"<<endl;
-//                    cout<<TFILE;
-//                    cin>>yn_answer;
-//                    cout<<TRESET;
-//                    if (yn_answer=="y") {
-//                        args.MeshMinimisation.push_back(true);
-//                        valid_answer=true;
-//                    } else if (yn_answer=="n") {
-//                        args.MeshMinimisation.push_back(false);
-//                        valid_answer=true;
-//                    }
-//                }
-                
-            } else {
-                cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
-                for (int i=0; i<args.membane_labels.size(); i++) {
-                    cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
+            if (args.meshpathinput == "None") {
+                string meshpath;
+                cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for 3D analysis."<<endl;
+                if (args.membane_labels.size()<2) {
+                    cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
                     cout<<TFILE;
                     cin>>meshpath;
                     cout<<TRESET;
-                    std::ifstream read_mesh;
-                    read_mesh.open(meshpath.c_str());
-                    if (!read_mesh) {
-                        std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
-                        i--;
-                    } else {
-                        args.Mesh_files.push_back(meshpath);
+                    
+                    meshpath = check_if_file_exists(meshpath);
+                    args.Mesh_files.push_back(meshpath);
+                    
+    //                bool valid_answer = false;
+    //                string yn_answer;
+    //                cout<<"Real Spherical harmonics amplitutes are calculated relative to the ground state of the system. The default ground state is a sphere with the same surface area as the Membrane. Do you want to change the ground state to the shape of the Mesh? (y,n)"<<endl;
+    //                cout<<TFILE;
+    //                cin>>yn_answer;
+    //                cout<<TRESET;
+    //                if (yn_answer=="y") {
+    //                    args.MeshMinimisation.push_back(true);
+    //                    valid_answer=true;
+    //                } else if (yn_answer=="n") {
+    //                    args.MeshMinimisation.push_back(false);
+    //                    valid_answer=true;
+    //                }
+    //                while (!valid_answer) {
+    //                    cout<<"Please enter y or n"<<endl;
+    //                    cout<<TFILE;
+    //                    cin>>yn_answer;
+    //                    cout<<TRESET;
+    //                    if (yn_answer=="y") {
+    //                        args.MeshMinimisation.push_back(true);
+    //                        valid_answer=true;
+    //                    } else if (yn_answer=="n") {
+    //                        args.MeshMinimisation.push_back(false);
+    //                        valid_answer=true;
+    //                    }
+    //                }
+                    
+                } else {
+                    cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+                    for (int i=0; i<args.membane_labels.size(); i++) {
+                        cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
+                        cout<<TFILE;
+                        cin>>meshpath;
+                        cout<<TRESET;
+                        std::ifstream read_mesh;
+                        read_mesh.open(meshpath.c_str());
+                        if (!read_mesh) {
+                            std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
+                            i--;
+                        } else {
+                            args.Mesh_files.push_back(meshpath);
+                        }
                     }
                 }
+            } else {
+                string meshpath = check_if_file_exists(args.meshpathinput);
+                args.Mesh_files.push_back(meshpath);
             }
+            
             
         }
         
