@@ -36,76 +36,34 @@
 
 #include "OpenMM.h"
 
+GeneralParameters generalParameters;
+/**A struct that stores differnet potential indexies.*/
+PotentialModelIndex potentialModelIndex;
 
 namespace GenConst {
-double Simulation_Time_In_Ps;
-PotentialModelIndex potential;
-int    MD_traj_save_step;
-double Report_Interval_In_Fs;
-double Step_Size_In_Fs;
-double MD_T;
-double K;
-int    MD_thrmo_step;
+
 int    MC_step;
 int    Mem_fluidity;
-bool   Periodic_box;
-double Lbox;
-bool   Periodic_condtion_status;
-int    Num_of_Membranes;
-int    Num_of_Chromatins;
-int    Num_of_Actins;
-int    Num_of_ECMs;
-string trajectory_file_name;
-string ProjectName;
+
 string force_file_name;
+double Buffer_temperature; //***********OLDCODE
 double Bussi_tau;
 double Actin_Membrane_Bond_Coefficient;
-bool   Excluded_volume_interaction;
+
 double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
-string Membrane_label;
-string Actin_label;
-string Chromatin_label;
-string ECM_label;
-int    Integrator_type;
-double frictionInPs;
-double temperature;
-double BoltzmannKJpermolkelvin;
+
+
 bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;
 string Checkpoint_file_name;
 bool   ChromatinVirtualSites;
 
-bool   write_bonds_to_PDB;
-bool   WantEnergy;
-bool   WantForce;
-bool   WantVelocity;
-bool   CMMotionRemover;
-int    CMMotionRemoverStep;
-bool   Wantvoronoi;
-bool   Testmode;
 
-
-double MCBarostatPressure;
-double MCBarostatTemperature;
-int    MCBarostatFrequency;
-
-bool MCAnisoBarostatOn;
-std::vector<double> MCAnisoBarostatPressure;
-double MCAnisoBarostatTemperature;
-std::vector<bool> MCAnisoBarostatScaleXYZ;
-int MCAnisoBarostatFrequency;
-
-
-std::vector<double> PeriodicBoxVector0;
-std::vector<double> PeriodicBoxVector1;
-std::vector<double> PeriodicBoxVector2;
-//    std::vector<std::vector<std::vector<double> > > data;
 std::vector<double> data_colection_times;
-std::vector<std::vector<double> > Lboxdims;
 
-std::string hardwareReport;
+
 }
 
 
@@ -123,8 +81,8 @@ int main(int argc, char **argv)
     
     vector<Membrane> Membranes;
     
-    GenConst::Num_of_Membranes=int(args.Mesh_files.size());
-    Membranes.resize(GenConst::Num_of_Membranes);
+    generalParameters.Num_of_Membranes=int(args.Mesh_files.size());
+    Membranes.resize(generalParameters.Num_of_Membranes);
 
     
     
@@ -152,11 +110,14 @@ int main(int argc, char **argv)
             cout<<"3D Analysis"<<endl;
             Membranes[i].import_pdb_frames(args, i);
             
-            if (!GenConst::Testmode) {
+            if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
             if (args.MeshMinimisation) {
                 Membranes[i].get_ground_state_from_mesh(args);
+            } else if (args.FrameMinimisation>-0.5) {
+                Membranes[i].get_ground_state_from_frame(args);
+                args.MeshMinimisation= true;
             }
             for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
                 
@@ -179,7 +140,7 @@ int main(int argc, char **argv)
             cout<<"2D Analysis"<<endl;
             Membranes[i].import_pdb_frames(args, i);
             
-            if (!GenConst::Testmode) {
+            if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
             

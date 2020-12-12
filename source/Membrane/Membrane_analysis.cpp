@@ -319,3 +319,45 @@ void Membrane::get_ground_state_from_mesh(ArgStruct_Analysis args){
         }
     }
 }
+
+void Membrane::get_ground_state_from_frame(ArgStruct_Analysis args){
+    load_pdb_frame(args.FrameMinimisation, args);
+    
+    update_COM_position();
+    set_com_to_zero();
+    
+    if (args.analysis_averaging_option == 1) {
+        srand (time(NULL));
+        double scratch = rand();
+        scratch = rand();
+    }else if(args.analysis_averaging_option == 2){
+        if(args.z_node == -1 || args.zy_node == -1){
+            cout<<"No nodes specified for aligning.\n the nodes must be specfied with the '--align_axes flag z,y' where z is the node index to be aligned with the  z axis (when the com is in the origin (0,0,0) )and y is the index of the node that will then be rotated to lie on the zy plane.\n";
+            exit(EXIT_FAILURE);
+        }
+        rotate_particle_to_axes(args);
+    }
+    
+    
+    update_spherical_positions();
+    calculate_dOmega();
+    calculate_surface_area_with_voronoi();
+    
+    int ell_max = args.ell_max;
+    
+    ulm_Mesh.clear();
+    ulm_Mesh.resize(ell_max+1);
+    for (int ell=0; ell<ell_max+1; ell++) {
+        ulm_Mesh[ell].resize(2*ell+1,0);
+    }
+    
+    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh();
+    for (int ell=0; ell<ell_max+1; ell++) {
+        for (int m=-ell; m<ell+1; m++) {
+            
+            vector<double>  Realylm = get_real_ylm_vectorlist_for_mesh(ell, m);
+            ulm_Mesh[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(Realylm, membrane_radii_list);
+            
+        }
+    }
+}
