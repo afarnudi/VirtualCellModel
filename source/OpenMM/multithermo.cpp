@@ -30,19 +30,22 @@ void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map
     omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
     omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
     omm->CustomIntegrator->addGlobalVariable("kTa", kBT);
-    omm->CustomIntegrator->addGlobalVariable("kTb", kBT*3);
+    omm->CustomIntegrator->addGlobalVariable("kTb", kBT*5);
+//    omm->CustomIntegrator->addGlobalVariable("tempa", 1);
     omm->CustomIntegrator->addPerDofVariable("stat", 0);
     
     omm->CustomIntegrator->addUpdateContextState();
-    omm->CustomIntegrator->addComputePerDof("stat", "f7");
-    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kTa/m)*gaussian");
-//    omm->CustomIntegrator->addComputePerDof("v", "v + stat*(a*v - v + c*f/m + b*sqrt(kTa/m)*gaussian)");
-//    omm->CustomIntegrator->addComputePerDof("v", "v + deriv(energy31, tempa)*b*sqrt(kTa/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("stat", "f31");
+//    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kTa/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f0/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + (1-delta(stat))*b*sqrt(kTb/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*b*sqrt(kTa/m)*gaussian");
 //    omm->CustomIntegrator->addComputePerDof("v", "v + (1-deriv(energy31, tempa))*b*sqrt(kTb/m)*gaussian");
     omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
 //    omm->CustomIntegrator->addComputePerDof("v", "v + stat*(a*v - v + c*f/m + b*sqrt(kTa/m)*gaussian)");
-    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kTa/m)*gaussian");
-//    omm->CustomIntegrator->addComputePerDof("v", "v + deriv(energy31, tempa)*b*sqrt(kTa/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*f0/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + (1-delta(stat))*b*sqrt(kTb/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*b*sqrt(kTa/m)*gaussian");
 //    omm->CustomIntegrator->addComputePerDof("v", "v + (1-deriv(energy31, tempa))*b*sqrt(kTb/m)*gaussian");
     
 }
