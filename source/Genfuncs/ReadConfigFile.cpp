@@ -185,11 +185,17 @@ void assign_general_parameters(void){
                 generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){
                 generalParameters.Integrator_type="Custom";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
             }
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);
         } else if (it.first == "Temperature") {
             generalParameters.temperature=stod(split[0]);
+            if (generalParameters.customtemperature<0) {
+                generalParameters.customtemperature=generalParameters.temperature;
+            }
         } else if (it.first == "ReportEnergy") {
             bool stat;
             if (split[0]=="true") {

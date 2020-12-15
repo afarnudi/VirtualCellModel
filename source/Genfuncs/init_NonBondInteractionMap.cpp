@@ -121,6 +121,15 @@ void NonBondInteractionMap::check_force_consistency(){
         errorMessage+= TRESET;
         throw std::runtime_error(errorMessage);
     }
+    if (generalParameters.Integrator_type == "Custom") {
+        if (force_sum>30) {
+            string errorMessage = TWARN;
+            errorMessage+="Force Reporter: cannot report more than 29 forces. This limitation is set by OpenMM (31). The custom integrator also takes up one force group. Please edit the interaction table and try again.";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
+    
 }
 
 int NonBondInteractionMap::setForceGroup(int row, int col){

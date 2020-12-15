@@ -104,6 +104,9 @@ struct GeneralParameters{
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     double temperature;
     
+    /**Set the custom thermostat temperature of the heat bath (in Kelvin) by writing it after 'C' in the intergrator type category. If left empty the tempreture of the integrator will be used. */
+    double customtemperature=-1;
+    
     
     double Simulation_box_length;
     /**The simulation uses periodic boundary condition. Default False*/
