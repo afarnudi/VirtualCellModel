@@ -14,9 +14,9 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
         cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
     }
     
-    if (args.analysis_dim==3) {
+//    if (args.analysis_dim==3) {
         analysis_init(args.Mesh_files[file_index]);
-    }
+//    }
     
     
     

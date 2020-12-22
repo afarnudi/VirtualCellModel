@@ -142,6 +142,9 @@ public:
     vector<double> get_ulmYlm_vectorlist_for_mesh();
     vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
     
+    //Analysis 2D funcs/vars:
+    void get_ring(ArgStruct_Analysis args);
+    
     
     std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
     /**return the  complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). Where l is a positiv integer, m is defined -l <= m <= l, theta is 0 <= theta <= pi, and phi is defined 0 <= phi <= 2pi. s*/

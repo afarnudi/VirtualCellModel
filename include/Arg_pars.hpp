@@ -24,6 +24,7 @@ struct ArgStruct_Analysis
     std::string analysis_filename;
     std::vector<std::string> membane_labels;
     int ell_max =20;
+    int q_max   =70;
     std::string extension;
     std::vector<std::string> output_filename;
     int framelimits_beg=0;

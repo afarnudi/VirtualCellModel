@@ -83,13 +83,14 @@ int main(int argc, char **argv)
     
     generalParameters.Num_of_Membranes=int(args.Mesh_files.size());
     Membranes.resize(generalParameters.Num_of_Membranes);
-
     
     
     
     cout<<TBOLD<<"Entering analysis mode:\n"<<TRESET;
     if (args.membane_labels.size()==0) {
         args.membane_labels.push_back(get_pdb_first_label(args.analysis_filename));
+        generalParameters.Num_of_Membranes=int(args.membane_labels.size());
+        Membranes.resize(generalParameters.Num_of_Membranes);
     }
     args.num_atoms_per_frame = get_pdb_num_of_atoms(args.analysis_filename);
     if (args.framelimits_end==0) {
@@ -103,53 +104,52 @@ int main(int argc, char **argv)
         args.framelimits_beg--;
     }
     cout<<args.num_atoms_per_frame<<" ATOMs in each frame"<<endl;
-    for (int i=0; i<args.output_filename.size(); i++) {
+    for (int memindex=0; memindex<args.output_filename.size(); memindex++) {
         
         if (args.analysis_dim == 3 ) {
             cout<<TPINK;
             cout<<"3D Analysis"<<endl;
-            Membranes[i].import_pdb_frames(args, i);
+            Membranes[memindex].import_pdb_frames(args, memindex);
             
             if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
             if (args.MeshMinimisation) {
-                Membranes[i].get_ground_state_from_mesh(args);
+                Membranes[memindex].get_ground_state_from_mesh(args);
             } else if (args.FrameMinimisation>-0.5) {
-                Membranes[i].get_ground_state_from_frame(args);
+                Membranes[memindex].get_ground_state_from_frame(args);
                 args.MeshMinimisation= true;
             }
-            for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
+            for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
                 
-                Membranes[0].load_pdb_frame(i, args);
+                Membranes[memindex].load_pdb_frame(frame, args);
                 
                 for (int runs=0; runs<args.num_ang_avg; runs++) {
                     
-                    Membranes[0].calculate_real_ulm(args);
-                    //                Membranes[0].myWritePDBFrame(runs,temp_pdb_name+".pdb");
-                    //                Membranes[0].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
+                    Membranes[memindex].calculate_real_ulm(args);
+                    //                Membranes[memindex].myWritePDBFrame(runs,temp_pdb_name+".pdb");
+                    //                Membranes[memindex].calculate_ulm_sub_particles(ell_max, analysis_averaging_option);
                 }
                 
-                cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+                cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
             cout<<TRESET<<endl;
-            Membranes[0].write_ulm(args, i);
+            Membranes[memindex].write_ulm(args, memindex);
             return 3;
         } else if(args.analysis_dim==2){
-            cout<<TCYAN;
+            cout<<TFILE;
             cout<<"2D Analysis"<<endl;
-            Membranes[i].import_pdb_frames(args, i);
-            
+            Membranes[memindex].import_pdb_frames(args, memindex);
             if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
-            
-            for (int i=0; i<args.framelimits_end-args.framelimits_beg; i++) {
-                Membranes[0].load_pdb_frame(i, args);
+//
+            for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
+                Membranes[memindex].load_pdb_frame(frame, args);
                 
-                
-                
-                cout<<"frame "<<i+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+                Membranes[memindex].get_ring(args);
+
+                cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
             cout<<endl;
             return 2;
