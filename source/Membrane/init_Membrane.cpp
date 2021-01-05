@@ -123,6 +123,7 @@ void Membrane::analysis_init(std::string Mesh_path){
     } else {
         read_gmesh_file(Mesh_path);
     }
+    update_average_Membrane_radius();
     
     Normal_direction_Identifier();
     Triangle_pair_counter();

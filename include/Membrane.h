@@ -144,6 +144,9 @@ public:
     
     //Analysis 2D funcs/vars:
     void get_ring(ArgStruct_Analysis args);
+    void calculate_freqs(ArgStruct_Analysis args);
+    void WriteMemPDBFrame(ArgStruct_Analysis args,
+                          vector<int> chainlist);
     
     
     std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
@@ -766,8 +769,8 @@ public:
         Params["UpdateEndTimeInPs"] = values;
         insertOrder.push_back("UpdateEndTimeInPs");
         
-        values[0] ="4 0.01 20";
-        values[1] ="#NUL: The number (N), amplitude (U), maximum value of the modes (L) of randomly generated real spherical harmonic modes add to the existing Memebrane mesh.";
+        values[0] ="0 0 0";
+        values[1] ="#NUL: The number (N), amplitude (U), maximum value of the modes (L) of randomly generated real spherical harmonic modes add to the existing Memebrane mesh. Example: 4 0.01 20, That generates 4 random modes that may go up to 20, with amplitude 0.01.";
         Params["NUL"] = values;
         insertOrder.push_back("NUL");
         

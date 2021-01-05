@@ -147,7 +147,7 @@ int main(int argc, char **argv)
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
                 Membranes[memindex].load_pdb_frame(frame, args);
                 
-                Membranes[memindex].get_ring(args);
+                Membranes[memindex].calculate_freqs(args);
 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
