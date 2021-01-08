@@ -143,10 +143,16 @@ public:
     vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
     
     //Analysis 2D funcs/vars:
+    vector<int> ringNodeList;
+    double contourRadius;
+    vector<double> contourSegmentLength;
     void get_ring(ArgStruct_Analysis args);
     void calculate_freqs(ArgStruct_Analysis args);
     void WriteMemPDBFrame(ArgStruct_Analysis args,
                           vector<int> chainlist);
+    void calculate_contourSegmentLength(void);
+    void calculate_contourRadius(void);
+    void calculate_modeAmplitudes2D(void);
     
     
     std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);

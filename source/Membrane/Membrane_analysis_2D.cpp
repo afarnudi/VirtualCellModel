@@ -31,7 +31,12 @@ void Membrane::calculate_freqs(ArgStruct_Analysis args){
         update_spherical_positions();
         
     }
-    get_ring(args);
+    if (ringNodeList.size()==0) {
+        get_ring(args);
+    }
+    
+    calculate_contourSegmentLength();
+//    calculate_contourRadius();
     
 //    vector<vector< double > > ulm_avg_frame;
 //    ulm_avg_frame.resize(ell_max+1);
@@ -68,6 +73,8 @@ void Membrane::calculate_freqs(ArgStruct_Analysis args){
 //    }
 }
 
+
+
 void Membrane::get_ring(ArgStruct_Analysis args){
     int n = int (sqrt(Num_of_Nodes))*2;
     double dtheta = M_PI/n;
@@ -76,17 +83,29 @@ void Membrane::get_ring(ArgStruct_Analysis args){
     double thresh_max = theta0 + dtheta;
     
     vector<int> chainlist(Num_of_Nodes,0);
-    
+    vector<vector<double> > indPhi;
     int count=0;
     for (int i=0; i<Num_of_Nodes; i++) {
         double theta = spherical_positions[i][1];
         if (theta < thresh_max && theta > thresh_min) {
+            vector <double> temp;
+            temp.push_back(i);
+            temp.push_back(spherical_positions[i][2]+M_PI);
+            indPhi.push_back(temp);
             chainlist[i]=1;
             count++;
         }
         
     }
-    bool getPDBOutputForDoubleCheck=false;
+    //Sort node indecies based on their phi (from 0 to 2pi)
+    sort(indPhi.begin(), indPhi.end(),[](const vector<double>& a, const vector<double>& b){
+        return a[1] < b[1];
+    });
+    for (auto &i:indPhi) {
+        ringNodeList.push_back(i[0]);
+    }
+    
+    bool getPDBOutputForDoubleCheck=true;
     if (getPDBOutputForDoubleCheck) {
         cout<<"count "<<count<<endl;
         WriteMemPDBFrame(args,chainlist);
@@ -126,4 +145,45 @@ void Membrane::WriteMemPDBFrame(ArgStruct_Analysis args,
 
     fprintf(pFile,"ENDMDL\n");
     fclose (pFile);
+}
+
+void Membrane::calculate_contourSegmentLength(void){
+    contourSegmentLength.clear();
+    
+    
+    for (int i=0; i<ringNodeList.size()-1; i++) {
+        double xi   = Node_Position[ringNodeList[i]][0];
+        double yi   = Node_Position[ringNodeList[i]][1];
+        double xip1 = Node_Position[ringNodeList[i+1]][0];
+        double yip1 = Node_Position[ringNodeList[i+1]][1];
+        contourSegmentLength.push_back( sqrt( (xip1-xi)*(xip1-xi) + (yip1-yi)*(yip1-yi) ) );
+    }
+    int N = int(ringNodeList.size()-1);
+    double x0   = Node_Position[ringNodeList[0]][0];
+    double y0   = Node_Position[ringNodeList[0]][1];
+    double xN = Node_Position[ringNodeList[N]][0];
+    double yN = Node_Position[ringNodeList[N]][1];
+    contourSegmentLength.push_back( sqrt( (xN-x0)*(xN-x0) + (yN-y0)*(yN-y0) ) );
+}
+
+void Membrane::calculate_contourRadius(void){
+    contourRadius=0;
+    for (int i=0; i<ringNodeList.size()-1; i++) {
+        double ri     = spherical_positions[ringNodeList[i]][0];
+        double rip1   = spherical_positions[ringNodeList[i+1]][0];
+        double phii   = spherical_positions[ringNodeList[i]][2];
+        double phiip1 = spherical_positions[ringNodeList[i+1]][2];
+        contourRadius += ( ri+rip1 )*( phiip1-phii );
+        cout<<( phiip1-phii )<<endl;
+    }
+    int N = int(ringNodeList.size()-1);
+    double r0     = spherical_positions[ringNodeList[0]][0];
+    double rN   = spherical_positions[ringNodeList[N]][0];
+    double phi0   = spherical_positions[ringNodeList[0]][2];
+    double phiN = spherical_positions[ringNodeList[N]][2];
+    contourRadius += ( r0+rN )*( 2*M_PI-phiN+phi0 );
+    cout<<( 2*M_PI-phiN+phi0 )<<endl;
+    contourRadius *= 1/(4*M_PI);
+    cout<<"contourRadius "<<contourRadius<<endl;
+    exit(0);
 }
