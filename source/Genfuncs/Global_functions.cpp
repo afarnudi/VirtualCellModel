@@ -112,22 +112,24 @@ void write_data(MyOpenMMData* omm,
         
         
     }
-    
-    int forcegroup = 1 << 31;
-    int infoMask = 0;
-    infoMask += OpenMM::State::Forces;     // for pot. energy (expensive)
-    
-    const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, forcegroup);
-    const std::vector<Vec3>& Forcesi = statei.getForces();
-    
-    ofstream write_force31;
-    string force31path =generalParameters.trajectory_file_name+"_f31.txt";
-    write_force31.open(force31path.c_str(),std::ios_base::app);
-    write_force31<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
-    write_force31<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
-    for (int t=0; t < (int)Forcesi.size(); ++t){
-        write_force31<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
-        write_force31<<"\n";
+    if (generalParameters.Integrator_type=="Custom") {
+        int forcegroup = 1 << 31;
+        int infoMask = 0;
+        infoMask += OpenMM::State::Forces;     // for pot. energy (expensive)
+        
+        const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, forcegroup);
+        const std::vector<Vec3>& Forcesi = statei.getForces();
+        
+        ofstream write_force31;
+        string force31path =generalParameters.trajectory_file_name+"_f31.txt";
+        write_force31.open(force31path.c_str(),std::ios_base::app);
+        write_force31<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
+        write_force31<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+        for (int t=0; t < (int)Forcesi.size(); ++t){
+            write_force31<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
+            write_force31<<"\n";
+        }
     }
+    
     
 }

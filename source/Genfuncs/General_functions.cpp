@@ -151,3 +151,17 @@ std::vector<double> convert_spherical_to_cartesian(std::vector<double> r_theta_p
     xyz[2] = p3.get<2>();
     return xyz;
 }
+
+
+string check_if_file_exists(string filename){
+    ifstream infile(filename.c_str());
+    bool loop=infile.is_open();
+    string entree = filename;
+    while( !loop ){
+        cout<<"'"<<TBOLD<<TWARN<<filename<<TRESET<<"' does not exist. Please try again:\n"<<TBLINK<<">> "<<TRESET;
+        cin>>entree;
+        ifstream infiletemp(entree.c_str());
+        loop=infiletemp.is_open();
+    }
+    return entree;
+}

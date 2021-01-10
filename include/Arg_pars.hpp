@@ -16,7 +16,7 @@
 
 struct ArgStruct_Analysis
 {
-    int analysis_dim = 0;
+    string analysis = "0";
     int analysis_averaging_option = 0;
     int num_ang_avg= 1;
     int z_node=-1;

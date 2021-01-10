@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     cout<<args.num_atoms_per_frame<<" ATOMs in each frame"<<endl;
     for (int memindex=0; memindex<args.output_filename.size(); memindex++) {
         
-        if (args.analysis_dim == 3 ) {
+        if (args.analysis == "3" ) {
             cout<<TPINK;
             cout<<"3D Analysis"<<endl;
             Membranes[memindex].import_pdb_frames(args, memindex);
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
             cout<<TRESET<<endl;
             Membranes[memindex].write_ulm(args, memindex);
             return 3;
-        } else if(args.analysis_dim==2){
+        } else if(args.analysis== "2"){
             cout<<TFILE;
             cout<<"2D Analysis"<<endl;
             Membranes[memindex].import_pdb_frames(args, memindex);

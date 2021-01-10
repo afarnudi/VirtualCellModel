@@ -12,13 +12,14 @@
 
 #include "Arg_pars.hpp"
 #include "cxxopts.hpp"
+#include "General_functions.hpp"
 
 using namespace std;
 
 void consistency_check(ArgStruct_Analysis &args);
 void build_output_names(ArgStruct_Analysis &args);
 void check_membrane_labels(ArgStruct_Analysis &args);
-string check_if_file_exists(string filename);
+
 
 ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
     ArgStruct_Analysis args;
@@ -33,7 +34,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                                  " \n"
                                  " "+programme_name+"\n"
                                  " \n"
-                                 " How to utilise VCM's analysis options:\n"
+                                 " How to utilise VCM's analysis options:\nThere are currently 3 features: 3D, 2D, and Energy analysis\n"
                                  " 3D analysis of the Membrane surface undulations:\n"
                                  " \n "+programme_name+
                                  " --analysis 3"
@@ -43,7 +44,28 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                                  " --align_axes <node on the Z axis>,<node on the Z-Y plane>"
                                  " --ext <output file extension>"
                                  " --framelimits <first frame>,<last frame>"
-                                 " --memlabels <firstlabel>,<secondlabel>,...");
+                                 " --memlabels <firstlabel>,<secondlabel>,..."
+                                 " --minimisedState"
+                                 " --meshfile Path/to/meshfile"
+                                 "\n\n 2D analysis of the Membrane contour undulations:\n"
+                                 " \n "+programme_name+
+                                 " --analysis 2"
+                                 " --pdbpath <path to pdb>"
+                                 " --lmax <maximum mode number>"
+                                 " --angavg <number of random rotations>"
+                                 " --align_axes <node on the Z axis>,<node on the Z-Y plane>"
+                                 " --ext <output file extension>"
+                                 " --framelimits <first frame>,<last frame>"
+                                 " --memlabels <firstlabel>,<secondlabel>,..."
+                                 " --meshfile Path/to/meshfile"
+                                 "\n\n Mechanical energy of the Membrane calculator:\n"
+                                 " \n "+programme_name+
+                                 " --analysis E"
+                                 " --pdbpath <path to pdb>"
+                                 " --ext <output file extension>"
+                                 " --framelimits <first frame>,<last frame>"
+                                 " --memlabels <firstlabel>,<secondlabel>,..."
+                                 " --meshfile Path/to/meshfile");
         options
         .positional_help("")
         .show_positional_help();
@@ -52,7 +74,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         //                .allow_unrecognised_options()
         .add_options()
         ("h,help", "Print help")
-        ("analysis", "3 for 3D analysis and 2 for 2D", cxxopts::value<int>(),"int")
+        ("analysis", "3 for 3D analysis and 2 for 2D", cxxopts::value<string>())
         ("pdbfile", "[2D + 3D] Path to Membrane pdb file that contain ONLY a single Membrane. Example: path/to/my/pdbfile.pdb", cxxopts::value<std::vector<std::string>>(),"Path+file")
         
         ("lmax", "[3D]The maximum mode number (l) the RSH amplitudes are measured for. This is a very expensive analysis since the number of angular modes (m) grow very rapidly (2*l+1) with l. Default 20.", cxxopts::value<int>(), "int")
@@ -96,7 +118,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         
         if (result.count("analysis"))
         {
-            args.analysis_dim=result["analysis"].as<int>();
+            args.analysis=result["analysis"].as<string>();
         }
         
         if (result.count("pdbfile"))
@@ -229,7 +251,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
 void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
     
-    if (args.analysis_dim != 2 && args.analysis_dim !=3) {
+    if (args.analysis != "2" && args.analysis != "3") {
         string errorMessage = TBLINK;
         errorMessage += TRED;
         errorMessage+="Error: "; errorMessage+=TRESET;
@@ -246,7 +268,7 @@ void consistency_check(ArgStruct_Analysis &args){
             cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
         }
         
-        if (args.analysis_dim == 3) {
+        if (args.analysis == "3") {
             cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
             cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
             
@@ -258,7 +280,7 @@ void consistency_check(ArgStruct_Analysis &args){
                 args.analysis_averaging_option = 2;
             }
             
-        } else if (args.analysis_dim == 2) {
+        } else if (args.analysis == "2") {
             cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
             cout<<TWWARN<<"This option is under development. Prceed with the trial version."<<TRESET<<endl;
             
@@ -377,25 +399,14 @@ void consistency_check(ArgStruct_Analysis &args){
     
 }
 
-string check_if_file_exists(string filename){
-    ifstream infile(filename.c_str());
-    bool loop=infile.is_open();
-    string entree = filename;
-    while( !loop ){
-        cout<<"'"<<TBOLD<<TWARN<<filename<<TRESET<<"' does not exist. Please try again:\n"<<TBLINK<<">> "<<TRESET;
-        cin>>entree;
-        ifstream infiletemp(entree.c_str());
-        loop=infiletemp.is_open();
-    }
-    return entree;
-}
+
 
 void build_output_names(ArgStruct_Analysis &args){
-    if (args.analysis_dim ==3) {
+    if (args.analysis == "3") {
         if (args.extension=="") {
             args.extension="_ulmt.txt";
         }
-    } else if (args.analysis_dim ==2) {
+    } else if (args.analysis == "2") {
         if (args.extension=="") {
             args.extension="_f2d.txt";
         }

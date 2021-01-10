@@ -48,7 +48,7 @@ int get_pdb_num_of_atoms(std::string filename, std::string label);
 int get_pdb_num_of_atoms(std::string filename);
 int get_pdb_num_of_frames(std::string filename, int num_atoms);
 
-
+std::string check_if_file_exists(std::string filename);
 
 void assign_project_directories(char* buffer);
 
