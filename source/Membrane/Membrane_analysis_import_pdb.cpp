@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "Membrane.h"
+#include "Configfile.hpp"
 
 using std::string;
 
@@ -14,9 +15,9 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
         cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
     }
     
-//    if (args.analysis_dim==3) {
+    if (args.analysis!="E") {
         analysis_init(args.Mesh_files[file_index]);
-//    }
+    }
     
     
     std::ifstream read_pdb;
@@ -28,6 +29,9 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
     string line;
     read_pdb.seekg(std::ios::beg);
     int num_of_frames = args.framelimits_end-args.framelimits_beg;
+    
+    pdb_frames_time.clear();
+    pdb_frames_time.resize(num_of_frames);
     
     pdb_frames.clear();
     pdb_frames.resize(num_of_frames);
@@ -54,6 +58,12 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
 
         getline(read_pdb, line);
         getline(read_pdb, line);
+        
+        auto split = split_and_check_for_comments(line, "Import PDB: ");
+        string time = split[2];
+        time.erase(time.begin(),time.begin()+5);
+        pdb_frames_time[frame_index]=stod(time);
+        
         int local_atom_count=0;
         for (int node_index= 0; node_index<args.num_atoms_per_frame; node_index++) {
             

@@ -153,6 +153,51 @@ int main(int argc, char **argv)
             }
             cout<<endl;
             return 2;
+        } else if (args.analysis == "E"){
+            cout<<TPURPLE;
+            cout<<"Mechanical Energy Analysis"<<endl;
+            string reportfilename = args.output_filename[memindex] + "_report.txt";
+//            string reportfilename = args.output_filename[memindex] args.analysis_filename;
+//            reportfilename.erase(reportfilename.end()-4,reportfilename.end());
+//            cout<<args.output_filename[memindex]<<endl;
+//            exit(0);
+////            string energyReportFileName = reportfilename + ""
+//            reportfilename+="_report.txt";
+            cout<<"Looking for simulation report file "<<TFILE<<reportfilename<<TPURPLE<<endl;
+            reportfilename=check_if_file_exists(reportfilename);
+            cout<<"Report file \""<<TFILE<<reportfilename<<TRESET<<"\""<<TSUCCESS<<" found"<<TPURPLE<<"."<<endl;
+            map<string, vector<string> > config_lines =read_configfile(reportfilename);
+            get_class_numbers(config_lines);
+            vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
+            Membranes[memindex].import_config(membrane_configs[ args.membane_label_indecies[memindex] ]);
+            cout<<TPURPLE;
+            Membranes[memindex].import_pdb_frames(args, memindex);
+            Membranes[memindex].load_pdb_frame(0, args);
+            Membranes[memindex].set_bond_nominal_length();
+            Membranes[memindex].set_bending_nominal_angle();
+            
+            string energyFileName = args.output_filename[memindex] + "_PotentialEnergy.txt";
+            FILE* pFile;
+            pFile = fopen (energyFileName.c_str(),"w");
+            fprintf(pFile,"time ps;   BendingEnergy      BondEnergy     TotalEnergy KJ/mole\n");
+            fclose (pFile);
+            
+            
+            if (!generalParameters.Testmode) {
+                cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
+            }
+            for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
+                
+                Membranes[memindex].load_pdb_frame(frame, args);
+                
+                Membranes[memindex].Mechanical_Energy_calculator();
+                Membranes[memindex].Export_Mechanical_Energy(energyFileName, frame+args.framelimits_beg);
+                
+                cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+            }
+            cout<<TRESET<<endl;
+            return 1;
+            
         }
     }
     

@@ -99,11 +99,12 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
          "(Not including 293)                               "
          "\n  4)  From frame 11 upto frame 73 (Not including"
          "73)                                               "
-         , cxxopts::value<std::vector<int>>(),"int,int")
+         , cxxopts::value<std::vector<int> >(),"int,int")
         ("memlabels", "[3D] The label(s) used to represent the memebrane(s) in the pdb file. The label(s) will also be used to distinguish between output files. Example (Note: irelevant flags are omited):               ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0,mem1            Output files: mydirectory/mypdb_mem0_myUlms.myextension and mydirectory/mypdb_mem1_myUlms.myextension", cxxopts::value<std::vector<std::string>>(),"mem0")
         
         ("m,minimisedState", "[3D] Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the minimised state. Takes two options, 'Mesh' to use the mesh coordinates, or the frame number you wish to set as the minimised state.", cxxopts::value<string>(), "string or int")
         ("meshfile", "[2D and 3D] path to the mesh file.", cxxopts::value<string>(), "Path+file")
+        ("reportindecies", "[E] The indecies (beginning from 0) corresponding to each membrane label. This option can be used for different combinations. A) If there is only one membrane in the reportfile/configfile you can exclude this option from the inputs. B) If there are multiple membranes in the reportfile/configfile and you are using the default option for the \"memlabels\" option (that uses the first atom label in the pdb) or one membrane label is provided, you should provide an index (integer beginning from 0) that corresponds to the memebrane configuration appearing in the reportfile/config file. For example if 3 membranes are configured in the reportfile/configfile the first one is identified with index 0, the second one with index 1, etc. If multiple membranes exist in the reportfile/configfile and multiple lables are provided using the \"memlabels\" option, the indecies corresponding to the membrane labels that appear in the reportfile/configfile must be provided. Example: 4 membranes configured in the reportfile/configfile, and the label (label is identified using the pdb file) of the third and first file is set using memlabels:\n ./VCM --analysis E .... --memlabels thirdlabel,firstlabel --reportindecies 2,0", cxxopts::value<std::vector<int> >(),"0,1")
         ;
         //      I have put this here so that parser throuws an exception when an extra argument is put in the command line that is not associated with any flags
         options.parse_positional({""});
@@ -211,6 +212,15 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                 args.membane_labels.push_back(f) ;
             }
         }
+        if (result.count("reportindecies"))
+        {
+            const auto values = result["reportindecies"].as<std::vector<int>>();
+            for (auto &ind: values) {
+                args.membane_label_indecies.push_back(ind);
+            }
+        } else {
+            args.membane_label_indecies.push_back(0);
+        }
         if (result.count("m"))
         {
             string input = result["minimisedState"].as<string>();
@@ -251,7 +261,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
 void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
     
-    if (args.analysis != "2" && args.analysis != "3") {
+    if (args.analysis != "2" && args.analysis != "3" && args.analysis != "E") {
         string errorMessage = TBLINK;
         errorMessage += TRED;
         errorMessage+="Error: "; errorMessage+=TRESET;
@@ -316,7 +326,7 @@ void consistency_check(ArgStruct_Analysis &args){
             cout<<"\t"<<TFILE<<args.output_filename[i]<<TRESET<<endl;
         }
         
-//        if (args.analysis_dim==3) {
+        if (args.analysis!="E") {
             if (args.meshpathinput == "None") {
                 string meshpath;
                 cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for analysis."<<endl;
@@ -379,7 +389,14 @@ void consistency_check(ArgStruct_Analysis &args){
             }
             
             
-//        }
+        } else {
+            if (args.membane_labels.size()!=0 && args.membane_labels.size()!=args.membane_label_indecies.size()) {
+                string errorMessage = TWARN;
+                errorMessage +="Error: Arg Parser: The number of mambrane labels and the corresponding indecies don't match. Check the number of arguments in the \"memlabels\" and \"reportindecies\" options.\n";
+                errorMessage +=TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        }
         
         if (args.framelimits_beg==0 && args.framelimits_end==0) {
             cout<<"All frames will be analysied."<<endl;

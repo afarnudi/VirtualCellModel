@@ -71,6 +71,8 @@ protected:
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy=0.0;
+    double Total_Bond_Energy=0.0;
+    double Total_Bending_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
     string Node_radius_stat;
@@ -106,8 +108,8 @@ protected:
     void Node_Bonds_identifier(void);
     void Triangle_pair_identifier(void);
     void Bending_potetial_2(double theta_0);
+    void calculating_dihedral_energy();
     
-    double Total_Bending_Energy = 0.0;
     vector<vector< int > > dihedral_atoms;
     
     /**write geometrical properties if it is true.*/
@@ -176,7 +178,7 @@ public:
     vector<vector<double> > ulm_temp_for_analysis;
   
     
-    
+    vector<double> pdb_frames_time;
     vector<vector<vector<double> > > pdb_frames;
     vector<vector<double> > spherical_positions;
     
@@ -277,6 +279,9 @@ public:
     void check_radius_update_values(void);
     void Triangle_Pair_and_Node_Bonds_Identifier(); //I guess this will use in MD loop and thus it should define as a public membere of class.
     void Elastic_Force_Calculator(double theta_0);
+    void Mechanical_Energy_calculator();
+    void Export_Mechanical_Energy(string filename, int frame);
+    void harmonic_potential_calculator(void);
     /**Construct a vector that lists all the neighbours of  each node and their respective index in the 'Node_Bond_list'.
      */
     void Node_neighbour_list_constructor();
