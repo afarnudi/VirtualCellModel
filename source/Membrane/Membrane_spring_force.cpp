@@ -197,3 +197,17 @@ void Membrane::custom(void){
     }
 
 }
+
+void Membrane::harmonic_potential_calculator(void){
+    
+    Total_Bond_Energy=0;
+    for (int i=0; i<Num_of_Node_Pairs; i++) {
+        double nodePairDistance = sqrt( (Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0])*(Node_Position[Node_Bond_list[i][0]][0]-Node_Position[Node_Bond_list[i][1]][0]) +
+                                        (Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1])*(Node_Position[Node_Bond_list[i][0]][1]-Node_Position[Node_Bond_list[i][1]][1]) +
+                                        (Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2])*(Node_Position[Node_Bond_list[i][0]][2]-Node_Position[Node_Bond_list[i][1]][2]));
+        nodePairDistance-=Node_Bond_Nominal_Length_in_Nm[i];
+        Total_Bond_Energy += nodePairDistance*nodePairDistance;
+    }
+    Total_Bond_Energy*=0.5*Spring_coefficient;
+
+}

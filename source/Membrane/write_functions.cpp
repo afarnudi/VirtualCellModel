@@ -204,3 +204,20 @@ void Membrane::write_geometrics(){
         wgeo<<i<<"\t"<<node_voronoi_normal_vec[i][0]<<"\t"<<node_voronoi_normal_vec[i][1]<<"\t"<<node_voronoi_normal_vec[i][2]<<"\t"<<node_voronoi_area[i]<<endl;
     }
 }
+
+void Membrane::Export_Mechanical_Energy(string filename, int frame){
+    
+    FILE* pFile;
+    pFile = fopen (filename.c_str(),"a");
+//    fprintf(pFile,"time ps; BendingEnergy BondEnergy TotalEnergy KJ/mole\n");
+    
+    
+    fprintf(pFile,"%8.3f\t%8.3f\t%8.3f\t%8.3f\n",
+            pdb_frames_time[frame],
+            Total_Bending_Energy,
+            Total_Potential_Energy,
+            Total_Potential_Energy);
+    
+    fclose (pFile);
+    
+}

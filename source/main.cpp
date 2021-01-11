@@ -107,20 +107,21 @@ int main(int argc, char **argv)
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
     
-    string configfilename;
-    string general_file_name="General_param_map.txt";
+    
+//    string general_file_name="General_param_map.txt";
     
     ArgStruct_VCM userinputs = cxxparser_vcm(argc, argv);
     
     if (userinputs.configfilename == "None") {
         cout<<TBOLD<<"\nHi!\nPlease enter the path + name of the configuration file. If you do not have a configuration file, run \""<<argv[0]<<" -h\" for more options.\n"<<TRESET<<"Example:\t../../myconfigfile.txt\n\nPath to configuration file: ";
+        string configfilename;
         cout<<TFILE;
         cin>>configfilename;
         cout<<TRESET;
-        userinputs.configfilename=configfilename;
-
+        userinputs.configfilename=check_if_file_exists(configfilename);
+    } else {
+        userinputs.configfilename=check_if_file_exists(userinputs.configfilename);
     }
-    
     
     clock_t tStart = clock();//Time the programme
 

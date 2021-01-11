@@ -185,11 +185,17 @@ void assign_general_parameters(void){
                 generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){
                 generalParameters.Integrator_type="Custom";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
             }
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);
         } else if (it.first == "Temperature") {
             generalParameters.temperature=stod(split[0]);
+            if (generalParameters.customtemperature<0) {
+                generalParameters.customtemperature=generalParameters.temperature;
+            }
         } else if (it.first == "ReportEnergy") {
             bool stat;
             if (split[0]=="true") {
@@ -299,97 +305,110 @@ void generate_report(map<string, vector<string> > config_lines){
     
     if (generalParameters.Num_of_Membranes!=0) {
         write_report<<endl;
-        for (auto &i : config_lines["-Membrane"]) {
-            write_report<<i<<endl;
-        }
-        
-        write_report<<"#Default values that where used:"<<endl;
-        //Now fill in the defaults missing from the configfile
-        Membrane mem;
-        for (auto &param: mem.get_map()){
-            bool add =true;
-            for (auto  &cparam: config_lines["-Membrane"]) {
-                vector<string> split = split_and_check_for_comments(cparam, "Membrane Reporter: Default values: ");
-                if (split[0] == param.first) {
-                    add =false;
-                    break;
+        vector<vector<string> > membrane_configs = sort_class_configs(config_lines["-Membrane"]);
+        for (int ind=0; ind<membrane_configs.size(); ind++) {
+            for (auto &i : membrane_configs[ind]) {
+                write_report<<i<<endl;
+            }
+            write_report<<"#Default values that where used:"<<endl;
+            //Now fill in the defaults missing from the configfile
+            Membrane mem;
+            for (auto &param: mem.get_map()){
+                bool add =true;
+                for (auto  &cparam: membrane_configs[ind]) {
+                    vector<string> split = split_and_check_for_comments(cparam, "Membrane Reporter: Default values: ");
+                    if (split[0] == param.first) {
+                        add =false;
+                        break;
+                    }
+                }
+                if (add) {
+                    write_report<<param.first<<" "<<param.second[0]<<endl;
                 }
             }
-            if (add) {
-                write_report<<param.first<<" "<<param.second[0]<<endl;
-            }
+            write_report<<endl;
         }
     }
     if (generalParameters.Num_of_Actins!=0) {
         write_report<<endl;
-        for (auto &i : config_lines["-Actin"]) {
-            write_report<<i<<endl;
-        }
-        
-        write_report<<"#Default values that where used:"<<endl;
-        //Now fill in the defaults missing from the configfile
-        Actin act;
-        for (auto &param: act.get_map()){
-            bool add =true;
-            for (auto  &cparam: config_lines["-Actin"]) {
-                vector<string> split = split_and_check_for_comments(cparam, "Actin Reporter: Default values: ");
-                if (split[0] == param.first) {
-                    add =false;
-                    break;
+        vector<vector<string> > actin_configs = sort_class_configs(config_lines["-Actin"]);
+        for (int ind=0; ind<actin_configs.size(); ind++) {
+            for (auto &i : actin_configs[ind]) {
+                write_report<<i<<endl;
+            }
+            write_report<<"#Default values that where used:"<<endl;
+            //Now fill in the defaults missing from the configfile
+            Actin act;
+            for (auto &param: act.get_map()){
+                bool add =true;
+                for (auto  &cparam: actin_configs[ind]) {
+                    vector<string> split = split_and_check_for_comments(cparam, "Actin Reporter: Default values: ");
+                    if (split[0] == param.first) {
+                        add =false;
+                        break;
+                    }
+                }
+                if (add) {
+                    write_report<<param.first<<" "<<param.second[0]<<endl;
                 }
             }
-            if (add) {
-                write_report<<param.first<<" "<<param.second[0]<<endl;
-            }
+            write_report<<endl;
         }
     }
     
     if (generalParameters.Num_of_ECMs!=0) {
         write_report<<endl;
-        for (auto &i : config_lines["-ECM"]) {
-            write_report<<i<<endl;
-        }
-        
-        write_report<<"#Default values that where used:"<<endl;
-        //Now fill in the defaults missing from the configfile
-        ECM ecm;
-        for (auto &param: ecm.get_map()){
-            bool add =true;
-            for (auto  &cparam: config_lines["-ECM"]) {
-                vector<string> split = split_and_check_for_comments(cparam, "ECM Reporter: Default values: ");
-                if (split[0] == param.first) {
-                    add =false;
-                    break;
+        vector<vector<string> > ecm_configs = sort_class_configs(config_lines["-ECM"]);
+        for (int ind=0; ind<ecm_configs.size(); ind++) {
+            for (auto &i : ecm_configs[ind]) {
+                write_report<<i<<endl;
+            }
+            write_report<<"#Default values that where used:"<<endl;
+            //Now fill in the defaults missing from the configfile
+            ECM ecm;
+            for (auto &param: ecm.get_map()){
+                bool add =true;
+                for (auto  &cparam: ecm_configs[ind]) {
+                    vector<string> split = split_and_check_for_comments(cparam, "ECM Reporter: Default values: ");
+                    if (split[0] == param.first) {
+                        add =false;
+                        break;
+                    }
+                }
+                if (add) {
+                    write_report<<param.first<<" "<<param.second[0]<<endl;
                 }
             }
-            if (add) {
-                write_report<<param.first<<" "<<param.second[0]<<endl;
-            }
+            write_report<<endl;
         }
     }
     
     if (generalParameters.Num_of_Chromatins!=0) {
         write_report<<endl;
-        for (auto &i : config_lines["-Chromatin"]) {
-            write_report<<i<<endl;
-        }
-        
-        write_report<<"#Default values that where used:"<<endl;
-        //Now fill in the defaults missing from the configfile
-        Chromatin chromo;
-        for (auto &param: chromo.get_map()){
-            bool add =true;
-            for (auto  &cparam: config_lines["-Chromatin"]) {
-                vector<string> split = split_and_check_for_comments(cparam, "Chromatin Reporter: Default values: ");
-                if (split[0] == param.first) {
-                    add =false;
-                    break;
+        vector<vector<string> > chromo_configs = sort_class_configs(config_lines["-Chromatin"]);
+        for (int ind=0; ind<chromo_configs.size(); ind++) {
+            for (auto &i : chromo_configs[ind]) {
+                write_report<<i<<endl;
+            }
+            write_report<<"#Default values that where used:"<<endl;
+            //Now fill in the defaults missing from the configfile
+            Chromatin chromo;
+            for (auto &param: chromo.get_map()){
+                bool add =true;
+                for (auto  &cparam: chromo_configs[ind]) {
+                    vector<string> split = split_and_check_for_comments(cparam, "Chromatin Reporter: Default values: ");
+                    if (split[0] == param.first) {
+                        add =false;
+                        break;
+                    }
+                }
+                if (add) {
+                    write_report<<param.first<<" "<<param.second[0]<<endl;
                 }
             }
-            if (add) {
-                write_report<<param.first<<" "<<param.second[0]<<endl;
-            }
+            write_report<<endl;
         }
+        
     }
     write_report<<endl;
     for (auto &i : config_lines["-InteractionTable"]) {

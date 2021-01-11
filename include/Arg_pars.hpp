@@ -16,14 +16,16 @@
 
 struct ArgStruct_Analysis
 {
-    int analysis_dim = 0;
+    string analysis = "0";
     int analysis_averaging_option = 0;
     int num_ang_avg= 1;
     int z_node=-1;
     int zy_node=-1;
     std::string analysis_filename;
     std::vector<std::string> membane_labels;
+    std::vector<int>         membane_label_indecies;
     int ell_max =20;
+    int q_max   =70;
     std::string extension;
     std::vector<std::string> output_filename;
     int framelimits_beg=0;
