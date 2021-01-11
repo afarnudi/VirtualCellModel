@@ -133,9 +133,10 @@ int main(int argc, char **argv)
                 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
-            cout<<TRESET<<endl;
+            
             Membranes[memindex].write_ulm(args, memindex);
-            return 3;
+            cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
+            
         } else if(args.analysis== "2"){
             cout<<TFILE;
             cout<<"2D Analysis"<<endl;
@@ -151,18 +152,13 @@ int main(int argc, char **argv)
 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
-            cout<<endl;
-            return 2;
+            
+            cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
+            
         } else if (args.analysis == "E"){
             cout<<TPURPLE;
             cout<<"Mechanical Energy Analysis"<<endl;
             string reportfilename = args.output_filename[memindex] + "_report.txt";
-//            string reportfilename = args.output_filename[memindex] args.analysis_filename;
-//            reportfilename.erase(reportfilename.end()-4,reportfilename.end());
-//            cout<<args.output_filename[memindex]<<endl;
-//            exit(0);
-////            string energyReportFileName = reportfilename + ""
-//            reportfilename+="_report.txt";
             cout<<"Looking for simulation report file "<<TFILE<<reportfilename<<TPURPLE<<endl;
             reportfilename=check_if_file_exists(reportfilename);
             cout<<"Report file \""<<TFILE<<reportfilename<<TRESET<<"\""<<TSUCCESS<<" found"<<TPURPLE<<"."<<endl;
@@ -195,13 +191,14 @@ int main(int argc, char **argv)
                 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
-            cout<<TRESET<<endl;
-            return 1;
+            
+            cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
+            
             
         }
     }
     
-    
+    return 0;
     
 }
 

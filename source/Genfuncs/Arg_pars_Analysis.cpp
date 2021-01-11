@@ -315,7 +315,7 @@ void consistency_check(ArgStruct_Analysis &args){
         
         
         if (args.membane_labels.size()==0) {
-            cout<<TWARN<<"\n!!!Warning"<<TRESET<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed.\n"<<endl;
+            cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed. By default VCM analyser will use the first ATOM label appearing in the pdb file.\n"<<endl;
         } else {
             check_membrane_labels(args);
         }
@@ -395,6 +395,9 @@ void consistency_check(ArgStruct_Analysis &args){
                 errorMessage +="Error: Arg Parser: The number of mambrane labels and the corresponding indecies don't match. Check the number of arguments in the \"memlabels\" and \"reportindecies\" options.\n";
                 errorMessage +=TRESET;
                 throw std::runtime_error(errorMessage);
+            }
+            if (args.membane_labels.size()==0) {
+                cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. By default VCM analyser will use the first Membrane class settings in the report file to initilise the membrane. For more options use the \"memlabel\" and \"reportindecies\" flags or use -h for more options.\n"<<endl;
             }
         }
         
