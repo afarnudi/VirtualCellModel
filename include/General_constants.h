@@ -28,6 +28,7 @@ struct PotentialModelIndex{
         Model["Harmonic_minmax"] = 7;
         Model["hill"] = 8;
         Model["KFs"] = 9;
+        Model["Gompper"] = 10;
         
         
         Model["RealHarmonic"] = 26;

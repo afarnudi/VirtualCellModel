@@ -139,6 +139,8 @@ void Membrane::assign_parameters(void){
                 spring_model = potentialModelIndex.Model["FENE"];
             } else if (split[0]=="N") {
                 spring_model = potentialModelIndex.Model["None"];
+            } else if (split[0]=="G") {
+                spring_model = potentialModelIndex.Model["Gompper"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";

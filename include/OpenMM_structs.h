@@ -51,6 +51,10 @@ struct Bonds{
     double hill_co;
     double k_F0;
     bool   canConstrain;
+    double gompperlmin;
+    double gompperlc1;
+    double gompperlc0;
+    double gompperlmax;
 };
 
 struct Dihedrals{
