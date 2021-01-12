@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
-            
+            Membranes[memindex].write_un_uq(args, memindex);
             cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
             
         } else if (args.analysis == "E"){

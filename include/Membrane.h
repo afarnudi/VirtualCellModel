@@ -146,7 +146,6 @@ public:
     
     //Analysis 2D funcs/vars:
     vector<int> ringNodeList;
-    double contourRadius;
     vector<double> contourSegmentLength;
     void get_ring(ArgStruct_Analysis args);
     void calculate_freqs(ArgStruct_Analysis args);
@@ -170,13 +169,20 @@ public:
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm(ArgStruct_Analysis args, int file_index);
+    void write_ulm  (ArgStruct_Analysis args, int file_index);
+    void write_un_uq(ArgStruct_Analysis args, int file_index);
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
     vector<vector<double> > ulm_Mesh;
     vector<vector<double> > ulm_temp_for_analysis;
-  
+    vector<double> cn_2D_avg;
+    vector<double> cn2_2D_avg;
+//    vector<double> Un2D_avg;
+    double contourRadius;
+    
+    vector<double> calculate_2D_amplitudes(int q_max);
+    
     
     vector<double> pdb_frames_time;
     vector<vector<vector<double> > > pdb_frames;

@@ -6,21 +6,18 @@ using namespace std;
 
 void Membrane::calculate_freqs(ArgStruct_Analysis args){
     
-//    int ell_max = args.ell_max;
-//    if(ulm_avg.size() != ell_max+1){
-//        ulm_avg.clear();
-//        ulm_std.clear();
-//        ulm_avg.resize(ell_max+1);
-//        ulm_std.resize(ell_max+1);
-//        for (int ell=0; ell<ell_max+1; ell++) {
-//            ulm_avg[ell].resize(2*ell+1,0);
-//            ulm_std[ell].resize(2*ell+1,0);
-//        }
-//        if (!generalParameters.Testmode) {
-//            cout<<"cleared ulm\n";
-//        }
-//
-//    }
+    int q_max = args.q_max;
+    if(cn_2D_avg.size() != q_max+1){
+//        Un2D_avg.clear();
+        cn_2D_avg.clear();
+        cn2_2D_avg.clear();
+//        Un2D_avg.resize(q_max+1, 0);
+        cn_2D_avg.resize(q_max+1, 0);
+        cn2_2D_avg.resize(q_max+1, 0);
+        if (!generalParameters.Testmode) {
+            cout<<"cleared uq\n";
+        }
+    }
     
     
     if(args.analysis_averaging_option == 1){
@@ -35,42 +32,19 @@ void Membrane::calculate_freqs(ArgStruct_Analysis args){
         get_ring(args);
     }
     
+    
+    
+    
+    
     calculate_contourSegmentLength();
-//    calculate_contourRadius();
+    calculate_contourRadius();
+    vector< double > cn_frame = calculate_2D_amplitudes(args.q_max);
     
-//    vector<vector< double > > ulm_avg_frame;
-//    ulm_avg_frame.resize(ell_max+1);
-//    for (int ell=0; ell<ell_max+1; ell++) {
-//        ulm_avg_frame[ell].resize(2*ell+1);
-//
-//        for (int m=0; m<2*ell+1; m++) {
-//            ulm_avg_frame[ell][m]=0;
-//        }
-//    }
+    for (int i=0; i<=q_max; i++) {
+        cn_2D_avg[i]+=cn_frame[i];
+        cn2_2D_avg[i]+=cn_frame[i]*cn_frame[i];
+    }
     
-//    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh();
-//    for (int ell=0; ell<ell_max+1; ell++) {
-//        //        cout<<ell<<" out of "<<ell_max<<"\r";
-//        for (int m=-ell; m<ell+1; m++) {
-//
-//            vector<double>  Realylm = get_real_ylm_vectorlist_for_mesh(ell, m);
-//            ulm_avg_frame[ell][m+ell] = calc_vectorlist_vectorlist_surface_integral(Realylm, membrane_radii_list);
-//            if (args.MeshMinimisation) {
-//                ulm_avg_frame[ell][m+ell]-=ulm_Mesh[ell][m+ell];
-//            }
-//
-//        }
-//    }
-//
-//
-//    for (int ell=0; ell<ell_max+1; ell++) {
-//        for (int m=-ell; m<ell+1; m++) {
-//            double ulm = ulm_avg_frame[ell][m+ell];
-//            ulm_avg[ell][m+ell] += ulm*ulm;
-//            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
-//
-//        }
-//    }
 }
 
 
@@ -185,5 +159,71 @@ void Membrane::calculate_contourRadius(void){
     cout<<( 2*M_PI-phiN+phi0 )<<endl;
     contourRadius *= 1/(4*M_PI);
     cout<<"contourRadius "<<contourRadius<<endl;
-    exit(0);
+}
+
+vector<double> Membrane::calculate_2D_amplitudes(int q_max){
+    vector<double> a_n(q_max+1,0);
+    vector<double> b_n(q_max+1,0);
+    vector<double> c_n(q_max+1,0);
+    
+    
+    for (int q=0; q<=q_max; q++) {
+        for (int i=0; i<ringNodeList.size()-1; i++) {
+            double ri     = spherical_positions[ringNodeList[i]][0];
+            double rip1   = spherical_positions[ringNodeList[i+1]][0];
+            double phii   = spherical_positions[ringNodeList[i]][2];
+            double phiip1 = spherical_positions[ringNodeList[i+1]][2];
+            
+            a_n[q]+= (phiip1-phii)*( ri*cos(q*phii) + rip1*cos(q*phiip1) );
+            b_n[q]+= (phiip1-phii)*( ri*sin(q*phii) + rip1*sin(q*phiip1) );
+        }
+        
+        int N = int(ringNodeList.size()-1);
+        double r0     = spherical_positions[ringNodeList[0]][0];
+        double rN   = spherical_positions[ringNodeList[N]][0];
+        double phi0   = spherical_positions[ringNodeList[0]][2];
+        double phiN = spherical_positions[ringNodeList[N]][2];
+        
+        a_n[q]+= (phiN-phi0)*( r0*cos(q*phi0) + rN*cos(q*phiN) );
+        b_n[q]+= (phiN-phi0)*( r0*sin(q*phi0) + rN*sin(q*phiN) );
+        
+        a_n[q]/= 2*M_PI*contourRadius;
+        b_n[q]/= 2*M_PI*contourRadius;
+        
+        c_n[q] = sqrt( a_n[q]*a_n[q] + b_n[q]*b_n[q]);
+        
+    }
+    
+    return c_n;
+}
+
+void Membrane::write_un_uq(ArgStruct_Analysis args, int file_index){
+    
+    double numOfFrames = args.framelimits_beg-args.framelimits_end;
+    vector<double> Un2D_avg;
+    vector<double> Uq2D_avg;
+    Uq2D_avg.resize(args.q_max+1,0);
+    Un2D_avg.resize(args.q_max+1,0);
+    for (int i=0; i<=args.q_max; i++) {
+        cn_2D_avg[i]/=numOfFrames;
+        cn2_2D_avg[i]/=numOfFrames;
+        Un2D_avg[i] = contourRadius*contourRadius*contourRadius*0.5*M_PI*(cn2_2D_avg[i]-cn_2D_avg[i]*cn_2D_avg[i]);
+        Uq2D_avg[i] = (cn2_2D_avg[i]-cn_2D_avg[i]*cn_2D_avg[i]);
+    }
+    
+    std::ofstream wdata;
+    wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
+    wdata<<"#Average contour radius\n";
+    wdata<<"#<|Un|^2> n=q*R\n";
+    wdata<<"#<|Uq|^2>\n";
+    
+    wdata<<contourRadius<<endl;
+    for (int n=0; n<args.q_max+1; n++) {
+        wdata<<Un2D_avg[n]<<"\t";
+    }
+    wdata<<"\n";
+    for (int q=0; q<args.q_max+1; q++) {
+        wdata<<Uq2D_avg[q]<<"\t";
+    }
+    wdata<<endl;
 }
