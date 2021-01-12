@@ -89,6 +89,24 @@ int main(int argc, char **argv)
     cout<<TBOLD<<"Entering analysis mode:\n"<<TRESET;
     if (args.membane_labels.size()==0) {
         args.membane_labels.push_back(get_pdb_first_label(args.analysis_filename));
+        if (args.analysis == "3") {
+            if (args.extension=="") {
+                args.extension="_ulmt.txt";
+            }
+        } else if (args.analysis == "2") {
+            if (args.extension=="") {
+                args.extension="_f2d.txt";
+            }
+        } else if (args.analysis == "E") {
+            if (args.extension=="") {
+                args.extension="_MechanicalEnergy.txt";
+            }
+        }
+        
+        string filename = args.analysis_filename;
+        filename.erase(filename.end()-4,filename.end() );
+        args.output_filename[0]=filename +"_"+args.membane_labels[0]+args.extension;
+        
         generalParameters.Num_of_Membranes=int(args.membane_labels.size());
         Membranes.resize(generalParameters.Num_of_Membranes);
     }
@@ -158,11 +176,8 @@ int main(int argc, char **argv)
         } else if (args.analysis == "E"){
             cout<<TPURPLE;
             cout<<"Mechanical Energy Analysis"<<endl;
-            string reportfilename = args.output_filename[memindex] + "_report.txt";
-            cout<<"Looking for simulation report file "<<TFILE<<reportfilename<<TPURPLE<<endl;
-            reportfilename=check_if_file_exists(reportfilename);
-            cout<<"Report file \""<<TFILE<<reportfilename<<TRESET<<"\""<<TSUCCESS<<" found"<<TPURPLE<<"."<<endl;
-            map<string, vector<string> > config_lines =read_configfile(reportfilename);
+
+            map<string, vector<string> > config_lines =read_configfile(args.Mesh_files[memindex]);
             get_class_numbers(config_lines);
             vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
             Membranes[memindex].import_config(membrane_configs[ args.membane_label_indecies[memindex] ]);
@@ -171,11 +186,9 @@ int main(int argc, char **argv)
             Membranes[memindex].load_pdb_frame(0, args);
             Membranes[memindex].set_bond_nominal_length();
             Membranes[memindex].set_bending_nominal_angle();
-            
-            string energyFileName = args.output_filename[memindex] + "_PotentialEnergy.txt";
             FILE* pFile;
-            pFile = fopen (energyFileName.c_str(),"w");
-            fprintf(pFile,"time ps;   BendingEnergy      BondEnergy     TotalEnergy KJ/mole\n");
+            pFile = fopen (args.output_filename[memindex].c_str(),"w");
+            fprintf(pFile,"time ps;   BendingEnergy      BondEnergy     TotalEnergy KJ/mole \n");
             fclose (pFile);
             
             
@@ -187,7 +200,7 @@ int main(int argc, char **argv)
                 Membranes[memindex].load_pdb_frame(frame, args);
                 
                 Membranes[memindex].Mechanical_Energy_calculator();
-                Membranes[memindex].Export_Mechanical_Energy(energyFileName, frame+args.framelimits_beg);
+                Membranes[memindex].Export_Mechanical_Energy(args.output_filename[memindex], frame+args.framelimits_beg);
                 
                 cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }

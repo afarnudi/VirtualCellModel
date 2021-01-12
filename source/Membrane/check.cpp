@@ -10,6 +10,37 @@
 
 
 void Membrane::check(void){
+    
+    get_bond_length_distribution();
+    
+    if (!generalParameters.Testmode) {
+        cout<<"Node pair (bond) distances:\n";
+        cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
+    }
+    
+    if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
+        cout<<TWWARN<<"\n!!!Warning"<<TRESET<<",Initial node distances are not ready/optimised for triangle bending calculations. You will need to make sure the system is relaxed to avoid programme break down.\n\n";
+
+    }
+    if (spring_model==potentialModelIndex.Model["Gompper"]) {
+        if (Node_Bond_Nominal_Length_stat=="Au") {
+            cout<<TWWARN<<"The \"Au\" option for the nominal bond length cannot be used with the Gompper potential. Switching to \"Av\""<<TRESET<<endl;
+            Node_Bond_Nominal_Length_stat=="Av";
+        } else if (Node_Bond_Nominal_Length_stat!="Au" && Node_Bond_Nominal_Length_stat!="Av"){
+            if (Max_node_pair_length>1.33*Average_node_pair_length || Max_node_pair_length<0.67*Average_node_pair_length) {
+                string errorMessage = TWARN;
+                errorMessage +="Membrane: Initilisation check: Mesh bond size distribuion is not compatible with the Gompper potential parameters. You can use i) another potential or ii) another mesh.\n This error was generated because either the maximum (minimum) bond length in the mesh is larger (smaller) than 1.33 (0.67) times the average bond length.";
+                errorMessage +=TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        }
+        double a = Average_node_pair_length;
+        GompperBondPotentialLminLc1Lc0Lmax={0.67*a,0.85*a,1.15*a,1.33*a};
+        
+    }
+}
+
+void Membrane::get_bond_length_distribution(void){
     Min_node_pair_length=1000;
     Max_node_pair_length=0;
     Average_node_pair_length=0;
@@ -27,15 +58,6 @@ void Membrane::check(void){
         }
     }
     Average_node_pair_length/=(Num_of_Node_Pairs);
-    if (!generalParameters.Testmode) {
-        cout<<"Node pair (bond) distances:\n";
-        cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
-    }
-    
-    if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
-        cout<<TWWARN<<"\n!!!Warning"<<TRESET<<",Initial node distances are not ready/optimised for triangle bending calculations. You will need to make sure the system is relaxed to avoid programme break down.\n\n";
-
-    }
 }
 
 void Membrane::check_radius_update_values(void){

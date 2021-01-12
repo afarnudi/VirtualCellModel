@@ -268,10 +268,12 @@ public:
     vector<vector<double> > node_voronoi_normal_vec;
     vector<double> node_voronoi_area;
     double surface_area_voronoi=0;
+    vector<double> GompperBondPotentialLminLc1Lc0Lmax;
     
     vector<int> Bond_triangle_neighbour_indices ;
     
     void check(void);
+    void get_bond_length_distribution(void);
     void set_bond_nominal_length(void);
     void set_node_radius(void);
     void set_bending_nominal_angle(void);
@@ -349,6 +351,10 @@ public:
     double kz=10;
     
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
+    
+    vector<double >get_gompper_params_lminlc1lc0lmax(){
+        return GompperBondPotentialLminLc1Lc0Lmax;
+    }
     
     /**Returns the last saved volume*/
     double get_volume(void){
