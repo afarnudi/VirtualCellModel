@@ -1,6 +1,7 @@
 #include "Membrane.h"
 #include "General_functions.hpp"
 #include <cstdlib>
+#include <algorithm>
 
 using namespace std;
 
