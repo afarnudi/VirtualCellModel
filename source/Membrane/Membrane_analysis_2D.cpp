@@ -199,7 +199,7 @@ void Membrane::get_ring(ArgStruct_Analysis args){
         
     }
     //Sort node indecies based on their phi (from 0 to 2pi)
-    sort(indPhi.begin(), indPhi.end(),[](const vector<double>& a, const vector<double>& b){
+    std::sort(indPhi.begin(), indPhi.end(),[](const vector<double>& a, const vector<double>& b){
         return a[1] < b[1];
     });
     for (auto &i:indPhi) {
