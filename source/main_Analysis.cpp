@@ -162,15 +162,22 @@ int main(int argc, char **argv)
             if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
-//
+            
+//            Membranes[memindex].updatepos(100);
+            Membranes[memindex].get_ring(args);
+            
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
                 Membranes[memindex].load_pdb_frame(frame, args);
                 
                 Membranes[memindex].calculate_freqs(args);
+//                Membranes[memindex].calculate_freqs_usingSH(args);
+//                Membranes[memindex].calculate_freqs_alexandra(args);
 
-                cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
+//                cout<<"frame "<<frame+args.framelimits_beg+1<<", End=[ "<<args.framelimits_end<<" ]\r"<< std::flush;
             }
             Membranes[memindex].write_un_uq(args, memindex);
+//            Membranes[memindex].write_uq_SH(args, memindex);
+//            Membranes[memindex].write_uq_Alexandra(args, memindex);
             cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
             
         } else if (args.analysis == "E"){
