@@ -14,7 +14,7 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
     if (!generalParameters.Testmode) {
         cout<<Num_of_Nodes<<" "<<label<<" nodes in "<<args.analysis_filename<<endl;
     }
-    
+//    cout<<args.Mesh_files[file_index]<<endl;
     if (args.analysis!="E") {
         analysis_init(args.Mesh_files[file_index]);
     }
@@ -149,7 +149,7 @@ void Membrane::import_pdb_frames(ArgStruct_Analysis args, int file_index){
 
         }
         if (local_atom_count != Num_of_Nodes) {
-            cout<<"Number of atoms in the "<<frame_index+args.framelimits_beg<<" does not match with the number of atoms in previous frames. Expected "<<Num_of_Nodes<<" got "<<local_atom_count<<endl;
+            cout<<"Number of atoms in frame, "<<frame_index+args.framelimits_beg<<", does not match with the number of atoms in previous frames. Expected "<<Num_of_Nodes<<" got "<<local_atom_count<<endl;
             exit(EXIT_FAILURE);
         }
         getline(read_pdb, line);

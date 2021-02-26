@@ -38,7 +38,11 @@ double Membrane::calc_real_ylmthetaphi(int l,  int  m, double theta, double phi)
     return realYLM;
 }
 
-
+#include <boost/math/special_functions/legendre.hpp>
+#include <cmath>
+double Membrane::calc_assoc_legendre(int ell, int m, double x){
+    return boost::math::legendre_p(ell, m, x);
+}
 
 
 void Membrane::generate_ulm_mode(int Ell, int M, double uLM, double radius){

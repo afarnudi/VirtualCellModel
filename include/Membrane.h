@@ -145,17 +145,56 @@ public:
     vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
     
     //Analysis 2D funcs/vars:
-    vector<int> ringNodeList;
-    double contourRadius;
+    //list of the detected nodes on the sphere equator. They are sorted with respect to phi, in an ascending order.
+    vector<int>    ringNodeList;
+    vector<double> contourradii;
+    //the countour segments between nodes on the equator.
     vector<double> contourSegmentLength;
+    //Detect a ring of nodes on the equator theta=poi/2
     void get_ring(ArgStruct_Analysis args);
+    void get_ring_from_projection(ArgStruct_Analysis args, int numpoints);
+    
     void calculate_freqs(ArgStruct_Analysis args);
+    void calculate_freqs_projection(ArgStruct_Analysis args);
+//    void calculate_freqs_usingSH(ArgStruct_Analysis args);
+    //Clculate the standard Fourier transform of the contour ring
+//    void calculate_freqs_alexandra(ArgStruct_Analysis args);
+    //The real, a_q, and the imaginary, b_q, coefficients of the complex fourier transformation.
+    vector<vector<double> > aq_alexandra;
+    vector<vector<double> > bq_alexandra;
+    
+    vector<vector<double> > Aq_H;
+    vector<vector<double> > Bq_H;
+    
+    vector<vector<double> > aq_alexandra_proj;
+    vector<vector<double> > bq_alexandra_proj;
+    
+    vector<vector<double> > Aq_H_proj;
+    vector<vector<double> > Bq_H_proj;
+    
+    
+    //Clculate the undulation amplitudes by using Alexandra's method described in the SI.
+    void calculate_2D_amplitudes_Alexandra(int q_max);
+    
+//    void write_uq_Alexandra(ArgStruct_Analysis args, int file_index);
+    //Calculate the theta_{i+1}-theta_i for node i along the ring
+    void calculate_deltaphi(void);
+    //Calculate the theta_{i+1}-theta_{i-1} for node i along the ring
+    void calculate_deltaphi_Alexandra(void);
+//    Used to store the "delta phi"s calculated by the "calculate_deltaphi" and "calculate_deltaphi_Alexandra" functions.
+    vector<double> deltaphi;
+    void updatepos(double);
+    
     void WriteMemPDBFrame(ArgStruct_Analysis args,
                           vector<int> chainlist);
     void calculate_contourSegmentLength(void);
     void calculate_contourRadius(void);
+    
+    //CAlculates the mode amplitudes as described in "Refined contour analysis of giant unilamellar vesicles" J. P ́ecr ́eaux1,a, H.-G. Do ̈bereiner2, J. Prost1, J.-F. Joanny1, and P. Bassereau1, Eur. Phys. J. E 13, 277–290 (2004), DOI 10.1140/epje/i2004-10001-9
     void calculate_modeAmplitudes2D(void);
     
+    //I use this list to destinguish between the nodes on the equator of the membrane and the others. I pass this list to "WriteMemPDBFrame" to get a pdb output for visualisation and debug.
+    vector<int> chainlist;
     
     std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
     /**return the  complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). Where l is a positiv integer, m is defined -l <= m <= l, theta is 0 <= theta <= pi, and phi is defined 0 <= phi <= 2pi. s*/
@@ -170,13 +209,24 @@ public:
     void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
     void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
     void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm(ArgStruct_Analysis args, int file_index);
+    void write_ulm  (ArgStruct_Analysis args, int file_index);
+    void write_un_uq(ArgStruct_Analysis args, int file_index);
+    void write_un_uq_projection(ArgStruct_Analysis args, int file_index);
+    void write_uq_SH(ArgStruct_Analysis args, int file_index);
+    double calc_assoc_legendre(int ell, int m, double x);
     
     vector<vector<double> > ulm_avg;
     vector<vector<double> > ulm_std;
     vector<vector<double> > ulm_Mesh;
     vector<vector<double> > ulm_temp_for_analysis;
-  
+
+    double contourRadius;
+    
+//    vector<double> calculate_2D_amplitudes(int q_max);
+    void calculateH_2D_amplitudes(int q_max);
+    void calculateH_2D_amplitudes_projection(int q_max, int numpoints);
+    void calculate_2D_amplitudes_Alexandra_projection(int q_max, int numpoints);
+    
     
     vector<double> pdb_frames_time;
     vector<vector<vector<double> > > pdb_frames;
