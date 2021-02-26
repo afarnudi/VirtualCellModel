@@ -41,7 +41,7 @@ void Membrane::consistancy_check(){
     ifstream readmesh(Mesh_file_name.c_str());
     if (!readmesh.is_open()) {
         string errorMessage = TWARN;
-        errorMessage +="Read Error: Could not read '"+Mesh_file_name+"'";
+        errorMessage +="Read Error: Could not read/locate mesh file '"+Mesh_file_name+"'";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }

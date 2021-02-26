@@ -5,21 +5,38 @@
 
 using namespace std;
 
+void Membrane::calculate_freqs_projection(ArgStruct_Analysis args){
+    int q_max = args.q_max;
+    
+    if(args.analysis_averaging_option == 1){
+        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
+        double theta = ((double) rand() / (RAND_MAX))*M_PI;
+        
+        rotate_coordinates(theta, phi);
+        update_spherical_positions();
+        
+    }
+    int numpoints = 2*sqrt(Num_of_Nodes);
+    deltaphi.clear();
+    double phiinc=2*M_PI/numpoints;
+    for (int i=0; i<numpoints; i++) {
+        deltaphi.push_back(i*phiinc);
+    }
+    get_ring_from_projection(args, numpoints);
+    contourRadius=0;
+    for (int i=0; i<numpoints; i++) {
+        contourRadius+=contourradii[i];
+    }
+    contourRadius/=numpoints;
+    
+    calculateH_2D_amplitudes_projection(args.q_max, numpoints);
+    calculate_2D_amplitudes_Alexandra_projection(args.q_max, numpoints);
+}
+
 void Membrane::calculate_freqs(ArgStruct_Analysis args){
     
     int q_max = args.q_max;
-    if(cn_2D_avg.size() != q_max+1){
-        //        Un2D_avg.clear();
-        cn_2D_avg.clear();
-        cn2_2D_avg.clear();
-        //        Un2D_avg.resize(q_max+1, 0);
-        cn_2D_avg.resize(q_max+1, 0);
-        cn2_2D_avg.resize(q_max+1, 0);
-        if (!generalParameters.Testmode) {
-            cout<<"cleared uq\n";
-        }
-    }
-    
+   
     
     if(args.analysis_averaging_option == 1){
         double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
@@ -33,20 +50,10 @@ void Membrane::calculate_freqs(ArgStruct_Analysis args){
         get_ring(args);
     }
     
-    
-    
-    
-    
-//    calculate_contourSegmentLength();
     calculate_contourRadius();
-    vector< double > cn_frame = calculate_2D_amplitudes(args.q_max);
+    calculateH_2D_amplitudes(args.q_max);
     calculate_2D_amplitudes_Alexandra(args.q_max);
     
-    for (int i=0; i<=q_max; i++) {
-        cn_2D_avg[i]+=cn_frame[i];
-        cn2_2D_avg[i]+=cn_frame[i]*cn_frame[i];
-        
-    }
     bool getPDBOutputForDoubleCheck=false;
     if (getPDBOutputForDoubleCheck) {
         //        cout<<"count "<<count<<endl;
@@ -55,80 +62,66 @@ void Membrane::calculate_freqs(ArgStruct_Analysis args){
     
 }
 
-//void Membrane::calculate_freqs_usingSH(ArgStruct_Analysis args){
-//    args.ell_max=20;
-//    calculate_real_ulm(args);
-//
-//
-//}
-//void Membrane::calculate_freqs_alexandra(ArgStruct_Analysis args){
-//
-//    int q_max = args.q_max;
-//
-//
-//
-//    if(args.analysis_averaging_option == 1){
-//        double phi   = ((double) rand() / (RAND_MAX))*2*M_PI;
-//        double theta = ((double) rand() / (RAND_MAX))*M_PI;
-//
-//        rotate_coordinates(theta, phi);
-//        update_spherical_positions();
-//
-//    }
-//    if (ringNodeList.size()==0) {
-//        get_ring(args);
-//    }
-////    exit(0);
-////    calculate_contourSegmentLength();
-//    calculate_contourRadius();
-//    calculate_2D_amplitudes_Alexandra(args.q_max);
-//
-//
-//    bool getPDBOutputForDoubleCheck=false;
-//    if (getPDBOutputForDoubleCheck) {
-//        //        cout<<"count "<<count<<endl;
-//        WriteMemPDBFrame(args,chainlist);
-//    }
-//
-//}
 
 #include <iomanip>
-vector<double> Membrane::calculate_2D_amplitudes(int q_max){
-    vector<double> a_n(q_max+1,0);
-    vector<double> b_n(q_max+1,0);
-    vector<double> c_n(q_max+1,0);
-    calculate_deltaphi();
+
+
+void Membrane::calculateH_2D_amplitudes(int q_max){
+    calculate_deltaphi_Alexandra();
+    
+    vector<double> a_q(q_max+1,0);
+    vector<double> b_q(q_max+1,0);
+    vector<double> c_q(q_max+1,0);
+    vector<double> c_q2(q_max+1,0);
     
     for (int q=0; q<=q_max; q++) {
-        for (int i=0; i<ringNodeList.size()-1; i++) {
-            double ri     = spherical_positions[ringNodeList[i]][0]-contourRadius;
-            double rip1   = spherical_positions[ringNodeList[i+1]][0]-contourRadius;
+        
+        for (int i=0; i<ringNodeList.size(); i++) {
+            double ri     = (spherical_positions[ringNodeList[i]][0]-contourRadius);//contourRadius;
             double phii   = spherical_positions[ringNodeList[i]][2];
-            double phiip1 = spherical_positions[ringNodeList[i+1]][2];
             
-            a_n[q]+= 0.5*(deltaphi[i])*( ri*cos(q*phii) + rip1*cos(q*phiip1) );
-            b_n[q]+= 0.5*(deltaphi[i])*( ri*sin(q*phii) + rip1*sin(q*phiip1) );
+            //Note that for the integral discretisation the dphi at point i is 0.5*deltaphi, delta phi = phi_i+1 - phi_i-1
+            a_q[q]+= ri*cos(q*phii)*0.5*deltaphi[i];
+            b_q[q]+= ri*sin(q*phii)*0.5*deltaphi[i];
         }
+
+        a_q[q]*= 1./(2*M_PI);
+        b_q[q]*= 1./(2*M_PI);
         
-        int N = int(ringNodeList.size()-1);
-        double r0     = spherical_positions[ringNodeList[0]][0]-contourRadius;
-        double rN   = spherical_positions[ringNodeList[N]][0]-contourRadius;
-        double phi0   = spherical_positions[ringNodeList[0]][2];
-        double phiN = spherical_positions[ringNodeList[N]][2];
-        
-        a_n[q]+= 0.5*(deltaphi[N])*( r0*cos(q*phi0) + rN*cos(q*phiN) );
-        b_n[q]+= 0.5*(deltaphi[N])*( r0*sin(q*phi0) + rN*sin(q*phiN) );
-        
-        a_n[q]/= M_PI*contourRadius;
-        b_n[q]/= M_PI*contourRadius;
-        
-        c_n[q] = sqrt( a_n[q]*a_n[q] + b_n[q]*b_n[q]);
-//        cout<<std::setprecision(9)<<"c_n["<<q<<"] = "<<c_n[q]<<"\t";
     }
-//    cout<<endl;
-//    cout<<endl;
-    return c_n;
+    Aq_H.push_back(a_q);
+    Bq_H.push_back(b_q);
+    
 }
+
+void Membrane::calculateH_2D_amplitudes_projection(int q_max, int numpoints){
+
+    vector<double> a_q(q_max+1,0);
+    vector<double> b_q(q_max+1,0);
+    vector<double> c_q(q_max+1,0);
+    vector<double> c_q2(q_max+1,0);
+    
+    double deltaphi_projection = 2*M_PI/numpoints;
+    
+    for (int q=0; q<=q_max; q++) {
+        
+        for (int i=0; i<contourradii.size(); i++) {
+            double ri     = (contourradii[i]-contourRadius);//contourRadius;
+            double phii   = i*deltaphi_projection;
+            
+            //Note that for the integral discretisation the dphi at point i is 0.5*deltaphi, delta phi = phi_i+1 - phi_i-1
+            a_q[q]+= ri*cos(q*phii);
+            b_q[q]+= ri*sin(q*phii);
+        }
+        a_q[q]*= deltaphi_projection/(2*M_PI);
+        b_q[q]*= deltaphi_projection/(2*M_PI);
+
+    }
+    Aq_H_proj.push_back(a_q);
+    Bq_H_proj.push_back(b_q);
+    
+}
+
 void Membrane::calculate_2D_amplitudes_Alexandra(int q_max){
     calculate_deltaphi_Alexandra();
     vector<double> a_q(q_max+1,0);
@@ -145,14 +138,38 @@ void Membrane::calculate_2D_amplitudes_Alexandra(int q_max){
             a_q[q]+= ri*cos(q*phii)*0.5*deltaphi[i];
             b_q[q]+= ri*sin(q*phii)*0.5*deltaphi[i];
         }
-//        a_n[q]/= 2*M_PI*contourRadius;
-//        b_n[q]/= 2*M_PI*contourRadius;
-        a_q[q]/= sqrt(2*M_PI);
-        b_q[q]/= sqrt(2*M_PI);
+        a_q[q]/= (2*M_PI);
+        b_q[q]/= (2*M_PI);
         
     }
     aq_alexandra.push_back(a_q);
     bq_alexandra.push_back(b_q);
+    
+}
+
+void Membrane::calculate_2D_amplitudes_Alexandra_projection(int q_max, int numpoints){
+    
+    vector<double> a_q(q_max+1,0);
+    vector<double> b_q(q_max+1,0);
+    
+    double deltaphi_projection = 2*M_PI/numpoints;
+    
+    for (int q=0; q<=q_max; q++) {
+        
+        for (int i=0; i<contourradii.size(); i++) {
+            double ri     = (contourradii[i]-contourRadius)/contourRadius;
+            double phii   = i*deltaphi_projection;
+            
+            //Note that for the integral discretisation the dphi at point i is 0.5*deltaphi, delta phi = phi_i+1 - phi_i-1
+            a_q[q]+= ri*cos(q*phii);
+            b_q[q]+= ri*sin(q*phii);
+        }
+        a_q[q]*= deltaphi_projection/(2*M_PI);
+        b_q[q]*= deltaphi_projection/(2*M_PI);
+        
+    }
+    aq_alexandra_proj.push_back(a_q);
+    bq_alexandra_proj.push_back(b_q);
     
 }
 
@@ -163,6 +180,46 @@ void Membrane::updatepos(double scale){
         }
     }
 }
+
+void Membrane::get_ring_from_projection(ArgStruct_Analysis args, int numpoints){
+    if(args.analysis_averaging_option == 2){
+        if(args.z_node == -1 || args.zy_node == -1){
+            cout<<"No nodes specified for aligning.\n the nodes must be specfied with the '--align_axes flag z,y' where z is the node index to be aligned with the  z axis (when the com is in the origin (0,0,0) )and y is the index of the node that will then be rotated to lie on the zy plane.\n";
+            exit(EXIT_FAILURE);
+        }
+        rotate_particle_to_axes(args);
+    }
+    update_COM_position();
+    set_com_to_zero();
+    update_spherical_positions();
+    
+    
+    contourradii.clear();
+    contourradii.resize(numpoints,0);
+    
+    double phiinc = 2*M_PI/numpoints;
+    
+    for (int i=0; i<Num_of_Nodes; i++) {
+        double projection_radius = sqrt(Node_Position[i][0]*Node_Position[i][0]+Node_Position[i][1]*Node_Position[i][1]);
+        int radius_index = (M_PI+spherical_positions[i][2])/phiinc;
+        if (contourradii[radius_index]<projection_radius) {
+            contourradii[radius_index]=projection_radius;
+        }
+        
+    }
+    for (int i=0; i<numpoints; i++) {
+        
+        if (contourradii[i]==0) {
+            string errorMessage = TWARN;
+            errorMessage+="Error: get_ring_from_projection: got a zero radius. Decrease the num of points you detect on the contour. Current num of points is set to "+to_string(numpoints)+"."; errorMessage+=TRESET;
+            errorMessage+="\n";
+            throw std::runtime_error(errorMessage);
+        }
+    }
+    
+    
+}
+
 void Membrane::get_ring(ArgStruct_Analysis args){
     if(args.analysis_averaging_option == 2){
         if(args.z_node == -1 || args.zy_node == -1){
@@ -179,13 +236,20 @@ void Membrane::get_ring(ArgStruct_Analysis args){
     
     
     int n = int (sqrt(Num_of_Nodes))*2;
+    double dtheta_persision=0.9;
     double dtheta = M_PI/n;
     double theta0 = M_PI/2;
-    double thresh_min = theta0 - dtheta;
-    double thresh_max = theta0 + dtheta;
+    double thresh_min;// = theta0 - dtheta*dtheta_persision;
+    double thresh_max;// = theta0 + dtheta*dtheta_persision;
     
-    chainlist.resize(Num_of_Nodes,0);
     vector<vector<double> > indPhi;
+    dtheta_persision+=0.1;
+//    cout<<"here, persision "<<dtheta_persision<<" indphi: "<<indPhi.size()<<endl;
+    thresh_min = theta0 - dtheta*dtheta_persision;
+    thresh_max = theta0 + dtheta*dtheta_persision;
+    chainlist.clear();
+    chainlist.resize(Num_of_Nodes,0);
+    indPhi.clear();
     int count=0;
     for (int i=0; i<Num_of_Nodes; i++) {
         double theta = spherical_positions[i][1];
@@ -199,6 +263,39 @@ void Membrane::get_ring(ArgStruct_Analysis args){
         }
         
     }
+    if (indPhi.size()<0.78*n) {
+        while (indPhi.size()<n) {
+            
+            dtheta_persision+=0.1;
+            cout<<"here, persision "<<dtheta_persision<<" indphi: "<<indPhi.size()<<endl;
+            thresh_min = theta0 - dtheta*dtheta_persision;
+            thresh_max = theta0 + dtheta*dtheta_persision;
+            chainlist.clear();
+            chainlist.resize(Num_of_Nodes,0);
+            indPhi.clear();
+            int count=0;
+            for (int i=0; i<Num_of_Nodes; i++) {
+                double theta = spherical_positions[i][1];
+                if (theta < thresh_max && theta > thresh_min) {
+                    vector <double> temp;
+                    temp.push_back(i);
+                    temp.push_back(spherical_positions[i][2]+M_PI);
+                    indPhi.push_back(temp);
+                    chainlist[i]=1;
+                    count++;
+                }
+                
+            }
+            if (dtheta_persision>5) {
+                string errorMessage = TWARN;
+                errorMessage+="Error: get_ring: cannot detect a ring of nodes on the equator."; errorMessage+=TRESET;
+                errorMessage+="\n";
+                throw std::runtime_error(errorMessage);
+            }
+        }
+    
+    }
+    
     //Sort node indecies based on their phi (from 0 to 2pi)
     std::sort(indPhi.begin(), indPhi.end(),[](const vector<double>& a, const vector<double>& b){
         return a[1] < b[1];
@@ -208,7 +305,7 @@ void Membrane::get_ring(ArgStruct_Analysis args){
 //        cout<<i[0]<<" ";//<<i[1]<<endl;
     }
     cout<<endl;
-    bool getPDBOutputForDoubleCheck=false;
+    bool getPDBOutputForDoubleCheck=true;
     if (getPDBOutputForDoubleCheck) {
         //        cout<<"count "<<count<<endl;
         WriteMemPDBFrame(args,chainlist);
@@ -230,13 +327,14 @@ void Membrane::WriteMemPDBFrame(ArgStruct_Analysis args,
     fprintf(pFile,"REMARK 250 time=%.3f ps;\n",
             0);
     char chain[]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+    int index=0;
     for (int n=0; n<Num_of_Nodes; ++n){
         
-        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
+        fprintf(pFile,"ATOM  %5d %4s ETH %c   0    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
                 n+1,
                 "mem0",
                 chain[list[n]],
-                double(n+1),
+//                index,
                 Node_Position[n][0],
                 Node_Position[n][1],
                 Node_Position[n][2],
@@ -279,13 +377,13 @@ void Membrane::calculate_deltaphi(void){
         double phiip1 = spherical_positions[ringNodeList[i+1]][2];
         deltaphi[i] = ( phiip1-phii );
         if (deltaphi[i]<0) {
-//            cout<<i<<": "<<deltaphi[i]<<" -> ";
+
             if (deltaphi[i] < -M_PI) {
                 deltaphi[i] += 2*M_PI;
             } else {
                 deltaphi[i]*=-1;
             }
-//            cout<<deltaphi[i]<<endl;
+
         }
     }
     int N = int(ringNodeList.size()-1);
@@ -294,14 +392,14 @@ void Membrane::calculate_deltaphi(void){
     double phiN = spherical_positions[ringNodeList[N]][2];
     deltaphi[N] = (phi0-phiN);
     if (deltaphi[N]<0) {
-//        cout<<N<<": "<<deltaphi[N]<<" -> ";
+
         if (deltaphi[N] < -M_PI) {
             deltaphi[N] += 2*M_PI;
         } else {
             deltaphi[N]*=-1;
         }
         
-//        cout<<deltaphi[N]<<endl;
+
     }
     
     for (auto &dphi:deltaphi) {
@@ -396,18 +494,28 @@ void Membrane::calculate_contourRadius(void){
 void Membrane::write_un_uq(ArgStruct_Analysis args, int file_index){
     
     double numOfFrames = args.framelimits_end-args.framelimits_beg;
-    vector<double> Un2D_avg;
-//    vector<double> Uq2D_avg;
-//    Uq2D_avg.resize(args.q_max+1,0);
-    Un2D_avg.resize(args.q_max+1,0);
-    for (int i=0; i<=args.q_max; i++) {
-        cn_2D_avg[i]/=numOfFrames;
-        cn2_2D_avg[i]/=numOfFrames;
-        
-        Un2D_avg[i] = contourRadius*contourRadius*contourRadius*0.5*M_PI*(cn2_2D_avg[i]-cn_2D_avg[i]*cn_2D_avg[i]);
-//        Uq2D_avg[i] = (cn2_2D_avg[i]-cn_2D_avg[i]*cn_2D_avg[i]);
-//        cout<<std::setprecision(12)<<"Un2D_avg["<<i<<"] = "<<Un2D_avg[i]<<"\tUq2D_avg["<<i<<"] = "<<Uq2D_avg[i]<<endl;
+
+    vector<double> Aq_avg;
+    vector<double> Bq_avg;
+    vector<double> Uq2_avg;
+    Aq_avg.resize(args.q_max+1,0);
+    Bq_avg.resize(args.q_max+1,0);
+    Uq2_avg.resize(args.q_max+1,0);
+    double M = numOfFrames;
+    for (int i=0; i<M; i++) {
+        for (int q=2; q<=args.q_max; q++) {
+            Aq_avg[q] += Aq_H[i][q]/M;
+            Bq_avg[q] += Bq_H[i][q]/M;
+        }
     }
+    
+    for (int i=0; i<M; i++) {
+        for (int q=0; q<=args.q_max; q++) {
+            Uq2_avg[q] += ( ( Aq_H[i][q] - Aq_avg[q] )*( Aq_H[i][q] - Aq_avg[q] ) + ( Bq_H[i][q] - Bq_avg[q] )*( Bq_H[i][q] - Bq_avg[q] ) )/M;
+            
+        }
+    }
+    
     
     std::ofstream wdata;
     wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
@@ -417,12 +525,14 @@ void Membrane::write_un_uq(ArgStruct_Analysis args, int file_index){
     
     wdata<<contourRadius<<endl;
     for (int n=0; n<args.q_max+1; n++) {
-        wdata<<Un2D_avg[n]<<"\t";
+//        double cq2_avg = 0.5*(Aq2_avg[n]+Bq2_avg[n]-Aq_avg[n]*Aq_avg[n]-Bq_avg[n]*Bq_avg[n]);
+//        wdata<<cq2_avg<<"\t";
+        wdata<<Uq2_avg[n]<<"\t";
     }
     
     
     
-    double M = args.framelimits_end-args.framelimits_beg;
+    M = args.framelimits_end-args.framelimits_beg;
     if( M != aq_alexandra.size()){
         cout<<"frame num = "<<M<<"  t = "<<aq_alexandra.size()<<endl;
         exit(0);
@@ -455,6 +565,100 @@ void Membrane::write_un_uq(ArgStruct_Analysis args, int file_index){
     }
     wdata<<endl;
 }
+
+void Membrane::write_un_uq_projection(ArgStruct_Analysis args, int file_index){
+    
+    double numOfFrames = args.framelimits_end-args.framelimits_beg;
+
+    vector<double> Aq_avg;
+    vector<double> Bq_avg;
+    vector<double> Aq2_avg;
+    vector<double> Bq2_avg;
+    
+    Aq_avg.resize(args.q_max+1,0);
+    Bq_avg.resize(args.q_max+1,0);
+    Aq2_avg.resize(args.q_max+1,0);
+    Bq2_avg.resize(args.q_max+1,0);
+    
+    for (int t=0;t<numOfFrames; t++){
+        for (int i=0; i<=args.q_max; i++) {
+        
+            Aq_avg[i]+=Aq_H_proj[t][i];
+            Bq_avg[i]+=Bq_H_proj[t][i];
+            Aq2_avg[i]+=Aq_H_proj[t][i]*Aq_H_proj[t][i];
+            Bq2_avg[i]+=Bq_H_proj[t][i]*Bq_H_proj[t][i];
+        }
+        
+    }
+    
+    for (int i=0; i<=args.q_max; i++) {
+        Aq_avg[i]/=numOfFrames;
+        Bq_avg[i]/=numOfFrames;
+        Aq2_avg[i]/=numOfFrames;
+        Bq2_avg[i]/=numOfFrames;
+    }
+    
+    
+    
+    
+    std::ofstream wdata;
+    string projection_name = args.output_filename[file_index];
+    
+    projection_name.erase(projection_name.end()-7,projection_name.end());
+    projection_name+="proj.txt";
+    
+    
+    wdata.open(projection_name.c_str(), std::ios::app);
+    wdata<<"#Average contour radius of the projected sphere onto the xyplane\n";
+    wdata<<"#<|Un|^2> n=q*R\n";
+    wdata<<"#<|Uq|^2> Standard Fourier transform \n";
+    
+    wdata<<contourRadius<<endl;
+    
+    for (int n=0; n<args.q_max+1; n++) {
+        double cq2_avg = 0.5*(Aq2_avg[n]+Bq2_avg[n]-Aq_avg[n]*Aq_avg[n]-Bq_avg[n]*Bq_avg[n]);
+        wdata<<cq2_avg<<"\t";
+    }
+    
+    
+    
+    double M = args.framelimits_end-args.framelimits_beg;
+    if( M != aq_alexandra_proj.size()){
+        cout<<"frame num = "<<M<<"  t = "<<aq_alexandra_proj.size()<<endl;
+        exit(0);
+    }
+    
+    vector<double> aq_avg;
+    vector<double> bq_avg;
+    vector<double> uq2_avg;
+    aq_avg.resize(args.q_max+1,0);
+    bq_avg.resize(args.q_max+1,0);
+    uq2_avg.resize(args.q_max+1,0);
+    
+    for (int i=0; i<M; i++) {
+        for (int q=2; q<=args.q_max; q++) {
+            aq_avg[q] += aq_alexandra_proj[i][q]/M;
+            bq_avg[q] += bq_alexandra_proj[i][q]/M;
+        }
+    }
+    
+    for (int i=0; i<M; i++) {
+        for (int q=0; q<=args.q_max; q++) {
+            uq2_avg[q] += ( ( aq_alexandra_proj[i][q] - aq_avg[q] )*( aq_alexandra_proj[i][q] - aq_avg[q] ) + ( bq_alexandra_proj[i][q] - bq_avg[q] )*( bq_alexandra_proj[i][q] - bq_avg[q] ) )/M;
+            
+        }
+    }
+    
+    wdata<<"\n";
+    for (int q=0; q<args.q_max+1; q++) {
+        wdata<<uq2_avg[q]<<"\t";
+    }
+    wdata<<endl;
+}
+
+
+
+
 #include <boost/math/special_functions/factorials.hpp>
 void Membrane::write_uq_SH(ArgStruct_Analysis args, int file_index){
     
@@ -512,55 +716,3 @@ void Membrane::write_uq_SH(ArgStruct_Analysis args, int file_index){
     wdata<<endl;
     
 }
-
-//void Membrane::write_uq_Alexandra(ArgStruct_Analysis args, int file_index){
-//
-//    double M = args.framelimits_end-args.framelimits_beg;
-//    if( M != an_alexandra.size()){
-//        cout<<"frame num = "<<M<<"  t = "<<an_alexandra.size()<<endl;
-//        exit(0);
-//    }
-//
-//    vector<double> an_avg;
-//    vector<double> bn_avg;
-//    vector<double> uq2_avg;
-//    an_avg.resize(args.q_max+1,0);
-//    bn_avg.resize(args.q_max+1,0);
-//    uq2_avg.resize(args.q_max+1,0);
-//
-//    for (int i=0; i<M; i++) {
-//        for (int q=2; q<=args.q_max; q++) {
-//            an_avg[q] += an_alexandra[i][q]/M;
-//            bn_avg[q] += bn_alexandra[i][q]/M;
-//        }
-//    }
-//    //    cout<<endl<<endl<<contourRadius<<endl;
-//    //    for (int i=0; i<args.q_max; i++) {
-//    //        cout<<an_avg[i]<<" "<<bn_avg[i]<<endl;
-//    //    }
-//    //    cout<<endl<<endl<<setprecision(12)<<sqrt(an_avg[0]*an_avg[0]+bn_avg[0]*bn_avg[0])<<endl<<endl;exit(0);
-//    for (int i=0; i<M; i++) {
-//        for (int q=0; q<=args.q_max; q++) {
-//            uq2_avg[q] += ( ( an_alexandra[i][q] - an_avg[q] )*( an_alexandra[i][q] - an_avg[q] ) + ( bn_alexandra[i][q] - bn_avg[q] )*( bn_alexandra[i][q] - bn_avg[q] ) )/M;
-//
-//        }
-//    }
-//
-//
-//    std::ofstream wdata;
-//    wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
-//    wdata<<"#Average contour radius\n";
-//    wdata<<"#<|Uq|^2> calculated using a paper based fft and alexandra's averaging\n";
-//    wdata<<"#<|Uq|^2>\n";
-//
-//    wdata<<contourRadius<<endl;
-//    for (int n=0; n<args.q_max+1; n++) {
-//        wdata<<uq2_avg[n]<<"\t";
-//    }
-//    wdata<<"\n";
-//    for (int q=0; q<args.q_max+1; q++) {
-//        wdata<<uq2_avg[q]<<"\t";
-//    }
-//    wdata<<endl;
-//
-//}
