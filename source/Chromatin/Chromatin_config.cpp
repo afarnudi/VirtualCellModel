@@ -56,7 +56,7 @@ void Chromatin::consistancy_check(){
     
     if (BondNominalLength_stat!= "Au" && BondNominalLength_stat!= "Av") {
         try {
-            double test = stod(BondNominalLength_stat);
+            stod(BondNominalLength_stat);
         } catch (...) {
             string errorMessage = TWARN;
             errorMessage+="Chromatin config parser: Invalid input for the \"NominalLengthInNm\" (";
@@ -67,6 +67,22 @@ void Chromatin::consistancy_check(){
             errorMessage+= TRESET;
             throw std::runtime_error(errorMessage);
         }
+    }
+    
+    {
+        try {
+            stod(SpontaneousBendingAngleInDeg_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Chromatin config parser: Invalid input for the \"SpontaneousBendingAngleInDeg\" (";
+            errorMessage+=TFILE;
+            errorMessage+=SpontaneousBendingAngleInDeg_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: 180";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        SpontaneousBendingAngleInDeg = stod(SpontaneousBendingAngleInDeg_stat);
     }
     
     if (ImportCoordinates) {
@@ -248,6 +264,8 @@ void Chromatin::assign_parameters(void){
             }
         } else if (it.first == "NominalLengthInNm") {
             BondNominalLength_stat = split[0];
+        } else if (it.first == "SpontaneousBendingAngleInDeg") {
+            SpontaneousBendingAngleInDeg_stat = split[0];
         } else if (it.first == "GenerateSelfAvoidingChain") {
             if(split[0]=="true"){
                 GenerateSelfAvoidingChain=true;
@@ -279,8 +297,8 @@ void Chromatin::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = potentialModelIndex.Model["Harmonic"];
-            } else if (split[0]=="FENE") {
-                spring_model = potentialModelIndex.Model["FENE"];
+            } else if (split[0]=="KG") {
+                spring_model = potentialModelIndex.Model["KremerGrest"];
             } else if (split[0]=="N") {
                 spring_model = potentialModelIndex.Model["None"];
             } else {
@@ -289,10 +307,23 @@ void Chromatin::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+        } else if (it.first == "AngleSpringModel") {
+            if (split[0]=="cos") {
+                angle_spring_model = potentialModelIndex.Model["angleCOS"];
+            } else if (split[0]=="N") {
+                angle_spring_model = potentialModelIndex.Model["None"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Chromatin config parser: Angle Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: cos (cosine potential), N (None).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "SpringCoeff") {
             Spring_coefficient = stod(split[0]);
         } else if (it.first == "DampingCoeff") {
             Damping_coefficient = stod(split[0]);
+        } else if (it.first == "AngleSpringCoeff") {
+            Angle_spring_coefficient = stod(split[0]);
         } else if (it.first == "CoordinateTranslateVector") {
             Shift_position_xyzVector.resize(3,0);
             Shift_position_xyzVector[0] = stod(split[0]);

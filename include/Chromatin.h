@@ -27,9 +27,11 @@ private: //(if we define these constants as private members of the class, we can
     string Node_radius_stat;
     int index;
     int spring_model=0;
+    int angle_spring_model=0;
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
+    double Angle_spring_coefficient=100;
     double Spring_coefficient=10.0; // stretching constant
     double Damping_coefficient=0.0; // Viscosity of the Membrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were involved).
     double Spring_force_cut_off=1000.0;
@@ -47,6 +49,9 @@ private: //(if we define these constants as private members of the class, we can
     
     vector<double> BondNominalLengths;
     string BondNominalLength_stat;
+    string SpontaneousBendingAngleInDeg_stat;
+    double SpontaneousBendingAngleInDeg;
+    double SpontaneousBendingAngleInRad;
     double bond_radius=0;
     bool   optimise_bond_radius=false;
     int    num_virtual_sites_per_bond=0;
@@ -113,6 +118,7 @@ private: //(if we define these constants as private members of the class, we can
 public: //these are using in Monte Carlo flip function. for defining them as private variables, we have tow ways: defining monte_carlo_flip as a member of this class or writing some functions to make them accessible out of membrane class.
     /**Set the Nominal length of bonds according to the bond_length_stat*/
     void set_bond_nominal_lengths(void);
+    void SpontaneousBendingAngle(void);
     void set_node_radius(void);
     void pdb_label_check(void);
     
@@ -193,6 +199,11 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         }
     }
     
+    /**return chromatin number of angle bonds. It is equal to the number of nodes-2*/
+    double get_num_of_angle_bonds(void){
+        return Num_of_Nodes-2;
+    }
+    
     /**return the number of  chromatin's real (non virtual) nodes .*/
     int get_num_of_real_site(void){
         return (Num_of_Nodes+num_virtual_sites_per_bond)/(num_virtual_sites_per_bond+1);
@@ -239,6 +250,12 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     int get_spring_model(void){
         return spring_model;
     }
+    
+    /**Return angle potential model, used to setup the openmm system for the bonds.
+     */
+    int get_angle_spring_model(void){
+        return angle_spring_model;
+    }
     /**Return the number of node types in a chromatin chain.
      */
     int get_num_of_node_types(){
@@ -254,6 +271,17 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    /**Return chroamtin spontaneous bending angle.
+     */
+    double get_spontaneousBendingAngleInRad(void){
+        return SpontaneousBendingAngleInRad;
+    }
+    /**Return chroamtin bending potential sprint coefficient.
+     */
+    double get_bendingStiffnessinKJpermol(void){
+        return Angle_spring_coefficient;
+    }
+    
     void shift_node_positions(void){
         for (int i=0; i<Num_of_Nodes; i++) {
             Node_Position[i][0]+=Shift_position_xyzVector[0];
@@ -403,11 +431,11 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("NodeRadius");
         
         values[0] ="H";
-        values[1] ="#Set the bond potential. 'H' for Harmonic, 'FENE' for a finitely extensible nonlinear elastic model. 'N' for None. Default H.";
+        values[1] ="#Set the bond potential. 'H' for Harmonic, 'FENE' for a finitely extensible nonlinear elastic model, 'KG' for Kremer-Grest model. 'N' for None. Default H.";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
         
-        values[0] ="200000";
+        values[0] ="2000";
         values[1] ="#Set the bond potential rigidity coefficient. Default value 2000.";
         Params["SpringCoeff"] = values;
         insertOrder.push_back("SpringCoeff");
@@ -421,6 +449,21 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         values[1] ="#Set the damping coefficient for non harmonic potentials. Default value 0.";
         Params["DampingCoeff"] = values;
         insertOrder.push_back("DampingCoeff");
+        
+        values[0] ="N";
+        values[1] ="#Set the angle-bond potential. 'cos' for cosine potential defined as k(1+cos(theta)). 'N' for None. Default N.";
+        Params["AngleSpringModel"] = values;
+        insertOrder.push_back("AngleSpringModel");
+        
+        values[0] ="2000";
+        values[1] ="#Set the angle-bond potential rigidity coefficient. Default value 2000.";
+        Params["AngleSpringCoeff"] = values;
+        insertOrder.push_back("AngleSpringCoeff");
+        
+        values[0] ="180";
+        values[1] ="#Set the angle-bond potential spontaneous bending angle in degrees. Default value 180.";
+        Params["SpontaneousBendingAngleInDeg"] = values;
+        insertOrder.push_back("SpontaneousBendingAngleInDeg");
         
         values[0] ="0 0 0";
         values[1] ="#X, Y, Z components of a vector used to translate all coordinates befor beginning the simluation.";

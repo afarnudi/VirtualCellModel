@@ -68,3 +68,13 @@ void Chromatin::set_node_radius(void){
         Node_radius=stod(Node_radius_stat);
     }
 }
+
+void Chromatin::SpontaneousBendingAngle(void){
+    if (Num_of_Nodes<3) {
+        string errorMessage = TWARN;
+        errorMessage +="Chromatin initliser: The chromatin must have at least 3 nodes in order to set up an angle potential. You can disable the angle potential or use a longer chromatin.";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    SpontaneousBendingAngleInRad = SpontaneousBendingAngleInDeg*M_PI/180.;
+}

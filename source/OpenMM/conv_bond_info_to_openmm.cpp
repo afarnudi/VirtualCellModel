@@ -16,11 +16,11 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].class_label = mem.get_label() + mem.get_label();
         bonds[i].nominalLengthInNm=mem.get_node_pair_Nominal_Length_in_Nm(i);
         
-        if (bonds[i].type == potentialModelIndex.Model["FENE"]) {
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
             fenepotential =true;
             bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
             bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
-            bonds[i].epsilon_FENE_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+            bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
         } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
             harmonicpotential=true;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
@@ -94,11 +94,11 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         bonds[i].atoms[1]=act.get_node_pair(i, 1);
         bonds[i].class_label = act.get_label() + act.get_label();
         
-        if (bonds[i].type == potentialModelIndex.Model["FENE"]) {
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
             fenepotential =true;
             bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
             bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
-            bonds[i].epsilon_FENE_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+            bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
         } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
             harmonicpotential= true;
             bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i) * act.get_act_r0factor();
@@ -476,12 +476,12 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
             //        cout<<"atom bon 2 = "<<(i+1)*(num_virtual_sites_per_bond+1)<<endl;
             bonds[i].class_label = chromo.get_label() + chromo.get_label();
             
-            if (bonds[i].type == potentialModelIndex.Model["FENE"]) {
+            if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
                 fenepotential =true;
                 bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
                 bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
                 bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
-                bonds[i].epsilon_FENE_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+                bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
                 
             } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
                 harmonicpotential = true;

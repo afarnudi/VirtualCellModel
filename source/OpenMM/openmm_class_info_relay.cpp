@@ -162,10 +162,10 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                                   vector<vector <std::set<int> > > &chromatin_set,
                                   MyAtomInfo*            	        all_atoms,
                                   Bonds*                            all_bonds,
-                                  Dihedrals*                        all_dihedrals,
+                                  Angles*                           all_angles,
                                   int                              &atom_count,
                                   int                              &bond_count,
-                                  int                              &dihe_count){
+                                  int                              &angle_count){
     for (int i=0; i<chromos.size(); i++) {
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
@@ -175,7 +175,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         
         
         for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
-            if (atoms[j].mass < 0.0001) {
+            if (atoms[j].mass < 0.0000001) {
                 atoms[j].vsite_atoms[0] += atom_count;
                 atoms[j].vsite_atoms[1] += atom_count;
             }
@@ -202,9 +202,24 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
             all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
         }
         
+        cout<<"Angle bond potential:";
+        Angles* angles = convert_Chromatin_angle_bond_info_to_openmm(chromos[i]);
+        
+        for (int j=0; j<chromos[i].get_num_of_bonds(); j++) {
+            all_angles[j+angle_count]=angles[j];
+            all_angles[j+angle_count].atoms[0]=angles[j].atoms[0]+atom_count;
+            all_angles[j+angle_count].atoms[1]=angles[j].atoms[1]+atom_count;
+            all_angles[j+angle_count].atoms[2]=angles[j].atoms[2]+atom_count;
+        }
+        
+        
+        
+        
+        
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
-        atom_count += chromos[i].get_num_of_nodes();
-        bond_count += chromos[i].get_num_of_bonds();
+        atom_count  += chromos[i].get_num_of_nodes();
+        bond_count  += chromos[i].get_num_of_bonds();
+        angle_count += chromos[i].get_num_of_angle_bonds();
         //        dihe_count += membranes[i].get_num_of_triangle_pairs();
     }
 }

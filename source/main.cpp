@@ -152,6 +152,7 @@ int main(int argc, char **argv)
     int num_of_atoms=0;
     int num_of_bonds=0;
     int num_of_dihedrals=0;
+    int num_of_angles=0;
     
     if (!GenConst::Load_from_checkpoint) {
         if (generalParameters.Num_of_Membranes!=0) {
@@ -256,6 +257,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Chromatins.size(); i++) {
                 num_of_atoms    += Chromatins[i].get_num_of_nodes();
                 num_of_bonds    += Chromatins[i].get_num_of_bonds();
+                num_of_angles   += Chromatins[i].get_num_of_angle_bonds();
             }
         }
         
@@ -286,6 +288,7 @@ int main(int argc, char **argv)
     int atom_count=0;
     int bond_count=0;
     int dihe_count=0;
+    int angle_count=0;
     
     int mem_atom_count=0;
     //int act_atom_count=0;
@@ -294,12 +297,14 @@ int main(int argc, char **argv)
     MyAtomInfo* all_atoms     = new MyAtomInfo[num_of_atoms+1];
     Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
     Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
+    Angles*     all_angles    = new Angles[num_of_angles+1];
     
     
     
     all_atoms[num_of_atoms].type         =EndOfList;
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
+    all_angles[num_of_angles].type       =EndOfList;
     
     
     if (generalParameters.Num_of_Membranes!=0) {
@@ -352,10 +357,10 @@ int main(int argc, char **argv)
                                     chromatin_set,
                                     all_atoms,
                                     all_bonds,
-                                    all_dihedrals,
+                                    all_angles,
                                     atom_count,
                                     bond_count,
-                                    dihe_count);
+                                    angle_count);
     }
     
     print_statistics(num_of_atoms,
@@ -376,7 +381,7 @@ int main(int argc, char **argv)
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();
         if (!GenConst::Load_from_checkpoint) {
-            omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
+            omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
         } else {
             std::filebuf rfb;
             string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;

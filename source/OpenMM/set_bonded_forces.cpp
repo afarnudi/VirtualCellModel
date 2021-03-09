@@ -7,7 +7,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &HarmonicBond,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
-                       vector<OpenMM::CustomBondForce*>      &FENEs,
+                       vector<OpenMM::CustomBondForce*>      &KremerGrests,
                        vector<OpenMM::CustomBondForce*>      &Gompperbond,
                        vector<OpenMM::CustomBondForce*>      &Gompperrep,
                        vector<OpenMM::CustomBondForce*>      &Contractiles,
@@ -18,21 +18,22 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::System                        &system
                        ){
     
-    bool FENEBondForce=false;
+    bool KremerGrestBondForce=false;
     bool gompperBondForce=false;
     bool HarmonicBondForce=false;
     bool Kelvin_VoigtBondForce=false;
     bool Hill_Force=false;
     bool k_Force=false;
     
-    set <std::string> FENE_classes;
+    set <std::string> KremerGrest_classes;
     set <std::string> Gompper_classes;
     set <std::string> X4harmonic_classes;
     set <std::string> Contractile_classes;
     set <std::string> Hill_classes;
     set <std::string> KF_classes;
     set <std::string> Harmonic_minmax_classes;
-    int FENE_index = -1;
+    
+    int KremerGrest_index = -1;
     int Gompper_index = -1;
     int X4harmonic_index = -1;
     int Contractile_index = -1;
@@ -44,32 +45,32 @@ void set_bonded_forces(Bonds*                                 bonds,
         
         const int*      atom = bonds[i].atoms;
         
-        if (bonds[i].type == potentialModelIndex.Model["FENE"])
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"])
         {
-            auto FENE_item = FENE_classes.find(bonds[i].class_label);
-            if (FENE_item == FENE_classes.end()) {
+            auto KremerGrest_item = KremerGrest_classes.find(bonds[i].class_label);
+            if (KremerGrest_item == KremerGrest_classes.end()) {
                 
-                FENE_classes.insert(bonds[i].class_label);
-                FENE_index++;
+                KremerGrest_classes.insert(bonds[i].class_label);
+                KremerGrest_index++;
                 
-                FENEs.push_back(new OpenMM::CustomBondForce("-0.5*K_fene*R0*R0*log(1-(r*r/(R0*R0)))*step(0.99*R0-r)+4*epsilon_fene*((sigma_fene/r)^12-(sigma_fene/r)^6+0.25)*step(cut_fene-r)"));
+                KremerGrests.push_back(new OpenMM::CustomBondForce("-0.5*K_fene*R0*R0*log(1-(r*r/(R0*R0)))*step(0.99*R0-r)+4*epsilon_fene*((sigma_fene/r)^12-(sigma_fene/r)^6+0.25)*step(cut_fene-r)"));
                 
-                FENEs[FENE_index]->addPerBondParameter("K_fene");
-                FENEs[FENE_index]->addPerBondParameter("R0");
-                FENEs[FENE_index]->addPerBondParameter("epsilon_fene");
-                FENEs[FENE_index]->addPerBondParameter("sigma_fene");
-                FENEs[FENE_index]->addPerBondParameter("cut_fene");
+                KremerGrests[KremerGrest_index]->addPerBondParameter("K_fene");
+                KremerGrests[KremerGrest_index]->addPerBondParameter("R0");
+                KremerGrests[KremerGrest_index]->addPerBondParameter("epsilon_fene");
+                KremerGrests[KremerGrest_index]->addPerBondParameter("sigma_fene");
+                KremerGrests[KremerGrest_index]->addPerBondParameter("cut_fene");
                 
-                system.addForce(FENEs[FENE_index]);
+                system.addForce(KremerGrests[KremerGrest_index]);
             }
             vector<double> parameters={bonds[i].k_FENE_inKJpermol,
                                        bonds[i].FENER0inNm,
-                                       bonds[i].epsilon_FENE_inKJpermol,
+                                       bonds[i].epsilon_WCA_inKJpermol,
                                        bonds[i].nominalLengthInNm,
                                        bonds[i].nominalLengthInNm*(pow(2,1./6.))
                                        };
             
-            FENEs[FENE_index]->addBond(atom[0], atom[1], parameters);
+            KremerGrests[KremerGrest_index]->addBond(atom[0], atom[1], parameters);
 //            if (GenConst::Periodic_box) {
 //                FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
 //            }

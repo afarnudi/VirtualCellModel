@@ -29,6 +29,10 @@ void Chromatin::initialise(void){
             Node_Position[i][0]*=rescale_factor;
             Node_Position[i][1]*=rescale_factor;
             Node_Position[i][2]*=rescale_factor;
+            
+//            Node_Velocity[i][0]*=rescale_factor;
+//            Node_Velocity[i][1]*=rescale_factor;
+//            Node_Velocity[i][2]*=rescale_factor;
         }
         
     }
@@ -40,6 +44,7 @@ void Chromatin::initialise(void){
     
     set_bond_nominal_lengths();
     set_node_radius();
+    SpontaneousBendingAngle();
     
     if (spring_model == potentialModelIndex.Model["None"]) {
         cout<<TWARN<<"\nChromatin spring model is set to 'None'."<<TRESET<<endl;

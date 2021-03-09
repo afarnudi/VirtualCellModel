@@ -19,7 +19,7 @@ struct PotentialModelIndex{
     
     PotentialModelIndex(){
         Model["None"] = 0;
-        Model["FENE"] = 1;
+        Model["KremerGrest"] = 1;
         Model["Harmonic"] = 2;
         Model["Kelvin-Voigt"] = 3;
         Model["Maxwell"] = 4;
@@ -29,6 +29,7 @@ struct PotentialModelIndex{
         Model["hill"] = 8;
         Model["KFs"] = 9;
         Model["Gompper"] = 10;
+        Model["angleCOS"] = 11;
         
         
         Model["RealHarmonic"] = 26;
