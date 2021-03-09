@@ -477,6 +477,19 @@ int main(int argc, char **argv)
         myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
         
+        if (generalParameters.Minimise) {
+            cout<<"Minimising the coordinates before running the simulation."<<endl;
+            cout<<"Minimisation parameters:"<<endl;
+            cout<<"\tMinimisation Tolerance: "<<generalParameters.MinimiseTolerance<<endl;
+            cout<<"\tMinimisation Max Iterations: "<<generalParameters.MinimiseMaxIterations<<endl<<endl;
+            OpenMM::LocalEnergyMinimizer::minimize(*(omm->context));
+            double fake_time, fake_energyInKJ, fake_potential_energyInKJ;
+            myGetOpenMMState(omm, fake_time, fake_energyInKJ, fake_potential_energyInKJ, all_atoms);
+            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+            cout<<"\tMinimisation finished. New coordinates written to PDB."<<endl<<endl;
+        }
+        
+        
         for (int frame=1; ; ++frame) {
             
             double time, energyInKJ, potential_energyInKJ;

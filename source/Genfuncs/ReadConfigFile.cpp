@@ -220,6 +220,21 @@ void assign_general_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             generalParameters.WantVelocity=stat;
+        } else if (it.first == "Minimise") {
+            bool stat;
+            if (split[0]=="true") {
+                stat=true;
+            } else if (split[0]=="false"){
+                stat=false;
+            } else {
+                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                throw std::runtime_error(errorMessage);
+            }
+            generalParameters.Minimise=stat;
+        } else if (it.first == "MinimiseTolerance") {
+            generalParameters.MinimiseTolerance=stod(split[0]);
+        } else if (it.first == "MinimiseMaxIterations") {
+            generalParameters.MinimiseMaxIterations=stoi(split[0]);
         } else if (it.first == "CMMotionRemover") {
             generalParameters.CMMotionRemoverStep=stoi(split[0]);
             if (stoi(split[0])>0) {
