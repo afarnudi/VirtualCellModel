@@ -268,7 +268,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             }
         }
     }
-    
+    cout<<flush;
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         if (generalParameters.Integrator_type=="Verlet") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
@@ -292,22 +292,22 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         
     }
-    
+    cout<<flush;
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
-    
+    cout<<flush;
     
     platformName = omm->context->getPlatform().getName();
     
     const std::map <std::string, double> params = omm->context->getParameters();
     
-    
+    cout<<flush;
     cout<<TGRAY<<params.size()<<endl;
     for(auto elem : params)
     {
         cout << elem.first << " " << elem.second << "\n";
     }
     cout<<"\n"<<TRESET;
-    
+    cout<<flush;
     return omm;
 }
