@@ -27,7 +27,9 @@ private: //(if we define these constants as private members of the class, we can
     string Node_radius_stat;
     int index;
     int spring_model=0;
+    bool spring_model_global_stat=false;
     int angle_spring_model=0;
+    bool angle_spring_model_global_stat=false;
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
@@ -250,11 +252,17 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     int get_spring_model(void){
         return spring_model;
     }
+    bool get_spring_model_global_stat(void){
+        return spring_model_global_stat;
+    }
     
     /**Return angle potential model, used to setup the openmm system for the bonds.
      */
     int get_angle_spring_model(void){
         return angle_spring_model;
+    }
+    int get_angle_spring_model_global_stat(void){
+        return angle_spring_model_global_stat;
     }
     /**Return the number of node types in a chromatin chain.
      */

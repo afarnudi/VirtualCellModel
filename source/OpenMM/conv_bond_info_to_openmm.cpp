@@ -469,6 +469,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
         //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
         for (int i=0; i<num_of_real_bonds; i++) {
             bonds[i].type = chromo.get_spring_model();
+            bonds[i].globalStat = chromo.get_spring_model_global_stat();
             bonds[i].atoms[0]=i*(num_virtual_sites_per_bond+1);
             bonds[i].atoms[1]=(i+1)*(num_virtual_sites_per_bond+1);
             //        cout<<"atom bon 1 = "<<i*(num_virtual_sites_per_bond+1)<<endl;

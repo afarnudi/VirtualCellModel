@@ -38,6 +38,7 @@ struct MyAtomInfo
 
 struct Bonds{
     int type;
+    bool globalStat;
     int atoms[2];
     std::string class_label;
    // double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
