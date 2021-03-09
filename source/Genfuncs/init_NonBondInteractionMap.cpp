@@ -31,6 +31,10 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
     inter_config_type["LJCS"]=6;
     inter_config_type_reverse[6]="LJCS";
     inter_type_name[6]="Lennard-JonesChromatinSpecial0";
+    
+    inter_config_type["WCA"]=7;
+    inter_config_type_reverse[7]="WCA";
+    inter_type_name[7]="Weeks-Chandler-Andersen";
 
     
     table_size = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs + generalParameters.Num_of_Chromatins;

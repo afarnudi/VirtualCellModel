@@ -58,6 +58,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
+    vector<OpenMM::CustomNonbondedForce*> WCAs;
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
@@ -72,6 +73,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                      ext_force,
                      LJ_12_6_interactions,
                      ExcludedVolumes,
+                     WCAs,
                      system);
     
     
@@ -84,8 +86,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        ExcludedVolumes,
                                        system);
     
-    omm->LJ = LJ_12_6_interactions;
-    omm->EV = ExcludedVolumes;
+    omm->LJ  = LJ_12_6_interactions;
+    omm->EV  = ExcludedVolumes;
+    omm->WCA = WCAs;
     // Create an array of harmonic spring force objects to add to the system.
     
     
