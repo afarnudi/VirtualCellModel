@@ -28,6 +28,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  TimeDependantData*             time_dependant_data,
                                  Bonds*                         bonds,
                                  Dihedrals*                     dihedrals,
+                                 Angles*                        angles,
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
@@ -205,14 +206,16 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                                   vector<vector<std::set<int> > >  &chromo_set,
                                   MyAtomInfo*                       all_atoms,
                                   Bonds*                            all_bonds,
-                                  Dihedrals*                        all_dihedrals,
+                                  Angles*                           all_angles,
                                   int                              &atom_count,
                                   int                              &bond_count,
                                   int                              &dihe_coun);
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo);
-/**Relay the bond information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
+/**Relay the bond information of the Chromatin nodes to other data structures ready to pass to OpenMM handles.*/
 Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo);
+/**Relay the angle-bond information of the Chromatin nodes to other data structures ready to pass to OpenMM handles.*/
+Angles* convert_Chromatin_angle_bond_info_to_openmm(Chromatin chromo);
 
 
 
@@ -384,7 +387,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &HarmonicBond,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
-                       vector<OpenMM::CustomBondForce*>      &FENEs,
+                       vector<OpenMM::CustomBondForce*>      &KGs,
                        vector<OpenMM::CustomBondForce*>      &Gompperbond,
                        vector<OpenMM::CustomBondForce*>      &Gompperrep,
                        vector<OpenMM::CustomBondForce*>      &Contractiles,
@@ -400,6 +403,13 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                          vector<OpenMM::CustomCompoundBondForce*>  &DihedralForces,
                          OpenMM::System                            &system
                          );
+
+/**Set angle forces for every 3 particles set to have an angle potential.
+ */
+void set_angle_forces(Angles*                             angles,
+                      vector<OpenMM::CustomAngleForce*>  &DihedralForces,
+                      OpenMM::System                     &system
+                      );
 
 void print_platform_info(void);
 PlatformInfo get_platform_info(void);

@@ -53,7 +53,7 @@ void myWritePDBFrame(int frameNum,
             hist = new_label;
         }
         //        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
-        fprintf(pFile,"ATOM  %5d %4s ETH %c%4.0f    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
+        fprintf(pFile,"ATOM %6d %4s ETH %c%4.0f    %8.3f%8.3f%8.3f%6.2f%6.1f\n",
                 n+1,
                 atoms[n].pdb,
                 chain[index],

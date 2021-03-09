@@ -45,7 +45,7 @@ struct Bonds{
    // double FENE_lmax, FENE_lmin, FENE_le0, FENE_le1;
     double nominalLengthInNm, stiffnessInKJPerNm2, stiffnessInKJPerNm4;
     double dampInKJPsPerNm2;
-    double FENER0inNm, epsilon_FENE_inKJpermol, k_FENE_inKJpermol;
+    double FENER0inNm, epsilon_WCA_inKJpermol, k_FENE_inKJpermol;
     double F0;
     double r_min,r_max;
     double hill_co;
@@ -62,6 +62,14 @@ struct Dihedrals{
     std::string class_label;
     std::vector<int> atoms;
     double bendingStiffnessinKJ;
+    double spontaneousBendingAngleInRad;
+};
+
+struct Angles{
+    int type;
+    std::string class_label;
+    int atoms[3];
+    double bendingStiffnessinKJpermol;
     double spontaneousBendingAngleInRad;
 };
 
@@ -102,6 +110,7 @@ struct MyOpenMMData {
     OpenMM::HarmonicBondForce* calcforce;
     std::vector<OpenMM::CustomBondForce*> x4harmonic;
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
+    std::vector<OpenMM::CustomAngleForce*> Angle;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
     

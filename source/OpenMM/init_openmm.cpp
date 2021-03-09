@@ -30,6 +30,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  TimeDependantData*     time_dependant_data,
                                  Bonds*                 bonds,
                                  Dihedrals*             dihedrals,
+                                 Angles*                angles,
                                  vector<set<int> >      &membrane_set,
                                  vector<set<int> >      &actin_set,
                                  vector<set<int> >      &ecm_set,
@@ -93,7 +94,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
     vector<OpenMM::CustomBondForce*> X4harmonics;
-    vector<OpenMM::CustomBondForce*> FENEs;
+    vector<OpenMM::CustomBondForce*> KremerGrests;
     vector<OpenMM::CustomBondForce*> Gompperbond;
     vector<OpenMM::CustomBondForce*> Gompperrep;
     vector<OpenMM::CustomBondForce*> Contractiles;
@@ -107,7 +108,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                       HarmonicBond,
                       Kelvin_VoigtBond,
                       X4harmonics,
-                      FENEs,
+                      KremerGrests,
                       Gompperbond,
                       Gompperrep,
                       Contractiles,
@@ -182,6 +183,15 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     if (dihedrals[0].type != EndOfList) {
         omm->Dihedral = DihedralForces;
+    }
+    
+    vector<OpenMM::CustomAngleForce*> AngleForces;
+    set_angle_forces(angles,
+                     AngleForces,
+                     system);
+    
+    if (dihedrals[0].type != EndOfList) {
+        omm->Angle = AngleForces;
     }
     
     set_pbcvectors(system);
