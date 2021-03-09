@@ -4,7 +4,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     const int mem_num_bonds = mem.get_num_of_node_pairs();
     Bonds* bonds = new Bonds[mem_num_bonds];
     
-    bool fenepotential =false;
+    bool KGpotential =false;
     bool harmonicpotential = false;
     bool gompperpotential = false;
     
@@ -15,9 +15,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);
         bonds[i].class_label = mem.get_label() + mem.get_label();
         bonds[i].nominalLengthInNm=mem.get_node_pair_Nominal_Length_in_Nm(i);
-        
         if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
-            fenepotential =true;
+            KGpotential =true;
             bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
             bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
             bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
@@ -46,8 +45,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     
-    if (fenepotential) {
-        cout<< " FENE"<<endl;
+    if (KGpotential) {
+        cout<< " Kremer Grest potential"<<endl;
     }
     
     if(bonds[0].type == potentialModelIndex.Model["HarmonicX4"]){
@@ -461,7 +460,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
     Bonds* bonds = new Bonds[chromo_num_bonds];
     
     bool harmonicpotential =false;
-    bool fenepotential =false;
+    bool KGpotential =false;
     //    cout<<"\nchromo_num_bonds = "<<chromo_num_bonds<<endl;
     if (chromo_num_bonds != 0) {
         int num_of_real_bonds = chromo.get_num_of_real_site()-1;
@@ -477,7 +476,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
             bonds[i].class_label = chromo.get_label() + chromo.get_label();
             
             if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
-                fenepotential =true;
+                KGpotential =true;
                 bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
                 bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
                 bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
@@ -494,6 +493,9 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
         if(harmonicpotential){
             cout<<" Harmonic "<<endl;
             cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<chromo.get_spring_stiffness_coefficient() <<endl;
+        }
+        if(KGpotential){
+            cout<<" Kremer Grest "<<endl;
         }
         vector<vector<int> > virtual_bond_list = chromo.get_virtual_bonds();
         

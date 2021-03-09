@@ -12,7 +12,7 @@ void set_angle_forces(Angles*                             angles,
     int AFs_index = -1;
     
     for (int i=0; angles[i].type != EndOfList; ++i) {
-        
+//        cout<<i<<" "<<flush;
         
         if (angles[i].type == potentialModelIndex.Model["angleCOS"]) {
             auto AFs_item = AFs_classes.find(angles[i].class_label);

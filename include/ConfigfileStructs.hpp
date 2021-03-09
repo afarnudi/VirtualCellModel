@@ -55,6 +55,10 @@ struct GeneralParameters{
     /** Integration step size (fs).  Default 0.001*/
     double Step_Size_In_Fs;
     
+    bool Minimise = false;
+    double  MinimiseTolerance;
+    int  MinimiseMaxIterations;
+    
     int Num_of_Membranes;
     int Num_of_Actins;
     int Num_of_Chromatins;
@@ -157,6 +161,21 @@ struct GeneralParameters{
         values[1] ="#The thermostat temperature (in Kelvin). Required by the Brownian and Langevin integrators. Default value 310";
         GenParams["Temperature"] = values;
         insertOrder.push_back("Temperature");
+        
+        values[0] ="false";
+        values[1] ="#Use 'true' or 'false' to specify th use of OpenMM's Minimize function. It searches for a new set of particle positions that represent a local minimum of the potential energy. The search is performed using the L-BFGS algorithm. Distance constraints are enforced during minimization by adding a harmonic restraining force to the potential function. Default false";
+        GenParams["Minimise"] = values;
+        insertOrder.push_back("Minimise");
+        
+        values[0] ="10";
+        values[1] ="#This specifies how precisely the energy minimum must be located. Minimization will be halted once the root-mean-square value of all force components reaches this tolerance. The default value is 10.";
+        GenParams["MinimiseTolerance"] = values;
+        insertOrder.push_back("MinimiseTolerance");
+        
+        values[0] ="0";
+        values[1] ="The maximum number of iterations to perform. If this is 0, minisation is continued until the results converge without regard to how many iterations it takes. The default value is 0.";
+        GenParams["MinimiseMaxIterations"] = values;
+        insertOrder.push_back("MinimiseMaxIterations");
         
         values[0] ="0";
         values[1] ="#The pressure acting on the system (in bar) through OpenMM's MonteCarloBarostat. Default 0";

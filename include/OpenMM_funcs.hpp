@@ -346,6 +346,30 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       string                                 set_1_name,
                                       string                                 set_2_name);
 
+
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                      atoms[],
+                          vector<vector<std::set<int> > >       set_1,
+                          vector<std::set<int> >                set_2,
+                          int                                   set_1_index,
+                          int                                   set_2_index,
+                          string                                set_1_name,
+                          string                                set_2_name,
+                          bool                                  use_max_radius);
+
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                       atoms[],
+                          vector<vector<std::set<int> > >             set_1,
+                          vector<vector<std::set<int> > >             set_2,
+                          int                                    set_1_index,
+                          int                                    set_2_index,
+                          string                                 set_1_name,
+                          string                                 set_2_name);
+
+
+
+
+
 OpenMM::State getCurrentState(MyOpenMMData*  omm,
                               bool        wantEnergy,
                               double&     timeInPs,
@@ -367,6 +391,7 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomExternalForce*>  &ext_force,
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                      vector<OpenMM::CustomNonbondedForce*> &WCAs,
                       OpenMM::System                        &system
                       );
 /**Add particles to the system and forces.

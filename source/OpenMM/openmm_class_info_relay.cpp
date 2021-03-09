@@ -205,7 +205,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         cout<<"Angle bond potential:";
         Angles* angles = convert_Chromatin_angle_bond_info_to_openmm(chromos[i]);
         
-        for (int j=0; j<chromos[i].get_num_of_bonds(); j++) {
+        for (int j=0; j<chromos[i].get_num_of_angle_bonds(); j++) {
             all_angles[j+angle_count]=angles[j];
             all_angles[j+angle_count].atoms[0]=angles[j].atoms[0]+atom_count;
             all_angles[j+angle_count].atoms[1]=angles[j].atoms[1]+atom_count;

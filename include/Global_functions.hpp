@@ -38,6 +38,7 @@ void collect_data(MyOpenMMData*,
 void print_statistics(int num_of_atoms,
                       int num_of_bonds,
                       int num_of_dihedrals,
+                      int num_of_angles,
                       vector<Membrane> &mems,
                       vector<Chromatin> &chromos);
 #endif /* Global_functions_hpp */
