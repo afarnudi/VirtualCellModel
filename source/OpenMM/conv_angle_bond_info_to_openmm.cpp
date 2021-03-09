@@ -8,7 +8,7 @@ Angles* convert_Chromatin_angle_bond_info_to_openmm(Chromatin chromo) {
     Angles* angles = new Angles[chromo_num_angles];
     
     
-    
+    bool COSpotential=false;
     
     if (chromo_num_angles != 0) {
         
@@ -22,13 +22,18 @@ Angles* convert_Chromatin_angle_bond_info_to_openmm(Chromatin chromo) {
             angles[i].class_label = chromo.get_label() + chromo.get_label();
             
             if (angles[i].type == potentialModelIndex.Model["angleCOS"]) {
-                
+                COSpotential=true;
                 angles[i].spontaneousBendingAngleInRad = chromo.get_spontaneousBendingAngleInRad();
                 angles[i].bendingStiffnessinKJpermol   = chromo.get_bendingStiffnessinKJpermol();
                 
             }
             
-            
+        }
+        if (COSpotential) {
+            cout<<" cosine potential"<<endl;
+            cout<<"\tBending rigidity (KJ.mol^-1) ="<<angles[0].bendingStiffnessinKJpermol<<endl;
+            cout<<"\tSpontaneous bending angle (Rad) = "<<angles[0].bendingStiffnessinKJpermol<<endl;
+            cout<<endl;
         }
         
     }

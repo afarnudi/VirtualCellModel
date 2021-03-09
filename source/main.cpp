@@ -275,7 +275,7 @@ int main(int argc, char **argv)
         } // End of if (Include_Membrane)
     }
     
-    cout<<"num_of_bonds "<<num_of_bonds<<endl;
+//    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
     int progress=0;
@@ -305,7 +305,6 @@ int main(int argc, char **argv)
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     all_angles[num_of_angles].type       =EndOfList;
-    
     
     if (generalParameters.Num_of_Membranes!=0) {
         OpenMM_membrane_info_relay(Membranes,
@@ -352,6 +351,7 @@ int main(int argc, char **argv)
                               bond_count,
                               dihe_count);
     }
+    
     if (generalParameters.Num_of_Chromatins!=0) {
         OpenMM_Chromatin_info_relay(Chromatins,
                                     chromatin_set,
@@ -366,6 +366,7 @@ int main(int argc, char **argv)
     print_statistics(num_of_atoms,
                      num_of_bonds,
                      num_of_dihedrals,
+                     num_of_angles,
                      Membranes,
                      Chromatins);
     
@@ -376,7 +377,7 @@ int main(int argc, char **argv)
     
     // ALWAYS enclose all OpenMM calls with a try/catch block to make sure that
     // usage and runtime errors are caught and reported.
-
+    
     try {
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();

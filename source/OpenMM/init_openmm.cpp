@@ -190,7 +190,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                      AngleForces,
                      system);
     
-    if (dihedrals[0].type != EndOfList) {
+    if (angles[0].type != EndOfList) {
         omm->Angle = AngleForces;
     }
     

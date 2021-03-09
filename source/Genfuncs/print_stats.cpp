@@ -11,6 +11,7 @@
 void print_statistics(int num_of_atoms,
                       int num_of_bonds,
                       int num_of_dihedrals,
+                      int num_of_angles,
                       vector<Membrane> &Membranes,
                       vector<Chromatin> &Chromatins){
     
@@ -30,4 +31,5 @@ void print_statistics(int num_of_atoms,
     cout<<num_of_atoms<<" Atoms"<<endl;
     cout<<num_of_bonds<<" Bonds"<<endl;
     cout<<num_of_dihedrals<<" Dihedrals"<<endl;
+    cout<<num_of_angles<<" Angles"<<endl;
 }
