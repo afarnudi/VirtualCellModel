@@ -43,6 +43,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
     
+    vector<string> loaderror = OpenMM::Platform::getPluginLoadFailures();
+    for (auto &line: loaderror){
+        cout<<line<<endl;
+    }
+    
     // Allocate space to hold OpenMM objects while we're using them.
     MyOpenMMData*       omm = new MyOpenMMData();
     
