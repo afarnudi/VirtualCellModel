@@ -9,6 +9,84 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
+void set_perParticle_interactions(const MyAtomInfo                       atoms[],
+                                  Bonds*                                 bonds,
+                                  vector<std::set<int> >                &membrane_set,
+                                  vector<std::set<int> >                &actin_set,
+                                  vector<std::set<int> >                &ecm_set,
+                                  vector<vector<set<int> > >            &chromatin_set,
+                                  NonBondInteractionMap                 &interaction_map,
+                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
+                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  OpenMM::System                        &system
+                                  ){
+    
+    
+    
+    
+    bool WCA=false;
+    for (int i=0; i<interaction_map.get_table_size(); i++) {
+        for (int j=0; j<interaction_map.get_table_size(); j++) {
+            if (interaction_map.get_interacton_type(i, j) == "Weeks-Chandler-Andersen") {
+                WCA = true;
+                break;
+            }
+        }
+        if (WCA) {
+            break;
+        }
+    }
+    
+    if (WCA) {
+        string epsilon = "epsilon";
+        string sigma   = "sigma";
+        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
+//        cout<<potential<<endl;
+        WCAs.push_back(new OpenMM::CustomNonbondedForce(potential));
+        
+        if (WCAs.size()!=1) {
+            string errorMessage = TWARN;
+            errorMessage+="init_openmm: add_particles_to_system_and_forces: Number of WCA forces is not 1.";
+            errorMessage+=" Please edit the interaction table and try again.";
+            errorMessage+=TWARN;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        WCAs[0]->addPerParticleParameter(sigma);
+        WCAs[0]->addPerParticleParameter(epsilon);
+        
+//            if (generalParameters.Periodic_condtion_status) {
+//                WCAs[0]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+//            } else {
+//                WCAs[0]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+//            }
+        system.addForce(WCAs[0]);
+    }
+    
+    
+    //Create bond list for all bonds to pass to createExclusionsFromBonds
+//    vector<pair<int, int> > BondExclusionList;
+//    int EndOfList =-1;
+//    for (int n=0; bonds[n].type != EndOfList; ++n) {
+//        pair<int, int> pair(bonds[n].atoms[0],bonds[n].atoms[0]);
+//        BondExclusionList.push_back(pair);
+//        
+//    }
+//    
+//    if (WCA) {
+//        WCAs[0]->createExclusionsFromBonds(BondExclusionList, 2);
+//        cout<<WCAs[0]->getNumExclusions()<<endl;
+//        exit(0);
+//    }
+    
+}
+
+
+
+
 
 void set_interactions(const MyAtomInfo                       atoms[],
                       Bonds*                                 bonds,
@@ -635,15 +713,15 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 }
             }
             else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                index = int(ExcludedVolumes.size()-1);
+                init_WCA_interaction(WCAs, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                index = int(WCAs.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                WCAs[index]->createExclusionsFromBonds(exclude_bonds, 0);
                 
-                system.addForce(ExcludedVolumes[index]);
+                system.addForce(WCAs[index]);
                 if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             }
             else if (interaction_name == "Lennard-JonesChromatinSpecial0"){

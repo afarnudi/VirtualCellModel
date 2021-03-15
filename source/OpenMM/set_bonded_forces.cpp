@@ -4,6 +4,61 @@ using std::set;
 const int EndOfList=-1;
 
 void set_bonded_forces(Bonds*                                 bonds,
+//                       OpenMM::HarmonicBondForce*            &HarmonicBond,
+//                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
+//                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
+                       vector<OpenMM::CustomBondForce*>      &KremerGrests,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperbond,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
+//                       vector<OpenMM::CustomBondForce*>      &Contractiles,
+//                       vector<OpenMM::CustomBondForce*>      &KFs,
+//                       vector<OpenMM::CustomBondForce*>      &hill_bonds,
+//                       vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
+//                       TimeDependantData*                    &time_dependant_data,
+                       OpenMM::System                        &system){
+    bool KremerGrestBondForce=false;
+    
+    
+    
+    
+    for (int i=0; bonds[i].type != EndOfList; ++i) {
+        
+        const int*      atom = bonds[i].atoms;
+        
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"])
+        {
+            
+            if (KremerGrests.size() == 0) {
+                string K_FENE = to_string(30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+                string epsilon_WCA = to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+                string sigma = "sigmaKG";
+                string potential = "-0.5*"+K_FENE+"*2.25*log(1-(r*r/(2.25*"+sigma+"*"+sigma+")))*step(0.99*1.5*"+sigma+"-r)+4*"+epsilon_WCA+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(2^(1./6.)*"+sigma+"-r)";
+                
+                KremerGrests.push_back(new OpenMM::CustomBondForce(potential));
+                
+                KremerGrests[0]->addPerBondParameter(sigma);
+                
+                
+                system.addForce(KremerGrests[0]);
+            }
+            vector<double> parameters={bonds[i].nominalLengthInNm
+                                       };
+            
+            KremerGrests[0]->addBond(atom[0], atom[1], parameters);
+    
+        }
+        
+        
+        
+    }
+    
+        
+}
+                      
+
+
+
+void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &HarmonicBond,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,

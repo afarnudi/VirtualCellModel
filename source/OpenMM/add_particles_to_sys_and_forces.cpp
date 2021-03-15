@@ -8,7 +8,19 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<Vec3>                          &initialVelInNmperPs,
                                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                        NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system){
+    
+ 
+    bool WCA =false;
+    if (generalParameters.MinimumForceDecleration) {
+        if (WCAs.size()==1) {
+            WCA=true;
+        }
+    }
+    
+    
     int EndOfList=-1;
 //    std::vector<double> sigma_ev;
     for (int n=0; atoms[n].type != EndOfList; ++n) {
@@ -29,6 +41,16 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
 //        std::vector<double> sigma_ev;
 //        sigma_ev.push_back(atoms[n].radius);
         
+        if (WCA) {
+            vector<double> params = {atoms[n].sigmaWCA, atoms[n].epsilonWCA};
+            WCAs[0]->addParticle();
+            WCAs[0]->setParticleParameters(n, params);
+        } else {
+            for (int i=0; i<WCAs.size(); i++) {
+                WCAs[i]->addParticle();
+            }
+        }
+        
         for (int i=0; i<ExcludedVolumes.size(); i++) {
             ExcludedVolumes[i]->addParticle();
         }
@@ -39,4 +61,5 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         
         
     }
+    
 }

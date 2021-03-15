@@ -46,6 +46,8 @@ struct GeneralParameters{
     string ECM_label="ecm";
     string Chromatin_label="chr";
     
+    bool MinimumForceDecleration;
+    
     /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
     double BoltzmannKJpermolkelvin = 0.008314459920816468;
     /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/
@@ -251,6 +253,11 @@ struct GeneralParameters{
         values[1] ="#This option is not available. Note to the developer: This should be moved to the Membrane. Default value 100.";
         GenParams["MemFluidity"] = values;
         insertOrder.push_back("MemFluidity");
+        
+        values[0] ="true";
+        values[1] ="#When true, sll interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
+        GenParams["MinimumForceDecleration"] = values;
+        insertOrder.push_back("MinimumForceDecleration");
         
     }
     

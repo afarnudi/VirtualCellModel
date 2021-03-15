@@ -7,7 +7,10 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  Dihedrals*             all_dihedrals,
                                  int                    &atom_count,
                                  int                    &bond_count,
-                                 int                    &dihe_count){
+                                 int                    &dihe_count,
+                                 NonBondInteractionMap                 &interaction_map){
+    
+    
     
     for (int i=0; i<membranes.size(); i++) {
         
@@ -165,13 +168,23 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                                   Angles*                           all_angles,
                                   int                              &atom_count,
                                   int                              &bond_count,
-                                  int                              &angle_count){
+                                  int                              &angle_count,
+                                  NonBondInteractionMap            &interaction_map){
+    
+    bool WCA =false;
     for (int i=0; i<chromos.size(); i++) {
+        for (int j=0; j<interaction_map.get_table_size(); j++) {
+            if (interaction_map.get_interacton_type(i, j)== "Weeks-Chandler-Andersen") {
+                WCA = true;
+                break;
+            }
+        }
+        
+        
         
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
         cout<<TCHR<<"Chromatin "<<i<<TRESET<<endl;
         MyAtomInfo* atoms = convert_Chromatin_position_to_openmm(chromos[i]);
-        
         
         
         for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
@@ -181,6 +194,11 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
             }
             
             all_atoms[j+atom_count]=atoms[j];
+            
+            if (WCA) {
+                all_atoms[j+atom_count].epsilonWCA = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+                all_atoms[j+atom_count].sigmaWCA = atoms[j].radius;
+            }
             
             
             chromatin_set[i][chromos[i].get_node_type(j)].insert(j+atom_count);
@@ -221,5 +239,6 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         bond_count  += chromos[i].get_num_of_bonds();
         angle_count += chromos[i].get_num_of_angle_bonds();
         //        dihe_count += membranes[i].get_num_of_triangle_pairs();
+        
     }
 }

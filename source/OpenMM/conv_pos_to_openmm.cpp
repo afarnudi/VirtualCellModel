@@ -39,6 +39,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
         myatominfo[i].ext_force_constants[1]=mem.get_ky();
         myatominfo[i].ext_force_constants[2]=mem.get_kz();
         
+        
     }
    // myatominfo[0].mass=0;
    // myatominfo[1].mass=0;

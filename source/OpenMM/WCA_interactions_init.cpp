@@ -126,7 +126,7 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
         WCAs[index]->addGlobalParameter(sigma,   max( atoms[*it_1].radius
                                                     , atoms[*it_2].radius ) );
     } else {
-        WCAs[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
+        WCAs[index]->addGlobalParameter(sigma,       ( atoms[*it_1].radius
                                                      + atoms[*it_2].radius ) );
     }
     WCAs[index]->addGlobalParameter(epsilon,   generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
@@ -143,10 +143,10 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
         WCAs[index]->addGlobalParameter(cutoff,   pow(2, 1./6) * max( atoms[*it_1].radius
                                                                    , atoms[*it_2].radius ) );
     } else {
-        WCAs[index]-> setCutoffDistance( pow(2, 1./6) * 0.5 *( atoms[*it_1].radius
-                                                            + atoms[*it_2].radius ) );
-        WCAs[index]->addGlobalParameter(cutoff,   pow(2, 1./6) * 0.5 *( atoms[*it_1].radius
-                                                                     + atoms[*it_2].radius ) );
+        WCAs[index]-> setCutoffDistance( pow(2, 1./6)  *( atoms[*it_1].radius
+                                                        + atoms[*it_2].radius ) );
+        WCAs[index]->addGlobalParameter(cutoff,   pow(2, 1./6) *( atoms[*it_1].radius
+                                                                + atoms[*it_2].radius ) );
     }
 
     WCAs[index]-> addInteractionGroup(compined_set, set_2[set_2_index]);
@@ -185,18 +185,18 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
 
 
     int index = WCAs.size()-1;
-    WCAs[index]->addGlobalParameter(sigma,   0.5*( atoms[*it_1].radius
-                                                 + atoms[*it_2].radius ));
+    WCAs[index]->addGlobalParameter(sigma,   ( atoms[*it_1].radius
+                                             + atoms[*it_2].radius ));
     WCAs[index]->addGlobalParameter(epsilon,   generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
     if (generalParameters.Periodic_condtion_status) {
         WCAs[index]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
     } else {
         WCAs[index]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
     }
-    WCAs[index]-> setCutoffDistance( pow(2,1./6) * 0.5 *( atoms[*it_1].radius
-                                                        + atoms[*it_2].radius ) );
-    WCAs[index]->addGlobalParameter(cutoff,   pow(2, 1./6) * 0.5 *( atoms[*it_1].radius
-                                                                 + atoms[*it_2].radius ) );
+    WCAs[index]-> setCutoffDistance( pow(2,1./6) *( atoms[*it_1].radius
+                                                  + atoms[*it_2].radius ) );
+    WCAs[index]->addGlobalParameter(cutoff,   pow(2, 1./6) *( atoms[*it_1].radius
+                                                            + atoms[*it_2].radius ) );
     WCAs[index]-> addInteractionGroup(compined_set_1, compined_set_2);
 }
 //

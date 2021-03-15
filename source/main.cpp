@@ -314,7 +314,8 @@ int main(int argc, char **argv)
                                    all_dihedrals,
                                    atom_count,
                                    bond_count,
-                                   dihe_count);
+                                   dihe_count,
+                                   interaction_map);
     }
     
     mem_atom_count = atom_count;
@@ -360,7 +361,8 @@ int main(int argc, char **argv)
                                     all_angles,
                                     atom_count,
                                     bond_count,
-                                    angle_count);
+                                    angle_count,
+                                    interaction_map);
     }
     
     print_statistics(num_of_atoms,

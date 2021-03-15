@@ -6,25 +6,22 @@
 
 const int EndOfList=-1;
 
-//std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds,
-//                                                              std::string label_1,
-//                                                              std::string label_2){
-//
-//    std::vector< std::pair< int, int > > exclude_bonds;
-//    //if shared node --> acin or membrane label
-//    for (int i_b=0; bonds[i_b].type != EndOfList; ++i_b) {
-//
-//        if ( (bonds[i_b].class_label == label_1 + label_2)  || (bonds[i_b].class_label == label_2 + label_1) ) {
-//            std::pair< int, int > temp;
-//            temp.first=bonds[i_b].atoms[0];
-//            temp.second=bonds[i_b].atoms[1];
-//            exclude_bonds.push_back(temp);
-//        }
-//
-//
-//    }
-//    return exclude_bonds;
-//}
+
+void creatBondExclusion(Bonds*                                 bonds,
+                        NonBondInteractionMap                 &interaction_map,
+                        vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                        vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                        vector<OpenMM::CustomNonbondedForce*> &WCAs
+                        ){
+    std::vector< std::pair< int, int > > excludedbonds = exclusion_list_generator(bonds);
+    
+    if (WCAs.size()==1) {
+        WCAs[0]->createExclusionsFromBonds(excludedbonds, 2);
+//        cout<<WCAs[0]->getNumExclusions()<<endl;
+//        exit(0);
+    }
+    
+}
 
 
 std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds){
@@ -35,12 +32,7 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds)
             std::pair< int, int > temp;
             temp.first =bonds[i_b].atoms[0];
             temp.second=bonds[i_b].atoms[1];
-            //exclude_bonds.push_back(temp);
-//        if (i_b>3170) {
-//            cout<<i_b<<" type "<<bonds[i_b].type<<endl;
-//            
-//        }
-//        
+
         int j=0;
         bool flag = true;
         
@@ -56,6 +48,11 @@ std::vector< std::pair< int, int > > exclusion_list_generator(Bonds*      bonds)
         
         if(flag)
         {
+//            cout<<temp.first<<" "<<temp.second<<endl;
+//            if (i_b%20==0) {
+//                int a;
+//                cin>>a;
+//            }
             exclude_bonds.push_back(temp);
         }
         

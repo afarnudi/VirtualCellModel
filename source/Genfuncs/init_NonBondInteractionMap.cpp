@@ -81,18 +81,23 @@ NonBondInteractionMap::NonBondInteractionMap(vector<string> lines){
                 for (int i=0; i<rows; i++) {
                     if (is_interaction(split[i+1])) {
                         inter_table[rows-1][i] = parse_interacton_type(split[1+i]);
+                        inter_table[i][rows-1] = inter_table[rows-1][i];
                         
                         if (needs_report(split[1+i])) {
                             force_report[rows-1][i] = true;
+                            force_report[i][rows-1] = force_report[rows-1][i];
                             force_sum++;
                         } else {
                             force_report[rows-1][i] = false;
+                            force_report[i][rows-1] = force_report[rows-1][i];
                         }
                         
                         if (optimise_radius(split[1+i])) {
                             use_max_radius[rows-1][i] = true;
+                            use_max_radius[i][rows-1] = use_max_radius[rows-1][i];
                         } else {
                             use_max_radius[rows-1][i] = false;
+                            use_max_radius[i][rows-1] = use_max_radius[rows-1][i];
                         }
                        
                     } else {

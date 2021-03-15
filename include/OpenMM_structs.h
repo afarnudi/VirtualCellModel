@@ -34,6 +34,8 @@ struct MyAtomInfo
     std::string class_label;
     int vsite_atoms[2];
     double vsite_weights[2];
+    double epsilonWCA   = 0;
+    double sigmaWCA   = 0;
 };
 
 struct Bonds{

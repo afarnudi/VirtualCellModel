@@ -284,6 +284,17 @@ void assign_general_parameters(void){
             generalParameters.PeriodicBoxVector2.push_back(stod(split[2]));
         } else if (it.first == "ProjectName") {
             generalParameters.ProjectName = split[0];
+        } else if (it.first == "MinimumForceDecleration") {
+            
+            if (split[0]=="true") {
+                generalParameters.MinimumForceDecleration = true;
+            } else if (split[0]=="false"){
+                generalParameters.MinimumForceDecleration = false;
+            } else {
+                string errorMessage = "Configfile parameter parse error: MinimumForceDecleration: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                throw std::runtime_error(errorMessage);
+            }
+        
         }
         
         
