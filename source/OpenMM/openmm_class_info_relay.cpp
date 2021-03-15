@@ -11,14 +11,25 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  NonBondInteractionMap                 &interaction_map){
     
     
-    
+    bool WCA =false;
     for (int i=0; i<membranes.size(); i++) {
-        
+        for (int j=0; j<interaction_map.get_table_size(); j++) {
+            if (interaction_map.get_interacton_type(i, j)== "Weeks-Chandler-Andersen") {
+                WCA = true;
+                break;
+            }
+        }
         //Create a set of the atom index to use for OpenMM's custom non bond interaction set.
         
         MyAtomInfo* atoms = convert_membrane_position_to_openmm(membranes[i]);
         for (int j=0;j<membranes[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
+            
+            if (WCA) {
+                all_atoms[j+atom_count].epsilonWCA = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+                all_atoms[j+atom_count].sigmaWCA = atoms[j].radius;
+            }
+            
             membrane_set[i].insert(j+atom_count);
         }
         
@@ -174,7 +185,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
     bool WCA =false;
     for (int i=0; i<chromos.size(); i++) {
         for (int j=0; j<interaction_map.get_table_size(); j++) {
-            if (interaction_map.get_interacton_type(i, j)== "Weeks-Chandler-Andersen") {
+            if (interaction_map.get_interacton_type(i+interaction_map.get_table_size() - chromos.size(), j)== "Weeks-Chandler-Andersen") {
                 WCA = true;
                 break;
             }
