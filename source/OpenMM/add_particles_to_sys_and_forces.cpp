@@ -42,7 +42,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
 //        sigma_ev.push_back(atoms[n].radius);
         
         if (WCA) {
-            vector<double> params = {atoms[n].sigmaWCA, atoms[n].epsilonWCA};
+            vector<double> params = {atoms[n].sigmaWCA};//, atoms[n].epsilonWCA};
             WCAs[0]->addParticle();
             WCAs[0]->setParticleParameters(n, params);
         } else {

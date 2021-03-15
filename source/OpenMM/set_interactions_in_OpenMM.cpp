@@ -40,7 +40,7 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
     }
     
     if (WCA) {
-        string epsilon = "epsilon";
+        string epsilon = to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
         string sigma   = "sigma";
         string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
 //        cout<<potential<<endl;
@@ -56,7 +56,7 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
         
         
         WCAs[0]->addPerParticleParameter(sigma);
-        WCAs[0]->addPerParticleParameter(epsilon);
+//        WCAs[0]->addPerParticleParameter(epsilon);
         
 //            if (generalParameters.Periodic_condtion_status) {
 //                WCAs[0]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
