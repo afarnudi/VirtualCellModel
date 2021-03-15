@@ -54,23 +54,23 @@ void          myStepWithOpenMM(MyOpenMMData*,
  *                     COPY STATE BACK TO CPU FROM OPENMM
  * -----------------------------------------------------------------------------
  */
-void          myGetOpenMMState(MyOpenMMData*,
+void          myGetOpenMMState(OpenMM::Context* context,
                                double&      time,
                                double&      energy,
                                double&      potential_energy,
                                MyAtomInfo   atoms[]);
-void          myGetOpenMMState2(MyOpenMMData*,
-                                double&      time,
-                                double&      energy,
-                                double&      potential_energy,
-                                vector<Membrane> mems,
-                                MyAtomInfo   atoms[]);
+//void          myGetOpenMMState2(OpenMM::Context* context,
+//                                double&      time,
+//                                double&      energy,
+//                                double&      potential_energy,
+//                                vector<Membrane> mems,
+//                                MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM
  * -----------------------------------------------------------------------------
  */
-void Cheap_GetOpenMMState(MyOpenMMData*,
+void Cheap_GetOpenMMState(OpenMM::Context* context,
                           MyAtomInfo atoms[]);
 
 /** -----------------------------------------------------------------------------
@@ -420,7 +420,10 @@ void creatBondExclusion(Bonds*                                 bonds,
 
 
 
-
+void minimisation(MyOpenMMData*        omm,
+                  MyAtomInfo           atoms[],
+                  Bonds*               bonds
+                  );
 
 /**Add particles to the system and forces.
  *Specify the atoms and their properties:

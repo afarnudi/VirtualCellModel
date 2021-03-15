@@ -262,8 +262,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         platforminfo = get_platform_info();
     }
     
+    
+    
+    
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     generateHardwareReport(platforminfo);
+    
+    
+    
+//    OpenMM::Platform& minimisationPlatform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
+    
     
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
@@ -326,6 +334,48 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 //    ofstream output("system.xml");
 //    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
 //    output.close();
+    
+//    if (generalParameters.Minimise) {
+//        PlatformInfo minimisePlatforminfo;
+//        minimisePlatforminfo = get_platform_info();
+//
+//        OpenMM::Platform& minimisePlatform = OpenMM::Platform::getPlatform(minimisePlatforminfo.platform_id);
+//
+//        if (minimisePlatform.getName() == "CPU" || minimisePlatforminfo.platform_id==0) {
+//            if (generalParameters.Integrator_type=="Verlet") {
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
+//            } else if (generalParameters.Integrator_type=="Brownian"){
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
+//            } else if (generalParameters.Integrator_type=="Langevin"){
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
+//            } else if (generalParameters.Integrator_type=="Custom"){
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
+//            }
+//        } else {
+//            if ( generalParameters.Integrator_type=="Verlet" ) {
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+//            } else if (generalParameters.Integrator_type=="Brownian"){
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+//            } else if (generalParameters.Integrator_type=="Langevin") {
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+//            } else if (generalParameters.Integrator_type=="Custom"){
+//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+//            }
+//
+//
+//        }
+//        cout<<flush;
+//        omm->minimisationContext->setPositions(initialPosInNm);
+//        omm->minimisationContext->setVelocities(initialVelInNmperPs);
+//        cout<<flush;
+//        cout<<"Minimising the coordinates before running the simulation."<<endl;
+//        cout<<"Minimisation parameters:"<<endl;
+//        cout<<"\tMinimisation Tolerance: "<<generalParameters.MinimiseTolerance<<endl;
+//        cout<<"\tMinimisation Max Iterations: "<<generalParameters.MinimiseMaxIterations<<endl<<endl;
+//        OpenMM::LocalEnergyMinimizer::minimize(*(omm->minimisationContext));
+//
+//    }
+    
     cout<<flush;
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         if (generalParameters.Integrator_type=="Verlet") {
@@ -367,6 +417,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     }
     cout<<"\n"<<TRESET;
     cout<<flush;
+    
+    
+    
+    
+    
+    
+    
+    
     
     return omm;
 }

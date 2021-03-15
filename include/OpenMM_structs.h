@@ -108,6 +108,7 @@ struct MyOpenMMData {
     OpenMM::CustomIntegrator*     CustomIntegrator;
     
     OpenMM::Context*  context;
+    OpenMM::Context*  minimisationContext;
 
     OpenMM::HarmonicBondForce* harmonic;
     OpenMM::HarmonicBondForce* calcforce;

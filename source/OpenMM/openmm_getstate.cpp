@@ -9,7 +9,7 @@
 
 
 using OpenMM::Vec3;
-void myGetOpenMMState(MyOpenMMData* omm,
+void myGetOpenMMState(OpenMM::Context* context,
                       double& timeInPs,
                       double& energyInKJ,
                       double& potential_energyInKJ,
@@ -23,7 +23,7 @@ void myGetOpenMMState(MyOpenMMData* omm,
         infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
     }
     // Forces are also available (and cheap).
-    const OpenMM::State state = omm->context->getState(infoMask);
+    const OpenMM::State state = context->getState(infoMask);
 //    const OpenMM::State state = omm->context->getState(infoMask,GenConst::Periodic_box);
     
     timeInPs = state.getTime(); // OpenMM time is in ps already
@@ -81,12 +81,12 @@ void myGetOpenMMState(MyOpenMMData* omm,
 
 
 
-void Cheap_GetOpenMMState(MyOpenMMData* omm,
+void Cheap_GetOpenMMState(OpenMM::Context* context,
                           MyAtomInfo atoms[])
 {
     int infoMask = 0;
     infoMask = OpenMM::State::Positions;
-    const OpenMM::State state = omm->context->getState(infoMask);
+    const OpenMM::State state = context->getState(infoMask);
     
     // Copy OpenMM positions into atoms array and change units from nm to Angstroms.
     const std::vector<Vec3>& positionsInNm = state.getPositions();
