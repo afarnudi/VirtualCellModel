@@ -27,12 +27,14 @@ void assign_project_directories(char* buffer){
     string trajectory = "Results";
     boost::filesystem::path pTrajectory(trajectory);
     if(!boost::filesystem::exists(pTrajectory)){
-        boost::filesystem::create_directory(pTrajectory);
+//        boost::filesystem::create_directory(pTrajectory);
+        boost::filesystem::create_directories(pTrajectory);
     }
     trajectory +="/"+generalParameters.ProjectName;
     pTrajectory=trajectory;
     if(!boost::filesystem::exists(pTrajectory)){
-        boost::filesystem::create_directory(pTrajectory);
+//        boost::filesystem::create_directory(pTrajectory);
+        boost::filesystem::create_directories(pTrajectory);
     }
     trajectory += "/";
     trajectory += buffer;
@@ -46,7 +48,8 @@ void assign_project_directories(char* buffer){
         ID = string(3 - IDtoString.length(), '0') + IDtoString;
         pTrajectory=trajectory+"_"+ID;
     }
-    boost::filesystem::create_directory(pTrajectory);
+//    boost::filesystem::create_directory(pTrajectory);
+    boost::filesystem::create_directories(pTrajectory);
     
     trajectory+="_"+ID;
     trajectory+="/";
