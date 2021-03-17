@@ -319,18 +319,18 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(AnisoMCBarostat);
     }
     
-    for (int i=0; atoms[i].type != EndOfList; i++) {
-        if (atoms[i].mass < 0.0001) {
-            if (atoms[i].class_label == "Chromatin") {
-                omm->system->setParticleMass(i, 0);
-                
-                OpenMM::TwoParticleAverageSite* vsite_pars;
-                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);//I think the last one should be atoms[i].Vsite_weights[1]
-                
-                omm->system->setVirtualSite(i, vsite_pars);
-            }
-        }
-    }
+//    for (int i=0; atoms[i].type != EndOfList; i++) {
+//        if (atoms[i].mass < 0.0001) {
+//            if (atoms[i].class_label == "Chromatin") {
+//                omm->system->setParticleMass(i, 0);
+//                
+//                OpenMM::TwoParticleAverageSite* vsite_pars;
+//                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);//I think the last one should be atoms[i].Vsite_weights[1]
+//                
+//                omm->system->setVirtualSite(i, vsite_pars);
+//            }
+//        }
+//    }
 //    ofstream output("system.xml");
 //    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
 //    output.close();

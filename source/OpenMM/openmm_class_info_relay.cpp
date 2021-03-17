@@ -199,10 +199,10 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         
         
         for (int j=0; j<chromos[i].get_num_of_nodes(); j++) {
-            if (atoms[j].mass < 0.0000001) {
-                atoms[j].vsite_atoms[0] += atom_count;
-                atoms[j].vsite_atoms[1] += atom_count;
-            }
+//            if (atoms[j].mass < 0.0000001) {
+//                atoms[j].vsite_atoms[0] += atom_count;
+//                atoms[j].vsite_atoms[1] += atom_count;
+//            }
             
             all_atoms[j+atom_count]=atoms[j];
             
