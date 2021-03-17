@@ -16,7 +16,7 @@ void creatBondExclusion(Bonds*                                 bonds,
     std::vector< std::pair< int, int > > excludedbonds = exclusion_list_generator(bonds);
     
     if (WCAs.size()==1) {
-        WCAs[0]->createExclusionsFromBonds(excludedbonds, 2);
+        WCAs[0]->createExclusionsFromBonds(excludedbonds, 1);
 //        cout<<WCAs[0]->getNumExclusions()<<endl;
 //        exit(0);
     }
