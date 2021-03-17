@@ -203,7 +203,11 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     
     /**return chromatin number of angle bonds. It is equal to the number of nodes-2*/
     double get_num_of_angle_bonds(void){
-        return Num_of_Nodes-2;
+        if (angle_spring_model!=potentialModelIndex.Model["None"]) {
+            return Num_of_Nodes-2;
+        }
+        return 0;
+        
     }
     
     /**return the number of  chromatin's real (non virtual) nodes .*/
