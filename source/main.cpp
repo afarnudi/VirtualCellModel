@@ -480,6 +480,12 @@ int main(int argc, char **argv)
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
         
         if (generalParameters.Minimise) {
+            string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
+            ofstream writexyz(traj_name.c_str());
+            for (int n=0; all_atoms[n].type != -1; n++) {
+                writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+            }
+            writexyz.close();
             minimisation(omm,
                          all_atoms,
                          all_bonds);
