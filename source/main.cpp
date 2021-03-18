@@ -608,8 +608,12 @@ int main(int argc, char **argv)
         print_real_time(chrono_clock_start, chrono::steady_clock::now());
         print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
         
-        
-        
+        string traj_name= generalParameters.trajectory_file_name+"_fin.xyz";
+        ofstream writexyz(traj_name.c_str());
+        for (int n=0; all_atoms[n].type != -1; n++) {
+            writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+        }
+        writexyz.close();
         
         
         // Clean up OpenMM data structures.

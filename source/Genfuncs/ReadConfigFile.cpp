@@ -181,6 +181,8 @@ void assign_general_parameters(void){
             generalParameters.Integrator_type="Verlet";
             if (split[0][0]=='B'){
                 generalParameters.Integrator_type="Brownian";
+            } else if (split[0][0]=='M'){
+                generalParameters.Integrator_type="LangevinMinimise";
             } else if (split[0][0]=='L'){
                 generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){

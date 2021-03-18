@@ -61,3 +61,44 @@ void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map
     
 }
 
+void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs){
+    double dt = stepSizeInFs* OpenMM::PsPerFs;
+    double friction = generalParameters.frictionInPs;
+    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+    
+    omm->LangevinMinimisation = new OpenMM::CustomIntegrator(dt);
+    
+    
+    omm->LangevinMinimisation->addGlobalVariable("a", exp(-0.5*friction*dt));
+    omm->LangevinMinimisation->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
+    omm->LangevinMinimisation->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
+    omm->LangevinMinimisation->addGlobalVariable("kT", kBT);
+    
+    omm->LangevinMinimisation->addUpdateContextState();
+    
+//    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+    omm->LangevinMinimisation->addComputePerDof("v", " c*f/m + b*sqrt(kT/m)*gaussian");
+    
+    omm->LangevinMinimisation->addComputePerDof("x", "x + dt*v");
+
+    //    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+}
+
+void set_Langevin(MyOpenMMData* omm, double stepSizeInFs){
+//    double dt = stepSizeInFs* OpenMM::PsPerFs;
+//    double friction = generalParameters.frictionInPs;
+//    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+//
+//    omm->CustomLangevin = new OpenMM::CustomIntegrator(dt);
+//
+//
+//    omm->CustomLangevin->addGlobalVariable("a", exp(-0.5*friction*dt));
+//    omm->CustomLangevin->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
+//    omm->CustomLangevin->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
+//    omm->CustomLangevin->addGlobalVariable("kT", kBT);
+//
+//    omm->CustomLangevin->addUpdateContextState();
+//    omm->CustomLangevin->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+//    omm->CustomLangevin->addComputePerDof("x", "x + dt*v");
+//    omm->CustomLangevin->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+}

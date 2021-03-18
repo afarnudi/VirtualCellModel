@@ -293,6 +293,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     } else if (generalParameters.Integrator_type=="Custom"){
 //        set_customLangevin(omm, stepSizeInFs);
         set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
+    } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+        
+        set_customLangevinforminimisation(omm, stepSizeInFs);
     }
     
     
@@ -386,6 +389,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Custom"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
         }
     } else {
         if ( generalParameters.Integrator_type=="Verlet" ) {
@@ -396,6 +401,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Custom"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }
         
         

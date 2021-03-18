@@ -252,4 +252,5 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
         //        dihe_count += membranes[i].get_num_of_triangle_pairs();
         
     }
+    cout<<endl;
 }

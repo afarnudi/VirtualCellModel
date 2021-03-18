@@ -66,7 +66,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     if(gompperpotential){
         cout<<" Gompper "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"\lmin,   lc1,   lc0,   lmax (Nm): \n\t" <<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<"lmin,   lc1,   lc0,   lmax (Nm): \n\t" <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     
     return bonds;
