@@ -7,7 +7,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     bool KGpotential =false;
     bool harmonicpotential = false;
     bool gompperpotential = false;
-    
+    bool noPotential=false;
     
     for (int i=0; i<mem_num_bonds; i++) {
         bonds[i].type = mem.get_spring_model();
@@ -37,6 +37,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
             bonds[i].gompperlc1=gompperparamslminlc1lc0lmax[1];
             bonds[i].gompperlc0=gompperparamslminlc1lc0lmax[2];
             bonds[i].gompperlmax=gompperparamslminlc1lc0lmax[3];
+        } else if (bonds[i].type == potentialModelIndex.Model["None"]){
+            noPotential = true;
         }
         
     }
@@ -67,6 +69,9 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         cout<<" Gompper "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
         cout<<"lmin,   lc1,   lc0,   lmax (Nm): \n\t" <<mem.get_spring_stiffness_coefficient() <<endl;
+    }
+    if(noPotential){
+        cout<<" None "<<endl;
     }
     
     return bonds;
