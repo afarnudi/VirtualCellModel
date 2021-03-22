@@ -71,10 +71,10 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     omm->LangevinMinimisation = new OpenMM::CustomIntegrator(dt);
     
     
-    omm->LangevinMinimisation->addGlobalVariable("a", exp(-0.5*friction*dt));
-    omm->LangevinMinimisation->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
-    omm->LangevinMinimisation->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
-    omm->LangevinMinimisation->addGlobalVariable("kT", kBT);
+//    omm->LangevinMinimisation->addGlobalVariable("a", exp(-0.5*friction*dt));
+//    omm->LangevinMinimisation->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
+//    omm->LangevinMinimisation->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
+//    omm->LangevinMinimisation->addGlobalVariable("kT", kBT);
     omm->LangevinMinimisation->addGlobalVariable("tol", restraint);
 //    omm->LangevinMinimisation->addGlobalVariable("scale", 0.000001);
 //    omm->LangevinMinimisation->addPerDofVariable("fmin", 1);
@@ -85,7 +85,8 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
 
     
     
-    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+//    omm->LangevinMinimisation->addComputePerDof("v", "c*f/m + b*sqrt(kT/m)*gaussian");
+    omm->LangevinMinimisation->addComputePerDof("v", "f/m");
     
 //    omm->LangevinMinimisation->addComputePerDof("fmin", "f");
 //    omm->LangevinMinimisation->addComputePerDof("fmin", "sqrt(dot(f,f))");
@@ -102,7 +103,7 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(dt*v,tol))");
 
 //    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
-    omm->LangevinMinimisation->addComputePerDof("v", "0");
+//    omm->LangevinMinimisation->addComputePerDof("v", "0");
     
 }
 
