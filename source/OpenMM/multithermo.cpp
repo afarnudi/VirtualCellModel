@@ -86,7 +86,7 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     
     
 //    omm->LangevinMinimisation->addComputePerDof("v", "c*f/m + b*sqrt(kT/m)*gaussian");
-    omm->LangevinMinimisation->addComputePerDof("v", "f/m");
+//    omm->LangevinMinimisation->addComputePerDof("v", "f/m");
     
 //    omm->LangevinMinimisation->addComputePerDof("fmin", "f");
 //    omm->LangevinMinimisation->addComputePerDof("fmin", "sqrt(dot(f,f))");
@@ -100,7 +100,7 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
 //    omm->LangevinMinimisation->beginIfBlock("v > tol ");
 //    omm->LangevinMinimisation->addComputePerDof("v", "tol");
 //    omm->LangevinMinimisation->endBlock();
-    omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(dt*v,tol))");
+    omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(0.5*dt*dt*f/m,tol))");
 
 //    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
 //    omm->LangevinMinimisation->addComputePerDof("v", "0");
