@@ -102,6 +102,9 @@ void myStepWithOpenMM(MyOpenMMData* omm,
         } else if ( generalParameters.Integrator_type=="Custom" ) {
             omm->CustomIntegrator->step(numSteps);
             total_step+=numSteps;
+        } else if ( generalParameters.Integrator_type=="LangevinMinimise" ) {
+            omm->LangevinMinimisation->step(numSteps);
+            total_step+=numSteps;
         }
         
         

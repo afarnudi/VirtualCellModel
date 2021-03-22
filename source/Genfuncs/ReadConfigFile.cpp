@@ -183,6 +183,14 @@ void assign_general_parameters(void){
                 generalParameters.Integrator_type="Brownian";
             } else if (split[0][0]=='M'){
                 generalParameters.Integrator_type="LangevinMinimise";
+                if (split.size()!=2) {
+                    string errorMessage = TWARN;
+                    errorMessage+="Configfile parameter parse error: Integrator: You need to specify a restriction for the position evolution for the 'Langevin minimise' integrater. Example: Integrator M 12.2857142857";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                } else {
+                    generalParameters.MinimisationIntegraterRestriction = stod(split[1]);
+                }
             } else if (split[0][0]=='L'){
                 generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){

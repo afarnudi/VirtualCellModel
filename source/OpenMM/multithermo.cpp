@@ -61,7 +61,9 @@ void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map
     
 }
 
-void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs){
+void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint){
+    
+    cout<<"Using the modified Langevin thermostat for minimisation with position restriction with tolerance "<<TFILE<<restraint<<TRESET<<endl;
     double dt = stepSizeInFs* OpenMM::PsPerFs;
     double friction = generalParameters.frictionInPs;
     double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
@@ -73,15 +75,35 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs){
     omm->LangevinMinimisation->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
     omm->LangevinMinimisation->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
     omm->LangevinMinimisation->addGlobalVariable("kT", kBT);
+    omm->LangevinMinimisation->addGlobalVariable("tol", restraint);
+//    omm->LangevinMinimisation->addGlobalVariable("scale", 0.000001);
+//    omm->LangevinMinimisation->addPerDofVariable("fmin", 1);
+    
     
     omm->LangevinMinimisation->addUpdateContextState();
     
-//    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
-    omm->LangevinMinimisation->addComputePerDof("v", " c*f/m + b*sqrt(kT/m)*gaussian");
-    
-    omm->LangevinMinimisation->addComputePerDof("x", "x + dt*v");
 
-    //    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+    
+    
+    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+    
+//    omm->LangevinMinimisation->addComputePerDof("fmin", "f");
+//    omm->LangevinMinimisation->addComputePerDof("fmin", "sqrt(dot(f,f))");
+//    omm->LangevinMinimisation->beginIfBlock("fmin > tol ");
+//    omm->LangevinMinimisation->addComputePerDof("fmin", "scale*f");
+//    omm->LangevinMinimisation->endBlock();
+
+    
+    
+//    omm->LangevinMinimisation->addComputePerDof("v", " c*f/m + b*sqrt(kT/m)*gaussian");
+//    omm->LangevinMinimisation->beginIfBlock("v > tol ");
+//    omm->LangevinMinimisation->addComputePerDof("v", "tol");
+//    omm->LangevinMinimisation->endBlock();
+    omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(dt*v,tol))");
+
+//    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+    omm->LangevinMinimisation->addComputePerDof("v", "0");
+    
 }
 
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs){

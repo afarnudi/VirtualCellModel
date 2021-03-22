@@ -102,9 +102,11 @@ struct GeneralParameters{
      * V: Verlet
      * B: Brownian, temperature and frictionCoeff need to be set as well.
      * L: Langevin, temperature and frictionCoeff need to be set as well.
+     * M: A a simple Langevin based integrater used for minimisation of potential energy. It consist the first step of Langevin velocity step, then a restrained position step, and finally the velocity is set to zero. The 'position restrain' (declared as adouble after 'M' in the configuration file) limits the maximum length of the position evolution.
      * C: Langevin, temperature and frictionCoeff need to be set as well.
      *Default V*/
     string Integrator_type;
+    double MinimisationIntegraterRestriction;
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
     double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
