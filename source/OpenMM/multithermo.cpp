@@ -103,7 +103,7 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(0.5*dt*dt*f/m,tol))");
 
 //    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
-//    omm->LangevinMinimisation->addComputePerDof("v", "0");
+    omm->LangevinMinimisation->addComputePerDof("v", "0");
     
 }
 
