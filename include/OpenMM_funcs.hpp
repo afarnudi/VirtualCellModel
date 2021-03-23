@@ -398,24 +398,26 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       );
 
 void set_perParticle_interactions(const MyAtomInfo                       atoms[],
-                      Bonds*                                 bonds,
-                      vector<std::set<int> >                &membrane_set,
-                      vector<std::set<int> >                &actin_set,
-                      vector<std::set<int> >                &ecm_set,
-                      vector<vector<std::set<int> > >       &chromatin_set,
-                      NonBondInteractionMap                 &interaction_map,
-                      vector<OpenMM::CustomExternalForce*>  &ext_force,
-                      vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
-                      vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
-                      vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                      OpenMM::System                        &system
-                      );
+                                  Bonds*                                 bonds,
+                                  vector<std::set<int> >                &membrane_set,
+                                  vector<std::set<int> >                &actin_set,
+                                  vector<std::set<int> >                &ecm_set,
+                                  vector<vector<std::set<int> > >       &chromatin_set,
+                                  NonBondInteractionMap                 &interaction_map,
+                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
+                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                  OpenMM::System                        &system
+                                  );
 
 void creatBondExclusion(Bonds*                                 bonds,
                         NonBondInteractionMap                 &interaction_map,
                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
-                        vector<OpenMM::CustomNonbondedForce*> &WCAs
+                        vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs
                         );
 
 
@@ -437,6 +439,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                         vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
                                         NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system);
 /**Define bonded forces and specify the involved atoms.

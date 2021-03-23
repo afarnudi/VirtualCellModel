@@ -20,6 +20,7 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
                                   vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                   vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                   vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
                                   OpenMM::System                        &system
                                   ){
     
@@ -27,20 +28,26 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
     
     
     bool WCA=false;
+    bool WCAFC=false;
     for (int i=0; i<interaction_map.get_table_size(); i++) {
         for (int j=0; j<interaction_map.get_table_size(); j++) {
             if (interaction_map.get_interacton_type(i, j) == "Weeks-Chandler-Andersen") {
                 WCA = true;
                 break;
+            } else if (interaction_map.get_interacton_type(i, j) == "Weeks-Chandler-Andersen-ForceCap"){
+                WCAFC = true;
+                break;
             }
         }
         if (WCA) {
+            break;
+        } else if (WCAFC) {
             break;
         }
     }
     
     if (WCA) {
-        string epsilon = "epsilonWCA";to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+        string epsilon = "epsilonWCA";//to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
         string sigma   = "sigmaWCA";
         string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
 //        cout<<potential<<endl;
@@ -64,23 +71,26 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
 //                WCAs[0]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
 //            }
         system.addForce(WCAs[0]);
+    } else if (WCAFC) {
+        string epsilon = "epsilonWCAFC";//to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+        string sigma   = "sigmaWCAFC";
+        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r)*step(r-"+sigma+"/1.9) + 100000*step("+sigma+"/1.9-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
+//        cout<<potential<<endl;
+        WCAFCs.push_back(new OpenMM::CustomNonbondedForce(potential));
+        
+        if (WCAFCs.size()!=1) {
+            string errorMessage = TWARN;
+            errorMessage+="init_openmm: add_particles_to_system_and_forces: Number of WCAFC forces is not 1.";
+            errorMessage+=" Please edit the interaction table and try again.";
+            errorMessage+=TWARN;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        WCAFCs[0]->addPerParticleParameter(sigma);
+        WCAFCs[0]->addPerParticleParameter(epsilon);
+        system.addForce(WCAFCs[0]);
     }
-    
-    
-    //Create bond list for all bonds to pass to createExclusionsFromBonds
-//    vector<pair<int, int> > BondExclusionList;
-//    int EndOfList =-1;
-//    for (int n=0; bonds[n].type != EndOfList; ++n) {
-//        pair<int, int> pair(bonds[n].atoms[0],bonds[n].atoms[0]);
-//        BondExclusionList.push_back(pair);
-//        
-//    }
-//    
-//    if (WCA) {
-//        WCAs[0]->createExclusionsFromBonds(BondExclusionList, 2);
-//        cout<<WCAs[0]->getNumExclusions()<<endl;
-//        exit(0);
-//    }
     
 }
 

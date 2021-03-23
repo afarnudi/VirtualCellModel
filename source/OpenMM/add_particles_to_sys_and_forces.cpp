@@ -9,14 +9,19 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                         vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
                                         NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system){
     
  
     bool WCA =false;
+    bool WCAFC =false;
+    
     if (generalParameters.MinimumForceDecleration) {
         if (WCAs.size()==1) {
             WCA=true;
+        } else if (WCAFCs.size()==1) {
+            WCAFC=true;
         }
     }
     
@@ -45,10 +50,10 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
             vector<double> params = {atoms[n].sigmaWCA, atoms[n].epsilonWCA};
             WCAs[0]->addParticle();
             WCAs[0]->setParticleParameters(n, params);
-        } else {
-            for (int i=0; i<WCAs.size(); i++) {
-                WCAs[i]->addParticle();
-            }
+        } else if (WCAFC) {
+            vector<double> params = {atoms[n].sigmaWCA, atoms[n].epsilonWCA};
+            WCAFCs[0]->addParticle();
+            WCAFCs[0]->setParticleParameters(n, params);
         }
         
         for (int i=0; i<ExcludedVolumes.size(); i++) {

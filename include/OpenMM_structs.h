@@ -120,6 +120,7 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
     std::vector<OpenMM::CustomNonbondedForce*> WCA;
+    std::vector<OpenMM::CustomNonbondedForce*> WCAFC;
     
 };
 

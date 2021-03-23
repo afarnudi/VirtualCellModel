@@ -12,10 +12,14 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
     
     
     bool WCA =false;
+    bool WCAFC =false;
     for (int i=0; i<membranes.size(); i++) {
         for (int j=0; j<interaction_map.get_table_size(); j++) {
             if (interaction_map.get_interacton_type(i, j)== "Weeks-Chandler-Andersen") {
                 WCA = true;
+                break;
+            } else if (interaction_map.get_interacton_type(i, j)== "Weeks-Chandler-Andersen-ForceCap") {
+                WCAFC = true;
                 break;
             }
         }
@@ -25,7 +29,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         for (int j=0;j<membranes[i].get_num_of_nodes(); j++) {
             all_atoms[j+atom_count]=atoms[j];
             
-            if (WCA) {
+            if (WCA || WCAFC) {
                 all_atoms[j+atom_count].epsilonWCA = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
                 all_atoms[j+atom_count].sigmaWCA = atoms[j].radius;
             }
@@ -188,10 +192,14 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                                   NonBondInteractionMap            &interaction_map){
     
     bool WCA =false;
+    bool WCAFC =false;
     for (int i=0; i<chromos.size(); i++) {
         for (int j=0; j<interaction_map.get_table_size(); j++) {
             if (interaction_map.get_interacton_type(i+interaction_map.get_table_size() - chromos.size(), j)== "Weeks-Chandler-Andersen") {
                 WCA = true;
+                break;
+            } else if (interaction_map.get_interacton_type(i+interaction_map.get_table_size() - chromos.size(), j)== "Weeks-Chandler-Andersen-ForceCap") {
+                WCAFC = true;
                 break;
             }
         }
@@ -211,7 +219,7 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
             
             all_atoms[j+atom_count]=atoms[j];
             
-            if (WCA) {
+            if (WCA || WCAFC) {
                 all_atoms[j+atom_count].epsilonWCA = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
                 all_atoms[j+atom_count].sigmaWCA = atoms[j].radius;
             }

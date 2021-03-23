@@ -64,6 +64,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
     vector<OpenMM::CustomNonbondedForce*> WCAs;
+    vector<OpenMM::CustomNonbondedForce*> WCAFCs;
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
@@ -82,17 +83,18 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                          system);
     } else {
         set_perParticle_interactions(atoms,
-                         bonds,
-                         membrane_set,
-                         actin_set,
-                         ecm_set,
-                         chromatin_set,
-                         interaction_map,
-                         ext_force,
-                         LJ_12_6_interactions,
-                         ExcludedVolumes,
-                         WCAs,
-                         system);
+                                     bonds,
+                                     membrane_set,
+                                     actin_set,
+                                     ecm_set,
+                                     chromatin_set,
+                                     interaction_map,
+                                     ext_force,
+                                     LJ_12_6_interactions,
+                                     ExcludedVolumes,
+                                     WCAs,
+                                     WCAFCs,
+                                     system);
     }
     
     
@@ -105,19 +107,22 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        LJ_12_6_interactions,
                                        ExcludedVolumes,
                                        WCAs,
+                                       WCAFCs,
                                        interaction_map,
                                        system);
     
     omm->LJ  = LJ_12_6_interactions;
     omm->EV  = ExcludedVolumes;
     omm->WCA = WCAs;
+    omm->WCAFC = WCAFCs;
     
     if (generalParameters.MinimumForceDecleration) {
         creatBondExclusion(bonds,
                            interaction_map,
                            LJ_12_6_interactions,
                            ExcludedVolumes,
-                           WCAs);
+                           WCAs,
+                           WCAFCs);
     }
     
     

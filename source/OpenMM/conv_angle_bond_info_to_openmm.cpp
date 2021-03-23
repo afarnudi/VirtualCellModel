@@ -13,6 +13,7 @@ Angles* convert_Chromatin_angle_bond_info_to_openmm(Chromatin chromo) {
        
     for (int i=0; i<chromo_num_angles; i++) {
         angles[i].type = chromo.get_angle_spring_model();
+        
         angles[i].atoms[0]=i;
         angles[i].atoms[1]=i+1;
         angles[i].atoms[2]=i+2;
