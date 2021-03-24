@@ -73,21 +73,24 @@ void myWritePDBFrame(int frameNum,
 
 void writeXYZFrame  (int atom_count,
                      const MyAtomInfo atoms[],
-                     std::string traj_name)
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ)
 {
-    int EndOfList=-1;
-    FILE* pFile;
-    pFile = fopen (traj_name.c_str(),"a");
-    fprintf(pFile,"%d\ncomment\n", atom_count);
-    
-    for (int n=0; atoms[n].type != EndOfList; ++n){
-        fprintf(pFile,"%4s\t%8.3f\t%8.3f\t%8.3f\n",
-                atoms[n].pdb,
-                atoms[n].posInNm[0],
-                atoms[n].posInNm[1],
-                atoms[n].posInNm[2]);
+    string traj_name= generalParameters.trajectory_file_name+".xyz";
+    ofstream writexyz(traj_name.c_str(), ios_base::app);
+    writexyz<<atom_count<<endl;
+    writexyz<<"time ";
+    writexyz<<time<<setprecision(16);
+    writexyz<<" potential_energy_inKJpermol ";
+    writexyz<<potential_energyInKJ<<setprecision(16);
+    writexyz<<" energy_inKJpermol ";
+    writexyz<<energyInKJ<<setprecision(16)<<endl;
+    for (int n=0; atoms[n].type != -1; n++) {
+        writexyz<<atoms[n].pdb<<"\t"<<atoms[n].posInNm[0]<<"\t"<<atoms[n].posInNm[1]<<"\t"<<atoms[n].posInNm[2]<<setprecision(16)<<"\n";
     }
-    fclose (pFile);
+    writexyz.close();
+    
 }
 
 

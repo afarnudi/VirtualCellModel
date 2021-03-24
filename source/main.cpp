@@ -476,7 +476,7 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = generalParameters.temperature;
         
-        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+//        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
         
         if (generalParameters.Minimise) {
@@ -502,8 +502,8 @@ int main(int argc, char **argv)
                 Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
-                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                
+//                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
+                writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 

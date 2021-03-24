@@ -142,7 +142,10 @@ void myWritePSF(int   num_of_atoms,
  */
 void writeXYZFrame  (int                atom_count,
                      const MyAtomInfo   atoms[],
-                     std::string        traj_name);
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ
+                     );
 
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
