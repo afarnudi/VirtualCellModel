@@ -74,7 +74,7 @@ void set_perParticle_interactions(const MyAtomInfo                       atoms[]
     } else if (WCAFC) {
         string epsilon = "epsilonWCAFC";//to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
         string sigma   = "sigmaWCAFC";
-        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r)*step(r-"+sigma+"/1.9) + 10000*step("+sigma+"/1.9-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
+        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r)*step(r-"+sigma+"/1.48) + (-972*1.48*r/"+sigma+"+2000)*step("+sigma+"/1.48-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
 //        cout<<potential<<endl;
         WCAFCs.push_back(new OpenMM::CustomNonbondedForce(potential));
         
