@@ -68,35 +68,21 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
-    if (!generalParameters.MinimumForceDecleration) {
-        set_interactions(atoms,
-                         bonds,
-                         membrane_set,
-                         actin_set,
-                         ecm_set,
-                         chromatin_set,
-                         interaction_map,
-                         ext_force,
-                         LJ_12_6_interactions,
-                         ExcludedVolumes,
-                         WCAs,
-                         system);
-    } else {
-        set_perParticle_interactions(atoms,
-                                     bonds,
-                                     membrane_set,
-                                     actin_set,
-                                     ecm_set,
-                                     chromatin_set,
-                                     interaction_map,
-                                     ext_force,
-                                     LJ_12_6_interactions,
-                                     ExcludedVolumes,
-                                     WCAs,
-                                     WCAFCs,
-                                     system);
-    }
-    
+    set_interactions(atoms,
+                     bonds,
+                     membrane_set,
+                     actin_set,
+                     ecm_set,
+                     chromatin_set,
+                     interaction_map,
+                     ext_force,
+                     LJ_12_6_interactions,
+                     ExcludedVolumes,
+                     WCAs,
+                     WCAFCs,
+                     generalParameters.MinimumForceDecleration,
+                     system);
+
     
     
     std::vector<Vec3> initialPosInNm;
@@ -116,14 +102,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     omm->WCA = WCAs;
     omm->WCAFC = WCAFCs;
     
-    if (generalParameters.MinimumForceDecleration) {
-        creatBondExclusion(bonds,
-                           interaction_map,
-                           LJ_12_6_interactions,
-                           ExcludedVolumes,
-                           WCAs,
-                           WCAFCs);
-    }
+
+    creatBondExclusion(bonds,
+                       interaction_map,
+                       LJ_12_6_interactions,
+                       ExcludedVolumes,
+                       WCAs,
+                       WCAFCs);
+
     
     
     
@@ -273,11 +259,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     generateHardwareReport(platforminfo);
     
-    
-    
-//    OpenMM::Platform& minimisationPlatform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
-    
-    
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
@@ -304,8 +285,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     
-    
-    //    cout<<"getNumPerDofVariables() "<<omm->CustomIntegrator->getNumPerDofVariables()<<endl;
     if (generalParameters.CMMotionRemover) {
         OpenMM::CMMotionRemover* comremover;
         comremover = new OpenMM::CMMotionRemover(generalParameters.CMMotionRemoverStep);
@@ -326,64 +305,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(AnisoMCBarostat);
     }
     
-//    for (int i=0; atoms[i].type != EndOfList; i++) {
-//        if (atoms[i].mass < 0.0001) {
-//            if (atoms[i].class_label == "Chromatin") {
-//                omm->system->setParticleMass(i, 0);
-//                
-//                OpenMM::TwoParticleAverageSite* vsite_pars;
-//                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);//I think the last one should be atoms[i].Vsite_weights[1]
-//                
-//                omm->system->setVirtualSite(i, vsite_pars);
-//            }
-//        }
-//    }
-//    ofstream output("system.xml");
-//    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
-//    output.close();
     
-//    if (generalParameters.Minimise) {
-//        PlatformInfo minimisePlatforminfo;
-//        minimisePlatforminfo = get_platform_info();
-//
-//        OpenMM::Platform& minimisePlatform = OpenMM::Platform::getPlatform(minimisePlatforminfo.platform_id);
-//
-//        if (minimisePlatform.getName() == "CPU" || minimisePlatforminfo.platform_id==0) {
-//            if (generalParameters.Integrator_type=="Verlet") {
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
-//            } else if (generalParameters.Integrator_type=="Brownian"){
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
-//            } else if (generalParameters.Integrator_type=="Langevin"){
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
-//            } else if (generalParameters.Integrator_type=="Custom"){
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
-//            }
-//        } else {
-//            if ( generalParameters.Integrator_type=="Verlet" ) {
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//            } else if (generalParameters.Integrator_type=="Brownian"){
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//            } else if (generalParameters.Integrator_type=="Langevin") {
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//            } else if (generalParameters.Integrator_type=="Custom"){
-//                omm->minimisationContext    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//            }
-//
-//
-//        }
-//        cout<<flush;
-//        omm->minimisationContext->setPositions(initialPosInNm);
-//        omm->minimisationContext->setVelocities(initialVelInNmperPs);
-//        cout<<flush;
-//        cout<<"Minimising the coordinates before running the simulation."<<endl;
-//        cout<<"Minimisation parameters:"<<endl;
-//        cout<<"\tMinimisation Tolerance: "<<generalParameters.MinimiseTolerance<<endl;
-//        cout<<"\tMinimisation Max Iterations: "<<generalParameters.MinimiseMaxIterations<<endl<<endl;
-//        OpenMM::LocalEnergyMinimizer::minimize(*(omm->minimisationContext));
-//
-//    }
     
-    cout<<flush;
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         if (generalParameters.Integrator_type=="Verlet") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
@@ -411,10 +334,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         
     }
-    cout<<flush;
+    
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
-    cout<<flush;
+    
     
     platformName = omm->context->getPlatform().getName();
     

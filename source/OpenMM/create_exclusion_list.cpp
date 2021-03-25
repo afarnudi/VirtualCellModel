@@ -15,11 +15,17 @@ void creatBondExclusion(Bonds*                                 bonds,
                         vector<OpenMM::CustomNonbondedForce*> &WCAFCs
                         ){
     std::vector< std::pair< int, int > > excludedbonds = exclusion_list_generator(bonds);
-    
-    if (WCAs.size()==1) {
-        WCAs[0]->createExclusionsFromBonds(excludedbonds, 2);
-    } else if (WCAFCs.size()==1) {
-        WCAFCs[0]->createExclusionsFromBonds(excludedbonds, 2);
+    for (int i=0; i<WCAs.size(); i++) {
+        WCAs[i]->createExclusionsFromBonds(excludedbonds, 2);
+    }
+    for (int i=0; i<WCAFCs.size(); i++) {
+        WCAFCs[i]->createExclusionsFromBonds(excludedbonds, 2);
+    }
+    for (int i=0; i<ExcludedVolumes.size(); i++) {
+        ExcludedVolumes[i]->createExclusionsFromBonds(excludedbonds, 2);
+    }
+    for (int i=0; i<LJ_12_6_interactions.size(); i++) {
+        LJ_12_6_interactions[i]->createExclusionsFromBonds(excludedbonds, 2);
     }
     
 }

@@ -373,7 +373,34 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
 
 
 
+//Minimum force declerationd
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                       atoms[],
+                          vector<vector<set<int> > >             set_1,
+                          vector<set<int> >                      set_2,
+                          
+                          int                                    set_2_index,
+                          string                                 set_1_name,
+                          string                                 set_2_name,
+                          bool                                   use_max_radius);
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                       atoms[],
+                          vector<vector<set<int> > >             class_set,
+                          string                                 class_set_name);
 
+void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                            const MyAtomInfo                       atoms[],
+                            vector<vector<set<int> > >             set_1,
+                            vector<set<int> >                      set_2,
+                            
+                            int                                    set_2_index,
+                            string                                 set_1_name,
+                            string                                 set_2_name,
+                            bool                                   use_max_radius);
+void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                            const MyAtomInfo                       atoms[],
+                            vector<vector<set<int> > >             class_set,
+                            string                                 class_set_name);
 
 OpenMM::State getCurrentState(MyOpenMMData*  omm,
                               bool        wantEnergy,
@@ -397,23 +424,12 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                      vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                      bool                                  minimiumForceDecleration,
                       OpenMM::System                        &system
                       );
 
-void set_perParticle_interactions(const MyAtomInfo                       atoms[],
-                                  Bonds*                                 bonds,
-                                  vector<std::set<int> >                &membrane_set,
-                                  vector<std::set<int> >                &actin_set,
-                                  vector<std::set<int> >                &ecm_set,
-                                  vector<vector<std::set<int> > >       &chromatin_set,
-                                  NonBondInteractionMap                 &interaction_map,
-                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
-                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
-                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
-                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                                  OpenMM::System                        &system
-                                  );
+
 
 void creatBondExclusion(Bonds*                                 bonds,
                         NonBondInteractionMap                 &interaction_map,
