@@ -261,6 +261,11 @@ struct GeneralParameters{
         GenParams["MinimumForceDecleration"] = values;
         insertOrder.push_back("MinimumForceDecleration");
         
+        values[0] ="PSF XYZ";
+        values[1] ="#Simulation outputs: You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style but for velocities. Default: PSF XYZ ";
+        GenParams["Outputs"] = values;
+        insertOrder.push_back("Outputs");
+        
     }
     
     map<string, vector<string> > get_map(){

@@ -305,6 +305,13 @@ void assign_general_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
         
+        } else if (it.first == "Outputs") {
+//            cout<<split.size()<<endl;
+//            for (auto &i:split){
+//                cout<<i<<" ";
+//            }
+//            cout<<endl;
+//            exit(0);
         }
         
         
