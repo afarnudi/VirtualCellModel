@@ -425,9 +425,25 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       vector<OpenMM::CustomNonbondedForce*> &WCAs,
                       vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                      bool                                  minimiumForceDecleration,
+//                      bool                                  minimiumForceDecleration,
                       OpenMM::System                        &system
                       );
+
+/**Set nonbonded forces with a single force decleration and perparticle parameters.*/
+void set_perParticle_interactions(const MyAtomInfo                       atoms[],
+//                                  Bonds*                                 bonds,
+//                                  vector<std::set<int> >                &membrane_set,
+//                                  vector<std::set<int> >                &actin_set,
+//                                  vector<std::set<int> >                &ecm_set,
+//                                  vector<vector<std::set<int> > >       &chromatin_set,
+                                  NonBondInteractionMap                 &interaction_map,
+//                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
+//                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+//                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                  OpenMM::System                        &system
+                                  );
 
 
 

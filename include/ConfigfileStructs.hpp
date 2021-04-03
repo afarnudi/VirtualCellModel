@@ -46,7 +46,8 @@ struct GeneralParameters{
     string ECM_label="ecm";
     string Chromatin_label="chr";
     
-    bool MinimumForceDecleration;
+    bool   MinimumForceDecleration;
+    double MinimumForceDeclerationCutoff=-1;
     
     /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
     double BoltzmannKJpermolkelvin = 0.008314459920816468;
@@ -260,7 +261,7 @@ struct GeneralParameters{
         GenParams["MemFluidity"] = values;
         insertOrder.push_back("MemFluidity");
         
-        values[0] ="true";
+        values[0] ="false";
         values[1] ="#When true, sll interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
         GenParams["MinimumForceDecleration"] = values;
         insertOrder.push_back("MinimumForceDecleration");

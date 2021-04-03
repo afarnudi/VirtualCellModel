@@ -297,7 +297,6 @@ void assign_general_parameters(void){
         } else if (it.first == "ProjectName") {
             generalParameters.ProjectName = split[0];
         } else if (it.first == "MinimumForceDecleration") {
-            
             if (split[0]=="true") {
                 generalParameters.MinimumForceDecleration = true;
             } else if (split[0]=="false"){
@@ -306,6 +305,13 @@ void assign_general_parameters(void){
                 string errorMessage = "Configfile parameter parse error: MinimumForceDecleration: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
                 throw std::runtime_error(errorMessage);
             }
+            if (split.size()==2) {
+                generalParameters.MinimumForceDeclerationCutoff = stod(split[1]);
+            } else if (split.size()>2) {
+                string errorMessage = "Configfile parameter parse error: MinimumForceDecleration: accepts a boolian ('true' or 'false') argument and a cutoff value. If cutoff is not provided the default value is used. The default value is twice the radius of the largest particles invlolved in the force.";
+                throw std::runtime_error(errorMessage);
+            }
+            
         
         } else if (it.first == "Outputs") {
             for (auto &i:split){

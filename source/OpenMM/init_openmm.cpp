@@ -68,21 +68,30 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
-    set_interactions(atoms,
-                     bonds,
-                     membrane_set,
-                     actin_set,
-                     ecm_set,
-                     chromatin_set,
-                     interaction_map,
-                     ext_force,
-                     LJ_12_6_interactions,
-                     ExcludedVolumes,
-                     WCAs,
-                     WCAFCs,
-                     generalParameters.MinimumForceDecleration,
-                     system);
-
+    
+    if (!generalParameters.MinimumForceDecleration) {
+        set_interactions(atoms,
+                         bonds,
+                         membrane_set,
+                         actin_set,
+                         ecm_set,
+                         chromatin_set,
+                         interaction_map,
+                         ext_force,
+                         LJ_12_6_interactions,
+                         ExcludedVolumes,
+                         WCAs,
+                         WCAFCs,
+    //                     generalParameters.MinimumForceDecleration,
+                         system);
+    } else {
+        set_perParticle_interactions(atoms,
+                                     interaction_map,
+                                     WCAs,
+                                     WCAFCs,
+                                     system);
+    }
+    
     
     
     std::vector<Vec3> initialPosInNm;
@@ -102,14 +111,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     omm->WCA = WCAs;
     omm->WCAFC = WCAFCs;
     
-
-    creatBondExclusion(bonds,
-                       interaction_map,
-                       LJ_12_6_interactions,
-                       ExcludedVolumes,
-                       WCAs,
-                       WCAFCs);
-
+    if (generalParameters.MinimumForceDecleration) {
+        creatBondExclusion(bonds,
+                           interaction_map,
+                           LJ_12_6_interactions,
+                           ExcludedVolumes,
+                           WCAs,
+                           WCAFCs);
+    }
     
     
     
