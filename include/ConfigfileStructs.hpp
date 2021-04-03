@@ -61,6 +61,10 @@ struct GeneralParameters{
     double  MinimiseTolerance;
     int  MinimiseMaxIterations;
     
+    bool WantPDB=false;
+    bool WantPSF=false;
+    bool WantXYZ=false;
+    
     int Num_of_Membranes;
     int Num_of_Actins;
     int Num_of_Chromatins;
@@ -226,10 +230,10 @@ struct GeneralParameters{
         GenParams["ReportEnergy"] = values;
         insertOrder.push_back("ReportEnergy");
         
-        values[0] ="false";
-        values[1] ="#Write the particle velocities (cheap) fora each  ReportIntervalInFs time point. Default false";
-        GenParams["WantVelocity"] = values;
-        insertOrder.push_back("WantVelocity");
+//        values[0] ="false";
+//        values[1] ="#Write the particle velocities (cheap) fora each  ReportIntervalInFs time point. Default false";
+//        GenParams["WantVelocity"] = values;
+//        insertOrder.push_back("WantVelocity");
         
         values[0] ="1000 0 0";
         values[1] ="#Periodic box vector (1 of 3). Default value (1000, 0, 0).";
@@ -262,7 +266,7 @@ struct GeneralParameters{
         insertOrder.push_back("MinimumForceDecleration");
         
         values[0] ="PSF XYZ";
-        values[1] ="#Simulation outputs: You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style but for velocities. Default: PSF XYZ ";
+        values[1] ="#Simulation outputs: You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style for velocities, FORCE: xyz file style for forces. Default: PSF XYZ ";
         GenParams["Outputs"] = values;
         insertOrder.push_back("Outputs");
         

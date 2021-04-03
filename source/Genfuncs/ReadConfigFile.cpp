@@ -219,18 +219,20 @@ void assign_general_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             generalParameters.WantEnergy=stat;
-        } else if (it.first == "WantVelocity") {
-            bool stat;
-            if (split[0]=="true") {
-                stat=true;
-            } else if (split[0]=="false"){
-                stat=false;
-            } else {
-                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
-                throw std::runtime_error(errorMessage);
-            }
-            generalParameters.WantVelocity=stat;
-        } else if (it.first == "Minimise") {
+        }
+//        else if (it.first == "WantVelocity") {
+//            bool stat;
+//            if (split[0]=="true") {
+//                stat=true;
+//            } else if (split[0]=="false"){
+//                stat=false;
+//            } else {
+//                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+//                throw std::runtime_error(errorMessage);
+//            }
+//            generalParameters.WantVelocity=stat;
+//        }
+        else if (it.first == "Minimise") {
             bool stat;
             if (split[0]=="true") {
                 stat=true;
@@ -306,12 +308,21 @@ void assign_general_parameters(void){
             }
         
         } else if (it.first == "Outputs") {
-//            cout<<split.size()<<endl;
-//            for (auto &i:split){
-//                cout<<i<<" ";
-//            }
-//            cout<<endl;
-//            exit(0);
+            for (auto &i:split){
+                if (i == "PSF") {
+                    generalParameters.WantPSF=true;
+                } else if (i == "PDB"){
+                    generalParameters.WantPDB=true;
+                } else if (i == "XYZ"){
+                    generalParameters.WantXYZ=true;
+                } else if (i == "VEL"){
+                    generalParameters.WantVelocity=true;
+                } else if (i == "FORCE"){
+                    generalParameters.WantForce=true;
+                }
+                
+            }
+            
         }
         
         
