@@ -45,7 +45,7 @@ void Membrane::Bond_triangle_neighbour_list_constructor(){
             }
         }
         if (Bond_triangle_neighbour_indices[i]==-1) {
-            cout<<"There is an error in the Membrane's 'Bond_triangle_neighbour_list_constructor'. it would seem that there is a node_pair that cannot be associated with two triangles. If the mesh is an open surface, this could be due to the bonds lying on the perimeter of the surface. This means that the voronoi area calculations will breakdown.\n";
+            cout<<"There is an error in the Membrane's 'Bond_triangle_neighbour_list_constructor'. it would seem that there is a node_pair that cannot be associated with two triangles. If the mesh is an open surface, this could be due to the bonds lying on the perimeter of the surface. This means that the voronoi area calculations will breakdown.\n";exit(0);
         }
     }
 }

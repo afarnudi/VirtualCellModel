@@ -28,7 +28,8 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
     
     Normal_direction_Identifier();
-    Triangle_pair_counter();
+//    Triangle_pair_counter();
+    Triangle_pair_identifier();
     if (!generalParameters.Testmode) {
         cout<<"Triangle pairs\t"<<Num_of_Triangle_Pairs<<endl;
     }
@@ -44,7 +45,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     cout<<"\nOther properties:\n";
     update_average_Membrane_radius();
     cout<<"\nRadius\t"<<Radius<<endl;
-    Triangle_pair_identifier();
+//    Triangle_pair_identifier();
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();

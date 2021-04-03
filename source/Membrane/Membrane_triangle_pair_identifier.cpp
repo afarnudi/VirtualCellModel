@@ -12,12 +12,12 @@
 void Membrane::Triangle_pair_identifier(void){
     Triangle_Pair_Nodes.clear();
     Triangle_pair_list.clear();
-    Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
+//    Triangle_Pair_Nodes.resize(Num_of_Triangle_Pairs);
     
     vector<int> temp_triangle_pair;
     temp_triangle_pair.resize(2);
     
-    int temp_int_Triangle_Pair_index=0;
+//    int temp_int_Triangle_Pair_index=0;
     
 //    int triangle_pairs=0;
 //    int temp[4][2*Membrane_num_of_Triangle_Pairs];
@@ -121,14 +121,17 @@ void Membrane::Triangle_pair_identifier(void){
             if(neighbour_indicator!=0)  //  to speed up  the programme we first check if we have found a neighbour or not
             {
                 // note that temp_triangle_node_A-temp_triangle_node_B-temp_triangle_node_C-neighbour  are 4 point of two triangle wich will interact
-                Triangle_Pair_Nodes[temp_int_Triangle_Pair_index].resize(4);
+                vector<int> Triangle_Pair_NodesAppend(4,0);
+//                Triangle_Pair_Nodes[temp_int_Triangle_Pair_index].resize(4);
                 if(neighbour_indicator==1)
                 {
+                    Triangle_Pair_NodesAppend[0]=temp_triangle_node_C;
+                    Triangle_Pair_NodesAppend[1]=temp_triangle_node_A;
+                    Triangle_Pair_NodesAppend[2]=temp_triangle_node_B;
+                    Triangle_Pair_NodesAppend[3]=neighbour;
                     
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][0]=temp_triangle_node_C;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_A;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    Triangle_Pair_Nodes.push_back(Triangle_Pair_NodesAppend);
+                    
                     temp_triangle_pair[0]=i;
                     temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
@@ -136,29 +139,36 @@ void Membrane::Triangle_pair_identifier(void){
                     
                 } else if(neighbour_indicator==2)
                 {
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][0]=temp_triangle_node_A;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_C;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_B;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    Triangle_Pair_NodesAppend[0]=temp_triangle_node_A;
+                    Triangle_Pair_NodesAppend[1]=temp_triangle_node_C;
+                    Triangle_Pair_NodesAppend[2]=temp_triangle_node_B;
+                    Triangle_Pair_NodesAppend[3]=neighbour;
+                    
+                    Triangle_Pair_Nodes.push_back(Triangle_Pair_NodesAppend);
+                    
                     temp_triangle_pair[0]=i;
                     temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
                     
                 } else if (neighbour_indicator==3)
                 {
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][0]=temp_triangle_node_B;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][1]=temp_triangle_node_C;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][2]=temp_triangle_node_A;
-                    Triangle_Pair_Nodes[temp_int_Triangle_Pair_index][3]=neighbour;
+                    Triangle_Pair_NodesAppend[0]=temp_triangle_node_B;
+                    Triangle_Pair_NodesAppend[1]=temp_triangle_node_C;
+                    Triangle_Pair_NodesAppend[2]=temp_triangle_node_A;
+                    Triangle_Pair_NodesAppend[3]=neighbour;
+                    
+                    Triangle_Pair_Nodes.push_back(Triangle_Pair_NodesAppend);
+                    
                     temp_triangle_pair[0]=i;
                     temp_triangle_pair[1]=j;
                     Triangle_pair_list.push_back(temp_triangle_pair);
                 }
-                temp_int_Triangle_Pair_index++;
+                
             }
             neighbour_indicator=0;
         }
     }
+    Num_of_Triangle_Pairs = Triangle_Pair_Nodes.size();
     if (Triangle_pair_list.size()!=Num_of_Triangle_Pairs) {
         cout<<"Triangle_pair_list.size()!=Num_of_Triangle_Pairs\nTriangle_pair_list.size() "<<Triangle_pair_list.size()<<"\nNum_of_Triangle_Pairs "<<Num_of_Triangle_Pairs<<endl;
     }
