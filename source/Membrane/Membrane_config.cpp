@@ -135,8 +135,8 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "SpringModel") {
             if (split[0]=="H") {
                 spring_model = potentialModelIndex.Model["Harmonic"];
-            } else if (split[0]=="FENE") {
-                spring_model = potentialModelIndex.Model["FENE"];
+            } else if (split[0]=="KG") {
+                spring_model = potentialModelIndex.Model["KremerGrest"];
             } else if (split[0]=="N") {
                 spring_model = potentialModelIndex.Model["None"];
             } else if (split[0]=="G") {
