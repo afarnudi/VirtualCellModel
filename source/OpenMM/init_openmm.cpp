@@ -155,7 +155,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                           system);
     } else {
         set_bonded_forces(bonds,
-//                          HarmonicBond,
+                          HarmonicBond,
 //                          Kelvin_VoigtBond,
 //                          X4harmonics,
                           KremerGrests,

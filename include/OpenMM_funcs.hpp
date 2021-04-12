@@ -496,7 +496,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 /**Define bonded forces and specify the involved atoms. Use one force declareation.
  */
 void set_bonded_forces(Bonds*                                 bonds,
-//                       OpenMM::HarmonicBondForce*            &HarmonicBond,
+                       OpenMM::HarmonicBondForce*            &HarmonicBond,
 //                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
 //                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomBondForce*>      &KGs,

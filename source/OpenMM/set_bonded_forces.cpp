@@ -4,7 +4,7 @@ using std::set;
 const int EndOfList=-1;
 
 void set_bonded_forces(Bonds*                                 bonds,
-//                       OpenMM::HarmonicBondForce*            &HarmonicBond,
+                       OpenMM::HarmonicBondForce*            &HarmonicBond,
 //                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
 //                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomBondForce*>      &KremerGrests,
@@ -16,10 +16,8 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                       vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
 //                       TimeDependantData*                    &time_dependant_data,
                        OpenMM::System                        &system){
-    bool KremerGrestBondForce=false;
     
-    
-    
+    bool HarmonicBondForce=false;
     
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         
@@ -38,7 +36,6 @@ void set_bonded_forces(Bonds*                                 bonds,
                 
                 KremerGrests[0]->addPerBondParameter(sigma);
                 
-                
                 system.addForce(KremerGrests[0]);
             }
             vector<double> parameters={bonds[i].nominalLengthInNm
@@ -47,11 +44,19 @@ void set_bonded_forces(Bonds*                                 bonds,
             KremerGrests[0]->addBond(atom[0], atom[1], parameters);
     
         }
-        
-        
+        else if (bonds[i].type == potentialModelIndex.Model["Harmonic"])
+        {
+            HarmonicBondForce=true;
+            HarmonicBond->addBond(atom[0], atom[1],
+                                  bonds[i].nominalLengthInNm,
+                                  bonds[i].stiffnessInKJPerNm2);
+        }
         
     }
     
+    if (HarmonicBondForce) {
+        system.addForce(HarmonicBond);
+    }
         
 }
                       
