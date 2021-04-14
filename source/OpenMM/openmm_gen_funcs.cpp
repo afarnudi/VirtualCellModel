@@ -30,7 +30,7 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             {
                 if (total_step % time_dependant_data->Kelvin_stepnum ==0)
                 {
-                    Cheap_GetOpenMMState(omm,atoms);
+                    Cheap_GetOpenMMState(omm->context,atoms);
                     time_dependant_data->Kelvin_dist_calc(atoms);
                     if(time_dependant_data->Kelvin_Voigt_distInNm.size()>1)
                     {
@@ -47,7 +47,7 @@ void myStepWithOpenMM(MyOpenMMData* omm,
                 if((total_step<34000000) && (total_step>170000) && (total_step % 1000 ==1))
                 //if (total_step % time_dependant_data->hill_stepnum ==0)
                 {
-                    Cheap_GetOpenMMState(omm,atoms);
+                    Cheap_GetOpenMMState(omm->context,atoms);
                     time_dependant_data->hill_dist_calc(atoms);
                     time_dependant_data->COM_calculator(atoms);
                     
@@ -101,6 +101,9 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             total_step+=numSteps;
         } else if ( generalParameters.Integrator_type=="Custom" ) {
             omm->CustomIntegrator->step(numSteps);
+            total_step+=numSteps;
+        } else if ( generalParameters.Integrator_type=="LangevinMinimise" ) {
+            omm->LangevinMinimisation->step(numSteps);
             total_step+=numSteps;
         }
         

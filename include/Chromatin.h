@@ -27,7 +27,9 @@ private: //(if we define these constants as private members of the class, we can
     string Node_radius_stat;
     int index;
     int spring_model=0;
+    bool spring_model_global_stat=false;
     int angle_spring_model=0;
+    bool angle_spring_model_global_stat=false;
     
     double Total_Kinetic_Energy;
     double Total_potential_Energy=0.0;
@@ -201,7 +203,11 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     
     /**return chromatin number of angle bonds. It is equal to the number of nodes-2*/
     double get_num_of_angle_bonds(void){
-        return Num_of_Nodes-2;
+        if (angle_spring_model!=potentialModelIndex.Model["None"]) {
+            return Num_of_Nodes-2;
+        }
+        return 0;
+        
     }
     
     /**return the number of  chromatin's real (non virtual) nodes .*/
@@ -250,11 +256,17 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     int get_spring_model(void){
         return spring_model;
     }
+    bool get_spring_model_global_stat(void){
+        return spring_model_global_stat;
+    }
     
     /**Return angle potential model, used to setup the openmm system for the bonds.
      */
     int get_angle_spring_model(void){
         return angle_spring_model;
+    }
+    int get_angle_spring_model_global_stat(void){
+        return angle_spring_model_global_stat;
     }
     /**Return the number of node types in a chromatin chain.
      */

@@ -68,6 +68,10 @@ public:
     int setForceGroup(int row, int col);
     int setForceGroup(int row, int col, int chromotype);
     
+    int get_table_size(){
+        return int(force_label.size());
+    }
+    
     int get_ForceGroupCount(){
         return ForceGroupCount;
     }

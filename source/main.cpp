@@ -314,7 +314,8 @@ int main(int argc, char **argv)
                                    all_dihedrals,
                                    atom_count,
                                    bond_count,
-                                   dihe_count);
+                                   dihe_count,
+                                   interaction_map);
     }
     
     mem_atom_count = atom_count;
@@ -360,7 +361,8 @@ int main(int argc, char **argv)
                                     all_angles,
                                     atom_count,
                                     bond_count,
-                                    angle_count);
+                                    angle_count,
+                                    interaction_map);
     }
     
     print_statistics(num_of_atoms,
@@ -474,19 +476,20 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = generalParameters.temperature;
         
-        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+//        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+        writeXYZFrame(atom_count,all_atoms,0, 0, 0);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
         
         if (generalParameters.Minimise) {
-            cout<<"Minimising the coordinates before running the simulation."<<endl;
-            cout<<"Minimisation parameters:"<<endl;
-            cout<<"\tMinimisation Tolerance: "<<generalParameters.MinimiseTolerance<<endl;
-            cout<<"\tMinimisation Max Iterations: "<<generalParameters.MinimiseMaxIterations<<endl<<endl;
-            OpenMM::LocalEnergyMinimizer::minimize(*(omm->context));
-            double fake_time, fake_energyInKJ, fake_potential_energyInKJ;
-            myGetOpenMMState(omm, fake_time, fake_energyInKJ, fake_potential_energyInKJ, all_atoms);
-            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
-            cout<<"\tMinimisation finished. New coordinates written to PDB."<<endl<<endl;
+            string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
+            ofstream writexyz(traj_name.c_str());
+            for (int n=0; all_atoms[n].type != -1; n++) {
+                writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+            }
+            writexyz.close();
+            minimisation(omm,
+                         all_atoms,
+                         all_bonds);
         }
         
         
@@ -494,14 +497,14 @@ int main(int argc, char **argv)
             
             double time, energyInKJ, potential_energyInKJ;
             
-            myGetOpenMMState(omm, time, energyInKJ, potential_energyInKJ, all_atoms);
+            myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             
             if ( int(time*1000/generalParameters.Step_Size_In_Fs) > savetime ) {
                 Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
-                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                
+//                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
+                writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 
@@ -606,8 +609,12 @@ int main(int argc, char **argv)
         print_real_time(chrono_clock_start, chrono::steady_clock::now());
         print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
         
-        
-        
+        string traj_name= generalParameters.trajectory_file_name+"_fin.xyz";
+        ofstream writexyz(traj_name.c_str());
+        for (int n=0; all_atoms[n].type != -1; n++) {
+            writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+        }
+        writexyz.close();
         
         
         // Clean up OpenMM data structures.

@@ -46,6 +46,9 @@ struct GeneralParameters{
     string ECM_label="ecm";
     string Chromatin_label="chr";
     
+    bool   MinimumForceDecleration;
+    double MinimumForceDeclerationCutoff=-1;
+    
     /**Boltzmann's constant set to 0.008314459920816468 KJ/mol.kelvin*/
     double BoltzmannKJpermolkelvin = 0.008314459920816468;
     /**Simulation time (in picoseconds). If this parameter is not set in the general config file by the user, or the value is set to zero, it will be calculate during runtime by multiplying the 'step size' by the 'total number of steps'.*/
@@ -58,6 +61,10 @@ struct GeneralParameters{
     bool Minimise = false;
     double  MinimiseTolerance;
     int  MinimiseMaxIterations;
+    
+    bool WantPDB=false;
+    bool WantPSF=false;
+    bool WantXYZ=false;
     
     int Num_of_Membranes;
     int Num_of_Actins;
@@ -100,9 +107,11 @@ struct GeneralParameters{
      * V: Verlet
      * B: Brownian, temperature and frictionCoeff need to be set as well.
      * L: Langevin, temperature and frictionCoeff need to be set as well.
+     * M: A a simple Langevin based integrater used for minimisation of potential energy. It consist the first step of Langevin velocity step, then a restrained position step, and finally the velocity is set to zero. The 'position restrain' (declared as adouble after 'M' in the configuration file) limits the maximum length of the position evolution.
      * C: Langevin, temperature and frictionCoeff need to be set as well.
      *Default V*/
     string Integrator_type;
+    double MinimisationIntegraterRestriction;
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
     double frictionInPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
@@ -222,10 +231,10 @@ struct GeneralParameters{
         GenParams["ReportEnergy"] = values;
         insertOrder.push_back("ReportEnergy");
         
-        values[0] ="false";
-        values[1] ="#Write the particle velocities (cheap) fora each  ReportIntervalInFs time point. Default false";
-        GenParams["WantVelocity"] = values;
-        insertOrder.push_back("WantVelocity");
+//        values[0] ="false";
+//        values[1] ="#Write the particle velocities (cheap) fora each  ReportIntervalInFs time point. Default false";
+//        GenParams["WantVelocity"] = values;
+//        insertOrder.push_back("WantVelocity");
         
         values[0] ="1000 0 0";
         values[1] ="#Periodic box vector (1 of 3). Default value (1000, 0, 0).";
@@ -251,6 +260,16 @@ struct GeneralParameters{
         values[1] ="#This option is not available. Note to the developer: This should be moved to the Membrane. Default value 100.";
         GenParams["MemFluidity"] = values;
         insertOrder.push_back("MemFluidity");
+        
+        values[0] ="false";
+        values[1] ="#When true, sll interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
+        GenParams["MinimumForceDecleration"] = values;
+        insertOrder.push_back("MinimumForceDecleration");
+        
+        values[0] ="PSF XYZ";
+        values[1] ="#Simulation outputs: You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style for velocities, FORCE: xyz file style for forces. Default: PSF XYZ ";
+        GenParams["Outputs"] = values;
+        insertOrder.push_back("Outputs");
         
     }
     

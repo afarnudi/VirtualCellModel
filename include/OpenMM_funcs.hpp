@@ -54,23 +54,23 @@ void          myStepWithOpenMM(MyOpenMMData*,
  *                     COPY STATE BACK TO CPU FROM OPENMM
  * -----------------------------------------------------------------------------
  */
-void          myGetOpenMMState(MyOpenMMData*,
+void          myGetOpenMMState(OpenMM::Context* context,
                                double&      time,
                                double&      energy,
                                double&      potential_energy,
                                MyAtomInfo   atoms[]);
-void          myGetOpenMMState2(MyOpenMMData*,
-                                double&      time,
-                                double&      energy,
-                                double&      potential_energy,
-                                vector<Membrane> mems,
-                                MyAtomInfo   atoms[]);
+//void          myGetOpenMMState2(OpenMM::Context* context,
+//                                double&      time,
+//                                double&      energy,
+//                                double&      potential_energy,
+//                                vector<Membrane> mems,
+//                                MyAtomInfo   atoms[]);
 
 /** -----------------------------------------------------------------------------
  *                     COPY STATE(ONLY POSITIONS) BACK TO CPU FROM OPENMM
  * -----------------------------------------------------------------------------
  */
-void Cheap_GetOpenMMState(MyOpenMMData*,
+void Cheap_GetOpenMMState(OpenMM::Context* context,
                           MyAtomInfo atoms[]);
 
 /** -----------------------------------------------------------------------------
@@ -142,7 +142,10 @@ void myWritePSF(int   num_of_atoms,
  */
 void writeXYZFrame  (int                atom_count,
                      const MyAtomInfo   atoms[],
-                     std::string        traj_name);
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ
+                     );
 
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
@@ -153,7 +156,8 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  Dihedrals*             all_dihedrals,
                                  int                    &atom_count,
                                  int                    &bond_count,
-                                 int                    &dihe_count);
+                                 int                    &dihe_count,
+                                 NonBondInteractionMap                 &interaction_map);
 /**Relay the position information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);
 /**Relay the bond information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
@@ -209,7 +213,8 @@ void OpenMM_Chromatin_info_relay (vector<Chromatin>                 chromos,
                                   Angles*                           all_angles,
                                   int                              &atom_count,
                                   int                              &bond_count,
-                                  int                              &dihe_coun);
+                                  int                              &dihe_coun,
+                                  NonBondInteractionMap                 &interaction_map);
 /**Relay the position information of the Actin nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_Chromatin_position_to_openmm(Chromatin chromo);
 /**Relay the bond information of the Chromatin nodes to other data structures ready to pass to OpenMM handles.*/
@@ -368,7 +373,34 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
 
 
 
+//Minimum force declerationd
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                       atoms[],
+                          vector<vector<set<int> > >             set_1,
+                          vector<set<int> >                      set_2,
+                          
+                          int                                    set_2_index,
+                          string                                 set_1_name,
+                          string                                 set_2_name,
+                          bool                                   use_max_radius);
+void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                          const MyAtomInfo                       atoms[],
+                          vector<vector<set<int> > >             class_set,
+                          string                                 class_set_name);
 
+void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                            const MyAtomInfo                       atoms[],
+                            vector<vector<set<int> > >             set_1,
+                            vector<set<int> >                      set_2,
+                            
+                            int                                    set_2_index,
+                            string                                 set_1_name,
+                            string                                 set_2_name,
+                            bool                                   use_max_radius);
+void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                            const MyAtomInfo                       atoms[],
+                            vector<vector<set<int> > >             class_set,
+                            string                                 class_set_name);
 
 OpenMM::State getCurrentState(MyOpenMMData*  omm,
                               bool        wantEnergy,
@@ -392,8 +424,44 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                      vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                      bool                                  minimiumForceDecleration,
                       OpenMM::System                        &system
                       );
+
+/**Set nonbonded forces with a single force decleration and perparticle parameters.*/
+void set_perParticle_interactions(const MyAtomInfo                       atoms[],
+//                                  Bonds*                                 bonds,
+//                                  vector<std::set<int> >                &membrane_set,
+//                                  vector<std::set<int> >                &actin_set,
+//                                  vector<std::set<int> >                &ecm_set,
+//                                  vector<vector<std::set<int> > >       &chromatin_set,
+                                  NonBondInteractionMap                 &interaction_map,
+//                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
+//                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+//                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                  OpenMM::System                        &system
+                                  );
+
+
+
+void creatBondExclusion(Bonds*                                 bonds,
+                        NonBondInteractionMap                 &interaction_map,
+                        vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+                        vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                        vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs
+                        );
+
+
+
+void minimisation(MyOpenMMData*        omm,
+                  MyAtomInfo           atoms[],
+                  Bonds*               bonds
+                  );
+
 /**Add particles to the system and forces.
  *Specify the atoms and their properties:
  *(1) System needs to know the masses.
@@ -405,6 +473,9 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<OpenMM::Vec3>                  &initialVelInNmperPs,
                                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                        NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system);
 /**Define bonded forces and specify the involved atoms.
  */
@@ -422,6 +493,24 @@ void set_bonded_forces(Bonds*                                 bonds,
                        TimeDependantData*                    &time_dependant_data,
                        OpenMM::System                        &system
                        );
+/**Define bonded forces and specify the involved atoms. Use one force declareation.
+ */
+void set_bonded_forces(Bonds*                                 bonds,
+                       OpenMM::HarmonicBondForce*            &HarmonicBond,
+//                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
+//                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
+                       vector<OpenMM::CustomBondForce*>      &KGs,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperbond,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
+//                       vector<OpenMM::CustomBondForce*>      &Contractiles,
+//                       vector<OpenMM::CustomBondForce*>      &KFs,
+//                       vector<OpenMM::CustomBondForce*>      &hill_bonds,
+//                       vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
+//                       TimeDependantData*                    &time_dependant_data,
+                       OpenMM::System                        &system
+                       );
+
+
 /**Set dihedral forces for triangle pair interactions.
  */
 void set_dihedral_forces(Dihedrals*                                 dihedrals,
@@ -436,6 +525,13 @@ void set_angle_forces(Angles*                             angles,
                       OpenMM::System                     &system
                       );
 
+/**Set angle forces for every 3 particles set to have an angle potential. Use minimum force decleration.
+ */
+void set_angle_forces_minimum(Angles*                             angles,
+                              vector<OpenMM::CustomAngleForce*>  &DihedralForces,
+                              OpenMM::System                     &system
+                              );
+
 void print_platform_info(void);
 PlatformInfo get_platform_info(void);
 void get_platform_info(PlatformInfo &platforminfo);
@@ -448,5 +544,14 @@ void customLangevinIntegrator(MyOpenMMData* omm,
 void set_pbcvectors(OpenMM::System &system);
 
 void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map, double stepSizeInFs, vector<set<int> >      &membrane_set, const MyAtomInfo  atoms[]);
+
+void set_multithermos_dropNewton3(MyOpenMMData* omm,
+                                  double stepSizeInFs,
+                                  vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                  vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                                  const MyAtomInfo  atoms[]);
+
+void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
+void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);
 
 #endif

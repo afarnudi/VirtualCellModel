@@ -5,6 +5,66 @@ const int EndOfList=-1;
 
 void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &HarmonicBond,
+//                       OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
+//                       vector<OpenMM::CustomBondForce*>      &X4harmonics,
+                       vector<OpenMM::CustomBondForce*>      &KremerGrests,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperbond,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
+//                       vector<OpenMM::CustomBondForce*>      &Contractiles,
+//                       vector<OpenMM::CustomBondForce*>      &KFs,
+//                       vector<OpenMM::CustomBondForce*>      &hill_bonds,
+//                       vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
+//                       TimeDependantData*                    &time_dependant_data,
+                       OpenMM::System                        &system){
+    
+    bool HarmonicBondForce=false;
+    
+    for (int i=0; bonds[i].type != EndOfList; ++i) {
+        
+        const int*      atom = bonds[i].atoms;
+        
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"])
+        {
+            
+            if (KremerGrests.size() == 0) {
+                string K_FENE = to_string(30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+                string epsilon_WCA = to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+                string sigma = "sigmaKG";
+                string potential = "-0.5*"+K_FENE+"*2.25*log(1-(r*r/(2.25*"+sigma+"*"+sigma+")))*step(0.99*1.5*"+sigma+"-r)+4*"+epsilon_WCA+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(2^(1./6.)*"+sigma+"-r)";
+                
+                KremerGrests.push_back(new OpenMM::CustomBondForce(potential));
+                
+                KremerGrests[0]->addPerBondParameter(sigma);
+                
+                system.addForce(KremerGrests[0]);
+            }
+            vector<double> parameters={bonds[i].nominalLengthInNm
+                                       };
+            
+            KremerGrests[0]->addBond(atom[0], atom[1], parameters);
+    
+        }
+        else if (bonds[i].type == potentialModelIndex.Model["Harmonic"])
+        {
+            HarmonicBondForce=true;
+            HarmonicBond->addBond(atom[0], atom[1],
+                                  bonds[i].nominalLengthInNm,
+                                  bonds[i].stiffnessInKJPerNm2);
+        }
+        
+    }
+    
+    if (HarmonicBondForce) {
+        system.addForce(HarmonicBond);
+    }
+        
+}
+                      
+
+
+
+void set_bonded_forces(Bonds*                                 bonds,
+                       OpenMM::HarmonicBondForce*            &HarmonicBond,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomBondForce*>      &KremerGrests,
@@ -47,33 +107,62 @@ void set_bonded_forces(Bonds*                                 bonds,
         
         if (bonds[i].type == potentialModelIndex.Model["KremerGrest"])
         {
-            auto KremerGrest_item = KremerGrest_classes.find(bonds[i].class_label);
-            if (KremerGrest_item == KremerGrest_classes.end()) {
+            if (bonds[i].globalStat) {
+                auto KremerGrest_item = KremerGrest_classes.find(bonds[i].class_label);
+                if (KremerGrest_item == KremerGrest_classes.end()) {
+//                    cout<<"Ok, I'm here ...."<<endl;
+                    KremerGrest_classes.insert(bonds[i].class_label);
+                    KremerGrest_index++;
+                    
+                    string K_fene = "K_fene"+bonds[i].class_label;
+                    string R0 = "R0"+bonds[i].class_label;
+                    string epsilon_fene = "epsilon_fene"+bonds[i].class_label;
+                    string sigma_fene = "sigma_fene"+bonds[i].class_label;
+                    string cut_fene = "cut_fene"+bonds[i].class_label;
+                    string potential = "-0.5*"+K_fene+"*"+R0+"*"+R0+"*log(1-(r*r/("+R0+"*"+R0+")))*step(0.99*"+R0+"-r)+4*"+epsilon_fene+"*(("+sigma_fene+"/r)^12-("+sigma_fene+"/r)^6+0.25)*step("+cut_fene+"-r)";
+                    
+                    KremerGrests.push_back(new OpenMM::CustomBondForce(potential));
+                    
+                    KremerGrests[KremerGrest_index]->addGlobalParameter(K_fene,bonds[i].k_FENE_inKJpermol);
+                    KremerGrests[KremerGrest_index]->addGlobalParameter(R0,bonds[i].FENER0inNm);
+                    KremerGrests[KremerGrest_index]->addGlobalParameter(epsilon_fene,bonds[i].epsilon_WCA_inKJpermol);
+                    KremerGrests[KremerGrest_index]->addGlobalParameter(sigma_fene,bonds[i].nominalLengthInNm);
+                    KremerGrests[KremerGrest_index]->addGlobalParameter(cut_fene,bonds[i].nominalLengthInNm*pow(2,1./6.) );
+                    
+                    system.addForce(KremerGrests[KremerGrest_index]);
+                }
                 
-                KremerGrest_classes.insert(bonds[i].class_label);
-                KremerGrest_index++;
+                KremerGrests[KremerGrest_index]->addBond(atom[0], atom[1]);
                 
-                KremerGrests.push_back(new OpenMM::CustomBondForce("-0.5*K_fene*R0*R0*log(1-(r*r/(R0*R0)))*step(0.99*R0-r)+4*epsilon_fene*((sigma_fene/r)^12-(sigma_fene/r)^6+0.25)*step(cut_fene-r)"));
+            } else {
+                auto KremerGrest_item = KremerGrest_classes.find(bonds[i].class_label);
+                if (KremerGrest_item == KremerGrest_classes.end()) {
+                    
+                    KremerGrest_classes.insert(bonds[i].class_label);
+                    KremerGrest_index++;
+                    
+                    KremerGrests.push_back(new OpenMM::CustomBondForce("-0.5*K_fene*R0*R0*log(1-(r*r/(R0*R0)))*step(0.99*R0-r)+4*epsilon_fene*((sigma_fene/r)^12-(sigma_fene/r)^6+0.25)*step(cut_fene-r)"));
+                    
+                    KremerGrests[KremerGrest_index]->addPerBondParameter("K_fene");
+                    KremerGrests[KremerGrest_index]->addPerBondParameter("R0");
+                    KremerGrests[KremerGrest_index]->addPerBondParameter("epsilon_fene");
+                    KremerGrests[KremerGrest_index]->addPerBondParameter("sigma_fene");
+                    KremerGrests[KremerGrest_index]->addPerBondParameter("cut_fene");
+                    
+                    system.addForce(KremerGrests[KremerGrest_index]);
+                }
+                vector<double> parameters={bonds[i].k_FENE_inKJpermol,
+                                           bonds[i].FENER0inNm,
+                                           bonds[i].epsilon_WCA_inKJpermol,
+                                           bonds[i].nominalLengthInNm,
+                                           bonds[i].nominalLengthInNm*(pow(2,1./6.))
+                                           };
                 
-                KremerGrests[KremerGrest_index]->addPerBondParameter("K_fene");
-                KremerGrests[KremerGrest_index]->addPerBondParameter("R0");
-                KremerGrests[KremerGrest_index]->addPerBondParameter("epsilon_fene");
-                KremerGrests[KremerGrest_index]->addPerBondParameter("sigma_fene");
-                KremerGrests[KremerGrest_index]->addPerBondParameter("cut_fene");
-                
-                system.addForce(KremerGrests[KremerGrest_index]);
+                KremerGrests[KremerGrest_index]->addBond(atom[0], atom[1], parameters);
+    //            if (GenConst::Periodic_box) {
+    //                FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
+    //            }
             }
-            vector<double> parameters={bonds[i].k_FENE_inKJpermol,
-                                       bonds[i].FENER0inNm,
-                                       bonds[i].epsilon_WCA_inKJpermol,
-                                       bonds[i].nominalLengthInNm,
-                                       bonds[i].nominalLengthInNm*(pow(2,1./6.))
-                                       };
-            
-            KremerGrests[KremerGrest_index]->addBond(atom[0], atom[1], parameters);
-//            if (GenConst::Periodic_box) {
-//                FENEs[FENE_index]->setUsesPeriodicBoundaryConditions(true);
-//            }
         }
         else if (bonds[i].type == potentialModelIndex.Model["Gompper"])
         {

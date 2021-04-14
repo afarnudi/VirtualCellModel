@@ -9,6 +9,92 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
+void set_perParticle_interactions(const MyAtomInfo                       atoms[],
+//                                  Bonds*                                 bonds,
+//                                  vector<std::set<int> >                &membrane_set,
+//                                  vector<std::set<int> >                &actin_set,
+//                                  vector<std::set<int> >                &ecm_set,
+//                                  vector<vector<set<int> > >            &chromatin_set,
+                                  NonBondInteractionMap                 &interaction_map,
+//                                  vector<OpenMM::CustomExternalForce*>  &ext_force,
+//                                  vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
+//                                  vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                  vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                  OpenMM::System                        &system
+                                  ){
+    bool WCA=false;
+    bool WCAFC=false;
+    for (int i=0; i<interaction_map.get_table_size(); i++) {
+        for (int j=0; j<interaction_map.get_table_size(); j++) {
+            if (interaction_map.get_interacton_type(i, j) == "Weeks-Chandler-Andersen") {
+                WCA = true;
+                break;
+            } else if (interaction_map.get_interacton_type(i, j) == "Weeks-Chandler-Andersen-ForceCap"){
+                WCAFC = true;
+                break;
+            }
+        }
+        if (WCA) {
+            break;
+        } else if (WCAFC) {
+            break;
+        }
+    }
+    
+    if (WCA) {
+        string epsilon = "epsilonWCA";//to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+        string sigma   = "sigmaWCA";
+        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
+//        cout<<potential<<endl;
+        WCAs.push_back(new OpenMM::CustomNonbondedForce(potential));
+        
+        if (WCAs.size()!=1) {
+            string errorMessage = TWARN;
+            errorMessage+="init_openmm: add_particles_to_system_and_forces: Number of WCA forces is not 1.";
+            errorMessage+=" Please edit the interaction table and try again.";
+            errorMessage+=TWARN;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        WCAs[0]->addPerParticleParameter(sigma);
+        WCAs[0]->addPerParticleParameter(epsilon);
+        
+        if (generalParameters.Periodic_condtion_status) {
+            WCAs[0]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+        } else {
+            WCAs[0]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+        }
+        system.addForce(WCAs[0]);
+    } else if (WCAFC) {
+        string epsilon = "epsilonWCAFC";//to_string(generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+        string sigma   = "sigmaWCAFC";
+        string potential = "4*"+epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*1.1224620483-r)*step(r-"+sigma+"/1.48) + (-972*1.48*r/"+sigma+"+2000)*step("+sigma+"/1.48-r); "+sigma+"=("+sigma+"1+"+sigma+"2); "+epsilon+"=sqrt("+epsilon+"1*"+epsilon+"2)";
+//        cout<<potential<<endl;
+        WCAFCs.push_back(new OpenMM::CustomNonbondedForce(potential));
+        
+        if (WCAFCs.size()!=1) {
+            string errorMessage = TWARN;
+            errorMessage+="init_openmm: add_particles_to_system_and_forces: Number of WCAFC forces is not 1.";
+            errorMessage+=" Please edit the interaction table and try again.";
+            errorMessage+=TWARN;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        WCAFCs[0]->addPerParticleParameter(sigma);
+        WCAFCs[0]->addPerParticleParameter(epsilon);
+        
+        if (generalParameters.Periodic_condtion_status) {
+            WCAFCs[0]-> setNonbondedMethod( OpenMM::CustomNonbondedForce::CutoffPeriodic);
+        } else {
+            WCAFCs[0]-> setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+        }
+        system.addForce(WCAFCs[0]);
+    }
+}
+
 
 void set_interactions(const MyAtomInfo                       atoms[],
                       Bonds*                                 bonds,
@@ -21,6 +107,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
                       vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                       vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                       vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                      vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                      bool                                   minimumForceDecleration,
                       OpenMM::System                        &system
                       ){
     
@@ -410,272 +498,219 @@ void set_interactions(const MyAtomInfo                       atoms[],
     
     class_count_i = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs;
     class_count_j = 0;
-    
-    for (int i=0; i < generalParameters.Num_of_Chromatins; i++) {
-        for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
+//    if (!minimumForceDecleration) {
+        for (int i=0; i < generalParameters.Num_of_Chromatins; i++) {
+            for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
+                
+                std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
+                std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
+                
+                //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                int index;
+                string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
+                interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Membrane_label  + std::to_string(j));
+                
+                if (interaction_name == "Lennard-Jones") {
+                    for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
+                        init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, generalParameters.Chromatin_label, generalParameters.Membrane_label);
+                        index = int(LJ_12_6_interactions.size()-1);
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(LJ_12_6_interactions[index]);
+                        if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                            LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j,chromo_type));
+                        }
+                    }
+                } else if (interaction_name == "Excluded-Volume"){
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(ExcludedVolumes.size()-1);
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+    //                    ExcludedVolumes[index]->setForceGroup(7);
+    //                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
+                    
+                    system.addForce(ExcludedVolumes[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    }
+                } else if (interaction_name == "Weeks-Chandler-Andersen"){
+                    init_WCA_interaction(WCAs, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(WCAs.size()-1);
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    WCAs[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+    //                    ExcludedVolumes[index]->setForceGroup(7);
+    //                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
+                    
+                    system.addForce(WCAs[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    }
+                }
+                
+                
+                
+            }
             
-            std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
-            std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
-            
-            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
-            
-            int index;
-            string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
-            interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Membrane_label  + std::to_string(j));
-            
-            if (interaction_name == "Lennard-Jones") {
-                for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
-                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, generalParameters.Chromatin_label, generalParameters.Membrane_label);
+            class_count_j = generalParameters.Num_of_Membranes;
+            for (int j=class_count_j; j < class_count_j+generalParameters.Num_of_Actins; j++) {
+                
+                
+                std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
+                std::string class_label_j=generalParameters.Actin_label+std::to_string(j-class_count_j);
+                
+                //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                
+                int index;
+                string interaction_name = interaction_map.get_interacton_type(i + class_count_j, j);
+                interaction_map.set_force_label(i + class_count_j, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Actin_label  + std::to_string(j-class_count_j));
+                if (interaction_name == "Lennard-Jones") {
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , generalParameters.Chromatin_label , generalParameters.Actin_label);
                     index = int(LJ_12_6_interactions.size()-1);
+                    
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+                    system.addForce(LJ_12_6_interactions[index]);
+                    if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                        LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j, j));
+                    }
+                } else if (interaction_name == "Excluded-Volume"){
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Actin_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    
+                    index = int(ExcludedVolumes.size()-1);
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+                    
+                    system.addForce(ExcludedVolumes[index]);
+                    if (interaction_map.get_report_status(i + class_count_j,j) ) {
+                        ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                    }
+                }
+                
+            }
+            
+            
+            class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins;
+            for (int j=class_count_j; j < class_count_j + generalParameters.Num_of_ECMs; j++) {
+                
+                std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
+                std::string class_label_j=generalParameters.ECM_label+std::to_string(j-class_count_j);
+                
+                //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+                
+                
+                int index;
+                string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
+                interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.ECM_label  + std::to_string(j-class_count_j));
+                if (interaction_name == "Lennard-Jones") {
+                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j , generalParameters.Chromatin_label , generalParameters.ECM_label);
+                    index = int(LJ_12_6_interactions.size()-1);
+                    
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     system.addForce(LJ_12_6_interactions[index]);
                     if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                        LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j,chromo_type));
+                        LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    }
+                } else if (interaction_name == "Excluded-Volume"){
+                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.ECM_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(ExcludedVolumes.size()-1);
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+                    
+                    system.addForce(ExcludedVolumes[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 }
-            } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                index = int(ExcludedVolumes.size()-1);
                 
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-//                    ExcludedVolumes[index]->setForceGroup(7);
-//                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
-                
-                system.addForce(ExcludedVolumes[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
-            } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                index = int(WCAs.size()-1);
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                WCAs[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-//                    ExcludedVolumes[index]->setForceGroup(7);
-//                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
-                
-                system.addForce(WCAs[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
             }
             
+            class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs;
             
-            
-        }
-        
-        class_count_j = generalParameters.Num_of_Membranes;
-        for (int j=class_count_j; j < class_count_j+generalParameters.Num_of_Actins; j++) {
-            
-            
-            std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
-            std::string class_label_j=generalParameters.Actin_label+std::to_string(j-class_count_j);
-            
-            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
-            
-            
-            int index;
-            string interaction_name = interaction_map.get_interacton_type(i + class_count_j, j);
-            interaction_map.set_force_label(i + class_count_j, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Actin_label  + std::to_string(j-class_count_j));
-            if (interaction_name == "Lennard-Jones") {
-                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, actin_set, i, j-class_count_j , generalParameters.Chromatin_label , generalParameters.Actin_label);
-                index = int(LJ_12_6_interactions.size()-1);
+            for (int j=class_count_j; j < class_count_j + i +1; j++) {
                 
+                std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
+                std::string class_label_j=generalParameters.Chromatin_label+std::to_string(j-class_count_j);
                 
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
                 
-                system.addForce(LJ_12_6_interactions[index]);
-                if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j, j));
-                }
-            } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, actin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Actin_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                
-                index = int(ExcludedVolumes.size()-1);
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-                
-                system.addForce(ExcludedVolumes[index]);
-                if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
-                }
-            }
-            
-        }
-        
-        
-        class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins;
-        for (int j=class_count_j; j < class_count_j + generalParameters.Num_of_ECMs; j++) {
-            
-            std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
-            std::string class_label_j=generalParameters.ECM_label+std::to_string(j-class_count_j);
-            
-            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
-            
-            
-            int index;
-            string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
-            interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.ECM_label  + std::to_string(j-class_count_j));
-            if (interaction_name == "Lennard-Jones") {
-                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, ecm_set, i, j-class_count_j , generalParameters.Chromatin_label , generalParameters.ECM_label);
-                index = int(LJ_12_6_interactions.size()-1);
-                
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-                system.addForce(LJ_12_6_interactions[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
-            } else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, ecm_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.ECM_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                index = int(ExcludedVolumes.size()-1);
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-                
-                system.addForce(ExcludedVolumes[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
-            }
-            
-        }
-        
-        class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs;
-        
-        for (int j=class_count_j; j < class_count_j + i +1; j++) {
-            
-            std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
-            std::string class_label_j=generalParameters.Chromatin_label+std::to_string(j-class_count_j);
-            
-            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
-            
-            int index;
-            string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
-            interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Chromatin_label  + std::to_string(j-class_count_j));
-            if (interaction_name == "Lennard-Jones") {
-                if (i == j-class_count_j) {
-                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
-                        for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
-                            
-                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
-                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
-                            
-                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                int index;
+                string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
+                interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + std::to_string(i) +  generalParameters.Chromatin_label  + std::to_string(j-class_count_j));
+                if (interaction_name == "Lennard-Jones") {
+                    if (i == j-class_count_j) {
+                        for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+                            for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
                                 
-                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
-                                index = int(LJ_12_6_interactions.size()-1);
+                                set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+                                set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
                                 
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(LJ_12_6_interactions[index]);
-                            } else {
-                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                                index = int(ExcludedVolumes.size()-1);
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(ExcludedVolumes[index]);
+                                if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                                    
+                                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+                                    index = int(LJ_12_6_interactions.size()-1);
+                                    
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(LJ_12_6_interactions[index]);
+                                } else {
+                                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                                    index = int(ExcludedVolumes.size()-1);
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(ExcludedVolumes[index]);
+                                }
                             }
                         }
-                    }
-                    
-                    
-                } else {
-                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
-                        for (int chr_type_2=0; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
-                            
-                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
-                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
-                            
-                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                        
+                        
+                    } else {
+                        for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+                            for (int chr_type_2=0; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
                                 
-                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
-                                index = int(LJ_12_6_interactions.size()-1);
+                                set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+                                set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
                                 
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(LJ_12_6_interactions[index]);
-                            } else {
-                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                                index = int(ExcludedVolumes.size()-1);
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(ExcludedVolumes[index]);
+                                if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                                    
+                                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+                                    index = int(LJ_12_6_interactions.size()-1);
+                                    
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(LJ_12_6_interactions[index]);
+                                } else {
+                                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                                    index = int(ExcludedVolumes.size()-1);
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(ExcludedVolumes[index]);
+                                }
                             }
                         }
                     }
                 }
-            }
-            else if (interaction_name == "Excluded-Volume"){
-                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                index = int(ExcludedVolumes.size()-1);
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-                system.addForce(ExcludedVolumes[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
-            }
-            else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                index = int(ExcludedVolumes.size()-1);
-                
-                // Add the list of atom pairs that are excluded from the excluded volume force.
-                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                
-                system.addForce(ExcludedVolumes[index]);
-                if (interaction_map.get_report_status(i + class_count_i,j) ) {
-                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
-                }
-            }
-            else if (interaction_name == "Lennard-JonesChromatinSpecial0"){
-                if (i == j-class_count_j) {
-                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
-                        for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
-                            
-                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
-                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
-                            
-                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
-                                
-                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
-                                index = int(LJ_12_6_interactions.size()-1);
-                                
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(LJ_12_6_interactions[index]);
-                            } else {
-                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                                index = int(ExcludedVolumes.size()-1);
-                                // Add the list of atom pairs that are excluded from the excluded volume force.
-                                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
-                                
-                                system.addForce(ExcludedVolumes[index]);
-                            }
-                        }
-                    }
-                    
-                    
-                } else {
+                else if (interaction_name == "Excluded-Volume"){
                     init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
                     index = int(ExcludedVolumes.size()-1);
                     
@@ -683,10 +718,296 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
                     
                     system.addForce(ExcludedVolumes[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    }
                 }
-            }
+                else if (interaction_name == "Weeks-Chandler-Andersen"){
+                    init_WCA_interaction(WCAs, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                    index = int(WCAs.size()-1);
+                    
+                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                    WCAs[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                    
+                    system.addForce(WCAs[index]);
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+                    }
+                }
+                else if (interaction_name == "Lennard-JonesChromatinSpecial0"){
+                    if (i == j-class_count_j) {
+                        for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+                            for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
+                                
+                                set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+                                set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
+                                
+                                if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+                                    
+                                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+                                    index = int(LJ_12_6_interactions.size()-1);
+                                    
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(LJ_12_6_interactions[index]);
+                                } else {
+                                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                                    index = int(ExcludedVolumes.size()-1);
+                                    // Add the list of atom pairs that are excluded from the excluded volume force.
+                                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                                    
+                                    system.addForce(ExcludedVolumes[index]);
+                                }
+                            }
+                        }
+                        
+                        
+                    } else {
+                        init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                        index = int(ExcludedVolumes.size()-1);
+                        
+                        // Add the list of atom pairs that are excluded from the excluded volume force.
+                        ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+                        
+                        system.addForce(ExcludedVolumes[index]);
+                    }
+                }
             
         }
-    }
-    
+        }
+//    } else {
+//
+//        for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
+//
+//            std::string class_label_i=generalParameters.Chromatin_label+"Class";
+//            std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
+//
+//            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+//
+//
+//            //the first Chromatin class interaction determins the interaction for the entire class declerations
+//            int i=0;
+//
+//            int index;
+//            string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
+//            interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + "Class" +  generalParameters.Membrane_label  + std::to_string(j));
+//
+//            if (interaction_name == "Lennard-Jones") {
+////                for (int chromo_type=0; chromo_type< chromatin_set[i].size(); chromo_type++) {
+////                    init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set[i][chromo_type], membrane_set, i, j, chromo_type, generalParameters.Chromatin_label, generalParameters.Membrane_label);
+////                    index = int(LJ_12_6_interactions.size()-1);
+////
+////                    // Add the list of atom pairs that are excluded from the excluded volume force.
+////                    LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                    system.addForce(LJ_12_6_interactions[index]);
+////                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+////                        LJ_12_6_interactions[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j,chromo_type));
+////                    }
+////                }
+//            } else if (interaction_name == "Excluded-Volume"){
+////                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+////                index = int(ExcludedVolumes.size()-1);
+////
+////                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+//////                    ExcludedVolumes[index]->setForceGroup(7);
+//////                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
+////
+////                system.addForce(ExcludedVolumes[index]);
+////                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+////                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+////                }
+//            } else if (interaction_name == "Weeks-Chandler-Andersen"){
+//                init_WCA_interaction(WCAs, atoms, chromatin_set, membrane_set, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+//                index = int(WCAs.size()-1);
+//
+//                // Add the list of atom pairs that are excluded from the excluded volume force.
+//                WCAs[index]->createExclusionsFromBonds(exclude_bonds, 0);
+//
+////                    ExcludedVolumes[index]->setForceGroup(7);
+////                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
+//
+//                system.addForce(WCAs[index]);
+//                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+//                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+//                }
+//            } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
+//                init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, membrane_set, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+//                index = int(WCAFCs.size()-1);
+//
+//                // Add the list of atom pairs that are excluded from the excluded volume force.
+//                WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, 0);
+//
+////                    ExcludedVolumes[index]->setForceGroup(7);
+////                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
+//
+//                system.addForce(WCAFCs[index]);
+//                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+//                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+//                }
+//            }
+//
+//
+//
+//        }
+//
+//        class_count_j = generalParameters.Num_of_Membranes;
+//
+//
+//        class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins;
+//
+//
+//        class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs;
+//
+//
+//
+//            std::string class_label_i=generalParameters.Chromatin_label+"Class";
+//            std::string class_label_j=generalParameters.Chromatin_label+"Class";
+//
+//            //std::vector< std::pair< int, int > > exclude_bonds=exclusion_list_generator(bonds, class_label_i, class_label_j);
+//        int i=0, j = class_count_j;
+//            int index;
+//            string interaction_name = interaction_map.get_interacton_type(i + class_count_i, j);
+////        cout<<i + class_count_i<<"  "<<j<<endl;
+////        cout<<interaction_name<<endl;exit(0);
+//            interaction_map.set_force_label(i + class_count_i, j, generalParameters.Chromatin_label + "Class" +  generalParameters.Chromatin_label  + "Class");
+//            if (interaction_name == "Lennard-Jones") {
+////                if (i == j-class_count_j) {
+////                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+////                        for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
+////
+////                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+////                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
+////
+////                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+////
+////                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+////                                index = int(LJ_12_6_interactions.size()-1);
+////
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(LJ_12_6_interactions[index]);
+////                            } else {
+////                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+////                                index = int(ExcludedVolumes.size()-1);
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(ExcludedVolumes[index]);
+////                            }
+////                        }
+////                    }
+////
+////
+////                } else {
+////                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+////                        for (int chr_type_2=0; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
+////
+////                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+////                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
+////
+////                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+////
+////                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+////                                index = int(LJ_12_6_interactions.size()-1);
+////
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(LJ_12_6_interactions[index]);
+////                            } else {
+////                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+////                                index = int(ExcludedVolumes.size()-1);
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(ExcludedVolumes[index]);
+////                            }
+////                        }
+////                    }
+////                }
+//            }
+//            else if (interaction_name == "Excluded-Volume"){
+////                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+////                index = int(ExcludedVolumes.size()-1);
+////
+////                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                system.addForce(ExcludedVolumes[index]);
+////                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+////                    ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+////                }
+//            }
+//            else if (interaction_name == "Weeks-Chandler-Andersen"){
+//                init_WCA_interaction(WCAs, atoms, chromatin_set, generalParameters.Chromatin_label);
+//                index = int(WCAs.size()-1);
+//
+//                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                WCAs[index]->createExclusionsFromBonds(exclude_bonds, 2);
+//
+//                system.addForce(WCAs[index]);
+//                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+//                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+//                }
+//            }
+//            else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
+//                init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, generalParameters.Chromatin_label);
+//                index = int(WCAFCs.size()-1);
+//
+//                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, 2);
+//
+//                system.addForce(WCAFCs[index]);
+//                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+//                    WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
+//                }
+//            }
+//            else if (interaction_name == "Lennard-JonesChromatinSpecial0"){
+////                if (i == j-class_count_j) {
+////                    for (int chr_type_1=0; chr_type_1<chromatin_set[i].size(); chr_type_1++) {
+////                        for (int chr_type_2=chr_type_1; chr_type_2<chromatin_set[j-class_count_j].size(); chr_type_2++) {
+////
+////                            set<int> :: iterator it_1 = chromatin_set[i][chr_type_1].begin();
+////                            set<int> :: iterator it_2 = chromatin_set[j-class_count_j][chr_type_2].begin();
+////
+////                            if (atoms[*it_1].epsilon_LJ_12_6* atoms[*it_2].epsilon_LJ_12_6 != 0){
+////
+////                                init_LJ_12_6_interaction(LJ_12_6_interactions, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Membrane_label);
+////                                index = int(LJ_12_6_interactions.size()-1);
+////
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                LJ_12_6_interactions[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(LJ_12_6_interactions[index]);
+////                            } else {
+////                                init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, chr_type_1, chr_type_2, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+////                                index = int(ExcludedVolumes.size()-1);
+////                                // Add the list of atom pairs that are excluded from the excluded volume force.
+////                                ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                                system.addForce(ExcludedVolumes[index]);
+////                            }
+////                        }
+////                    }
+////
+////
+////                } else {
+////                    init_Excluded_volume_interaction(ExcludedVolumes, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+////                    index = int(ExcludedVolumes.size()-1);
+////
+////                    // Add the list of atom pairs that are excluded from the excluded volume force.
+////                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, 0);
+////
+////                    system.addForce(ExcludedVolumes[index]);
+////                }
+//            }
+//
+//
+//
+//    }
 }

@@ -8,9 +8,26 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<Vec3>                          &initialVelInNmperPs,
                                         vector<OpenMM::CustomNonbondedForce*> &LJ_12_6_interactions,
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAs,
+                                        vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+                                        NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system){
+    
+ 
+    
     int EndOfList=-1;
-//    std::vector<double> sigma_ev;
+    
+    bool WCA =false;
+    bool WCAFC =false;
+    double maxCuttoff=0;
+    if (generalParameters.MinimumForceDecleration) {
+        if (WCAs.size()==1) {
+            WCA=true;
+        } else if (WCAFCs.size()==1) {
+            WCAFC=true;
+        }
+    }
+
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
         system.addParticle(atoms[n].mass);
@@ -26,8 +43,29 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         initialVelInNmperPs.push_back(velocityInNmperPs);
         
         //add particles to the excluded volume force. The number of particles should be equal to the number particles in the system. The exluded interaction lists should be defined afterwards.
-//        std::vector<double> sigma_ev;
-//        sigma_ev.push_back(atoms[n].radius);
+        if (WCA || WCAFC) {
+            vector<double> params = {atoms[n].sigmaWCA, atoms[n].epsilonWCA};
+            if (generalParameters.MinimumForceDeclerationCutoff<0) {
+                if (maxCuttoff < 2*atoms[n].sigmaWCA) {
+                    maxCuttoff = 2*atoms[n].sigmaWCA;
+                }
+            }
+            if (WCA) {
+                WCAs[0]->addParticle();
+                WCAs[0]->setParticleParameters(n, params);
+            } else if (WCAFC) {
+                WCAFCs[0]->addParticle();
+                WCAFCs[0]->setParticleParameters(n, params);
+            }
+            
+        } else {
+            for (int i=0; i<WCAs.size(); i++) {
+                WCAs[i]->addParticle();
+            }
+            for (int i=0; i<WCAFCs.size(); i++) {
+                WCAFCs[i]->addParticle();
+            }
+        }
         
         for (int i=0; i<ExcludedVolumes.size(); i++) {
             ExcludedVolumes[i]->addParticle();
@@ -39,4 +77,18 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
         
         
     }
+    
+    if (WCA || WCAFC) {
+        if (generalParameters.MinimumForceDeclerationCutoff>0) {
+            maxCuttoff = generalParameters.MinimumForceDeclerationCutoff;
+        }
+        
+        if (WCA) {
+            WCAs[0]  -> setCutoffDistance(maxCuttoff);
+        } else if (WCAFC) {
+            WCAFCs[0]-> setCutoffDistance(maxCuttoff);
+        }
+        
+    }
+    
 }

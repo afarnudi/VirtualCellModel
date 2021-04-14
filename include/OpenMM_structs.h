@@ -34,10 +34,13 @@ struct MyAtomInfo
     std::string class_label;
     int vsite_atoms[2];
     double vsite_weights[2];
+    double epsilonWCA   = 0;
+    double sigmaWCA   = 0;
 };
 
 struct Bonds{
     int type;
+    bool globalStat;
     int atoms[2];
     std::string class_label;
    // double nominalLengthInAngstroms, stiffnessInKcalPerAngstrom2, stiffnessInKcalPerAngstrom4;
@@ -102,9 +105,12 @@ struct MyOpenMMData {
     OpenMM::VerletIntegrator*     VerletIntegrator;
     OpenMM::BrownianIntegrator*   BrownianIntegrator;
     OpenMM::LangevinIntegrator*   LangevinIntegrator;
+    
     OpenMM::CustomIntegrator*     CustomIntegrator;
+    OpenMM::CustomIntegrator*     LangevinMinimisation;
     
     OpenMM::Context*  context;
+    OpenMM::Context*  minimisationContext;
 
     OpenMM::HarmonicBondForce* harmonic;
     OpenMM::HarmonicBondForce* calcforce;
@@ -114,6 +120,7 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
     std::vector<OpenMM::CustomNonbondedForce*> WCA;
+    std::vector<OpenMM::CustomNonbondedForce*> WCAFC;
     
 };
 

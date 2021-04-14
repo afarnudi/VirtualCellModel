@@ -28,7 +28,8 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
     
     Normal_direction_Identifier();
-    Triangle_pair_counter();
+//    Triangle_pair_counter();
+    Triangle_pair_identifier();
     if (!generalParameters.Testmode) {
         cout<<"Triangle pairs\t"<<Num_of_Triangle_Pairs<<endl;
     }
@@ -44,7 +45,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     cout<<"\nOther properties:\n";
     update_average_Membrane_radius();
     cout<<"\nRadius\t"<<Radius<<endl;
-    Triangle_pair_identifier();
+//    Triangle_pair_identifier();
     
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
@@ -79,15 +80,16 @@ void Membrane::initialise(std::string Mesh_file_name){
         label += std::to_string(index);
     }
     
-    if (spring_model == potentialModelIndex.Model["FENE"]) {
-        if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
-            string errorMessage = TWARN;
-            errorMessage+="Warning";
-            errorMessage+= TRESET;
-            errorMessage+= ". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
-            throw std::runtime_error(errorMessage);
-        }
-    } else if (spring_model == potentialModelIndex.Model["None"]) {
+//    if (spring_model == potentialModelIndex.Model["FENE"]) {
+//        if (FENE_k == 0 || FENE_epsilon == 0 || FENE_max == 0 ) {
+//            string errorMessage = TWARN;
+//            errorMessage+="Warning";
+//            errorMessage+= TRESET;
+//            errorMessage+= ". Membrane spring model set to FENE but FENE parameters not set in the membrane configuration file. Please make sure you have set the following parameters: \nFENE_eps\nFENE_k\nFENE_min\nFENE_max (cannot be zero)\n";
+//            throw std::runtime_error(errorMessage);
+//        }
+//    } else
+        if (spring_model == potentialModelIndex.Model["None"]) {
         cout<<TWARN<<"\nMembrnae spring model is set to 'None'."<<TRESET<<endl;
     }
     

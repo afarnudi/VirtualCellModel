@@ -3,6 +3,42 @@
 using std::set;
 const int EndOfList=-1;
 
+void set_angle_forces_minimum(Angles*                             angles,
+                              vector<OpenMM::CustomAngleForce*>  &AngleForces,
+                              OpenMM::System                     &system
+                              ){
+    
+    for (int i=0; angles[i].type != EndOfList; ++i) {
+//        cout<<i<<" "<<flush;
+        
+        if (angles[i].type == potentialModelIndex.Model["angleCOS"]) {
+            
+            if (AngleForces.size() == 0) {
+                string k_bend = "K_bend";
+                string theta0 = "theta0Bend";
+                AngleForces.push_back(new OpenMM::CustomAngleForce(k_bend+"*(1-cos(theta-"+theta0+") )"));
+                
+//                AngleForces[0]->addPerAngleParameter(k_bend);
+//                AngleForces[0]->addPerAngleParameter(theta0);
+                AngleForces[0]->addGlobalParameter(k_bend, angles[i].bendingStiffnessinKJpermol);
+                AngleForces[0]->addGlobalParameter(theta0, angles[i].spontaneousBendingAngleInRad);
+                
+                system.addForce(AngleForces[0]);
+                
+            }
+//            vector<double> parameters={angles[i].bendingStiffnessinKJpermol,
+//                                       angles[i].spontaneousBendingAngleInRad
+//                                       };
+//            AngleForces[0]->addAngle(angles[i].atoms[0],angles[i].atoms[1],angles[i].atoms[2],parameters);
+            
+            AngleForces[0]->addAngle(angles[i].atoms[0],angles[i].atoms[1],angles[i].atoms[2]);
+        }
+        
+    }
+}
+
+
+
 void set_angle_forces(Angles*                             angles,
                       vector<OpenMM::CustomAngleForce*>  &AngleForces,
                       OpenMM::System                     &system

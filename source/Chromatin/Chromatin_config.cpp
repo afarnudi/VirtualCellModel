@@ -68,7 +68,10 @@ void Chromatin::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
-    
+    if (BondNominalLength_stat!= "Au") {
+        //This will later be used in the OpenMM bond implimentation to define global or per atom parameters. Global will take less memmory.
+        spring_model_global_stat=true;
+    }
     {
         try {
             stod(SpontaneousBendingAngleInDeg_stat);

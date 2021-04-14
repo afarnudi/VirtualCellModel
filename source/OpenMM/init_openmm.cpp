@@ -43,6 +43,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
     
+    vector<string> loaderror = OpenMM::Platform::getPluginLoadFailures();
+    for (auto &line: loaderror){
+        cout<<line<<endl;
+    }
+    
     // Allocate space to hold OpenMM objects while we're using them.
     MyOpenMMData*       omm = new MyOpenMMData();
     
@@ -59,22 +64,34 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     // Create a vector of handles for the force objects. These handles will be added to the system. Each handle in the list will be associated with a class instance.
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
     vector<OpenMM::CustomNonbondedForce*> WCAs;
+    vector<OpenMM::CustomNonbondedForce*> WCAFCs;
     vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
     vector<OpenMM::CustomExternalForce*>  ext_force;
     
     
-    set_interactions(atoms,
-                     bonds,
-                     membrane_set,
-                     actin_set,
-                     ecm_set,
-                     chromatin_set,
-                     interaction_map,
-                     ext_force,
-                     LJ_12_6_interactions,
-                     ExcludedVolumes,
-                     WCAs,
-                     system);
+    if (!generalParameters.MinimumForceDecleration) {
+        set_interactions(atoms,
+                         bonds,
+                         membrane_set,
+                         actin_set,
+                         ecm_set,
+                         chromatin_set,
+                         interaction_map,
+                         ext_force,
+                         LJ_12_6_interactions,
+                         ExcludedVolumes,
+                         WCAs,
+                         WCAFCs,
+    //                     generalParameters.MinimumForceDecleration,
+                         system);
+    } else {
+        set_perParticle_interactions(atoms,
+                                     interaction_map,
+                                     WCAs,
+                                     WCAFCs,
+                                     system);
+    }
+    
     
     
     std::vector<Vec3> initialPosInNm;
@@ -84,11 +101,27 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        initialVelInNmperPs,
                                        LJ_12_6_interactions,
                                        ExcludedVolumes,
+                                       WCAs,
+                                       WCAFCs,
+                                       interaction_map,
                                        system);
     
     omm->LJ  = LJ_12_6_interactions;
     omm->EV  = ExcludedVolumes;
     omm->WCA = WCAs;
+    omm->WCAFC = WCAFCs;
+    
+    if (generalParameters.MinimumForceDecleration) {
+        creatBondExclusion(bonds,
+                           interaction_map,
+                           LJ_12_6_interactions,
+                           ExcludedVolumes,
+                           WCAs,
+                           WCAFCs);
+    }
+    
+    
+    
     // Create an array of harmonic spring force objects to add to the system.
     
     
@@ -106,20 +139,35 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomBondForce*> KFs;
     //OpenMM::HarmonicAngleForce*     HarmonicAngle = new OpenMM::HarmonicAngleForce();
     
-    
-    set_bonded_forces(bonds,
-                      HarmonicBond,
-                      Kelvin_VoigtBond,
-                      X4harmonics,
-                      KremerGrests,
-                      Gompperbond,
-                      Gompperrep,
-                      Contractiles,
-                      KFs,
-                      HillBonds,
-                      Harmonic_minmax,
-                      time_dependant_data,
-                      system);
+    if (!generalParameters.MinimumForceDecleration) {
+        set_bonded_forces(bonds,
+                          HarmonicBond,
+                          Kelvin_VoigtBond,
+                          X4harmonics,
+                          KremerGrests,
+                          Gompperbond,
+                          Gompperrep,
+                          Contractiles,
+                          KFs,
+                          HillBonds,
+                          Harmonic_minmax,
+                          time_dependant_data,
+                          system);
+    } else {
+        set_bonded_forces(bonds,
+                          HarmonicBond,
+//                          Kelvin_VoigtBond,
+//                          X4harmonics,
+                          KremerGrests,
+//                          Gompperbond,
+//                          Gompperrep,
+//                          Contractiles,
+//                          KFs,
+//                          HillBonds,
+//                          Harmonic_minmax,
+//                          time_dependant_data,
+                          system);
+    }
     
     
     omm->harmonic = HarmonicBond;
@@ -189,9 +237,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     }
     
     vector<OpenMM::CustomAngleForce*> AngleForces;
-    set_angle_forces(angles,
-                     AngleForces,
-                     system);
+    if (!generalParameters.MinimumForceDecleration) {
+        set_angle_forces(angles,
+                         AngleForces,
+                         system);
+    } else {
+        set_angle_forces_minimum(angles,
+                                 AngleForces,
+                                 system);
+    }
+    
     
     if (angles[0].type != EndOfList) {
         omm->Angle = AngleForces;
@@ -206,6 +261,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     } else {
         platforminfo = get_platform_info();
     }
+    
+    
+    
     
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     generateHardwareReport(platforminfo);
@@ -229,13 +287,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                                  stepSizeInFs * OpenMM::PsPerFs);
     } else if (generalParameters.Integrator_type=="Custom"){
 //        set_customLangevin(omm, stepSizeInFs);
-        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
+//        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
+        set_multithermos_dropNewton3(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+        set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
     }
     
     
     
-    
-    //    cout<<"getNumPerDofVariables() "<<omm->CustomIntegrator->getNumPerDofVariables()<<endl;
     if (generalParameters.CMMotionRemover) {
         OpenMM::CMMotionRemover* comremover;
         comremover = new OpenMM::CMMotionRemover(generalParameters.CMMotionRemoverStep);
@@ -256,18 +315,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(AnisoMCBarostat);
     }
     
-    for (int i=0; atoms[i].type != EndOfList; i++) {
-        if (atoms[i].mass < 0.0001) {
-            if (atoms[i].class_label == "Chromatin") {
-                omm->system->setParticleMass(i, 0);
-                
-                OpenMM::TwoParticleAverageSite* vsite_pars;
-                vsite_pars =  new OpenMM::TwoParticleAverageSite(atoms[i].vsite_atoms[0], atoms[i].vsite_atoms[1], atoms[i].Vsite_weights[0], atoms[i].Vsite_weights[0]);//I think the last one should be atoms[i].Vsite_weights[1]
-                
-                omm->system->setVirtualSite(i, vsite_pars);
-            }
-        }
-    }
+//    ofstream output("system_fail.xml");
+//    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
+//    output.close();exit(0);
     
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         if (generalParameters.Integrator_type=="Verlet") {
@@ -278,6 +328,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Custom"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
         }
     } else {
         if ( generalParameters.Integrator_type=="Verlet" ) {
@@ -288,6 +340,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Custom"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }
         
         
@@ -301,13 +355,22 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     const std::map <std::string, double> params = omm->context->getParameters();
     
-    
+    cout<<flush;
     cout<<TGRAY<<params.size()<<endl;
     for(auto elem : params)
     {
         cout << elem.first << " " << elem.second << "\n";
     }
     cout<<"\n"<<TRESET;
+    cout<<flush;
+    
+    
+    
+    
+    
+    
+    
+    
     
     return omm;
 }

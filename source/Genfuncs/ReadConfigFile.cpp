@@ -151,6 +151,7 @@ void general_parameters_consistency_check(void){
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    
 }
 
 void assign_general_parameters(void){
@@ -181,6 +182,16 @@ void assign_general_parameters(void){
             generalParameters.Integrator_type="Verlet";
             if (split[0][0]=='B'){
                 generalParameters.Integrator_type="Brownian";
+            } else if (split[0][0]=='M'){
+                generalParameters.Integrator_type="LangevinMinimise";
+                if (split.size()!=2) {
+                    string errorMessage = TWARN;
+                    errorMessage+="Configfile parameter parse error: Integrator: You need to specify a restriction for the position evolution for the 'Langevin minimise' integrater. Example: Integrator M 12.2857142857";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                } else {
+                    generalParameters.MinimisationIntegraterRestriction = stod(split[1]);
+                }
             } else if (split[0][0]=='L'){
                 generalParameters.Integrator_type="Langevin";
             } else if (split[0][0]=='C'){
@@ -209,18 +220,20 @@ void assign_general_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             generalParameters.WantEnergy=stat;
-        } else if (it.first == "WantVelocity") {
-            bool stat;
-            if (split[0]=="true") {
-                stat=true;
-            } else if (split[0]=="false"){
-                stat=false;
-            } else {
-                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
-                throw std::runtime_error(errorMessage);
-            }
-            generalParameters.WantVelocity=stat;
-        } else if (it.first == "Minimise") {
+        }
+//        else if (it.first == "WantVelocity") {
+//            bool stat;
+//            if (split[0]=="true") {
+//                stat=true;
+//            } else if (split[0]=="false"){
+//                stat=false;
+//            } else {
+//                string errorMessage = "Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+//                throw std::runtime_error(errorMessage);
+//            }
+//            generalParameters.WantVelocity=stat;
+//        }
+        else if (it.first == "Minimise") {
             bool stat;
             if (split[0]=="true") {
                 stat=true;
@@ -284,6 +297,39 @@ void assign_general_parameters(void){
             generalParameters.PeriodicBoxVector2.push_back(stod(split[2]));
         } else if (it.first == "ProjectName") {
             generalParameters.ProjectName = split[0];
+        } else if (it.first == "MinimumForceDecleration") {
+            if (split[0]=="true") {
+                generalParameters.MinimumForceDecleration = true;
+            } else if (split[0]=="false"){
+                generalParameters.MinimumForceDecleration = false;
+            } else {
+                string errorMessage = "Configfile parameter parse error: MinimumForceDecleration: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                throw std::runtime_error(errorMessage);
+            }
+            if (split.size()==2) {
+                generalParameters.MinimumForceDeclerationCutoff = stod(split[1]);
+            } else if (split.size()>2) {
+                string errorMessage = "Configfile parameter parse error: MinimumForceDecleration: accepts a boolian ('true' or 'false') argument and a cutoff value. If cutoff is not provided the default value is used. The default value is twice the radius of the largest particles invlolved in the force.";
+                throw std::runtime_error(errorMessage);
+            }
+            
+        
+        } else if (it.first == "Outputs") {
+            for (auto &i:split){
+                if (i == "PSF") {
+                    generalParameters.WantPSF=true;
+                } else if (i == "PDB"){
+                    generalParameters.WantPDB=true;
+                } else if (i == "XYZ"){
+                    generalParameters.WantXYZ=true;
+                } else if (i == "VEL"){
+                    generalParameters.WantVelocity=true;
+                } else if (i == "FORCE"){
+                    generalParameters.WantForce=true;
+                }
+                
+            }
+            
         }
         
         
