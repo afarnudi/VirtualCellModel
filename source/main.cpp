@@ -477,6 +477,7 @@ int main(int argc, char **argv)
         double initTemp = generalParameters.temperature;
         
 //        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+        writeXYZFrame(atom_count,all_atoms,0, 0, 0);
         myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
         
         if (generalParameters.Minimise) {

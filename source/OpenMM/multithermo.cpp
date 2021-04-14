@@ -61,6 +61,59 @@ void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map
     
 }
 
+
+void set_multithermos_dropNewton3(MyOpenMMData* omm,
+                                  double stepSizeInFs,
+                                  vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                  vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                                  const MyAtomInfo  atoms[]){
+    /**
+                Leap-frog Langevin integrator. Reference:
+                Jesús A. Izaguirre, Chris R. Sweet, and Vijay S. Pande. Multiscale dynamics of macromolecules using Normal Mode Langevin. Pacific Symposium on Biocomputing, 15:240–251, 2010.
+     */
+    
+    DihedralForces[0]->setForceGroup(31);
+    WCAs[0]->setForceGroup(30);
+    
+    double dt = stepSizeInFs* OpenMM::PsPerFs;
+    double friction = generalParameters.frictionInPs;
+    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
+    
+    
+    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+    
+    omm->CustomIntegrator->addGlobalVariable("a", exp(-0.5*friction*dt));
+    omm->CustomIntegrator->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
+    omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
+    omm->CustomIntegrator->addGlobalVariable("kTa", kBT);
+    omm->CustomIntegrator->addGlobalVariable("kTb", kBTmem);
+    omm->CustomIntegrator->addPerDofVariable("stat", 0);
+    
+    
+    omm->CustomIntegrator->addUpdateContextState();
+    omm->CustomIntegrator->addComputePerDof("stat", "f31");
+    
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+    omm->CustomIntegrator->addComputePerDof("v", "v + c*(f31)/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*c*(f30)/m");
+//    omm->CustomIntegrator->addComputePerDof("v", "v + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+
+//    omm->CustomIntegrator->addComputePerDof("v", "v + b*sqrt(kTa/m)*gaussian");
+
+    omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
+    
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+    omm->CustomIntegrator->addComputePerDof("v", "v + c*(f31)/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*c*(f30)/m");
+//    omm->CustomIntegrator->addComputePerDof("v", "v + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+    
+}
+
+
+
+
+
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint){
     
     cout<<"Using the modified Langevin thermostat for minimisation with position restriction with tolerance "<<TFILE<<restraint<<TRESET<<endl;

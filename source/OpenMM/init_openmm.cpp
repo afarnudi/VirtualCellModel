@@ -287,7 +287,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                                  stepSizeInFs * OpenMM::PsPerFs);
     } else if (generalParameters.Integrator_type=="Custom"){
 //        set_customLangevin(omm, stepSizeInFs);
-        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
+//        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
+        set_multithermos_dropNewton3(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
     }

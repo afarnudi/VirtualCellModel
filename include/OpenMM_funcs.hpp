@@ -544,6 +544,13 @@ void customLangevinIntegrator(MyOpenMMData* omm,
 void set_pbcvectors(OpenMM::System &system);
 
 void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map, double stepSizeInFs, vector<set<int> >      &membrane_set, const MyAtomInfo  atoms[]);
+
+void set_multithermos_dropNewton3(MyOpenMMData* omm,
+                                  double stepSizeInFs,
+                                  vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                  vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                                  const MyAtomInfo  atoms[]);
+
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);
 

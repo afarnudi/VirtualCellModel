@@ -80,7 +80,7 @@ void writeXYZFrame  (int atom_count,
     string traj_name= generalParameters.trajectory_file_name+".xyz";
     ofstream writexyz(traj_name.c_str(), ios_base::app);
     writexyz<<atom_count<<endl;
-    writexyz<<"time ";
+    writexyz<<"timePs ";
     writexyz<<time<<setprecision(16);
     writexyz<<" potential_energy_inKJpermol ";
     writexyz<<potential_energyInKJ<<setprecision(16);

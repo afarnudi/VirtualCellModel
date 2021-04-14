@@ -151,6 +151,7 @@ void general_parameters_consistency_check(void){
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    
 }
 
 void assign_general_parameters(void){
