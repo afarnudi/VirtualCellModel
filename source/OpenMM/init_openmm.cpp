@@ -285,10 +285,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
-    } else if (generalParameters.Integrator_type=="Custom"){
-//        set_customLangevin(omm, stepSizeInFs);
-//        set_multithermos(omm, interaction_map, stepSizeInFs, membrane_set, atoms);
-        set_multithermos_dropNewton3(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3"){
+        set_multithermos_dropNewton3_Langevin(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="CustomGJFDropNewton3"){
+        set_multithermos_dropNewton3_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="GJF"){
+        set_multithermos_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
     }
@@ -326,7 +328,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Langevin"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
-        } else if (generalParameters.Integrator_type=="Custom"){
+        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
@@ -338,7 +340,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else if (generalParameters.Integrator_type=="Custom"){
+        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
