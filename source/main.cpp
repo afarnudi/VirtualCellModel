@@ -476,9 +476,17 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = generalParameters.temperature;
         
-//        myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
-        writeXYZFrame(atom_count,all_atoms,0, 0, 0);
-        myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
+        if (generalParameters.WantPSF) {
+            myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
+        }
+        if (generalParameters.WantPDB) {
+            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+        }
+        if (generalParameters.WantXYZ) {
+            writeXYZFrame(atom_count,all_atoms,0, 0, 0);
+        }
+        
+        
         
         if (generalParameters.Minimise) {
             string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
@@ -503,8 +511,12 @@ int main(int argc, char **argv)
                 Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
-//                myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
+                if (generalParameters.WantPDB) {
+                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
+                }
+                if (generalParameters.WantXYZ) {
+                    writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
+                }
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 
@@ -609,12 +621,12 @@ int main(int argc, char **argv)
         print_real_time(chrono_clock_start, chrono::steady_clock::now());
         print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
         
-        string traj_name= generalParameters.trajectory_file_name+"_fin.xyz";
-        ofstream writexyz(traj_name.c_str());
-        for (int n=0; all_atoms[n].type != -1; n++) {
-            writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
-        }
-        writexyz.close();
+//        string traj_name= generalParameters.trajectory_file_name+"_fin.xyz";
+//        ofstream writexyz(traj_name.c_str());
+//        for (int n=0; all_atoms[n].type != -1; n++) {
+//            writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+//        }
+//        writexyz.close();
         
         
         // Clean up OpenMM data structures.
