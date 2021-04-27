@@ -62,11 +62,11 @@ void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map
 }
 
 
-void set_multithermos_dropNewton3(MyOpenMMData* omm,
-                                  double stepSizeInFs,
-                                  vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
-                                  vector<OpenMM::CustomNonbondedForce*>    &WCAs,
-                                  const MyAtomInfo  atoms[]){
+void set_multithermos_dropNewton3_Langevin(MyOpenMMData* omm,
+                                           double stepSizeInFs,
+                                           vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                           vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                                           const MyAtomInfo  atoms[]){
     /**
                 Leap-frog Langevin integrator. Reference:
                 Jesús A. Izaguirre, Chris R. Sweet, and Vijay S. Pande. Multiscale dynamics of macromolecules using Normal Mode Langevin. Pacific Symposium on Biocomputing, 15:240–251, 2010.
@@ -88,28 +88,123 @@ void set_multithermos_dropNewton3(MyOpenMMData* omm,
     omm->CustomIntegrator->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
     omm->CustomIntegrator->addGlobalVariable("kTa", kBT);
     omm->CustomIntegrator->addGlobalVariable("kTb", kBTmem);
-    omm->CustomIntegrator->addPerDofVariable("stat", 0);
+    omm->CustomIntegrator->addPerDofVariable("f_n31", 0);
     
     
     omm->CustomIntegrator->addUpdateContextState();
-    omm->CustomIntegrator->addComputePerDof("stat", "f31");
+    omm->CustomIntegrator->addComputePerDof("f_n31", "f31");
     
-    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
-    omm->CustomIntegrator->addComputePerDof("v", "v + c*(f31)/m");
-    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*c*(f30)/m");
-//    omm->CustomIntegrator->addComputePerDof("v", "v + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
-
-//    omm->CustomIntegrator->addComputePerDof("v", "v + b*sqrt(kTa/m)*gaussian");
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(f_n31))*(sqrt(kTb/m) + delta(f_n31)*sqrt(kTa/m) )*gaussian)");
+    omm->CustomIntegrator->addComputePerDof("v", "v + c*(f_n31)/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(f_n31)*c*(f30)/m");
 
     omm->CustomIntegrator->addComputePerDof("x", "x + dt*v");
     
-    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+    omm->CustomIntegrator->addComputePerDof("v", "a*v + c*(f0)/m + b*( (1-delta(f_n31))*(sqrt(kTb/m) + delta(f_n31)*sqrt(kTa/m) )*gaussian)");
     omm->CustomIntegrator->addComputePerDof("v", "v + c*(f31)/m");
-    omm->CustomIntegrator->addComputePerDof("v", "v + delta(stat)*c*(f30)/m");
-//    omm->CustomIntegrator->addComputePerDof("v", "v + b*( (1-delta(stat))*(sqrt(kTb/m) + delta(stat)*sqrt(kTa/m) )*gaussian)");
+    omm->CustomIntegrator->addComputePerDof("v", "v + delta(f_n31)*c*(f30)/m");
+
     
 }
 
+void set_multithermos_dropNewton3_GJF(MyOpenMMData* omm,
+                                      double stepSizeInFs,
+                                      vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                      vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                                      const MyAtomInfo  atoms[]){
+    /**
+                Leap-frog Langevin integrator. Reference:
+                Jesús A. Izaguirre, Chris R. Sweet, and Vijay S. Pande. Multiscale dynamics of macromolecules using Normal Mode Langevin. Pacific Symposium on Biocomputing, 15:240–251, 2010.
+     */
+    
+    DihedralForces[0]->setForceGroup(31);
+    WCAs[0]->setForceGroup(30);
+    
+    double dt = stepSizeInFs* OpenMM::PsPerFs;
+    double friction = generalParameters.frictionInPs;
+    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
+    int    num_of_atoms = 0;
+    for (int i=0; atoms[i].type!=-1; i++) {
+        num_of_atoms++;
+    }
+    
+    
+    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+
+    omm->CustomIntegrator->addGlobalVariable("a_gjf", (1-(dt*friction)/2.)/(1+(dt*friction)/2.) );
+    omm->CustomIntegrator->addGlobalVariable("b_gjf", 1./(1+(dt*friction)/2.) );
+    omm->CustomIntegrator->addGlobalVariable("x_sigma_gjfa", sqrt(0.5* friction*kBT*dt *dt*dt) );
+    omm->CustomIntegrator->addGlobalVariable("v_sigma_gjfa", sqrt(  2* friction*kBT*dt ) );
+    omm->CustomIntegrator->addGlobalVariable("x_sigma_gjfb", sqrt(0.5* friction*kBTmem*dt *dt*dt) );
+    omm->CustomIntegrator->addGlobalVariable("v_sigma_gjfb", sqrt(  2* friction*kBTmem*dt ) );
+    
+//    omm->CustomIntegrator->addPerDofVariable("x_n", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("f_n0", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("f_n30", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("f_n31", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("beta_n_1", 0.0);
+    
+
+    omm->CustomIntegrator->addUpdateContextState();
+    
+    
+    omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
+    omm->CustomIntegrator->addComputePerDof("f_n0", "f0");
+    omm->CustomIntegrator->addComputePerDof("f_n30", "f30");
+    omm->CustomIntegrator->addComputePerDof("f_n31", "f31");
+    
+    omm->CustomIntegrator->addComputePerDof("x", "x + b_gjf*dt*v + b_gjf*dt*dt*(f_n0+f_n31+delta(f_n31)*f_n30)/(2*m) + b_gjf*((1-delta(f_n31))*x_sigma_gjfb + delta(f_n31)*x_sigma_gjfa )*beta_n_1/sqrt(m)");
+    
+    
+    
+    omm->CustomIntegrator->addComputePerDof("v", "a_gjf*v + (dt/(2*m))*(a_gjf*(f_n0+f_n31+delta(f_n31)*f_n30) + f0) + b_gjf*((1-delta(f_n31))*v_sigma_gjfb + delta(f_n31)*v_sigma_gjfa )*beta_n_1/sqrt(m) ");
+    omm->CustomIntegrator->addComputePerDof("v", "v+ (dt/(2*m))*(f31)");
+    omm->CustomIntegrator->addComputePerDof("v", "v+ (dt/(2*m))*(delta(f_n31)*f30)");
+
+}
+
+void set_multithermos_GJF(MyOpenMMData* omm,
+                          double stepSizeInFs,
+                          vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                          vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                          const MyAtomInfo  atoms[]){
+    /**
+                Leap-frog Langevin integrator. Reference:
+                Jesús A. Izaguirre, Chris R. Sweet, and Vijay S. Pande. Multiscale dynamics of macromolecules using Normal Mode Langevin. Pacific Symposium on Biocomputing, 15:240–251, 2010.
+     */
+    
+   
+    double dt = stepSizeInFs* OpenMM::PsPerFs;
+    double friction = generalParameters.frictionInPs;
+    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+//    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
+    int    num_of_atoms = 0;
+    for (int i=0; atoms[i].type!=-1; i++) {
+        num_of_atoms++;
+    }
+    
+    
+    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+
+    omm->CustomIntegrator->addGlobalVariable("a_gjf", (1-(dt*friction)/2.)/(1+(dt*friction)/2.) );
+    omm->CustomIntegrator->addGlobalVariable("b_gjf", 1./(1+(dt*friction)/2.) );
+    omm->CustomIntegrator->addGlobalVariable("x_sigma_gjf", sqrt(0.5* friction*kBT*dt *dt*dt) );
+    omm->CustomIntegrator->addGlobalVariable("v_sigma_gjf", sqrt(  2* friction*kBT*dt ) );
+    
+    omm->CustomIntegrator->addPerDofVariable("f_n", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("beta_n_1", 0.0);
+    
+
+    omm->CustomIntegrator->addUpdateContextState();
+    
+    omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
+    omm->CustomIntegrator->addComputePerDof("f_n", "f");
+    
+    omm->CustomIntegrator->addComputePerDof("x", "x + b_gjf*dt*v + b_gjf*dt*dt*f_n/(2*m) + b_gjf*x_sigma_gjf*beta_n_1/sqrt(m)");
+    omm->CustomIntegrator->addComputePerDof("v", "a_gjf*v + (dt/(2*m))*(a_gjf*f_n + f) + b_gjf*v_sigma_gjf*beta_n_1/sqrt(m) ");
+
+}
 
 
 
@@ -124,38 +219,12 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     omm->LangevinMinimisation = new OpenMM::CustomIntegrator(dt);
     
     
-//    omm->LangevinMinimisation->addGlobalVariable("a", exp(-0.5*friction*dt));
-//    omm->LangevinMinimisation->addGlobalVariable("b", sqrt(1-exp(-friction*dt)));
-//    omm->LangevinMinimisation->addGlobalVariable("c", (1-exp(-0.5*friction*dt))/friction );
-//    omm->LangevinMinimisation->addGlobalVariable("kT", kBT);
     omm->LangevinMinimisation->addGlobalVariable("tol", restraint);
-//    omm->LangevinMinimisation->addGlobalVariable("scale", 0.000001);
-//    omm->LangevinMinimisation->addPerDofVariable("fmin", 1);
-    
     
     omm->LangevinMinimisation->addUpdateContextState();
-    
 
-    
-    
-//    omm->LangevinMinimisation->addComputePerDof("v", "c*f/m + b*sqrt(kT/m)*gaussian");
-//    omm->LangevinMinimisation->addComputePerDof("v", "f/m");
-    
-//    omm->LangevinMinimisation->addComputePerDof("fmin", "f");
-//    omm->LangevinMinimisation->addComputePerDof("fmin", "sqrt(dot(f,f))");
-//    omm->LangevinMinimisation->beginIfBlock("fmin > tol ");
-//    omm->LangevinMinimisation->addComputePerDof("fmin", "scale*f");
-//    omm->LangevinMinimisation->endBlock();
-
-    
-    
-//    omm->LangevinMinimisation->addComputePerDof("v", " c*f/m + b*sqrt(kT/m)*gaussian");
-//    omm->LangevinMinimisation->beginIfBlock("v > tol ");
-//    omm->LangevinMinimisation->addComputePerDof("v", "tol");
-//    omm->LangevinMinimisation->endBlock();
     omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(0.5*dt*dt*f/m,tol))");
 
-//    omm->LangevinMinimisation->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
     omm->LangevinMinimisation->addComputePerDof("v", "0");
     
 }

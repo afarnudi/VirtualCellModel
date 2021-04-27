@@ -180,9 +180,9 @@ void assign_general_parameters(void){
             }
         } else if (it.first == "Integrator") {
             generalParameters.Integrator_type="Verlet";
-            if (split[0][0]=='B'){
+            if (split[0]=="B"){
                 generalParameters.Integrator_type="Brownian";
-            } else if (split[0][0]=='M'){
+            } else if (split[0]=="M"){
                 generalParameters.Integrator_type="LangevinMinimise";
                 if (split.size()!=2) {
                     string errorMessage = TWARN;
@@ -192,13 +192,20 @@ void assign_general_parameters(void){
                 } else {
                     generalParameters.MinimisationIntegraterRestriction = stod(split[1]);
                 }
-            } else if (split[0][0]=='L'){
+            } else if (split[0]=="L"){
                 generalParameters.Integrator_type="Langevin";
-            } else if (split[0][0]=='C'){
-                generalParameters.Integrator_type="Custom";
+            } else if (split[0]=="CL"){
+                generalParameters.Integrator_type="CustomLangevinDropNewton3";
                 if (split.size()>1) {
                     generalParameters.customtemperature=stod(split[1]);
                 }
+            } else if (split[0]=="CGJF"){
+                generalParameters.Integrator_type="CustomGJFDropNewton3";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
+            } else if (split[0]=="GJF"){
+                generalParameters.Integrator_type="GJF";
             }
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);

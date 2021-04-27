@@ -73,7 +73,7 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             } else if ( generalParameters.Integrator_type=="Langevin" ) {
                 omm->LangevinIntegrator->step(1);
                 total_step++;
-            } else if ( generalParameters.Integrator_type=="Custom" ) {
+            } else if ( generalParameters.Integrator_type=="CustomLangevinDropNewton3" ) {
                 omm->CustomIntegrator->step(1);
                 total_step++;
             }
@@ -99,7 +99,7 @@ void myStepWithOpenMM(MyOpenMMData* omm,
         } else if ( generalParameters.Integrator_type=="Langevin" ) {
             omm->LangevinIntegrator->step(numSteps);
             total_step+=numSteps;
-        } else if ( generalParameters.Integrator_type=="Custom" ) {
+        } else if ( generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF") {
             omm->CustomIntegrator->step(numSteps);
             total_step+=numSteps;
         } else if ( generalParameters.Integrator_type=="LangevinMinimise" ) {
