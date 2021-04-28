@@ -47,6 +47,7 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
         "generate flags for available platforms.")
         ("platformID", "ID of platform to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
         ("platformDeviceID", "ID of platform device to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
+        ("r,resume", "'Directory path' of the interupted simulation. The simulation can only resume on the same machine it was originally running on (for a consist run).", cxxopts::value<std::string>())
         ;
         
         options.parse_positional({"configfile"});
@@ -67,6 +68,12 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
         if (result.count("c"))
         {
             userinputs.configfilename =result["c"].as<string>() ;
+        }
+        if (result.count("r"))
+        {
+            userinputs.resumePath =result["r"].as<string>() ;
+            userinputs.configfilename = find_resume_config(userinputs.resumePath, generalParameters.Checkpoint_path, generalParameters.Checkpoint_platformName);
+            generalParameters.Resume=true;
         }
         if (result.count("a"))
         {

@@ -66,6 +66,13 @@ struct GeneralParameters{
     bool WantPSF=false;
     bool WantXYZ=false;
     
+    bool CBP=false;
+    string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+    
+    bool Resume=false;
+    string Checkpoint_path;
+    string Checkpoint_platformName;
+    
     int Num_of_Membranes;
     int Num_of_Actins;
     int Num_of_Chromatins;

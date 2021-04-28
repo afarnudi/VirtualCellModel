@@ -42,6 +42,7 @@ struct ArgStruct_Analysis
 struct ArgStruct_VCM
 {
     std::string  configfilename;
+    std::string  resumePath;
     PlatformInfo platforminfo;
     bool platforminput = false;
 };

@@ -165,3 +165,116 @@ string check_if_file_exists(string filename){
     }
     return entree;
 }
+
+
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+
+std::string exec(const char* cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    return result;
+}
+
+std::vector<std::string> splitstring(std::string line, char delimiter){
+    std::stringstream ss(line);
+    std::string s;
+    const char delim = delimiter;
+    std::vector<std::string> splitpath;
+    while (std::getline(ss, s, delim)) {
+        splitpath.push_back(s);
+    }
+    return splitpath;
+}
+
+std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &checkpointPlatformName){
+    std::vector<std::string> splitpath = splitstring(resumePath, '/');
+    if(splitpath.size()==0){
+        string errorMessage = TWARN;
+        errorMessage+="error parsing options: argument -r: Please provide a directory path.";
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    
+    string reportfilename, hardwarereport;
+    for (int i=0; i<splitpath.size(); i++) {
+        reportfilename+=splitpath[i]+"/";
+        checkpointPath+=splitpath[i]+"/";
+        hardwarereport+=splitpath[i]+"/";
+        generalParameters.trajectory_file_name+=splitpath[i]+"/";
+    }
+    reportfilename+=splitpath[splitpath.size()-1]+"_report.txt";
+    checkpointPath+=splitpath[splitpath.size()-1]+"_Checkpoint";
+    hardwarereport+=splitpath[splitpath.size()-1]+"_hardware_runtime.txt";
+    generalParameters.trajectory_file_name+=splitpath[splitpath.size()-1];
+    
+    ifstream reportfile(reportfilename.c_str());
+    bool fileExists=reportfile.is_open();
+    if( !fileExists ){
+        string errorMessage = TWARN;
+        errorMessage+="error parsing options: resume: report file not found:\n";
+        errorMessage+=reportfilename;
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    ifstream checkpointfile(checkpointPath.c_str());
+    fileExists=checkpointfile.is_open();
+    if( !fileExists ){
+        string errorMessage = TWARN;
+        errorMessage+="error parsing options: resume: checkpoint file not found:\n";
+        errorMessage+=checkpointPath;
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    
+    ifstream hardwarefile(hardwarereport.c_str());
+    fileExists=hardwarefile.is_open();
+    if( !fileExists ){
+        cout<<TWARN<<"warning hardware report file not in the simulation path. Make sure the simulation is resuming on the same machine.\n";
+        cout<<hardwarereport<<endl<<TRESET;
+    } else {
+        string line;
+        getline (hardwarefile,line);
+        string machineName = exec("hostname");
+        
+        vector<string> splitline = splitstring(machineName, '\n');
+        machineName=splitline[0];
+        if (machineName!=line) {
+            string errorMessage = TWARN;
+            errorMessage+="error parsing options: resume: Resume machine name does not match:\n";
+            errorMessage+="Simulation was run on :    ";
+            errorMessage+=TFILE;
+            errorMessage+=line+"\n";
+            errorMessage+=TWARN;
+            errorMessage+="Simulation is resuming on: ";
+            errorMessage+=TFILE;
+            errorMessage+=machineName+"\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        getline (hardwarefile,line);
+        splitline = splitstring(line, ' ');
+        cout<<line<<endl;
+        for (auto &i:splitline){
+            cout<<i<<endl;
+        }
+        checkpointPlatformName=splitline[3];
+        
+//        exit(0);
+    }
+    
+    
+    
+    return reportfilename;
+}

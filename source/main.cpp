@@ -78,7 +78,7 @@ double sigma_LJ_12_6;
 double epsilon_LJ_12_6;
 
 
-bool   CreateCheckpoint;
+//bool   CreateCheckpoint;
 bool   Load_from_checkpoint;
 string Checkpoint_path;
 string Checkpoint_file_name;
@@ -97,6 +97,7 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
+//    generalParameters.CBP=true;
     cout<<TRESET;
     // get the current time.
     time_t t = time(0);
@@ -106,9 +107,6 @@ int main(int argc, char **argv)
     struct tm * now = localtime( & t );
     char buffer [80];
     strftime (buffer,80,"%Y_%m_%d_time_%H_%M",now);
-    
-    
-//    string general_file_name="General_param_map.txt";
     
     ArgStruct_VCM userinputs = cxxparser_vcm(argc, argv);
     
@@ -131,7 +129,7 @@ int main(int argc, char **argv)
 
     NonBondInteractionMap interaction_map(config_lines["-InteractionTable"]);
     
-    string ckeckpoint_name=generalParameters.trajectory_file_name+"_Checkpoint";
+    
     
     vector<Membrane> Membranes;
     vector<std::set<int> >  membrane_set;
@@ -154,7 +152,7 @@ int main(int argc, char **argv)
     int num_of_dihedrals=0;
     int num_of_angles=0;
     
-    if (!GenConst::Load_from_checkpoint) {
+//    if (!generalParameters.Resume) {
         if (generalParameters.Num_of_Membranes!=0) {
             Membranes.resize(generalParameters.Num_of_Membranes);
             membrane_set.resize(generalParameters.Num_of_Membranes);
@@ -273,12 +271,12 @@ int main(int argc, char **argv)
                 } //for (int i=0; i<GenConst::Num_of_Actins; i++)
             }
         } // End of if (Include_Membrane)
-    }
+//    } End of Resume
     
 //    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
-    int progress=0;
+//    int progress=0;
     double MC_Acceptance_Rate=0;
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
@@ -300,79 +298,79 @@ int main(int argc, char **argv)
     Angles*     all_angles    = new Angles[num_of_angles+1];
     
     
-    
-    all_atoms[num_of_atoms].type         =EndOfList;
-    all_bonds[num_of_bonds].type         =EndOfList;
-    all_dihedrals[num_of_dihedrals].type =EndOfList;
-    all_angles[num_of_angles].type       =EndOfList;
-    
-    if (generalParameters.Num_of_Membranes!=0) {
-        OpenMM_membrane_info_relay(Membranes,
-                                   membrane_set,
-                                   all_atoms,
-                                   all_bonds,
-                                   all_dihedrals,
-                                   atom_count,
-                                   bond_count,
-                                   dihe_count,
-                                   interaction_map);
-    }
-    
-    mem_atom_count = atom_count;
-    
-    
-    if (generalParameters.Num_of_Actins!=0) {
-        OpenMM_Actin_info_relay(Actins,
-                                actin_set,
-                                all_atoms,
-                                all_bonds,
-                                all_dihedrals,
-                                atom_count,
-                                bond_count,
-                                dihe_count);
-    }
-    
-    
-    if (generalParameters.Num_of_Membranes!=0  && generalParameters.Num_of_Actins!=0) {
-        OpenMM_ActMem_info_relay(Actins,
-                                 Membranes,
-                                 all_bonds,
-                                 mem_atom_count,
-                                 bond_count);
+//    if (!generalParameters.Resume) {
+        all_atoms[num_of_atoms].type         =EndOfList;
+        all_bonds[num_of_bonds].type         =EndOfList;
+        all_dihedrals[num_of_dihedrals].type =EndOfList;
+        all_angles[num_of_angles].type       =EndOfList;
         
-    }
-    
-    if (generalParameters.Num_of_ECMs!=0) {
-        OpenMM_ECM_info_relay(ECMs,
-                              ecm_set,
-                              all_atoms,
-                              all_bonds,
-                              all_dihedrals,
-                              atom_count,
-                              bond_count,
-                              dihe_count);
-    }
-    
-    if (generalParameters.Num_of_Chromatins!=0) {
-        OpenMM_Chromatin_info_relay(Chromatins,
-                                    chromatin_set,
+        if (generalParameters.Num_of_Membranes!=0) {
+            OpenMM_membrane_info_relay(Membranes,
+                                       membrane_set,
+                                       all_atoms,
+                                       all_bonds,
+                                       all_dihedrals,
+                                       atom_count,
+                                       bond_count,
+                                       dihe_count,
+                                       interaction_map);
+        }
+        
+        mem_atom_count = atom_count;
+        
+        
+        if (generalParameters.Num_of_Actins!=0) {
+            OpenMM_Actin_info_relay(Actins,
+                                    actin_set,
                                     all_atoms,
                                     all_bonds,
-                                    all_angles,
+                                    all_dihedrals,
                                     atom_count,
                                     bond_count,
-                                    angle_count,
-                                    interaction_map);
-    }
+                                    dihe_count);
+        }
+        
+        
+        if (generalParameters.Num_of_Membranes!=0  && generalParameters.Num_of_Actins!=0) {
+            OpenMM_ActMem_info_relay(Actins,
+                                     Membranes,
+                                     all_bonds,
+                                     mem_atom_count,
+                                     bond_count);
+            
+        }
+        
+        if (generalParameters.Num_of_ECMs!=0) {
+            OpenMM_ECM_info_relay(ECMs,
+                                  ecm_set,
+                                  all_atoms,
+                                  all_bonds,
+                                  all_dihedrals,
+                                  atom_count,
+                                  bond_count,
+                                  dihe_count);
+        }
+        
+        if (generalParameters.Num_of_Chromatins!=0) {
+            OpenMM_Chromatin_info_relay(Chromatins,
+                                        chromatin_set,
+                                        all_atoms,
+                                        all_bonds,
+                                        all_angles,
+                                        atom_count,
+                                        bond_count,
+                                        angle_count,
+                                        interaction_map);
+        }
+        
+        print_statistics(num_of_atoms,
+                         num_of_bonds,
+                         num_of_dihedrals,
+                         num_of_angles,
+                         Membranes,
+                         Chromatins);
     
-    print_statistics(num_of_atoms,
-                     num_of_bonds,
-                     num_of_dihedrals,
-                     num_of_angles,
-                     Membranes,
-                     Chromatins);
-    
-    
+//    } End of Resume
     //autocorrelation calculations:
     //        GenConst::velocity_save.resize(6);
     
@@ -381,38 +379,44 @@ int main(int argc, char **argv)
     // usage and runtime errors are caught and reported.
     
     try {
+        
+        int savetime = 0;
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();
-        if (!GenConst::Load_from_checkpoint) {
+        
+//        if (!generalParameters.Resume) {
             omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
-        } else {
-            std::filebuf rfb;
-            string checkpoint_load_name = GenConst::Checkpoint_path + GenConst::Checkpoint_file_name;
-            checkpoint_load_name = "Results/Resumes/OpenMM/chromo2019_11_17_time_11_57";
-            rfb.open (checkpoint_load_name.c_str(),std::ios::in);
-            if (rfb.is_open()) {
-                cout<<"Loading checkpoint from: "<<checkpoint_load_name<<endl;
-            } else {
-                cout<<"Checkpoint loadding is enabled. Cannpt find the checkpoint file. Please check the checkpoint path and filename in the general config file."<<endl;
-                exit(EXIT_FAILURE);
-            }
-            std::istream rcheckpoint(&rfb);
-            omm->context->loadCheckpoint(rcheckpoint);
+//        } else {
             
-            //wrok in progress.
-            //Need to retrive all information from the checkpoint and relay them to the respective classes.
+            
+//        }
+        
+        
+        
+        if (!generalParameters.Resume) {
+            assign_project_directories(buffer);
+            cout<< "\nFile name: "<<TFILE<<generalParameters.trajectory_file_name<<TRESET<<endl<<endl;
+        
+        }
+        string hardwarereportpath = generalParameters.trajectory_file_name+"_hardware_runtime.txt";
+        if (!generalParameters.Resume) {
+            ofstream write_hardwareReport;
+            write_hardwareReport.open(hardwarereportpath.c_str(),std::ios_base::app);
+            write_hardwareReport<<generalParameters.hardwareReport;
+            write_hardwareReport<<endl;
         }
         
+        string hardwareReportHeader;
+        ifstream read_hardwareReport;
+        read_hardwareReport.open(hardwarereportpath.c_str());
+        string line;
+        while(getline (read_hardwareReport,line)){
+            hardwareReportHeader+=line+"\n";
+        }
+        if (generalParameters.Resume) {
+            hardwareReportHeader+="\n Resume ================================================\n";
+        }
         
-        
-        assign_project_directories(buffer);
-        cout<< "\nFile name: "<<TFILE<<generalParameters.trajectory_file_name<<TRESET<<endl<<endl;
-        
-        ofstream write_hardwareReport;
-        string hardwarereportpath =generalParameters.trajectory_file_name+"_hardware_runtime.txt";
-        write_hardwareReport.open(hardwarereportpath.c_str(),std::ios_base::app);
-        write_hardwareReport<<generalParameters.hardwareReport;
-        write_hardwareReport<<endl;
         
         //export generated chromatin coordinates; The export happens only if the chromatin is set to export coordinates in it's configuration.
         for (int ich=0;ich<Chromatins.size();ich++) {
@@ -433,15 +437,13 @@ int main(int argc, char **argv)
         }
         cout<<platformName.c_str()<<TRESET<<endl;
         
+        if (!generalParameters.Resume) {
         
-        std::string Reporname=generalParameters.trajectory_file_name+"_report.txt";
+            std::string Reporname=generalParameters.trajectory_file_name+"_report.txt";
+            generate_report(config_lines);
+        }
+        string ckeckpoint_name=generalParameters.trajectory_file_name+"_Checkpoint";
         
-        generate_report(config_lines);
-        
-        
-        std::filebuf wfb;
-        wfb.open (ckeckpoint_name.c_str(),std::ios::out);
-        std::ostream wcheckpoint(&wfb);
         
         //Time the programme
         tStart = clock();
@@ -463,7 +465,7 @@ int main(int argc, char **argv)
             NumSilentSteps = Savingstep;
         }
         
-        int savetime = 0;
+        
         int MCCalcTime = MCCalcstep;
         
         cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
@@ -476,19 +478,32 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = generalParameters.temperature;
         
-        if (generalParameters.WantPSF) {
-            myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
-        }
-        if (generalParameters.WantPDB) {
-            myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
-        }
-        if (generalParameters.WantXYZ) {
-            writeXYZFrame(atom_count,all_atoms,0, 0, 0);
+        if (!generalParameters.Resume) {
+            if (generalParameters.WantPSF) {
+                myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
+            }
+            if (generalParameters.WantPDB) {
+                myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
+            }
+            if (generalParameters.WantXYZ) {
+                writeXYZFrame(atom_count,all_atoms,0, 0, 0);
+            }
+        } else {
+            int infoMask = 0;
+            infoMask = OpenMM::State::Positions;
+            infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
+            const OpenMM::State state = omm->context->getState(infoMask);
+            
+            double timeInPs = state.getTime(); // OpenMM time is in ps already
+            savetime=    int(timeInPs*1000/generalParameters.Step_Size_In_Fs);
+            progressp =  int(1000*timeInPs/generalParameters.Simulation_Time_In_Ps)/10. + 0.1;
+            
         }
         
+//        cout<<progressp<<"   "<<savetime<<endl;exit(0);
         
         
-        if (generalParameters.Minimise) {
+        if (generalParameters.Minimise && !generalParameters.Resume) {
             string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
             ofstream writexyz(traj_name.c_str());
             for (int n=0; all_atoms[n].type != -1; n++) {
@@ -508,7 +523,7 @@ int main(int argc, char **argv)
             myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             
             if ( int(time*1000/generalParameters.Step_Size_In_Fs) > savetime ) {
-                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
+//                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 if (generalParameters.WantPDB) {
@@ -519,9 +534,18 @@ int main(int argc, char **argv)
                 }
                 //Begin: Exporting congiguration of classes for simulation .
                 
+                std::filebuf wfb;
+                wfb.open (ckeckpoint_name.c_str(),std::ios::out);
+                std::ostream wcheckpoint(&wfb);
+                omm->context->createCheckpoint(wcheckpoint);
+                wfb.close();
                 
                 savetime += Savingstep;
-                
+                print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, false,
+                           tStart,
+                           chrono_clock_start,
+                           chrono_sys_clock_start
+                           );
             }
             
             
@@ -543,10 +567,10 @@ int main(int argc, char **argv)
 //            }
             //                cout<<"CreateCheckpoint\n";
             
-            if (GenConst::CreateCheckpoint) {
-                omm->context->createCheckpoint(wcheckpoint);
+//            if (GenConst::CreateCheckpoint) {
+            
                 //End: Exporting congiguration of classes for simulation resume.
-            }
+//            }
             
             if (time >= generalParameters.Simulation_Time_In_Ps){
                 break;
@@ -561,7 +585,7 @@ int main(int argc, char **argv)
                 //                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                 progressp =  int(1000*time/generalParameters.Simulation_Time_In_Ps)/10. + 0.1;
                 //                    cout<<progressp<<endl;
-                progress++;
+//                progress++;
             }
             
             
@@ -616,17 +640,16 @@ int main(int argc, char **argv)
         
         cout<<"[ 100% ]\t time: "<<generalParameters.Simulation_Time_In_Ps<<"Ps\n";
         
+        print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, true,
+                   tStart,
+                   chrono_clock_start,
+                   chrono_sys_clock_start
+                   );
+//        print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC), true);
+//        print_real_time(chrono_clock_start, chrono::steady_clock::now(), true);
+//        print_system_time(chrono_sys_clock_start, chrono::system_clock::now(), true);
         
-        print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC));
-        print_real_time(chrono_clock_start, chrono::steady_clock::now());
-        print_system_time(chrono_sys_clock_start, chrono::system_clock::now());
-        
-//        string traj_name= generalParameters.trajectory_file_name+"_fin.xyz";
-//        ofstream writexyz(traj_name.c_str());
-//        for (int n=0; all_atoms[n].type != -1; n++) {
-//            writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
-//        }
-//        writexyz.close();
+
         
         
         // Clean up OpenMM data structures.
