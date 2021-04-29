@@ -286,18 +286,24 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->BrownianIntegrator = new OpenMM::BrownianIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
+        omm->BrownianIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Langevin"){
         omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
+        omm->LangevinIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3"){
         set_multithermos_dropNewton3_Langevin(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="CustomGJFDropNewton3"){
         set_multithermos_dropNewton3_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF"){
         set_multithermos_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     }
     
     
@@ -313,12 +319,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             generalParameters.MCBarostatTemperature = generalParameters.temperature;
         }
         OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(generalParameters.MCBarostatPressure, generalParameters.MCBarostatTemperature, generalParameters.MCBarostatFrequency);
+        MCBarostat->setRandomNumberSeed(generalParameters.Seed);
         omm->system->addForce(MCBarostat);
     }
     if (generalParameters.MCAnisoBarostatOn) {
         
         const Vec3 anisotropicpressure(generalParameters.MCAnisoBarostatPressure[0],generalParameters.MCAnisoBarostatPressure[1],generalParameters.MCAnisoBarostatPressure[2]);
         OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, generalParameters.MCAnisoBarostatTemperature, generalParameters.MCAnisoBarostatScaleXYZ[0], generalParameters.MCAnisoBarostatScaleXYZ[1], generalParameters.MCAnisoBarostatScaleXYZ[2],generalParameters.MCAnisoBarostatFrequency);
+        AnisoMCBarostat->setRandomNumberSeed(generalParameters.Seed);
         omm->system->addForce(AnisoMCBarostat);
     }
     

@@ -46,6 +46,8 @@ struct GeneralParameters{
     string ECM_label="ecm";
     string Chromatin_label="chr";
     
+    int Seed=0;
+    
     bool   MinimumForceDecleration;
     double MinimumForceDeclerationCutoff=-1;
     
@@ -177,6 +179,11 @@ struct GeneralParameters{
         values[1] ="#The thermostat temperature (in Kelvin). Required by the Brownian and Langevin integrators. Default value 310";
         GenParams["Temperature"] = values;
         insertOrder.push_back("Temperature");
+        
+        values[0] ="0";
+        values[1] ="#OpenMM Documentation: \"Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.\". Default value 0";
+        GenParams["Seed"] = values;
+        insertOrder.push_back("Seed");
         
         values[0] ="false";
         values[1] ="#Use 'true' or 'false' to specify th use of OpenMM's Minimize function. It searches for a new set of particle positions that represent a local minimum of the potential energy. The search is performed using the L-BFGS algorithm. Distance constraints are enforced during minimization by adding a harmonic restraining force to the potential function. Default false";

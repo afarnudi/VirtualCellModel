@@ -209,6 +209,8 @@ void assign_general_parameters(void){
             }
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);
+        } else if (it.first == "Seed") {
+            generalParameters.Seed=stoi(split[0]);
         } else if (it.first == "Temperature") {
             generalParameters.temperature=stod(split[0]);
             if (generalParameters.customtemperature<0) {
