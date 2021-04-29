@@ -539,8 +539,9 @@ int main(int argc, char **argv)
                 }
                 if (generalParameters.WantXYZ) {
                     if (generalParameters.usingBackupCheckpoint) {
+                        //This will only be run once after the checkpoint back up is loaded. generalParameters.usingBackupCheckpoint will become false after the new checkpoint is made.
                         writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,false);
-                        generalParameters.usingBackupCheckpoint = false;
+                        
                     } else {
                         writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
                     }
@@ -548,7 +549,11 @@ int main(int argc, char **argv)
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
-                boost::filesystem::rename(ckeckpoint_name, ckeckpoint_name_backup);
+                if (!generalParameters.usingBackupCheckpoint) {
+                    boost::filesystem::rename(ckeckpoint_name, ckeckpoint_name_backup);
+                } else {
+                    generalParameters.usingBackupCheckpoint = false;
+                }
                 
                     
                 
