@@ -548,8 +548,9 @@ int main(int argc, char **argv)
                 //Begin: Exporting congiguration of classes for simulation .
                 
                 string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
-                boost::filesystem::remove(ckeckpoint_name_backup);
                 boost::filesystem::rename(ckeckpoint_name, ckeckpoint_name_backup);
+                
+                    
                 
                 std::filebuf wfb;
                 wfb.open (ckeckpoint_name.c_str(),std::ios::out);
