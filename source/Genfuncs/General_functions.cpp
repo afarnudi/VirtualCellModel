@@ -224,6 +224,7 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
     if( !fileExists ){
         string errorMessage = TWARN;
         errorMessage+="error parsing options: resume: report file not found:\n";
+        errorMessage+=TFILE;
         errorMessage+=reportfilename;
         errorMessage+= TRESET;
         throw std::runtime_error(errorMessage);
@@ -233,9 +234,22 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
     if( !fileExists ){
         string errorMessage = TWARN;
         errorMessage+="error parsing options: resume: checkpoint file not found:\n";
+        errorMessage+=TFILE;
         errorMessage+=checkpointPath;
         errorMessage+= TRESET;
-        throw std::runtime_error(errorMessage);
+        cout<< errorMessage<<endl;
+        
+        cout<<"Will try backup.."<<endl;
+        string backupCheckpointPath = checkpointPath+"Backup";
+        ifstream backupcheckpointfile(backupCheckpointPath.c_str());
+        fileExists=backupcheckpointfile.is_open();
+        if( !fileExists ){
+            string errorMessage = TWARN;
+            errorMessage+="Both the checkpoint and the backup are missing (in the simulation directory). This simulation cannot be resumed.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
     }
     
     ifstream hardwarefile(hardwarereport.c_str());
