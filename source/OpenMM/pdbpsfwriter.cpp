@@ -75,10 +75,37 @@ void writeXYZFrame  (int atom_count,
                      const MyAtomInfo atoms[],
                      double             time,
                      double             energyInKJ,
-                     double             potential_energyInKJ)
+                     double             potential_energyInKJ,
+                     bool buffer)
 {
-    string traj_name= generalParameters.trajectory_file_name+".xyz";
-    ofstream writexyz(traj_name.c_str(), ios_base::app);
+    if (buffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".xyz_buff";
+        string traj_name= generalParameters.trajectory_file_name+".xyz";
+        
+        
+        
+        ifstream readxyzb(buff_name.c_str());
+        ofstream writexyz(traj_name.c_str(), ios_base::app);
+        if (!readxyzb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No trajectory buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        while (getline(readxyzb,readline)) {
+            writexyz<<readline<<endl;
+        }
+        readxyzb.close();
+        writexyz.close();
+    }
+        
+    
+    
+    string traj_name= generalParameters.trajectory_file_name+".xyz_buff";
+    ofstream writexyz(traj_name.c_str());
     writexyz<<atom_count<<endl;
     writexyz<<"timePs ";
     writexyz<<time<<setprecision(16);

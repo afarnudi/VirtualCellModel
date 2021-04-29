@@ -48,6 +48,8 @@ struct GeneralParameters{
     
     int Seed=0;
     
+    bool usingBackupCheckpoint=false;
+    
     bool   MinimumForceDecleration;
     double MinimumForceDeclerationCutoff=-1;
     

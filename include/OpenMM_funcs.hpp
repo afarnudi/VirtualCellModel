@@ -144,7 +144,8 @@ void writeXYZFrame  (int                atom_count,
                      const MyAtomInfo   atoms[],
                      double             time,
                      double             energyInKJ,
-                     double             potential_energyInKJ
+                     double             potential_energyInKJ,
+                     bool buff
                      );
 
 

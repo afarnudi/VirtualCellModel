@@ -367,10 +367,26 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->context->setVelocities(initialVelInNmperPs);
     } else {
         cout<<"Loading checkpoint from: "<<generalParameters.Checkpoint_path<<endl;
-        std::filebuf rfb;
-        rfb.open (generalParameters.Checkpoint_path.c_str(),std::ios::in);
-        std::istream rcheckpoint(&rfb);
-        omm->context->loadCheckpoint(rcheckpoint);
+        try {
+            std::filebuf rfb;
+            rfb.open (generalParameters.Checkpoint_path.c_str(),std::ios::in);
+            std::istream rcheckpoint(&rfb);
+            omm->context->loadCheckpoint(rcheckpoint);
+        } catch (const std::exception& e) {
+            try {
+                generalParameters.usingBackupCheckpoint=true;
+                std::filebuf rfb;
+                string backupcheckpoint = generalParameters.Checkpoint_path + "Backup";
+                rfb.open (backupcheckpoint.c_str(),std::ios::in);
+                std::istream rcheckpoint(&rfb);
+                omm->context->loadCheckpoint(rcheckpoint);
+            } catch (const std::exception& e) {
+                string errorMessage = TWARN;
+                errorMessage+="Loading Checkpoint: Both the checkpoint and the backup are curropt. This simulation cannot be resumed.\n";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        }
     }
     
     

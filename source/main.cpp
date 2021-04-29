@@ -26,6 +26,8 @@
 #include <string>
 #include <math.h>
 #include <chrono>
+#include <cstdio>
+#include <boost/filesystem.hpp>
 
 #include "Membrane.h"
 #include "Chromatin.h"
@@ -486,8 +488,13 @@ int main(int argc, char **argv)
                 myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
             }
             if (generalParameters.WantXYZ) {
-                writeXYZFrame(atom_count,all_atoms,0, 0, 0);
+                writeXYZFrame(atom_count,all_atoms,0, 0, 0, false);
             }
+            std::filebuf wfb;
+            wfb.open (ckeckpoint_name.c_str(),std::ios::out);
+            std::ostream wcheckpoint(&wfb);
+            omm->context->createCheckpoint(wcheckpoint);
+            wfb.close();
         } else {
             int infoMask = 0;
             infoMask = OpenMM::State::Positions;
@@ -515,10 +522,11 @@ int main(int argc, char **argv)
                          all_bonds);
         }
         
+        double time, energyInKJ, potential_energyInKJ;
         
         for (int frame=1; ; ++frame) {
             
-            double time, energyInKJ, potential_energyInKJ;
+            time=0; energyInKJ=0; potential_energyInKJ=0;
             
             myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             
@@ -530,9 +538,18 @@ int main(int argc, char **argv)
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 }
                 if (generalParameters.WantXYZ) {
-                    writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
+                    if (generalParameters.usingBackupCheckpoint) {
+                        writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,false);
+                        generalParameters.usingBackupCheckpoint = false;
+                    } else {
+                        writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
+                    }
                 }
                 //Begin: Exporting congiguration of classes for simulation .
+                
+                string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
+                boost::filesystem::remove(ckeckpoint_name_backup);
+                boost::filesystem::rename(ckeckpoint_name, ckeckpoint_name_backup);
                 
                 std::filebuf wfb;
                 wfb.open (ckeckpoint_name.c_str(),std::ios::out);
@@ -637,7 +654,9 @@ int main(int argc, char **argv)
             }
 
         }
-        
+        if (generalParameters.WantXYZ) {
+            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
+        }
         cout<<"[ 100% ]\t time: "<<generalParameters.Simulation_Time_In_Ps<<"Ps\n";
         
         print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, true,
