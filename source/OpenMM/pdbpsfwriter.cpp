@@ -96,7 +96,7 @@ void writeXYZFrame  (int atom_count,
         
         
         while (getline(readxyzb,readline)) {
-            writexyz<<readline<<endl;
+            writexyz<<readline<<"\n";
         }
         readxyzb.close();
         writexyz.close();

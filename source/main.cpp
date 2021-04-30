@@ -550,7 +550,7 @@ int main(int argc, char **argv)
                 
                 string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
                 if (!generalParameters.usingBackupCheckpoint) {
-                    boost::filesystem::rename(ckeckpoint_name, ckeckpoint_name_backup);
+                    boost::filesystem::copy(ckeckpoint_name, ckeckpoint_name_backup);
                 } else {
                     generalParameters.usingBackupCheckpoint = false;
                 }

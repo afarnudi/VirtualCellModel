@@ -198,6 +198,7 @@ std::vector<std::string> splitstring(std::string line, char delimiter){
     return splitpath;
 }
 
+#include <boost/filesystem.hpp>
 std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &checkpointPlatformName){
     std::vector<std::string> splitpath = splitstring(resumePath, '/');
     if(splitpath.size()==0){
@@ -265,17 +266,27 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
         vector<string> splitline = splitstring(machineName, '\n');
         machineName=splitline[0];
         if (machineName!=line) {
-            string errorMessage = TWARN;
-            errorMessage+="error parsing options: resume: Resume machine name does not match:\n";
-            errorMessage+="Simulation was run on :    ";
-            errorMessage+=TFILE;
-            errorMessage+=line+"\n";
-            errorMessage+=TWARN;
-            errorMessage+="Simulation is resuming on: ";
-            errorMessage+=TFILE;
-            errorMessage+=machineName+"\n";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
+            
+            string hardwarereportbackup = hardwarereport+"Backup";
+            ifstream hardwarefilebackup(hardwarereport.c_str());
+            getline (hardwarefilebackup,line);
+            if (machineName!=line) {
+                string errorMessage = TWARN;
+                errorMessage+="error parsing options: resume: Resume machine name does not match:\n";
+                errorMessage+="Simulation was run on :    ";
+                errorMessage+=TFILE;
+                errorMessage+=line+"\n";
+                errorMessage+=TWARN;
+                errorMessage+="Simulation is resuming on: ";
+                errorMessage+=TFILE;
+                errorMessage+=machineName+"\n";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            } else {
+                boost::filesystem::copy(hardwarereportbackup, hardwarereport);
+            }
+            
+            
         }
         getline (hardwarefile,line);
         splitline = splitstring(line, ' ');
