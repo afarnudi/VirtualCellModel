@@ -7,8 +7,88 @@
 //
 #include <iostream>
 #include "General_functions.hpp"
+#include <boost/filesystem.hpp>
 
-void print_wall_clock_time(double sim_duration_per_sec){
+void print_time(std::string filepath, std::string hardwareReportHeader, bool printToScreen,
+                clock_t tStart,
+                std::chrono::time_point<std::chrono::steady_clock> chronoSteadyClockStart,
+                std::chrono::time_point<std::chrono::system_clock> chronoSystemClockStart
+                ){
+    
+    string backupfilepath = filepath +"Backup";
+    boost::filesystem::copy(filepath, backupfilepath);
+    
+    ofstream file(filepath.c_str());
+
+    double sim_duration_per_sec = (double)((clock() - tStart)/CLOCKS_PER_SEC);
+    std::chrono::time_point<std::chrono::steady_clock> chronoSteadyClockEnd = chrono::steady_clock::now();
+    std::chrono::time_point<std::chrono::system_clock> chronoSystemClockEnd = chrono::system_clock::now();
+    
+    
+    double sec_per_day     =60*60*24;
+    double sec_per_hour    =60*60;
+    double sec_per_min     =60;
+    
+    int days =  sim_duration_per_sec/sec_per_day;
+    sim_duration_per_sec -= days * sec_per_day;
+    
+    int hours = sim_duration_per_sec/sec_per_hour;
+    sim_duration_per_sec -= hours * sec_per_hour;
+    
+    int mins = sim_duration_per_sec/sec_per_min ;
+    sim_duration_per_sec -= mins * sec_per_min;
+    
+    file<<hardwareReportHeader;
+    
+    if (printToScreen) {
+        cout << "Wall clock time of the simulation:\n";
+        cout << hours << "\tHours\n";
+        cout << mins  << "\tMinutes\n";
+        cout << int(sim_duration_per_sec) << "\tSeconds\n";
+    }
+    
+    file << "Wall clock time of the simulation:\n";
+    file << hours << "\tHours\n";
+    file << mins  << "\tMinutes\n";
+    file << int(sim_duration_per_sec) << "\tSeconds\n\n";
+    
+    
+    auto chromoSteadyClockDiff = chronoSteadyClockEnd - chronoSteadyClockStart;
+    
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count();
+    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromoSteadyClockDiff).count();
+    int secs  = std::chrono::duration_cast<std::chrono::seconds>(chromoSteadyClockDiff).count();
+    file << "\nchrono::steady_clock runtime: \n";
+    file << hours << "\tHours\n";
+    file << mins - hours * 60 << "\tMinutes\n";
+    file << secs - mins * 60 << "\tSeconds\n\n";
+    if (printToScreen) {
+        cout << "\nchrono::steady_clock runtime: \n";
+        cout << hours << "\tHours\n";
+        cout << mins - hours * 60 << "\tMinutes\n";
+        cout << secs - mins * 60 << "\tSeconds\n";
+    }
+    
+    
+    auto chromoSystemClockDiff = chronoSystemClockEnd - chronoSystemClockStart;
+    secs = std::chrono::duration_cast<std::chrono::seconds>(chromoSystemClockDiff).count();
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count();
+    mins = std::chrono::duration_cast<std::chrono::minutes>(chromoSystemClockDiff).count();
+    
+    file << "\nchrono::system_clock runtime: \n";
+    file << hours << "\tHours\n";
+    file << mins - hours * 60 << "\tMinutes\n";
+    file << secs - mins * 60 << "\tSeconds\n\n";
+    if (printToScreen) {
+        cout << "\nchrono::system_clock runtime: \n";
+        cout << hours << "\tHours\n";
+        cout << mins - hours * 60 << "\tMinutes\n";
+        cout << secs - mins * 60 << "\tSeconds\n";
+    }
+    file.close();
+}
+
+void print_wall_clock_time(double sim_duration_per_sec, bool printToScreen){
     std::string traj_name  = generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"a");
@@ -27,9 +107,11 @@ void print_wall_clock_time(double sim_duration_per_sec){
     
     int mins = sim_duration_per_sec/sec_per_min ;
     sim_duration_per_sec -= mins * sec_per_min;
+    if (printToScreen) {
+        printf("Wall clock time of the simulation:\n");
+        printf("%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
+    }
     
-    printf("Wall clock time of the simulation:\n");
-    printf("%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
     
     fprintf(pFile,"Wall clock time of the simulation:\n");
     fprintf(pFile,"%4i\tHours,\n%4i\tMinutes,\n%4i\tSeconds\n", hours,mins,int(sim_duration_per_sec) );
@@ -40,47 +122,52 @@ void print_wall_clock_time(double sim_duration_per_sec){
 using std::cout;
 
 void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
-                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end){
+                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end,
+                     bool printToScreen){
     std::string hardname= generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     std::ofstream write_report;
     write_report.open(hardname.c_str(),std::ios_base::app);
     
     auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
-    int secs;
-    int hours;
-    int mins;
-    cout << "\nchrono::steady_clock runtime: \n";
+    
+    int hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
+    int mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
+    int secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
     write_report << "\nchrono::steady_clock runtime: \n";
-    hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
-    cout << hours << "\tHours\n";
     write_report << hours << "\tHours\n";
-    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
-    cout << mins - hours * 60 << "\tMinutes\n";
     write_report << mins - hours * 60 << "\tMinutes\n";
-    secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
-    cout << secs - mins * 60 << "\tSeconds\n";
-    write_report << secs - mins * 60 << "\tSeconds\n";
+    write_report << secs - mins * 60 << "\tSeconds\n\n";
+    if (printToScreen) {
+        cout << "\nchrono::steady_clock runtime: \n";
+        cout << hours << "\tHours\n";
+        cout << mins - hours * 60 << "\tMinutes\n";
+        cout << secs - mins * 60 << "\tSeconds\n";
+    }
+    
+    
+    
 }
 
 void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
-                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end){
+                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end,
+                       bool printToScreen){
     std::string hardname= generalParameters.trajectory_file_name+"_hardware_runtime.txt";
     std::ofstream write_report;
     write_report.open(hardname.c_str(),std::ios_base::app);
     
     auto chromo_clock_diff = chrono_clock_end - chrono_clock_start;
-    int secs;
-    int hours;
-    int mins;
-    cout << "\nchrono::system_clock runtime: \n";
+    int secs = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
+    int hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
+    int mins = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
+    
     write_report << "\nchrono::system_clock runtime: \n";
-    hours = std::chrono::duration_cast<std::chrono::hours>(chromo_clock_diff).count();
-    cout << hours << "\tHours\n";
     write_report << hours << "\tHours\n";
-    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromo_clock_diff).count();
-    cout << mins - hours * 60 << "\tMinutes\n";
     write_report << mins - hours * 60 << "\tMinutes\n";
-    secs  = std::chrono::duration_cast<std::chrono::seconds>(chromo_clock_diff).count();
-    cout << secs - mins * 60 << "\tSeconds\n";
-    write_report << secs - mins * 60 << "\tSeconds\n";
+    write_report << secs - mins * 60 << "\tSeconds\n\n";
+    if (printToScreen) {
+        cout << "\nchrono::system_clock runtime: \n";
+        cout << hours << "\tHours\n";
+        cout << mins - hours * 60 << "\tMinutes\n";
+        cout << secs - mins * 60 << "\tSeconds\n";
+    }
 }

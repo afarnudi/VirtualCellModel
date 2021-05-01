@@ -38,10 +38,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  ArgStruct_VCM           userinputs,
                                  NonBondInteractionMap  &interaction_map)
 {
-    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+//    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
-    OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
-    //OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
+    if (!generalParameters.CBP) {
+        OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
+    } else {
+        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+    }
+    
     
     vector<string> loaderror = OpenMM::Platform::getPluginLoadFailures();
     for (auto &line: loaderror){
@@ -253,20 +257,21 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     }
     
     set_pbcvectors(system);
-    
     PlatformInfo platforminfo;
-    if (userinputs.platforminput) {
-        platforminfo = userinputs.platforminfo;
-        get_platform_info(platforminfo);
+    if (!generalParameters.Resume) {
+        
+        if (userinputs.platforminput) {
+            platforminfo = userinputs.platforminfo;
+            get_platform_info(platforminfo);
+        } else {
+            platforminfo = get_platform_info();
+        }
+
+        generateHardwareReport(platforminfo);
     } else {
-        platforminfo = get_platform_info();
+        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
     }
-    
-    
-    
-    
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
-    generateHardwareReport(platforminfo);
     
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
@@ -281,18 +286,24 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->BrownianIntegrator = new OpenMM::BrownianIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
+        omm->BrownianIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Langevin"){
         omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionInPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
+        omm->LangevinIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3"){
         set_multithermos_dropNewton3_Langevin(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="CustomGJFDropNewton3"){
         set_multithermos_dropNewton3_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF"){
         set_multithermos_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     }
     
     
@@ -308,12 +319,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             generalParameters.MCBarostatTemperature = generalParameters.temperature;
         }
         OpenMM::MonteCarloBarostat* MCBarostat = new OpenMM::MonteCarloBarostat(generalParameters.MCBarostatPressure, generalParameters.MCBarostatTemperature, generalParameters.MCBarostatFrequency);
+        MCBarostat->setRandomNumberSeed(generalParameters.Seed);
         omm->system->addForce(MCBarostat);
     }
     if (generalParameters.MCAnisoBarostatOn) {
         
         const Vec3 anisotropicpressure(generalParameters.MCAnisoBarostatPressure[0],generalParameters.MCAnisoBarostatPressure[1],generalParameters.MCAnisoBarostatPressure[2]);
         OpenMM::MonteCarloAnisotropicBarostat* AnisoMCBarostat = new OpenMM::MonteCarloAnisotropicBarostat(anisotropicpressure, generalParameters.MCAnisoBarostatTemperature, generalParameters.MCAnisoBarostatScaleXYZ[0], generalParameters.MCAnisoBarostatScaleXYZ[1], generalParameters.MCAnisoBarostatScaleXYZ[2],generalParameters.MCAnisoBarostatFrequency);
+        AnisoMCBarostat->setRandomNumberSeed(generalParameters.Seed);
         omm->system->addForce(AnisoMCBarostat);
     }
     
@@ -349,14 +362,38 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
     }
     
-    omm->context->setPositions(initialPosInNm);
-    omm->context->setVelocities(initialVelInNmperPs);
+    if (!generalParameters.Resume) {
+        omm->context->setPositions(initialPosInNm);
+        omm->context->setVelocities(initialVelInNmperPs);
+    } else {
+        cout<<"Loading checkpoint from: "<<generalParameters.Checkpoint_path<<endl;
+        try {
+            std::filebuf rfb;
+            rfb.open (generalParameters.Checkpoint_path.c_str(),std::ios::in);
+            std::istream rcheckpoint(&rfb);
+            omm->context->loadCheckpoint(rcheckpoint);
+        } catch (const std::exception& e) {
+            try {
+                generalParameters.usingBackupCheckpoint=true;
+                std::filebuf rfb;
+                string backupcheckpoint = generalParameters.Checkpoint_path + "Backup";
+                rfb.open (backupcheckpoint.c_str(),std::ios::in);
+                std::istream rcheckpoint(&rfb);
+                omm->context->loadCheckpoint(rcheckpoint);
+            } catch (const std::exception& e) {
+                string errorMessage = TWARN;
+                errorMessage+="Loading Checkpoint: Both the checkpoint and the backup are curropt. This simulation cannot be resumed.\n";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        }
+    }
     
     
-    platformName = omm->context->getPlatform().getName();
+    
+//    platformName = omm->context->getPlatform().getName();
     
     const std::map <std::string, double> params = omm->context->getParameters();
-    
     cout<<flush;
     cout<<TGRAY<<params.size()<<endl;
     for(auto elem : params)
@@ -365,9 +402,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     }
     cout<<"\n"<<TRESET;
     cout<<flush;
-    
-    
-    
     
     
     

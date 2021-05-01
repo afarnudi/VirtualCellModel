@@ -31,12 +31,16 @@ void calc_surface_coefficeints (double points[3][3], double &A, double &B, doubl
 void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C);
 
 
-
-void print_wall_clock_time(double sim_duration_per_sec);
+void print_time(std::string filepath, std::string hardwareReportHeader, bool printToScreen,
+                clock_t tStart,
+                std::chrono::time_point<std::chrono::steady_clock> chrono_steady_clock_start,
+                std::chrono::time_point<std::chrono::system_clock> chrono_system_clock_start
+                );
+void print_wall_clock_time(double sim_duration_per_sec, bool printToScreen);
 void print_real_time(std::chrono::time_point<std::chrono::steady_clock> chrono_clock_start,
-                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end);
+                     std::chrono::time_point<std::chrono::steady_clock> chrono_clock_end, bool printToScreen);
 void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono_clock_start,
-                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end);
+                       std::chrono::time_point<std::chrono::system_clock> chrono_clock_end, bool printToScreen);
 
 std::vector<double> convert_cartesian_to_spherical(double x, double y, double z);
 std::vector<double> convert_cartesian_to_spherical(std::vector<double> xyz);
@@ -52,4 +56,8 @@ std::string check_if_file_exists(std::string filename);
 
 void assign_project_directories(char* buffer);
 
+std::string exec(const char* cmd);
+std::vector<std::string> splitstring(std::string, char delimiter);
+
+std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &Checkpoint_platformName);
 #endif /* General_functions_hpp */
