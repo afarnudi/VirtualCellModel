@@ -6,7 +6,7 @@ STEP 1: Install the [Boost] library
 
 STEP 2: Clone the Membrane_OBJ project from our [github] page.
 
-STEP 3: Change directory to Membrane_OBJ.
+STEP 3: Change directory to VirtualCellModel.
 
 STEP 4: Run makefile by typing 'make'. You may need to modify the make file depending on the openmm installation directory on your machine if OpenMM is installed in a differnet directory than /usr/local/openmm/.
 
