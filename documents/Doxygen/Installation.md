@@ -4,7 +4,7 @@ VCM is a software package written in C++. It currently runs on MacOS and Linux. 
 
 STEP 1: Install the [Boost] library
 
-STEP 2: Clone the Membrane_OBJ project from our [github] page.
+STEP 2: Clone the VirtualCellModel project from our [github] page.
 
 STEP 3: Change directory to VirtualCellModel.
 
