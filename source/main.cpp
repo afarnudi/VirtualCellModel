@@ -550,7 +550,7 @@ int main(int argc, char **argv)
                 
                 string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
                 if (!generalParameters.usingBackupCheckpoint) {
-                    boost::filesystem::copy(ckeckpoint_name, ckeckpoint_name_backup);
+                    boost::filesystem::copy_file(ckeckpoint_name, ckeckpoint_name_backup, boost::filesystem::copy_option::overwrite_if_exists);
                 } else {
                     generalParameters.usingBackupCheckpoint = false;
                 }
@@ -660,9 +660,9 @@ int main(int argc, char **argv)
             }
 
         }
-        if (generalParameters.WantXYZ) {
-            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
-        }
+//        if (generalParameters.WantXYZ) {
+//            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
+//        }
         cout<<"[ 100% ]\t time: "<<generalParameters.Simulation_Time_In_Ps<<"Ps\n";
         
         print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, true,

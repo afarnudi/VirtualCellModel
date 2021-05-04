@@ -16,7 +16,7 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
                 ){
     
     string backupfilepath = filepath +"Backup";
-    boost::filesystem::copy(filepath, backupfilepath);
+    boost::filesystem::copy_file(filepath, backupfilepath, boost::filesystem::copy_option::overwrite_if_exists);
     
     ofstream file(filepath.c_str());
 
@@ -42,47 +42,91 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
     
     if (printToScreen) {
         cout << "Wall clock time of the simulation:\n";
-        cout << hours << "\tHours\n";
-        cout << mins  << "\tMinutes\n";
+        if (days!=0) {
+            cout << days << "\tDays\n";
+        }
+        if (hours!=0) {
+            cout << hours << "\tHours\n";
+        }
+        if (mins!=0) {
+            cout << mins  << "\tMinutes\n";
+        }
         cout << int(sim_duration_per_sec) << "\tSeconds\n";
     }
     
     file << "Wall clock time of the simulation:\n";
-    file << hours << "\tHours\n";
-    file << mins  << "\tMinutes\n";
+    if (days!=0) {
+        file << days << "\tDays\n";
+    }
+    if (hours!=0) {
+        file << hours << "\tHours\n";
+    }
+    if (mins!=0) {
+        file << mins  << "\tMinutes\n";
+    }
     file << int(sim_duration_per_sec) << "\tSeconds\n\n";
     
     
     auto chromoSteadyClockDiff = chronoSteadyClockEnd - chronoSteadyClockStart;
-    
-    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count();
+    days  = int(std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count()/24);
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count() - days*24;
     mins  = std::chrono::duration_cast<std::chrono::minutes>(chromoSteadyClockDiff).count();
     int secs  = std::chrono::duration_cast<std::chrono::seconds>(chromoSteadyClockDiff).count();
+    
     file << "\nchrono::steady_clock runtime: \n";
-    file << hours << "\tHours\n";
-    file << mins - hours * 60 << "\tMinutes\n";
+    if (days!=0) {
+        file << days << "\tDays\n";
+    }
+    if (hours!=0) {
+        file << hours << "\tHours\n";
+    }
+    if (mins!=0) {
+        file << mins - hours * 60 << "\tMinutes\n";
+    }
     file << secs - mins * 60 << "\tSeconds\n\n";
     if (printToScreen) {
         cout << "\nchrono::steady_clock runtime: \n";
-        cout << hours << "\tHours\n";
-        cout << mins - hours * 60 << "\tMinutes\n";
+        if (days!=0) {
+            cout << days << "\tDays\n";
+        }
+        if (hours!=0) {
+            cout << hours << "\tHours\n";
+        }
+        if (mins!=0) {
+            cout << mins - hours * 60 << "\tMinutes\n";
+        }
         cout << secs - mins * 60 << "\tSeconds\n";
     }
     
     
     auto chromoSystemClockDiff = chronoSystemClockEnd - chronoSystemClockStart;
-    secs = std::chrono::duration_cast<std::chrono::seconds>(chromoSystemClockDiff).count();
-    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count();
+    days =  int(std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count()/24);
+    hours = std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count()-days*24;
     mins = std::chrono::duration_cast<std::chrono::minutes>(chromoSystemClockDiff).count();
+    secs = std::chrono::duration_cast<std::chrono::seconds>(chromoSystemClockDiff).count();
     
     file << "\nchrono::system_clock runtime: \n";
-    file << hours << "\tHours\n";
-    file << mins - hours * 60 << "\tMinutes\n";
+    if (days!=0) {
+        file << days << "\tDays\n";
+    }
+    if (hours!=0) {
+        file << hours << "\tHours\n";
+    }
+    if (mins!=0) {
+        file << mins - hours * 60 << "\tMinutes\n";
+    }
     file << secs - mins * 60 << "\tSeconds\n\n";
     if (printToScreen) {
         cout << "\nchrono::system_clock runtime: \n";
-        cout << hours << "\tHours\n";
-        cout << mins - hours * 60 << "\tMinutes\n";
+        if (days!=0) {
+            cout << days << "\tHours\n";
+        }
+        if (hours!=0) {
+            cout << hours << "\tHours\n";
+        }
+        if (mins!=0) {
+            cout << mins - hours * 60 << "\tMinutes\n";
+        }
         cout << secs - mins * 60 << "\tSeconds\n";
     }
     file.close();
