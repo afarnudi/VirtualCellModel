@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['timedependantdata_675',['TimeDependantData',['../struct_time_dependant_data.html',1,'']]]
+  ['platforminfo_899',['PlatformInfo',['../struct_platform_info.html',1,'']]],
+  ['potentialmodelindex_900',['PotentialModelIndex',['../struct_potential_model_index.html',1,'']]]
 ];
