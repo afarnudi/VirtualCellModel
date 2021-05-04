@@ -44,7 +44,10 @@ void Chromatin::initialise(void){
     
     set_bond_nominal_lengths();
     set_node_radius();
-    SpontaneousBendingAngle();
+    if (angle_spring_model != potentialModelIndex.Model["None"]) {
+        SpontaneousBendingAngle();
+    }
+    
     
     if (spring_model == potentialModelIndex.Model["None"]) {
         cout<<TWARN<<"\nChromatin spring model is set to 'None'."<<TRESET<<endl;
