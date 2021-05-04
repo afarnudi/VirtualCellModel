@@ -1,13 +1,22 @@
 var searchData=
 [
-  ['begin_5fupdate_5ftime_5fin_5fps_38',['Begin_update_time_in_Ps',['../class_membrane.html#aec640007997199f6c79532a59a046dfc',1,'Membrane']]],
-  ['bending_5fcoefficient_39',['Bending_coefficient',['../class_membrane.html#a25001dd440e0d8631a7191b3750f4188',1,'Membrane']]],
-  ['bending_5fpotetial_5f2_40',['Bending_potetial_2',['../class_membrane.html#ac19f9710feb9c8e6f6bbc7ffb5a182e6',1,'Membrane']]],
-  ['bendingstiffnessinkj_41',['bendingStiffnessinKJ',['../struct_dihedrals.html#a47fde3f26ebb0916df0a57488390db75',1,'Dihedrals']]],
-  ['bond_5flength_42',['bond_length',['../class_chromatin.html#a78ce6db80380b71287fa42b2cbba85bb',1,'Chromatin']]],
-  ['bond_5fradius_43',['bond_radius',['../class_chromatin.html#ac7215b03b33dfde425126aaa95432dea',1,'Chromatin']]],
-  ['bond_5ftriangle_5fneighbour_5findices_44',['Bond_triangle_neighbour_indices',['../class_membrane.html#a66c2c41c51d238c132efa5ed7e1b666d',1,'Membrane']]],
-  ['bond_5ftriangle_5fneighbour_5flist_5fconstructor_45',['Bond_triangle_neighbour_list_constructor',['../class_membrane.html#adeb300c2d9eaacef8f3cf30b12e55c2e',1,'Membrane']]],
-  ['bonds_46',['Bonds',['../struct_bonds.html',1,'']]],
-  ['build_5frandom_5fchain_47',['build_random_chain',['../class_chromatin.html#ae3f17fd0b51db84a3890105f8f4a7028',1,'Chromatin']]]
+  ['begin_5fupdate_5ftime_5fin_5fps_50',['Begin_update_time_in_Ps',['../class_membrane.html#aec640007997199f6c79532a59a046dfc',1,'Membrane']]],
+  ['bending_5fcoefficient_51',['Bending_coefficient',['../class_membrane.html#a25001dd440e0d8631a7191b3750f4188',1,'Membrane']]],
+  ['bending_5fmodel_52',['bending_model',['../class_membrane.html#a3dc3923757624a5146ce330dd737598b',1,'Membrane']]],
+  ['bending_5fpotetial_5f2_53',['Bending_potetial_2',['../class_membrane.html#ac19f9710feb9c8e6f6bbc7ffb5a182e6',1,'Membrane']]],
+  ['bendingstiffnessinkj_54',['bendingStiffnessinKJ',['../struct_dihedrals.html#a47fde3f26ebb0916df0a57488390db75',1,'Dihedrals']]],
+  ['bendingstiffnessinkjpermol_55',['bendingStiffnessinKJpermol',['../struct_angles.html#a7760baf95eed4b8667f185279d714137',1,'Angles']]],
+  ['boltzmannkjpermolkelvin_56',['BoltzmannKJpermolkelvin',['../struct_general_parameters.html#aaa3445a1482d6da939e1b12f3935e425',1,'GeneralParameters']]],
+  ['bond_5fradius_57',['bond_radius',['../class_chromatin.html#ac7215b03b33dfde425126aaa95432dea',1,'Chromatin']]],
+  ['bond_5ftriangle_5fneighbour_5findices_58',['Bond_triangle_neighbour_indices',['../class_membrane.html#a66c2c41c51d238c132efa5ed7e1b666d',1,'Membrane']]],
+  ['bond_5ftriangle_5fneighbour_5flist_5fconstructor_59',['Bond_triangle_neighbour_list_constructor',['../class_membrane.html#adeb300c2d9eaacef8f3cf30b12e55c2e',1,'Membrane']]],
+  ['bondnominallength_5fstat_60',['BondNominalLength_stat',['../class_chromatin.html#addfee710c53e4d3dfa0866a3b9d405eb',1,'Chromatin']]],
+  ['bondnominallengths_61',['BondNominalLengths',['../class_chromatin.html#aec6642993ffc49ba4f6d4470b1fb6ebf',1,'Chromatin']]],
+  ['bonds_62',['Bonds',['../struct_bonds.html',1,'']]],
+  ['bq_5falexandra_63',['bq_alexandra',['../class_membrane.html#a9c58850b72782ad3fb91dbcfac6fdcfe',1,'Membrane']]],
+  ['bq_5falexandra_5fproj_64',['bq_alexandra_proj',['../class_membrane.html#a53c8a8a238381bccfefd072faa6570e6',1,'Membrane']]],
+  ['bq_5fh_65',['Bq_H',['../class_membrane.html#ab8f08fbcea2ccbead2c03b9965fb7ce0',1,'Membrane']]],
+  ['bq_5fh_5fproj_66',['Bq_H_proj',['../class_membrane.html#a6582b5e5513e22f70f32a119f539c701',1,'Membrane']]],
+  ['brownianintegrator_67',['BrownianIntegrator',['../struct_my_open_m_m_data.html#a7830d762967c94f97268da9cfb5a5603',1,'MyOpenMMData']]],
+  ['build_5frandom_5fchain_68',['build_random_chain',['../class_chromatin.html#ae3f17fd0b51db84a3890105f8f4a7028',1,'Chromatin']]]
 ];

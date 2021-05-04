@@ -9,7 +9,6 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
     ] ],
     [ "Configfile.hpp", "_configfile_8hpp.html", "_configfile_8hpp" ],
     [ "ConfigfileStructs.hpp", "_configfile_structs_8hpp.html", [
-      [ "INTERindex", "struct_i_n_t_e_rindex.html", "struct_i_n_t_e_rindex" ],
       [ "FLAGindex", "struct_f_l_a_gindex.html", "struct_f_l_a_gindex" ],
       [ "GeneralParameters", "struct_general_parameters.html", "struct_general_parameters" ]
     ] ],
@@ -21,7 +20,9 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
     [ "General_functions.hpp", "_general__functions_8hpp.html", "_general__functions_8hpp" ],
     [ "Global_functions.hpp", "_global__functions_8hpp.html", "_global__functions_8hpp" ],
     [ "interaction.hpp", "interaction_8hpp.html", "interaction_8hpp" ],
-    [ "maps.hpp", "maps_8hpp.html", "maps_8hpp" ],
+    [ "Interaction_table.hpp", "_interaction__table_8hpp.html", [
+      [ "NonBondInteractionMap", "class_non_bond_interaction_map.html", "class_non_bond_interaction_map" ]
+    ] ],
     [ "Membrane.h", "_membrane_8h.html", [
       [ "Membrane", "class_membrane.html", "class_membrane" ]
     ] ],
@@ -30,6 +31,8 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
       [ "MyAtomInfo", "struct_my_atom_info.html", "struct_my_atom_info" ],
       [ "Bonds", "struct_bonds.html", "struct_bonds" ],
       [ "Dihedrals", "struct_dihedrals.html", "struct_dihedrals" ],
+      [ "Angles", "struct_angles.html", "struct_angles" ],
+      [ "PlatformInfo", "struct_platform_info.html", "struct_platform_info" ],
       [ "MyOpenMMData", "struct_my_open_m_m_data.html", "struct_my_open_m_m_data" ],
       [ "TimeDependantData", "struct_time_dependant_data.html", "struct_time_dependant_data" ]
     ] ],

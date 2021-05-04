@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['the_20virtual_20cell_20model_20software_20package_1333',['The Virtual Cell Model Software Package',['../index.html',1,'']]]
+  ['setting_20up_20your_20ide_1777',['Setting up your IDE',['../md__doxygen__i_d_e__setup.html',1,'']]]
 ];
