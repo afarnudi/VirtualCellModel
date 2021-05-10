@@ -120,7 +120,54 @@ void writeXYZFrame  (int atom_count,
     
 }
 
-
+void writeVelocitiesFrame  (int atom_count,
+                     const MyAtomInfo atoms[],
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ,
+                     bool buffer)
+{
+    if (buffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".vel_buff";
+        string traj_name= generalParameters.trajectory_file_name+".vel";
+        
+        
+        
+        ifstream readxyzb(buff_name.c_str());
+        ofstream writexyz(traj_name.c_str(), ios_base::app);
+        if (!readxyzb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No trajectory buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        while (getline(readxyzb,readline)) {
+            writexyz<<readline<<"\n";
+        }
+        readxyzb.close();
+        writexyz.close();
+    }
+        
+    
+    
+    string traj_name= generalParameters.trajectory_file_name+".vel_buff";
+    ofstream writexyz(traj_name.c_str());
+    writexyz<<atom_count<<endl;
+    writexyz<<"timePs ";
+    writexyz<<time<<setprecision(16);
+    writexyz<<" potential_energy_inKJpermol ";
+    writexyz<<potential_energyInKJ<<setprecision(16);
+    writexyz<<" energy_inKJpermol ";
+    writexyz<<energyInKJ<<setprecision(16)<<endl;
+    for (int n=0; atoms[n].type != -1; n++) {
+        writexyz<<atoms[n].pdb<<"\t"<<atoms[n].velocityInNmperPs[0]<<"\t"<<atoms[n].velocityInNmperPs[1]<<"\t"<<atoms[n].velocityInNmperPs[2]<<setprecision(16)<<"\n";
+    }
+    writexyz.close();
+    
+}
 
 
 

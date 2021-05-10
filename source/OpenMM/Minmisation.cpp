@@ -2,6 +2,7 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include "write_functions.hpp"
 
 void minimisation(MyOpenMMData*              omm,
                   MyAtomInfo                 all_atoms[],

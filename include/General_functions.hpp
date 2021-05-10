@@ -13,7 +13,7 @@
 #include <chrono>
 #include <fstream>
 #include <iterator>
-
+#include "OpenMM_structs.h"
 #include "General_constants.h"
 
 
@@ -60,4 +60,8 @@ std::string exec(const char* cmd);
 std::vector<std::string> splitstring(std::string, char delimiter);
 
 std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &Checkpoint_platformName);
+
+void loadCheckpoint(MyOpenMMData* omm);
+void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name);
+
 #endif /* General_functions_hpp */

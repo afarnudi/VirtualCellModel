@@ -122,6 +122,7 @@ struct GeneralParameters{
      * C: Langevin, temperature and frictionCoeff need to be set as well.
      *Default V*/
     string Integrator_type;
+    string GJF_case="A";
     double MinimisationIntegraterRestriction;
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
     double frictionInPs;
