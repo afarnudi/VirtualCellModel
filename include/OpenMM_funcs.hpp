@@ -118,35 +118,6 @@ void          myTerminateOpenMM(MyOpenMMData*,
 
 
 
-/**                               PDB FILE WRITER
- * Given state data, output a single frame (pdb "model") of the trajectory.
- */
-void myWritePDBFrame(int                frameNum,
-                     double             timeInPs,
-                     double             energyInKcal,
-                     double             potential_energy,
-                     const MyAtomInfo   atoms[],
-                     const Bonds        bonds[]);
-/**                               PSF FILE WRITER
- * Given state data at the beginning of the simulation, output a protein structure file.
- */
-void myWritePSF(int   num_of_atoms,
-                int   num_of_bonds,
-                const MyAtomInfo   atoms[],
-                const Bonds        bonds[]);
-
-
-
-/**                               PDB FILE WRITER
- * Given state data, output a single frame (pdb "model") of the trajectory.
- */
-void writeXYZFrame  (int                atom_count,
-                     const MyAtomInfo   atoms[],
-                     double             time,
-                     double             energyInKJ,
-                     double             potential_energyInKJ,
-                     bool buff
-                     );
 
 
 /**Relay Membrane class's atom information to other data structures ready to pass to OpenMM handles.*/
@@ -563,6 +534,13 @@ void set_multithermos_GJF(MyOpenMMData* omm,
                           vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
                           vector<OpenMM::CustomNonbondedForce*>    &WCAs,
                           const MyAtomInfo  atoms[]);
+
+void set_multithermos_GJF2020(MyOpenMMData* omm,
+                              double stepSizeInFs,
+                              vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                              vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                              const MyAtomInfo  atoms[],
+                              string GJFcase);
 
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);

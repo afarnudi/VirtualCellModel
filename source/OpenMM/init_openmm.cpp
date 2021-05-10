@@ -301,6 +301,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     } else if (generalParameters.Integrator_type=="GJF"){
         set_multithermos_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
+    } else if (generalParameters.Integrator_type=="GJF20"){
+        set_multithermos_GJF2020(omm, stepSizeInFs, DihedralForces, WCAs, atoms, generalParameters.GJF_case);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
@@ -341,7 +344,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Langevin"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
-        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF"){
+        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF20"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
@@ -353,7 +356,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF"){
+        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF20"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
@@ -366,27 +369,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->context->setPositions(initialPosInNm);
         omm->context->setVelocities(initialVelInNmperPs);
     } else {
-        cout<<"Loading checkpoint from: "<<generalParameters.Checkpoint_path<<endl;
-        try {
-            std::filebuf rfb;
-            rfb.open (generalParameters.Checkpoint_path.c_str(),std::ios::in);
-            std::istream rcheckpoint(&rfb);
-            omm->context->loadCheckpoint(rcheckpoint);
-        } catch (const std::exception& e) {
-            try {
-                generalParameters.usingBackupCheckpoint=true;
-                std::filebuf rfb;
-                string backupcheckpoint = generalParameters.Checkpoint_path + "Backup";
-                rfb.open (backupcheckpoint.c_str(),std::ios::in);
-                std::istream rcheckpoint(&rfb);
-                omm->context->loadCheckpoint(rcheckpoint);
-            } catch (const std::exception& e) {
-                string errorMessage = TWARN;
-                errorMessage+="Loading Checkpoint: Both the checkpoint and the backup are curropt. This simulation cannot be resumed.\n";
-                errorMessage+= TRESET;
-                throw std::runtime_error(errorMessage);
-            }
-        }
+        loadCheckpoint(omm);
     }
     
     

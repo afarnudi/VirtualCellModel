@@ -490,6 +490,9 @@ int main(int argc, char **argv)
             if (generalParameters.WantXYZ) {
                 writeXYZFrame(atom_count,all_atoms,0, 0, 0, false);
             }
+            if (generalParameters.WantVelocity) {
+                writeVelocitiesFrame(atom_count,all_atoms,0, 0, 0, false);
+            }
             std::filebuf wfb;
             wfb.open (ckeckpoint_name.c_str(),std::ios::out);
             std::ostream wcheckpoint(&wfb);
@@ -537,31 +540,12 @@ int main(int argc, char **argv)
                 if (generalParameters.WantPDB) {
                     myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
                 }
-                if (generalParameters.WantXYZ) {
-                    if (generalParameters.usingBackupCheckpoint) {
-                        //This will only be run once after the checkpoint back up is loaded. generalParameters.usingBackupCheckpoint will become false after the new checkpoint is made.
-                        writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,false);
-                        
-                    } else {
-                        writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
-                    }
-                }
+                
+                writeOutputs(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
+                
                 //Begin: Exporting congiguration of classes for simulation .
                 
-                string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
-                if (!generalParameters.usingBackupCheckpoint) {
-                    boost::filesystem::copy_file(ckeckpoint_name, ckeckpoint_name_backup, boost::filesystem::copy_option::overwrite_if_exists);
-                } else {
-                    generalParameters.usingBackupCheckpoint = false;
-                }
-                
-                    
-                
-                std::filebuf wfb;
-                wfb.open (ckeckpoint_name.c_str(),std::ios::out);
-                std::ostream wcheckpoint(&wfb);
-                omm->context->createCheckpoint(wcheckpoint);
-                wfb.close();
+                saveCheckpoint(omm, ckeckpoint_name);
                 
                 savetime += Savingstep;
                 print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, false,

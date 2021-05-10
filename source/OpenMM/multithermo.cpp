@@ -170,8 +170,11 @@ void set_multithermos_GJF(MyOpenMMData* omm,
                           vector<OpenMM::CustomNonbondedForce*>    &WCAs,
                           const MyAtomInfo  atoms[]){
     /**
-                Leap-frog Langevin integrator. Reference:
-                Jesús A. Izaguirre, Chris R. Sweet, and Vijay S. Pande. Multiscale dynamics of macromolecules using Normal Mode Langevin. Pacific Symposium on Biocomputing, 15:240–251, 2010.
+     A simple and effective Verlet-type algorithm for simulating Langevin dynamics
+     
+     Niels Grønbech-Jensen  & Oded Farago
+     Accepted author version posted online: 09 Jan 2013.Published online: 14 Feb 2013.
+     DOI:10.1080/00268976.2012.760055
      */
     
    
@@ -246,4 +249,68 @@ void set_Langevin(MyOpenMMData* omm, double stepSizeInFs){
 //    omm->CustomLangevin->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
 //    omm->CustomLangevin->addComputePerDof("x", "x + dt*v");
 //    omm->CustomLangevin->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
+}
+
+
+void set_multithermos_GJF2020(MyOpenMMData* omm,
+                              double stepSizeInFs,
+                              vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                              vector<OpenMM::CustomNonbondedForce*>    &WCAs,
+                              const MyAtomInfo  atoms[],
+                              string GJFcase){
+    /**
+     Defining velocities for accurate kinetic statistics in the GJF thermostat
+     Niels Grønbech-Jensen and Oded Farago
+     DOI: 10.1103/PhysRevE.101.022123
+     */
+    
+    
+       
+    double dt = stepSizeInFs* OpenMM::PsPerFs;
+    double friction = generalParameters.frictionInPs;
+    double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+//    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
+    int    num_of_atoms = 0;
+    for (int i=0; atoms[i].type!=-1; i++) {
+        num_of_atoms++;
+    }
+    double gamma1, gamma5;
+    double b_gjf = 1./(1+(dt*friction)/2.);
+    double a_gjf = (1-(dt*friction)/2.)/(1+(dt*friction)/2.) ;
+    
+    if (GJFcase=="A") {
+        gamma1 = 1./sqrt(b_gjf);
+        gamma5 = 0;
+    } else if (GJFcase=="B") {
+        gamma1 = 1./sqrt(b_gjf);
+        gamma5 = -0.5;
+    } else if (GJFcase=="C") {
+        gamma1 = 1;
+        gamma5 = -0.5*(b_gjf-sqrt(b_gjf*(b_gjf+1)));
+    }
+    
+    double Gamma4 = b_gjf*gamma1 - 2*a_gjf*gamma5;
+    double Gamma5 = b_gjf*gamma1 + 2*gamma5;
+    
+    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
+
+    omm->CustomIntegrator->addGlobalVariable("a_gjf", a_gjf );
+    omm->CustomIntegrator->addGlobalVariable("bg1", b_gjf*gamma1 );
+    omm->CustomIntegrator->addGlobalVariable("g4bg1", Gamma4/(b_gjf*gamma1) );
+    omm->CustomIntegrator->addGlobalVariable("g5", Gamma5 );
+    omm->CustomIntegrator->addGlobalVariable("g51", gamma5/gamma1 );
+    omm->CustomIntegrator->addGlobalVariable("g1", gamma1 );
+    
+    omm->CustomIntegrator->addPerDofVariable("u_n", 0.0);
+    omm->CustomIntegrator->addPerDofVariable("beta_n_1", 0.0);
+    
+
+    omm->CustomIntegrator->addUpdateContextState();
+    
+    omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
+    
+    omm->CustomIntegrator->addComputePerDof("u_n", "bg1*v + g5*beta_n_1/(2*m) + dt*bg1*f/(2*m)");
+    omm->CustomIntegrator->addComputePerDof("x", "x + dt*u_n/g1 - g51*dt*beta_n_1/m");
+    omm->CustomIntegrator->addComputePerDof("v", "a_gjf*u_n/bg1 + g4bg1*beta_n_1/(2*m) + dt*f/(2*m)");
+
 }

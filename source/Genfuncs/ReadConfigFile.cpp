@@ -206,6 +206,26 @@ void assign_general_parameters(void){
                 }
             } else if (split[0]=="GJF"){
                 generalParameters.Integrator_type="GJF";
+            } else if (split[0]=="GJF20"){
+                generalParameters.Integrator_type="GJF20";
+                if (split.size()>1) {
+                    if (split[1]=="A") {
+                        generalParameters.GJF_case="A";
+                    } else if (split[1]=="B") {
+                        generalParameters.GJF_case="B";
+                    } else if (split[1]=="C") {
+                        generalParameters.GJF_case="C";
+                    } else {
+                        string errorMessage = TWARN;
+                        errorMessage+="Configfile parameter parse error: Integrator: GJF20: The case \"";
+                        errorMessage+= TFILE;
+                        errorMessage+= split[1];
+                        errorMessage+= TRESET;
+                        errorMessage+="\" is not defined. Use A, B, C, or D.";
+                        errorMessage+= TRESET;
+                        throw std::runtime_error(errorMessage);
+                    }
+                }
             }
         } else if (it.first == "FrictionInPs") {
             generalParameters.frictionInPs=stod(split[0]);

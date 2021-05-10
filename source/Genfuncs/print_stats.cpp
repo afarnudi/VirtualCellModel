@@ -2,11 +2,13 @@
 //  General_functions.cpp
 //  Cell-Durotaxis
 //
-//  Created by Ali Farnudi on 27/08/2017.
-//  Copyright © 2017 Ali Farnudi. All rights reserved.
+//  Created by Ali Farnudi on 05/05/2021.
+//  Copyright © 2021 Ali Farnudi. All rights reserved.
 //
 #include <iostream>
-#include "Global_functions.hpp"
+#include "Membrane.h"
+#include "Chromatin.h"
+#include "General_functions.hpp"
 
 void print_statistics(int num_of_atoms,
                       int num_of_bonds,
