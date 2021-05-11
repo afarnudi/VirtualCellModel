@@ -303,6 +303,7 @@ void set_multithermos_GJF2020(MyOpenMMData* omm,
 
     omm->CustomIntegrator->addGlobalVariable("a_gjf", a_gjf );
     omm->CustomIntegrator->addGlobalVariable("b_gjf", b_gjf );
+    omm->CustomIntegrator->addGlobalVariable("sigma_gjf", sqrt(2*friction*kBT) );
 //    omm->CustomIntegrator->addGlobalVariable("g1", gamma1 );
 //    omm->CustomIntegrator->addGlobalVariable("g5", gamma5 );
 //    omm->CustomIntegrator->addGlobalVariable("h4", Gamma4 );
@@ -316,17 +317,17 @@ void set_multithermos_GJF2020(MyOpenMMData* omm,
     
     omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
     if (GJFcase=="A") {
-        omm->CustomIntegrator->addComputePerDof("u_n", "sqrt(b_gjf)*(v + (beta_n_1 + dt*f)/(2*m) )");
+        omm->CustomIntegrator->addComputePerDof("u_n", "sqrt(b_gjf)*(v + (sigma_gjf*beta_n_1 + dt*f)/(2*m) )");
         omm->CustomIntegrator->addComputePerDof("x"  , "x + sqrt(b_gjf)*dt*u_n");
-        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n/sqrt(b_gjf) + (beta_n_1 + dt*f)/(2*m)");
+        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n/sqrt(b_gjf) + (sigma_gjf*beta_n_1 + dt*f)/(2*m)");
     } else if (GJFcase=="B") {
         omm->CustomIntegrator->addComputePerDof("u_n", "v + dt*f/(2*m)");
-        omm->CustomIntegrator->addComputePerDof("x"  , "x + b_gjf*dt*u_n + b_gjf*dt*beta_n_1/(2*m)");
-        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n + b_gjf*beta_n_1/m + dt*f/(2*m)");
+        omm->CustomIntegrator->addComputePerDof("x"  , "x + b_gjf*dt*u_n + b_gjf*dt*sigma_gjf*beta_n_1/(2*m)");
+        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n + b_gjf*sigma_gjf*beta_n_1/m + dt*f/(2*m)");
     } else if (GJFcase=="C") {
-        omm->CustomIntegrator->addComputePerDof("u_n", "b_gjf*( v + sqrt( (1+b_gjf)/b_gjf )*beta_n_1 + dt*beta_n_1/m )");
-        omm->CustomIntegrator->addComputePerDof("x"  , "x + dt*u_n + (b_gjf-sqrt( b_gjf*(1+b_gjf) ) )*dt*beta_n_1/m ");
-        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n/b_gjf + beta_n_1*(2*b_gjf - a_gjf*sqrt( (1+b_gjf)/b_gjf ) )/(2*m) + dt*f/(2*m)");
+        omm->CustomIntegrator->addComputePerDof("u_n", "b_gjf*( v + sqrt( (1+b_gjf)/b_gjf )*sigma_gjf*beta_n_1 + dt*sigma_gjf*beta_n_1/m )");
+        omm->CustomIntegrator->addComputePerDof("x"  , "x + dt*u_n + (b_gjf-sqrt( b_gjf*(1+b_gjf) ) )*dt*beta_n_1*sigma_gjf/m ");
+        omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n/b_gjf + sigma_gjf*beta_n_1*(2*b_gjf - a_gjf*sqrt( (1+b_gjf)/b_gjf ) )/(2*m) + dt*f/(2*m)");
     }
 
 }
