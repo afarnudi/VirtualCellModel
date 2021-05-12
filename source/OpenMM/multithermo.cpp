@@ -348,7 +348,7 @@ void set_multithermos_GJF2020(MyOpenMMData* omm,
     
     omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
     if (GJFcase=="A") {
-        omm->CustomIntegrator->addComputePerDof("u_n", "a1*v + (a2*beta_n_1 + a3*f)/m )");
+        omm->CustomIntegrator->addComputePerDof("u_n", "a1*v + (a2*beta_n_1 + a3*f)/m");
         omm->CustomIntegrator->addComputePerDof("x"  , "x + a4*u_n");
         omm->CustomIntegrator->addComputePerDof("v"  , "a5*u_n + (a6*beta_n_1 + 0.5*dt*f)/m");
     } else if (GJFcase=="B") {
@@ -356,7 +356,7 @@ void set_multithermos_GJF2020(MyOpenMMData* omm,
         omm->CustomIntegrator->addComputePerDof("x"  , "x + b1*u_n + b2*beta_n_1/m");
         omm->CustomIntegrator->addComputePerDof("v"  , "a_gjf*u_n + b3*beta_n_1/m + dt*f/(2*m)");
     } else if (GJFcase=="C") {
-        omm->CustomIntegrator->addComputePerDof("u_n", "b_gjf*v + c1*beta_n_1 + c2*beta_n_1/m )");
+        omm->CustomIntegrator->addComputePerDof("u_n", "b_gjf*v + c1*beta_n_1 + c2*beta_n_1/m");
         omm->CustomIntegrator->addComputePerDof("x"  , "x + dt*u_n + c3*beta_n_1/m ");
         omm->CustomIntegrator->addComputePerDof("v"  , "c4*u_n + c5*beta_n_1/m + dt*f/(2*m)");
     }
