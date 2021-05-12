@@ -181,7 +181,7 @@ void set_multithermos_GJF(MyOpenMMData* omm,
     double dt = stepSizeInFs* OpenMM::PsPerFs;
     double friction = generalParameters.frictionInPs;
     double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
-    double sigma  = sqrt(2*friction*kBT);
+    double sigma  = sqrt(2*friction*kBT*dt);
 //    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
     int    num_of_atoms = 0;
     for (int i=0; atoms[i].type!=-1; i++) {
@@ -283,7 +283,7 @@ void set_multithermos_GJF2020(MyOpenMMData* omm,
         num_of_atoms++;
     }
     
-    double sigma_gjf = sqrt(2*friction*kBT);
+    double sigma_gjf = sqrt(2*friction*kBT*dt);
     
     double gamma1, gamma5;
     double b_gjf = 1./(1+(dt*friction)/2.);
