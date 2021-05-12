@@ -181,19 +181,27 @@ void set_multithermos_GJF(MyOpenMMData* omm,
     double dt = stepSizeInFs* OpenMM::PsPerFs;
     double friction = generalParameters.frictionInPs;
     double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+    double sigma  = sqrt(2*friction*kBT);
 //    double kBTmem = generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature;
     int    num_of_atoms = 0;
     for (int i=0; atoms[i].type!=-1; i++) {
         num_of_atoms++;
     }
-    
+    double b_gjf = 1./(1+(dt*friction)/2.);
+    double a_gjf = (1-(dt*friction)/2.)/(1+(dt*friction)/2.);
     
     omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
-
+    
+    omm->CustomIntegrator->addGlobalVariable("g1", b_gjf*dt );
+    omm->CustomIntegrator->addGlobalVariable("g2", b_gjf*dt*dt*0.5 );
+    omm->CustomIntegrator->addGlobalVariable("g3", b_gjf*dt*sigma*0.5 );
     omm->CustomIntegrator->addGlobalVariable("a_gjf", (1-(dt*friction)/2.)/(1+(dt*friction)/2.) );
-    omm->CustomIntegrator->addGlobalVariable("b_gjf", 1./(1+(dt*friction)/2.) );
-    omm->CustomIntegrator->addGlobalVariable("x_sigma_gjf", sqrt(0.5* friction*kBT*dt *dt*dt) );
-    omm->CustomIntegrator->addGlobalVariable("v_sigma_gjf", sqrt(  2* friction*kBT*dt ) );
+    omm->CustomIntegrator->addGlobalVariable("g4", dt*a_gjf*0.5 );
+    omm->CustomIntegrator->addGlobalVariable("g5", b_gjf*sigma );
+    
+//    omm->CustomIntegrator->addGlobalVariable("b_gjf", 1./(1+(dt*friction)/2.) );
+//    omm->CustomIntegrator->addGlobalVariable("x_sigma_gjf", sqrt(0.5* friction*kBT*dt *dt*dt) );
+//    omm->CustomIntegrator->addGlobalVariable("v_sigma_gjf", sqrt(  2* friction*kBT*dt ) );
     
     omm->CustomIntegrator->addPerDofVariable("f_n", 0.0);
     omm->CustomIntegrator->addPerDofVariable("beta_n_1", 0.0);
@@ -204,8 +212,8 @@ void set_multithermos_GJF(MyOpenMMData* omm,
     omm->CustomIntegrator->addComputePerDof("beta_n_1", "gaussian");
     omm->CustomIntegrator->addComputePerDof("f_n", "f");
     
-    omm->CustomIntegrator->addComputePerDof("x", "x + b_gjf*dt*v + b_gjf*dt*dt*f_n/(2*m) + b_gjf*x_sigma_gjf*beta_n_1/sqrt(m)");
-    omm->CustomIntegrator->addComputePerDof("v", "a_gjf*v + (dt/(2*m))*(a_gjf*f_n + f) + b_gjf*v_sigma_gjf*beta_n_1/sqrt(m) ");
+    omm->CustomIntegrator->addComputePerDof("x", "x + g1*v + g2*f_n/m + g3*beta_n_1/m");
+    omm->CustomIntegrator->addComputePerDof("v", "a_gjf*v  + g4*f_n/m + g5*beta_n_1/m + dt*f/(2*m)");
 
 }
 
