@@ -491,7 +491,7 @@ Bonds* convert_Chromatin_bond_info_to_openmm(Chromatin chromo) {
             } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
                 harmonicpotential = true;
                 bonds[i].nominalLengthInNm=chromo.get_bond_nominal_length(i);
-                bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient();
+                bonds[i].stiffnessInKJPerNm2=chromo.get_spring_stiffness_coefficient(i);
             }
             
             

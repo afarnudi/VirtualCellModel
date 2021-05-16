@@ -27,6 +27,7 @@ private: //(if we define these constants as private members of the class, we can
     string Node_radius_stat;
     int index;
     int spring_model=0;
+    bool zebraBonds=false;
     bool spring_model_global_stat=false;
     int angle_spring_model=0;
     bool angle_spring_model_global_stat=false;
@@ -283,6 +284,18 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
     double get_spring_stiffness_coefficient(void){
         return Spring_coefficient;
     }
+    double get_spring_stiffness_coefficient(int i){
+        if (zebraBonds) {
+            if (i%2==0) {
+                return Spring_coefficient;
+            } else {
+                return 0;
+            }
+        } else {
+            return Spring_coefficient;
+            
+        }
+    }
     /**Return chroamtin spontaneous bending angle.
      */
     double get_spontaneousBendingAngleInRad(void){
@@ -446,6 +459,11 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         values[1] ="#Set the bond potential. 'H' for Harmonic, 'FENE' for a finitely extensible nonlinear elastic model, 'KG' for Kremer-Grest model. 'N' for None. Default H.";
         Params["SpringModel"] = values;
         insertOrder.push_back("SpringModel");
+        
+        values[0] ="false";
+        values[1] ="#Set the bond potential rigidity coefficient to zero for every other bond. Default false.";
+        Params["zebraBonds"] = values;
+        insertOrder.push_back("zebraBonds");
         
         values[0] ="2000";
         values[1] ="#Set the bond potential rigidity coefficient. Default value 2000.";

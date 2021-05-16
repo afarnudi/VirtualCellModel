@@ -280,6 +280,17 @@ void Chromatin::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+        } else if (it.first == "zebraBonds") {
+            if(split[0]=="true"){
+                zebraBonds=true;
+            } else if (split[0]=="false"){
+                zebraBonds=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Chromatin config parser: zebraBonds: I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "ExportGeneratedCoordinates") {
             if(split[0]=="true"){
                 ExportGeneratedCoordinates=true;
