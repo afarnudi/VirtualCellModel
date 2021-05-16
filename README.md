@@ -13,15 +13,16 @@ Required softwares:
 [Boost]
 
 Step 1: Clone.
-Step 2: Change directory to Membrane_OBJ and make the project.
+
+Step 2: Change directory to VirtualCellModel and make the project.
 ```console
-cd Membrane_OBJ
+cd VirtualCellModel
 make -j4
 ```
 
 Please visit our [installation] page for more information.
 
-[installation]: https://afarnudi.github.io/Membrane_OBJ/md__doxygen__installation.html
+[installation]: https://afarnudi.github.io/VirtualCellModel/md__doxygen__installation.html
 [VCM]: https://afarnudi.github.io/Membrane_OBJ/index.html
 [openMM]: http://openmm.org "OpenMM"
 [Boost]: https://www.boost.org
