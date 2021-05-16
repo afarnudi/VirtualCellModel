@@ -97,7 +97,10 @@ void configfile_generator(int status){
                 write_configs<<defaultparams.GenParams[element][1]<<endl;
             }
             write_configs<<element<<" "<<defaultparams.GenParams[element][0]<<endl;
-            write_configs<<endl;
+            if (comments) {
+                write_configs<<endl;
+            }
+            
         }
         
         
@@ -110,7 +113,9 @@ void configfile_generator(int status){
                 write_configs<<map[element][1]<<endl;
             }
             write_configs<<element<<" "<<map[element][0]<<endl;
-            write_configs<<endl;
+            if (comments) {
+                write_configs<<endl;
+            }
         }
         write_configs<<"-Actin"<<endl<<endl;
         Actin act;
@@ -121,7 +126,9 @@ void configfile_generator(int status){
                 write_configs<<map[element][1]<<endl;
             }
             write_configs<<element<<" "<<map[element][0]<<endl;
-            write_configs<<endl;
+            if (comments) {
+                write_configs<<endl;
+            }
         }
         
         write_configs<<"-ECM"<<endl<<endl;
@@ -133,7 +140,9 @@ void configfile_generator(int status){
                 write_configs<<map[element][1]<<endl;
             }
             write_configs<<element<<" "<<map[element][0]<<endl;
-            write_configs<<endl;
+            if (comments) {
+                write_configs<<endl;
+            }
         }
         
         write_configs<<"-Chromatin"<<endl<<endl;
@@ -145,7 +154,9 @@ void configfile_generator(int status){
                 write_configs<<map[element][1]<<endl;
             }
             write_configs<<element<<" "<<map[element][0]<<endl;
-            write_configs<<endl;
+            if (comments) {
+                write_configs<<endl;
+            }
         }
         
         write_configs<<"-InteractionTable"<<endl<<endl;
