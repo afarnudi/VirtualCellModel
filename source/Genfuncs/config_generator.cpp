@@ -103,7 +103,7 @@ void configfile_generator(int status){
             
         }
         
-        
+        write_configs<<endl;
         write_configs<<"-Membrane"<<endl<<endl;
         Membrane mem;
         auto map = mem.get_map();
@@ -117,6 +117,8 @@ void configfile_generator(int status){
                 write_configs<<endl;
             }
         }
+        
+        write_configs<<endl;
         write_configs<<"-Actin"<<endl<<endl;
         Actin act;
         map = act.get_map();
@@ -131,6 +133,7 @@ void configfile_generator(int status){
             }
         }
         
+        write_configs<<endl;
         write_configs<<"-ECM"<<endl<<endl;
         ECM ecm;
         map = ecm.get_map();
@@ -145,6 +148,7 @@ void configfile_generator(int status){
             }
         }
         
+        write_configs<<endl;
         write_configs<<"-Chromatin"<<endl<<endl;
         Chromatin chromo;
         map = chromo.get_map();
@@ -159,6 +163,7 @@ void configfile_generator(int status){
             }
         }
         
+        write_configs<<endl;
         write_configs<<"-InteractionTable"<<endl<<endl;
         if (comments) {
             write_configs<<"#Define the non-bonded interaction between the Classes. The classes in the table should be written in the following order: Membranes (M0, M1, ...), Actins (A0, A1, ...), ECMs (E0, E1, ...), Chromatins (C0, C1, ...)"<<endl;
