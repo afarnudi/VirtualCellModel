@@ -236,7 +236,7 @@ int main(int argc, char **argv)
             for (int i=0; i<Membranes.size(); i++) {
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
                 num_of_bonds        += Membranes[i].get_num_of_node_pairs();
-                num_of_dihedrals    += Membranes[i].get_num_of_triangle_pairs();
+                num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
             }
         }
         

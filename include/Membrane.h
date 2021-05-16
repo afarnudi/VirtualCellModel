@@ -517,6 +517,17 @@ public:
     int get_num_of_triangle_pairs(){
         return int(Triangle_Pair_Nodes.size());
     }
+    
+    /**Returns the calculated number of triangles in the imported mesh file.*/
+    int get_num_of_dihedral_elements(){
+        if (bending_model!=potentialModelIndex.Model["None"]) {
+            return int(Triangle_Pair_Nodes.size());
+        } else {
+            return 0;
+        }
+        
+    }
+    
     /**Return the node IDs of the dihedral angles.*/
     vector<int> get_traingle_pair_nodes_list(int triangle_pair){
         return Triangle_Pair_Nodes[triangle_pair];

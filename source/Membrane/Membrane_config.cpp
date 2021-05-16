@@ -90,6 +90,9 @@ void Membrane::consistancy_check(){
         }
     }
     
+    if (Bending_coefficient==0) {
+        bending_model=potentialModelIndex.Model["None"];
+    }
 }
 
 void Membrane::assign_parameters(void){
