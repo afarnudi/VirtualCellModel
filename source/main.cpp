@@ -235,7 +235,7 @@ int main(int argc, char **argv)
             
             for (int i=0; i<Membranes.size(); i++) {
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
-                num_of_bonds        += Membranes[i].get_num_of_node_pairs();
+                num_of_bonds        += Membranes[i].get_num_of_bonds();
                 num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
             }
         }
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
                                     dihe_count);
         }
         
-        
+    
         if (generalParameters.Num_of_Membranes!=0  && generalParameters.Num_of_Actins!=0) {
             OpenMM_ActMem_info_relay(Actins,
                                      Membranes,

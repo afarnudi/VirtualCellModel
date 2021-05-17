@@ -93,6 +93,10 @@ void Membrane::consistancy_check(){
     if (Bending_coefficient==0) {
         bending_model=potentialModelIndex.Model["None"];
     }
+    if (Spring_coefficient==0) {
+        spring_model=potentialModelIndex.Model["None"];
+    }
+    
 }
 
 void Membrane::assign_parameters(void){

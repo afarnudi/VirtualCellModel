@@ -1,7 +1,7 @@
 #include "OpenMM_funcs.hpp"
 
 Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
-    const int mem_num_bonds = mem.get_num_of_node_pairs();
+    const int mem_num_bonds = mem.get_num_of_bonds();
     Bonds* bonds = new Bonds[mem_num_bonds];
     
     bool KGpotential =false;

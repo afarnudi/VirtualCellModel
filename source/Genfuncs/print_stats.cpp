@@ -19,10 +19,10 @@ void print_statistics(int num_of_atoms,
     
     for (int i=0; i<Membranes.size(); i++) {
         if (Membranes[i].get_spring_model() == potentialModelIndex.Model["None"]) {
-            num_of_bonds-=Membranes[i].get_num_of_node_pairs();
+            num_of_bonds-=Membranes[i].get_num_of_bonds();
         }
         if (Membranes[i].get_bending_model() == potentialModelIndex.Model["None"]) {
-            num_of_dihedrals-=Membranes[i].get_num_of_triangle_pairs();
+            num_of_dihedrals-=Membranes[i].get_num_of_dihedral_elements();
         }
     }
     for (int i=0; i<generalParameters.Num_of_Chromatins; i++) {

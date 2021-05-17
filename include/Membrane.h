@@ -477,6 +477,13 @@ public:
     int get_num_of_node_pairs(void){
         return Num_of_Node_Pairs;
     }
+    int get_num_of_bonds(void){
+        if (spring_model==potentialModelIndex.Model["None"]) {
+            return 0;
+        } else {
+            return Num_of_Node_Pairs;
+        }
+    }
     /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
     int get_node_pair(int bond_num, int node_id){
         return Node_Bond_list[bond_num][node_id];

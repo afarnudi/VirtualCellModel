@@ -8,7 +8,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     bool dihedralPotential = false;
     bool noPotential = false;
     
-    const int mem_num_tri_pairs = mem.get_num_of_triangle_pairs();
+    const int mem_num_tri_pairs = mem.get_num_of_dihedral_elements();
 //    cout<<"**++**++**++\n\t"<<mem_num_tri_pairs<<"\n**++**++**++\n";
     Dihedrals* diatoms = new Dihedrals[mem_num_tri_pairs];
     
@@ -40,7 +40,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
         cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     
-    if (noPotential) {
+    if (noPotential || mem_num_tri_pairs==0) {
         cout<<" None"<<endl;
     }
     

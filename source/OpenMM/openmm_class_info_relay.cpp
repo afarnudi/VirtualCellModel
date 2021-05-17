@@ -41,14 +41,14 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         cout<<TMEM<<"Membrane "<<i<<TRESET<<endl;
         cout<<"Bond potential:";
         Bonds* bonds = convert_membrane_bond_info_to_openmm(membranes[i]);
-        if (membranes[i].get_spring_model() != potentialModelIndex.Model["None"]) {
-            for (int j=0; j<membranes[i].get_num_of_node_pairs(); j++) {
-                all_bonds[j+bond_count]=bonds[j];
-                all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
-                all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
-                
-            }
+        
+        for (int j=0; j<membranes[i].get_num_of_bonds(); j++) {
+            all_bonds[j+bond_count]=bonds[j];
+            all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
+            all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
+            
         }
+        
         
         cout<<"Dihedral potential:";
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
@@ -65,9 +65,10 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
         atom_count += membranes[i].get_num_of_nodes();
-        bond_count += membranes[i].get_num_of_node_pairs();
-        dihe_count += membranes[i].get_num_of_triangle_pairs();
+        bond_count += membranes[i].get_num_of_bonds();
+        dihe_count += membranes[i].get_num_of_dihedral_elements();
     }
+
 }
 
 void OpenMM_Actin_info_relay (vector<Actin>          acts,
