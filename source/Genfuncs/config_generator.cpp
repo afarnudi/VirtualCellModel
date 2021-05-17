@@ -62,18 +62,18 @@ void write_mem_configs(ofstream &write_configs, vector<Membrane> &mems, int memi
     write_configs<<mems[memid].insertOrder[index]<<" "<<mems[memid].Params[mems[memid].insertOrder[index]][0]<<endl;
     write_configs<<endl;
     
-    for (int i =0; i<mems[memid].insertOrder.size(); i++) {
-        bool write = true;
-        for (auto &el: excluded_indecies){
-            if (el == i) {
-                write=false;
-                break;
-            }
-        }
-        if (write) {
-            write_configs<<"#"<<mems[memid].insertOrder[i]<<" "<<mems[memid].Params[mems[memid].insertOrder[i]][0]<<endl;
-        }
-    }
+//    for (int i =0; i<mems[memid].insertOrder.size(); i++) {
+//        bool write = true;
+//        for (auto &el: excluded_indecies){
+//            if (el == i) {
+//                write=false;
+//                break;
+//            }
+//        }
+//        if (write) {
+//            write_configs<<"#"<<mems[memid].insertOrder[i]<<" "<<mems[memid].Params[mems[memid].insertOrder[i]][0]<<endl;
+//        }
+//    }
     write_configs<<endl;
 }
 
@@ -86,10 +86,11 @@ void configfile_generator(int status){
     write_configs.open(genfilename.c_str());
     if (status==0) {
         bool comments      = include_comments();
-        write_configs<<"#This is the VCM configuration template."<<endl;
-        write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
-        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
-        
+        if (comments) {
+            write_configs<<"#This is the VCM configuration template."<<endl;
+            write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
+            write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
+        }
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
         for (auto & element : defaultparams.insertOrder) {
@@ -217,8 +218,8 @@ void configfile_generator(int status){
     }
     else if (status==1)
     {
-        write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
-        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
+//        write_configs<<"#Whatever following \"#\" will be ignored by the programme."<<endl;
+//        write_configs<<"#You may use a \"word\", number, or character to label class instances. Note that this lable will only be used by the programme within the configuration file enviroment to distiguish between classes.  If no label is provided, the programme will automatically assign a number label beginning from 0."<<endl<<endl;
         write_configs<<"-GeneralParameters"<<endl<<endl;
         GeneralParameters defaultparams;
         cout<<TFILE;
@@ -253,9 +254,9 @@ void configfile_generator(int status){
             write_configs<<defaultparams.insertOrder[i]<<" "<<defaultparams.GenParams[defaultparams.insertOrder[i]][0]<<endl;
             write_configs<<endl;
         }
-        for (int i =4; i<defaultparams.insertOrder.size(); i++) {
-            write_configs<<"#"<<defaultparams.insertOrder[i]<<" "<<defaultparams.GenParams[defaultparams.insertOrder[i]][0]<<endl;
-        }
+//        for (int i =4; i<defaultparams.insertOrder.size(); i++) {
+//            write_configs<<"#"<<defaultparams.insertOrder[i]<<" "<<defaultparams.GenParams[defaultparams.insertOrder[i]][0]<<endl;
+//        }
         write_configs<<endl;
         
         int all_class_count=0;
@@ -315,26 +316,26 @@ void configfile_generator(int status){
         }
         
         write_configs<<endl;
-        write_configs<<"#Non-bonded interactions:"<<endl;
-        write_configs<<"#0:  No interaction."<<endl;
-        write_configs<<"#LJ: Lennard Jones 12-6."<<endl;
-        write_configs<<"#EV: Excluded Volume interaction (Shifted Lennard Jones 12-6)."<<endl;
-        
-        write_configs<<endl<<endl;
-        write_configs<<"#Note: If you have multiple instances of one class that have almost the same configurations but differ in just a couple, you can use the inheritance feature. The inheritance feature allows you to copy configurations from one class and add/overwiwte new configrations. Inheritance can only be applied to classes of the same kind:"<<endl;
-        write_configs<<"#Example:"<<endl;
-        write_configs<<"#-Membrane A"<<endl;
-        write_configs<<"#config1 10"<<endl;
-        write_configs<<"#config2 true"<<endl;
-        write_configs<<"#config3 200"<<endl;
-        write_configs<<"#-Membrane B :: A"<<endl;
-        write_configs<<"#config2 false"<<endl;
-        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl;
-        write_configs<<"#The programme will interpret Membrane B as follows:"<<endl;
-        write_configs<<"#-Membrane B"<<endl;
-        write_configs<<"#config1 10"<<endl;
-        write_configs<<"#config2 false"<<endl;
-        write_configs<<"#config3 200"<<endl<<endl;
+//        write_configs<<"#Non-bonded interactions:"<<endl;
+//        write_configs<<"#0:  No interaction."<<endl;
+//        write_configs<<"#LJ: Lennard Jones 12-6."<<endl;
+//        write_configs<<"#EV: Excluded Volume interaction (Shifted Lennard Jones 12-6)."<<endl;
+//        
+//        write_configs<<endl<<endl;
+//        write_configs<<"#Note: If you have multiple instances of one class that have almost the same configurations but differ in just a couple, you can use the inheritance feature. The inheritance feature allows you to copy configurations from one class and add/overwiwte new configrations. Inheritance can only be applied to classes of the same kind:"<<endl;
+//        write_configs<<"#Example:"<<endl;
+//        write_configs<<"#-Membrane A"<<endl;
+//        write_configs<<"#config1 10"<<endl;
+//        write_configs<<"#config2 true"<<endl;
+//        write_configs<<"#config3 200"<<endl;
+//        write_configs<<"#-Membrane B :: A"<<endl;
+//        write_configs<<"#config2 false"<<endl;
+//        write_configs<<"#The programme will copy the configurations of Membrane A to Membrane B and add/overwrite the configurations that are listed in Membrane B."<<endl;
+//        write_configs<<"#The programme will interpret Membrane B as follows:"<<endl;
+//        write_configs<<"#-Membrane B"<<endl;
+//        write_configs<<"#config1 10"<<endl;
+//        write_configs<<"#config2 false"<<endl;
+//        write_configs<<"#config3 200"<<endl<<endl;
     }
     
     
