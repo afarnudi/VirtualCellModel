@@ -516,31 +516,48 @@ void customLangevinIntegrator(MyOpenMMData* omm,
 
 void set_pbcvectors(OpenMM::System &system);
 
-void set_multithermos(MyOpenMMData* omm, NonBondInteractionMap  &interaction_map, double stepSizeInFs, vector<set<int> >      &membrane_set, const MyAtomInfo  atoms[]);
+void set_LFLangevin_multithermos(MyOpenMMData* omm,
+                                 double stepSizeInFs,
+                                 double friction,
+                                 double kBT,
+                                 double kBTmem,
+                                 vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                 vector<OpenMM::CustomNonbondedForce*>    &WCAs);
 
-void set_multithermos_dropNewton3_Langevin(MyOpenMMData* omm,
-                                           double stepSizeInFs,
-                                           vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
-                                           vector<OpenMM::CustomNonbondedForce*>    &WCAs,
-                                           const MyAtomInfo  atoms[]);
+void set_LFLangevin_multithermos_dropNewton3(MyOpenMMData* omm,
+                                             double stepSizeInPs,
+                                             double friction_invertPs,
+                                             double kBT,
+                                             double kBTmem,
+                                             vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                             vector<OpenMM::CustomNonbondedForce*>    &WCAs);
 
-void set_multithermos_dropNewton3_GJF(MyOpenMMData* omm,
-                                      double stepSizeInFs,
-                                      vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
-                                      vector<OpenMM::CustomNonbondedForce*>    &WCAs,
-                                      const MyAtomInfo  atoms[]);
-void set_multithermos_GJF(MyOpenMMData* omm,
-                          double stepSizeInFs,
+void set_GJF(MyOpenMMData* omm,
+             double stepSizeInPs,
+             double friction_invertPs,
+             double kBT);
+
+void set_GJF_multithermos(MyOpenMMData* omm,
+                          double stepSizeInPs,
+                          double friction_invertPs,
+                          double kBT,
+                          double kBTmem,
                           vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
-                          vector<OpenMM::CustomNonbondedForce*>    &WCAs,
-                          const MyAtomInfo  atoms[]);
+                          vector<OpenMM::CustomNonbondedForce*>    &WCAs);
 
-void set_multithermos_GJF2020(MyOpenMMData* omm,
-                              double stepSizeInFs,
-                              vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
-                              vector<OpenMM::CustomNonbondedForce*>    &WCAs,
-                              const MyAtomInfo  atoms[],
-                              string GJFcase);
+void set_GJF_multithermos_DropNewton3(MyOpenMMData* omm,
+                                      double stepSizeInPs,
+                                      double friction_invertPs,
+                                      double kBT,
+                                      double kBTmem,
+                                      vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                      vector<OpenMM::CustomNonbondedForce*>    &WCAs);
+
+void set_GJF2020(MyOpenMMData* omm,
+                 double stepSizeInPs,
+                 double friction_invertPs,
+                 double kBT,
+                 string GJFcase);
 
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);

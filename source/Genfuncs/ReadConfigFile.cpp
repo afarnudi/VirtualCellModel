@@ -194,18 +194,28 @@ void assign_general_parameters(void){
                 }
             } else if (split[0]=="L"){
                 generalParameters.Integrator_type="Langevin";
-            } else if (split[0]=="CL"){
-                generalParameters.Integrator_type="CustomLangevinDropNewton3";
+            } else if (split[0]=="LFLangevinMultiT"){
+                generalParameters.Integrator_type="LFLangevinMulti-thermos";
                 if (split.size()>1) {
                     generalParameters.customtemperature=stod(split[1]);
                 }
-            } else if (split[0]=="CGJF"){
-                generalParameters.Integrator_type="CustomGJFDropNewton3";
+            } else if (split[0]=="LFLangevinMultiTDropN3"){
+                generalParameters.Integrator_type="LFLangevinMulti-thermosDropNewton3";
                 if (split.size()>1) {
                     generalParameters.customtemperature=stod(split[1]);
                 }
             } else if (split[0]=="GJF"){
                 generalParameters.Integrator_type="GJF";
+            } else if (split[0]=="GJFMT"){
+                generalParameters.Integrator_type="GJF2013Multi-thermos";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
+            } else if (split[0]=="GJFMTDropN3"){
+                generalParameters.Integrator_type="GJF2013Multi-thermosDropNewton3";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
             } else if (split[0]=="GJF20"){
                 generalParameters.Integrator_type="GJF20";
                 if (split.size()>1) {
@@ -227,11 +237,11 @@ void assign_general_parameters(void){
                     }
                 }
             }
-        } else if (it.first == "FrictionInPs") {
-            generalParameters.frictionInPs=stod(split[0]);
+        } else if (it.first == "FrictionIninvertPs") {
+            generalParameters.frictionIninvertPs=stod(split[0]);
         } else if (it.first == "Seed") {
             generalParameters.Seed=stoi(split[0]);
-        } else if (it.first == "Temperature") {
+        } else if (it.first == "TemperatureinKelvin") {
             generalParameters.temperature=stod(split[0]);
             if (generalParameters.customtemperature<0) {
                 generalParameters.customtemperature=generalParameters.temperature;

@@ -125,7 +125,7 @@ struct GeneralParameters{
     string GJF_case="A";
     double MinimisationIntegraterRestriction;
     /**Set the friction coefficient which couples the system to the heat bath (in inverse picoseconds). Default 5*/
-    double frictionInPs;
+    double frictionIninvertPs;
     /**Set the temperature of the heat bath (in Kelvin). Default 300*/
     double temperature;
     
@@ -169,19 +169,25 @@ struct GeneralParameters{
         insertOrder.push_back("SimulationBoxLength");
         
         values[0] ="V";
-        values[1] ="#Set the integrator type. 'Temperature' and 'FrictionCoeff' needs to be set for Langevin and Brownian. V: Verlet. B: Brownian. L: Langevin. Default value 'V'.";
+        values[1] ="#Set the integrator type. Default value 'V'.\n"
+                   "#\tV: Verlet. \n"
+                   "#\tB: Brownian. *needs: FrictionIninvertPs and Temperature\n"
+                   "#\tL: Langevin. *needs: FrictionIninvertPs and Temperature\n"
+                   "#\tGJF: The GJF thermostat based on \"A simple and effective Verlet-type algorithm for simulating Langevin dynamics\" by Niels Grønbech-Jensen  & Oded Farago Published online: 14 Feb 2013 DOI:10.1080/00268976.2012.760055  *needs: FrictionIninvertPs and Temperature\n"
+                   "#\tGJF20: Use: GJF20 A (or B, C) An update to the GJF thermostat based on \"Defining velocities for accurate kinetic statistics in the GJF thermostat\" by Niels Grønbech-Jensen and Oded Farago DOI: 10.1103/PhysRevE.101.022123 *needs: FrictionIninvertPs and Temperature\n"
+        ;
         GenParams["Integrator"] = values;
         insertOrder.push_back("Integrator");
         
         values[0] ="5";
         values[1] ="#The friction coefficient which couples the system to the heat bath (in inverse pico seconds). Required by the Brownian and Langevin integrators. Default value 5.";
-        GenParams["FrictionInPs"] = values;
-        insertOrder.push_back("FrictionInPs");
+        GenParams["FrictionIninvertPs"] = values;
+        insertOrder.push_back("FrictionIninvertPs");
         
         values[0] ="310";
         values[1] ="#The thermostat temperature (in Kelvin). Required by the Brownian and Langevin integrators. Default value 310";
-        GenParams["Temperature"] = values;
-        insertOrder.push_back("Temperature");
+        GenParams["TemperatureinKelvin"] = values;
+        insertOrder.push_back("TemperatureinKelvin");
         
         values[0] ="0";
         values[1] ="#OpenMM Documentation: \"Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.\". Default value 0";

@@ -284,25 +284,62 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->VerletIntegrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
     } else if (generalParameters.Integrator_type=="Brownian"){
         omm->BrownianIntegrator = new OpenMM::BrownianIntegrator(generalParameters.temperature,
-                                                                 generalParameters.frictionInPs,
+                                                                 generalParameters.frictionIninvertPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
         omm->BrownianIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Langevin"){
         omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
-                                                                 generalParameters.frictionInPs,
+                                                                 generalParameters.frictionIninvertPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
         omm->LangevinIntegrator->setRandomNumberSeed(generalParameters.Seed);
-    } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3"){
-        set_multithermos_dropNewton3_Langevin(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos"){
+        set_LFLangevin_multithermos(omm,
+                                    stepSizeInFs* OpenMM::PsPerFs,
+                                    generalParameters.frictionIninvertPs,
+                                    generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
+                                    generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
+                                    DihedralForces,
+                                    WCAs);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
-    } else if (generalParameters.Integrator_type=="CustomGJFDropNewton3"){
-        set_multithermos_dropNewton3_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+    } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3"){
+        set_LFLangevin_multithermos_dropNewton3(omm,
+                                                stepSizeInFs* OpenMM::PsPerFs,
+                                                generalParameters.frictionIninvertPs,
+                                                generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
+                                                generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
+                                                DihedralForces,
+                                                WCAs);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF"){
-        set_multithermos_GJF(omm, stepSizeInFs, DihedralForces, WCAs, atoms);
+        set_GJF(omm,
+                stepSizeInFs* OpenMM::PsPerFs,
+                generalParameters.frictionIninvertPs,
+                generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
+    } else if (generalParameters.Integrator_type=="GJF2013Multi-thermos"){
+        set_GJF_multithermos(omm,
+                             stepSizeInFs* OpenMM::PsPerFs,
+                             generalParameters.frictionIninvertPs,
+                             generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
+                             generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
+                             DihedralForces,
+                             WCAs);
+        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
+    } else if (generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3"){
+        set_GJF_multithermos_DropNewton3(omm,
+                                         stepSizeInFs* OpenMM::PsPerFs,
+                                         generalParameters.frictionIninvertPs,
+                                         generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
+                                         generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
+                                         DihedralForces,
+                                         WCAs);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF20"){
-        set_multithermos_GJF2020(omm, stepSizeInFs, DihedralForces, WCAs, atoms, generalParameters.GJF_case);
+        set_GJF2020(omm,
+                    stepSizeInFs* OpenMM::PsPerFs,
+                    generalParameters.frictionIninvertPs,
+                    generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
+                    generalParameters.GJF_case);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
@@ -344,7 +381,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Langevin"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
-        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF20"){
+        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
@@ -356,7 +393,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else if (generalParameters.Integrator_type=="CustomLangevinDropNewton3" || generalParameters.Integrator_type=="CustomGJFDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF20"){
+        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
