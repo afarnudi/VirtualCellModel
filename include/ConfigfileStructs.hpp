@@ -66,6 +66,8 @@ struct GeneralParameters{
     double  MinimiseTolerance;
     int  MinimiseMaxIterations;
     
+    bool setVelocitiesToTemperature = false;
+    
     bool WantPDB=false;
     bool WantPSF=false;
     bool WantXYZ=false;
@@ -188,6 +190,11 @@ struct GeneralParameters{
         values[1] ="#The thermostat temperature (in Kelvin). Required by the Brownian and Langevin integrators. Default value 310";
         GenParams["TemperatureinKelvin"] = values;
         insertOrder.push_back("TemperatureinKelvin");
+        
+        values[0] ="false";
+        values[1] ="#Set all particle velocities to random values taken from a Boltzmann distribution at a given temperature. Default value false";
+        GenParams["setVelocitiesToTemperature"] = values;
+        insertOrder.push_back("setVelocitiesToTemperature");
         
         values[0] ="0";
         values[1] ="#OpenMM Documentation: \"Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.\". Default value 0";

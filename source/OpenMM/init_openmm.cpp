@@ -404,7 +404,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     if (!generalParameters.Resume) {
         omm->context->setPositions(initialPosInNm);
-        omm->context->setVelocities(initialVelInNmperPs);
+        if (generalParameters.setVelocitiesToTemperature) {
+            omm->context->setVelocitiesToTemperature(generalParameters.temperature, generalParameters.Seed);
+        } else {
+            omm->context->setVelocities(initialVelInNmperPs);
+        }
     } else {
         loadCheckpoint(omm);
     }

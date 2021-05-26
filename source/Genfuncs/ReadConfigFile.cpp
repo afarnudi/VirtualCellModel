@@ -259,6 +259,19 @@ void assign_general_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             generalParameters.WantEnergy=stat;
+        } else if (it.first == "setVelocitiesToTemperature") {
+            bool stat;
+            if (split[0]=="true") {
+                stat=true;
+            } else if (split[0]=="false"){
+                stat=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            generalParameters.setVelocitiesToTemperature=stat;
         }
 //        else if (it.first == "WantVelocity") {
 //            bool stat;
