@@ -12,16 +12,16 @@ void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, d
     double friction = generalParameters.frictionIninvertPs;
     double kBT    = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
     
-    omm->LangevinMinimisation = new OpenMM::CustomIntegrator(dt);
+    omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);
     
     
-    omm->LangevinMinimisation->addGlobalVariable("tol", restraint);
+    omm->CustomIntegrator->addGlobalVariable("tol", restraint);
     
-    omm->LangevinMinimisation->addUpdateContextState();
+    omm->CustomIntegrator->addUpdateContextState();
 
-    omm->LangevinMinimisation->addComputePerDof("x", "x + max(-tol,min(0.5*dt*dt*f/m,tol))");
+    omm->CustomIntegrator->addComputePerDof("x", "x + max(-tol,min(0.5*dt*dt*f/m,tol))");
 
-    omm->LangevinMinimisation->addComputePerDof("v", "0");
+    omm->CustomIntegrator->addComputePerDof("v", "0");
     
 }
 

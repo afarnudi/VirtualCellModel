@@ -107,7 +107,7 @@ struct MyOpenMMData {
     OpenMM::LangevinIntegrator*   LangevinIntegrator;
     
     OpenMM::CustomIntegrator*     CustomIntegrator;
-    OpenMM::CustomIntegrator*     LangevinMinimisation;
+//    OpenMM::CustomIntegrator*     LangevinMinimisation;
     
     OpenMM::Context*  context;
     OpenMM::Context*  minimisationContext;

@@ -342,8 +342,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                     generalParameters.GJF_case);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
-        set_customLangevinforminimisation(omm, stepSizeInFs, generalParameters.MinimisationIntegraterRestriction);
+        set_customLangevinforminimisation(omm,
+                                          stepSizeInFs,
+                                          generalParameters.MinimisationIntegraterRestriction);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
+//        cout<<generalParameters.Seed<<endl;exit(0);
     }
     
     
@@ -381,11 +384,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Langevin"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
-        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20"){
+        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20" || generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
-        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
-            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
         }
+//        else if (generalParameters.Integrator_type=="LangevinMinimise"){
+//            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
+//        }
     } else {
         if ( generalParameters.Integrator_type=="Verlet" ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
@@ -393,11 +397,12 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20"){
+        } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF20" || generalParameters.Integrator_type=="LangevinMinimise"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-        } else if (generalParameters.Integrator_type=="LangevinMinimise"){
-            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }
+//        else if (generalParameters.Integrator_type=="LangevinMinimise"){
+//            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+//        }
         
         
     }
