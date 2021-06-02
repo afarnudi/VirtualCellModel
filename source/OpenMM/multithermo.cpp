@@ -44,3 +44,4 @@ void set_Langevin(MyOpenMMData* omm, double stepSizeInFs){
 //    omm->CustomLangevin->addComputePerDof("v", "a*v + c*f/m + b*sqrt(kT/m)*gaussian");
 }
 
+

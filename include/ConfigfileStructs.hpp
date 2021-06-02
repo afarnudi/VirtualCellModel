@@ -177,6 +177,7 @@ struct GeneralParameters{
                    "#\tL: Langevin. *needs: FrictionIninvertPs and Temperature\n"
                    "#\tGJF: The GJF thermostat based on \"A simple and effective Verlet-type algorithm for simulating Langevin dynamics\" by Niels Grønbech-Jensen  & Oded Farago Published online: 14 Feb 2013 DOI:10.1080/00268976.2012.760055  *needs: FrictionIninvertPs and Temperature\n"
                    "#\tGJF20: Use: GJF20 A (or B, C) An update to the GJF thermostat based on \"Defining velocities for accurate kinetic statistics in the GJF thermostat\" by Niels Grønbech-Jensen and Oded Farago DOI: 10.1103/PhysRevE.101.022123 *needs: FrictionIninvertPs and Temperature\n"
+                   "#\tGlobal: Bussi et al global thermostat DOI: http://dx.doi.org/10.1016/j.cpc.2008.01.006 *needs: FrictionIninvertPs and Temperature\n"
         ;
         GenParams["Integrator"] = values;
         insertOrder.push_back("Integrator");

@@ -216,26 +216,13 @@ void assign_general_parameters(void){
                 if (split.size()>1) {
                     generalParameters.customtemperature=stod(split[1]);
                 }
-            } else if (split[0]=="GJF20"){
-                generalParameters.Integrator_type="GJF20";
+            } else if (split[0]=="GJFMTDropN3"){
+                generalParameters.Integrator_type="GJF2013Multi-thermosDropNewton3";
                 if (split.size()>1) {
-                    if (split[1]=="A") {
-                        generalParameters.GJF_case="A";
-                    } else if (split[1]=="B") {
-                        generalParameters.GJF_case="B";
-                    } else if (split[1]=="C") {
-                        generalParameters.GJF_case="C";
-                    } else {
-                        string errorMessage = TWARN;
-                        errorMessage+="Configfile parameter parse error: Integrator: GJF20: The case \"";
-                        errorMessage+= TFILE;
-                        errorMessage+= split[1];
-                        errorMessage+= TRESET;
-                        errorMessage+="\" is not defined. Use A, B, C, or D.";
-                        errorMessage+= TRESET;
-                        throw std::runtime_error(errorMessage);
-                    }
+                    generalParameters.customtemperature=stod(split[1]);
                 }
+            } else if (split[0]=="Global"){
+                generalParameters.Integrator_type="Bussi2008";
             }
         } else if (it.first == "FrictionIninvertPs") {
             generalParameters.frictionIninvertPs=stod(split[0]);

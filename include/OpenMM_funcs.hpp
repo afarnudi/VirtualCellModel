@@ -559,6 +559,12 @@ void set_GJF2020(MyOpenMMData* omm,
                  double kBT,
                  string GJFcase);
 
+void set_Bussi_Global_thermostat(MyOpenMMData* omm,
+                                 double stepSizeInPs,
+                                 double friction_invertPs,
+                                 double kBT,
+                                 int number_of_atoms);
+
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);
 
