@@ -216,13 +216,24 @@ void assign_general_parameters(void){
                 if (split.size()>1) {
                     generalParameters.customtemperature=stod(split[1]);
                 }
-            } else if (split[0]=="GJFMTDropN3"){
-                generalParameters.Integrator_type="GJF2013Multi-thermosDropNewton3";
-                if (split.size()>1) {
-                    generalParameters.customtemperature=stod(split[1]);
+            } else if (split[0]=="GJF20"){
+                generalParameters.Integrator_type="GJF2020";
+                if (split.size()!=2) {
+                    string errorMessage = TWARN;
+                    errorMessage+="Configfile parameter parse error: Integrator: You need to specify the 'Case'. Choices are between A and B. Example: Integrator GJF20 A";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                } else {
+                    generalParameters.GJF_case = split[1];
                 }
+                
             } else if (split[0]=="Global"){
                 generalParameters.Integrator_type="Bussi2008";
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Configfile parameter parse error: Integrator: Don't understand integrator option. Please read the template for a list of integrators.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
             }
         } else if (it.first == "FrictionIninvertPs") {
             generalParameters.frictionIninvertPs=stod(split[0]);

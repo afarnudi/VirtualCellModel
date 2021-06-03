@@ -66,5 +66,4 @@ void set_GJF2020(MyOpenMMData* omm,
         omm->CustomIntegrator->addComputePerDof("v"  , "c4*u_n + c5*beta_n_1/sqrt(m) + dt*f/(2*m)");
     }
 
-    
 }
