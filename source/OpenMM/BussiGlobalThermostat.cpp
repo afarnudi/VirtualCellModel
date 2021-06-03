@@ -79,7 +79,7 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
     
     omm->CustomIntegrator->addGlobalVariable("c_global", c );
     omm->CustomIntegrator->addGlobalVariable("dofs_global", dof);
-    omm->CustomIntegrator->addGlobalVariable("mke", dof * 0.5 * kBT );
+//    omm->CustomIntegrator->addGlobalVariable("mke", dof * 0.5 * kBT );
     omm->CustomIntegrator->addGlobalVariable("ke", 0.0 );
     omm->CustomIntegrator->addGlobalVariable("alpha", 0.0 );
     omm->CustomIntegrator->addGlobalVariable("sign_alpha", 0.0 );
