@@ -179,8 +179,10 @@ void assign_general_parameters(void){
                 generalParameters.Periodic_condtion_status=true;
             }
         } else if (it.first == "Integrator") {
-            generalParameters.Integrator_type="Verlet";
-            if (split[0]=="B"){
+//            generalParameters.Integrator_type="Verlet";
+            if (split[0]=="V"){
+                generalParameters.Integrator_type="Verlet";
+            } else if (split[0]=="B"){
                 generalParameters.Integrator_type="Brownian";
             } else if (split[0]=="M"){
                 generalParameters.Integrator_type="LangevinMinimise";
