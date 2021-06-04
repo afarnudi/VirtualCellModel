@@ -254,7 +254,11 @@ void assign_general_parameters(void){
                 stat=false;
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="Configfile parameter parse error: Could not parse  '"+split[0]+"'. use 'true' or 'false'.";
+                errorMessage+="Configfile parameter parse error: Could not parse  '";
+                errorMessage+=TFILE;
+                errorMessage+=split[0];
+                errorMessage+=TWARN;
+                errorMessage+="'. use 'true' or 'false'.";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }

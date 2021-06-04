@@ -115,4 +115,5 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
     omm->CustomIntegrator->addUpdateContextState();
     omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f/m");
     omm->CustomIntegrator->addComputePerDof("x", "x+dt*v");
+    omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f/m");
 }
