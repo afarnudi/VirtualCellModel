@@ -423,6 +423,21 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
     }
     
+    platform.setPropertyValue(*omm->context, "Precision", generalParameters.precision);
+    string tempPrecision = platform.getPropertyValue(*omm->context, "Precision");
+    if (tempPrecision != generalParameters.precision) {
+        generalParameters.hardwareReport+="Precision not supported by platform, will use: ";
+        generalParameters.hardwareReport+=tempPrecision+"\n";
+        generalParameters.hardwareReport+="------------------------\n\n";
+        generalParameters.precision=tempPrecision;
+        cout<<"Precision not supported by platform, will use: "<<tempPrecision<<endl;
+    } else {
+        generalParameters.hardwareReport+=tempPrecision;
+        generalParameters.hardwareReport+=" precision set on the platform.\n";
+        generalParameters.hardwareReport+="------------------------\n\n";
+        cout<<"Platform precision set to: "<<tempPrecision<<endl;
+    }
+    
     if (!generalParameters.Resume) {
         omm->context->setPositions(initialPosInNm);
         if (generalParameters.setVelocitiesToTemperature) {

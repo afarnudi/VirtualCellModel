@@ -79,6 +79,7 @@ struct Angles{
 struct PlatformInfo{
     int platform_id=0;
     int platform_device_id=0;
+    
     std::vector<std::string> device_properties_report;
     std::vector<std::map<std::string, std::string> > device_properties;
 };

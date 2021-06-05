@@ -370,7 +370,7 @@ void assign_general_parameters(void){
             }
             
         
-        } else if (it.first == "Outputs") {
+        } else if (it.first == "TextOutputs") {
             for (auto &i:split){
                 if (i == "PSF") {
                     generalParameters.WantPSF=true;
@@ -385,6 +385,30 @@ void assign_general_parameters(void){
                 }
                 
             }
+            
+        } else if (it.first == "BinOutputs") {
+            for (auto &i:split){
+                if (i == "XYZ"){
+                    generalParameters.WantXYZbin=true;
+                } else if (i == "VEL"){
+                    generalParameters.WantVelocityBin=true;
+                }
+                
+            }
+            
+        } else if (it.first == "Precision") {
+            if (split[0] == "single" || split[0] == "double") {
+                generalParameters.precision = split[0];
+            } else {
+                string errorMessage = "Configfile parameter parse error: Precision: Could not parse '";
+                errorMessage+=TFILE;
+                errorMessage+=split[0];
+                errorMessage+=TRESET;
+                errorMessage+="'. Use only 'single' or 'double'.\n";
+                
+                throw std::runtime_error(errorMessage);
+            }
+            
             
         }
         

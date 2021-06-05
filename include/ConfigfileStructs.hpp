@@ -47,6 +47,7 @@ struct GeneralParameters{
     string Chromatin_label="chr";
     
     int Seed=0;
+    string precision;
     
     bool usingBackupCheckpoint=false;
     
@@ -71,6 +72,10 @@ struct GeneralParameters{
     bool WantPDB=false;
     bool WantPSF=false;
     bool WantXYZ=false;
+    bool WantXYZbin=false;
+    bool WantVelocityBin=false;
+    
+    string dataPercision;
     
     bool CBP=false;
     string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
@@ -298,9 +303,19 @@ struct GeneralParameters{
         insertOrder.push_back("MinimumForceDecleration");
         
         values[0] ="PSF XYZ";
-        values[1] ="#Simulation outputs: You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style for velocities, FORCE: xyz file style for forces. Default: PSF XYZ ";
-        GenParams["Outputs"] = values;
-        insertOrder.push_back("Outputs");
+        values[1] ="#Simulation outputs (text format): You can add as many output formats as you wish. PSF: psf connectivity file, XYZ: xyz file, PDB: pdb file, VEL: xyz file style for velocities, FORCE: xyz file style for forces, N: no text output. Default: PSF XYZ ";
+        GenParams["TextOutputs"] = values;
+        insertOrder.push_back("TextOutputs");
+        
+        values[0] ="N";
+        values[1] ="#Simulation outputs (binary format): You can add as many output formats as you wish. XYZ: xyz coordinats, VEL: xyz components of velocities, N: No binary output. Default: N ";
+        GenParams["BinOutputs"] = values;
+        insertOrder.push_back("BinOutputs");
+        
+        values[0] ="single";
+        values[1] ="#Set the precision of the calculations. If the precision is not supported by the platform the default precision of the platform will be used. Default: N ";
+        GenParams["Precision"] = values;
+        insertOrder.push_back("Precision");
         
     }
     

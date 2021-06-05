@@ -362,7 +362,7 @@ void generateHardwareReport (PlatformInfo platforminfo){
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     int stepSizeInFs =1;
     generalParameters.hardwareReport  = exec("hostname");
-    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform:\n";
+    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform with default properties:\n";
     if (platform.getName() != "CPU") {
         generalParameters.hardwareReport+=platforminfo.device_properties_report[platforminfo.platform_device_id]+"\n";
     } else {
