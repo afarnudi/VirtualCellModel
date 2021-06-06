@@ -24,10 +24,12 @@ void EcmGeneratingReport (char* buffer, ECM ecm );
 void checkingForce (Membrane membrane, int MD_Step, char* buffer);
 
 void writeOutputs(int                atom_count,
+                  int                frameNum,
                   const MyAtomInfo   atoms[],
                   double             time,
                   double             energyInKJ,
-                  double             potential_energyInKJ
+                  double             potential_energyInKJ,
+                  bool               usingBackupCheckpoint
                  );
 
 
@@ -39,7 +41,7 @@ void myWritePDBFrame(int                frameNum,
                      double             energyInKcal,
                      double             potential_energy,
                      const MyAtomInfo   atoms[],
-                     const Bonds        bonds[]);
+                     bool               copyFromBuffer);
 /**                               PSF FILE WRITER
  * Given state data at the beginning of the simulation, output a protein structure file.
  */
@@ -68,5 +70,17 @@ void writeVelocitiesFrame  (int                atom_count,
                             double             potential_energyInKJ,
                             bool buff
                             );
+
+void writeXYZbinFrame(const MyAtomInfo atoms[],
+                      string precision,
+                      bool copyFromBuffer);
+void writeVELbinFrame(const MyAtomInfo atoms[],
+                      string precision,
+                      bool copyFromBuffer);
+void writeTPKbinFrame(double             time,
+                      double             energyInKJ,
+                      double             potential_energyInKJ,
+                      string precision,
+                      bool copyFromBuffer);
 
 #endif /* write_functions_hpp */

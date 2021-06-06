@@ -392,6 +392,8 @@ void assign_general_parameters(void){
                     generalParameters.WantXYZbin=true;
                 } else if (i == "VEL"){
                     generalParameters.WantVelocityBin=true;
+                } else if (i == "TPK"){
+                    generalParameters.WantTPKBin=true;
                 }
                 
             }

@@ -10,24 +10,32 @@
 
 
 void writeOutputs(int                atom_count,
+                  int                frameNum,
                   const MyAtomInfo   all_atoms[],
                   double             time,
                   double             energyInKJ,
-                  double             potential_energyInKJ
+                  double             potential_energyInKJ,
+                  bool               usingBackupCheckpoint
                   ){
-    if (generalParameters.usingBackupCheckpoint) {
-        if (generalParameters.WantXYZ) {
-            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,false);
-        }
-        if (generalParameters.WantVelocity) {
-            writeVelocitiesFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ, false);
-        }
-    } else {
-        if (generalParameters.WantXYZ) {
-            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
-        }
-        if (generalParameters.WantVelocity) {
-            writeVelocitiesFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ, true);
-        }
+    
+    if (generalParameters.WantPDB) {
+        myWritePDBFrame(frameNum, time, energyInKJ, potential_energyInKJ, all_atoms, !usingBackupCheckpoint);
     }
+    if (generalParameters.WantXYZ) {
+        writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ, !usingBackupCheckpoint);
+    }
+    if (generalParameters.WantVelocity) {
+        writeVelocitiesFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ, !usingBackupCheckpoint);
+    }
+    if (generalParameters.WantXYZbin) {
+        writeXYZbinFrame(all_atoms, generalParameters.precision, !usingBackupCheckpoint);
+    }
+    if (generalParameters.WantVelocityBin) {
+        writeVELbinFrame(all_atoms, generalParameters.precision, !usingBackupCheckpoint);
+    }
+    if (generalParameters.WantTPKBin) {
+        writeXYZbinFrame(all_atoms, generalParameters.precision, !usingBackupCheckpoint);
+        writeTPKbinFrame(time, energyInKJ, potential_energyInKJ, generalParameters.precision,!usingBackupCheckpoint);
+    }
+    
 }

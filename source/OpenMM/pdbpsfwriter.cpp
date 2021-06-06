@@ -11,18 +11,41 @@
 using OpenMM::Vec3;
 //                           PDB FILE WRITER
 // Given state data, output a single frame (pdb "model") of the trajectory.
-void myWritePDBFrame(int frameNum,
-                     double timeInPs,
-                     double energyInKJ,
-                     double potential_energyInKJ,
-                     const MyAtomInfo atoms[],
-                     const Bonds bonds[])
+void myWritePDBFrame(int                frameNum,
+                     double             timeInPs,
+                     double             energyInKJ,
+                     double             potential_energyInKJ,
+                     const MyAtomInfo   atoms[],
+                     bool               copyFromBuffer)
 {
     int EndOfList=-1;
     
-    string traj_name= generalParameters.trajectory_file_name+".pdb";
+    if (copyFromBuffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".pdb_buff";
+        string traj_name= generalParameters.trajectory_file_name+".pdb";
+        
+        ifstream readPDBb(buff_name.c_str());
+        ofstream writePDB(traj_name.c_str(), ios_base::app);
+        if (!readPDBb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No PDB buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        
+        while (getline(readPDBb,readline)) {
+            writePDB<<readline<<"\n";
+        }
+        readPDBb.close();
+        writePDB.close();
+        
+    }
+    
+    string traj_name= generalParameters.trajectory_file_name+".pdb_buff";
     FILE* pFile;
-    pFile = fopen (traj_name.c_str(),"a");
+    pFile = fopen (traj_name.c_str(),"w");
     fprintf(pFile,"MODEL     %d\n", frameNum);
     fprintf(pFile,"REMARK 250 time=%.3f ps; energy=%6.6f potential energy=%.3f KJ/mole\n",
             timeInPs,
@@ -76,9 +99,9 @@ void writeXYZFrame  (int atom_count,
                      double             time,
                      double             energyInKJ,
                      double             potential_energyInKJ,
-                     bool buffer)
+                     bool               copyFromBuffer)
 {
-    if (buffer) {
+    if (copyFromBuffer) {
         string readline;
         string buff_name= generalParameters.trajectory_file_name+".xyz_buff";
         string traj_name= generalParameters.trajectory_file_name+".xyz";
@@ -125,9 +148,9 @@ void writeVelocitiesFrame  (int atom_count,
                      double             time,
                      double             energyInKJ,
                      double             potential_energyInKJ,
-                     bool buffer)
+                     bool               copyFromBuffer)
 {
-    if (buffer) {
+    if (copyFromBuffer) {
         string readline;
         string buff_name= generalParameters.trajectory_file_name+".vel_buff";
         string traj_name= generalParameters.trajectory_file_name+".vel";
@@ -244,4 +267,165 @@ void myWritePSF(int   num_of_atoms,
         
     }
     fclose (pFile);
+}
+
+
+void writeXYZbinFrame(const MyAtomInfo atoms[],
+                      string precision,
+                      bool copyFromBuffer){
+    if (copyFromBuffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision+"_buff";
+        string traj_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision;
+        
+        ofstream writexyz(traj_name.c_str(), std::ios::ate );
+        ifstream readxyzb(buff_name.c_str() );
+
+        if (!readxyzb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No trajectory buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        std::copy(
+            (std::istreambuf_iterator<char>(readxyzb)),  // (*)
+             std::istreambuf_iterator<char>(),
+             std::ostreambuf_iterator<char>(writexyz)
+        );
+        
+        readxyzb.close();
+        writexyz.close();
+    }
+        
+    
+    
+    string traj_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision+"_buff";
+    ofstream writexyz(traj_name.c_str(),  ios::out|ios::binary);
+    
+    if (precision=="single") {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                float wbuf = atoms[n].posInNm[i];
+                writexyz.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    } else {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                double wbuf = atoms[n].posInNm[i];
+                writexyz.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    }
+    
+    writexyz.close();
+}
+
+
+void writeTPKbinFrame(double             time,
+                      double             energyInKJ,
+                      double             potential_energyInKJ,
+                      string precision,
+                      bool copyFromBuffer){
+    if (copyFromBuffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision+"_buff";
+        string traj_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision;
+        
+        ofstream writetpk(traj_name.c_str(), std::ios::ate );
+        ifstream readtpkb(buff_name.c_str() );
+
+        if (!readtpkb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No tpk buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        std::copy(
+            (std::istreambuf_iterator<char>(readtpkb)),  // (*)
+             std::istreambuf_iterator<char>(),
+             std::ostreambuf_iterator<char>(writetpk)
+        );
+        
+        readtpkb.close();
+        writetpk.close();
+    }
+        
+    
+    
+    string traj_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision+"_buff";
+    ofstream writetpk(traj_name.c_str(),  ios::out|ios::binary);
+    
+    if (precision=="single") {
+        float wbuf = time;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = potential_energyInKJ;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = energyInKJ - potential_energyInKJ;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+    } else {
+        double wbuf = time;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = potential_energyInKJ;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = energyInKJ - potential_energyInKJ;
+        writetpk.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+    }
+    
+    writetpk.close();
+}
+
+
+void writeVELbinFrame(const MyAtomInfo atoms[],
+                      string precision,
+                      bool copyFromBuffer){
+    if (copyFromBuffer) {
+        string readline;
+        string buff_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision+"_buff";
+        string traj_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision;
+        
+        ofstream writexyz(traj_name.c_str(), std::ios::ate );
+        ifstream readxyzb(buff_name.c_str() );
+
+        if (!readxyzb.is_open()) {
+            string errorMessage = TWARN;
+            errorMessage+="No trajectory buffer available to read. If this is an immature simulation please run it from the beginning.\n";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+        
+        std::copy(
+            (std::istreambuf_iterator<char>(readxyzb)),  // (*)
+             std::istreambuf_iterator<char>(),
+             std::ostreambuf_iterator<char>(writexyz)
+        );
+        
+        readxyzb.close();
+        writexyz.close();
+    }
+        
+    
+    
+    string traj_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision+"_buff";
+    ofstream writexyz(traj_name.c_str(),  ios::out|ios::binary);
+    
+    if (precision=="single") {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                float wbuf = atoms[n].velocityInNmperPs[i];
+                writexyz.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    } else {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                double wbuf = atoms[n].velocityInNmperPs[i];
+                writexyz.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    }
+    
+    writexyz.close();
 }

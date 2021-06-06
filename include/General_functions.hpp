@@ -61,7 +61,7 @@ std::vector<std::string> splitstring(std::string, char delimiter);
 
 std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &Checkpoint_platformName);
 
-void loadCheckpoint(MyOpenMMData* omm);
-void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name);
+void loadCheckpoint(MyOpenMMData* omm, bool &usingBackupCheckpoint);
+void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, bool &usingBackupCheckpoint);
 
 #endif /* General_functions_hpp */

@@ -74,6 +74,7 @@ struct GeneralParameters{
     bool WantXYZ=false;
     bool WantXYZbin=false;
     bool WantVelocityBin=false;
+    bool WantTPKBin=false;
     
     string dataPercision;
     
@@ -308,7 +309,7 @@ struct GeneralParameters{
         insertOrder.push_back("TextOutputs");
         
         values[0] ="N";
-        values[1] ="#Simulation outputs (binary format): You can add as many output formats as you wish. XYZ: xyz coordinats, VEL: xyz components of velocities, N: No binary output. Default: N ";
+        values[1] ="#Simulation outputs (binary format): You can add as many output formats as you wish. XYZ: xyz coordinats, VEL: xyz components of velocities, TPK: time, potential energy, and kinetic energy, N: No binary output. Default: N ";
         GenParams["BinOutputs"] = values;
         insertOrder.push_back("BinOutputs");
         

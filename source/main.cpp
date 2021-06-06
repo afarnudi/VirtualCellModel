@@ -480,19 +480,19 @@ int main(int argc, char **argv)
         double TempStep = 0.2;
         double initTemp = generalParameters.temperature;
         
+        double time, energyInKJ, potential_energyInKJ;
+        
         if (!generalParameters.Resume) {
+            time=0; energyInKJ=0; potential_energyInKJ=0;
+            int framenum=0;
+            myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
+            
             if (generalParameters.WantPSF) {
                 myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
             }
-            if (generalParameters.WantPDB) {
-                myWritePDBFrame(0, 0, 0, 0, all_atoms, all_bonds);
-            }
-            if (generalParameters.WantXYZ) {
-                writeXYZFrame(atom_count,all_atoms,0, 0, 0, false);
-            }
-            if (generalParameters.WantVelocity) {
-                writeVelocitiesFrame(atom_count,all_atoms,0, 0, 0, false);
-            }
+            writeOutputs(atom_count,framenum,all_atoms,time, energyInKJ, potential_energyInKJ, true);
+            
+            
             std::filebuf wfb;
             wfb.open (ckeckpoint_name.c_str(),std::ios::out);
             std::ostream wcheckpoint(&wfb);
@@ -525,7 +525,7 @@ int main(int argc, char **argv)
                          all_bonds);
         }
         
-        double time, energyInKJ, potential_energyInKJ;
+        
         
         for (int frame=1; ; ++frame) {
             
@@ -537,15 +537,12 @@ int main(int argc, char **argv)
 //                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
-                if (generalParameters.WantPDB) {
-                    myWritePDBFrame(frame, time, energyInKJ, potential_energyInKJ, all_atoms, all_bonds);
-                }
                 
-                writeOutputs(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ);
+                writeOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
                 
                 //Begin: Exporting congiguration of classes for simulation .
                 
-                saveCheckpoint(omm, ckeckpoint_name);
+                saveCheckpoint(omm, ckeckpoint_name, generalParameters.usingBackupCheckpoint);
                 
                 savetime += Savingstep;
                 print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, false,
