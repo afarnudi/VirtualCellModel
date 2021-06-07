@@ -47,9 +47,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
 void          myStepWithOpenMM(MyOpenMMData*,
                                TimeDependantData*,
                                MyAtomInfo atoms[],
-                               int        numSteps,
+                               int&        numSteps,
                                int&        total_step);
-
+void CalculateSilentSteps(int& numSteps ,
+                          int total_steps,
+                          double exponent);
 /** -----------------------------------------------------------------------------
  *                     COPY STATE BACK TO CPU FROM OPENMM
  * -----------------------------------------------------------------------------

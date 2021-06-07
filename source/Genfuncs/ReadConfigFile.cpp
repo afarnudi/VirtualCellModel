@@ -152,6 +152,20 @@ void general_parameters_consistency_check(void){
         throw std::runtime_error(errorMessage);
     }
     
+    if (generalParameters.expSampling) {
+        if (generalParameters.expSamplingExponent<0 && generalParameters.expSamplingNumOfSteps<0) {
+            string errorMessage = TWARN;
+            errorMessage +="Configfile parameter parse error: ReportIntervalInFs: negative input is not allowed.\n";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        } else if (generalParameters.expSamplingExponent<0){
+            int TotalSimulationSteps = generalParameters.Simulation_Time_In_Ps*1000/generalParameters.Step_Size_In_Fs;
+            generalParameters.expSamplingExponent=log(TotalSimulationSteps)/generalParameters.expSamplingNumOfSteps;
+        }
+        
+    }
+    
+    
 }
 
 void assign_general_parameters(void){
@@ -164,7 +178,31 @@ void assign_general_parameters(void){
         if (it.first == "SimulationTimeInPs") {
             generalParameters.Simulation_Time_In_Ps=stod(split[0]);
         } else if (it.first == "ReportIntervalInFs") {
-            generalParameters.Report_Interval_In_Fs=stod(split[0]);
+            if (split[0]=="EXP") {
+                generalParameters.expSampling=true;
+                
+                if (split.size()<2) {
+                    string errorMessage = TWARN;
+                    errorMessage+="Configfile parameter parse error: ReportIntervalInFs: You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                } else {
+                    if (split[1] == "Step") {
+                        if (split.size()<3) {
+                            string errorMessage = TWARN;
+                            errorMessage+="Configfile parameter parse error: ReportIntervalInFs: You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200";
+                            errorMessage+= TRESET;
+                            throw std::runtime_error(errorMessage);
+                        }
+                        generalParameters.expSamplingNumOfSteps=stoi(split[2]);
+                    } else {
+                        generalParameters.expSamplingExponent=stod(split[1]);
+                    }
+                    
+                }
+            } else {
+                generalParameters.Report_Interval_In_Fs=stod(split[0]);
+            }
         } else if (it.first == "StepSizeInFs") {
             generalParameters.Step_Size_In_Fs=stod(split[0]);
         } else if (it.first == "MC_step") {

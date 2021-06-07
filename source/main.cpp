@@ -457,20 +457,20 @@ int main(int argc, char **argv)
         //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
         int MCCalcstep = (int)(GenConst::Mem_fluidity * generalParameters.Step_Size_In_Fs + 0.5);
         int NumSilentSteps = (int)(generalParameters.Report_Interval_In_Fs / generalParameters.Step_Size_In_Fs + 0.5);
-        int Savingstep = NumSilentSteps;
-        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
-            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
-            NumSilentSteps = MCCalcstep;
-        } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
-            int rate =  (int)(MCCalcstep / NumSilentSteps );
-            Savingstep = int(MCCalcstep/rate);
-            NumSilentSteps = Savingstep;
-        }
+//        int Savingstep = NumSilentSteps;
+//        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
+//            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
+//            NumSilentSteps = MCCalcstep;
+//        } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
+//            int rate =  (int)(MCCalcstep / NumSilentSteps );
+//            Savingstep = int(MCCalcstep/rate);
+//            NumSilentSteps = Savingstep;
+//        }
         
         
         int MCCalcTime = MCCalcstep;
         
-        cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
+//        cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
         
         int total_step_num = 0;
         
@@ -544,7 +544,7 @@ int main(int argc, char **argv)
                 
                 saveCheckpoint(omm, ckeckpoint_name, generalParameters.usingBackupCheckpoint);
                 
-                savetime += Savingstep;
+                savetime += NumSilentSteps;
                 print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, false,
                            tStart,
                            chrono_clock_start,
@@ -645,6 +645,12 @@ int main(int argc, char **argv)
 //            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
 //        }
         cout<<"[ 100% ]\t time: "<<generalParameters.Simulation_Time_In_Ps<<"Ps\n";
+        
+        if (generalParameters.expSampling) {
+            myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
+            writeOutputs(atom_count,-1,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
+            saveCheckpoint(omm, ckeckpoint_name, generalParameters.usingBackupCheckpoint);
+        }
         
         print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, true,
                    tStart,

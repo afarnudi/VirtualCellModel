@@ -60,6 +60,10 @@ struct GeneralParameters{
     double Simulation_Time_In_Ps;
     /**Trajectory saving rate in femtoseconds. If this parameter is not set by the user in the general config file, or the value is set to zero, the interval will be calculated by multiplying the MD_traj_save_step by the Step_Size_In_Fs.*/
     double Report_Interval_In_Fs;
+    bool   expSampling= false;
+    double expSamplingExponent=-1;
+    int    expSamplingNumOfSteps=-1;
+    
     /** Integration step size (fs).  Default 0.001*/
     double Step_Size_In_Fs;
     
@@ -89,6 +93,8 @@ struct GeneralParameters{
     int Num_of_Actins;
     int Num_of_Chromatins;
     int Num_of_ECMs;
+    
+    
     
     bool   WantEnergy;
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
@@ -167,7 +173,7 @@ struct GeneralParameters{
         insertOrder.push_back("StepSizeInFs");
         
         values[0] ="1000";
-        values[1] ="#Trajectory saving, data collection, etc wil be performed at the ReportIntervalInFs time intervales measured in femto seconds. Default value 1000.";
+        values[1] ="#Trajectory saving, data collection, etc wil be performed at the ReportIntervalInFs time intervales measured in femto seconds.\n It can also be set to record data at exponential time intervals by specifying 'EXP Step' followed by the number of samples you want to save. Example: ReportIntervalInFs EXP Step 200, the simulation outputs will be recorded every t = int(exp(m*delta)), where t is an integer and the maximum value is T=SimulationTimeInPs*1000/StepSizeInFs, m is an integer multiplier, and delta=log(T)/N. Note log(T) is the natural logarithm and N is the number of report intervals requested (here 200). \nAlso you can just set an exponent for the exponential data sampling. Example ReportIntervalInFs EXP 0.98, the simulation outputs will be recorded every t = exp(m*delta), where t is an integer and the maximum value is T=SimulationTimeInPs*1000/StepSizeInFs, m is an integer multiplier. Note log(T) is the natural logarithm. Default value 1000";
         GenParams["ReportIntervalInFs"] = values;
         insertOrder.push_back("ReportIntervalInFs");
         

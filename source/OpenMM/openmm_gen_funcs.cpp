@@ -10,7 +10,7 @@
 void myStepWithOpenMM(MyOpenMMData* omm,
                       TimeDependantData* time_dependant_data,
                       MyAtomInfo atoms[],
-                      int numSteps ,
+                      int& numSteps ,
                       int& total_step) {
     
     OpenMM::Vec3 z(0,0,0);
@@ -90,19 +90,19 @@ void myStepWithOpenMM(MyOpenMMData* omm,
     
     else
     {
+        if (generalParameters.expSampling) {
+            CalculateSilentSteps(numSteps, total_step, generalParameters.expSamplingExponent);
+        }
         if ( generalParameters.Integrator_type=="Verlet" ) {
             omm->VerletIntegrator->step(numSteps);
-            total_step+=numSteps;
         } else if ( generalParameters.Integrator_type=="Brownian" ) {
             omm->BrownianIntegrator->step(numSteps);
-            total_step+=numSteps;
         } else if ( generalParameters.Integrator_type=="Langevin" ) {
             omm->LangevinIntegrator->step(numSteps);
-            total_step+=numSteps;
         } else {
             omm->CustomIntegrator->step(numSteps);
-            total_step+=numSteps;
         }
+        total_step+=numSteps;
 //        else if ( generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF2020" || generalParameters.Integrator_type=="LangevinMinimise" || generalParameters.Integrator_type=="Bussi2008") {
 //            omm->CustomIntegrator->step(numSteps);
 //            total_step+=numSteps;
@@ -113,6 +113,26 @@ void myStepWithOpenMM(MyOpenMMData* omm,
 //        }
         
         
+    }
+    
+}
+
+void CalculateSilentSteps(int& numSteps ,
+                          int total_step,
+                          double exponent){
+//    cout<<total_step<<endl;
+    if (total_step==0) {
+        numSteps = int( exp(exponent)  );
+    } else {
+        int m = round(  log(total_step)/exponent );
+        numSteps = int( pow(M_E, (m+1)*exponent) - total_step  );
+    }
+    
+    int power=2;
+    while (numSteps==0) {
+        int m = round(  log(total_step)/exponent );
+        numSteps = int( pow(M_E, (m+power)*exponent) - total_step  );
+        power++;
     }
     
 }
