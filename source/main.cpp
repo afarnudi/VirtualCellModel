@@ -505,7 +505,8 @@ int main(int argc, char **argv)
             const OpenMM::State state = omm->context->getState(infoMask);
             
             double timeInPs = state.getTime(); // OpenMM time is in ps already
-            savetime=    int(timeInPs*1000/generalParameters.Step_Size_In_Fs);
+            total_step_num = int(timeInPs*1000/generalParameters.Step_Size_In_Fs);
+            savetime = int(timeInPs*1000/generalParameters.Step_Size_In_Fs);
             progressp =  int(1000*timeInPs/generalParameters.Simulation_Time_In_Ps)/10. + 0.1;
             
         }
