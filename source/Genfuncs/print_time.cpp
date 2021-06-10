@@ -70,8 +70,8 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
     auto chromoSteadyClockDiff = chronoSteadyClockEnd - chronoSteadyClockStart;
     days  = int(std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count()/24);
     hours = std::chrono::duration_cast<std::chrono::hours>(chromoSteadyClockDiff).count() - days*24;
-    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromoSteadyClockDiff).count();
-    int secs  = std::chrono::duration_cast<std::chrono::seconds>(chromoSteadyClockDiff).count();
+    mins  = std::chrono::duration_cast<std::chrono::minutes>(chromoSteadyClockDiff).count() - days*24*60  - hours*60;
+    int secs  = std::chrono::duration_cast<std::chrono::seconds>(chromoSteadyClockDiff).count() - days*24*60*60  - hours*60*60 - mins*60;
     
     file << "\nchrono::steady_clock runtime: \n";
     if (days!=0) {
@@ -81,9 +81,9 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
         file << hours << "\tHours\n";
     }
     if (mins!=0) {
-        file << mins - hours * 60 << "\tMinutes\n";
+        file << mins  << "\tMinutes\n";
     }
-    file << secs - mins * 60 << "\tSeconds\n\n";
+    file << secs  << "\tSeconds\n\n";
     if (printToScreen) {
         cout << "\nchrono::steady_clock runtime: \n";
         if (days!=0) {
@@ -93,17 +93,17 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
             cout << hours << "\tHours\n";
         }
         if (mins!=0) {
-            cout << mins - hours * 60 << "\tMinutes\n";
+            cout << mins << "\tMinutes\n";
         }
-        cout << secs - mins * 60 << "\tSeconds\n";
+        cout << secs << "\tSeconds\n";
     }
     
     
     auto chromoSystemClockDiff = chronoSystemClockEnd - chronoSystemClockStart;
     days =  int(std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count()/24);
     hours = std::chrono::duration_cast<std::chrono::hours>(chromoSystemClockDiff).count()-days*24;
-    mins = std::chrono::duration_cast<std::chrono::minutes>(chromoSystemClockDiff).count();
-    secs = std::chrono::duration_cast<std::chrono::seconds>(chromoSystemClockDiff).count();
+    mins = std::chrono::duration_cast<std::chrono::minutes>(chromoSystemClockDiff).count() - days*24*60  - hours*60;
+    secs = std::chrono::duration_cast<std::chrono::seconds>(chromoSystemClockDiff).count() - days*24*60*60  - hours*60*60 - mins*60;
     
     file << "\nchrono::system_clock runtime: \n";
     if (days!=0) {
@@ -113,21 +113,21 @@ void print_time(std::string filepath, std::string hardwareReportHeader, bool pri
         file << hours << "\tHours\n";
     }
     if (mins!=0) {
-        file << mins - hours * 60 << "\tMinutes\n";
+        file << mins  << "\tMinutes\n";
     }
-    file << secs - mins * 60 << "\tSeconds\n\n";
+    file << secs  << "\tSeconds\n\n";
     if (printToScreen) {
         cout << "\nchrono::system_clock runtime: \n";
         if (days!=0) {
-            cout << days << "\tHours\n";
+            cout << days << "\tDays\n";
         }
         if (hours!=0) {
             cout << hours << "\tHours\n";
         }
         if (mins!=0) {
-            cout << mins - hours * 60 << "\tMinutes\n";
+            cout << mins  << "\tMinutes\n";
         }
-        cout << secs - mins * 60 << "\tSeconds\n";
+        cout << secs << "\tSeconds\n";
     }
     file.close();
 }
