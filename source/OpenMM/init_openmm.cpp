@@ -446,7 +446,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context->setVelocities(initialVelInNmperPs);
         }
     } else {
-        loadCheckpoint(omm, generalParameters.usingBackupCheckpoint);
+        loadCheckpoint(omm,generalParameters.trajectory_file_name+"_Checkpoint", generalParameters.buffer_file_name+"_Checkpoint", generalParameters.usingBackupCheckpoint);
     }
     
     
