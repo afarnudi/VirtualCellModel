@@ -9,13 +9,16 @@
 #include "General_functions.hpp"
 #include <boost/filesystem.hpp>
 
-void print_time(std::string filepath, std::string hardwareReportHeader, bool printToScreen,
+void print_time(std::string filepath,
+                std::string fileBackupPath,
+                std::string hardwareReportHeader,
+                bool printToScreen,
                 clock_t tStart,
                 std::chrono::time_point<std::chrono::steady_clock> chronoSteadyClockStart,
                 std::chrono::time_point<std::chrono::system_clock> chronoSystemClockStart
                 ){
     
-    string backupfilepath = filepath +"Backup";
+    string backupfilepath = fileBackupPath +"Backup";
     boost::filesystem::copy_file(filepath, backupfilepath, boost::filesystem::copy_option::overwrite_if_exists);
     
     ofstream file(filepath.c_str());

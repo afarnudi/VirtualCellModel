@@ -41,6 +41,7 @@ struct GeneralParameters{
     string hardwareReport;
     /**Name of the output file. Please note that the date and time the file is generated will be attached to this name.*/
     string trajectory_file_name;
+    string buffer_file_name;
     string Membrane_label="mem";
     string Actin_label="act";
     string ECM_label="ecm";

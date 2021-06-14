@@ -396,7 +396,7 @@ int main(int argc, char **argv)
         
         
         if (!generalParameters.Resume) {
-            assign_project_directories(buffer);
+            assign_project_directories(buffer, generalParameters.ProjectName, generalParameters.trajectory_file_name, generalParameters.buffer_file_name);
             cout<< "\nFile name: "<<TFILE<<generalParameters.trajectory_file_name<<TRESET<<endl<<endl;
         
         }
@@ -445,6 +445,7 @@ int main(int argc, char **argv)
             generate_report(config_lines);
         }
         string ckeckpoint_name=generalParameters.trajectory_file_name+"_Checkpoint";
+        string ckeckpointBackup_name=generalParameters.buffer_file_name+"_Checkpoint";
         
         
         //Time the programme
@@ -543,10 +544,12 @@ int main(int argc, char **argv)
                 
                 //Begin: Exporting congiguration of classes for simulation .
                 
-                saveCheckpoint(omm, ckeckpoint_name, generalParameters.usingBackupCheckpoint);
+                saveCheckpoint(omm, ckeckpoint_name, ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
                 
                 savetime += NumSilentSteps;
-                print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, false,
+                print_time(generalParameters.trajectory_file_name + "_hardware_runtime.txt",
+                           generalParameters.buffer_file_name + "_hardware_runtime.txt",
+                           hardwareReportHeader, false,
                            tStart,
                            chrono_clock_start,
                            chrono_sys_clock_start
@@ -650,10 +653,13 @@ int main(int argc, char **argv)
         if (generalParameters.expSampling) {
             myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             writeOutputs(atom_count,-1,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
-            saveCheckpoint(omm, ckeckpoint_name, generalParameters.usingBackupCheckpoint);
+            saveCheckpoint(omm, ckeckpoint_name,ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
         }
         
-        print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt", hardwareReportHeader, true,
+        print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt",
+                   generalParameters.buffer_file_name + "_hardware_runtime.txt",
+                   hardwareReportHeader,
+                   true,
                    tStart,
                    chrono_clock_start,
                    chrono_sys_clock_start

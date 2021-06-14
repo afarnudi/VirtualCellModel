@@ -31,7 +31,10 @@ void calc_surface_coefficeints (double points[3][3], double &A, double &B, doubl
 void calc_surface_coefficeints_2 (double points[3][3], double &A, double &B, double &C);
 
 
-void print_time(std::string filepath, std::string hardwareReportHeader, bool printToScreen,
+void print_time(std::string filepath,
+                std::string fileBackupPath,
+                std::string hardwareReportHeader,
+                bool printToScreen,
                 clock_t tStart,
                 std::chrono::time_point<std::chrono::steady_clock> chrono_steady_clock_start,
                 std::chrono::time_point<std::chrono::system_clock> chrono_system_clock_start
@@ -54,14 +57,17 @@ int get_pdb_num_of_frames(std::string filename, int num_atoms);
 
 std::string check_if_file_exists(std::string filename);
 
-void assign_project_directories(char* buffer);
+void assign_project_directories(char* buffer,
+                                std::string projectName,
+                                std::string &trajPath,
+                                std::string &buffPath);
 
 std::string exec(const char* cmd);
 std::vector<std::string> splitstring(std::string, char delimiter);
 
 std::string find_resume_config(std::string resumePath, std::string &checkpointPath, std::string &Checkpoint_platformName);
 
-void loadCheckpoint(MyOpenMMData* omm, bool &usingBackupCheckpoint);
-void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, bool &usingBackupCheckpoint);
+void loadCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, std::string ckeckpointBackup_name, bool &usingBackupCheckpoint);
+void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, std::string ckeckpointBackup_name, bool &usingBackupCheckpoint);
 
 #endif /* General_functions_hpp */

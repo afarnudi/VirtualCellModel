@@ -8,32 +8,28 @@
 #include <iostream>
 #include <fstream>
 
-#include "General_constants.h"
-#include "Arg_pars.hpp"
-#include "cxxopts.hpp"
-#include "Configfile.hpp"
-#include "Membrane.h"
-#include "Actin.h"
-#include "ECM.h"
-#include "Chromatin.h"
+
+#include "General_functions.hpp"
 
 using namespace std;
 
 
 #include <boost/filesystem.hpp>
 
-void assign_project_directories(char* buffer){
+void assign_project_directories(char* buffer,
+                                string projectName,
+                                string &trajPath,
+                                string &buffPath
+                                ){
     int instanceID=0;
     string trajectory = "Results";
     boost::filesystem::path pTrajectory(trajectory);
     if(!boost::filesystem::exists(pTrajectory)){
-//        boost::filesystem::create_directory(pTrajectory);
         boost::filesystem::create_directories(pTrajectory);
     }
-    trajectory +="/"+generalParameters.ProjectName;
+    trajectory +="/" + projectName;
     pTrajectory=trajectory;
     if(!boost::filesystem::exists(pTrajectory)){
-//        boost::filesystem::create_directory(pTrajectory);
         boost::filesystem::create_directories(pTrajectory);
     }
     trajectory += "/";
@@ -48,13 +44,17 @@ void assign_project_directories(char* buffer){
         ID = string(3 - IDtoString.length(), '0') + IDtoString;
         pTrajectory=trajectory+"_"+ID;
     }
-//    boost::filesystem::create_directory(pTrajectory);
     boost::filesystem::create_directories(pTrajectory);
     
     trajectory+="_"+ID;
     trajectory+="/";
+    pTrajectory=trajectory+"buffs";
+    if(!boost::filesystem::exists(pTrajectory)){
+        boost::filesystem::create_directories(pTrajectory);
+    }
+    buffPath = trajectory + "buffs/" + buffer + "_" + ID;
     trajectory+= buffer;
     trajectory+="_"+ID;
     cout<<trajectory<<endl;
-    generalParameters.trajectory_file_name=trajectory;
+    trajPath=trajectory;
 }

@@ -34,8 +34,7 @@ void writeOutputs(int                atom_count,
         writeVELbinFrame(all_atoms, generalParameters.precision, !usingBackupCheckpoint);
     }
     if (generalParameters.WantTPKBin) {
-        writeXYZbinFrame(all_atoms, generalParameters.precision, !usingBackupCheckpoint);
-        writeTPKbinFrame(time, energyInKJ, potential_energyInKJ, generalParameters.precision,!usingBackupCheckpoint);
+        writeTPKbinFrame(time, energyInKJ, potential_energyInKJ, generalParameters.precision, !usingBackupCheckpoint);
     }
     
 }

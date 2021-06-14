@@ -13,18 +13,18 @@
 
 using namespace std;
 
-void loadCheckpoint(MyOpenMMData* omm, bool &usingBackupCheckpoint){
-    cout<<"Loading checkpoint from: "<<generalParameters.Checkpoint_path<<endl;
+void loadCheckpoint(MyOpenMMData* omm, string ckeckpoint_name, string ckeckpointBackup_name, bool &usingBackupCheckpoint){
+    cout<<"Loading checkpoint from: "<<ckeckpoint_name<<endl;
     try {
         std::filebuf rfb;
-        rfb.open (generalParameters.Checkpoint_path.c_str(),std::ios::in);
+        rfb.open (ckeckpoint_name.c_str(),std::ios::in);
         std::istream rcheckpoint(&rfb);
         omm->context->loadCheckpoint(rcheckpoint);
     } catch (const std::exception& e) {
         try {
             usingBackupCheckpoint=true;
             std::filebuf rfb;
-            string backupcheckpoint = generalParameters.Checkpoint_path + "Backup";
+            string backupcheckpoint = ckeckpointBackup_name + "Backup";
             rfb.open (backupcheckpoint.c_str(),std::ios::in);
             std::istream rcheckpoint(&rfb);
             omm->context->loadCheckpoint(rcheckpoint);
@@ -39,8 +39,8 @@ void loadCheckpoint(MyOpenMMData* omm, bool &usingBackupCheckpoint){
 
 
 
-void saveCheckpoint(MyOpenMMData* omm, string ckeckpoint_name, bool &usingBackupCheckpoint){
-    string ckeckpoint_name_backup = ckeckpoint_name + "Backup";
+void saveCheckpoint(MyOpenMMData* omm, string ckeckpoint_name, string ckeckpointBackup_name, bool &usingBackupCheckpoint){
+    string ckeckpoint_name_backup = ckeckpointBackup_name + "Backup";
     if (!usingBackupCheckpoint) {
         boost::filesystem::copy_file(ckeckpoint_name, ckeckpoint_name_backup, boost::filesystem::copy_option::overwrite_if_exists);
     } else {

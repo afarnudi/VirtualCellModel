@@ -22,7 +22,7 @@ void myWritePDBFrame(int                frameNum,
     
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".pdb_buff";
+        string buff_name= generalParameters.buffer_file_name+".pdb_buff";
         string traj_name= generalParameters.trajectory_file_name+".pdb";
         
         ifstream readPDBb(buff_name.c_str());
@@ -43,7 +43,7 @@ void myWritePDBFrame(int                frameNum,
         
     }
     
-    string traj_name= generalParameters.trajectory_file_name+".pdb_buff";
+    string traj_name= generalParameters.buffer_file_name+".pdb_buff";
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"w");
     fprintf(pFile,"MODEL     %d\n", frameNum);
@@ -103,7 +103,7 @@ void writeXYZFrame  (int atom_count,
 {
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".xyz_buff";
+        string buff_name= generalParameters.buffer_file_name+".xyz_buff";
         string traj_name= generalParameters.trajectory_file_name+".xyz";
         
         
@@ -127,7 +127,7 @@ void writeXYZFrame  (int atom_count,
         
     
     
-    string traj_name= generalParameters.trajectory_file_name+".xyz_buff";
+    string traj_name= generalParameters.buffer_file_name+".xyz_buff";
     ofstream writexyz(traj_name.c_str());
     writexyz<<atom_count<<endl;
     writexyz<<"timePs ";
@@ -152,7 +152,7 @@ void writeVelocitiesFrame  (int atom_count,
 {
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".vel_buff";
+        string buff_name= generalParameters.buffer_file_name+".vel_buff";
         string traj_name= generalParameters.trajectory_file_name+".vel";
         
         
@@ -176,7 +176,7 @@ void writeVelocitiesFrame  (int atom_count,
         
     
     
-    string traj_name= generalParameters.trajectory_file_name+".vel_buff";
+    string traj_name= generalParameters.buffer_file_name+".vel_buff";
     ofstream writexyz(traj_name.c_str());
     writexyz<<atom_count<<endl;
     writexyz<<"timePs ";
@@ -275,10 +275,10 @@ void writeXYZbinFrame(const MyAtomInfo atoms[],
                       bool copyFromBuffer){
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision+"_buff";
+        string buff_name= generalParameters.buffer_file_name+".bin_xyz_"+precision+"_buff";
         string traj_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision;
         
-        ofstream writexyz(traj_name.c_str(), std::ios::ate );
+        ofstream writexyz(traj_name.c_str(), std::ios::app );
         ifstream readxyzb(buff_name.c_str() );
 
         if (!readxyzb.is_open()) {
@@ -288,11 +288,7 @@ void writeXYZbinFrame(const MyAtomInfo atoms[],
             throw std::runtime_error(errorMessage);
         }
         
-        std::copy(
-            (std::istreambuf_iterator<char>(readxyzb)),  // (*)
-             std::istreambuf_iterator<char>(),
-             std::ostreambuf_iterator<char>(writexyz)
-        );
+        writexyz<<readxyzb.rdbuf();
         
         readxyzb.close();
         writexyz.close();
@@ -300,7 +296,7 @@ void writeXYZbinFrame(const MyAtomInfo atoms[],
         
     
     
-    string traj_name= generalParameters.trajectory_file_name+".bin_xyz_"+precision+"_buff";
+    string traj_name= generalParameters.buffer_file_name+".bin_xyz_"+precision+"_buff";
     ofstream writexyz(traj_name.c_str(),  ios::out|ios::binary);
     
     if (precision=="single") {
@@ -330,10 +326,10 @@ void writeTPKbinFrame(double             time,
                       bool copyFromBuffer){
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision+"_buff";
+        string buff_name= generalParameters.buffer_file_name+".bin_tpk_"+precision+"_buff";
         string traj_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision;
         
-        ofstream writetpk(traj_name.c_str(), std::ios::ate );
+        ofstream writetpk(traj_name.c_str(), std::ios::app );
         ifstream readtpkb(buff_name.c_str() );
 
         if (!readtpkb.is_open()) {
@@ -343,11 +339,7 @@ void writeTPKbinFrame(double             time,
             throw std::runtime_error(errorMessage);
         }
         
-        std::copy(
-            (std::istreambuf_iterator<char>(readtpkb)),  // (*)
-             std::istreambuf_iterator<char>(),
-             std::ostreambuf_iterator<char>(writetpk)
-        );
+        writetpk<<readtpkb.rdbuf();
         
         readtpkb.close();
         writetpk.close();
@@ -355,7 +347,7 @@ void writeTPKbinFrame(double             time,
         
     
     
-    string traj_name= generalParameters.trajectory_file_name+".bin_tpk_"+precision+"_buff";
+    string traj_name= generalParameters.buffer_file_name+".bin_tpk_"+precision+"_buff";
     ofstream writetpk(traj_name.c_str(),  ios::out|ios::binary);
     
     if (precision=="single") {
@@ -383,10 +375,10 @@ void writeVELbinFrame(const MyAtomInfo atoms[],
                       bool copyFromBuffer){
     if (copyFromBuffer) {
         string readline;
-        string buff_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision+"_buff";
-        string traj_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision;
+        string buff_name= generalParameters.buffer_file_name+".bin_vel_"+precision+"_buff";
+        string traj_name= generalParameters.trajectory_file_name+".bin_vel_"+precision;
         
-        ofstream writexyz(traj_name.c_str(), std::ios::ate );
+        ofstream writexyz(traj_name.c_str(), std::ios::app );
         ifstream readxyzb(buff_name.c_str() );
 
         if (!readxyzb.is_open()) {
@@ -396,11 +388,7 @@ void writeVELbinFrame(const MyAtomInfo atoms[],
             throw std::runtime_error(errorMessage);
         }
         
-        std::copy(
-            (std::istreambuf_iterator<char>(readxyzb)),  // (*)
-             std::istreambuf_iterator<char>(),
-             std::ostreambuf_iterator<char>(writexyz)
-        );
+        writexyz<<readxyzb.rdbuf();
         
         readxyzb.close();
         writexyz.close();
@@ -408,7 +396,7 @@ void writeVELbinFrame(const MyAtomInfo atoms[],
         
     
     
-    string traj_name= generalParameters.trajectory_file_name+".bin_VEL_"+precision+"_buff";
+    string traj_name= generalParameters.buffer_file_name+".bin_vel_"+precision+"_buff";
     ofstream writexyz(traj_name.c_str(),  ios::out|ios::binary);
     
     if (precision=="single") {

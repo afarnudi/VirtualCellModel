@@ -214,11 +214,13 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
         checkpointPath+=splitpath[i]+"/";
         hardwarereport+=splitpath[i]+"/";
         generalParameters.trajectory_file_name+=splitpath[i]+"/";
+        generalParameters.buffer_file_name+=splitpath[i]+"/";
     }
     reportfilename+=splitpath[splitpath.size()-1]+"_report.txt";
     checkpointPath+=splitpath[splitpath.size()-1]+"_Checkpoint";
     hardwarereport+=splitpath[splitpath.size()-1]+"_hardware_runtime.txt";
     generalParameters.trajectory_file_name+=splitpath[splitpath.size()-1];
+    generalParameters.buffer_file_name+="buffs/"+splitpath[splitpath.size()-1];
     
     ifstream reportfile(reportfilename.c_str());
     bool fileExists=reportfile.is_open();
