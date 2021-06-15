@@ -565,7 +565,8 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
                                  double stepSizeInPs,
                                  double friction_invertPs,
                                  double kBT,
-                                 int number_of_atoms);
+                                 int number_of_atoms,
+                                 bool CMMotionRemover);
 
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);

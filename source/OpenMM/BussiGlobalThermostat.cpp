@@ -7,7 +7,8 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
                                  double stepSizeInPs,
                                  double friction_invertPs,
                                  double kBT,
-                                 int number_of_atoms){
+                                 int number_of_atoms,
+                                 bool CMMotionRemover){
     /**
      Giovanni Bussi and Michele Parrinello.
      Stochastics thermostats : comparison of local and global schemes.
@@ -16,7 +17,7 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
     
    
     double dt = stepSizeInPs;
-    double dof = 3*number_of_atoms;
+    int dof = 3*number_of_atoms -int(CMMotionRemover)*3;
     double c = exp(-2.0 * dt / friction_invertPs);
     
     omm->CustomIntegrator = new OpenMM::CustomIntegrator(dt);

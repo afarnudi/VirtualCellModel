@@ -355,7 +355,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                     stepSizeInFs* OpenMM::PsPerFs,
                                     generalParameters.frictionIninvertPs,
                                     generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
-                                    numberOfAtoms);
+                                    numberOfAtoms,
+                                    generalParameters.CMMotionRemover);
         omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     }
     
@@ -413,12 +414,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         } else {
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         }
-//        else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF2020" || generalParameters.Integrator_type=="LangevinMinimise" || generalParameters.Integrator_type=="Bussi2008"){
-//            omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
-//        }
-//        else if (generalParameters.Integrator_type=="LangevinMinimise"){
-//            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform);
-//        }
+
     } else {
         if ( generalParameters.Integrator_type=="Verlet" ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
@@ -429,12 +425,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         } else {
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }
-//        else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos" || generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3" || generalParameters.Integrator_type=="GJF" || generalParameters.Integrator_type=="GJF2013Multi-thermos" || generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3" || generalParameters.Integrator_type=="GJF2020" || generalParameters.Integrator_type=="LangevinMinimise" || generalParameters.Integrator_type=="Bussi2008"){
-//            omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//        }
-//        else if (generalParameters.Integrator_type=="LangevinMinimise"){
-//            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMinimisation, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
-//        }
         
         
     }
@@ -463,30 +453,30 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                 omm->context->setVelocitiesToTemperature(generalParameters.temperature);
             }
             
-            int infoMask = 0;
-            infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
-            
-            const OpenMM::State state = omm->context->getState(infoMask);
-            const std::vector<Vec3>& velInNmperPs  = state.getVelocities();
-            vector<Vec3> velInNmperPsCorrected;
-            velInNmperPsCorrected.resize(velInNmperPs.size());
-            vector<double> comVel = {0,0,0};
-            for (int i=0; i < (int)velInNmperPs.size(); ++i){
-                comVel[0] += velInNmperPs[i][0];
-                comVel[1] += velInNmperPs[i][1];
-                comVel[2] += velInNmperPs[i][2];
-            }
-            
-            comVel[0]/=double(velInNmperPs.size());
-            comVel[1]/=double(velInNmperPs.size());
-            comVel[2]/=double(velInNmperPs.size());
-            
-            for (int i=0; i < (int)velInNmperPs.size(); ++i){
-                velInNmperPsCorrected[i][0] = velInNmperPs[i][0]- comVel[0];
-                velInNmperPsCorrected[i][1] = velInNmperPs[i][1]- comVel[1];
-                velInNmperPsCorrected[i][2] = velInNmperPs[i][2]- comVel[2];
-            }
-            omm->context->setVelocities(velInNmperPsCorrected);
+//            int infoMask = 0;
+//            infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
+//
+//            const OpenMM::State state = omm->context->getState(infoMask);
+//            const std::vector<Vec3>& velInNmperPs  = state.getVelocities();
+//            vector<Vec3> velInNmperPsCorrected;
+//            velInNmperPsCorrected.resize(velInNmperPs.size());
+//            vector<double> comVel = {0,0,0};
+//            for (int i=0; i < (int)velInNmperPs.size(); ++i){
+//                comVel[0] += velInNmperPs[i][0];
+//                comVel[1] += velInNmperPs[i][1];
+//                comVel[2] += velInNmperPs[i][2];
+//            }
+//
+//            comVel[0]/=double(velInNmperPs.size());
+//            comVel[1]/=double(velInNmperPs.size());
+//            comVel[2]/=double(velInNmperPs.size());
+//
+//            for (int i=0; i < (int)velInNmperPs.size(); ++i){
+//                velInNmperPsCorrected[i][0] = velInNmperPs[i][0]- comVel[0];
+//                velInNmperPsCorrected[i][1] = velInNmperPs[i][1]- comVel[1];
+//                velInNmperPsCorrected[i][2] = velInNmperPs[i][2]- comVel[2];
+//            }
+//            omm->context->setVelocities(velInNmperPsCorrected);
         } else {
             omm->context->setVelocities(initialVelInNmperPs);
             
@@ -494,23 +484,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     } else {
         loadCheckpoint(omm,generalParameters.trajectory_file_name+"_Checkpoint", generalParameters.buffer_file_name+"_Checkpoint", generalParameters.usingBackupCheckpoint);
     }
-//    
-//    int infoMask = 0;
-//    infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
-//    
-//    const OpenMM::State state = omm->context->getState(infoMask);
-//    const std::vector<Vec3>& velInNmperPs2  = state.getVelocities();
-//    
-//    vector<double> comVel = {0,0,0};
-//    for (int i=0; i < (int)velInNmperPs2.size(); ++i){
-//        comVel[0] += velInNmperPs2[i][0];
-//        comVel[1] += velInNmperPs2[i][1];
-//        comVel[2] += velInNmperPs2[i][2];
-//    }
-//    
-//    cout<<comVel[0]<<"\t"<<comVel[1]<<"\t"<<comVel[2]<<endl;
-//    exit(0);
-
     
     const std::map <std::string, double> params = omm->context->getParameters();
     cout<<flush;
