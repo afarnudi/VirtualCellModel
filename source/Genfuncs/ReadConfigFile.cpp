@@ -342,7 +342,7 @@ void assign_general_parameters(void){
             generalParameters.MinimiseTolerance=stod(split[0]);
         } else if (it.first == "MinimiseMaxIterations") {
             generalParameters.MinimiseMaxIterations=stoi(split[0]);
-        } else if (it.first == "CMMotionRemover") {
+        } else if (it.first == "CMMotionRemoverStep") {
             generalParameters.CMMotionRemoverStep=stoi(split[0]);
             if (stoi(split[0])>0) {
                 generalParameters.CMMotionRemover = true;
