@@ -567,6 +567,16 @@ void set_Bussi_Global_thermostat(MyOpenMMData* omm,
                                  double kBT,
                                  int number_of_atoms,
                                  bool CMMotionRemover);
+void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
+                                                          double stepSizeInPs,
+                                                          double friction_invertPs,
+                                                          double kBT,
+                                                          int number_of_atoms,
+                                                          bool CMMotionRemover,
+                                                          int number_of_mem_atoms,
+                                                          double kBTmem,
+                                                          vector<OpenMM::CustomCompoundBondForce*> &DihedralForces,
+                                                          vector<OpenMM::CustomNonbondedForce*>    &WCAs);
 
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);

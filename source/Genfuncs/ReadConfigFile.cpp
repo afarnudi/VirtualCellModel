@@ -269,6 +269,11 @@ void assign_general_parameters(void){
                 
             } else if (split[0]=="Global"){
                 generalParameters.Integrator_type="Bussi2008";
+            } else if (split[0]=="GlobalMTDropN3"){
+                generalParameters.Integrator_type="Bussi2008Multi-thermosDropNewton3";
+                if (split.size()>1) {
+                    generalParameters.customtemperature=stod(split[1]);
+                }
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Configfile parameter parse error: Integrator: Don't understand integrator option. Please read the template for a list of integrators.";
