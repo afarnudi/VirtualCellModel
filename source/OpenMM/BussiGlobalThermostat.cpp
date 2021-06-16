@@ -171,10 +171,10 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
     
     
     omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*(f0+f_n31)/m");
-    omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f30*delta(f_n31)/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f30*(1-delta(f_n31))/m");
     
     omm->CustomIntegrator->addComputePerDof("x", "x+dt*v");
     
     omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*(f0+f_n31)/m");
-    omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f30*delta(f_n31)/m");
+    omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f30*(1-delta(f_n31))/m");
 }
