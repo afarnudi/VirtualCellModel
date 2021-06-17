@@ -130,7 +130,6 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
     
     omm->CustomIntegrator->addComputePerDof("f_n31", "f31");
     // global thermostat coefficients
-//    omm->CustomIntegrator->addComputeSum("ke", "0.5*m*v*v");
     omm->CustomIntegrator->addComputeSum("keCh", "0.5*m*v*v *delta(f_n31)");
     omm->CustomIntegrator->addComputeSum("keMem","0.5*m*v*v *(1-delta(f_n31))");
     //"S_global" is an approximate since we assume "dofs_global" goes to inf
@@ -145,7 +144,6 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
     omm->CustomIntegrator->addComputeGlobal("S_globalMem", "sqrt(2*(dofs_globalMem-1))*gaussian+(dofs_globalMem-1)*(1-delta(f_n31))");
     omm->CustomIntegrator->endBlock();
     
-    
     omm->CustomIntegrator->beginIfBlock("dofs_globalCh<=1000");
     omm->CustomIntegrator->addComputePerDof("R2Ch", "gaussian^2");
     omm->CustomIntegrator->addComputeSum("sum_R2Ch", "R2Ch*delta(f_n31)");
@@ -157,7 +155,6 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
     omm->CustomIntegrator->addComputeGlobal("S_globalMem", "sum_R2Mem-gaussian^2");
     omm->CustomIntegrator->endBlock();
     
-    
     omm->CustomIntegrator->addComputeGlobal("alphaCh","sqrt(c_global + global_b1Ch*(S_globalCh+R_globalCh*R_globalCh)/keCh + global_b2Ch*R_globalCh*sqrt(1.0/keCh) )");
     omm->CustomIntegrator->addComputeGlobal("alphaMem","sqrt(c_global + global_b1Mem*(S_globalMem+R_globalMem*R_globalMem)/keMem + global_b2Mem*R_globalMem*sqrt(1.0/keMem) )");
     
@@ -167,8 +164,6 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
     omm->CustomIntegrator->addComputePerDof("v", "sign_alphaCh*alphaCh*v*delta(f_n31) + sign_alphaMem*alphaMem*v*(1-delta(f_n31))");
     //velocity-Verlet
     omm->CustomIntegrator->addUpdateContextState();
-    
-    
     
     omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*(f0+f_n31)/m");
     omm->CustomIntegrator->addComputePerDof("v", "v + 0.5*dt*f30*delta(f_n31)/m");

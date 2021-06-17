@@ -290,12 +290,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->BrownianIntegrator = new OpenMM::BrownianIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionIninvertPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
-        omm->BrownianIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Langevin"){
         omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(generalParameters.temperature,
                                                                  generalParameters.frictionIninvertPs,
                                                                  stepSizeInFs * OpenMM::PsPerFs);
-        omm->LangevinIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermos"){
         set_LFLangevin_multithermos(omm,
                                     stepSizeInFs* OpenMM::PsPerFs,
@@ -304,7 +302,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                     generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                                     DihedralForces,
                                     WCAs);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LFLangevinMulti-thermosDropNewton3"){
         set_LFLangevin_multithermos_dropNewton3(omm,
                                                 stepSizeInFs* OpenMM::PsPerFs,
@@ -313,13 +310,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                 generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                                                 DihedralForces,
                                                 WCAs);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF"){
         set_GJF(omm,
                 stepSizeInFs* OpenMM::PsPerFs,
                 generalParameters.frictionIninvertPs,
                 generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF2013Multi-thermos"){
         set_GJF_multithermos(omm,
                              stepSizeInFs* OpenMM::PsPerFs,
@@ -328,7 +323,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                              generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                              DihedralForces,
                              WCAs);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF2013Multi-thermosDropNewton3"){
         set_GJF_multithermos_DropNewton3(omm,
                                          stepSizeInFs* OpenMM::PsPerFs,
@@ -337,19 +331,16 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                          generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                                          DihedralForces,
                                          WCAs);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="GJF2020"){
         set_GJF2020(omm,
                     stepSizeInFs* OpenMM::PsPerFs,
                     generalParameters.frictionIninvertPs,
                     generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
                     generalParameters.GJF_case);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="LangevinMinimise"){
         set_customLangevinforminimisation(omm,
                                           stepSizeInFs,
                                           generalParameters.MinimisationIntegraterRestriction);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Bussi2008"){
         set_Bussi_Global_thermostat(omm,
                                     stepSizeInFs* OpenMM::PsPerFs,
@@ -357,7 +348,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                     generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
                                     numberOfAtoms,
                                     generalParameters.CMMotionRemover);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     } else if (generalParameters.Integrator_type=="Bussi2008Multi-thermosDropNewton3"){
         set_Bussi_Global_thermostat_multithermos_DropNewton3(omm,
                                                              stepSizeInFs* OpenMM::PsPerFs,
@@ -369,14 +359,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                              generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                                                              DihedralForces,
                                                              WCAs);
-        
-        set_Bussi_Global_thermostat(omm,
-                                    stepSizeInFs* OpenMM::PsPerFs,
-                                    generalParameters.frictionIninvertPs,
-                                    generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature,
-                                    numberOfAtoms,
-                                    generalParameters.CMMotionRemover);
-        omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
     }
     
     
