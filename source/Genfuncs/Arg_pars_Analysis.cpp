@@ -72,7 +72,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         .add_options()
         ("h,help", "Print help")
         ("analysis", "3 for 3D analysis and 2 for 2D", cxxopts::value<string>())
-        ("pdbfile", "[2D + 3D] Path to Membrane pdb file that contain ONLY a single Membrane. Example: path/to/my/pdbfile.pdb", cxxopts::value<std::vector<std::string>>(),"Path+file")
+        ("filepath", "[2D + 3D] Path to Membrane pdb file that contain ONLY a single Membrane. Example: path/to/my/pdbfile.pdb", cxxopts::value<std::vector<std::string>>(),"Path+file")
         
         ("lmax", "[3D]The maximum mode number (l) the RSH amplitudes are measured for. This is a very expensive analysis since the number of angular modes (m) grow very rapidly (2*l+1) with l. Default 20.", cxxopts::value<int>(), "int")
         ("qmax", "[2D]The maximum wave number (q) the FFT amplitudes are measured for. . Default 70.", cxxopts::value<int>(), "int")
@@ -119,15 +119,29 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             args.analysis=result["analysis"].as<string>();
         }
         
-        if (result.count("pdbfile"))
+        if (result.count("filepath"))
         {
-            auto& ff = result["pdbfile"].as<std::vector<std::string>>();
+            auto& ff = result["filepath"].as<std::vector<std::string>>();
             string filename;
             for (const auto& f : ff)
             {
                 filename+= f ;
             }
             args.analysis_filename = filename;
+            string extension = args.analysis_filename;
+            extension.erase(extension.begin(),extension.end()-3 );
+            if (extension == "xyz") {
+                args.fileExtension = "xyz";
+            } else if (extension == "pdb"){
+                args.fileExtension = "pdb";
+            }
+            extension = args.analysis_filename;
+            extension.erase(extension.begin(),extension.end()-14 );
+            if (extension == "bin_xyz_single") {
+                args.fileExtension = "bin_xyz_single";
+            } else if (extension == "bin_xyz_double"){
+                args.fileExtension = "bin_xyz_single";
+            }
         }
         if (result.count("lmax"))
         {

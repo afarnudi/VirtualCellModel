@@ -213,7 +213,7 @@ void Membrane::Export_Mechanical_Energy(string filename, int frame){
     
     
     fprintf(pFile,"%8.3f\t%8.3f\t%8.3f\t%8.3f\n",
-            pdb_frames_time[frame],
+            analysis_coord_frames_time[frame],
             Total_Bending_Energy,
             Total_Potential_Energy,
             Total_Potential_Energy);
