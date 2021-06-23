@@ -141,7 +141,11 @@ int main(int argc, char **argv)
         if (args.analysis == "3" ) {
             cout<<TPINK;
             cout<<"3D Analysis"<<endl;
-            Membranes[memindex].import_pdb_frames(args, memindex);
+            if (args.fileExtension=="pdb") {
+                Membranes[memindex].import_pdb_frames(args, memindex);
+            } else if (args.fileExtension=="xyz") {
+                Membranes[memindex].import_xyz_frames(args, memindex);
+            }
             
             if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
