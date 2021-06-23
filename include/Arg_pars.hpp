@@ -22,6 +22,7 @@ struct ArgStruct_Analysis
     int z_node=-1;
     int zy_node=-1;
     std::string analysis_filename;
+    std::string fileExtension;
     std::vector<std::string> membane_labels;
     std::vector<int>         membane_label_indecies;
     int ell_max =20;

@@ -128,8 +128,9 @@ public:
     void calculate_dOmega(void);
     vector<double> node_dOmega;
     
-    void load_pdb_frame(int frame, ArgStruct_Analysis args);
+    void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
     void import_pdb_frames(ArgStruct_Analysis args, int file_index);
+    void import_xyz_frames(ArgStruct_Analysis args, int file_index);
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
     void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
@@ -228,8 +229,8 @@ public:
     void calculate_2D_amplitudes_Alexandra_projection(int q_max, int numpoints);
     
     
-    vector<double> pdb_frames_time;
-    vector<vector<vector<double> > > pdb_frames;
+    vector<double> analysis_coord_frames_time;
+    vector<vector<vector<double> > > analysis_coord_frames;
     vector<vector<double> > spherical_positions;
     
     void set_com_to_zero(){

@@ -88,7 +88,12 @@ int main(int argc, char **argv)
     
     cout<<TBOLD<<"Entering analysis mode:\n"<<TRESET;
     if (args.membane_labels.size()==0) {
-        args.membane_labels.push_back(get_pdb_first_label(args.analysis_filename));
+        if (args.fileExtension=="pdb") {
+            args.membane_labels.push_back(get_pdb_first_label(args.analysis_filename));
+        } else if (args.fileExtension=="xyz") {
+            args.membane_labels.push_back(get_xyz_first_label(args.analysis_filename));
+        }
+        
         if (args.analysis == "3") {
             if (args.extension=="") {
                 args.extension="_ulmt.txt";
@@ -110,10 +115,19 @@ int main(int argc, char **argv)
         generalParameters.Num_of_Membranes=int(args.membane_labels.size());
         Membranes.resize(generalParameters.Num_of_Membranes);
     }
-    args.num_atoms_per_frame = get_pdb_num_of_atoms(args.analysis_filename);
-    if (args.framelimits_end==0) {
-        args.framelimits_end = get_pdb_num_of_frames(args.analysis_filename, args.num_atoms_per_frame);
-    } else {
+    if (args.fileExtension=="pdb") {
+        args.num_atoms_per_frame = get_pdb_num_of_atoms(args.analysis_filename);
+        if (args.framelimits_end==0) {
+            args.framelimits_end = get_pdb_num_of_frames(args.analysis_filename, args.num_atoms_per_frame);
+        }
+    } else if (args.fileExtension=="xyz") {
+        args.num_atoms_per_frame = get_xyz_num_of_atoms(args.analysis_filename);
+        if (args.framelimits_end==0) {
+            args.framelimits_end = get_xyz_num_of_frames(args.analysis_filename, args.num_atoms_per_frame);
+        }
+    }
+    
+    if (args.framelimits_end!=0) {
         //c++ arrays start from 0
         args.framelimits_end--;
     }
@@ -140,7 +154,7 @@ int main(int argc, char **argv)
             }
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
                 
-                Membranes[memindex].load_pdb_frame(frame, args);
+                Membranes[memindex].load_analysis_coord_frame(frame, args);
                 
                 for (int runs=0; runs<args.num_ang_avg; runs++) {
                     
@@ -158,7 +172,11 @@ int main(int argc, char **argv)
         } else if(args.analysis== "2"){
             cout<<TFILE;
             cout<<"2D Analysis"<<endl;
-            Membranes[memindex].import_pdb_frames(args, memindex);
+            if (args.fileExtension=="pdb") {
+                Membranes[memindex].import_pdb_frames(args, memindex);
+            } else if (args.fileExtension=="xyz") {
+                Membranes[memindex].import_xyz_frames(args, memindex);
+            }
             if (!generalParameters.Testmode) {
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
@@ -167,7 +185,7 @@ int main(int argc, char **argv)
             Membranes[memindex].get_ring(args);
             
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
-                Membranes[memindex].load_pdb_frame(frame, args);
+                Membranes[memindex].load_analysis_coord_frame(frame, args);
                 
                 Membranes[memindex].calculate_freqs(args);
                 
@@ -180,7 +198,7 @@ int main(int argc, char **argv)
             
             
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
-                Membranes[memindex].load_pdb_frame(frame, args);
+                Membranes[memindex].load_analysis_coord_frame(frame, args);
                 
                
                 Membranes[memindex].calculate_freqs_projection(args);
@@ -205,7 +223,7 @@ int main(int argc, char **argv)
             Membranes[memindex].import_config(membrane_configs[ args.membane_label_indecies[memindex] ]);
             cout<<TPURPLE;
             Membranes[memindex].import_pdb_frames(args, memindex);
-            Membranes[memindex].load_pdb_frame(0, args);
+            Membranes[memindex].load_analysis_coord_frame(0, args);
             Membranes[memindex].set_bond_nominal_length();
             Membranes[memindex].set_bending_nominal_angle();
             FILE* pFile;
@@ -219,7 +237,7 @@ int main(int argc, char **argv)
             }
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
                 
-                Membranes[memindex].load_pdb_frame(frame, args);
+                Membranes[memindex].load_analysis_coord_frame(frame, args);
                 
                 Membranes[memindex].Mechanical_Energy_calculator();
                 Membranes[memindex].Export_Mechanical_Energy(args.output_filename[memindex], frame+args.framelimits_beg);

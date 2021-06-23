@@ -14,10 +14,10 @@ using namespace std;
 
 
 
-void Membrane::load_pdb_frame(int frame, ArgStruct_Analysis args){
+void Membrane::load_analysis_coord_frame(int frame, ArgStruct_Analysis args){
     for (int i=0; i<Num_of_Nodes; i++) {
         for (int j=0; j<3; j++) {
-            Node_Position[i][j] = pdb_frames[frame][i][j];
+            Node_Position[i][j] = analysis_coord_frames[frame][i][j];
         }
     }
     
@@ -321,7 +321,7 @@ void Membrane::get_ground_state_from_mesh(ArgStruct_Analysis args){
 }
 
 void Membrane::get_ground_state_from_frame(ArgStruct_Analysis args){
-    load_pdb_frame(args.FrameMinimisation, args);
+    load_analysis_coord_frame(args.FrameMinimisation, args);
     
     update_COM_position();
     set_com_to_zero();
