@@ -209,11 +209,19 @@ void Membrane::import_xyz_frames(ArgStruct_Analysis args, int file_index){
 
         getline(read_xyz, line);
         getline(read_xyz, line);
-        
         auto split = split_and_check_for_comments(line, "Import XYZ: ");
         string time = split[1];
-        analysis_coord_frames_time[frame_index]=stod(time);
-
+        
+        try {
+            analysis_coord_frames_time[frame_index]=stod(time);
+        } catch (...) {
+            cout<<"&"<<line<<"&"<<endl;
+            cout<<"$"<<time<<"$"<<endl;
+            throw ;
+        }
+            
+        
+        
         int local_atom_count=0;
         double readCoord[3];
         string readLable;
@@ -227,6 +235,7 @@ void Membrane::import_xyz_frames(ArgStruct_Analysis args, int file_index){
                 local_atom_count++;
             }
         }
+        getline(read_xyz, line);
         if (local_atom_count != Num_of_Nodes) {
             cout<<"Number of atoms in frame, "<<frame_index+args.framelimits_beg<<", does not match with the number of atoms in previous frames. Expected "<<Num_of_Nodes<<" got "<<local_atom_count<<endl;
             exit(EXIT_FAILURE);
