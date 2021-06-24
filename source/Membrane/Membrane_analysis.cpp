@@ -258,13 +258,17 @@ void Membrane::calculate_dOmega(void){
 }
 
 void Membrane::write_ulm(ArgStruct_Analysis args, int file_index){
+    double numOfFrames = args.framelimits_end-args.framelimits_beg;
+    if (args.analysis_averaging_option == 1) {
+        numOfFrames*=args.num_ang_avg;
+    }
     std::ofstream wdata;
     wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
 
     for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
             
-            wdata<<ulm_avg[ell][m+ell]<<"\t";
+            wdata<<ulm_avg[ell][m+ell]/numOfFrames<<"\t";
         }
         wdata<<"\n";
         
@@ -272,7 +276,7 @@ void Membrane::write_ulm(ArgStruct_Analysis args, int file_index){
     for (int ell=0; ell<args.ell_max+1; ell++) {
         for (int m=-ell; m<ell+1; m++) {
             
-            wdata<<ulm_std[ell][m+ell]<<"\t";
+            wdata<<ulm_std[ell][m+ell]/numOfFrames<<"\t";
         }
         wdata<<"\n";
     }
