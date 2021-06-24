@@ -259,6 +259,9 @@ void Membrane::calculate_dOmega(void){
 
 void Membrane::write_ulm(ArgStruct_Analysis args, int file_index){
     double numOfFrames = args.framelimits_end-args.framelimits_beg;
+    if (args.analysis_averaging_option == 1) {
+        numOfFrames*=args.num_ang_avg;
+    }
     std::ofstream wdata;
     wdata.open(args.output_filename[file_index].c_str(), std::ios::app);
 
