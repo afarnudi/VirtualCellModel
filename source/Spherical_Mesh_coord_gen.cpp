@@ -153,8 +153,9 @@ using OpenMM::Vec3;
 MyOpenMMData* init_openmm(MyAtomInfo *atoms,
                           double stepSizeInFs,
                           int seed){
-    
+    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
+//    OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
     MyOpenMMData*       omm = new MyOpenMMData();
     OpenMM::System&     system = *(omm->system = new OpenMM::System());
     vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
