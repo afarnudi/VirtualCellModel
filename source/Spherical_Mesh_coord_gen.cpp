@@ -7,14 +7,14 @@
 #include <chrono>
 
 #include "OpenMM.h"
-#include "Openmm_structs.h"
+#include "OpenMM_structs.h"
 
 using namespace std;
 
-void generate_random_coordinates(int N, MyAtomInfo *atoms);
+void generate_random_coordinates(int N, MyAtomInfo *atoms, int seed);
 void myWritePDBFrame(int frameNum, double timeInPs, const MyAtomInfo atoms[], string traj_name);
 void myGetOpenMMState(MyOpenMMData* omm, double& timeInPs, MyAtomInfo atoms[]);
-MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs);
+MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs, int seed);
 void export_xyz(MyAtomInfo* atoms, string traj_name);
 void print_wall_clock_time(double sim_duration_per_sec);
 void print_real_time(chrono::time_point<chrono::steady_clock> chrono_clock_start,
@@ -34,30 +34,31 @@ int main(int argc, const char * argv[]) {
     clock_t tStart = clock();//Time the programme
     
     int N = 100, EndOfList=-1;
-    
+    int seed=0;
     
     if (argc>1) {
         N = stoi(argv[1]);
+        seed = stoi(argv[2]);
     }
-    string pdbname = "USphere_"+to_string(N)+"d.pdb";
+    string pdbname = "USphere_"+to_string(N)+"d_s"+to_string(seed)+".pdb";
     //extra node at the origin to keep everything constrained;
     N++;
     //extra -1 at the end of list
     MyAtomInfo* atoms     = new MyAtomInfo[N+1];
     atoms[N].type         =EndOfList;
-    generate_random_coordinates(N, atoms);
+    generate_random_coordinates(N, atoms, seed);
     
     
     
     float progressp=0;
     double Step_Size_In_Fs =1;
     int savetime = 0;
-    double Simulation_Time_In_Ps =1000;
+    double Simulation_Time_In_Ps =200;
     double Report_Interval_In_Fs= 10000;
     int NumSilentSteps = (int)(Report_Interval_In_Fs / Step_Size_In_Fs + 0.5);
     try {
         MyOpenMMData* omm = new MyOpenMMData();
-        omm = init_openmm(atoms, Step_Size_In_Fs);
+        omm = init_openmm(atoms, Step_Size_In_Fs, seed);
         string platformName = omm->context->getPlatform().getName();
         
         
@@ -89,7 +90,7 @@ int main(int argc, const char * argv[]) {
                 //        omm->context->computeVirtualSites();
             } else {
                 
-                omm->Lintegrator->step(NumSilentSteps);
+                omm->LangevinIntegrator->step(NumSilentSteps);
                 //        omm->context->computeVirtualSites();
             }
             
@@ -103,7 +104,7 @@ int main(int argc, const char * argv[]) {
         }
         
         cout<<"[ 100% ]\t time: "<<Simulation_Time_In_Ps<<"Ps\n";
-            
+        
         
         
     }
@@ -150,7 +151,8 @@ void export_xyz(MyAtomInfo* atoms,
 
 using OpenMM::Vec3;
 MyOpenMMData* init_openmm(MyAtomInfo *atoms,
-                          double stepSizeInFs){
+                          double stepSizeInFs,
+                          int seed){
     
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     MyOpenMMData*       omm = new MyOpenMMData();
@@ -291,16 +293,17 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
         cout<<"Please choose a device (index): \n";
         std::cin>>device_id;
     }
-//    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
-    omm->Lintegrator = new OpenMM::LangevinIntegrator(0,
-                                                      0.01,
-                                                      stepSizeInFs * OpenMM::PsPerFs);
+    //    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(0,
+                                                             0.1,
+                                                             stepSizeInFs * OpenMM::PsPerFs);
+    omm->LangevinIntegrator->setRandomNumberSeed(seed);
     
     if (platform.getName() == "CPU" || platform_id==0) {
         if ( omm->integrator != NULL ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
         } else {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform);
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
         }
         
         
@@ -309,7 +312,7 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
         if ( omm->integrator != NULL ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
         } else {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->Lintegrator, platform, device_properties[device_id]);
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, device_properties[device_id]);
         }
     }
     
@@ -320,8 +323,8 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
 }
 
 
-void generate_random_coordinates(int N, MyAtomInfo* atoms){
-    
+void generate_random_coordinates(int N, MyAtomInfo* atoms, int seed){
+    srand(seed);
     char pdblabel[]={'m','e','m','b'};
     
     atoms[0].type=0;
@@ -350,10 +353,10 @@ void generate_random_coordinates(int N, MyAtomInfo* atoms){
         double z = cos(theta);
         double dist=0;
         bool good = true;
-//        cout<<atoms[0].radius<<endl;
+        //        cout<<atoms[0].radius<<endl;
         for (int j=1; j<i; j++) {
             dist= sqrt( (x-atoms[j].posInNm[0])*(x-atoms[j].posInNm[0]) + (y-atoms[j].posInNm[1])*(y-atoms[j].posInNm[1]) + (z-atoms[j].posInNm[2])*(z-atoms[j].posInNm[2]) );
-//            cout<<dist<<endl;
+            //            cout<<dist<<endl;
             if (dist<atoms[0].radius) {
                 good=false;
             }
