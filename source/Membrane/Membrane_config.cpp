@@ -114,7 +114,7 @@ void Membrane::assign_parameters(void){
         }
         if (it.first == "MeshFile") {
             string extension = split[0];
-            extension.erase(extension.begin(),extension.begin()+extension.find('.')+1);
+            extension.erase(extension.begin(),extension.begin()+extension.find_last_of('.')+1);
             if (extension == "ply" || extension == "msh") {
                 mesh_format=extension;
             } else{

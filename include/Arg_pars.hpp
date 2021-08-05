@@ -38,6 +38,9 @@ struct ArgStruct_Analysis
     int  FrameMinimisation = -1;
     
     std::string meshpathinput = "None";
+    
+    bool undulateMesh = false;
+    std::vector<double> SeedNumLmaxUmax;
 };
 
 struct ArgStruct_VCM

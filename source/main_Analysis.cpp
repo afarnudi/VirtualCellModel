@@ -84,7 +84,87 @@ int main(int argc, char **argv)
     generalParameters.Num_of_Membranes=int(args.Mesh_files.size());
     Membranes.resize(generalParameters.Num_of_Membranes);
     
-    
+    if (args.undulateMesh) {
+        if (args.extension=="") {
+            args.extension="_undulated.ply";
+        }
+//        cout<<args.meshpathinput<<endl;
+        
+        
+        string label=generalParameters.Membrane_label+to_string(0);
+        Membranes[0].set_label(label);
+        Membranes[0].set_file_time(buffer);
+        Membranes[0].set_index(0);
+        
+        vector<string> configlines;
+        configlines.push_back("-Membrane");
+        configlines.push_back("MeshFile  " + args.meshpathinput);
+        Membranes[0].import_config(configlines);
+        
+        int seed = args.SeedNumLmaxUmax[0];
+        int numberOfRandomModes = args.SeedNumLmaxUmax[1];
+        int ellMaxOfRandomModes = args.SeedNumLmaxUmax[2];
+        double ulmOfRandomModes = args.SeedNumLmaxUmax[3];
+        
+        string filename = args.meshpathinput;
+        filename.erase(filename.end()-4,filename.end() );
+        args.output_filename.push_back(filename + "_S" + to_string(seed) + "N" + to_string(numberOfRandomModes) + "Ellmax" + to_string(ellMaxOfRandomModes) + "U" + to_string(ulmOfRandomModes) +args.extension);
+//        cout<<args.output_filename[0]<<endl;
+        srand(seed);
+        
+        Membranes[0].randomundulationgenerator(numberOfRandomModes,
+                                               ellMaxOfRandomModes,
+                                               ulmOfRandomModes);
+        
+//        Membranes[0].calculate_volume_and_surface_area();
+//        double volume = Membranes[0].get_volume();
+//        Membranes[0].rescale_membrane(cbrt(1./volume));
+        
+        ifstream read;
+        read.open(args.meshpathinput.c_str());
+        ofstream write;
+        write.open(args.output_filename[0]);
+        
+        int temp_int; // This is just a temp intiger charachter that we use to read unnecessary ply file intigers. We never use these intigers in the actual programme.
+        std::string temp_string;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        getline(read, temp_string);
+        write<<temp_string<<endl;
+        // In this section the Node coordinates are read from the ply file.
+        
+        for(int i=0;i<Membranes[0].get_num_of_nodes();i++)
+        {
+            getline(read, temp_string);
+            write<< Membranes[0].get_node_position(i, 0) << " ";
+            write<< Membranes[0].get_node_position(i, 1) << " ";
+            write<< Membranes[0].get_node_position(i, 2) << " "<<endl;
+        }
+        
+        while (getline(read, temp_string)) {
+            write<<temp_string<<endl;
+        }
+        
+        return 0;
+    }
     
     cout<<TBOLD<<"Entering analysis mode:\n"<<TRESET;
     if (args.membane_labels.size()==0) {
@@ -221,7 +301,7 @@ int main(int argc, char **argv)
             cout<<TPURPLE;
             cout<<"Mechanical Energy Analysis"<<endl;
 
-            map<string, vector<string> > config_lines =read_configfile(args.Mesh_files[memindex]);
+            map<string, vector<string> > config_lines = read_configfile(args.Mesh_files[memindex]);
             get_class_numbers(config_lines);
             vector<vector<string> > membrane_configs =sort_class_configs(config_lines["-Membrane"]);
             Membranes[memindex].import_config(membrane_configs[ args.membane_label_indecies[memindex] ]);

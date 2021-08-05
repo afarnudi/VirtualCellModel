@@ -115,3 +115,47 @@ void Membrane::add_ulm_mode_real(int Ell, int M, double uLM, double radius){
     calculate_surface_area_with_voronoi();
 }
 
+
+
+
+void Membrane::randomundulationgenerator(void){
+    
+    
+    
+    
+    for (int i=0; i<NumberOfRandomModes; i++) {
+        double r = ((double) rand() / (RAND_MAX));
+        int Ell = rand() % (EllMaxOfRandomModes+1);
+        int M   = rand() % (Ell+1);
+        if (r<0.5) {
+            M*=-1;
+        }
+        update_spherical_positions();
+        calculate_dOmega();
+        calculate_surface_area_with_voronoi();
+        add_ulm_mode_real(Ell, M, UlmOfRandomModes, Radius);
+        cout<<"Ulm "<<UlmOfRandomModes<<"  Ell "<<Ell<<"  M "<<M<<endl;
+    }
+    
+    
+}
+
+void Membrane::randomundulationgenerator(int numberOfRandomModes,
+                                         int ellMaxOfRandomModes,
+                                         double ulmOfRandomModes){
+    for (int i=0; i<numberOfRandomModes; i++) {
+        double r = ((double) rand() / (RAND_MAX));
+        int Ell = rand() % (ellMaxOfRandomModes+1);
+        int M   = rand() % (Ell+1);
+        if (r<0.5) {
+            M*=-1;
+        }
+        update_spherical_positions();
+        calculate_dOmega();
+        calculate_surface_area_with_voronoi();
+        add_ulm_mode_real(Ell, M, ulmOfRandomModes, Radius);
+        cout<<"Ulm "<<UlmOfRandomModes<<"  Ell "<<Ell<<"  M "<<M<<endl;
+    }
+    
+    
+}
