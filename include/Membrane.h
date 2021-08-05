@@ -75,7 +75,7 @@ protected:
     double Total_Bending_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
-    string Node_radius_stat;
+    string Node_radius_stat = "Av";
     vector<double> Node_radius;
     double New_Radius=-1;
     double New_node_radius=-1;
@@ -722,7 +722,9 @@ public:
         return New_Radius;
     }
     
-    void ranfomundulationgenerator(void);
+    void randomundulationgenerator(void);
+    void randomundulationgenerator(int numberOfRandomModes, int ellMaxOfRandomModes, double ulmOfRandomModes);
+    
     bool AddRandomModes = false;
     int NumberOfRandomModes;
     int EllMaxOfRandomModes;

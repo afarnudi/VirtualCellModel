@@ -19,6 +19,7 @@ using namespace std;
 void consistency_check(ArgStruct_Analysis &args);
 void build_output_names(ArgStruct_Analysis &args);
 void check_membrane_labels(ArgStruct_Analysis &args);
+void check_membrane_path(ArgStruct_Analysis &args);
 
 
 ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
@@ -102,6 +103,8 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         ("m,minimisedState", "[3D] Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the minimised state. Takes two options, 'Mesh' to use the mesh coordinates, or the frame number you wish to set as the minimised state.", cxxopts::value<string>(), "string or int")
         ("meshfile", "[2D and 3D] path to the mesh file.", cxxopts::value<string>(), "Path+file")
         ("reportindecies", "[E] The indecies (beginning from 0) corresponding to each membrane label. This option can be used for different combinations. A) If there is only one membrane in the reportfile/configfile you can exclude this option from the inputs. B) If there are multiple membranes in the reportfile/configfile and you are using the default option for the \"memlabels\" option (that uses the first atom label in the pdb) or one membrane label is provided, you should provide an index (integer beginning from 0) that corresponds to the memebrane configuration appearing in the reportfile/config file. For example if 3 membranes are configured in the reportfile/configfile the first one is identified with index 0, the second one with index 1, etc. If multiple membranes exist in the reportfile/configfile and multiple lables are provided using the \"memlabels\" option, the indecies corresponding to the membrane labels that appear in the reportfile/configfile must be provided. Example: 4 membranes configured in the reportfile/configfile, and the label (label is identified using the pdb file) of the third and first file is set using memlabels:\n ./VCM --analysis E .... --memlabels thirdlabel,firstlabel --reportindecies 2,0", cxxopts::value<std::vector<int> >(),"0,1")
+        ("u,UndulateMesh", "Under development: Undulate an input mesh using Spherical Harmonics and export for simulation.")
+        ("SNLU", "Under development: inputs for S (int): random generator seed, N (int): number of random undulations, L (int): max ell of the randomly chosen mode, U (double): maximum aplitude of the random ulm. Input in form of string S_N_L_U, example: 0_5_10_0.04", cxxopts::value<string>())
         ;
         //      I have put this here so that parser throuws an exception when an extra argument is put in the command line that is not associated with any flags
         options.parse_positional({""});
@@ -257,6 +260,22 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             args.meshpathinput = result["meshfile"].as<string>();
         }
         
+        if (result.count("u"))
+        {
+            args.undulateMesh = true;
+        }
+        if (result.count("SNLU"))
+        {
+            args.SeedNumLmaxUmax.resize(4,0);
+            string tempInputs = result["SNLU"].as<string>();
+            vector<string> tempInput = splitstring(tempInputs , '_');
+            args.SeedNumLmaxUmax[0] = stod(tempInput[0]);
+            args.SeedNumLmaxUmax[1] = stod(tempInput[1]);
+            args.SeedNumLmaxUmax[2] = stod(tempInput[2]);
+            args.SeedNumLmaxUmax[3] = stod(tempInput[3]);
+        }
+        
+        
         consistency_check(args);
         return args;
         
@@ -272,175 +291,117 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
 void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
     
-    if (args.analysis != "2" && args.analysis != "3" && args.analysis != "E") {
-        string errorMessage = TBLINK;
-        errorMessage += TRED;
-        errorMessage+="Error: "; errorMessage+=TRESET;
-        errorMessage+="Analysis dimension option not supported.\nUse -h for more information."; errorMessage+=TRESET;
-        throw std::runtime_error(errorMessage);
+    if (args.undulateMesh) {
+        check_membrane_path(args);
     } else {
-        if (args.analysis_filename == "" ) {
+        if (args.analysis != "2" && args.analysis != "3" && args.analysis != "E") {
             string errorMessage = TBLINK;
             errorMessage += TRED;
-            errorMessage += "Analysis file (path+file) not provided. Use -h for more information.";
+            errorMessage+="Error: "; errorMessage+=TRESET;
+            errorMessage+="Analysis dimension option not supported.\nUse -h for more information."; errorMessage+=TRESET;
             throw std::runtime_error(errorMessage);
         } else {
-            args.analysis_filename = check_if_file_exists(args.analysis_filename);
-            cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
-        }
-        
-        if (args.analysis == "3") {
-            cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
-            cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
-            
-            
-            if (args.MeshMinimisation) {
-                args.analysis_averaging_option = 2;
-            }
-            if (args.FrameMinimisation>0) {
-                args.analysis_averaging_option = 2;
-            }
-            
-        } else if (args.analysis == "2") {
-            cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
-            cout<<TWWARN<<"This option is under development. Proceed with the trial version."<<TRESET<<endl;
-            
-            cout<<"Wave number, q, will go up to q_max="<<args.q_max<<endl;
-            
-        } else if (args.analysis == "E") {
-            cout<<TWARN<<"Mechanical Energy"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
-            cout<<TWWARN<<"This option is under development. Proceed with the trial version."<<TRESET<<endl;
-        }
-        
-        if (args.num_ang_avg !=1 && args.z_node !=-1) {
-            cout<<"\"angavg\" and \"alignaxes\" "<<TWWARN<<"cannot be used simultaneously"<<TRESET<<". Run help (-h, --help) for more inforamtion."<<endl;
-            exit(4);
-        }else {
-            if (args.analysis_averaging_option == 1) {
-                cout<<"Average over random rotations:"<<TON<<" ON"<<TRESET<<endl;
-                cout<<"Number of random rotations: "<<args.num_ang_avg<<endl;
-            }else if (args.analysis_averaging_option == 2) {
-                cout<<"Material frame reference: "<<TON<<"ON"<<TRESET<<endl;
-                cout<<"Node index on the Z axis: "<<args.z_node<<endl;
-                cout<<"Node inedx on the Z-Y plane: "<<args.zy_node<<endl;
-                
-            }
-        }
-        
-        
-        if (args.membane_labels.size()==0) {
-            cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed. By default VCM analyser will use the first ATOM label appearing in the pdb file.\n"<<TRESET<<endl;
-        } else {
-            check_membrane_labels(args);
-        }
-        build_output_names(args);
-        
-        cout<<"Output file(s):\n";
-        for (int i=0; i<args.output_filename.size(); i++) {
-            cout<<"\t"<<TFILE<<args.output_filename[i]<<TRESET<<endl;
-        }
-        
-        if (args.analysis!="E") {
-            if (args.meshpathinput == "None") {
-                string meshpath;
-                cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for analysis."<<endl;
-                if (args.membane_labels.size()<2) {
-                    cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
-                    cout<<TFILE;
-                    cin>>meshpath;
-                    cout<<TRESET;
-                    
-                    meshpath = check_if_file_exists(meshpath);
-                    args.Mesh_files.push_back(meshpath);
-                    
-                    //                bool valid_answer = false;
-                    //                string yn_answer;
-                    //                cout<<"Real Spherical harmonics amplitutes are calculated relative to the ground state of the system. The default ground state is a sphere with the same surface area as the Membrane. Do you want to change the ground state to the shape of the Mesh? (y,n)"<<endl;
-                    //                cout<<TFILE;
-                    //                cin>>yn_answer;
-                    //                cout<<TRESET;
-                    //                if (yn_answer=="y") {
-                    //                    args.MeshMinimisation.push_back(true);
-                    //                    valid_answer=true;
-                    //                } else if (yn_answer=="n") {
-                    //                    args.MeshMinimisation.push_back(false);
-                    //                    valid_answer=true;
-                    //                }
-                    //                while (!valid_answer) {
-                    //                    cout<<"Please enter y or n"<<endl;
-                    //                    cout<<TFILE;
-                    //                    cin>>yn_answer;
-                    //                    cout<<TRESET;
-                    //                    if (yn_answer=="y") {
-                    //                        args.MeshMinimisation.push_back(true);
-                    //                        valid_answer=true;
-                    //                    } else if (yn_answer=="n") {
-                    //                        args.MeshMinimisation.push_back(false);
-                    //                        valid_answer=true;
-                    //                    }
-                    //                }
-                    
-                } else {
-                    cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
-                    for (int i=0; i<args.membane_labels.size(); i++) {
-                        cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
-                        cout<<TFILE;
-                        cin>>meshpath;
-                        cout<<TRESET;
-                        std::ifstream read_mesh;
-                        read_mesh.open(meshpath.c_str());
-                        if (!read_mesh) {
-                            std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
-                            i--;
-                        } else {
-                            args.Mesh_files.push_back(meshpath);
-                        }
-                    }
-                }
-            } else {
-                string meshpath = check_if_file_exists(args.meshpathinput);
-                args.Mesh_files.push_back(meshpath);
-            }
-            
-            
-        } else {
-            if (args.membane_labels.size()!=0 && args.membane_labels.size()!=args.membane_label_indecies.size()) {
-                string errorMessage = TWARN;
-                errorMessage +="Error: Arg Parser: The number of mambrane labels and the corresponding indecies don't match. Check the number of arguments in the \"memlabels\" and \"reportindecies\" options.\n";
-                errorMessage +=TRESET;
+            if (args.analysis_filename == "" ) {
+                string errorMessage = TBLINK;
+                errorMessage += TRED;
+                errorMessage += "Analysis file (path+file) not provided. Use -h for more information.";
                 throw std::runtime_error(errorMessage);
+            } else {
+                args.analysis_filename = check_if_file_exists(args.analysis_filename);
+                cout<<"Will analyse \""<<TFILE<<args.analysis_filename<<TRESET<<"\""<<endl;
             }
+            
+            if (args.analysis == "3") {
+                cout<<TWARN<<"3D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
+                cout<<"Real Spherical harmonics, U_lm, will go up to l="<<args.ell_max<<endl;
+                
+                
+                if (args.MeshMinimisation) {
+                    args.analysis_averaging_option = 2;
+                }
+                if (args.FrameMinimisation>0) {
+                    args.analysis_averaging_option = 2;
+                }
+                
+            } else if (args.analysis == "2") {
+                cout<<TWARN<<"2D"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
+                cout<<TWWARN<<"This option is under development. Proceed with the trial version."<<TRESET<<endl;
+                
+                cout<<"Wave number, q, will go up to q_max="<<args.q_max<<endl;
+                
+            } else if (args.analysis == "E") {
+                cout<<TWARN<<"Mechanical Energy"<<TRESET" analysis mode: "<<TON<<"ON\n"<<TRESET;
+                cout<<TWWARN<<"This option is under development. Proceed with the trial version."<<TRESET<<endl;
+            }
+            
+            if (args.num_ang_avg !=1 && args.z_node !=-1) {
+                cout<<"\"angavg\" and \"alignaxes\" "<<TWWARN<<"cannot be used simultaneously"<<TRESET<<". Run help (-h, --help) for more inforamtion."<<endl;
+                exit(4);
+            }else {
+                if (args.analysis_averaging_option == 1) {
+                    cout<<"Average over random rotations:"<<TON<<" ON"<<TRESET<<endl;
+                    cout<<"Number of random rotations: "<<args.num_ang_avg<<endl;
+                }else if (args.analysis_averaging_option == 2) {
+                    cout<<"Material frame reference: "<<TON<<"ON"<<TRESET<<endl;
+                    cout<<"Node index on the Z axis: "<<args.z_node<<endl;
+                    cout<<"Node inedx on the Z-Y plane: "<<args.zy_node<<endl;
+                    
+                }
+            }
+            
+            
             if (args.membane_labels.size()==0) {
-                cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. By default VCM analyser will use the first Membrane class settings in the report file to initilise the membrane. For more options use the \"memlabel\" and \"reportindecies\" flags or use -h for more options.\n"<<TRESET<<endl;
+                cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. If the pdb strictly containes one Membrane class (and no other classes), ignore this warning. If it contains multiple membranes or other classes as well, assign the membrane label to be analysed. By default VCM analyser will use the first ATOM label appearing in the pdb file.\n"<<TRESET<<endl;
+            } else {
+                check_membrane_labels(args);
             }
-            string reportfilename = args.analysis_filename;
-            reportfilename.erase(reportfilename.end()-4,reportfilename.end() );
-            reportfilename += "_report.txt";
-            cout<<"Looking for simulation report file "<<TFILE<<reportfilename<<TPURPLE<<endl;
-            reportfilename=check_if_file_exists(reportfilename);
+            build_output_names(args);
             
-            cout<<"Report file \""<<TFILE<<reportfilename<<TRESET<<"\""<<TSUCCESS<<" found"<<TPURPLE<<"."<<endl;
-            args.Mesh_files.push_back(reportfilename);
-            if (args.membane_labels.size()!=0) {
-                args.Mesh_files.resize(args.membane_labels.size(), reportfilename);
+            cout<<"Output file(s):\n";
+            for (int i=0; i<args.output_filename.size(); i++) {
+                cout<<"\t"<<TFILE<<args.output_filename[i]<<TRESET<<endl;
+            }
+            
+            if (args.analysis!="E") {
+                check_membrane_path(args);
+            } else {
+                if (args.membane_labels.size()!=0 && args.membane_labels.size()!=args.membane_label_indecies.size()) {
+                    string errorMessage = TWARN;
+                    errorMessage +="Error: Arg Parser: The number of mambrane labels and the corresponding indecies don't match. Check the number of arguments in the \"memlabels\" and \"reportindecies\" options.\n";
+                    errorMessage +=TRESET;
+                    throw std::runtime_error(errorMessage);
+                }
+                if (args.membane_labels.size()==0) {
+                    cout<<TWARN<<"\n!!!Warning"<<TRESET<<TBOLD<<", no membrane labels assigned. By default VCM analyser will use the first Membrane class settings in the report file to initilise the membrane. For more options use the \"memlabel\" and \"reportindecies\" flags or use -h for more options.\n"<<TRESET<<endl;
+                }
+                string reportfilename = args.analysis_filename;
+                reportfilename.erase(reportfilename.end()-4,reportfilename.end() );
+                reportfilename += "_report.txt";
+                cout<<"Looking for simulation report file "<<TFILE<<reportfilename<<TPURPLE<<endl;
+                reportfilename=check_if_file_exists(reportfilename);
+                
+                cout<<"Report file \""<<TFILE<<reportfilename<<TRESET<<"\""<<TSUCCESS<<" found"<<TPURPLE<<"."<<endl;
+                args.Mesh_files.push_back(reportfilename);
+                if (args.membane_labels.size()!=0) {
+                    args.Mesh_files.resize(args.membane_labels.size(), reportfilename);
+                }
+            }
+            
+            if (args.framelimits_beg==0 && args.framelimits_end==0) {
+                cout<<"All frames will be analysied."<<endl;
+            } else if (args.framelimits_beg==0) {
+                cout<<"Frames from the beginning to frame "<<args.framelimits_end<<" will be analysed."<<endl;
+                
+            } else if (args.framelimits_end==0) {
+                cout<<"Frames from "<<args.framelimits_beg<<" to the end will be analysed."<<endl;
+            } else if (args.framelimits_end == args.framelimits_beg+1){
+                cout<<"Frame "<<args.framelimits_beg<<" will be analysed."<<endl;
+            } else {
+                cout<<"Frames from "<<args.framelimits_beg<<" to "<<args.framelimits_end<<" will be analysed."<<endl;
             }
         }
-        
-        if (args.framelimits_beg==0 && args.framelimits_end==0) {
-            cout<<"All frames will be analysied."<<endl;
-        } else if (args.framelimits_beg==0) {
-            cout<<"Frames from the beginning to frame "<<args.framelimits_end<<" will be analysed."<<endl;
-            
-        } else if (args.framelimits_end==0) {
-            cout<<"Frames from "<<args.framelimits_beg<<" to the end will be analysed."<<endl;
-        } else if (args.framelimits_end == args.framelimits_beg+1){
-            cout<<"Frame "<<args.framelimits_beg<<" will be analysed."<<endl;
-        } else {
-            cout<<"Frames from "<<args.framelimits_beg<<" to "<<args.framelimits_end<<" will be analysed."<<endl;
-        }
+        cout<<endl;
     }
-    cout<<endl;
-    
     
 }
 
@@ -494,5 +455,43 @@ void check_membrane_labels(ArgStruct_Analysis &args){
                 cout<<TWWARN<<"\n!!!Warning"<<TRESET<<", pdb labels are 4 charachters long. The Membrane label \""<<TWARN<<args.membane_labels[i]<<TRESET<<"\" is "<<args.membane_labels[i].size()<<" long. If there is a typo, end the programme and start again.\n\n";
             }
         }
+    }
+}
+
+
+void check_membrane_path(ArgStruct_Analysis &args){
+    if (args.meshpathinput == "None") {
+        string meshpath;
+        cout<<"Mesh information is "<<TWARN<<"required"<<TRESET<<" for analysis."<<endl;
+        if (args.membane_labels.size()<2) {
+            cout<<"Please enter the path+file for the Membrane mesh.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+            cout<<TFILE;
+            cin>>meshpath;
+            cout<<TRESET;
+            
+            meshpath = check_if_file_exists(meshpath);
+            args.Mesh_files.push_back(meshpath);
+           
+            
+        } else {
+            cout<<"Please enter the path+file for the following Membranes.\nExample:\n\tpath/to/my/mesh.ply"<<endl;
+            for (int i=0; i<args.membane_labels.size(); i++) {
+                cout<<"For "<<TWARN<<args.membane_labels[i]<<TRESET<<":"<<endl;
+                cout<<TFILE;
+                cin>>meshpath;
+                cout<<TRESET;
+                std::ifstream read_mesh;
+                read_mesh.open(meshpath.c_str());
+                if (!read_mesh) {
+                    std::cout << TWWARN<<"Unable to read"<<TRESET<<" \""<<TFILE<<meshpath<<TRESET<<"\" or it does not exist.\nPlease try again."<<std::endl;
+                    i--;
+                } else {
+                    args.Mesh_files.push_back(meshpath);
+                }
+            }
+        }
+    } else {
+        string meshpath = check_if_file_exists(args.meshpathinput);
+        args.Mesh_files.push_back(meshpath);
     }
 }
