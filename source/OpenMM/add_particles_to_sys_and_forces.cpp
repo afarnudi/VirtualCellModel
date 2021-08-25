@@ -27,7 +27,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
             WCAFC=true;
         }
     }
-
+    
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         //        const AtomType& atype = atomType[atoms[n].type];
         system.addParticle(atoms[n].mass);
