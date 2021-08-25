@@ -436,12 +436,12 @@ public: //these are using in Monte Carlo flip function. for defining them as pri
         insertOrder.push_back("NodeTypes");
         
         values[0] ="0";
-        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value 0. If the Chromatin is interacting with another class, the Sigma between them will be calculated as the average of the class's sigmas: Sigma {Chromatin & A} = 0.5(sigma{Chromatin}+Sigma{A}).  \n#If the chromatin has more than 1 node type, additional LJ sigmas should be provided, if not the default value (2.5*node radius) will be assigned to them. Example for 3 node types: LJsigma 1 3 2.5";
+        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value is the radius of the Chromatin node. If the Chromatin is interacting with another class, the Sigma between them will be calculated as the sum of the class's sigmas: Sigma {Chromatin & A} = (sigma{Chromatin}+Sigma{A})";
         Params["LJsigma"] = values;
         insertOrder.push_back("LJsigma");
         
-        values[0] ="0";
-        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the Chromatin is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Chromatin & A} = sqrt(epsillon{Chromatin}*+epsillon{A}). \n#If the chromatin has more than 1 node type, additional LJ epsiolnes should be provided, if not the default value (0) will be assigned to them. Example for 3 node types: LJepsilon 2 4 7";
+        values[0] ="kbt";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value kbt. If the Chromatin is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Chromatin & A} = sqrt(epsillon{Chromatin}*+epsillon{A}).";
         Params["LJepsilon"] = values;
         insertOrder.push_back("LJepsilon");
         

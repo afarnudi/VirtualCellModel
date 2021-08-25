@@ -823,13 +823,13 @@ public:
         Params["XYZinMembrane"] = values;
         insertOrder.push_back("XYZinMembrane");
         
-//        values[0] ="0";
-//        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value 0. If the Memebrane is interacting with another class, the Sigma between them will be calculated as the average of the class's sigmas: Sigma {Membrane & A} = 0.5(sigma{Membrane}+Sigma{A})";
-//        Params["LJsigma"] = values;
-//        insertOrder.push_back("LJsigma");
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 sigma. Default value is the radius of the Membrane node. If the Memebrane is interacting with another class, the Sigma between them will be calculated as the sum of the class's sigmas: Sigma {Membrane & A} = (sigma{Membrane}+Sigma{A})";
+        Params["LJsigma"] = values;
+        insertOrder.push_back("LJsigma");
         
         values[0] ="kbt";
-        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*+epsillon{A}).";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value kbt. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*+epsillon{A}).";
         Params["LJepsilon"] = values;
         insertOrder.push_back("LJepsilon");
         
