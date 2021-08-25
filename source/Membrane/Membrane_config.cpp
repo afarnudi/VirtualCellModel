@@ -45,6 +45,22 @@ void Membrane::consistancy_check(){
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    if (epsilon_LJ_12_6Stat == "kbt") {
+        epsilon_LJ_12_6 = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+    } else {
+        try {
+            epsilon_LJ_12_6= stod(epsilon_LJ_12_6Stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+            errorMessage+=TFILE;
+            errorMessage+=epsilon_LJ_12_6Stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
     
     if (Node_Bond_Nominal_Length_stat!= "Au" && Node_Bond_Nominal_Length_stat!= "Av") {
         try {
@@ -192,7 +208,8 @@ void Membrane::assign_parameters(void){
 //            sigma_LJ_12_6 = stod(split[0]);
 //        }
         else if (it.first == "LJepsilon") {
-            epsilon_LJ_12_6 = stod(split[0]);
+            epsilon_LJ_12_6Stat  = split[0];
+            
         } else if (it.first == "UpdateRadius") {
             New_Radius = stod(split[0]);
         } else if (it.first == "UpdateBeginTimeInPs") {

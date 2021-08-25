@@ -68,6 +68,7 @@ protected:
     
     double sigma_LJ_12_6=0;
     double epsilon_LJ_12_6=0;
+    string epsilon_LJ_12_6Stat;
     
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy=0.0;
@@ -827,7 +828,7 @@ public:
 //        Params["LJsigma"] = values;
 //        insertOrder.push_back("LJsigma");
         
-        values[0] ="0";
+        values[0] ="kbt";
         values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*+epsillon{A}).";
         Params["LJepsilon"] = values;
         insertOrder.push_back("LJepsilon");
