@@ -31,6 +31,7 @@ private:
     
     std::string label;
     std::string Mesh_file_name;
+    std::string MeshType;
     
     std::string file_time;
     int index;
@@ -38,7 +39,9 @@ private:
     std::map<std::string, double> param_map;
     
     double Node_Mass=1;
-    double Node_radius=1;
+    string Node_radius_stat;
+    //double Node_radius=1;
+    vector<double> Node_radius;
     int spring_model=1;
     double Spring_coefficient=10;
     double stiffness_gradient_x=0;
@@ -54,24 +57,29 @@ private:
     double receptor_gradient_y = 0;
     double receptor_gradient_z = 0;
     
+    vector<double> Shift_position_xyzVector;
+    vector<double> Shift_velocities_xyzVector;
+//    double Shift_in_X_direction=0;
+//    double Shift_in_Y_direction=0;
+//    double Shift_in_Z_direction=0;
     
-    double Shift_in_X_direction=0;
-    double Shift_in_Y_direction=0;
-    double Shift_in_Z_direction=0;
+    string mesh_format;
+    
     
     int Num_of_Nodes=0;
     int Num_of_Triangle_Pairs=0;
     int Num_of_Node_Pairs=0;
     int Num_of_Triangles=0;
     
-    double x_speed=0.0; //???
-    double y_speed=0.0;
-    double z_speed=0.0;
+   // double x_speed=0.0; //???
+   // double y_speed=0.0;
+   // double z_speed=0.0;
     
     int ext_force_model=0;
-    double kx=10;
-    double ky=10;
-    double kz=10;
+    vector<double> ext_force_rigidity ;
+    //double kx=10;
+    //double ky=10;
+    //double kz=10;
     
     double Kelvin_Damping_Coefficient=100;
     double Dashpot_Viscosity=0.02;
@@ -97,11 +105,14 @@ private:
     vector<vector<double> > Node_Velocity;
     vector<vector<int> > Node_Bond_list;
     vector<vector<int> > Node_neighbour_list;
+    string  Node_Bond_Nominal_Length_stat;
+    double  Node_Bond_user_defined_Nominal_Length_in_Nm;
     void Node_Bond_identifier_2D(void);
     void Node_Bond_identifier_3D(void);
     void Node_Bond_identifier_3D_square(void);
     
     void initialise(int dimension);
+    void initialise(std::string Mesh_file_name);
     void Node_neighbour_list_constructor(void);
     
 //    void read_input(string input_file);
@@ -239,9 +250,13 @@ public:
         return epsilon_LJ_12_6;
     }
     
-    double get_node_radius(void){
-        return Node_radius;
-    }
+//    double get_node_radius(void){
+//        return Node_radius;
+//    }
+    
+    double get_node_radius(int index){
+           return Node_radius[index];
+       }
     
     double get_interaction_range(void){
         return interaction_range;
@@ -260,13 +275,13 @@ public:
         return ext_force_model;
     }
     double get_kx(void){
-        return kx;
+        return ext_force_rigidity[0];
     }
     double get_ky(void){
-        return ky;
+        return ext_force_rigidity[1];
     }
     double get_kz(void){
-        return kz;
+        return ext_force_rigidity[2];
     }
     
     double get_node_position(int node_number, int node_coordinate){
@@ -275,11 +290,20 @@ public:
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
-    void shift_node_positions(void){
+//    void shift_node_positions(void){
+//        for (int i=0; i<Num_of_Nodes; i++) {
+//            Node_Position[i][0]+=Shift_in_X_direction;
+//            Node_Position[i][1]+=Shift_in_Y_direction;
+//            Node_Position[i][2]+=Shift_in_Z_direction;
+//        }
+//    }
+    
+    /** This function shifts the whole ecm.*/
+    void shift_position (double x, double y, double z) {
         for (int i=0; i<Num_of_Nodes; i++) {
-            Node_Position[i][0]+=Shift_in_X_direction;
-            Node_Position[i][1]+=Shift_in_Y_direction;
-            Node_Position[i][2]+=Shift_in_Z_direction;
+            Node_Position[i][0]+=x;
+            Node_Position[i][1]+=y;
+            Node_Position[i][2]+=z;
         }
     }
     
@@ -353,15 +377,144 @@ public:
     ECM(){
         values.resize(2);
         
-        values[0] ="value 0";
-        values[1] ="#This is a parameter example for ECM with default value 'value 0'.";
-        Params["ECMSampleParam0"] = values;
-        insertOrder.push_back("ECMSampleParam0");
+      values[0] ="Path/to/my/meshfile.extension";
+        values[1] ="#Path to the mesh file. Supported formats: Blender's ply, and Gmsh 2. The ECM class cannot be initilised without a mesh file.";
+        Params["MeshFile"] = values;
+        insertOrder.push_back("MeshFile");
         
-        values[0] ="value 1";
-        values[1] ="#This is a parameter example for ECM with default value 'value 1'.";
-        Params["ECMSampleParam1"] = values;
-        insertOrder.push_back("ECMSampleParam1");
+        values[0] ="2d";
+        values[1] ="#2d or 3d ecm.  default value 2d";
+        Params["MeshType"] = values;
+        insertOrder.push_back("MeshType");
+        
+        values[0] ="1";
+        values[1] ="#Mass asssigned to each node. Default value 1";
+        Params["NodeMass"] = values;
+        insertOrder.push_back("NodeMass");
+        
+        values[0] ="Av";
+        values[1] ="#Radius assigned to each node. Legal Values 1) Av, half of the average bond distance of nodes or 2) \"a value\". The node radius is used to calculate the cutt-off and minimum energy distance for the 'Excluded Volume' and the 'Lennard-Jones' potential.";
+        Params["NodeRadius"] = values;
+        insertOrder.push_back("NodeRadius");
+        
+        values[0] ="Au";
+        values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
+        Params["NominalLengthInNm"] = values;
+        insertOrder.push_back("NominalLengthInNm");
+        
+        values[0] ="H";
+        values[1] ="#Set the bond potential. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'kelvin' for the Kelvin-Voigt potential. 'N' for no potential. Default H";
+        Params["SpringModel"] = values;
+        insertOrder.push_back("SpringModel");
+        
+        values[0] ="0";
+        values[1] ="#Set the bond potential rigidity coefficient. Default value 0.";
+        Params["SpringCoeff"] = values;
+        insertOrder.push_back("SpringCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the damping coefficient. Default value 0.";
+        Params["DampingCoeff"] = values;
+        insertOrder.push_back("DampingCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceModel"] = values;
+        insertOrder.push_back("ExtForceModel");
+        
+        values[0] ="0 0 0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceRigidity"] = values;
+        insertOrder.push_back("ExtForceRigidity");
+        
+        
+        values[0] ="1";
+        values[1] ="#Used to scale the ECM coordinates. Default 1";
+        Params["Scale"] = values;
+        insertOrder.push_back("Scale");
+               
+        values[0] ="0 0 0";
+        values[1] ="#X, Y, Z components of a vector used to translate all coordinates of the Mesh befor beginning the simluation.";
+        Params["CoordinateTranslateVector"] = values;
+        insertOrder.push_back("CoordinateTranslateVector");
+               
+        values[0] ="0 0 0";
+        values[1] ="#Vx, Vy, Vz components of a vector used to add to all initial node velocities befor beginning the simluation.";
+        Params["VelocityShiftVector"] = values;
+        insertOrder.push_back("VelocityShiftVector");
+        
+        values[0] ="0";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the ECM is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {ECM & A} = sqrt(epsillon{ECM}*+epsillon{A}).";
+        Params["LJepsilon"] = values;
+        insertOrder.push_back("LJepsilon");
+        
+//        values[0] ="10";
+//        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value 0. If the ECM is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {ECM & A} = sqrt(epsillon{ECM}*+epsillon{A}).";
+//        Params["LJepsilon"] = values;
+//        insertOrder.push_back("LJsigma");
+        
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm rigidity in x direction. Default 0";
+        Params["stiffness_gradient_x"] = values;
+        insertOrder.push_back("stiffness_gradient_x");
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm rigidity in y direction. Default 0";
+        Params["stiffness_gradient_y"] = values;
+        insertOrder.push_back("stiffness_gradient_y");
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm rigidity in z direction. Default 0";
+        Params["stiffness_gradient_z"] = values;
+        insertOrder.push_back("stiffness_gradient_z");
+        
+        
+        values[0] ="1";
+        values[1] ="#Set receptor type on ecm. '1' for normal ecm with receptor density defined by 'receptor_density' parameter, 2 for stripe pattern receptors. Default 1";
+        Params["receptor_type"] = values;
+        insertOrder.push_back("receptor_type");
+        
+        
+        values[0] ="1";
+        values[1] ="#Set receptor surface density on ECM. Default 1";
+        Params["receptor_density"] = values;
+        insertOrder.push_back("receptor_density");
+        
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm receptor density in x direction. Default 0";
+        Params["receptor_gradient_x"] = values;
+        insertOrder.push_back("receptor_gradient_x");
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm receptor density in y direction. Default 0";
+        Params["receptor_gradient_y"] = values;
+        insertOrder.push_back("receptor_gradient_y");
+        
+        values[0] ="0";
+        values[1] ="#Set gradient in ecm receptor density in z direction. Default 0";
+        Params["receptor_gradient_z"] = values;
+        insertOrder.push_back("receptor_gradient_z");
+        
+        
+        values[0] ="0";
+        values[1] ="#will be added . Default 0";
+        Params["receptor_center_x"] = values;
+        insertOrder.push_back("receptor_center_x");
+        
+        values[0] ="0";
+        values[1] ="#will be added . Default 0";
+        Params["receptor_center_y"] = values;
+        insertOrder.push_back("receptor_center_y");
+        
+        values[0] ="0";
+        values[1] ="#will be added . Default 0";
+        Params["receptor_center_z"] = values;
+        insertOrder.push_back("receptor_center_z");
+        
+        
+        
         
         
     }
@@ -375,6 +528,9 @@ public:
     void assign_key_value(string key, string value){
         Params[key][0]=value;
     }
+    
+    void assign_parameters(void);
+    void consistancy_check(void);
 };
 
 #endif /* ECM_hpp */

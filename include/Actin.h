@@ -33,11 +33,11 @@ private:
     vector<double> Node_radius;
     int spring_model=2;
     double Spring_coefficient=100;
-    double Contractile_force =10;
+    double Contractile_force =0;
     int contractile_model = 1;
     double contractile_hill_co = 0;
-    double Contractile_k1=50;
-    double Contractile_k2=25;
+    double Contractile_k1=0;
+    double Contractile_k2=0;
     double Contractile_rmin=0;
     double Contractile_rmax=1000000;
     double act_r0factor = 1;
@@ -76,9 +76,10 @@ private:
 //    double z_speed=0.0;
     
     int ext_force_model=0;
-    double kx=10;
-    double ky=10;
-    double kz=10;
+    vector<double> ext_force_rigidity ;
+    //double kx=10;
+    //double ky=10;
+    //double kz=10;
     
     void read_actin_file(void);
     
@@ -432,13 +433,13 @@ public:
         return ext_force_model;
     }
     double get_kx(void){
-        return kx;
+        return ext_force_rigidity[0];
     }
     double get_ky(void){
-        return ky;
+        return ext_force_rigidity[1];
     }
     double get_kz(void){
-        return kz;
+        return ext_force_rigidity[2];
     }
     void check(void);
     void check_2(void);
@@ -502,7 +503,7 @@ public:
         values.resize(2);
         
         values[0] ="Path/to/my/meshfile.extension";
-        values[1] ="#Path to the mesh file. Supported formats: Blender's ply, actin format .actin, and Gmsh 2. The Membrane class cannot be initilised without a mesh file.";
+        values[1] ="#Path to the mesh file. Supported formats: Blender's ply, actin format .actin, and Gmsh 2. The Actin class cannot be initilised without a mesh file.";
         Params["MeshFile"] = values;
         insertOrder.push_back("MeshFile");
         
@@ -521,6 +522,11 @@ public:
         Params["NodeRadius"] = values;
         insertOrder.push_back("NodeRadius");
         
+//        values[0] ="Av";
+//        values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";
+//        Params["NominalLengthInNm"] = values;
+//        insertOrder.push_back("NominalLengthInNm");
+        
         values[0] ="H";
         values[1] ="#Set the bond potential. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'kelvin' for the Kelvin-Voigt potential. 'N' for no potential. Default H";
         Params["SpringModel"] = values;
@@ -530,6 +536,54 @@ public:
         values[1] ="#Set the bond potential rigidity coefficient. Default value 0.";
         Params["SpringCoeff"] = values;
         insertOrder.push_back("SpringCoeff");
+        
+        
+        values[0] ="0";
+        values[1] ="#Set the Contractile force for filaments in cytoskeleton. Default value 0.";
+        Params["Contractile_force"] = values;
+        insertOrder.push_back("Contractile_force");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element.this spring exists in compression. Default value 0.";
+        Params["Contractile_k1"] = values;
+        insertOrder.push_back("Contractile_k1");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element. this spring exists in extension. Default value 0.";
+        Params["Contractile_k2"] = values;
+        insertOrder.push_back("Contractile_k2");
+        
+        values[0] ="0";
+        values[1] ="#Set the minimum length of contractile filaments. Default value 0.";
+        Params["Contractile_rmin_factor"] = values;
+        insertOrder.push_back("Contractile_rmin_factor");
+        
+        values[0] ="100";
+        values[1] ="#Set the maximum length of contractile filaments. Default value 100.";
+        Params["Contractile_rmax_factor"] = values;
+        insertOrder.push_back("Contractile_rmax_factor");
+        
+        
+        values[0] ="1";
+        values[1] ="#Set the Contractile elements nominal length in sajjad type actin. Default value 1.";
+        Params["actin_r0factor"] = values;
+        insertOrder.push_back("actin_r0factor");
+        
+        values[0] ="0";
+        values[1] ="#Set hill coefficient for hill contractiles. Default value 0.";
+        Params["Contractile_hill_co"] = values;
+        insertOrder.push_back("Contractile_hill_co");
+        
+        values[0] ="0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceModel"] = values;
+        insertOrder.push_back("ExtForceModel");
+        
+        values[0] ="0 0 0";
+        values[1] ="#Under development. Do not use this flag.";
+        Params["ExtForceRigidity"] = values;
+        insertOrder.push_back("ExtForceRigidity");
+        
         
         values[0] ="0";
         values[1] ="#Set the Kelvin Damping Coefficient. Default value 0.";
@@ -547,7 +601,7 @@ public:
         insertOrder.push_back("NominalLengthInNm");
         
         values[0] ="1";
-        values[1] ="#Used to scale the Membrane coordinates. Default 1";
+        values[1] ="#Used to scale the Actin coordinates. Default 1";
         Params["Scale"] = values;
         insertOrder.push_back("Scale");
         

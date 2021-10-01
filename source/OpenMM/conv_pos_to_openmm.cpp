@@ -127,7 +127,7 @@ MyAtomInfo* convert_ECM_position_to_openmm(ECM ecm) {
         myatominfo[i].velocityInNmperPs[1]=ecm.get_node_velocity(i, 1);
         myatominfo[i].velocityInNmperPs[2]=ecm.get_node_velocity(i, 2);
         myatominfo[i].mass=ecm.get_node_mass();
-        myatominfo[i].radius=ecm.get_node_radius();
+        myatominfo[i].radius=ecm.get_node_radius(i);
         myatominfo[i].sigma_LJ_12_6=ecm.get_sigma_LJ_12_6();
         myatominfo[i].epsilon_LJ_12_6=ecm.get_epsilon_LJ_12_6();
         myatominfo[i].ext_force_model=ecm.get_ext_force_model();
