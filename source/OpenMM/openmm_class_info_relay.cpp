@@ -92,8 +92,8 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
         
         cout<<"Bond potential:";
         Bonds* bonds = convert_Actin_bond_info_to_openmm(acts[i],atoms);
-//        for (int j=0; j<(4*acts[i].get_num_of_node_pairs() + 4*acts[i].get_num_of_abp_pairs() +4*acts[i].get_num_of_MT_pairs() ); j++) {
-        for (int j=0; j<acts[i].get_num_of_node_pairs(); j++) {
+        for (int j=0; j<(4*acts[i].get_num_of_node_pairs() + 4*acts[i].get_num_of_abp_pairs() +4*acts[i].get_num_of_MT_pairs() ); j++) {
+       // for (int j=0; j<acts[i].get_num_of_node_pairs(); j++) {
             all_bonds[j+bond_count]=bonds[j];
             all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
             all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
@@ -102,8 +102,8 @@ void OpenMM_Actin_info_relay (vector<Actin>          acts,
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
         atom_count += acts[i].get_num_of_nodes();
-//        bond_count += (4*acts[i].get_num_of_node_pairs() + 4*acts[i].get_num_of_abp_pairs() + 4*acts[i].get_num_of_MT_pairs() ) ;
-        bond_count += acts[i].get_num_of_node_pairs();
+        bond_count += (4*acts[i].get_num_of_node_pairs() + 4*acts[i].get_num_of_abp_pairs() + 4*acts[i].get_num_of_MT_pairs() ) ;
+        //bond_count += acts[i].get_num_of_node_pairs();
         //        dihe_count += membranes[i].get_num_of_triangle_pairs();
     }
 }

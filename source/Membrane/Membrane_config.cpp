@@ -16,7 +16,7 @@ void Membrane::import_config(vector<string> configlines){
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);
-                //Only replace parameters that actually exist in the Membrane parameters and ignor anythin else;
+                //Only replace parameters that actually exist in the Membrane parameters and ignore anythin else;
                 if (it != Params.end()) {
                     configlines[i].erase(configlines[i].begin(),configlines[i].begin()+int(split[0].size()) );
                     it->second[0] = configlines[i];
@@ -238,6 +238,17 @@ void Membrane::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+            
+        
+        }    else if (it.first == "ExtForceModel") {
+             ext_force_model = stoi(split[0]);
+        
+         } else if (it.first == "ExtForceRigidity") {
+             ext_force_rigidity.resize(3,0);
+             ext_force_rigidity[0] = stoi(split[0]);
+             ext_force_rigidity[1] = stoi(split[1]);
+             ext_force_rigidity[2] = stoi(split[2]);
+        
         } else if (it.first == "VelocityShiftVector") {
             Shift_velocities_xyzVector.resize(3,0);
             Shift_velocities_xyzVector[0] = stod(split[0]);

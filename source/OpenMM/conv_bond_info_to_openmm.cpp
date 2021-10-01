@@ -86,10 +86,10 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     bool KelvinVoigtpotential = false;
     bool Contractilepotential = false;
     bool Harmonic_minmaxpotential = false;
-    bool fenepotential=false;
+    //bool fenepotential=false;
     
-    Bonds* bonds = new Bonds[act_num_bonds];
-//    Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
+   // Bonds* bonds = new Bonds[act_num_bonds];
+    Bonds* bonds = new Bonds[4*act_num_bonds + 4*act_abp_bonds + 4*act_MT_bonds];
     //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
     //    cout<<"ecm.get_num_of_node_pairs()()  "<<ecm.get_num_of_node_pairs()<<endl;
     for (int i=0; i<act_num_bonds; i++) {
@@ -97,12 +97,10 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         bonds[i].atoms[0]=act.get_node_pair(i, 0);
         bonds[i].atoms[1]=act.get_node_pair(i, 1);
         bonds[i].class_label = act.get_label() + act.get_label();
+       // bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i);
         
-        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
-            fenepotential =true;
-            bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
-            bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
-            bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+        if (bonds[i].type == potentialModelIndex.Model["Harmonic_minmax"]) {
+            Harmonic_minmaxpotential =true;
         } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
             harmonicpotential= true;
             bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i) * act.get_act_r0factor();
@@ -112,8 +110,8 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
             bonds[i].nominalLengthInNm=act.get_node_pair_Nominal_Length_in_Nm(i) * act.get_act_r0factor();
             bonds[i].stiffnessInKJPerNm2=act.get_spring_stiffness_coefficient();
             bonds[i].dampInKJPsPerNm2=act.get_kelvin_damping_coefficient();
-        } else if (bonds[i].type == potentialModelIndex.Model["Contractile"]){
-            Contractilepotential = true;
+        //} else if (bonds[i].type == potentialModelIndex.Model["Contractile"]){
+          //  Contractilepotential = true;
         }
         
         
@@ -122,7 +120,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     
     
     //Contractile element parallel to bond spring
-    if (Contractilepotential) {
+    //if (Contractilepotential) {
         for (int i=act_num_bonds; i<(2*act_num_bonds); i++) {
             int model = act.get_contractile_model();
             switch (model) {
@@ -154,7 +152,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         
         //Contractile spring
         for (int i=2*act_num_bonds; i<(3*act_num_bonds); i++) {
-            bonds[i].type = potentialModelIndex.Model["Harmonic"];
+            bonds[i].type = potentialModelIndex.Model["Harmonic_minmax"];
             bonds[i+act_num_bonds].type = potentialModelIndex.Model["Harmonic_minmax"];
             bonds[i].atoms[0]=act.get_node_pair(i-2*act_num_bonds, 0);
             bonds[i].atoms[1]=act.get_node_pair(i-2*act_num_bonds, 1);
@@ -369,7 +367,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
         }
         
         
-    }
+    //}
     
     
     if(harmonicpotential){
@@ -389,7 +387,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
     
     if(bonds[2*act_num_bonds].type == potentialModelIndex.Model["Harmonic_minmax"]){
         cout<<" Contractile elements"<<endl;
-        cout<<"\tk1 and k2 ? (?units?) = "<< act.get_contractile_k1()<< " , " << act.get_contractile_k2()<< endl;
+        cout<<"\tk1 and k2 ? (KJ.Nm^-2.mol^-1 ) = "<< act.get_contractile_k1()<< " , " << act.get_contractile_k2()<< endl;
         cout<<"\trmin and rmax (Nm) = "<< act.get_contractile_rmin() * act.get_avg_node_dist()<< " , " << act.get_contractile_rmax() * act.get_avg_node_dist()<< endl;
     }
     

@@ -164,7 +164,7 @@ struct GeneralParameters{
         insertOrder.push_back("ProjectName");
         
         values[0] ="10";
-        values[1] ="#Simulation time length masured in pico seconds. Default value 10.";
+        values[1] ="#Simulation time length measured in pico seconds. Default value 10.";
         GenParams["SimulationTimeInPs"] = values;
         insertOrder.push_back("SimulationTimeInPs");
         
