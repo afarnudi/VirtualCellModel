@@ -400,7 +400,7 @@ Bonds* convert_Actin_bond_info_to_openmm(Actin act,MyAtomInfo* atoms) {
 Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
     const int act_num_bonds = act.return_num_of_actin_membrane_shared_nodes(k);
     Bonds* bonds = new Bonds[act_num_bonds];
-    double stiffness = 1000000;
+    double stiffness = 10000;
     double nominal_length = 0;
     int type = potentialModelIndex.Model["Harmonic"];
     //    cout<<"ecm.get_spring_model()  "<<ecm.get_spring_model()<<endl;
@@ -409,6 +409,7 @@ Bonds* convert_ActMem_bond_info_to_openmm(Actin act, int k) {
         bonds[i].type = type;
         bonds[i].atoms[0]=act.return_ActMem_shared_act_atom(k, i);
         bonds[i].atoms[1]=act.return_ActMem_shared_mem_atom(k, i);
+//        std::cout << "act " <<  bonds[i].atoms[0] << "connected to " << "mem " <<  bonds[i].atoms[1] << '\n';
         bonds[i].nominalLengthInNm=nominal_length;
         bonds[i].stiffnessInKJPerNm2=stiffness;
         bonds[i].class_label = act.get_label() + generalParameters.Membrane_label+std::to_string(k);
