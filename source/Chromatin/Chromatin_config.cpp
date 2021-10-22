@@ -190,7 +190,7 @@ void Chromatin::consistancy_check(){
         } else if (it.first == "LJepsilon"){
             epsilon_LJ.resize(num_of_node_types,0);
             if (split.size()==1) {
-                if (split[0] != "kbt") {
+                if (split[0] == "kbt") {
                     epsilon_LJ[0] = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
                 } else {
                     try {
