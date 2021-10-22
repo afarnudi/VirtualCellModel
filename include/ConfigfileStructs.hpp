@@ -95,7 +95,7 @@ struct GeneralParameters{
     int Num_of_Chromatins;
     int Num_of_ECMs;
     
-    
+    int bondCutoff;
     
     bool   WantEnergy;
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
@@ -324,6 +324,11 @@ struct GeneralParameters{
         values[1] ="#Set the precision of the calculations. If the precision is not supported by the platform the default precision of the platform will be used. Default: N ";
         GenParams["Precision"] = values;
         insertOrder.push_back("Precision");
+        
+        values[0] ="0";
+        values[1] ="#For non bonded forces, pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions.";
+        GenParams["bondCutoff"] = values;
+        insertOrder.push_back("bondCutoff");
         
     }
     
