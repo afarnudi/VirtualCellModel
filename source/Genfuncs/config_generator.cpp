@@ -235,7 +235,7 @@ void configfile_generator(int status){
         defaultparams.GenParams["ProjectName"][0]=input;
         cout<<TRESET;
         
-        cout<<"Please set the simulation time length masured in pico seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
+        cout<<"Please set the simulation time length measured in pico seconds:\n"<<TBLINK<<TBOLD<<">> "<<TRESET<<TFILE;
         cin>>input;
         defaultparams.GenParams["SimulationTimeInPs"][0]=input;
         cout<<TRESET;

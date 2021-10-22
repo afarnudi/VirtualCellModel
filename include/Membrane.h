@@ -398,9 +398,10 @@ public:
 //    double z_speed=0.0;
     
     int ext_force_model=0;
-    double kx=10;
-    double ky=10;
-    double kz=10;
+    vector<double> ext_force_rigidity ;
+    //double kx=10;
+    //double ky=10;
+    //double kz=10;
     
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     
@@ -571,13 +572,13 @@ public:
         return ext_force_model;
     }
     double get_kx(void){
-        return kx;
+        return ext_force_rigidity[0];
     }
     double get_ky(void){
-        return ky;
+        return ext_force_rigidity[1];
     }
     double get_kz(void){
-        return kz;
+        return ext_force_rigidity[2];
     }
     void set_FENE_param_2(double &lmin, double &lmax, double &epsilon, double &k){
         lmin = FENE_min;
