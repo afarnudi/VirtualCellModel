@@ -306,7 +306,7 @@ struct GeneralParameters{
         insertOrder.push_back("MemFluidity");
         
         values[0] ="false";
-        values[1] ="#When true, sll interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
+        values[1] ="#When true, all interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
         GenParams["MinimumForceDecleration"] = values;
         insertOrder.push_back("MinimumForceDecleration");
         
