@@ -197,7 +197,7 @@ void Chromatin::consistancy_check(){
                         epsilon_LJ[0] = stod(split[0]);
                     } catch (...) {
                         string errorMessage = TWARN;
-                        errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+                        errorMessage+="Chromatin config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
                         errorMessage+=TFILE;
                         errorMessage+=split[0];
                         errorMessage+=TWARN;
