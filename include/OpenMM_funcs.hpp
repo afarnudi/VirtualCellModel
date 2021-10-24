@@ -325,61 +325,6 @@ void init_Excluded_volume_interaction(vector<OpenMM::CustomNonbondedForce*> &Exc
                                       string                                 set_1_name,
                                       string                                 set_2_name);
 
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                      atoms[],
-                          vector<set<int> >                     set_1,
-                          vector<set<int> >                     set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name);
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<set<int> > >             set_1,
-                          vector<set<int> >                      set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name,
-                            bool                                   use_max_radius);
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<std::set<int> > >             set_1,
-                          vector<vector<std::set<int> > >             set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                      atoms[],
-                          vector<set<int> >                     set_1,
-                          vector<set<int> >                     set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                      atoms[],
-                          vector<vector<std::set<int> > >       set_1,
-                          vector<std::set<int> >                set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name,
-                          bool                                  use_max_radius);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<std::set<int> > >             set_1,
-                          vector<vector<std::set<int> > >             set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name);
-
-
 
 
 
@@ -588,4 +533,16 @@ void set_Bussi_Global_thermostat_multithermos_DropNewton3(MyOpenMMData* omm,
 void set_customLangevinforminimisation(MyOpenMMData* omm, double stepSizeInFs, double restraint);
 void set_Langevin(MyOpenMMData* omm, double stepSizeInFs);
 
+string generate_parameter_name(string    parameter_name,
+                               int       set_1_index,
+                               int       set_2_index,
+                               string    set_1_name,
+                               string    set_2_name);
+string generate_parameter_name(string    parameter_name,
+                               string    set_1_name,
+                               string    set_2_name);
+set<int> get_flat_set(vector<vector<set<int> > > vec_vec_set,
+                      int                        set_1_index);
+set<int> get_flat_set(vector<set<int> >  vec_vec_set,
+                      int                set_1_index);
 #endif
