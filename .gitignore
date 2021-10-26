@@ -8,11 +8,12 @@
 *.so
 *.xyz
 *.xml
-
+bin/
 bin/Results/Reports/
 bin/Results/Resumes/
 bin/Results/Relaxation/
 bin/Results/Damper/
+objects/
 #documents/build/doctrees/
 #documents/build/html/
 documents/seqan3-doc/

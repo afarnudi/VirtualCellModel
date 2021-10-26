@@ -1,4 +1,4 @@
-TARGET=VCM
+TARGET=VCMclang9
 CXXFLAGS=-std=c++14 -O3
 
 #OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm750
@@ -20,7 +20,7 @@ ifeq ($(OSNAME),Darwin)
 else
   Boost_LIB_Dir = $(Boost_LIB_Mac_Dir)
   LIBS = $(LinLIBS)
-  CXX = clang++
+  CXX = clang++-9
 endif
 
 BINDIR=bin
@@ -61,4 +61,4 @@ GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 
 clean: 
 	rm -rf $(GARBAGE)
-	rm bin/VCM
+	rm bin/VCMclang9
