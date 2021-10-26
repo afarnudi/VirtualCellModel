@@ -145,16 +145,16 @@ void Membrane::randomundulationgenerator(int numberOfRandomModes,
                                          double ulmOfRandomModes){
     for (int i=0; i<numberOfRandomModes; i++) {
         double r = ((double) rand() / (RAND_MAX));
-        int Ell = rand() % (ellMaxOfRandomModes+1);
+        int Ell = 2 + rand() % (ellMaxOfRandomModes - 1);
         int M   = rand() % (Ell+1);
-        if (r<0.5) {
+        if (rand()<0.5) {
             M*=-1;
         }
         update_spherical_positions();
         calculate_dOmega();
         calculate_surface_area_with_voronoi();
         add_ulm_mode_real(Ell, M, ulmOfRandomModes, Radius);
-        cout<<"Ulm "<<UlmOfRandomModes<<"  Ell "<<Ell<<"  M "<<M<<endl;
+        cout<<"Ulm "<<ulmOfRandomModes<<"  Ell "<<Ell<<"  M "<<M<<endl;
     }
     
     

@@ -190,22 +190,65 @@ void Chromatin::consistancy_check(){
         } else if (it.first == "LJepsilon"){
             epsilon_LJ.resize(num_of_node_types,0);
             if (split.size()==1) {
-                if (split[0] != "0") {
-                    epsilon_LJ[0]= stod(split[0]);
+                if (split[0] == "kbt") {
+                    epsilon_LJ[0] = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+                } else {
+                    try {
+                        epsilon_LJ[0] = stod(split[0]);
+                    } catch (...) {
+                        string errorMessage = TWARN;
+                        errorMessage+="Chromatin config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+                        errorMessage+=TFILE;
+                        errorMessage+=split[0];
+                        errorMessage+=TWARN;
+                        errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
+                        errorMessage+= TRESET;
+                        throw std::runtime_error(errorMessage);
+                    }
                 }
             } else {
                 if (split.size()>num_of_node_types) {
                     cout<<TWARN<<"Chromatin config check: LJepsilon: Too many arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". The first "<<num_of_node_types<<" will be used: ";
                     for (int i=0; i<num_of_node_types; i++) {
                         cout<<TBOLD<<split[i]<<" ";
-                        epsilon_LJ[i] = stod(split[i]);
+                        if (split[i] != "kbt") {
+                            epsilon_LJ[i] = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+                        } else {
+                            try {
+                                epsilon_LJ[i] = stod(split[i]);
+                            } catch (...) {
+                                string errorMessage = TWARN;
+                                errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+                                errorMessage+=TFILE;
+                                errorMessage+=split[i];
+                                errorMessage+=TWARN;
+                                errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
+                                errorMessage+= TRESET;
+                                throw std::runtime_error(errorMessage);
+                            }
+                        }
                     }
                     cout<<TRESET<<endl;
                     
                 } else if (split.size()>num_of_node_types){
                     cout<<TWARN<<"Chromatin config check: LJepsilon: Too few arguments ( Expected "<<TBOLD<<num_of_node_types<<TWARN<<" got "<<split.size()<<TWARN<<") provided for \"LJepsilon\". Will fill with default values:";
                     for (int i=0; i<split.size(); i++) {
-                        epsilon_LJ[i] = stod(split[i]);
+                        if (split[i] != "kbt") {
+                            epsilon_LJ[i] = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+                        } else {
+                            try {
+                                epsilon_LJ[i] = stod(split[i]);
+                            } catch (...) {
+                                string errorMessage = TWARN;
+                                errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+                                errorMessage+=TFILE;
+                                errorMessage+=split[i];
+                                errorMessage+=TWARN;
+                                errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
+                                errorMessage+= TRESET;
+                                throw std::runtime_error(errorMessage);
+                            }
+                        }
                         cout<<TBOLD<<split[i]<<" ";
                     }
                     for (int i=split.size(); i<num_of_node_types; i++) {

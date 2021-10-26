@@ -16,7 +16,7 @@ void Membrane::import_config(vector<string> configlines){
             if (split.size()!=0) {
                 map<string, vector<string> >::iterator it;
                 it = Params.find(split[0]);
-                //Only replace parameters that actually exist in the Membrane parameters and ignor anythin else;
+                //Only replace parameters that actually exist in the Membrane parameters and ignore anythin else;
                 if (it != Params.end()) {
                     configlines[i].erase(configlines[i].begin(),configlines[i].begin()+int(split[0].size()) );
                     it->second[0] = configlines[i];
@@ -44,6 +44,22 @@ void Membrane::consistancy_check(){
         errorMessage +="Read Error: Could not read/locate mesh file '"+Mesh_file_name+"'";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
+    }
+    if (epsilon_LJ_12_6Stat == "kbt") {
+        epsilon_LJ_12_6 = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
+    } else {
+        try {
+            epsilon_LJ_12_6= stod(epsilon_LJ_12_6Stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+            errorMessage+=TFILE;
+            errorMessage+=epsilon_LJ_12_6Stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
     }
     
     if (Node_Bond_Nominal_Length_stat!= "Au" && Node_Bond_Nominal_Length_stat!= "Av") {
@@ -192,7 +208,8 @@ void Membrane::assign_parameters(void){
 //            sigma_LJ_12_6 = stod(split[0]);
 //        }
         else if (it.first == "LJepsilon") {
-            epsilon_LJ_12_6 = stod(split[0]);
+            epsilon_LJ_12_6Stat  = split[0];
+            
         } else if (it.first == "UpdateRadius") {
             New_Radius = stod(split[0]);
         } else if (it.first == "UpdateBeginTimeInPs") {
@@ -221,6 +238,17 @@ void Membrane::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+            
+        
+        }    else if (it.first == "ExtForceModel") {
+             ext_force_model = stoi(split[0]);
+        
+         } else if (it.first == "ExtForceRigidity") {
+             ext_force_rigidity.resize(3,0);
+             ext_force_rigidity[0] = stoi(split[0]);
+             ext_force_rigidity[1] = stoi(split[1]);
+             ext_force_rigidity[2] = stoi(split[2]);
+        
         } else if (it.first == "VelocityShiftVector") {
             Shift_velocities_xyzVector.resize(3,0);
             Shift_velocities_xyzVector[0] = stod(split[0]);

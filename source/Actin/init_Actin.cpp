@@ -22,7 +22,7 @@ void Actin::initialise(string Mesh_file_name){
         }
         
     } else if (mesh_format=="actin"){
-        read_actin_file();
+       read_actin_file();
     }
     
     cout<<"# of Nodes="<<Num_of_Nodes<<endl;

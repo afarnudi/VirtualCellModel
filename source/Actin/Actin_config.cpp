@@ -50,7 +50,7 @@ void Actin::consistancy_check(){
             Node_Bond_user_defined_Nominal_Length_in_Nm= stod(Node_Bond_Nominal_Length_stat);
         } catch (...) {
             string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"NominalLengthInNm\" (";
+            errorMessage+="Actin config parser: Invalid input for the \"NominalLengthInNm\" (";
             errorMessage+=TFILE;
             errorMessage+=Node_Bond_Nominal_Length_stat;
             errorMessage+=TWARN;
@@ -73,6 +73,10 @@ void Actin::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    
+    if (Spring_coefficient==0) {
+        spring_model=potentialModelIndex.Model["None"];
+    }
 }
 
 void Actin::assign_parameters(void){
@@ -80,7 +84,7 @@ void Actin::assign_parameters(void){
         vector<string> split = split_and_check_for_comments(it.second[0], "Actin: "+it.first);
         if (split.size()==0) {
             string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \""+it.first+"\". Value in configuration file";
+            errorMessage+="Actin config parser: Invalid input for the \""+it.first+"\". Value in configuration file";
             errorMessage+=TFILE;
             errorMessage+=it.second[0];
             errorMessage+=TWARN;
@@ -104,7 +108,18 @@ void Actin::assign_parameters(void){
         } else if (it.first == "MeshType") {
             MeshType = split[0];
         } else if (it.first == "NodeMass") {
-            Node_Mass = stod(split[0]);
+           try {
+                Node_Mass = stod(split[0]);
+            } catch (...) {
+                string errorMessage = TWARN;
+                errorMessage+="Actin config parser: Invalid input for the \"NodeMass\", expected a number but got \"";
+                errorMessage+=TFILE;
+                errorMessage+=split[0];
+                errorMessage+=TWARN;
+                errorMessage+="\". Please try again.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "NodeRadius") {
             Node_radius_stat = split[0];
         } else if (it.first == "NominalLengthInNm") {
@@ -120,12 +135,54 @@ void Actin::assign_parameters(void){
                 spring_model = potentialModelIndex.Model["Kelvin-Voigt"];
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="Membrane config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";
+                errorMessage+="Actin config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None), kelvin (Kelvin-Voigt).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
         } else if (it.first == "SpringCoeff") {
             Spring_coefficient = stod(split[0]);
+        } else if (it.first == "Contractile_force") {
+            Contractile_force = stod(split[0]);
+        } else if (it.first == "Contractile_k1") {
+            Contractile_k1 = stod(split[0]);
+        } else if (it.first == "Contractile_k2") {
+            Contractile_k2 = stod(split[0]);
+        } else if (it.first == "Contractile_rmin_factor") {
+           Contractile_rmin = stod(split[0]);
+        } else if (it.first == "Contractile_rmax_factor") {
+            Contractile_rmax = stod(split[0]);
+        } else if (it.first == "actin_r0factor") {
+            act_r0factor = stod(split[0]);
+       // } else if (it.first == "Contractile_model") {
+        //    contractile_model = stod(split[0]);
+            
+        }else if (it.first == "Contractile_model") {
+            if (split[0]=="Constant") {
+                contractile_model = potentialModelIndex.Model["Contractile"];
+            } else if (split[0]=="Hill") {
+                contractile_model = potentialModelIndex.Model["hill"];
+            } else if (split[0]=="KFs") {
+                contractile_model = potentialModelIndex.Model["KFs"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Actin config parser: Contractile Model: I don't understand the \""+split[0]+"\" Model. Available models: Constant (Constant force), and Hill (hill contractile element).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "Contractile_hill_co") {
+           contractile_hill_co = stod(split[0]);
+            
+            //for abp similar to contractile
+            
+        } else if (it.first == "ExtForceModel") {
+            ext_force_model = stoi(split[0]);
+       
+        } else if (it.first == "ExtForceRigidity") {
+            ext_force_rigidity.resize(3,0);
+            ext_force_rigidity[0] = stoi(split[0]);
+            ext_force_rigidity[1] = stoi(split[1]);
+            ext_force_rigidity[2] = stoi(split[2]);
+       
         } else if (it.first == "CoordinateTranslateVector") {
             Shift_position_xyzVector.resize(3,0);
             Shift_position_xyzVector[0] = stod(split[0]);
