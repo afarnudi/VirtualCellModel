@@ -21,40 +21,40 @@ void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
                             string                                set_2_name,
                             bool                                  use_max_radius);
 
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                            const MyAtomInfo                      atoms[],
-                            set<int>                              set_1,
-                            set<int>                              set_2,
-                            int                                   set_1_index,
-                            int                                   set_2_index,
-                            string                                set_1_name,
-                            string                                set_2_name,
-                            bool                                  use_max_radius);
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                      atoms[],
-                          vector<set<int> >                     set_1,
-                          vector<set<int> >                     set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name);
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<set<int> > >             set_1,
-                          vector<set<int> >                      set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name,
-                            bool                                   use_max_radius);
-void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<std::set<int> > >             set_1,
-                          vector<vector<std::set<int> > >             set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name);
+//void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                            const MyAtomInfo                      atoms[],
+//                            set<int>                              set_1,
+//                            set<int>                              set_2,
+//                            int                                   set_1_index,
+//                            int                                   set_2_index,
+//                            string                                set_1_name,
+//                            string                                set_2_name,
+//                            bool                                  use_max_radius);
+//void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                          const MyAtomInfo                      atoms[],
+//                          vector<set<int> >                     set_1,
+//                          vector<set<int> >                     set_2,
+//                          int                                   set_1_index,
+//                          int                                   set_2_index,
+//                          string                                set_1_name,
+//                          string                                set_2_name);
+//void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                          const MyAtomInfo                       atoms[],
+//                          vector<vector<set<int> > >             set_1,
+//                          vector<set<int> >                      set_2,
+//                          int                                    set_1_index,
+//                          int                                    set_2_index,
+//                          string                                 set_1_name,
+//                          string                                 set_2_name,
+//                            bool                                   use_max_radius);
+//void init_WCAFC_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
+//                          const MyAtomInfo                       atoms[],
+//                          vector<vector<std::set<int> > >             set_1,
+//                          vector<vector<std::set<int> > >             set_2,
+//                          int                                    set_1_index,
+//                          int                                    set_2_index,
+//                          string                                 set_1_name,
+//                          string                                 set_2_name);
 
 
 
@@ -71,43 +71,43 @@ void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
                           string                                set_2_name,
                           bool                                  use_max_radius);
 
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                      atoms[],
-                          set<int>                              set_1,
-                          set<int>                              set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name,
-                          bool                                  use_max_radius);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                      atoms[],
-                          vector<set<int> >                     set_1,
-                          vector<set<int> >                     set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                      atoms[],
-                          vector<vector<std::set<int> > >       set_1,
-                          vector<std::set<int> >                set_2,
-                          int                                   set_1_index,
-                          int                                   set_2_index,
-                          string                                set_1_name,
-                          string                                set_2_name,
-                          bool                                  use_max_radius);
-
-void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
-                          const MyAtomInfo                       atoms[],
-                          vector<vector<std::set<int> > >             set_1,
-                          vector<vector<std::set<int> > >             set_2,
-                          int                                    set_1_index,
-                          int                                    set_2_index,
-                          string                                 set_1_name,
-                          string                                 set_2_name);
+//void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+//                          const MyAtomInfo                      atoms[],
+//                          set<int>                              set_1,
+//                          set<int>                              set_2,
+//                          int                                   set_1_index,
+//                          int                                   set_2_index,
+//                          string                                set_1_name,
+//                          string                                set_2_name,
+//                          bool                                  use_max_radius);
+//
+//void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+//                          const MyAtomInfo                      atoms[],
+//                          vector<set<int> >                     set_1,
+//                          vector<set<int> >                     set_2,
+//                          int                                   set_1_index,
+//                          int                                   set_2_index,
+//                          string                                set_1_name,
+//                          string                                set_2_name);
+//
+//void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+//                          const MyAtomInfo                      atoms[],
+//                          vector<vector<std::set<int> > >       set_1,
+//                          vector<std::set<int> >                set_2,
+//                          int                                   set_1_index,
+//                          int                                   set_2_index,
+//                          string                                set_1_name,
+//                          string                                set_2_name,
+//                          bool                                  use_max_radius);
+//
+//void init_WCA_interaction(vector<OpenMM::CustomNonbondedForce*> &WCAs,
+//                          const MyAtomInfo                       atoms[],
+//                          vector<vector<std::set<int> > >             set_1,
+//                          vector<vector<std::set<int> > >             set_2,
+//                          int                                    set_1_index,
+//                          int                                    set_2_index,
+//                          string                                 set_1_name,
+//                          string                                 set_2_name);
 
 
 
