@@ -326,7 +326,7 @@ struct GeneralParameters{
         insertOrder.push_back("Precision");
         
         values[0] ="0";
-        values[1] ="#For non bonded forces, pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions.";
+        values[1] ="#For non bonded forces, pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions. Default: 0";
         GenParams["bondCutoff"] = values;
         insertOrder.push_back("bondCutoff");
         

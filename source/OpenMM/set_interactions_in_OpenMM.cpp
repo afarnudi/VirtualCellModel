@@ -2,6 +2,7 @@
 #include "General_functions.hpp"
 #include "OpenMM_structs.h"
 #include "OpenMM_funcs.hpp"
+#include "OpenMM_WCA.hpp"
 #include <stdlib.h>
 #include <time.h>
 
@@ -192,6 +193,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
         }
         
         for (int j=0; j < i+1; j++) {
+            set<int> set_1 = get_flat_set(membrane_set, i);
+            set<int> set_2 = get_flat_set(membrane_set, j);
             
             std::string class_label_i=generalParameters.Membrane_label+std::to_string(i);
             std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
@@ -228,30 +231,26 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, membrane_set, membrane_set, i, j, generalParameters.Membrane_label , generalParameters.Membrane_label);
-                
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i ,j));
                 index = int(WCAs.size()-1);
-                //
+                
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
-                if (interaction_map.get_report_status(i,j) ) {
-                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i,j));
+                if (interaction_map.get_report_status(i ,j) ) {
+                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i ,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, membrane_set, membrane_set, i, j, generalParameters.Membrane_label , generalParameters.Membrane_label);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i ,j));
+                index = int(ExcludedVolumes.size()-1);
                 
-                index = int(WCAFCs.size()-1);
-                //
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
-                if (interaction_map.get_report_status(i,j) ) {
-                    WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i,j));
+                if (interaction_map.get_report_status(i ,j) ) {
+                    WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i ,j));
                 }
             }
             
@@ -277,6 +276,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
         class_count_i = generalParameters.Num_of_Membranes;
         class_count_j = 0;
         for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
+            set<int> set_1 = get_flat_set(actin_set, i);
+            set<int> set_2 = get_flat_set(membrane_set, j-class_count_j);
+            
             std::string class_label_i=generalParameters.Actin_label+std::to_string(i);
             std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
             
@@ -311,11 +313,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, actin_set, membrane_set, i, j, generalParameters.Actin_label , generalParameters.Membrane_label);
-                
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(WCAs.size()-1);
+                
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
@@ -323,11 +324,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, actin_set, membrane_set, i, j, generalParameters.Actin_label , generalParameters.Membrane_label);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(ExcludedVolumes.size()-1);
                 
-                index = int(WCAFCs.size()-1);
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
@@ -339,6 +339,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         class_count_j = generalParameters.Num_of_Membranes;
         for (int j=class_count_j; j < class_count_j + i +1 ; j++) {
+            set<int> set_1 = get_flat_set(actin_set, i);
+            set<int> set_2 = get_flat_set(actin_set, j-class_count_j);
             
             std::string class_label_i=generalParameters.Actin_label+std::to_string(i);
             std::string class_label_j=generalParameters.Actin_label+std::to_string(j-class_count_j);
@@ -376,12 +378,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, actin_set, actin_set, i, j-class_count_j, generalParameters.Actin_label , generalParameters.Actin_label);
-                
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(WCAs.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
@@ -389,12 +389,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, actin_set, actin_set, i, j-class_count_j, generalParameters.Actin_label , generalParameters.Actin_label);
-                
-                index = int(WCAFCs.size()-1);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
@@ -422,7 +420,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
         }
         
         for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
-            
+            set<int> set_1 = get_flat_set(ecm_set, i);
+            set<int> set_2 = get_flat_set(membrane_set, j-class_count_j);
             
             std::string class_label_i=generalParameters.ECM_label+std::to_string(i);
             std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
@@ -457,11 +456,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, ecm_set, membrane_set, i, j, generalParameters.ECM_label , generalParameters.Membrane_label);
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(WCAs.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
@@ -469,11 +467,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, ecm_set, membrane_set, i, j, generalParameters.ECM_label , generalParameters.Membrane_label);
-                index = int(WCAFCs.size()-1);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
@@ -529,7 +526,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         class_count_j = generalParameters.Num_of_Membranes;
         for (int j=class_count_j; j < class_count_j+generalParameters.Num_of_Actins; j++) {
-            
+            set<int> set_1 = get_flat_set(ecm_set, i);
+            set<int> set_2 = get_flat_set(actin_set, j-class_count_j);
             
             std::string class_label_i=generalParameters.ECM_label+std::to_string(i);
             std::string class_label_j=generalParameters.Actin_label+std::to_string(j-class_count_j);
@@ -566,28 +564,26 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, ecm_set, actin_set, i, j-class_count_j, generalParameters.ECM_label, generalParameters.Actin_label);
-                index = int(ExcludedVolumes.size()-1);
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(WCAs.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
-                if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, ecm_set, actin_set, i, j-class_count_j, generalParameters.ECM_label, generalParameters.Actin_label);
-                index = int(WCAFCs.size()-1);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
-                if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                    WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                    WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             }
             
@@ -596,6 +592,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
         
         class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins;
         for (int j=class_count_j; j < class_count_j + i + 1; j++) {
+            set<int> set_1 = get_flat_set(ecm_set, i);
+            set<int> set_2 = get_flat_set(ecm_set, j-class_count_j);
             
             std::string class_label_i=generalParameters.ECM_label+std::to_string(i);
             std::string class_label_j=generalParameters.ECM_label+std::to_string(j-class_count_j);
@@ -632,11 +630,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                init_WCA_interaction(WCAs, atoms, ecm_set, ecm_set, i, j-class_count_j, generalParameters.ECM_label , generalParameters.ECM_label);
+                init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                 index = int(WCAs.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAs[index], exclude_bonds);
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
@@ -644,11 +641,10 @@ void set_interactions(const MyAtomInfo                       atoms[],
                     WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                 }
             } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                init_WCAFC_interaction(WCAFCs, atoms, ecm_set, ecm_set, i, j-class_count_j, generalParameters.ECM_label , generalParameters.ECM_label);
-                index = int(WCAFCs.size()-1);
+                init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                index = int(ExcludedVolumes.size()-1);
                 
                 // Add the list of atom pairs that are excluded from the excluded volume force.
-//                add_exclusion(WCAFCs[index], exclude_bonds);
                 WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAFCs[index]);
@@ -664,6 +660,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
 //    if (!minimumForceDecleration) {
         for (int i=0; i < generalParameters.Num_of_Chromatins; i++) {
             for (int j=0; j < generalParameters.Num_of_Membranes; j++) {
+                set<int> set_1 = get_flat_set(chromatin_set, i);
+                set<int> set_2 = get_flat_set(membrane_set, j-class_count_j);
                 
                 std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
                 std::string class_label_j=generalParameters.Membrane_label+std::to_string(j);
@@ -702,28 +700,22 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                    init_WCA_interaction(WCAs, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                     index = int(WCAs.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
-                    
-    //                    ExcludedVolumes[index]->setForceGroup(7);
-    //                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
                     
                     system.addForce(WCAs[index]);
                     if (interaction_map.get_report_status(i + class_count_i,j) ) {
                         WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                    init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, membrane_set, i, j, generalParameters.Chromatin_label , generalParameters.Membrane_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                    index = int(WCAFCs.size()-1);
+                    init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(ExcludedVolumes.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
-                    
-    //                    ExcludedVolumes[index]->setForceGroup(7);
-    //                    cout<<TWWARN<<"Set forcegroup"<<TRESET<<endl;
                     
                     system.addForce(WCAFCs[index]);
                     if (interaction_map.get_report_status(i + class_count_i,j) ) {
@@ -737,7 +729,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             class_count_j = generalParameters.Num_of_Membranes;
             for (int j=class_count_j; j < class_count_j+generalParameters.Num_of_Actins; j++) {
-                
+                set<int> set_1 = get_flat_set(chromatin_set, i);
+                set<int> set_2 = get_flat_set(actin_set, j-class_count_j);
                 
                 std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
                 std::string class_label_j=generalParameters.Actin_label+std::to_string(j-class_count_j);
@@ -774,31 +767,26 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                    init_WCA_interaction(WCAs, atoms, chromatin_set, actin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Actin_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                    
+                    init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                     index = int(WCAs.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
-//                    ExcludedVolumes[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                     WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                     
-                    
                     system.addForce(WCAs[index]);
-                    if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                        WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                    init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, actin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Actin_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                    
-                    index = int(WCAFCs.size()-1);
+                    init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(ExcludedVolumes.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                     
-                    
                     system.addForce(WCAFCs[index]);
-                    if (interaction_map.get_report_status(i + class_count_j,j) ) {
-                        WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_j,j));
+                    if (interaction_map.get_report_status(i + class_count_i,j) ) {
+                        WCAFCs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 }
                 
@@ -807,6 +795,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
             
             class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins;
             for (int j=class_count_j; j < class_count_j + generalParameters.Num_of_ECMs; j++) {
+                set<int> set_1 = get_flat_set(chromatin_set, i);
+                set<int> set_2 = get_flat_set(ecm_set, j-class_count_j);
                 
                 std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
                 std::string class_label_j=generalParameters.ECM_label+std::to_string(j-class_count_j);
@@ -842,24 +832,24 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen"){
-                    init_WCA_interaction(WCAs, atoms, chromatin_set, ecm_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.ECM_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    
+                    init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                     index = int(WCAs.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
-                    
                     
                     system.addForce(WCAs[index]);
                     if (interaction_map.get_report_status(i + class_count_i,j) ) {
                         WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 } else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                    init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, ecm_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.ECM_label, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
-                    index = int(WCAFCs.size()-1);
+                    
+                    init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(ExcludedVolumes.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAFCs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
-                    
                     
                     system.addForce(WCAFCs[index]);
                     if (interaction_map.get_report_status(i + class_count_i,j) ) {
@@ -872,6 +862,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
             class_count_j = generalParameters.Num_of_Membranes + generalParameters.Num_of_Actins + generalParameters.Num_of_ECMs;
             
             for (int j=class_count_j; j < class_count_j + i +1; j++) {
+                
+                set<int> set_1 = get_flat_set(chromatin_set, i);
+                set<int> set_2 = get_flat_set(chromatin_set, j-class_count_j);
                 
                 std::string class_label_i=generalParameters.Chromatin_label+std::to_string(i);
                 std::string class_label_j=generalParameters.Chromatin_label+std::to_string(j-class_count_j);
@@ -950,8 +943,9 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         ExcludedVolumes[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 }else if (interaction_name == "Weeks-Chandler-Andersen"){
-                    init_WCA_interaction(WCAs, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
-                    index = int(ExcludedVolumes.size()-1);
+                    
+                    init_WCA_interaction(WCAs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
+                    index = int(WCAs.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.
                     WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
@@ -961,7 +955,8 @@ void set_interactions(const MyAtomInfo                       atoms[],
                         WCAs[index]->setForceGroup(interaction_map.setForceGroup(i + class_count_i,j));
                     }
                 }else if (interaction_name == "Weeks-Chandler-Andersen-ForceCap"){
-                    init_WCAFC_interaction(WCAFCs, atoms, chromatin_set, chromatin_set, i, j-class_count_j, generalParameters.Chromatin_label , generalParameters.Chromatin_label);
+                    
+                    init_WCAFC_interaction(WCAFCs, atoms, set_1, set_2, class_label_i , class_label_j, interaction_map.get_radius_optimisation_status(i + class_count_i,j));
                     index = int(ExcludedVolumes.size()-1);
                     
                     // Add the list of atom pairs that are excluded from the excluded volume force.

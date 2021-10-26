@@ -353,3 +353,34 @@ void set_pbcvectors(OpenMM::System &system){
         cout<<"Periodic Boundry Condition "<<TOFF<<"Off"<<TRESET<<endl;
     }
 }
+
+
+string generate_parameter_name(string    parameter_name,
+                               int       set_1_index,
+                               int       set_2_index,
+                               string    set_1_name,
+                               string    set_2_name){
+    string parameter   = parameter_name + set_1_name + std::to_string(set_1_index) + set_2_name + std::to_string(set_2_index) ;
+    return parameter;
+}
+string generate_parameter_name(string    parameter_name,
+                               string    set_1_name,
+                               string    set_2_name){
+    string parameter   = parameter_name + set_1_name + set_2_name ;
+    return parameter;
+}
+
+set<int> get_flat_set(vector<vector<set<int> > > vec_vec_set,
+                      int                        set_1_index){
+    set<int> flat_set;
+    for (int i=0; i<vec_vec_set[set_1_index].size(); i++) {
+        flat_set.insert(vec_vec_set[set_1_index][i].begin(),vec_vec_set[set_1_index][i].end());
+    }
+    return flat_set;
+}
+
+set<int> get_flat_set(vector<set<int> >  vec_vec_set,
+                      int                set_1_index){
+    return vec_vec_set[set_1_index];
+}
+
