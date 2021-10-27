@@ -105,7 +105,7 @@ def write_ply_file(xyz_file_name, xyzs, tris, path):
 
 
 def gen_ply_file(xyz_file_name, args):
-    run_command_quiet_verbose(args, "./sphere_delaunay_bonds " + xyz_file_name)
+    run_command_quiet_unless_verbose(args, "./sphere_delaunay_bonds " + xyz_file_name)
 
     bond_file_name = xyz_file_name + "l"
     xyzs = np.loadtxt(xyz_file_name)
@@ -124,7 +124,7 @@ def gen_bond_info(xyz_file_name, args):
     exe_name = "sphere_delaunay_bonds"
     if not os.path.exists(exe_name):
         run_command(args, "bash sphere_delaunay.sh")
-    run_command_quiet_verbose(args, f"./{exe_name} {xyz_file_name}")
+    run_command_quiet_unless_verbose(args, f"./{exe_name} {xyz_file_name}")
 
 
 def clean_files_with_extention(extention):
@@ -143,12 +143,19 @@ def run_command(args, command):
         os.system(command + " >&-")
 
 
-def run_command_quiet_verbose(args, command):
+def run_command_quiet_unless_verbose(args, command):
 
     if args.verbose:
         os.system(command)
     else:
         os.system(command + " >&- 2>&-")
+
+def run_command_verbose_unless_quiet(args, command):
+
+    if args.quiet:
+        os.system(command + " >&- 2>&-")
+    else:
+        os.system(command)
 
 
 def get_arguments_from_parser():
