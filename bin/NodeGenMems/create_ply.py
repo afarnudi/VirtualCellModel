@@ -230,9 +230,9 @@ if __name__ == "__main__":
 
         if os.path.exists(xyz_file_name):
             if args.overwrite:
-                run_command(args, gen_xyz_command)
+                run_command_quiet_verbose(args, gen_xyz_command)
         else:
-            run_command(args, gen_xyz_command)
+            run_command_quiet_verbose(args, gen_xyz_command)
 
         gen_bond_info(xyz_file_name, args)
         gen_ply_file(xyz_file_name, args)
