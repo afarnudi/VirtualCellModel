@@ -14,7 +14,7 @@ using namespace std;
 void generate_random_coordinates(int N, MyAtomInfo *atoms, int seed);
 void myWritePDBFrame(int frameNum, double timeInPs, const MyAtomInfo atoms[], string traj_name);
 void myGetOpenMMState(MyOpenMMData* omm, double& timeInPs, MyAtomInfo atoms[]);
-MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs, int seed);
+MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs, int seed, int platformID, int platformDeviceID);
 void export_xyz(MyAtomInfo* atoms, string traj_name);
 void print_wall_clock_time(double sim_duration_per_sec);
 void print_real_time(chrono::time_point<chrono::steady_clock> chrono_clock_start,
@@ -35,11 +35,19 @@ int main(int argc, const char * argv[]) {
     
     int N = 100, EndOfList=-1;
     int seed=0;
-    
+    int platformID = -1;
+    int platformDeviceID =-1;
+
+
     if (argc>1) {
         N = stoi(argv[1]);
         seed = stoi(argv[2]);
     }
+    if (argc>3){
+    	platformID = stoi(argv[3]);
+	platformDeviceID = stoi(argv[4]); 
+    }
+    //cout<<N<<" "<<seed<<" "<<platformID<<" "<<platformDeviceID<<endl;
     string pdbname = "USphere_"+to_string(N)+"d_s"+to_string(seed)+".pdb";
     //extra node at the origin to keep everything constrained;
     N++;
@@ -58,7 +66,7 @@ int main(int argc, const char * argv[]) {
     int NumSilentSteps = (int)(Report_Interval_In_Fs / Step_Size_In_Fs + 0.5);
     try {
         MyOpenMMData* omm = new MyOpenMMData();
-        omm = init_openmm(atoms, Step_Size_In_Fs, seed);
+        omm = init_openmm(atoms, Step_Size_In_Fs, seed, platformID, platformDeviceID);
         string platformName = omm->context->getPlatform().getName();
         
         
@@ -136,6 +144,7 @@ void export_xyz(MyAtomInfo* atoms,
                 string traj_name){
     traj_name.erase(traj_name.end()-3,traj_name.end());
     traj_name+="xyz";
+    //traj_name = "NodeGenMems/" + traj_name;
     int EndOfList=-1;
     FILE* pFile;
     pFile = fopen (traj_name.c_str(),"w");
@@ -152,7 +161,9 @@ void export_xyz(MyAtomInfo* atoms,
 using OpenMM::Vec3;
 MyOpenMMData* init_openmm(MyAtomInfo *atoms,
                           double stepSizeInFs,
-                          int seed){
+                          int seed,
+			  int platformID,
+			  int platformDeviceID){
     const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     //OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
@@ -199,108 +210,111 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
     omm->harmonic = HarmonicBond;
     
     
-    
-    //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
-    //Listing the names of all available platforms.
-    cout<<"\nOpenMM available platforms:\n"<<"Index Name \t  Speed (Estimated)\n";
-    for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
-        OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
-        cout<<" ("<<std::to_string(i)<<")  "<<platform.getName().c_str()<<
-        "\t   "<<platform.getSpeed()<<endl;
+    //cout<<"safe"<<endl; 
+    if (platformID<0){
+    	//cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
+    	//Listing the names of all available platforms.
+    	cout<<"\nOpenMM available platforms:\n"<<"Index Name \t  Speed (Estimated)\n";
+    	for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
+            OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
+            cout<<" ("<<std::to_string(i)<<")  "<<platform.getName().c_str()<<
+            "\t   "<<platform.getSpeed()<<endl;
+    	} 
+    	cout<<"Please choose a pltform (index): \n";
+    	std::cin>>platformID;
     }
-    int platform_id=0;
-    cout<<"Please choose a pltform (index): \n";
-    std::cin>>platform_id;
-    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platformID);
     
-    
+     
     std::vector<std::map<std::string, std::string> > device_properties;
-    if (platform.getName() == "OpenCL") {
-        cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
-        int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
-                try {
-                    std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : ";
-                    for (auto & name : platform_devices){
-                        if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
-                            continue;
-                        } else {
-                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+    
+    	if (platform.getName() == "OpenCL") {
+            cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
+       	    int counter=0;
+            for (int i=0; i<10; i++) {
+            	for (int j=0; j<10; j++) {
+            	    try {
+                        std::map<std::string, std::string> temp_device_properties;
+                        temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
+                        temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
+                        OpenMM::System temp_system;
+                        temp_system.addParticle(1.0);
+                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                        std::vector<std::string> platform_devices = platform.getPropertyNames();
+                        cout<<counter<<" : ";
+                        for (auto & name : platform_devices){
+                           if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
+                               continue;
+                           } else {
+                               cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+                           }
                         }
-                    }
-                    cout<<"------------------------"<<endl;
-                    counter++;
-                    device_properties.push_back(temp_device_properties);
-                } catch (const std::exception& e) {
+                        cout<<"------------------------"<<endl;
+                        counter++;
+                        device_properties.push_back(temp_device_properties);
+                    } catch (const std::exception& e) {
                     
+                    }
+               }
+            }
+        } else if (platform.getName() == "CUDA") {
+            cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
+            int counter=0;
+            for (int i=0; i<10; i++) {
+                for (int j=0; j<10; j++) {
+                    try {
+                        std::map<std::string, std::string> temp_device_properties;
+                        temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+                        temp_device_properties["CudaDeviceIndex"]=std::to_string(j);
+                        OpenMM::System temp_system;
+                        temp_system.addParticle(1.0);
+                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                        std::vector<std::string> platform_devices = platform.getPropertyNames();
+                        cout<<counter<<" : ";
+                        for (auto & name : platform_devices){
+                            if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
+                                continue;
+                            } else {
+                                cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+                            }
+                        }
+                        cout<<"------------------------"<<endl;
+                        counter++;
+                        device_properties.push_back(temp_device_properties);
+                     } catch (const std::exception& e) {
+                    
+                    }
                 }
             }
-        }
-    } else if (platform.getName() == "CUDA") {
-        cout<<"Available devices on the "<<platform.getName()<<" platform:\n";
-        int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
-                try {
-                    std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["CudaDeviceIndex"]=std::to_string(j);
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<counter<<" : ";
-                    for (auto & name : platform_devices){
-                        if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
-                            continue;
-                        } else {
-                            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
-                        }
-                    }
-                    cout<<"------------------------"<<endl;
-                    counter++;
-                    device_properties.push_back(temp_device_properties);
-                } catch (const std::exception& e) {
-                    
-                }
+        } else if (platform.getName() == "CPU") {
+            OpenMM::System temp_system;
+            temp_system.addParticle(1.0);
+            OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+            OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
+            std::vector<std::string> platform_devices = platform.getPropertyNames();
+            cout<<"CPU"<<" properties:\n";
+            for (auto & name : platform_devices){
+                cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
             }
+            cout<<"------------------------"<<endl;
         }
-    } else if (platform.getName() == "CPU") {
-        OpenMM::System temp_system;
-        temp_system.addParticle(1.0);
-        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-        OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
-        std::vector<std::string> platform_devices = platform.getPropertyNames();
-        cout<<"CPU"<<" properties:\n";
-        for (auto & name : platform_devices){
-            cout<<"\t"<<name<<"\t"<<platform.getPropertyValue(temp_context, name)<<endl;
+   
+    if (platformDeviceID<0){
+        if (device_properties.size()>1) {
+            cout<<"Please choose a device (index): \n";
+            std::cin>>platformDeviceID;
         }
-        cout<<"------------------------"<<endl;
     }
     
-    
-    int device_id=0;
-    if (device_properties.size()>1) {
-        cout<<"Please choose a device (index): \n";
-        std::cin>>device_id;
-    }
     //    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
     omm->LangevinIntegrator = new OpenMM::LangevinIntegrator(0,
                                                              0.1,
                                                              stepSizeInFs * OpenMM::PsPerFs);
     omm->LangevinIntegrator->setRandomNumberSeed(seed);
     
-    if (platform.getName() == "CPU" || platform_id==0) {
+    if (platform.getName() == "CPU" || platformID==0) {
         if ( omm->integrator != NULL ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform);
         } else {
@@ -311,9 +325,9 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
         
     } else {
         if ( omm->integrator != NULL ) {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[device_id]);
+            omm->context    = new OpenMM::Context(*omm->system, *omm->integrator, platform, device_properties[platformDeviceID]);
         } else {
-            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, device_properties[device_id]);
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, device_properties[platformDeviceID]);
         }
     }
     
