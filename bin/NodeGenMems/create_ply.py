@@ -187,6 +187,18 @@ def get_arguments_from_parser():
         help="Specify the path you wish to save the generated ply",
         default="",
     )
+    parser.add_argument(
+        "-p","platformID",
+        help="VCM platform to run",
+        type=int,
+        default=2,
+    )
+    parser.add_argument(
+        "-d","platformDeviceID",
+        help="Device ID to use on the platform.",
+        type=int,
+        default=0,
+    )
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -214,7 +226,7 @@ if __name__ == "__main__":
     for s in range(args.min_seed, args.max_seed):
         print_seed(s)
         xyz_file_name = f"USphere_{args.n}d_s{s}.xyz"
-        gen_xyz_command = f"./NodGenClang9 {args.n} {s} 2 0"
+        gen_xyz_command = f"./NodGenClang9 {args.n} {s} {args.platformID} {args.platformDeviceID}"
 
         if os.path.exists(xyz_file_name):
             if args.overwrite:
