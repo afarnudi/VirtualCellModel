@@ -33,9 +33,9 @@ class Inputs:
         """assign scale"""
         return float(args.scale)
 
-    def get_scale(args):
-        """assign scale"""
-        return float(args.scale)
+    def get_scale(self,):
+        """return scale"""
+        return float(self.scale)
 
     def get_temperature(self):
         """retun temperature in string format"""
@@ -60,7 +60,7 @@ def configfile_gen_mem_ulms(index, inputs, config_file_name):
             for line in f:
                 words = line.split(" ")
                 if words[0] == "ProjectName":
-                    line = line[:-1] + f"/{hostname}/{index}\n"
+                    line = line[:-1] + f"/{index}\n"
                     line = re.sub(r"/\d+k", f"/{inputs.get_temperature()}k", line)
                     line = re.sub(
                         r"/mesh_\d+", f"/mesh_{inputs.get_mesh_resolution()}", line
@@ -69,7 +69,10 @@ def configfile_gen_mem_ulms(index, inputs, config_file_name):
                 if words[0] == "MeshFile":
                     line = "MeshFile Mesh/icospheres/" + inputs.get_mesh_path()
                     line = line[:-5] + str(index) + ".ply" + "\n"
-                    print(line)
+                if words[0] == "Scale":
+                    line = "Scale " + str(inputs.get_scale()) + "\n"
+                if words[0] == "TemperatureinKelvin":
+                    line = "TemperatureinKelvin " + str(inputs.get_temperature()) + "\n"
                 f1.write(line)
     return edited_config_file_name
 
@@ -80,24 +83,34 @@ def get_arguments():
         description="Use VCM to run Memebrane samples with optional parameters."
     )
     parser.add_argument(
-        "-m",
-        "--mesh-res",
+        "-m", "--mesh-res",
         help="mesh resolution, 10 for 1002, and 50 for 25002 nodes.",
         default=50,
+        choices=[10,50],
         type=int,
+        metavar='',
     )
     parser.add_argument(
-        "-t", "--temperature", help="Simulation temperature", default=300, type=float
+        "-t", "--temperature", 
+        help="Simulation temperature", 
+        default=300, 
+        type=float,
+        metavar='',
     )
     parser.add_argument(
-        "-s", "--scale", help="scale of the membrane", default=100, type=float
+        "-s", "--scale", 
+        help="scale of the membrane", 
+        default=100, 
+        type=float,
+        metavar='',
     )
     parser.add_argument(
         "-v",
         "--version",
         help="clang version of compiled VCM",
-        default="clang++",
+        default="clang++9",
         type=str,
+        metavar='',
     )
     parser.add_argument(
         "-p",
@@ -105,9 +118,14 @@ def get_arguments():
         help="Machine ID assigned to different platforms, i.e. OpenCL, CPU, Cuda, ...",
         default=2,
         type=int,
+        metavar='',
     )
     parser.add_argument(
-        "-d", "--platformDeviceID", help="ID of device to use", default=0, type=int
+        "-d", "--platformDeviceID", 
+        help="ID of device to use", 
+        default=0, 
+        type=int,
+        metavar='',
     )
     return parser.parse_args()
 
