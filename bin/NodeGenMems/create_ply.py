@@ -188,13 +188,13 @@ def get_arguments_from_parser():
         default="",
     )
     parser.add_argument(
-        "-p","platformID",
+        "-p","--platformID",
         help="VCM platform to run",
         type=int,
         default=2,
     )
     parser.add_argument(
-        "-d","platformDeviceID",
+        "-d","--platformDeviceID",
         help="Device ID to use on the platform.",
         type=int,
         default=0,
