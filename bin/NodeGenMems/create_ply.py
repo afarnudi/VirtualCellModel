@@ -77,16 +77,23 @@ def build_triangle_from_bonds(sphere_delaunay_bonds_output):
 
     return np.asarray(triangle_list), np.asarray(list(bond_set))
 
-
-def write_ply_file(xyz_file_name, xyzs, tris, path):
+def gen_ply_dir(path, xyz_file_name):
     file_path = path
     if not file_path.endswith("/"):
         file_path += "/"
     word_split = xyz_file_name.split("_")
     ply_dir = file_path + word_split[0] + "_" + word_split[1]
+    return ply_dir
+
+def gen_ply_path(path, xyz_file_name):
+    ply_dir = gen_ply_dir(path, xyz_file_name)
+    return ply_dir + "/" + xyz_file_name[:-3] + "ply"
+
+def write_ply_file(xyz_file_name, xyzs, tris, path):
+    ply_dir = gen_ply_dir(path, xyz_file_name)
     if not os.path.exists(ply_dir):
         os.makedirs(ply_dir)
-    ply_file_path = ply_dir + "/" + xyz_file_name[:-3] + "ply"
+    ply_file_path = gen_ply_path(path, xyz_file_name)
     with open(ply_file_path, "w") as f:
         f.write("ply\n")
         f.write("format ascii 1.0\n")
@@ -240,8 +247,16 @@ if __name__ == "__main__":
                 run_command_verbose_unless_quiet(args, gen_xyz_command)
         else:
             run_command_verbose_unless_quiet(args, gen_xyz_command)
-
-        gen_bond_info(xyz_file_name, args)
-        gen_ply_file(xyz_file_name, args)
+        
+        ply_file_path = gen_ply_path(args.path, xyz_file_name)
+        
+        if os.path.exists(ply_file_path):
+            if args.overwrite:
+                gen_bond_info(xyz_file_name, args)
+                gen_ply_file(xyz_file_name, args)
+        else:
+            gen_bond_info(xyz_file_name, args)
+            gen_ply_file(xyz_file_name, args)
+        
     clean_files_with_extention(".eps")
-    clean_files_with_extention(".xyzl")
+    clean_files_with_extention(".pdb")
