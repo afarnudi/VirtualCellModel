@@ -106,9 +106,9 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
                 if words[0] == "TemperatureinKelvin":
                     line = "TemperatureinKelvin " + temp + "\n"
                 if words[0] == "SpringCoeff":
-                    line = "SpringCoeff {:.4}\n".format(spring)
+                    line = f"SpringCoeff {spring}\n"
                 if words[0] == "BendingCoeff":
-                    line = "BendingCoeff {}\n".format(bend)
+                    line = f"BendingCoeff {bend}\n"
                 f1.write(line)
     return edited_config_file_name
 
