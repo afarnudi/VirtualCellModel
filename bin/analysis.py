@@ -3,7 +3,7 @@
 
 import os
 import re
-
+import argparse
 
 def get_folder_names_and_values(path, prefix, suffix, data_type):
     folders = os.listdir(path)
@@ -199,27 +199,50 @@ def get_seed_from_path(path):
 
 
 def main():
-    project_name = "MemTest"
+    parser = argparse.ArgumentParser(
+        "Membrane analysis", description="Setup VCM.analysis to analyse membrane trajectories."
+    )
+    parser.add_argument("-t",
+                        "--tmux_max_session", 
+                        help="Set max tmux session to use",
+                        type=int,
+                        default=4)
+    parser.add_argument("-p",
+                        "--project_name", 
+                        help="Set project directory.",
+                        type=str,
+                        default="MemTest")
+    parser.add_argument("--clean", 
+                        help="Find and delete all tmuxInProgress files", 
+                        action= "store_true")
+    args = parser.parse_args()
+    
+    
+    project_name = args.project_name
     results_path = "Results/"
     tmux_session_count = 0
-    tmux_max_sessions = 4
+    tmux_max_sessions = args.tmux_max_session
 
     file_paths = get_file_paths(project_name, results_path)
     for file_path in file_paths:
         ulm_file = file_path + "_mem0_Dulmts.txt"
         if not os.path.exists(ulm_file):
             tmux_session_in_progress = file_path + "_tmuxInProgress"
-            if not os.path.exists(tmux_session_in_progress):
-                if tmux_session_count < tmux_max_sessions:
-                    os.system(f"touch {tmux_session_in_progress}")
-                    seed = get_seed_from_path(file_path)
-                    mesh_path = get_mesh_path(file_path, seed)
-                    analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
-                    os.system(f"tmux new -s {tmux_session_count} -d")
-                    os.system(
-                        f'tmux send -t {tmux_session_count} "{analysis_command}" C-m'
-                    )
-                    tmux_session_count += 1
+            if not args.clean:
+                if not os.path.exists(tmux_session_in_progress):
+                    if tmux_session_count < tmux_max_sessions:
+                        os.system(f"touch {tmux_session_in_progress}")
+                        seed = get_seed_from_path(file_path)
+                        mesh_path = get_mesh_path(file_path, seed)
+                        analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
+                        os.system(f"tmux new -s {tmux_session_count} -d")
+                        os.system(
+                            f'tmux send -t {tmux_session_count} "{analysis_command}" C-m'
+                        )
+                        tmux_session_count += 1
+            else:
+                if os.path.exists(tmux_session_in_progress):
+                    os.system(f"rm {tmux_session_in_progress}")
 
     print(f"{tmux_session_count} (out of {tmux_max_sessions}) sessions created")
 if __name__ == "__main__":
