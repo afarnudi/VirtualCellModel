@@ -164,7 +164,15 @@ def get_file_paths(project_name, results_path):
                                     "", 
                                     int
                                 )
-                                samples = [f for f in samples if f[0]!='buffs']
+                                smps = []
+                                for smp in samples:
+                                    try:
+                                        int(smp[0])
+                                        smps.append(smp)
+                                    except:
+                                        #I don't need samples that are not integers
+                                        continue
+                                samples=smps
                                 samples.sort()
                                 for seed in samples:
                                     seed_name, seed_value = seed
