@@ -164,6 +164,7 @@ def get_file_paths(project_name, results_path):
                                     "", 
                                     int
                                 )
+                                samples = [f for f in samples if f[0]!='buffs']
                                 samples.sort()
                                 for seed in samples:
                                     seed_name, seed_value = seed
