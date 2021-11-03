@@ -7,7 +7,8 @@ import re
 
 def get_folder_names_and_values(path, prefix, suffix, data_type):
     folders = os.listdir(path)
-    names = [f for f in folders if re.search(prefix + r"[-+]?\d*\.\d+|\d+" + suffix, f)]
+    patern = prefix + r"[-+]?\d*\.\d+" + suffix + "|" + prefix + r"\d+" + suffix
+    names = [f for f in folders if re.search(patern, f)]
     values = [data_type(re.findall(r"[-+]?\d*\.\d+|\d+", f)[0]) for f in names]
     return [(a, b) for a, b in zip(names, values)]
 
