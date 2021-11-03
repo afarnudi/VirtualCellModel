@@ -25,7 +25,7 @@ class Inputs:
 
     def parse_mesh_resolution(args):
         """Parse resolution input to mesh path"""
-        if args.mesh_res in [50, 10]:
+        if args.mesh_res in [50,40,30, 10]:
             return Inputs.generate_mesh_path_from_resolution(args.mesh_res)
         else:
             raise Exception("only available options for mesh resolutions are 10 and 50")
