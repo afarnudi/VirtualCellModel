@@ -214,7 +214,7 @@ def main():
                     os.system(f"touch {tmux_session_in_progress}")
                     seed = get_seed_from_path(file_path)
                     mesh_path = get_mesh_path(file_path, seed)
-                    analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}"
+                    analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
                     os.system(f"tmux new -s {tmux_session_count} -d")
                     os.system(
                         f'tmux send -t {tmux_session_count} "{analysis_command}" C-m'
