@@ -5,6 +5,7 @@ import os
 import re
 import argparse
 
+
 def get_folder_names_and_values(path, prefix, suffix, data_type):
     folders = os.listdir(path)
     patern = prefix + r"[-+]?\d*\.\d+" + suffix + "|" + prefix + r"\d+" + suffix
@@ -96,73 +97,49 @@ def get_file_paths(project_name, results_path):
     paths = []
     project_path = Path(project_name)
     steps = get_folder_names_and_values(
-        results_path + project_path.get_dir(), 
-        "step_", 
-        "", 
-        int
+        results_path + project_path.get_dir(), "step_", "", int
     )
     for step in steps:
         step_name, step_value = step
         project_path.add_folder(step_name)
         frictions = get_folder_names_and_values(
-            results_path + project_path.get_dir(), 
-            "friction_", 
-            "", 
-            float
+            results_path + project_path.get_dir(), "friction_", "", float
         )
         for friction in frictions:
             friction_name, friction_value = friction
             project_path.add_folder(friction_name)
             temperatures = get_folder_names_and_values(
-                results_path + project_path.get_dir(), 
-                "", 
-                "k", 
-                int
+                results_path + project_path.get_dir(), "", "k", int
             )
             for temperature in temperatures:
                 temperature_name, temperature_value = temperature
                 project_path.add_folder(temperature_name)
                 meshes = get_folder_names_and_values(
-                    results_path + project_path.get_dir(), 
-                    "mesh_", 
-                    "", 
-                    int
+                    results_path + project_path.get_dir(), "mesh_", "", int
                 )
                 for mesh in meshes:
                     mesh_name, mesh_value = mesh
                     project_path.add_folder(mesh_name)
                     sigmas = get_folder_names_and_values(
-                        results_path + project_path.get_dir(), 
-                        "spring_", 
-                        "", 
-                        float
+                        results_path + project_path.get_dir(), "spring_", "", float
                     )
                     for sigma in sigmas:
                         sigma_name, sigma_value = sigma
                         project_path.add_folder(sigma_name)
                         kappas = get_folder_names_and_values(
-                            results_path + project_path.get_dir(), 
-                            "bend_", 
-                            "", 
-                            float
+                            results_path + project_path.get_dir(), "bend_", "", float
                         )
                         for kappa in kappas:
                             kappa_name, kappa_value = kappa
                             project_path.add_folder(kappa_name)
                             radii = get_folder_names_and_values(
-                                results_path + project_path.get_dir(), 
-                                "r_", 
-                                "", 
-                                float
+                                results_path + project_path.get_dir(), "r_", "", float
                             )
                             for radius in radii:
                                 radius_name, radius_value = radius
                                 project_path.add_folder(radius_name)
                                 samples = get_folder_names_and_values(
-                                    results_path + project_path.get_dir(), 
-                                    "", 
-                                    "", 
-                                    int
+                                    results_path + project_path.get_dir(), "", "", int
                                 )
                                 smps = []
                                 for smp in samples:
@@ -170,9 +147,9 @@ def get_file_paths(project_name, results_path):
                                         int(smp[0])
                                         smps.append(smp)
                                     except:
-                                        #I don't need samples that are not integers
+                                        # I don't need samples that are not integers
                                         continue
-                                samples=smps
+                                samples = smps
                                 samples.sort()
                                 for seed in samples:
                                     seed_name, seed_value = seed
@@ -209,29 +186,33 @@ def get_seed_from_path(path):
 
 def main():
     parser = argparse.ArgumentParser(
-        "Membrane analysis", description="Setup VCM.analysis to analyse membrane trajectories."
+        "Membrane analysis",
+        description="Setup VCM.analysis to analyse membrane trajectories.",
     )
-    parser.add_argument("-t",
-                        "--tmux_max_session", 
-                        help="Set max tmux session to use",
-                        type=int,
-                        default=4)
-    parser.add_argument("-p",
-                        "--project_name", 
-                        help="Set project directory.",
-                        type=str,
-                        default="MemTest")
-    parser.add_argument("--clean", 
-                        help="Find and delete all tmuxInProgress files", 
-                        action= "store_true")
+    parser.add_argument(
+        "-t",
+        "--tmux_max_session",
+        help="Set max tmux session to use",
+        type=int,
+        default=4,
+    )
+    parser.add_argument(
+        "-p",
+        "--project_name",
+        help="Set project directory.",
+        type=str,
+        default="MemTest",
+    )
+    parser.add_argument(
+        "--clean", help="Find and delete all tmuxInProgress files", action="store_true"
+    )
     args = parser.parse_args()
-    
-    
+
     project_name = args.project_name
     results_path = "Results/"
     tmux_session_count = 0
     tmux_max_sessions = args.tmux_max_session
-    
+
     file_paths = get_file_paths(project_name, results_path)
     os.system("tmux kill-server")
     for file_path in file_paths:
@@ -241,7 +222,7 @@ def main():
             if not args.clean:
                 if not os.path.exists(tmux_session_in_progress):
                     if tmux_session_count < tmux_max_sessions:
-                        
+
                         seed = get_seed_from_path(file_path)
                         mesh_path = get_mesh_path(file_path, seed)
                         analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
@@ -259,5 +240,7 @@ def main():
                     os.system(f"rm {tmux_session_in_progress}")
 
     print(f"{tmux_session_count} (out of {tmux_max_sessions}) sessions created")
+
+
 if __name__ == "__main__":
     main()
