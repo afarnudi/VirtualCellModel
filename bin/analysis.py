@@ -231,8 +231,9 @@ def main():
     results_path = "Results/"
     tmux_session_count = 0
     tmux_max_sessions = args.tmux_max_session
-
+    
     file_paths = get_file_paths(project_name, results_path)
+    os.system("tmux kill-server")
     for file_path in file_paths:
         ulm_file = file_path + "_mem0_Dulmts.txt"
         if not os.path.exists(ulm_file):
@@ -240,14 +241,18 @@ def main():
             if not args.clean:
                 if not os.path.exists(tmux_session_in_progress):
                     if tmux_session_count < tmux_max_sessions:
-                        os.system(f"touch {tmux_session_in_progress}")
+                        
                         seed = get_seed_from_path(file_path)
                         mesh_path = get_mesh_path(file_path, seed)
                         analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
-                        os.system(f"tmux new -s {tmux_session_count} -d")
+                        try:
+                            os.system(f"tmux new -s {tmux_session_count} -d")
+                        except:
+                            print(f"tmux session {tmux_session_count} already exists")
                         os.system(
                             f'tmux send -t {tmux_session_count} "{analysis_command}" C-m'
                         )
+                        os.system(f"touch {tmux_session_in_progress}")
                         tmux_session_count += 1
             else:
                 if os.path.exists(tmux_session_in_progress):
