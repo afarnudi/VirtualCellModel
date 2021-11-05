@@ -433,10 +433,10 @@ void set_bonded_forces(Bonds*                                 bonds,
                 abraham_classes.insert(bonds[i].class_label);
                 abraham_index++;
                 
-                string sigma   = "sigmaAbraham";
+                string sigma   = "2";
                 string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
                 
-                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(r-"+sigma+"*2^(1/6)) + "+epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(lbond-"+sigma+"*2^(1/6)-r)";
+                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(r-"+sigma+"*2^(1/6)) + "+epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(lbond+"+sigma+"*2^(1/6)-r)";
                 
                 abrahams.push_back( new OpenMM::CustomBondForce(potential));
                 
@@ -445,11 +445,11 @@ void set_bonded_forces(Bonds*                                 bonds,
                 system.addForce(abrahams[abraham_index]);
             }
             double lbond =bonds[i].nominalLengthInNm;
-            double sigmaAbraham =bonds[i].nominalLengthInNm/10;
+//            double sigmaAbraham =bonds[i].nominalLengthInNm/10;
             vector<double> parameters;
             parameters.resize(1);
             parameters[0]=lbond;
-            parameters[1]=sigmaAbraham;
+//            parameters[1]=sigmaAbraham;
             abrahams[abraham_index]->addBond(atom[0], atom[1], parameters);
 //            if (GenConst::Periodic_box) {
 //                X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
