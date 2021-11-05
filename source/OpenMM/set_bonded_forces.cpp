@@ -436,7 +436,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                 string sigma   = "2";
                 string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
                 
-                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(r-"+sigma+"*2^(1/6)) + "+epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(lbond+"+sigma+"*2^(1/6)-r)";
+                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*2^(1/6)-r) + "+epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(r-(lbond+"+sigma+"*2^(1/6)))";
                 
                 abrahams.push_back( new OpenMM::CustomBondForce(potential));
                 
