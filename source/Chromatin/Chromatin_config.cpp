@@ -358,6 +358,8 @@ void Chromatin::assign_parameters(void){
                 spring_model = potentialModelIndex.Model["KremerGrest"];
             } else if (split[0]=="N") {
                 spring_model = potentialModelIndex.Model["None"];
+            } else if (split[0]=="A") {
+                spring_model = potentialModelIndex.Model["Abraham1989"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Chromatin config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), N (None).";
