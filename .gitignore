@@ -8,6 +8,7 @@
 *.so
 *.xyz
 *.xml
+*__pycache__*
 bin/
 bin/Results/Reports/
 bin/Results/Resumes/

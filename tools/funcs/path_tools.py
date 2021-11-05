@@ -3,7 +3,6 @@
 
 import os
 import re
-import argparse
 
 
 def get_folder_names_and_values(path, prefix, suffix, data_type):
@@ -93,53 +92,53 @@ class Path:
             self.path += folder_name + "/"
 
 
-def get_file_paths(project_name, results_path):
+def get_file_paths(project_name):
     paths = []
     project_path = Path(project_name)
     steps = get_folder_names_and_values(
-        results_path + project_path.get_dir(), "step_", "", int
+        project_path.get_dir(), "step_", "", int
     )
     for step in steps:
         step_name, step_value = step
         project_path.add_folder(step_name)
         frictions = get_folder_names_and_values(
-            results_path + project_path.get_dir(), "friction_", "", float
+            project_path.get_dir(), "friction_", "", float
         )
         for friction in frictions:
             friction_name, friction_value = friction
             project_path.add_folder(friction_name)
             temperatures = get_folder_names_and_values(
-                results_path + project_path.get_dir(), "", "k", int
+                project_path.get_dir(), "", "k", int
             )
             for temperature in temperatures:
                 temperature_name, temperature_value = temperature
                 project_path.add_folder(temperature_name)
                 meshes = get_folder_names_and_values(
-                    results_path + project_path.get_dir(), "mesh_", "", int
+                    project_path.get_dir(), "mesh_", "", int
                 )
                 for mesh in meshes:
                     mesh_name, mesh_value = mesh
                     project_path.add_folder(mesh_name)
                     sigmas = get_folder_names_and_values(
-                        results_path + project_path.get_dir(), "spring_", "", float
+                        project_path.get_dir(), "spring_", "", float
                     )
                     for sigma in sigmas:
                         sigma_name, sigma_value = sigma
                         project_path.add_folder(sigma_name)
                         kappas = get_folder_names_and_values(
-                            results_path + project_path.get_dir(), "bend_", "", float
+                            project_path.get_dir(), "bend_", "", float
                         )
                         for kappa in kappas:
                             kappa_name, kappa_value = kappa
                             project_path.add_folder(kappa_name)
                             radii = get_folder_names_and_values(
-                                results_path + project_path.get_dir(), "r_", "", float
+                                project_path.get_dir(), "r_", "", float
                             )
                             for radius in radii:
                                 radius_name, radius_value = radius
                                 project_path.add_folder(radius_name)
                                 samples = get_folder_names_and_values(
-                                    results_path + project_path.get_dir(), "", "", int
+                                    project_path.get_dir(), "", "", int
                                 )
                                 smps = []
                                 for smp in samples:
@@ -154,10 +153,7 @@ def get_file_paths(project_name, results_path):
                                 for seed in samples:
                                     seed_name, seed_value = seed
                                     file_path = (
-                                        os.getcwd()
-                                        + "/"
-                                        + results_path
-                                        + project_path.get_dir()
+                                        project_path.get_dir()
                                         + f"{seed_name}/"
                                     )
                                     folders = os.listdir(file_path)
@@ -182,65 +178,3 @@ def get_mesh_path(path, seed):
 
 def get_seed_from_path(path):
     return int(path.split("/")[-3])
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        "Membrane analysis",
-        description="Setup VCM.analysis to analyse membrane trajectories.",
-    )
-    parser.add_argument(
-        "-t",
-        "--tmux_max_session",
-        help="Set max tmux session to use",
-        type=int,
-        default=4,
-    )
-    parser.add_argument(
-        "-p",
-        "--project_name",
-        help="Set project directory.",
-        type=str,
-        default="MemTest",
-    )
-    parser.add_argument(
-        "--clean", help="Find and delete all tmuxInProgress files", action="store_true"
-    )
-    args = parser.parse_args()
-
-    project_name = args.project_name
-    results_path = "Results/"
-    tmux_session_count = 0
-    tmux_max_sessions = args.tmux_max_session
-
-    file_paths = get_file_paths(project_name, results_path)
-    os.system("tmux kill-server")
-    for file_path in file_paths:
-        ulm_file = file_path + "_mem0_Dulmts.txt"
-        if not os.path.exists(ulm_file):
-            tmux_session_in_progress = file_path + "_tmuxInProgress"
-            if not args.clean:
-                if not os.path.exists(tmux_session_in_progress):
-                    if tmux_session_count < tmux_max_sessions:
-
-                        seed = get_seed_from_path(file_path)
-                        mesh_path = get_mesh_path(file_path, seed)
-                        analysis_command = f"./VCM_AnalysisClang9 --analysis 3 --lmax 70 --framelimits 3,0 --meshfile {mesh_path} --ext _Dulmts.txt --filepath {file_path}.xyz"
-                        try:
-                            os.system(f"tmux new -s {tmux_session_count} -d")
-                        except:
-                            print(f"tmux session {tmux_session_count} already exists")
-                        os.system(
-                            f'tmux send -t {tmux_session_count} "{analysis_command}" C-m'
-                        )
-                        os.system(f"touch {tmux_session_in_progress}")
-                        tmux_session_count += 1
-            else:
-                if os.path.exists(tmux_session_in_progress):
-                    os.system(f"rm {tmux_session_in_progress}")
-
-    print(f"{tmux_session_count} (out of {tmux_max_sessions}) sessions created")
-
-
-if __name__ == "__main__":
-    main()
