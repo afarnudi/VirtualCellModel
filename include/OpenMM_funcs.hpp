@@ -416,6 +416,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        vector<OpenMM::CustomBondForce*>      &KFs,
                        vector<OpenMM::CustomBondForce*>      &hill_bonds,
                        vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
+                       vector<OpenMM::CustomBondForce*>      &abrahams,
                        TimeDependantData*                    &time_dependant_data,
                        OpenMM::System                        &system
                        );

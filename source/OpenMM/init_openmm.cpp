@@ -141,6 +141,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomBondForce*> HillBonds;
     vector<OpenMM::CustomBondForce*> Harmonic_minmax;
     vector<OpenMM::CustomBondForce*> KFs;
+    vector<OpenMM::CustomBondForce*> abrahams;
     //OpenMM::HarmonicAngleForce*     HarmonicAngle = new OpenMM::HarmonicAngleForce();
     
     if (!generalParameters.MinimumForceDecleration) {
@@ -155,6 +156,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                           KFs,
                           HillBonds,
                           Harmonic_minmax,
+                          abrahams,
                           time_dependant_data,
                           system);
     } else {

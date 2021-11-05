@@ -30,6 +30,7 @@ struct PotentialModelIndex{
         Model["KFs"] = 9;
         Model["Gompper"] = 10;
         Model["angleCOS"] = 11;
+        Model["Abraham1989"] = 12;
         
         
         Model["RealHarmonic"] = 26;

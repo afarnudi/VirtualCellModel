@@ -74,6 +74,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        vector<OpenMM::CustomBondForce*>      &KFs,
                        vector<OpenMM::CustomBondForce*>      &HillBonds,
                        vector<OpenMM::CustomBondForce*>      &Harmonic_minmax,
+                       vector<OpenMM::CustomBondForce*>      &abrahams,
                        TimeDependantData*                    &time_dependant_data,
                        OpenMM::System                        &system
                        ){
@@ -92,6 +93,7 @@ void set_bonded_forces(Bonds*                                 bonds,
     set <std::string> Hill_classes;
     set <std::string> KF_classes;
     set <std::string> Harmonic_minmax_classes;
+    set <std::string> abraham_classes;
     
     int KremerGrest_index = -1;
     int Gompper_index = -1;
@@ -100,6 +102,7 @@ void set_bonded_forces(Bonds*                                 bonds,
     int Hill_index = -1;
     int KF_index = -1;
     int Harmonic_minmax_index = -1;
+    int abraham_index = -1;
     
     for (int i=0; bonds[i].type != EndOfList; ++i) {
         
@@ -422,9 +425,37 @@ void set_bonded_forces(Bonds*                                 bonds,
             //time_dependant_data->hill_coefficient.push_back(b);
             //time_dependant_data->hill_const_force.push_back(F0);
         }
+        else if (bonds[i].type == potentialModelIndex.Model["Abraham1989"])
+        {
+            auto abraham_item = abraham_classes.find(bonds[i].class_label);
+            if (abraham_item == abraham_classes.end()) {
+                
+                abraham_classes.insert(bonds[i].class_label);
+                abraham_index++;
+                
+                string sigma   = "2";
+                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
+                
+                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step(r-"+sigma+"*2^(1/6)) + "+epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(lbond-"+sigma+"*2^(1/6)-r)";
+                
+                abrahams.push_back( new OpenMM::CustomBondForce(potential));
+                
+                abrahams[abraham_index]->addPerBondParameter("lbond");
+                system.addForce(abrahams[abraham_index]);
+            }
+            double lbond =bonds[i].nominalLengthInNm;
+            vector<double> parameters;
+            parameters.resize(1);
+            parameters[0]=lbond;
+            abrahams[abraham_index]->addBond(atom[0], atom[1], parameters);
+//            if (GenConst::Periodic_box) {
+//                X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
+//            }
+        }
         
         
     }
+    
     
     if (HarmonicBondForce) {
         system.addForce(HarmonicBond);
