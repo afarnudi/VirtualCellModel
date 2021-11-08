@@ -3,6 +3,7 @@
 
 import os
 import argparse
+import time
 
 import funcs.path_tools as pt
 
@@ -38,6 +39,8 @@ def main():
 
     file_paths = pt.get_file_paths(project_name)
     os.system("tmux kill-server")
+    #make sure the tmux kill-server command is finished.
+    time.sleep(1)
     for file_path in file_paths:
         ulm_file = file_path + "_mem0_Dulmts.txt"
         if not os.path.exists(ulm_file):

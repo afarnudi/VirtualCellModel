@@ -171,6 +171,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 //                          KFs,
 //                          HillBonds,
 //                          Harmonic_minmax,
+                          abrahams,
 //                          time_dependant_data,
                           system);
     }
