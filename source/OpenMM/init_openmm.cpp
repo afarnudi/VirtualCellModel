@@ -31,6 +31,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  Bonds*                 bonds,
                                  Dihedrals*             dihedrals,
                                  Angles*                angles,
+                                 Triangles*             triangles,
                                  vector<set<int> >      &membrane_set,
                                  vector<set<int> >      &actin_set,
                                  vector<set<int> >      &ecm_set,
@@ -243,6 +244,18 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->Dihedral = DihedralForces;
     }
     
+    vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
+    vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
+    set_surface_constraint_forces(triangles,
+                                  GlobalSurfaceConstraintForces,
+                                  LocalSurfaceConstraintForces,
+                                  system);
+    
+    if (triangles[0].type != EndOfList) {
+        omm->GlobalSurfaceConstraintForces = GlobalSurfaceConstraintForces;
+        omm->LocalSurfaceConstraintForces  = LocalSurfaceConstraintForces;
+    }
+    
     vector<OpenMM::CustomAngleForce*> AngleForces;
     if (!generalParameters.MinimumForceDecleration) {
         set_angle_forces(angles,
@@ -284,7 +297,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     for (int n=0; atoms[n].type != EndOfList; ++n) {
         numberOfAtoms++;
     }
-    
     
     
     if (generalParameters.Integrator_type=="Verlet") {
@@ -450,7 +462,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
     
-    
+//    exit(0);
     if (!generalParameters.Resume) {
         omm->context->setPositions(initialPosInNm);
         if (generalParameters.setVelocitiesToTemperature) {

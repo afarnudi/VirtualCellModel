@@ -76,6 +76,14 @@ struct Angles{
     double spontaneousBendingAngleInRad;
 };
 
+struct Triangles{
+    int type;
+    std::string class_label;
+    std::vector <int> atoms;
+    double ConstraintStiffnessinKJpermolperNm2;
+    double SurfaceConstraintValue;
+};
+
 struct PlatformInfo{
     int platform_id=0;
     int platform_device_id=0;
@@ -117,6 +125,8 @@ struct MyOpenMMData {
     OpenMM::HarmonicBondForce* calcforce;
     std::vector<OpenMM::CustomBondForce*> x4harmonic;
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
+    std::vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
+    std::vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
     std::vector<OpenMM::CustomAngleForce*> Angle;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;

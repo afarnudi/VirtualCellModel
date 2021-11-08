@@ -105,6 +105,20 @@ void Membrane::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    if (SurfaceConstraintValue_stat!= "Au") {
+        try {
+            double test = stod(SurfaceConstraintValue_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"SurfaceConstraintValue\" (";
+            errorMessage+=TFILE;
+            errorMessage+=SurfaceConstraintValue_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au, or just an input value (example 100)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
     
     if (Bending_coefficient==0) {
         bending_model=potentialModelIndex.Model["None"];
@@ -172,6 +186,19 @@ void Membrane::assign_parameters(void){
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
+        } else if (it.first == "SurfaceConstraint") {
+            if (split[0]=="L") {
+                surface_constraint_model = potentialModelIndex.Model["LocalConstraint"];
+            } else if (split[0]=="G") {
+                surface_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
+            } else if (split[0]=="N") {
+                surface_constraint_model = potentialModelIndex.Model["None"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: Surface Constraint Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
         } else if (it.first == "SpringCoeff") {
             Spring_coefficient = stod(split[0]);
         } else if (it.first == "DampingCoeff") {
@@ -189,10 +216,14 @@ void Membrane::assign_parameters(void){
             }
         } else if (it.first == "BendingCoeff") {
             Bending_coefficient = stod(split[0]);
+        } else if (it.first == "SurfaceConstraintCoeff") {
+            surface_constraint_coefficient = stod(split[0]);
         } else if (it.first == "NominalLengthInNm") {
             Node_Bond_Nominal_Length_stat = split[0];
         } else if (it.first == "SpontaneousTriangleBendingAngleInDegrees") {
             Triangle_pair_angle_stat = split[0];
+        } else if (it.first == "SurfaceConstraintValue") {
+            SurfaceConstraintValue_stat = split[0];
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {

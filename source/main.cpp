@@ -153,6 +153,7 @@ int main(int argc, char **argv)
     int num_of_bonds=0;
     int num_of_dihedrals=0;
     int num_of_angles=0;
+    int num_of_triangles=0;
     
 //    if (!generalParameters.Resume) {
         if (generalParameters.Num_of_Membranes!=0) {
@@ -237,6 +238,7 @@ int main(int argc, char **argv)
                 num_of_atoms        += Membranes[i].get_num_of_nodes();
                 num_of_bonds        += Membranes[i].get_num_of_bonds();
                 num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
+                num_of_triangles    += Membranes[i].get_num_of_triangle();
             }
         }
         
@@ -289,6 +291,7 @@ int main(int argc, char **argv)
     int bond_count=0;
     int dihe_count=0;
     int angle_count=0;
+    int triangle_count =0;
     
     int mem_atom_count=0;
     //int act_atom_count=0;
@@ -298,13 +301,15 @@ int main(int argc, char **argv)
     Bonds*      all_bonds     = new Bonds[num_of_bonds+1];
     Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
     Angles*     all_angles    = new Angles[num_of_angles+1];
+    Triangles*  all_triangles = new Triangles[num_of_triangles+1];
     
     
 //    if (!generalParameters.Resume) {
-        all_atoms[num_of_atoms].type         =EndOfList;
-        all_bonds[num_of_bonds].type         =EndOfList;
-        all_dihedrals[num_of_dihedrals].type =EndOfList;
-        all_angles[num_of_angles].type       =EndOfList;
+    all_atoms[num_of_atoms].type         =EndOfList;
+    all_bonds[num_of_bonds].type         =EndOfList;
+    all_dihedrals[num_of_dihedrals].type =EndOfList;
+    all_angles[num_of_angles].type       =EndOfList;
+    all_triangles[num_of_triangles].type =EndOfList;
         
         if (generalParameters.Num_of_Membranes!=0) {
             OpenMM_membrane_info_relay(Membranes,
@@ -312,9 +317,11 @@ int main(int argc, char **argv)
                                        all_atoms,
                                        all_bonds,
                                        all_dihedrals,
+                                       all_triangles,
                                        atom_count,
                                        bond_count,
                                        dihe_count,
+                                       triangle_count,
                                        interaction_map);
         }
         
@@ -387,7 +394,7 @@ int main(int argc, char **argv)
         TimeDependantData* time_dependant_data = new TimeDependantData();
         
 //        if (!generalParameters.Resume) {
-            omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
+            omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, all_triangles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
 //        } else {
             
             

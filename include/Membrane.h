@@ -45,63 +45,62 @@ class Membrane
 protected:
     /**Store the label(pdb) used to write to the trajectory file */
     std::string label;
+    std::string epsilon_LJ_12_6Stat;
+    std::string Mesh_file_name="None";
+    std::string resume_file_name="None";
+    std::string Node_radius_stat = "Av";
+    
+    bool   update_radius_stat=false;
+    /**write geometrical properties if it is true.*/
+    bool WantGeometricProps=false;
+    
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
-    /*variables*/
-    /**Store the volume of the membrane*/
-    double volume;
-    /**Store the surface area of the membrane*/
-    double surface_area;
-    
-    
-    /*variables*/
     /**Number of nodes in the membrane.*/
     int Num_of_Nodes=0;
     /*constants*/
     ///This is the number of nodes on the membrane (Both the outer membrane and the Nucleus). This is the first number that appears in the 'membrane' file (once opend with a text editor)
     int Num_of_Triangles; ///This is the number of triangles on the membrane (Both the outer membrane and the Nucleus). This is the number that appears in the 'membrane' file after the node position list is finished and before Gmesh lists the nodes that make a triangle.
+    int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
+    int Num_of_Triangle_Pairs;
     
-    std::map<std::string, double> param_map;
-    
-    std::string Mesh_file_name="None";
-    std::string resume_file_name="None";
-    
+    /*variables*/
+    /**Store the volume of the membrane*/
+    double volume;
+    /**Store the surface area of the membrane*/
+    double surface_area;
     double sigma_LJ_12_6=0;
     double epsilon_LJ_12_6=0;
-    string epsilon_LJ_12_6Stat;
-    
     double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy=0.0;
     double Total_Bond_Energy=0.0;
     double Total_Bending_Energy=0.0;
     double Total_Kinetic_Energy;
     double Radius=0;
-    string Node_radius_stat = "Av";
-    vector<double> Node_radius;
     double New_Radius=-1;
     double New_node_radius=-1;
     double Begin_update_time_in_Ps=0;
     double End_update_time_in_Ps=0;
-    bool   update_radius_stat=false;
-    
     double COM_velocity[3]={0};
     double COM_position[3]={0};
-    
     double FENE_min=0, FENE_max=0, FENE_epsilon=0, FENE_k=0;
-    
-    int Num_of_Node_Pairs; //??? (This variable should be defined and explained)
-    int Num_of_Triangle_Pairs;
     double X_in=0;
     double Y_in=0;
     double Z_in=0;
     double X_scale=0;
     double Y_scale=0;
     double Z_scale=0;
-    
     double Average_Node_Distance();
+    
+    /*variables*/
+    std::map<std::string, double> param_map;
+    
+    vector<double> Node_radius;
+    
+    vector<vector< int > > dihedral_atoms;
+    
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
-    
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
     void FENE_log (void);
@@ -111,180 +110,68 @@ protected:
     void Bending_potetial_2(double theta_0);
     void calculating_dihedral_energy();
     
-    vector<vector< int > > dihedral_atoms;
-    
-    /**write geometrical properties if it is true.*/
-    bool WantGeometricProps=false;
     
 public:
-    //Analysis funcs/vars:
-    bool initial_random_rotation_coordinates = false;
-    void rotate_coordinates(double theta, double phi);
-    void rotate_particle_to_axes(ArgStruct_Analysis args);
-    void update_spherical_positions();
-    void convert_spherical_positions_to_cartisian();
-    void analysis_init(std::string Mesh_path);
-    void get_ground_state_from_mesh(ArgStruct_Analysis args);
-    void get_ground_state_from_frame(ArgStruct_Analysis args);
-    void calculate_dOmega(void);
+    std::string output_file_neme;
+    std::string file_time;
+    std::string Node_Bond_Nominal_Length_stat;
+    std::string Triangle_pair_angle_stat;
+    std::string mesh_format;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
+    std::string SurfaceConstraintValue_stat;
+    
+    bool AddRandomModes = false;
+    
+    int spring_model=0;
+    int bending_model=0;
+    int surface_constraint_model=0;
+    int ext_force_model=0;
+    int NumberOfRandomModes;
+    int EllMaxOfRandomModes;
+    
+    double contourRadius;
+    double Node_Bond_user_defined_Nominal_Length_in_Nm;
+    double Triangle_pair_Nominal_angle_in_degrees=-1;
+    double surface_area_voronoi=0;
+    double Spring_coefficient=0.;
+    double Bending_coefficient=0.;
+    double SpontaneousTriangleBendingInDegrees=0.;
+    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
+    double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
+    double rescale_factor=1;
+    double UlmOfRandomModes;
+    double surface_constraint_coefficient=0;
+    double SurfaceConstraintValue=0;
+    
+    vector<string> insertOrder;
+    vector<string> values;
+    
     vector<double> node_dOmega;
-    
-    void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
-    void import_pdb_frames(ArgStruct_Analysis args, int file_index);
-    void import_xyz_frames(ArgStruct_Analysis args, int file_index);
-    void generate_ulm_mode(int ell, int m, double ulm, double radius);
-    
-    void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
-    void add_ulm_mode_real(int Ell, int M, double uLM, double radius);
-    
-    void myWritePDBFrame(int frameNum, std::string traj_name);
-    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<std::complex<double> > vectorlist2);
-    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<double> vectorlist2);
-    double calc_vectorlist_vectorlist_surface_integral(vector<double> vectorlist1, vector<double> vectorlist2);
-    vector<std::complex<double> > get_ylm_vectorlist_for_mesh(int ell, int m, bool complex_conjugate);
-    vector<double> get_real_ylm_vectorlist_for_mesh(int ell, int m);
-    vector<double> get_ulmYlm_vectorlist_for_mesh();
-    vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
-    
-    //Analysis 2D funcs/vars:
     //list of the detected nodes on the sphere equator. They are sorted with respect to phi, in an ascending order.
     vector<int>    ringNodeList;
+    //I use this list to destinguish between the nodes on the equator of the membrane and the others. I pass this list to "WriteMemPDBFrame" to get a pdb output for visualisation and debug.
+    vector<int> chainlist;
+    vector<int> Bond_triangle_neighbour_indices ;
+    
     vector<double> contourradii;
     //the countour segments between nodes on the equator.
     vector<double> contourSegmentLength;
-    //Detect a ring of nodes on the equator theta=poi/2
-    void get_ring(ArgStruct_Analysis args);
-    void get_ring_from_projection(ArgStruct_Analysis args, int numpoints);
-    
-    void calculate_freqs(ArgStruct_Analysis args);
-    void calculate_freqs_projection(ArgStruct_Analysis args);
-//    void calculate_freqs_usingSH(ArgStruct_Analysis args);
-    //Clculate the standard Fourier transform of the contour ring
-//    void calculate_freqs_alexandra(ArgStruct_Analysis args);
-    //The real, a_q, and the imaginary, b_q, coefficients of the complex fourier transformation.
-    vector<vector<double> > aq_alexandra;
-    vector<vector<double> > bq_alexandra;
-    
-    vector<vector<double> > Aq_H;
-    vector<vector<double> > Bq_H;
-    
-    vector<vector<double> > aq_alexandra_proj;
-    vector<vector<double> > bq_alexandra_proj;
-    
-    vector<vector<double> > Aq_H_proj;
-    vector<vector<double> > Bq_H_proj;
-    
-    
-    //Clculate the undulation amplitudes by using Alexandra's method described in the SI.
-    void calculate_2D_amplitudes_Alexandra(int q_max);
-    
-//    void write_uq_Alexandra(ArgStruct_Analysis args, int file_index);
-    //Calculate the theta_{i+1}-theta_i for node i along the ring
-    void calculate_deltaphi(void);
-    //Calculate the theta_{i+1}-theta_{i-1} for node i along the ring
-    void calculate_deltaphi_Alexandra(void);
-//    Used to store the "delta phi"s calculated by the "calculate_deltaphi" and "calculate_deltaphi_Alexandra" functions.
+    //    Used to store the "delta phi"s calculated by the "calculate_deltaphi" and "calculate_deltaphi_Alexandra" functions.
     vector<double> deltaphi;
-    void updatepos(double);
-    
-    void WriteMemPDBFrame(ArgStruct_Analysis args,
-                          vector<int> chainlist);
-    void calculate_contourSegmentLength(void);
-    void calculate_contourRadius(void);
-    
-    //CAlculates the mode amplitudes as described in "Refined contour analysis of giant unilamellar vesicles" J. P ́ecr ́eaux1,a, H.-G. Do ̈bereiner2, J. Prost1, J.-F. Joanny1, and P. Bassereau1, Eur. Phys. J. E 13, 277–290 (2004), DOI 10.1140/epje/i2004-10001-9
-    void calculate_modeAmplitudes2D(void);
-    
-    //I use this list to destinguish between the nodes on the equator of the membrane and the others. I pass this list to "WriteMemPDBFrame" to get a pdb output for visualisation and debug.
-    vector<int> chainlist;
-    
-    std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
-    /**return the  complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). Where l is a positiv integer, m is defined -l <= m <= l, theta is 0 <= theta <= pi, and phi is defined 0 <= phi <= 2pi. s*/
-    std::complex<double> calc_complex_ylmthetaphi(int l,  int  m, double theta, double phi);
-    double calc_real_ylmthetaphi(int l,  int  m, double theta, double phi);
-    
-    
-    
-    void calculate_ulm(ArgStruct_Analysis args);
-    void calculate_real_ulm(ArgStruct_Analysis args);
-    void calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool clear);
-    void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
-    void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
-    void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
-    void write_ulm  (ArgStruct_Analysis args, int file_index);
-    void write_un_uq(ArgStruct_Analysis args, int file_index);
-    void write_un_uq_projection(ArgStruct_Analysis args, int file_index);
-    void write_uq_SH(ArgStruct_Analysis args, int file_index);
-    double calc_assoc_legendre(int ell, int m, double x);
-    
-    vector<vector<double> > ulm_avg;
-    vector<vector<double> > ulm_std;
-    vector<vector<double> > ulm_Mesh;
-    vector<vector<double> > ulm_temp_for_analysis;
-
-    double contourRadius;
-    
-//    vector<double> calculate_2D_amplitudes(int q_max);
-    void calculateH_2D_amplitudes(int q_max);
-    void calculateH_2D_amplitudes_projection(int q_max, int numpoints);
-    void calculate_2D_amplitudes_Alexandra_projection(int q_max, int numpoints);
-    
-    
     vector<double> analysis_coord_frames_time;
-    vector<vector<vector<double> > > analysis_coord_frames;
-    vector<vector<double> > spherical_positions;
+    vector<double> Node_Bond_Nominal_Length_in_Nm;
+    vector<double> Triangle_pair_angles_in_radians;
+    vector<double> node_voronoi_area;
+    vector<double> GompperBondPotentialLminLc1Lc0Lmax;
+    vector<double> Shift_position_xyzVector;
+    vector<double> Shift_velocities_xyzVector;
+    vector<double> ext_force_rigidity ;
     
-    void set_com_to_zero(){
-        update_COM_position();
-        for (int i=0; i<Num_of_Nodes; i++) {
-            for (int j=0; j<3; j++) {
-                Node_Position[i][j] -= COM_position[j];
-            }
-        }
-    }
-    /**Return the geometrical properties write status*/
-    bool get_GeometricProps_flag(){
-        return WantGeometricProps;
-    }
-    
-    void write_geometrics();
-    
-    /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
-    double calculate_bending_energy(void);
-    
-    /**Returns the node radius update value (set value in the configuration file). */
-    double get_new_radius(void){
-        return New_Radius;
-    }
-    /**Returns whether the Membrane is setup for radius change (true) or not (false). */
-    bool get_update_status(void){
-        return update_radius_stat;
-    }
-    
-    std::string output_file_neme;
-    std::string file_time;
-    
-    vector<vector<double> > Node_Position;
     vector<vector<int> >    Triangle_list;
     //List that stores the IDs of triangles that are neighbours.
     vector<vector<int> >    Triangle_pair_list;
     //vector<vector<int> > Membrane_Node_Pair_list;
     vector<vector<int> >    Node_Bond_list;// this variable is  the same as Membrane_Node_pair_list. I think  the name "Membrane_Edges" is less confusing. and also we fill it in a different way.
-    vector<double>          Node_Bond_Nominal_Length_in_Nm;
-    string                  Node_Bond_Nominal_Length_stat;
-    double                  Node_Bond_user_defined_Nominal_Length_in_Nm;
-    
-    vector<double>          Triangle_pair_angles_in_radians;
-    string                  Triangle_pair_angle_stat;
-    double                  Triangle_pair_Nominal_angle_in_degrees=-1;
-    
     vector<vector<int> >    Triangle_Pair_Nodes;
-    vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
-    vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
-    
-    
-    
-    
     /**This list is used to store all the neighbours of nodes:
      *Example:
      *If node i has 4 neighbours:  m, n, o, p
@@ -317,13 +204,99 @@ public:
      *Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ]  = i, p
      */
     vector<vector<int> > Node_neighbour_list_respective_bond_index;
+    
+    vector<vector<double> > aq_alexandra;
+    vector<vector<double> > bq_alexandra;
+    vector<vector<double> > Aq_H;
+    vector<vector<double> > Bq_H;
+    vector<vector<double> > aq_alexandra_proj;
+    vector<vector<double> > bq_alexandra_proj;
+    vector<vector<double> > Aq_H_proj;
+    vector<vector<double> > Bq_H_proj;
+    vector<vector<double> > ulm_avg;
+    vector<vector<double> > ulm_std;
+    vector<vector<double> > ulm_Mesh;
+    vector<vector<double> > ulm_temp_for_analysis;
+    vector<vector<double> > spherical_positions;
+    vector<vector<double> > Node_Position;
+    vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
+    vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > node_voronoi_normal_vec;
-    vector<double> node_voronoi_area;
-    double surface_area_voronoi=0;
-    vector<double> GompperBondPotentialLminLc1Lc0Lmax;
     
-    vector<int> Bond_triangle_neighbour_indices ;
+    vector<vector<vector<double> > > analysis_coord_frames;
     
+    std::map<string, vector<string> > Params;
+    
+    
+    //Analysis funcs/vars:
+    bool initial_random_rotation_coordinates = false;
+    void rotate_coordinates(double theta, double phi);
+    void rotate_particle_to_axes(ArgStruct_Analysis args);
+    void update_spherical_positions();
+    void convert_spherical_positions_to_cartisian();
+    void analysis_init(std::string Mesh_path);
+    void get_ground_state_from_mesh(ArgStruct_Analysis args);
+    void get_ground_state_from_frame(ArgStruct_Analysis args);
+    void calculate_dOmega(void);
+    
+    void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
+    void import_pdb_frames(ArgStruct_Analysis args, int file_index);
+    void import_xyz_frames(ArgStruct_Analysis args, int file_index);
+    void generate_ulm_mode(int ell, int m, double ulm, double radius);
+    
+    void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);
+    void add_ulm_mode_real(int Ell, int M, double uLM, double radius);
+    
+    void myWritePDBFrame(int frameNum, std::string traj_name);
+    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<std::complex<double> > vectorlist2);
+    std::complex<double> calc_vectorlist_vectorlist_surface_integral(vector<std::complex<double> > vectorlist1, vector<double> vectorlist2);
+    double calc_vectorlist_vectorlist_surface_integral(vector<double> vectorlist1, vector<double> vectorlist2);
+    vector<std::complex<double> > get_ylm_vectorlist_for_mesh(int ell, int m, bool complex_conjugate);
+    vector<double> get_real_ylm_vectorlist_for_mesh(int ell, int m);
+    vector<double> get_ulmYlm_vectorlist_for_mesh();
+    vector<double> get_ulmYlm_vectorlist_for_mesh(char Requiv);
+    
+    //Analysis 2D funcs/vars:
+    //Detect a ring of nodes on the equator theta=poi/2
+    void get_ring(ArgStruct_Analysis args);
+    void get_ring_from_projection(ArgStruct_Analysis args, int numpoints);
+    void calculate_freqs(ArgStruct_Analysis args);
+    void calculate_freqs_projection(ArgStruct_Analysis args);
+    //Clculate the undulation amplitudes by using Alexandra's method described in the SI.
+    void calculate_2D_amplitudes_Alexandra(int q_max);
+    //Calculate the theta_{i+1}-theta_i for node i along the ring
+    void calculate_deltaphi(void);
+    //Calculate the theta_{i+1}-theta_{i-1} for node i along the ring
+    void calculate_deltaphi_Alexandra(void);
+    void updatepos(double);
+    void WriteMemPDBFrame(ArgStruct_Analysis args,
+                          vector<int> chainlist);
+    void calculate_contourSegmentLength(void);
+    void calculate_contourRadius(void);
+    //CAlculates the mode amplitudes as described in "Refined contour analysis of giant unilamellar vesicles" J. P ́ecr ́eaux1,a, H.-G. Do ̈bereiner2, J. Prost1, J.-F. Joanny1, and P. Bassereau1, Eur. Phys. J. E 13, 277–290 (2004), DOI 10.1140/epje/i2004-10001-9
+    void calculate_modeAmplitudes2D(void);
+    std::complex<double> calc_complex_ylm_surface_integral(int ell, int m, double radius);
+    /**return the  complex spherical harmonic for the provided parameters: Y_l,m (theta, phi). Where l is a positiv integer, m is defined -l <= m <= l, theta is 0 <= theta <= pi, and phi is defined 0 <= phi <= 2pi. s*/
+    std::complex<double> calc_complex_ylmthetaphi(int l,  int  m, double theta, double phi);
+    double calc_real_ylmthetaphi(int l,  int  m, double theta, double phi);
+    void calculate_ulm(ArgStruct_Analysis args);
+    void calculate_real_ulm(ArgStruct_Analysis args);
+    void calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool clear);
+    void calculate_ulm_radiustest(int ell_max, int analysis_averaging_option);
+    void calculate_ulm_radiustest_real(int ell_max, int analysis_averaging_option);
+    void calculate_ulm_sub_particles(int ell_max, int analysis_averaging_option);
+    void write_ulm  (ArgStruct_Analysis args, int file_index);
+    void write_un_uq(ArgStruct_Analysis args, int file_index);
+    void write_un_uq_projection(ArgStruct_Analysis args, int file_index);
+    void write_uq_SH(ArgStruct_Analysis args, int file_index);
+    double calc_assoc_legendre(int ell, int m, double x);
+    //    vector<double> calculate_2D_amplitudes(int q_max);
+    void calculateH_2D_amplitudes(int q_max);
+    void calculateH_2D_amplitudes_projection(int q_max, int numpoints);
+    void calculate_2D_amplitudes_Alexandra_projection(int q_max, int numpoints);
+    void write_geometrics();
+    /**Returns the total bending energy  of the membrane (indepentant of OpenMM calculations) */
+    double calculate_bending_energy(void);
     void check(void);
     void get_bond_length_distribution(void);
     void set_bond_nominal_length(void);
@@ -342,18 +315,11 @@ public:
     /**Construct a vector that lists the triangle neighbours of each node  pair.
      */
     void Bond_triangle_neighbour_list_constructor();
-    
     void export_for_resume(int MD_step);
-    
     //monte carlo flip functions
     bool check_monte_carlo=0;
     void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
-
-
-//    bool monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter);
-
     void monte_carlo_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals, MyAtomInfo atoms[], double& localDeltaE, int& Accepted_Try_Counter,int& pyramid_counter, int &MC_total_tries, double &MC_Acceptance_Rate);
-
     double calculating_the_bond_energy(int index, bool initial_or_final, MyAtomInfo  atoms[],int number_of_privious_mem_nodes);
     double calculating_the_bond_energy_check(int p1, int p2, MyAtomInfo atoms[]);
     double calculating_the_bend_energy(int uncommn1, int common2, int common3, int uncommon4, bool initial_or_final, MyAtomInfo  atoms[], int number_of_privious_mem_nodes);
@@ -365,50 +331,46 @@ public:
     bool check_Pyramid(vector <int> A_neighbors, vector <int> B_neighbors);
     bool check_Pyramid_2(int initial_pair, vector<int> A_neighbours_dihedral_index, vector<int> B_neighbours_dihedral_index);
     void check_the_flip(MyOpenMMData* omm, Bonds* bonds, Dihedrals* dihedrals);
-    
     //end of monte carlo flip functions
-    
     void export_for_resume(int MD_step, MyAtomInfo atoms[], int atom_count);
-    
-    
-    //    void initialise(string input_file_name , string Mesh_file_name);
     void initialise(std::string Mesh_file_name);
-    //    void initialise(string Mesh_file_name, double x, double y, double z);
     void import(std::string import_file_name);
     void import_config(vector<string> configlines);
-
     void write_pov_traj(std::string traj_name, std::string label, int currentstep);
+    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
+    void calculate_volume_and_surface_area(void);
+    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
+    void calculate_surface_area_with_voronoi(void);
+    /**Calculate and return the cot of the  angle between nodes A(middle of the angle), B, and C.*/
+    double calc_theta_angle_ABC(int node_A, int node_B, int node_C);
+    void randomundulationgenerator(void);
+    void randomundulationgenerator(int numberOfRandomModes, int ellMaxOfRandomModes, double ulmOfRandomModes);
+    void assign_parameters(void);
+    void consistancy_check(void);
     
-    int spring_model=0;
-    int bending_model=0;
-    string mesh_format;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
-    //    vector <double> T_Kinetic_Energy;
-    double Spring_coefficient=0.;
-    double Bending_coefficient=0.;
-    double SpontaneousTriangleBendingInDegrees=0.;
-    double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
-    
-    vector<double> Shift_position_xyzVector;
-    vector<double> Shift_velocities_xyzVector;
-//    double Shift_in_X_direction=0.0; //???
-//    double Shift_in_Z_direction=0.0; //???
-//    double Shift_in_Y_direction=0.0; //???
-//    double x_speed=0.0; //???
-//    double y_speed=0.0;
-//    double z_speed=0.0;
-    
-    int ext_force_model=0;
-    vector<double> ext_force_rigidity ;
-    //double kx=10;
-    //double ky=10;
-    //double kz=10;
-    
-    double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
-    
+    void set_com_to_zero(){
+        update_COM_position();
+        for (int i=0; i<Num_of_Nodes; i++) {
+            for (int j=0; j<3; j++) {
+                Node_Position[i][j] -= COM_position[j];
+            }
+        }
+    }
+    /**Return the geometrical properties write status*/
+    bool get_GeometricProps_flag(){
+        return WantGeometricProps;
+    }
+    /**Returns the node radius update value (set value in the configuration file). */
+    double get_new_radius(void){
+        return New_Radius;
+    }
+    /**Returns whether the Membrane is setup for radius change (true) or not (false). */
+    bool get_update_status(void){
+        return update_radius_stat;
+    }
     vector<double >get_gompper_params_lminlc1lc0lmax(){
         return GompperBondPotentialLminLc1Lc0Lmax;
     }
-    
     /**Returns the last saved volume*/
     double get_volume(void){
         return volume;
@@ -418,12 +380,6 @@ public:
         calculate_surface_area_with_voronoi();
         return node_voronoi_area;
     }
-    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
-    void calculate_volume_and_surface_area(void);
-    
-    /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
-    void calculate_surface_area_with_voronoi(void);
-    
     /**Returns the last saved surface area*/
     double get_surface_area(void){
         return surface_area;
@@ -449,8 +405,6 @@ public:
     double get_surface_area_voronoi(){
         return surface_area_voronoi;
     }
-    double rescale_factor=1;
-    
     void rescale_membrane(double factor){
         for(auto &pos: Node_Position){
             for(auto &coord: pos){
@@ -467,9 +421,6 @@ public:
     std::string get_label(void){
         return label;
     }
-//    void Relax_1(void);
-    
-    
     /** \brief public access to total number of membrane nodes.
      * \return integer number of nodes in the membrane
      */
@@ -515,19 +466,22 @@ public:
     double get_bending_stiffness_coefficient(void){
         return Bending_coefficient;
     }
+    /**Return bending stiffness coefficient. */
+    double get_surface_constraint_stiffness_coefficient(void){
+        return surface_constraint_coefficient;
+    }
+    /**Return the spontaneous bending angle between triangle pairs in radians. */
+    double get_surface_constraint_area(void){
+        return SurfaceConstraintValue;
+    }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
     double get_spontaneous_angle_in_Rad(int nodePairIndex){
         return Triangle_pair_angles_in_radians[nodePairIndex];
     }
-    /**Return the spontaneous bending angle between triangle pairs in radians. */
-    
-    
-    
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_triangle_pairs(){
         return int(Triangle_Pair_Nodes.size());
     }
-    
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
         if (bending_model!=potentialModelIndex.Model["None"]) {
@@ -537,15 +491,17 @@ public:
         }
         
     }
-    
     /**Return the node IDs of the dihedral angles.*/
     vector<int> get_traingle_pair_nodes_list(int triangle_pair){
         return Triangle_Pair_Nodes[triangle_pair];
     }
-    
     /**Return the node IDs of the dihedral angles.*/
     vector<int> get_dihedral_atoms_list(int index){
         return dihedral_atoms[index];
+    }
+    /**Return the node IDs of the dihedral angles.*/
+    vector<int> get_triangle_atoms_list(int index){
+        return Triangle_list[index];
     }
     /**Return the node ID of the dihedral angles member.*/
     int get_traingle_pair_node(int triangle_pair, int index){
@@ -558,6 +514,10 @@ public:
     /**Return input spring model, used to setup the openmm system for the bonds.*/
     int get_bending_model(void){
         return bending_model;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_surface_constraint_model(void){
+        return surface_constraint_model;
     }
     /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
     double get_sigma_LJ_12_6(void){
@@ -586,13 +546,8 @@ public:
         epsilon = FENE_epsilon;
         k = FENE_k;
     }
-    /**Calculate and return the cot of the  angle between nodes A(middle of the angle), B, and C.*/
-    double calc_theta_angle_ABC(int node_A, int node_B, int node_C);
-    
     /**Set FENE calculated parameters.*/
     void set_FENE_param(double &le0, double &le1, double &lmin, double &lmax){
-        
-        
         double width= 0.66*Average_node_pair_length; // it defines a minimum limit for weil width.
         double delta_length=Max_node_pair_length-Min_node_pair_length;
         double width_scaling =0.2; // this variable adjusts the log_barrier potential width. if the edges have almost the same length, then it shlould be  redefined to have an appropriate weil width
@@ -609,11 +564,7 @@ public:
         
         le0 = lmin + 3.0*(lmax-lmin)/4.0;
         le1 = lmin +   (lmax-lmin)/4.0;
-        
-        
     }
-    
-    
     void shift_velocity (double vx, double vy, double vz){
         for (int i=0; i<Num_of_Nodes; i++) {
             Node_Velocity[i][0]+=vx;
@@ -649,7 +600,6 @@ public:
     double get_node_radius(int index){
         return Node_radius[index];
     }
-    
     double get_membrane_weighted_radius(void){
         
         vector< double> unit;
@@ -662,10 +612,9 @@ public:
         double weighted_radius_sum = calc_vectorlist_vectorlist_surface_integral(radii,unit);
         weighted_radius_sum/=4*M_PI;
         cout<<weighted_radius_sum<<endl;
-//        exit(0);
+        //        exit(0);
         return 0;
     }
-    
     void add_to_force(double force,int index, int coor){
         Node_Force[index][coor]+=force;
     }
@@ -706,7 +655,6 @@ public:
         Y_in+=y;
         Z_in+=z;
     }
-    
     void update_average_Membrane_radius(void){
         Radius=0;
         update_COM_position();
@@ -723,19 +671,14 @@ public:
     double get_new_Membrane_radius(void){
         return New_Radius;
     }
-    
-    void randomundulationgenerator(void);
-    void randomundulationgenerator(int numberOfRandomModes, int ellMaxOfRandomModes, double ulmOfRandomModes);
-    
-    bool AddRandomModes = false;
-    int NumberOfRandomModes;
-    int EllMaxOfRandomModes;
-    double UlmOfRandomModes;
+    std::map<string, vector<string> > get_map(){
+        return Params;
+    }
+    vector<string > get_insertOrder(){
+        return insertOrder;
+    }
     
     
-    std::map<string, vector<string> > Params;
-    vector<string> insertOrder;
-    vector<string> values;
     Membrane(){
         values.resize(2);
         
@@ -864,17 +807,23 @@ public:
         Params["NUL"] = values;
         insertOrder.push_back("NUL");
         
+        values[0] ="N";
+        values[1] ="#The surface constraint model, L, for local and , G, for a global constraint. Default N";
+        Params["SurfaceConstraint"] = values;
+        insertOrder.push_back("SurfaceConstraint");
         
+        values[0] ="Au";
+        values[1] ="#Set the surface constraint value: 1) Au: The initial surface of the mesh, S, for Global and S/N for Local constraint where N is the number of triangles on the surface; 2) \"value\": Where you type a specific value. Defaullt Au";
+        Params["SurfaceConstraintValue"] = values;
+        insertOrder.push_back("SurfaceConstraintValue");
+        
+        values[0] ="0";
+        values[1] ="#Set surface constraint potential (harmonic) rigidity coefficient. Default 0";
+        Params["SurfaceConstraintCoeff"] = values;
+        insertOrder.push_back("SurfaceConstraintCoeff");
     }
     
-    std::map<string, vector<string> > get_map(){
-        return Params;
-    }
-    vector<string > get_insertOrder(){
-        return insertOrder;
-    }
-    void assign_parameters(void);
-    void consistancy_check(void);
+    
 };
 
 #endif // MEMBRANE_H

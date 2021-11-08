@@ -31,6 +31,8 @@ struct PotentialModelIndex{
         Model["Gompper"] = 10;
         Model["angleCOS"] = 11;
         Model["Abraham1989"] = 12;
+        Model["LocalConstraint"] = 13;
+        Model["GlobalConstraint"] = 14;
         
         
         Model["RealHarmonic"] = 26;

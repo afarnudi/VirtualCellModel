@@ -50,6 +50,16 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
+    if (SurfaceConstraintValue_stat=="Au") {
+        calculate_volume_and_surface_area();
+        if (surface_constraint_model==potentialModelIndex.Model["LocalConstraint"]) {
+            SurfaceConstraintValue= surface_area/Num_of_Triangles;
+        } else if(surface_constraint_model==potentialModelIndex.Model["GlobalConstraint"]) {
+            SurfaceConstraintValue= surface_area;
+        }
+    } else{
+        SurfaceConstraintValue= stod(SurfaceConstraintValue_stat);
+    }
     
     if (AddRandomModes) {
         randomundulationgenerator();

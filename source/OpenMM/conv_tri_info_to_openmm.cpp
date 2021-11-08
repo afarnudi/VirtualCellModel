@@ -47,3 +47,60 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     
     return diatoms;
 }
+
+Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
+    
+    
+    bool GlobalSurfacePotential = false;
+    bool LocalSurfacePotential = false;
+    bool noPotential = false;
+    
+    const int mem_num_tris = mem.get_num_of_triangle();
+//    cout<<"**++**++**++\n\t"<<mem_num_tri_pairs<<"\n**++**++**++\n";
+    Triangles* triatoms = new Triangles[mem_num_tris];
+    
+    
+    for (int i=0; i<mem_num_tris; i++) {
+//        vector<int> tri_pair_nodes(mem.get_traingle_pair_nodes_list(i));
+        
+        triatoms[i].type = mem.get_surface_constraint_model();
+        if (triatoms[i].type == potentialModelIndex.Model["LocalConstraint"] || triatoms[i].type == potentialModelIndex.Model["GlobalConstraint"]) {
+            if (triatoms[i].type == potentialModelIndex.Model["LocalConstraint"]) {
+                LocalSurfacePotential = true;
+            } else {
+                GlobalSurfacePotential = true;
+            }
+            vector<int> tri_nodes(mem.get_triangle_atoms_list(i));
+            triatoms[i].atoms.resize(3);
+            triatoms[i].atoms[0]=tri_nodes[0];
+            triatoms[i].atoms[1]=tri_nodes[1];
+            triatoms[i].atoms[2]=tri_nodes[2];
+            
+            triatoms[i].ConstraintStiffnessinKJpermolperNm2 = mem.get_surface_constraint_stiffness_coefficient();
+            triatoms[i].class_label = mem.get_label();
+            triatoms[i].SurfaceConstraintValue = mem.get_surface_constraint_area();
+        } else if (triatoms[i].type == potentialModelIndex.Model["None"]){
+            noPotential = true;
+        }
+        
+        
+    }
+    
+    if (LocalSurfacePotential) {
+        cout<<" Local surface constraint"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-2 .Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    if (GlobalSurfacePotential) {
+        cout<<" Global surface constraint"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-2 .Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    
+    if (noPotential || mem_num_tris==0) {
+        cout<<" None"<<endl;
+    }
+    
+    
+    return triatoms;
+}
