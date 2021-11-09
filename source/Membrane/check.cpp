@@ -23,19 +23,23 @@ void Membrane::check(void){
 
     }
     if (spring_model==potentialModelIndex.Model["Gompper"]) {
-        if (Node_Bond_Nominal_Length_stat=="Au") {
-            cout<<TWWARN<<"The \"Au\" option for the nominal bond length cannot be used with the Gompper potential. Switching to \"Av\""<<TRESET<<endl;
-            Node_Bond_Nominal_Length_stat=="Av";
-        } else if (Node_Bond_Nominal_Length_stat!="Au" && Node_Bond_Nominal_Length_stat!="Av"){
-            if (Max_node_pair_length>1.33*Average_node_pair_length || Max_node_pair_length<0.67*Average_node_pair_length) {
+        if (Node_Bond_Nominal_Length_stat=="Av")
+        {
+            if (Max_node_pair_length>1.33*Average_node_pair_length || Min_node_pair_length<0.67*Average_node_pair_length) {
                 string errorMessage = TWARN;
-                errorMessage +="Membrane: Initilisation check: Mesh bond size distribuion is not compatible with the Gompper potential parameters. You can use i) another potential or ii) another mesh.\n This error was generated because either the maximum (minimum) bond length in the mesh is larger (smaller) than 1.33 (0.67) times the average bond length.";
+                errorMessage +="Membrane: Initilisation check: Mesh bond size distribuion is not compatible with the Gompper potential. You can either i) use a custom nominal length that is between ";
+                errorMessage +=to_string(Min_node_pair_length/0.67);
+                errorMessage +=" and ";
+                errorMessage +=to_string(Max_node_pair_length/1.33);
+                errorMessage +=". ii) use another potential or iii) use another mesh.\n This error was generated because either the maximum (minimum) bond length in the mesh is larger (smaller) than 1.33 (0.67) times the average bond length.";
                 errorMessage +=TRESET;
                 throw std::runtime_error(errorMessage);
             }
+//            double a = Average_node_pair_length;
+//            GompperBondPotentialLminLc1Lc0Lmax={0.67*a,0.85*a,1.15*a,1.33*a};
         }
-        double a = Average_node_pair_length;
-        GompperBondPotentialLminLc1Lc0Lmax={0.67*a,0.85*a,1.15*a,1.33*a};
+        
+        
         
     }
 }
