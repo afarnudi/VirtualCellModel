@@ -30,13 +30,13 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         } else if (bonds[i].type == potentialModelIndex.Model["RealHarmonic"]){
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == potentialModelIndex.Model["Gompper"]){
-            harmonicpotential=true;
-            vector<double> gompperparamslminlc1lc0lmax = mem.get_gompper_params_lminlc1lc0lmax();
-            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
-            bonds[i].gompperlmin=gompperparamslminlc1lc0lmax[0];
-            bonds[i].gompperlc1=gompperparamslminlc1lc0lmax[1];
-            bonds[i].gompperlc0=gompperparamslminlc1lc0lmax[2];
-            bonds[i].gompperlmax=gompperparamslminlc1lc0lmax[3];
+            gompperpotential=true;
+//            vector<double> gompperparamslminlc1lc0lmax = mem.get_gompper_params_lminlc1lc0lmax();
+//            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+//            bonds[i].gompperlmin=gompperparamslminlc1lc0lmax[0];
+//            bonds[i].gompperlc1=gompperparamslminlc1lc0lmax[1];
+//            bonds[i].gompperlc0=gompperparamslminlc1lc0lmax[2];
+//            bonds[i].gompperlmax=gompperparamslminlc1lc0lmax[3];
         } else if (bonds[i].type == potentialModelIndex.Model["None"]){
             noPotential = true;
         }
@@ -66,9 +66,9 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     }
     
     if(gompperpotential){
-        cout<<" Gompper "<<endl;
-        cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
-        cout<<"lmin,   lc1,   lc0,   lmax (Nm): \n\t" <<mem.get_spring_stiffness_coefficient() <<endl;
+        cout<<" Gompper tethered"<<endl;
+//        cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;
+//        cout<<"lmin,   lc1,   lc0,   lmax (Nm): \n\t" <<mem.get_spring_stiffness_coefficient() <<endl;
     }
     if(noPotential){
         cout<<" None "<<endl;

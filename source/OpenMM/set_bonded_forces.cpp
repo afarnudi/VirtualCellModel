@@ -92,8 +92,8 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomBondForce*>      &KremerGrests,
-                       vector<OpenMM::CustomBondForce*>      &Gompperbond,
-                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
+                       vector<OpenMM::CustomBondForce*>      &Gompper,
+//                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
                        vector<OpenMM::CustomBondForce*>      &Contractiles,
                        vector<OpenMM::CustomBondForce*>      &KFs,
                        vector<OpenMM::CustomBondForce*>      &HillBonds,
@@ -200,56 +200,21 @@ void set_bonded_forces(Bonds*                                 bonds,
                 Gompper_index++;
                 string label = bonds[i].class_label;
 
-                string potentialbond = "step(0.99*"+label+"lmax-r)*"+"step(r-1.01*"+label+"lc0)*"+label+"bb*exp(1/("+label+"lc0-r))/("+label+"lmax-r)";
-
-                Gompperbond.push_back(new OpenMM::CustomBondForce(potentialbond));
-//                cout<<potentialbond<<endl;exit(0);
-                Gompperbond[Gompper_index]->addGlobalParameter(label+"lc0" , bonds[i].gompperlc0);
-                Gompperbond[Gompper_index]->addGlobalParameter(label+"bb"  , bonds[i].stiffnessInKJPerNm2);
-                Gompperbond[Gompper_index]->addGlobalParameter(label+"lmax", bonds[i].gompperlmax);
-
-                string potentialrep = "step(r-1.01*"+label+"lmin)*"+"step(0.99*"+label+"lc1-r)*"+label+"br*exp(1/(r-"+label+"lc1))/(r-"+label+"lmin)";
-                Gompperrep.push_back(new OpenMM::CustomBondForce(potentialrep));
-                cout<<potentialbond<<endl;cout<<potentialrep<<endl;
-                Gompperrep[Gompper_index]->addGlobalParameter(label+"br"  , bonds[i].stiffnessInKJPerNm2);
-                Gompperrep[Gompper_index]->addGlobalParameter(label+"lc1" , bonds[i].gompperlc1);
-                Gompperrep[Gompper_index]->addGlobalParameter(label+"lmin", bonds[i].gompperlmin);
-                    
-//                string label = bonds[i].class_label;
-//
-//                string potentialbond = "step(r-1.01*lc0)*kgompper*exp(1/(lc0-r))/(lmax-r)";
-//
-//                Gompperbond.push_back(new OpenMM::CustomBondForce(potentialbond));
-//
-//                Gompperbond[Gompper_index]->addPerBondParameter("lc0");// , bonds[i].gompperlc0);
-//                Gompperbond[Gompper_index]->addPerBondParameter("kgompper");//  , bonds[i].stiffnessInKJPerNm2);
-//                Gompperbond[Gompper_index]->addPerBondParameter("lmax");//, bonds[i].gompperlmax);
-//
-//                string potentialrep = "step(0.99*lc1-r)*kgompper*exp(1/(r-lc1))/(r-lmin)";
-//                Gompperrep.push_back(new OpenMM::CustomBondForce(potentialrep));
-//                cout<<potentialbond<<endl;cout<<potentialrep<<endl;
-//                Gompperrep[Gompper_index]->addPerBondParameter("kgompper");//  , bonds[i].stiffnessInKJPerNm2);
-//                Gompperrep[Gompper_index]->addPerBondParameter("lc1");// , bonds[i].gompperlc1);
-//                Gompperrep[Gompper_index]->addPerBondParameter("lmin");//, bonds[i].gompperlmin);
+                string potential = to_string(80*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature)+"*(";
+                potential += "exp(1/(1.15*edge-r))/(1.33*edge-r)*step(r-1.15*edge)";
+                potential += "+";
+                potential += "exp(1/(r-0.85*edge))/(r-0.67*edge)*step(0.85*edge-r)";
+                potential += ")";
                 
-                
-                system.addForce(Gompperbond[Gompper_index]);
-//                system.addForce(Gompperrep [Gompper_index]);
+                Gompper.push_back(new OpenMM::CustomBondForce(potential));
+                Gompper[Gompper_index]->addPerBondParameter("edge");
+        
+                system.addForce(Gompper[Gompper_index]);
             }
+            vector<double> parameters;
+            parameters.push_back(bonds[i].nominalLengthInNm);
             
-//            vector<double> bondparameters={bonds[i].gompperlc0,
-//                                           bonds[i].stiffnessInKJPerNm2,
-//                                           bonds[i].gompperlmax
-//                                           };
-//            Gompperbond[Gompper_index]->addBond(atom[0], atom[1], bondparameters);
-            Gompperbond[Gompper_index]->addBond(atom[0], atom[1]);
-            
-//            vector<double> repparameters={bonds[i].stiffnessInKJPerNm2,
-//                                          bonds[i].gompperlc1,
-//                                          bonds[i].gompperlmin
-//                                          };
-//            Gompperrep [Gompper_index]->addBond(atom[0], atom[1], repparameters);
-            Gompperrep [Gompper_index]->addBond(atom[0], atom[1]);
+            Gompper[Gompper_index]->addBond(atom[0], atom[1], parameters);
 
         }
         else if (bonds[i].type == potentialModelIndex.Model["Harmonic"])
