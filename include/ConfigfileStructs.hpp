@@ -95,7 +95,7 @@ struct GeneralParameters{
     int Num_of_Chromatins;
     int Num_of_ECMs;
     
-    
+    int bondCutoff;
     
     bool   WantEnergy;
     /**Collect forces (cheap) during each Report_Interval_In_Fs time point. Default true*/
@@ -306,7 +306,7 @@ struct GeneralParameters{
         insertOrder.push_back("MemFluidity");
         
         values[0] ="false";
-        values[1] ="#When true, sll interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
+        values[1] ="#When true, all interaction potentails will be declared using the minimum number of 'Forces'. This will result in better performance for large systems. If false, multiple force groups will be defined for each class. This will come in handy when wanting to look at the evolution of selected forces on a class.";
         GenParams["MinimumForceDecleration"] = values;
         insertOrder.push_back("MinimumForceDecleration");
         
@@ -324,6 +324,11 @@ struct GeneralParameters{
         values[1] ="#Set the precision of the calculations. If the precision is not supported by the platform the default precision of the platform will be used. Default: N ";
         GenParams["Precision"] = values;
         insertOrder.push_back("Precision");
+        
+        values[0] ="0";
+        values[1] ="#For non bonded forces, pairs of particles that are separated by this many bonds or fewer are added to the list of exclusions.";
+        GenParams["bondCutoff"] = values;
+        insertOrder.push_back("bondCutoff");
         
     }
     

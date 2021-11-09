@@ -190,14 +190,14 @@ void Chromatin::consistancy_check(){
         } else if (it.first == "LJepsilon"){
             epsilon_LJ.resize(num_of_node_types,0);
             if (split.size()==1) {
-                if (split[0] != "kbt") {
+                if (split[0] == "kbt") {
                     epsilon_LJ[0] = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
                 } else {
                     try {
                         epsilon_LJ[0] = stod(split[0]);
                     } catch (...) {
                         string errorMessage = TWARN;
-                        errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
+                        errorMessage+="Chromatin config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
                         errorMessage+=TFILE;
                         errorMessage+=split[0];
                         errorMessage+=TWARN;

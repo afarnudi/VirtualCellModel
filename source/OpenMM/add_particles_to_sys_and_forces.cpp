@@ -19,6 +19,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
     
     bool WCA =false;
     bool WCAFC =false;
+    bool LJ126 =false;
     double maxCuttoff=0;
     if (generalParameters.MinimumForceDecleration) {
         if (WCAs.size()==1) {
