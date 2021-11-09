@@ -39,7 +39,7 @@ private:
     double Contractile_k1=0;
     double Contractile_k2=0;
     double Contractile_rmin=0;
-    double Contractile_rmax=1000000;
+    double Contractile_rmax=100;
     double act_r0factor = 1;
     
     
@@ -47,7 +47,7 @@ private:
     double abp_k1=0;
     double abp_k2=0;
     double abp_rmin=0;
-    double abp_rmax=1000000;
+    double abp_rmax=100;
     double abp_r0factor = 1;
     double abp_hill_co = 100 ;
     double abp_model = 1;
@@ -58,7 +58,7 @@ private:
     double MT_k1=0;
     double MT_k2=0;
     double MT_rmin=0;
-    double MT_rmax=1000000;
+    double MT_rmax=100;
     double MT_r0factor = 1;
     double MT_hill_co = 100 ;
     double MT_model = 1;
@@ -569,10 +569,119 @@ public:
         Params["actin_r0factor"] = values;
         insertOrder.push_back("actin_r0factor");
         
+        values[0] ="Constant";
+        values[1] ="#Set contractile model.Constant for constant force and Hill for hill model. Default value Constant.";
+        Params["Contractile_model"] = values;
+        insertOrder.push_back("Contractile_model");
+        
         values[0] ="0";
         values[1] ="#Set hill coefficient for hill contractiles. Default value 0.";
         Params["Contractile_hill_co"] = values;
         insertOrder.push_back("Contractile_hill_co");
+        
+        values[0] ="0";
+        values[1] ="#Set abp force for abps. Default value 0.";
+        Params["abp_force"] = values;
+        insertOrder.push_back("abp_force");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element in abps. this spring exists in compression. Default value 0.";
+        Params["abp_k1"] = values;
+        insertOrder.push_back("abp_k1");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element in abps. this spring exists in extension. Default value 0.";
+        Params["abp_k2"] = values;
+        insertOrder.push_back("abp_k2");
+        
+        values[0] ="100";
+        values[1] ="#Set the maximum length of abp filaments. Default value 100.";
+        Params["abp_rmax_factor"] = values;
+        insertOrder.push_back("abp_rmax_factor");
+        
+        values[0] ="0";
+        values[1] ="#Set the minimum length of abp filaments. Default value 0.";
+        Params["abp_rmin_factor"] = values;
+        insertOrder.push_back("abp_rmin_factor");
+        
+        values[0] ="1";
+        values[1] ="#Set the abp elements nominal length in sajjad type actin. Default value 1.";
+        Params["abp_r0factor"] = values;
+        insertOrder.push_back("abp_r0factor");
+        
+        
+        values[0] ="Constant";
+        values[1] ="#Set abp model.Constant for constant force and Hill for hill model. Default value Constant.";
+        Params["abp_model"] = values;
+        insertOrder.push_back("abp_model");
+        
+        values[0] ="0";
+        values[1] ="#Set hill coefficient for hill contractiles in abps. Default value 0.";
+        Params["abp_hill_co"] = values;
+        insertOrder.push_back("abp_hill_co");
+        
+        values[0] ="H";
+        values[1] ="#Set the bond potential in abps. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'kelvin' for the Kelvin-Voigt potential. 'N' for no potential. Default H";
+        Params["abp_SpringModel"] = values;
+        insertOrder.push_back("abp_SpringModel");
+        
+        values[0] ="0";
+        values[1] ="#Set the bond potential rigidity coefficient in abps. Default value 0.";
+        Params["abp_SpringCoeff"] = values;
+        insertOrder.push_back("abp_SpringCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set MT force for Microtubuls. Default value 0.";
+        Params["MT_force"] = values;
+        insertOrder.push_back("MT_force");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element in MTs. this spring exists in compression. Default value 0.";
+        Params["MT_k1"] = values;
+        insertOrder.push_back("MT_k1");
+        
+        values[0] ="0";
+        values[1] ="#Set the spring coefficient for spring parallel to contractile element in MTs. this spring exists in extension. Default value 0.";
+        Params["MT_k2"] = values;
+        insertOrder.push_back("MT_k2");
+        
+        values[0] ="100";
+        values[1] ="#Set the maximum length of MT filaments. Default value 100.";
+        Params["MT_rmax_factor"] = values;
+        insertOrder.push_back("MT_rmax_factor");
+        
+        values[0] ="0";
+        values[1] ="#Set the minimum length of MT filaments. Default value 0.";
+        Params["MT_rmin_factor"] = values;
+        insertOrder.push_back("MT_rmin_factor");
+        
+        values[0] ="1";
+        values[1] ="#Set the MT elements nominal length in sajjad type actin. Default value 1.";
+        Params["MT_r0factor"] = values;
+        insertOrder.push_back("MT_r0factor");
+
+        
+        values[0] ="Constant";
+        values[1] ="#Set MT model.Constant for constant force and Hill for hill model. Default value Constant.";
+        Params["MT_model"] = values;
+        insertOrder.push_back("MT_model");
+        
+        values[0] ="0";
+        values[1] ="#Set hill coefficient for hill contractiles in MTs. Default value 0.";
+        Params["MT_hill_co"] = values;
+        insertOrder.push_back("MT_hill_co");
+        
+        values[0] ="H";
+               values[1] ="#Set the bond potential in MTs. 'H' for harmonic. 'FENE' for a finitely extensible nonlinear elastic model. 'kelvin' for the Kelvin-Voigt potential. 'N' for no potential. Default H";
+               Params["MT_SpringModel"] = values;
+               insertOrder.push_back("MT_SpringModel");
+               
+               values[0] ="0";
+               values[1] ="#Set the bond potential rigidity coefficient in abps. Default value 0.";
+               Params["MT_SpringCoeff"] = values;
+               insertOrder.push_back("MT_SpringCoeff");
+        
+        
         
         values[0] ="0";
         values[1] ="#Under development. Do not use this flag.";
