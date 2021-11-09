@@ -42,7 +42,7 @@ void set_surface_constraint_forces(Triangles*                                 tr
                 GSCFs_index++;
                 
                 string potential = generate_surface_constraint_potential(triangles, triangles[i].class_label, i);
-                
+//                cout<<potential<<endl;exit(0);
                 mem_nodes = count_mem_nodes(triangles, triangles[i].class_label);
 //                cout<<"mem_nodes = "<<mem_nodes<<endl;exit(0);
                 
@@ -142,5 +142,44 @@ string generate_surface_constraint_potential(Triangles* triangles,
     potential+=area+"-"+to_string(triangles[triangle_count].SurfaceConstraintValue)+")^2";
     potential+="/"+to_string(triangles[triangle_count].SurfaceConstraintValue);
 //    cout<<potential<<endl;
+    
+    
+//    string area="";
+////    area+="0.5*(";
+//    int mem_nodes = count_mem_nodes(triangles, class_label);
+//    int mem_tris  = count_mem_triangles(triangles, class_label);
+//    string defs="";
+////    for (int i=0; i<mem_tris; ++i) {
+//    for (int i=0; i<3; ++i) {
+//        string p1=to_string(triangles[i].atoms[0]+1);
+//        string p2=to_string(triangles[i].atoms[1]+1);
+//        string p3=to_string(triangles[i].atoms[2]+1);
+//        
+//        string r12 = "r" + p1 + "_" + p2;
+//        string r13 = "r" + p1 + "_" + p3;
+//        string t213= "t" + p2 + "_" + p1 + "_" + p3;
+//        
+//        string r12def = r12 +"=distance(p" + p1 + ",p" + p2 + ");";
+//        string r13def = r13 +"=distance(p" + p1 + ",p" + p3 + ");";
+//        string t213def= t213 +"=angle(p" + p2 + ",p" + p1 + ",p" + p3 + ");";
+//        defs+= r12def + r13def + t213def;
+//        
+////        area+="abs(";
+//        area+= r12 + "*";
+//        area+= r13 + "*" ;
+//        area+="sin(" + t213 + ")";
+////        area+=")";
+//        area+="+";
+//    }
+//    //extra '+' at the end
+//    area.pop_back();
+////    area+=" )";
+//    string potential="";
+//    potential+="0.25*";
+//    potential+=to_string(triangles[triangle_count].ConstraintStiffnessinKJpermolperNm2)+"*(";
+//    potential+=area+"-"+to_string(triangles[triangle_count].SurfaceConstraintValue)+")^2";
+//    potential+="/"+to_string(triangles[triangle_count].SurfaceConstraintValue);
+//    potential+=";"+defs;
+////    cout<<potential<<endl;
     return potential;
 }
