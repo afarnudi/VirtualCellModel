@@ -422,23 +422,41 @@ void set_bonded_forces(Bonds*                                 bonds,
                 abraham_classes.insert(bonds[i].class_label);
                 abraham_index++;
                 
-                string sigma   = "sigmaAbraham";
+//                string sigma   = "sigmaAbraham";
                 string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature);
                 
-                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*2^(1/6)-r)+" + epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(r-(lbond-" +sigma+"*2^(1/6)))";
+//                string potential = epsilon+"*(("+sigma+"/r)^12-("+sigma+"/r)^6+0.25)*step("+sigma+"*2^(1/6)-r)+" + epsilon+"*(("+sigma+"/(lbond-r))^12-("+sigma+"/(lbond-r))^6+0.25)*step(r-(lbond-" +sigma+"*2^(1/6)))";
+                string potential = epsilon+"*(";
+                potential +="(";
+                potential +="0.1*lbond/(0.67*lbond-r)";
+                potential +=")^12";
+                potential +="-(";
+                potential +="0.1*lbond/(0.67*lbond-r)";
+                potential +=")^6";
+                potential +="+0.25)*";
+                potential +="step(lbond*(0.67+0.1*2^(1/6))-r)";
+                potential +="+" + epsilon+"*(";
+                potential +="(";
+                potential +="0.1*lbond/(1.33*lbond-r)";
+                potential +=")^12";
+                potential +="-(";
+                potential +="0.1*lbond/(1.33*lbond-r)";
+                potential +=")^6";
+                potential +="+0.25)*";
+                potential +="step(r-lbond*(1.33-0.1*2^(1/6)))";
                 
                 abrahams.push_back( new OpenMM::CustomBondForce(potential));
                 
-                abrahams[abraham_index]->addPerBondParameter(sigma);
+//                abrahams[abraham_index]->addPerBondParameter(sigma);
                 abrahams[abraham_index]->addPerBondParameter("lbond");
                 system.addForce(abrahams[abraham_index]);
             }
-            double sigmaAbraham =bonds[i].nominalLengthInNm/5;
-            double lbond =bonds[i].nominalLengthInNm + sigmaAbraham * pow(2,1./6);
+//            double sigmaAbraham =bonds[i].nominalLengthInNm/5;
+            double lbond =bonds[i].nominalLengthInNm;// + sigmaAbraham * pow(2,1./6);
             
             vector<double> parameters;
-            parameters.resize(2);
-            parameters[0]=sigmaAbraham;
+            parameters.resize(1);
+//            parameters[0]=sigmaAbraham;
             parameters[1]=lbond;
             
             abrahams[abraham_index]->addBond(atom[0], atom[1], parameters);
