@@ -64,7 +64,7 @@ void set_surface_constraint_forces(Triangles*                                 tr
                 string potential = "0.5*"+to_string(triangles[i].ConstraintStiffnessinKJpermolperNm2)
                     +"*("
                     +"abs("
-                    +"distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
+                    +"0.5*distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
                     +")"
                     +"-"+to_string(triangles[i].SurfaceConstraintValue)
                     +")^2"
