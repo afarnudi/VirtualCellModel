@@ -3,7 +3,7 @@
 
 import os
 import re
-
+import glob
 
 def get_folder_names_and_values(path, prefix, suffix, data_type):
     folders = os.listdir(path)
@@ -85,83 +85,99 @@ class Path:
         self.path += folder_name + "/"
 
     def add_folder(self, folder_name):
-
-        if self.folder_name_in_path(folder_name):
-            self.replace_folder_name(folder_name)
-        else:
-            self.path += folder_name + "/"
+        if folder_name!="":
+            if self.folder_name_in_path(folder_name):
+                self.replace_folder_name(folder_name)
+            else:
+                self.path += folder_name + "/"
 
 
 def get_file_paths(project_name):
-    paths = []
-    project_path = Path(project_name)
-    steps = get_folder_names_and_values(
-        project_path.get_dir(), "step_", "", int
-    )
-    for step in steps:
-        step_name, step_value = step
-        project_path.add_folder(step_name)
-        frictions = get_folder_names_and_values(
-            project_path.get_dir(), "friction_", "", float
-        )
-        for friction in frictions:
-            friction_name, friction_value = friction
-            project_path.add_folder(friction_name)
-            temperatures = get_folder_names_and_values(
-                project_path.get_dir(), "", "k", int
-            )
-            for temperature in temperatures:
-                temperature_name, temperature_value = temperature
-                project_path.add_folder(temperature_name)
-                meshes = get_folder_names_and_values(
-                    project_path.get_dir(), "mesh_", "", int
-                )
-                for mesh in meshes:
-                    mesh_name, mesh_value = mesh
-                    project_path.add_folder(mesh_name)
-                    sigmas = get_folder_names_and_values(
-                        project_path.get_dir(), "spring_", "", float
-                    )
-                    for sigma in sigmas:
-                        sigma_name, sigma_value = sigma
-                        project_path.add_folder(sigma_name)
-                        kappas = get_folder_names_and_values(
-                            project_path.get_dir(), "bend_", "", float
-                        )
-                        for kappa in kappas:
-                            kappa_name, kappa_value = kappa
-                            project_path.add_folder(kappa_name)
-                            radii = get_folder_names_and_values(
-                                project_path.get_dir(), "r_", "", float
-                            )
-                            for radius in radii:
-                                radius_name, radius_value = radius
-                                project_path.add_folder(radius_name)
-                                samples = get_folder_names_and_values(
-                                    project_path.get_dir(), "", "", int
-                                )
-                                smps = []
-                                for smp in samples:
-                                    try:
-                                        int(smp[0])
-                                        smps.append(smp)
-                                    except:
-                                        # I don't need samples that are not integers
-                                        continue
-                                samples = smps
-                                samples.sort()
-                                for seed in samples:
-                                    seed_name, seed_value = seed
-                                    file_path = (
-                                        project_path.get_dir()
-                                        + f"{seed_name}/"
-                                    )
-                                    folders = os.listdir(file_path)
-                                    folders.sort()
-                                    paths.append(
-                                        file_path + folders[-1] + "/" + folders[-1]
-                                    )
+    
+    paths = glob.glob(f'{project_name}/**/', recursive=True)
+    paths = [f for f in paths if '/buffs/' not in f]
+    paths = [f for f in paths if 'time' in f]
+    paths = [f+f.split('/')[-2] for f in paths]
+    paths.sort()
     return paths
+    
+    # paths = []
+    # project_path = Path(project_name)
+    
+    # steps = get_folder_names_and_values(
+    #     project_path.get_dir(), "step_", "", int
+    # )
+    # for step in steps:
+    #     step_name, step_value = step
+    #     project_path.add_folder(step_name)
+    #     frictions = get_folder_names_and_values(
+    #         project_path.get_dir(), "friction_", "", float
+    #     )
+    #     for friction in frictions:
+    #         friction_name, friction_value = friction
+    #         project_path.add_folder(friction_name)
+    #         temperatures = get_folder_names_and_values(
+    #             project_path.get_dir(), "", "k", int
+    #         )
+    #         for temperature in temperatures:
+    #             temperature_name, temperature_value = temperature
+    #             project_path.add_folder(temperature_name)
+    #             meshes = get_folder_names_and_values(
+    #                 project_path.get_dir(), "mesh_", "", int
+    #             )
+    #             for mesh in meshes:
+    #                 mesh_name, mesh_value = mesh
+    #                 project_path.add_folder(mesh_name)
+    #                 sigmas = get_folder_names_and_values(
+    #                     project_path.get_dir(), "spring_", "", float
+    #                 )
+    #                 for sigma in sigmas:
+    #                     sigma_name, sigma_value = sigma
+    #                     project_path.add_folder(sigma_name)
+    #                     kappas = get_folder_names_and_values(
+    #                         project_path.get_dir(), "bend_", "", float
+    #                     )
+    #                     for kappa in kappas:
+    #                         kappa_name, kappa_value = kappa
+    #                         project_path.add_folder(kappa_name)
+    #                         surf_consts = get_folder_names_and_values(
+    #                             project_path.get_dir(), "surf_", "", float
+    #                         )
+    #                         for surf in surf_consts:
+    #                             surf_name, surf_value = surf
+    #                             project_path.add_folder(surf_name)
+                                
+    #                             radii = get_folder_names_and_values(
+    #                                 project_path.get_dir(), "r_", "", float
+    #                             )
+    #                             for radius in radii:
+    #                                 radius_name, radius_value = radius
+    #                                 project_path.add_folder(radius_name)
+    #                                 samples = get_folder_names_and_values(
+    #                                     project_path.get_dir(), "", "", int
+    #                                 )
+    #                                 smps = []
+    #                                 for smp in samples:
+    #                                     try:
+    #                                         int(smp[0])
+    #                                         smps.append(smp)
+    #                                     except:
+    #                                         # I don't need samples that are not integers
+    #                                         continue
+    #                                 samples = smps
+    #                                 samples.sort()
+    #                                 for seed in samples:
+    #                                     seed_name, seed_value = seed
+    #                                     file_path = (
+    #                                         project_path.get_dir()
+    #                                         + f"{seed_name}/"
+    #                                     )
+    #                                     folders = os.listdir(file_path)
+    #                                     folders.sort()
+    #                                     paths.append(
+    #                                         file_path + folders[-1] + "/" + folders[-1]
+    #                                     )
+    # return paths
 
 
 def get_param_value(path, prefix, suffix, data_type):
