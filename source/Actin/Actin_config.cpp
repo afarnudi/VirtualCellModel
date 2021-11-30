@@ -173,6 +173,111 @@ void Actin::assign_parameters(void){
            contractile_hill_co = stod(split[0]);
             
             //for abp similar to contractile
+          
+        } else if (it.first == "abp_SpringModel") {
+        if (split[0]=="H") {
+            abp_spring_model = potentialModelIndex.Model["Harmonic"];
+        } else if (split[0]=="FENE") {
+            abp_spring_model = potentialModelIndex.Model["FENE"];
+        } else if (split[0]=="N") {
+            abp_spring_model = potentialModelIndex.Model["None"];
+        } else if (split[0]=="kelvin") {
+            abp_spring_model = potentialModelIndex.Model["Kelvin-Voigt"];
+        } else {
+            string errorMessage = TWARN;
+            errorMessage+="Actin config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None), kelvin (Kelvin-Voigt).";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+            
+            
+        } else if (it.first == "abp_SpringCoeff") {
+            abp_Spring_coefficient = stod(split[0]);
+        } else if (it.first == "abp_force") {
+            abp_force = stod(split[0]);
+        } else if (it.first == "abp_k1") {
+            abp_k1 = stod(split[0]);
+        } else if (it.first == "abp_k2") {
+            abp_k2 = stod(split[0]);
+        } else if (it.first == "abp_rmin_factor") {
+           abp_rmin = stod(split[0]);
+        } else if (it.first == "abp_rmax_factor") {
+            abp_rmax = stod(split[0]);
+            
+        } else if (it.first == "abp_r0factor") {
+             abp_r0factor = stod(split[0]);
+        // } else if (it.first == "Contractile_model") {
+         //    contractile_model = stod(split[0]);
+            
+        }else if (it.first == "abp_model") {
+            if (split[0]=="Constant") {
+                abp_model = potentialModelIndex.Model["Contractile"];
+            } else if (split[0]=="Hill") {
+                abp_model = potentialModelIndex.Model["hill"];
+            } else if (split[0]=="KFs") {
+                abp_model = potentialModelIndex.Model["KFs"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Actin config parser: abp Model: I don't understand the \""+split[0]+"\" Model. Available models: Constant (Constant force), and Hill (hill contractile element).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "abp_hill_co") {
+           abp_hill_co = stod(split[0]);
+            
+            
+            
+        } else if (it.first == "MT_SpringModel") {
+               if (split[0]=="H") {
+                   MT_spring_model = potentialModelIndex.Model["Harmonic"];
+               } else if (split[0]=="FENE") {
+                   MT_spring_model = potentialModelIndex.Model["FENE"];
+               } else if (split[0]=="N") {
+                   MT_spring_model = potentialModelIndex.Model["None"];
+               } else if (split[0]=="kelvin") {
+                   MT_spring_model = potentialModelIndex.Model["Kelvin-Voigt"];
+               } else {
+                   string errorMessage = TWARN;
+                   errorMessage+="Actin config parser: Spring Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None), kelvin (Kelvin-Voigt).";
+                   errorMessage+= TRESET;
+                   throw std::runtime_error(errorMessage);
+               }
+                   
+                   
+               } else if (it.first == "MT_SpringCoeff") {
+                   MT_Spring_coefficient = stod(split[0]);
+               } else if (it.first == "MT_force") {
+                   MT_force = stod(split[0]);
+               } else if (it.first == "MT_k1") {
+                   MT_k1 = stod(split[0]);
+               } else if (it.first == "MT_k2") {
+                   MT_k2 = stod(split[0]);
+               } else if (it.first == "MT_rmin_factor") {
+                  MT_rmin = stod(split[0]);
+               } else if (it.first == "MT_rmax_factor") {
+                   MT_rmax = stod(split[0]);
+                   
+               } else if (it.first == "MT_r0factor") {
+                    MT_r0factor = stod(split[0]);
+               // } else if (it.first == "Contractile_model") {
+                //    contractile_model = stod(split[0]);
+                   
+               }else if (it.first == "MT_model") {
+                   if (split[0]=="Constant") {
+                       MT_model = potentialModelIndex.Model["Contractile"];
+                   } else if (split[0]=="Hill") {
+                       MT_model = potentialModelIndex.Model["hill"];
+                   } else if (split[0]=="KFs") {
+                       MT_model = potentialModelIndex.Model["KFs"];
+                   } else {
+                       string errorMessage = TWARN;
+                       errorMessage+="Actin config parser: MT Model: I don't understand the \""+split[0]+"\" Model. Available models: Constant (Constant force), and Hill (hill contractile element).";
+                       errorMessage+= TRESET;
+                       throw std::runtime_error(errorMessage);
+                   }
+               } else if (it.first == "MT_hill_co") {
+                  MT_hill_co = stod(split[0]);
+                   
             
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
