@@ -135,6 +135,8 @@ def load_xyz(file_name, label=None):
             try:
                 line = datamap.readline()
                 line = datamap.readline()
+                if not line:
+                    break
                 words = line.split()
                 time.append(float(words[1].decode("utf-8")))
                 energies.append(float(words[3].decode("utf-8")))
@@ -162,3 +164,11 @@ def load_xyz(file_name, label=None):
         time = np.asarray(time)
 
         return coords, time, energies
+
+
+def main():
+    file_name='2021_11_30_time_09_39_000.xyz'
+    xyz = load_xyz(file_name)
+
+if __name__=='__main__':
+    main()
