@@ -2,8 +2,8 @@ TARGET=VCM
 CXXFLAGS=-std=c++14 -O3
 
 #OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm750
-OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
-#OpenMM_INSTALL_DIR=/usr/local/openmm
+#OpenMM_INSTALL_DIR=/scratch/alifarnudi/local/openmm
+OpenMM_INSTALL_DIR=/usr/local/openmm
 
 OSNAME := $(shell uname -s)
 
