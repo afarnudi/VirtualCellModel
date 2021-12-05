@@ -80,7 +80,7 @@ void set_surface_constraint_forces(Triangles*                                 tr
                 string potential_part2 = to_string(triangles[i].ConstraintStiffnessinKJpermolperNm2)
                 +"*("//begin multiplyer
                 //begin surface of first triangle
-                +"0.5"
+                +"0.25"
                 +"*distance(p1,p2)*distance(p1,p3)"
                 +"*abs(sin(angle(p2,p1,p3)))"
                 +"*distance(p4,p5)*distance(p4,p6)"
