@@ -540,6 +540,7 @@ public:
     double get_kz(void){
         return ext_force_rigidity[2];
     }
+    void update_info_from_omm(MyAtomInfo atoms[], int atom_count);
     void set_FENE_param_2(double &lmin, double &lmax, double &epsilon, double &k){
         lmin = FENE_min;
         lmax = FENE_max;

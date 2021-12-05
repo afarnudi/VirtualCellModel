@@ -45,10 +45,13 @@ void collect_data(MyOpenMMData* omm,
     
     GenConst::data_colection_times.push_back(timeInPs);
     
+    int atom_count=0;
     for (int i=0; i<mems.size(); i++) {
         if (mems[i].get_GeometricProps_flag()) {
+            mems[i].update_info_from_omm(atoms, atom_count);
             mems[i].write_geometrics();
         }
+        atom_count+=mems[i].get_num_of_nodes();
     }
     
     write_data(omm, atoms, intertable);
