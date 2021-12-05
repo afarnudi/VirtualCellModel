@@ -498,6 +498,7 @@ int main(int argc, char **argv)
             if (generalParameters.WantPSF) {
                 myWritePSF(num_of_atoms, num_of_bonds, all_atoms, all_bonds);
             }
+            collect_data(omm, all_atoms, interaction_map, Membranes, time);
             writeOutputs(atom_count,framenum,all_atoms,time, energyInKJ, potential_energyInKJ, true);
             
             
