@@ -19,7 +19,8 @@ class Inputs:
         self.platformID = args.platformID
         self.platformDeviceID = args.platformDeviceID
         self.rescale = 1 / args.rescale_elastic_properties
-
+        self.sigma = args.surface_coef
+        
     def generate_mesh_path_from_resolution(x):
         return "USphere_{0}2d/USphere_{0}2d_s0.ply".format(x ** 2)
 
@@ -61,11 +62,15 @@ class Inputs:
     def get_spring_coefficient(self):
         """retun spring_coefficient"""
         return self.spring * self.rescale
+    
+    def get_sigma(self):
+        """retun spring_coefficient"""
+        return self.sigma 
 
 
 def get_float_string(coef):
     """retun spring_coefficient"""
-    coef = "{:.3f}".format(coef)
+    coef = "{:.5f}".format(coef)
     while coef.endswith("0"):
         coef = coef[:-1]
     if coef.endswith("."):
@@ -87,6 +92,9 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
     spring = get_float_string(inputs.get_spring_coefficient())
     bend = get_float_string(inputs.get_bending_coefficient())
     scale = get_float_string(inputs.get_scale())
+    sigma = get_float_string(inputs.get_sigma())
+    print(inputs.get_sigma())
+    print(sigma)
     with open(config_file_name) as f:
         with open(edited_config_file_name, "w") as f1:
             for line in f:
@@ -98,17 +106,21 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
                     line = re.sub(r"/spring_\d+(\.\d*)?", f"/spring_{spring}", line)
                     line = re.sub(r"/bend_\d+(\.\d*)?", f"/bend_{bend}", line)
                     line = re.sub(r"/r_\d+", f"/r_{scale}", line)
+                    line = re.sub(r"/surf_\d+(\.\d*)?", f"/surf_{sigma}", line)
+                    print(line)
                 if words[0] == "MeshFile":
                     line = "MeshFile Mesh/icospheres/" + inputs.get_mesh_path()
                     line = line[:-5] + str(seed) + ".ply" + "\n"
                 if words[0] == "Scale":
-                    line = "Scale " + scale + "\n"
+                    line = f"Scale {scale}\n"
                 if words[0] == "TemperatureinKelvin":
                     line = "TemperatureinKelvin " + temp + "\n"
                 if words[0] == "SpringCoeff":
                     line = f"SpringCoeff {spring}\n"
                 if words[0] == "BendingCoeff":
                     line = f"BendingCoeff {bend}\n"
+                if words[0] == "SurfaceConstraintCoeff":
+                    line = f"SurfaceConstraintCoeff {sigma}\n"
                 f1.write(line)
     return edited_config_file_name
 
@@ -196,6 +208,13 @@ def get_arguments():
         required=True,
         type=int,
         nargs=2,
+        metavar="\b",
+    )
+    parser.add_argument(
+        "--surface_coef",
+        help="Surface tension rigidity",
+        default=0.02,
+        type=float,
         metavar="\b",
     )
     return parser.parse_args()
