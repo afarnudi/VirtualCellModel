@@ -52,9 +52,17 @@ void set_surface_constraint_forces(Triangles*                                 tr
                 
                 GSCFs_classes.insert(triangles[i].class_label);
                 GSCFs_index++;
+//                Implament Global triangle area potential:
+//                \frac{1}{2}\frac{k_b}{A_0}\left[\sum_{i=1}^Na_i-A_0\right]^2
+//                This implamentation will make a 'string' that is too long for OpenMM to handle.
+//                Therefor we break up the potential into 2 parts:
+//                U_{liquid}^{global}=\frac{1}{2}\frac{k_b}{A_0}\left[\sum_{i=1}^Na_i^2+A_0^2-2A_0\sum_{i=1}^Na_i+2\sum_{i\neq j}a_ia_j\right]
+//                =\frac{1}{2}\frac{k_b}{A_0}\left[\sum_{i=1}^N(a_i-A_0)^2-(N-1)A_0^2+2\sum_{i\neq j}a_ia_j\right]
+//                =\sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0}\left((a_i-A_0)^2-\frac{(N-1)}{N}A_0^2\right)+\sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
                 
-//                mem_nodes = count_mem_nodes(triangles, triangles[i].class_label);
-                double N_1timesA2 = (mem_tris-1)*triangles[i].SurfaceConstraintValue*triangles[i].SurfaceConstraintValue;
+                
+//                \sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0}\left((a_i-A_0)^2-\frac{(N-1)}{N}A_0^2\right)
+                double N_1timesA2 = (mem_tris-1)*triangles[i].SurfaceConstraintValue*triangles[i].SurfaceConstraintValue/double(mem_tris);
                 string potential_part1 = "0.5*"+to_string(triangles[i].ConstraintStiffnessinKJpermolperNm2)
                 +"*("//begin multiplyer
                 +"("
@@ -77,6 +85,7 @@ void set_surface_constraint_forces(Triangles*                                 tr
 //                cout<<potential_part1<<endl<<endl;
                 GSCFs_index++;
                 
+//                \sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
                 string potential_part2 = to_string(triangles[i].ConstraintStiffnessinKJpermolperNm2)
                 +"*("//begin multiplyer
                 //begin surface of first triangle
@@ -122,7 +131,8 @@ void set_surface_constraint_forces(Triangles*                                 tr
                 
                 LSCFs_classes.insert(triangles[i].class_label);
                 LSCFs_index++;
-                
+//                Implament local triangle area potential:
+//                \sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0/N}(a_i-\frac{A_0}{N})^2
                 string potential = "0.5*"+to_string(triangles[i].ConstraintStiffnessinKJpermolperNm2)
                 +"*("
                 +"abs("
