@@ -195,7 +195,18 @@ void Membrane::assign_parameters(void){
                 surface_constraint_model = potentialModelIndex.Model["None"];
             } else {
                 string errorMessage = TWARN;
-                errorMessage+="Membrane config parser: Surface Constraint Model: I don't understand the \""+split[0]+"\" Model. Available models: H (Harmonic), and N (None).";
+                errorMessage+="Membrane config parser: Surface Constraint Model: I don't understand the \""+split[0]+"\" Model. Available models: G (global), L (local), and N (None).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+        } else if (it.first == "VolumeConstraint") {
+            if (split[0]=="G") {
+                volume_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
+            } else if (split[0]=="N") {
+                volume_constraint_model = potentialModelIndex.Model["None"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: Volume Constraint Model: I don't understand the \""+split[0]+"\" Model. Available models: G (global), and N (None).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
@@ -218,12 +229,16 @@ void Membrane::assign_parameters(void){
             Bending_coefficient = stod(split[0]);
         } else if (it.first == "SurfaceConstraintCoeff") {
             surface_constraint_coefficient = stod(split[0]);
+        } else if (it.first == "VolumeConstraintCoeff") {
+            volume_constraint_coefficient = stod(split[0]);
         } else if (it.first == "NominalLengthInNm") {
             Node_Bond_Nominal_Length_stat = split[0];
         } else if (it.first == "SpontaneousTriangleBendingAngleInDegrees") {
             Triangle_pair_angle_stat = split[0];
         } else if (it.first == "SurfaceConstraintValue") {
             SurfaceConstraintValue_stat = split[0];
+        } else if (it.first == "VolumeConstraintRatio") {
+            VolumeConstraintRatio = stod(split[0]);
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {

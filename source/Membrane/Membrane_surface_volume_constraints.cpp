@@ -1,0 +1,29 @@
+//
+//  check.cpp
+//  Mem
+//
+//  Created by Ali Farnudi on 24/09/2020.
+//  Copyright © 2018 Ali Farnudi. All rights reserved.
+//
+
+#include "Membrane.h"
+
+
+void Membrane::assign_surface_volume_constraints(void){
+    calculate_volume_and_surface_area();
+    if (surface_constraint_model!=potentialModelIndex.Model["None"]) {
+        if (SurfaceConstraintValue_stat=="Au") {
+            if (surface_constraint_model==potentialModelIndex.Model["LocalConstraint"]) {
+                SurfaceConstraintValue= surface_area/Num_of_Triangles;
+            } else if(surface_constraint_model==potentialModelIndex.Model["GlobalConstraint"]) {
+                SurfaceConstraintValue= surface_area;
+            }
+        } else{
+            SurfaceConstraintValue= stod(SurfaceConstraintValue_stat);
+        }
+    }
+    if (volume_constraint_model!=potentialModelIndex.Model["None"]) {
+        VolumeConstraintValue = volume*VolumeConstraintRatio;
+    }
+    
+}

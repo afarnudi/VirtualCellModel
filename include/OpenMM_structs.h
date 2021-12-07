@@ -77,11 +77,15 @@ struct Angles{
 };
 
 struct Triangles{
-    int type;
+    int surface_type;
+    int volume_type;
     std::string class_label;
     std::vector <int> atoms;
-    double ConstraintStiffnessinKJpermolperNm2;
+    double SurfaceConstraintStiffnessinKJpermolperNm2;
     double SurfaceConstraintValue;
+    
+    double VolumeConstraintStiffnessinKJpermolperNm3;
+    double VolumeConstraintValue;
 };
 
 struct PlatformInfo{
@@ -127,6 +131,7 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomCompoundBondForce*> Dihedral;
     std::vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
     std::vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
+    std::vector<OpenMM::CustomCompoundBondForce*> GlobalVolumeConstraintForces;
     std::vector<OpenMM::CustomAngleForce*> Angle;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;

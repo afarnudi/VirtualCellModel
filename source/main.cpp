@@ -309,7 +309,8 @@ int main(int argc, char **argv)
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     all_angles[num_of_angles].type       =EndOfList;
-    all_triangles[num_of_triangles].type =EndOfList;
+    all_triangles[num_of_triangles].surface_type =EndOfList;
+    all_triangles[num_of_triangles].volume_type =EndOfList;
         
         if (generalParameters.Num_of_Membranes!=0) {
             OpenMM_membrane_info_relay(Membranes,

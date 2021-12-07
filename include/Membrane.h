@@ -124,6 +124,7 @@ public:
     int spring_model=0;
     int bending_model=0;
     int surface_constraint_model=0;
+    int volume_constraint_model=0;
     int ext_force_model=0;
     int NumberOfRandomModes;
     int EllMaxOfRandomModes;
@@ -140,7 +141,10 @@ public:
     double rescale_factor=1;
     double UlmOfRandomModes;
     double surface_constraint_coefficient=0;
+    double volume_constraint_coefficient=0;
     double SurfaceConstraintValue=0;
+    double VolumeConstraintRatio=0;
+    double VolumeConstraintValue=0;
     
     vector<string> insertOrder;
     vector<string> values;
@@ -312,6 +316,7 @@ public:
     /**Construct a vector that lists all the neighbours of  each node and their respective index in the 'Node_Bond_list'.
      */
     void Node_neighbour_list_constructor();
+    void assign_surface_volume_constraints();
     /**Construct a vector that lists the triangle neighbours of each node  pair.
      */
     void Bond_triangle_neighbour_list_constructor();
@@ -466,13 +471,21 @@ public:
     double get_bending_stiffness_coefficient(void){
         return Bending_coefficient;
     }
-    /**Return bending stiffness coefficient. */
+    /**Return surface stiffness coefficient. */
     double get_surface_constraint_stiffness_coefficient(void){
         return surface_constraint_coefficient;
+    }
+    /**Return volume stiffness coefficient. */
+    double get_volume_constraint_stiffness_coefficient(void){
+        return volume_constraint_coefficient;
     }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
     double get_surface_constraint_area(void){
         return SurfaceConstraintValue;
+    }
+    /**Return the spontaneous bending angle between triangle pairs in radians. */
+    double get_volume_constraint_volume(void){
+        return VolumeConstraintValue;
     }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
     double get_spontaneous_angle_in_Rad(int nodePairIndex){
@@ -518,6 +531,10 @@ public:
     /**Return input spring model, used to setup the openmm system for the bonds.*/
     int get_surface_constraint_model(void){
         return surface_constraint_model;
+    }
+    /**Return input spring model, used to setup the openmm system for the bonds.*/
+    int get_volume_constraint_model(void){
+        return volume_constraint_model;
     }
     /**Return the Lenard Jones 12 6 sigma, used to setup the openmm system for the LJ interaction.*/
     double get_sigma_LJ_12_6(void){
@@ -822,6 +839,21 @@ public:
         values[1] ="#Set surface constraint potential (harmonic) rigidity coefficient. Default 0";
         Params["SurfaceConstraintCoeff"] = values;
         insertOrder.push_back("SurfaceConstraintCoeff");
+        
+        values[0] ="N";
+        values[1] ="#The volume constraint model, G, for a global constraint. Default N";
+        Params["VolumeConstraint"] = values;
+        insertOrder.push_back("VolumeConstraint");
+        
+        values[0] ="1";
+        values[1] ="#Set the volume constraint value. The value is v_t/v_i wich is the ratio of the target volume v_t to the initial volume of the mesh v_i. Defaullt 1";
+        Params["VolumeConstraintRatio"] = values;
+        insertOrder.push_back("VolumeConstraintRatio");
+        
+        values[0] ="0";
+        values[1] ="#Set volume constraint potential (harmonic) rigidity coefficient. Default 0";
+        Params["VolumeConstraintCoeff"] = values;
+        insertOrder.push_back("VolumeConstraintCoeff");
     }
     
     

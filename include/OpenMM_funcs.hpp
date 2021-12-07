@@ -450,11 +450,12 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                          vector<OpenMM::CustomCompoundBondForce*>  &DihedralForces,
                          OpenMM::System                            &system
                          );
-void set_surface_constraint_forces(Triangles*                                 triangles,
-                                   vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
-                                   vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceConstraintForces,
-                                   OpenMM::System                            &system
-                                   );
+void set_surface_volume_constraint_forces(Triangles*                                 triangles,
+                                          vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
+                                          vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceConstraintForces,
+                                          vector<OpenMM::CustomCompoundBondForce*>  &GlobalVolumeConstraintForces,
+                                          OpenMM::System                            &system
+                                          );
 /**Set angle forces for every 3 particles set to have an angle potential.
  */
 void set_angle_forces(Angles*                             angles,

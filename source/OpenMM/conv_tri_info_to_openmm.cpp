@@ -52,55 +52,83 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     
     
     bool GlobalSurfacePotential = false;
+    bool GlobalVolumePotential = false;
     bool LocalSurfacePotential = false;
-    bool noPotential = false;
+    bool noSurfacePotential = false;
+    bool noVolumePotential = false;
     
     const int mem_num_tris = mem.get_num_of_triangle();
-//    cout<<"**++**++**++\n\t"<<mem_num_tri_pairs<<"\n**++**++**++\n";
     Triangles* triatoms = new Triangles[mem_num_tris];
     
     
     for (int i=0; i<mem_num_tris; i++) {
-//        vector<int> tri_pair_nodes(mem.get_traingle_pair_nodes_list(i));
         
-        triatoms[i].type = mem.get_surface_constraint_model();
-        if (triatoms[i].type == potentialModelIndex.Model["LocalConstraint"] || triatoms[i].type == potentialModelIndex.Model["GlobalConstraint"]) {
-            if (triatoms[i].type == potentialModelIndex.Model["LocalConstraint"]) {
-                LocalSurfacePotential = true;
-            } else {
-                GlobalSurfacePotential = true;
-            }
+        triatoms[i].surface_type = mem.get_surface_constraint_model();
+        triatoms[i].volume_type  = mem.get_volume_constraint_model();
+        
+        if (triatoms[i].surface_type != potentialModelIndex.Model["None"] || triatoms[i].volume_type != potentialModelIndex.Model["None"]) {
+            
             vector<int> tri_nodes(mem.get_triangle_atoms_list(i));
             triatoms[i].atoms.resize(3);
             triatoms[i].atoms[0]=tri_nodes[0];
             triatoms[i].atoms[1]=tri_nodes[1];
             triatoms[i].atoms[2]=tri_nodes[2];
             
-            triatoms[i].ConstraintStiffnessinKJpermolperNm2 = mem.get_surface_constraint_stiffness_coefficient();
-            triatoms[i].class_label = mem.get_label();
-            triatoms[i].SurfaceConstraintValue = mem.get_surface_constraint_area();
-        } else if (triatoms[i].type == potentialModelIndex.Model["None"]){
-            noPotential = true;
+            if (triatoms[i].surface_type != potentialModelIndex.Model["None"]){
+                if (triatoms[i].surface_type == potentialModelIndex.Model["LocalConstraint"]) {
+                    LocalSurfacePotential = true;
+                } else {
+                    GlobalSurfacePotential = true;
+                }
+                triatoms[i].SurfaceConstraintStiffnessinKJpermolperNm2 = mem.get_surface_constraint_stiffness_coefficient();
+                triatoms[i].class_label = mem.get_label();
+                triatoms[i].SurfaceConstraintValue = mem.get_surface_constraint_area();
+            } else {
+                noSurfacePotential = true;
+            }
+            
+            if (triatoms[i].volume_type != potentialModelIndex.Model["None"]){
+                if (triatoms[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]) {
+                    GlobalVolumePotential = true;
+                }
+                triatoms[i].VolumeConstraintStiffnessinKJpermolperNm3 = mem.get_volume_constraint_stiffness_coefficient();
+                triatoms[i].class_label = mem.get_label();
+                triatoms[i].VolumeConstraintValue = mem.get_volume_constraint_volume();
+            } else {
+                noVolumePotential = true;
+            }
+            
+        } else {
+            noSurfacePotential = true;
+            noVolumePotential = true;
         }
         
         
     }
-    
+    cout<<"Area potential:";
     if (LocalSurfacePotential) {
         cout<<" Local surface constraint"<<endl;
-        cout<<"\tCoeficient (KJ . mol^-2 .Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ . mol . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
         cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
     }
     if (GlobalSurfacePotential) {
         cout<<" Global surface constraint"<<endl;
-        cout<<"\tCoeficient (KJ . mol^-2 .Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ . mol . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
         cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
     }
-    
-    if (noPotential || mem_num_tris==0) {
+    if (noSurfacePotential || mem_num_tris==0) {
+        cout<<" None"<<endl;
+    }
+    cout<<"Volume potential:";
+    if (GlobalVolumePotential) {
+        cout<<" Global volume constraint"<<endl;
+        cout<<"\tCoeficient (KJ . mol .Nm^-3) = "<<mem.get_volume_constraint_stiffness_coefficient() <<endl;
+        cout<<"\tVolume (Nm^3) = "<<mem.get_volume_constraint_volume() <<endl;
+    }
+    if (noVolumePotential || mem_num_tris==0) {
         cout<<" None"<<endl;
     }
     
-    
+//    exit(0);
     return triatoms;
 }

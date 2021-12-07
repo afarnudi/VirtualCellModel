@@ -64,7 +64,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
             }
         }
         
-        cout<<"Surface potential:";
+        cout<<"Area and volume potentials:\n";
         Triangles* triangles = convert_membrane_triangle_info_to_openmm(membranes[i]);
         if (membranes[i].get_surface_constraint_model() != potentialModelIndex.Model["None"]) {
             for (int j=0; j<membranes[i].get_num_of_triangle(); j++) {
@@ -74,6 +74,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                 all_triangles[j+tri_count].atoms[2]=triangles[j].atoms[2]+atom_count;
             }
         }
+        
         
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
