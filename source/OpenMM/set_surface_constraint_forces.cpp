@@ -44,24 +44,29 @@ void set_surface_volume_constraint_forces(Triangles*                            
             mem_tris = count_mem_triangles(triangles, triangles[i].class_label);
             tri_counter+=mem_tris;
         }
-        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]) {
+        
+        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]  && triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]) {
             auto GVCFs_item = GVCFs_classes.find(triangles[i].class_label);
             if (GVCFs_item == GVCFs_classes.end()) {
                 
                 GVCFs_classes.insert(triangles[i].class_label);
                 GVCFs_index++;
                 
-                string potential_part1 = generate_global_volume_constraint_potential_part_1(triangles[i], mem_tris);
+                string surf_potential_part1 = generate_global_surface_constraint_potential_part_1(triangles[i], mem_tris);
+                string volu_potential_part1 = generate_global_volume_constraint_potential_part_1(triangles[i], mem_tris);
+                string potential = surf_potential_part1 + "+" + volu_potential_part1;
                 
-                GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential_part1));
+                GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
 //                cout<<potential_part1<<endl<<endl;
                 GVCFs_index++;
                 
 //                \sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
-                string potential_part2 = generate_global_volume_constraint_potential_part_2(triangles[i]);
+                string surf_potential_part2 = generate_global_surface_constraint_potential_part_2(triangles[i]);
+                string volu_potential_part2 = generate_global_volume_constraint_potential_part_2(triangles[i]);
+                potential = surf_potential_part2 + "+" + volu_potential_part2;
                 
-                GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential_part2));
+                GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential));
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
 //                cout<<potential_part2<<endl;exit(0);
             }
@@ -84,75 +89,118 @@ void set_surface_volume_constraint_forces(Triangles*                            
                     jj++;
                 }
             }
-        }
+        } else {
         
-        if (triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]) {
-            auto GSCFs_item = GSCFs_classes.find(triangles[i].class_label);
-            if (GSCFs_item == GSCFs_classes.end()) {
-                
-                GSCFs_classes.insert(triangles[i].class_label);
-                GSCFs_index++;
-
-                
-                string potential_part1 = generate_global_surface_constraint_potential_part_1(triangles[i], mem_tris);
-                
-                GlobalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential_part1));
-                system.addForce(GlobalSurfaceConstraintForces[GSCFs_index]);
-//                cout<<potential_part1<<endl<<endl;
-                GSCFs_index++;
-                
-//                \sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
-                string potential_part2 = generate_global_surface_constraint_potential_part_2(triangles[i]);
-                
-                GlobalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential_part2));
-                system.addForce(GlobalSurfaceConstraintForces[GSCFs_index]);
-//                cout<<potential_part2<<endl;exit(0);
-            }
-            GlobalSurfaceConstraintForces[GSCFs_index-1]->addBond(triangles[i].atoms);
-//            cout<<"G :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
-            if (i == tri_counter-1) {
-                continue;
-            } else {
-                vector<int> atoms;
-                atoms.resize(6);
-                atoms[0]=triangles[i].atoms[0];
-                atoms[1]=triangles[i].atoms[1];
-                atoms[2]=triangles[i].atoms[2];
-                int jj=i;
-                for (int j=i+1; j<tri_counter; ++j) {
-                    atoms[3]=triangles[j].atoms[0];
-                    atoms[4]=triangles[j].atoms[1];
-                    atoms[5]=triangles[j].atoms[2];
-                    GlobalSurfaceConstraintForces[GSCFs_index]->addBond(atoms);
-                    jj++;
+            
+            if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]) {
+                auto GVCFs_item = GVCFs_classes.find(triangles[i].class_label);
+                if (GVCFs_item == GVCFs_classes.end()) {
+                    
+                    GVCFs_classes.insert(triangles[i].class_label);
+                    GVCFs_index++;
+                    
+                    string potential_part1 = generate_global_volume_constraint_potential_part_1(triangles[i], mem_tris);
+                    
+                    GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential_part1));
+                    system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
+    //                cout<<potential_part1<<endl<<endl;
+                    GVCFs_index++;
+                    
+    //                \sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
+                    string potential_part2 = generate_global_volume_constraint_potential_part_2(triangles[i]);
+                    
+                    GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential_part2));
+                    system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
+    //                cout<<potential_part2<<endl;exit(0);
+                }
+                GlobalVolumeConstraintForces[GVCFs_index-1]->addBond(triangles[i].atoms);
+    //            cout<<"G :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
+                if (i == tri_counter-1) {
+                    continue;
+                } else {
+                    vector<int> atoms;
+                    atoms.resize(6);
+                    atoms[0]=triangles[i].atoms[0];
+                    atoms[1]=triangles[i].atoms[1];
+                    atoms[2]=triangles[i].atoms[2];
+                    int jj=i;
+                    for (int j=i+1; j<tri_counter; ++j) {
+                        atoms[3]=triangles[j].atoms[0];
+                        atoms[4]=triangles[j].atoms[1];
+                        atoms[5]=triangles[j].atoms[2];
+                        GlobalVolumeConstraintForces[GVCFs_index]->addBond(atoms);
+                        jj++;
+                    }
                 }
             }
-        } else if (triangles[i].surface_type == potentialModelIndex.Model["LocalConstraint"]) {
-            auto LSCFs_item = LSCFs_classes.find(triangles[i].class_label);
-            if (LSCFs_item == LSCFs_classes.end()) {
-                
-                LSCFs_classes.insert(triangles[i].class_label);
-                LSCFs_index++;
-//                Implament local triangle area potential:
-//                \sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0/N}(a_i-\frac{A_0}{N})^2
-                string potential = "0.5*"+to_string(triangles[i].SurfaceConstraintStiffnessinKJpermolperNm2)
-                +"*("
-                +"abs("
-                +"0.5*distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
-                +")"
-                +"-"+to_string(triangles[i].SurfaceConstraintValue)
-                +")^2"
-                +"/"+to_string(triangles[i].SurfaceConstraintValue);
-                
-                LocalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
-                
-                system.addForce(LocalSurfaceConstraintForces[LSCFs_index]);
-                
+            
+            if (triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]) {
+                auto GSCFs_item = GSCFs_classes.find(triangles[i].class_label);
+                if (GSCFs_item == GSCFs_classes.end()) {
+                    
+                    GSCFs_classes.insert(triangles[i].class_label);
+                    GSCFs_index++;
+
+                    
+                    string potential_part1 = generate_global_surface_constraint_potential_part_1(triangles[i], mem_tris);
+                    
+                    GlobalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential_part1));
+                    system.addForce(GlobalSurfaceConstraintForces[GSCFs_index]);
+    //                cout<<potential_part1<<endl<<endl;
+                    GSCFs_index++;
+                    
+    //                \sum_{i\neq j}\frac{k_b}{A_0}a_ia_j
+                    string potential_part2 = generate_global_surface_constraint_potential_part_2(triangles[i]);
+                    
+                    GlobalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential_part2));
+                    system.addForce(GlobalSurfaceConstraintForces[GSCFs_index]);
+    //                cout<<potential_part2<<endl;exit(0);
+                }
+                GlobalSurfaceConstraintForces[GSCFs_index-1]->addBond(triangles[i].atoms);
+    //            cout<<"G :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
+                if (i == tri_counter-1) {
+                    continue;
+                } else {
+                    vector<int> atoms;
+                    atoms.resize(6);
+                    atoms[0]=triangles[i].atoms[0];
+                    atoms[1]=triangles[i].atoms[1];
+                    atoms[2]=triangles[i].atoms[2];
+                    int jj=i;
+                    for (int j=i+1; j<tri_counter; ++j) {
+                        atoms[3]=triangles[j].atoms[0];
+                        atoms[4]=triangles[j].atoms[1];
+                        atoms[5]=triangles[j].atoms[2];
+                        GlobalSurfaceConstraintForces[GSCFs_index]->addBond(atoms);
+                        jj++;
+                    }
+                }
+            } else if (triangles[i].surface_type == potentialModelIndex.Model["LocalConstraint"]) {
+                auto LSCFs_item = LSCFs_classes.find(triangles[i].class_label);
+                if (LSCFs_item == LSCFs_classes.end()) {
+                    
+                    LSCFs_classes.insert(triangles[i].class_label);
+                    LSCFs_index++;
+    //                Implament local triangle area potential:
+    //                \sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0/N}(a_i-\frac{A_0}{N})^2
+                    string potential = "0.5*"+to_string(triangles[i].SurfaceConstraintStiffnessinKJpermolperNm2)
+                    +"*("
+                    +"abs("
+                    +"0.5*distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
+                    +")"
+                    +"-"+to_string(triangles[i].SurfaceConstraintValue)
+                    +")^2"
+                    +"/"+to_string(triangles[i].SurfaceConstraintValue);
+                    
+                    LocalSurfaceConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
+                    
+                    system.addForce(LocalSurfaceConstraintForces[LSCFs_index]);
+                    
+                }
+                LocalSurfaceConstraintForces[LSCFs_index]->addBond(triangles[i].atoms);
+    //            cout<<"L :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
             }
-            LocalSurfaceConstraintForces[LSCFs_index]->addBond(triangles[i].atoms);
-//            cout<<"L :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
         }
-        
     }
 //    exit(0);
 }
