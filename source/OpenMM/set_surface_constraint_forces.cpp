@@ -306,8 +306,8 @@ string generate_global_volume_constraint_potential_part_1(Triangles triangle, in
     //begin p2
     +to_string(N_1timesV2)
     //end p2
-    +")";//end multiplyer
-//    +"/"+to_string(triangle.VolumeConstraintValue);
+    +")"//end multiplyer
+    +"/"+to_string(triangle.VolumeConstraintValue);
     
     return potential_part1;
 }
@@ -327,8 +327,8 @@ string generate_global_volume_constraint_potential_part_2(Triangles triangle){
     string potential_part2 = to_string(triangle.VolumeConstraintStiffnessinKJpermolperNm3)
     +"*(1./36)"
     +"*(x1*(y3*z2-z3*y2)+x2*(y1*z3-z1*y3)+x3*(y2*z1-z2*y1))"
-    +"*(x4*(y6*z5-z6*y5)+x5*(y4*z6-z4*y6)+x6*(y5*z4-z5*y4))";
-//    +"/"+to_string(triangle.VolumeConstraintValue);
+    +"*(x4*(y6*z5-z6*y5)+x5*(y4*z6-z4*y6)+x6*(y5*z4-z5*y4))"
+    +"/"+to_string(triangle.VolumeConstraintValue);
     
     return potential_part2;
 }
