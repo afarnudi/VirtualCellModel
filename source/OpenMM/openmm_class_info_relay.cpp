@@ -66,12 +66,13 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         cout<<"Area and volume potentials:\n";
         Triangles* triangles = convert_membrane_triangle_info_to_openmm(membranes[i]);
-        if (membranes[i].get_surface_constraint_model() != potentialModelIndex.Model["None"]) {
+        if (membranes[i].get_surface_constraint_model() != potentialModelIndex.Model["None"] || membranes[i].get_volume_constraint_model() != potentialModelIndex.Model["None"]) {
             for (int j=0; j<membranes[i].get_num_of_triangle(); j++) {
                 all_triangles[j+tri_count]=triangles[j];
                 all_triangles[j+tri_count].atoms[0]=triangles[j].atoms[0]+atom_count;
                 all_triangles[j+tri_count].atoms[1]=triangles[j].atoms[1]+atom_count;
                 all_triangles[j+tri_count].atoms[2]=triangles[j].atoms[2]+atom_count;
+                cout<<all_triangles[j+tri_count].volume_type<<" ";
             }
         }
         
