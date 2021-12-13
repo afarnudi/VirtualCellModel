@@ -72,7 +72,6 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                 all_triangles[j+tri_count].atoms[0]=triangles[j].atoms[0]+atom_count;
                 all_triangles[j+tri_count].atoms[1]=triangles[j].atoms[1]+atom_count;
                 all_triangles[j+tri_count].atoms[2]=triangles[j].atoms[2]+atom_count;
-                cout<<all_triangles[j+tri_count].volume_type<<" ";
             }
         }
         
