@@ -239,6 +239,8 @@ void Membrane::assign_parameters(void){
             SurfaceConstraintValue_stat = split[0];
         } else if (it.first == "VolumeConstraintRatio") {
             VolumeConstraintRatio = stod(split[0]);
+        } else if (it.first == "SurfaceConstraintRatio") {
+            SurfaceConstraintRatio = stod(split[0]);
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {

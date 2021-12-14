@@ -143,6 +143,7 @@ public:
     double surface_constraint_coefficient=0;
     double volume_constraint_coefficient=0;
     double SurfaceConstraintValue=0;
+    double SurfaceConstraintRatio=0;
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
     
@@ -834,6 +835,11 @@ public:
         values[1] ="#Set the surface constraint value: 1) Au: The initial surface of the mesh, S, for Global and S/N for Local constraint where N is the number of triangles on the surface; 2) \"value\": Where you type a specific value. Defaullt Au";
         Params["SurfaceConstraintValue"] = values;
         insertOrder.push_back("SurfaceConstraintValue");
+        
+        values[0] ="1";
+        values[1] ="#Set the surface area ratio. The value of the surface area is multiplied by this ration after calculation. Example: If the SurfaceConstraintValue is set to 'Au', and the SurfaceConstraintRatio set to 0.5, the constrainted area is set to half of the mesh surface area. Defaullt 1";
+        Params["SurfaceConstraintRatio"] = values;
+        insertOrder.push_back("SurfaceConstraintRatio");
         
         values[0] ="0";
         values[1] ="#Set surface constraint potential (harmonic) rigidity coefficient. Default 0";
