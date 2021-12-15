@@ -128,6 +128,7 @@ public:
     int ext_force_model=0;
     int NumberOfRandomModes;
     int EllMaxOfRandomModes;
+    int LinearReducedSrfaceVolume=0;
     
     double contourRadius;
     double Node_Bond_user_defined_Nominal_Length_in_Nm;
@@ -485,7 +486,7 @@ public:
         return SurfaceConstraintValue;
     }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
-    double get_volume_constraint_volume(void){
+    double get_volume_constraint_value(void){
         return VolumeConstraintValue;
     }
     /**Return the spontaneous bending angle between triangle pairs in radians. */
@@ -860,6 +861,11 @@ public:
         values[1] ="#Set volume constraint potential (harmonic) rigidity coefficient. Default 0";
         Params["VolumeConstraintCoeff"] = values;
         insertOrder.push_back("VolumeConstraintCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Linearly change the area/Volume ratio. Default 0";
+        Params["LinearReducedSrfaceVolume"] = values;
+        insertOrder.push_back("LinearReducedSrfaceVolume");
     }
     
     

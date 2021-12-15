@@ -246,7 +246,6 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
     vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
-    
     vector<OpenMM::CustomCompoundBondForce*> GlobalVolumeConstraintForces;
     
     set_surface_volume_constraint_forces(triangles,
@@ -255,14 +254,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                           GlobalVolumeConstraintForces,
                                           system);
     
-    if (triangles[0].surface_type != EndOfList) {
-        omm->GlobalSurfaceConstraintForces = GlobalSurfaceConstraintForces;
-        omm->LocalSurfaceConstraintForces  = LocalSurfaceConstraintForces;
-    }
     
-    if (triangles[0].volume_type != EndOfList) {
-        omm->GlobalVolumeConstraintForces = GlobalVolumeConstraintForces;
-    }
+    omm->GlobalSurfaceConstraintForces = GlobalSurfaceConstraintForces;
+    omm->LocalSurfaceConstraintForces  = LocalSurfaceConstraintForces;
+    omm->GlobalVolumeConstraintForces  = GlobalVolumeConstraintForces;
+
     
     vector<OpenMM::CustomAngleForce*> AngleForces;
     if (!generalParameters.MinimumForceDecleration) {

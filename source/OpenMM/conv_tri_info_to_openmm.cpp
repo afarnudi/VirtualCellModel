@@ -93,7 +93,7 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
                 }
                 triatoms[i].VolumeConstraintStiffnessinKJpermolperNm3 = mem.get_volume_constraint_stiffness_coefficient();
                 triatoms[i].class_label = mem.get_label();
-                triatoms[i].VolumeConstraintValue = mem.get_volume_constraint_volume();
+                triatoms[i].VolumeConstraintValue = mem.get_volume_constraint_value();
             } else {
                 noVolumePotential = true;
             }
@@ -123,7 +123,7 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     if (GlobalVolumePotential) {
         cout<<" Global volume constraint"<<endl;
         cout<<"\tCoeficient (KJ . mol .Nm^-3) = "<<mem.get_volume_constraint_stiffness_coefficient() <<endl;
-        cout<<"\tVolume (Nm^3) = "<<mem.get_volume_constraint_volume() <<endl;
+        cout<<"\tVolume (Nm^3) = "<<mem.get_volume_constraint_value() <<endl;
     }
     if (noVolumePotential || mem_num_tris==0) {
         cout<<" None"<<endl;

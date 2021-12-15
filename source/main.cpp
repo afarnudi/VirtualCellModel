@@ -99,7 +99,7 @@ const int EndOfList=-1;
 
 int main(int argc, char **argv)
 {
-//    generalParameters.CBP=true;
+    //    generalParameters.CBP=true;
     cout<<TRESET;
     // get the current time.
     time_t t = time(0);
@@ -124,11 +124,11 @@ int main(int argc, char **argv)
     }
     
     clock_t tStart = clock();//Time the programme
-
+    
     map<string, vector<string> > config_lines =read_configfile(userinputs.configfilename);
     get_class_numbers(config_lines);
     parse_genconfig_parameters(config_lines["-GeneralParameters"]);
-
+    
     NonBondInteractionMap interaction_map(config_lines["-InteractionTable"]);
     
     
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     vector<Actin> Actins;
     vector<std::set<int> > actin_set;
     vector<vector<string> > actin_configs =sort_class_configs(config_lines["-Actin"]);
-
+    
     vector<ECM> ECMs;
     vector<std::set<int> > ecm_set;
     vector<vector<string> > ecm_configs =sort_class_configs(config_lines["-ECM"]);
@@ -155,132 +155,132 @@ int main(int argc, char **argv)
     int num_of_angles=0;
     int num_of_triangles=0;
     
-//    if (!generalParameters.Resume) {
-        if (generalParameters.Num_of_Membranes!=0) {
-            Membranes.resize(generalParameters.Num_of_Membranes);
-            membrane_set.resize(generalParameters.Num_of_Membranes);
-            for (int i=0; i<generalParameters.Num_of_Membranes; i++) {
-                string label=generalParameters.Membrane_label+to_string(i);
-                Membranes[i].set_label(label);
-                Membranes[i].set_file_time(buffer);
-                Membranes[i].set_index(i);
-                try{
-                    Membranes[i].import_config(membrane_configs[i]);
-                }
-                catch(const std::exception& e) {
-                    printf("EXCEPTION: %s\n", e.what());
-                    return 0;
-                }
+    //    if (!generalParameters.Resume) {
+    if (generalParameters.Num_of_Membranes!=0) {
+        Membranes.resize(generalParameters.Num_of_Membranes);
+        membrane_set.resize(generalParameters.Num_of_Membranes);
+        for (int i=0; i<generalParameters.Num_of_Membranes; i++) {
+            string label=generalParameters.Membrane_label+to_string(i);
+            Membranes[i].set_label(label);
+            Membranes[i].set_file_time(buffer);
+            Membranes[i].set_index(i);
+            try{
+                Membranes[i].import_config(membrane_configs[i]);
+            }
+            catch(const std::exception& e) {
+                printf("EXCEPTION: %s\n", e.what());
+                return 0;
             }
         }
-        
-        if (generalParameters.Num_of_Actins!=0) {
-            Actins.resize(generalParameters.Num_of_Actins);
-            actin_set.resize(generalParameters.Num_of_Actins);
-            for (int i=0; i<generalParameters.Num_of_Actins; i++) {
-                string label=generalParameters.Actin_label+to_string(i);
-                Actins[i].set_label(label);
-                Actins[i].set_file_time(buffer);
-                Actins[i].set_index(i);
-                try {
-                    Actins[i].import_config(actin_configs[i]);
-                }
-                catch(const std::exception& e) {
-                    printf("EXCEPTION: %s\n", e.what());
-                    return 0;
-                }
-            }
-        }
-        
-        if (generalParameters.Num_of_ECMs!=0){
-            ECMs.resize(generalParameters.Num_of_ECMs);
-            ecm_set.resize(generalParameters.Num_of_ECMs);
-            for (int i=0; i<generalParameters.Num_of_ECMs; i++) {
-                string label=generalParameters.ECM_label+to_string(i);
-                ECMs[i].set_label(label);
-                ECMs[i].set_file_time(buffer);
-                ECMs[i].set_index(i);
-                try {
-                    ECMs[i].import_config(ecm_configs[i]);
-                }
-                catch(const std::exception& e) {
-                    printf("EXCEPTION: %s\n", e.what());
-                    return 0;
-                }
-            }
-            
-        }
-        
-        
-        if (generalParameters.Num_of_Chromatins!=0) {
-            Chromatins.resize(generalParameters.Num_of_Chromatins);
-            chromatin_set.resize(generalParameters.Num_of_Chromatins);
-            for (int i=0; i<generalParameters.Num_of_Chromatins; i++) {
-                string label=generalParameters.Chromatin_label+to_string(i);
-                Chromatins[i].set_label(label);
-                Chromatins[i].set_file_time(buffer);
-                Chromatins[i].set_index(i);
-                try {
-                Chromatins[i].import_config(chromatin_configs[i]);
-                }
-                catch(const std::exception& e) {
-                    printf("EXCEPTION: %s\n", e.what());
-                    return 0;
-                }
-                chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
-            }
-        }
-        
-        
-        if (generalParameters.Num_of_Membranes!=0) {
-            
-            for (int i=0; i<Membranes.size(); i++) {
-                num_of_atoms        += Membranes[i].get_num_of_nodes();
-                num_of_bonds        += Membranes[i].get_num_of_bonds();
-                num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
-                num_of_triangles    += Membranes[i].get_num_of_triangle();
-            }
-        }
-        
-        if (generalParameters.Num_of_Actins!=0) {
-            for (int i=0; i<Actins.size(); i++) {
-                num_of_atoms        += Actins[i].get_num_of_nodes();
-                num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
-                //num_of_bonds        += Actins[i].get_num_of_node_pairs();
-            }
-        }
-        if (generalParameters.Num_of_ECMs!=0) {
-            for (int i=0; i<ECMs.size(); i++) {
-                num_of_atoms += ECMs[i].get_num_of_nodes();
-                num_of_bonds += ECMs[i].get_num_of_node_pairs();
-            }
-        }
-        if (generalParameters.Num_of_Chromatins!=0) {
-            for (int i=0; i<Chromatins.size(); i++) {
-                num_of_atoms    += Chromatins[i].get_num_of_nodes();
-                num_of_bonds    += Chromatins[i].get_num_of_bonds();
-                num_of_angles   += Chromatins[i].get_num_of_angle_bonds();
-            }
-        }
-        
-        
-        if (generalParameters.Num_of_Membranes!=0){
-            if (generalParameters.Num_of_Actins!=0){
-                for (int i=0; i<generalParameters.Num_of_Actins; i++) {
-                    for (int j=0; j<generalParameters.Num_of_Membranes; j++) {
-                        Actin_Membrane_shared_Node_Identifier(Actins[i],Membranes[j],i,j);
-                        num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
-                    }
-                    
-                } //for (int i=0; i<GenConst::Num_of_Actins; i++)
-            }
-        } // End of if (Include_Membrane)
-//    } End of Resume
+    }
     
-//    cout<<"num_of_bonds "<<num_of_bonds<<endl;
+    if (generalParameters.Num_of_Actins!=0) {
+        Actins.resize(generalParameters.Num_of_Actins);
+        actin_set.resize(generalParameters.Num_of_Actins);
+        for (int i=0; i<generalParameters.Num_of_Actins; i++) {
+            string label=generalParameters.Actin_label+to_string(i);
+            Actins[i].set_label(label);
+            Actins[i].set_file_time(buffer);
+            Actins[i].set_index(i);
+            try {
+                Actins[i].import_config(actin_configs[i]);
+            }
+            catch(const std::exception& e) {
+                printf("EXCEPTION: %s\n", e.what());
+                return 0;
+            }
+        }
+    }
+    
+    if (generalParameters.Num_of_ECMs!=0){
+        ECMs.resize(generalParameters.Num_of_ECMs);
+        ecm_set.resize(generalParameters.Num_of_ECMs);
+        for (int i=0; i<generalParameters.Num_of_ECMs; i++) {
+            string label=generalParameters.ECM_label+to_string(i);
+            ECMs[i].set_label(label);
+            ECMs[i].set_file_time(buffer);
+            ECMs[i].set_index(i);
+            try {
+                ECMs[i].import_config(ecm_configs[i]);
+            }
+            catch(const std::exception& e) {
+                printf("EXCEPTION: %s\n", e.what());
+                return 0;
+            }
+        }
+        
+    }
+    
+    
+    if (generalParameters.Num_of_Chromatins!=0) {
+        Chromatins.resize(generalParameters.Num_of_Chromatins);
+        chromatin_set.resize(generalParameters.Num_of_Chromatins);
+        for (int i=0; i<generalParameters.Num_of_Chromatins; i++) {
+            string label=generalParameters.Chromatin_label+to_string(i);
+            Chromatins[i].set_label(label);
+            Chromatins[i].set_file_time(buffer);
+            Chromatins[i].set_index(i);
+            try {
+                Chromatins[i].import_config(chromatin_configs[i]);
+            }
+            catch(const std::exception& e) {
+                printf("EXCEPTION: %s\n", e.what());
+                return 0;
+            }
+            chromatin_set[i].resize(Chromatins[i].get_num_of_node_types() );
+        }
+    }
+    
+    
+    if (generalParameters.Num_of_Membranes!=0) {
+        
+        for (int i=0; i<Membranes.size(); i++) {
+            num_of_atoms        += Membranes[i].get_num_of_nodes();
+            num_of_bonds        += Membranes[i].get_num_of_bonds();
+            num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
+            num_of_triangles    += Membranes[i].get_num_of_triangle();
+        }
+    }
+    
+    if (generalParameters.Num_of_Actins!=0) {
+        for (int i=0; i<Actins.size(); i++) {
+            num_of_atoms        += Actins[i].get_num_of_nodes();
+            num_of_bonds        += 4*Actins[i].get_num_of_node_pairs() + 4*Actins[i].get_num_of_abp_pairs() + 4*Actins[i].get_num_of_MT_pairs();
+            //num_of_bonds        += Actins[i].get_num_of_node_pairs();
+        }
+    }
+    if (generalParameters.Num_of_ECMs!=0) {
+        for (int i=0; i<ECMs.size(); i++) {
+            num_of_atoms += ECMs[i].get_num_of_nodes();
+            num_of_bonds += ECMs[i].get_num_of_node_pairs();
+        }
+    }
+    if (generalParameters.Num_of_Chromatins!=0) {
+        for (int i=0; i<Chromatins.size(); i++) {
+            num_of_atoms    += Chromatins[i].get_num_of_nodes();
+            num_of_bonds    += Chromatins[i].get_num_of_bonds();
+            num_of_angles   += Chromatins[i].get_num_of_angle_bonds();
+        }
+    }
+    
+    
+    if (generalParameters.Num_of_Membranes!=0){
+        if (generalParameters.Num_of_Actins!=0){
+            for (int i=0; i<generalParameters.Num_of_Actins; i++) {
+                for (int j=0; j<generalParameters.Num_of_Membranes; j++) {
+                    Actin_Membrane_shared_Node_Identifier(Actins[i],Membranes[j],i,j);
+                    num_of_bonds        += Actins[i].return_num_of_actin_membrane_shared_nodes(j);
+                }
+                
+            } //for (int i=0; i<GenConst::Num_of_Actins; i++)
+        }
+    } // End of if (Include_Membrane)
+    //    } End of Resume
+    
+    //    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
-//    int progress=0;
+    //    int progress=0;
     double MC_Acceptance_Rate=0;
     int MC_total_tries=0;
     int Accepted_Try_Counter=0;
@@ -304,83 +304,83 @@ int main(int argc, char **argv)
     Triangles*  all_triangles = new Triangles[num_of_triangles+1];
     
     
-//    if (!generalParameters.Resume) {
+    //    if (!generalParameters.Resume) {
     all_atoms[num_of_atoms].type         =EndOfList;
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     all_angles[num_of_angles].type       =EndOfList;
     all_triangles[num_of_triangles].surface_type =EndOfList;
     all_triangles[num_of_triangles].volume_type =EndOfList;
+    
+    if (generalParameters.Num_of_Membranes!=0) {
+        OpenMM_membrane_info_relay(Membranes,
+                                   membrane_set,
+                                   all_atoms,
+                                   all_bonds,
+                                   all_dihedrals,
+                                   all_triangles,
+                                   atom_count,
+                                   bond_count,
+                                   dihe_count,
+                                   triangle_count,
+                                   interaction_map);
+    }
+    
+    mem_atom_count = atom_count;
+    
+    
+    if (generalParameters.Num_of_Actins!=0) {
+        OpenMM_Actin_info_relay(Actins,
+                                actin_set,
+                                all_atoms,
+                                all_bonds,
+                                all_dihedrals,
+                                atom_count,
+                                bond_count,
+                                dihe_count);
+    }
+    
+    
+    if (generalParameters.Num_of_Membranes!=0  && generalParameters.Num_of_Actins!=0) {
+        OpenMM_ActMem_info_relay(Actins,
+                                 Membranes,
+                                 all_bonds,
+                                 mem_atom_count,
+                                 bond_count);
         
-        if (generalParameters.Num_of_Membranes!=0) {
-            OpenMM_membrane_info_relay(Membranes,
-                                       membrane_set,
-                                       all_atoms,
-                                       all_bonds,
-                                       all_dihedrals,
-                                       all_triangles,
-                                       atom_count,
-                                       bond_count,
-                                       dihe_count,
-                                       triangle_count,
-                                       interaction_map);
-        }
-        
-        mem_atom_count = atom_count;
-        
-        
-        if (generalParameters.Num_of_Actins!=0) {
-            OpenMM_Actin_info_relay(Actins,
-                                    actin_set,
+    }
+    
+    if (generalParameters.Num_of_ECMs!=0) {
+        OpenMM_ECM_info_relay(ECMs,
+                              ecm_set,
+                              all_atoms,
+                              all_bonds,
+                              all_dihedrals,
+                              atom_count,
+                              bond_count,
+                              dihe_count);
+    }
+    
+    if (generalParameters.Num_of_Chromatins!=0) {
+        OpenMM_Chromatin_info_relay(Chromatins,
+                                    chromatin_set,
                                     all_atoms,
                                     all_bonds,
-                                    all_dihedrals,
+                                    all_angles,
                                     atom_count,
                                     bond_count,
-                                    dihe_count);
-        }
-        
+                                    angle_count,
+                                    interaction_map);
+    }
     
-        if (generalParameters.Num_of_Membranes!=0  && generalParameters.Num_of_Actins!=0) {
-            OpenMM_ActMem_info_relay(Actins,
-                                     Membranes,
-                                     all_bonds,
-                                     mem_atom_count,
-                                     bond_count);
-            
-        }
-        
-        if (generalParameters.Num_of_ECMs!=0) {
-            OpenMM_ECM_info_relay(ECMs,
-                                  ecm_set,
-                                  all_atoms,
-                                  all_bonds,
-                                  all_dihedrals,
-                                  atom_count,
-                                  bond_count,
-                                  dihe_count);
-        }
-        
-        if (generalParameters.Num_of_Chromatins!=0) {
-            OpenMM_Chromatin_info_relay(Chromatins,
-                                        chromatin_set,
-                                        all_atoms,
-                                        all_bonds,
-                                        all_angles,
-                                        atom_count,
-                                        bond_count,
-                                        angle_count,
-                                        interaction_map);
-        }
-        
-        print_statistics(num_of_atoms,
-                         num_of_bonds,
-                         num_of_dihedrals,
-                         num_of_angles,
-                         Membranes,
-                         Chromatins);
+    print_statistics(num_of_atoms,
+                     num_of_bonds,
+                     num_of_dihedrals,
+                     num_of_angles,
+                     Membranes,
+                     Chromatins);
     
-//    } End of Resume
+    //    } End of Resume
     //autocorrelation calculations:
     //        GenConst::velocity_save.resize(6);
     
@@ -394,19 +394,19 @@ int main(int argc, char **argv)
         MyOpenMMData* omm = new MyOpenMMData();
         TimeDependantData* time_dependant_data = new TimeDependantData();
         
-//        if (!generalParameters.Resume) {
-            omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, all_triangles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
-//        } else {
-            
-            
-//        }
+        //        if (!generalParameters.Resume) {
+        omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, all_triangles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
+        //        } else {
+        
+        
+        //        }
         
         
         
         if (!generalParameters.Resume) {
             assign_project_directories(buffer, generalParameters.ProjectName, generalParameters.trajectory_file_name, generalParameters.buffer_file_name);
             cout<< "\nFile name: "<<TFILE<<generalParameters.trajectory_file_name<<TRESET<<endl<<endl;
-        
+            
         }
         string hardwarereportpath = generalParameters.trajectory_file_name+"_hardware_runtime.txt";
         if (!generalParameters.Resume) {
@@ -448,7 +448,7 @@ int main(int argc, char **argv)
         cout<<platformName.c_str()<<TRESET<<endl;
         
         if (!generalParameters.Resume) {
-        
+            
             std::string Reporname=generalParameters.trajectory_file_name+"_report.txt";
             generate_report(config_lines);
         }
@@ -466,20 +466,20 @@ int main(int argc, char **argv)
         //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
         int MCCalcstep = (int)(GenConst::Mem_fluidity * generalParameters.Step_Size_In_Fs + 0.5);
         int NumSilentSteps = (int)(generalParameters.Report_Interval_In_Fs / generalParameters.Step_Size_In_Fs + 0.5);
-//        int Savingstep = NumSilentSteps;
-//        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
-//            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
-//            NumSilentSteps = MCCalcstep;
-//        } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
-//            int rate =  (int)(MCCalcstep / NumSilentSteps );
-//            Savingstep = int(MCCalcstep/rate);
-//            NumSilentSteps = Savingstep;
-//        }
+        //        int Savingstep = NumSilentSteps;
+        //        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
+        //            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
+        //            NumSilentSteps = MCCalcstep;
+        //        } else if ( (NumSilentSteps < MCCalcstep) && MCCalcstep != 0 ){
+        //            int rate =  (int)(MCCalcstep / NumSilentSteps );
+        //            Savingstep = int(MCCalcstep/rate);
+        //            NumSilentSteps = Savingstep;
+        //        }
         
         
         int MCCalcTime = MCCalcstep;
         
-//        cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
+        //        cout<<"Savingstep "<<Savingstep<<"\nNumSilentSteps "<<NumSilentSteps<<endl;
         
         int total_step_num = 0;
         
@@ -521,7 +521,7 @@ int main(int argc, char **argv)
             
         }
         
-//        cout<<progressp<<"   "<<savetime<<endl;exit(0);
+        //        cout<<progressp<<"   "<<savetime<<endl;exit(0);
         
         
         if (generalParameters.Minimise && !generalParameters.Resume) {
@@ -545,7 +545,7 @@ int main(int argc, char **argv)
             myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             
             if ( int(time*1000/generalParameters.Step_Size_In_Fs) > savetime ) {
-//                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
+                //                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 
@@ -563,31 +563,70 @@ int main(int argc, char **argv)
                            chrono_clock_start,
                            chrono_sys_clock_start
                            );
+                
+                if (omm->GlobalVolumeConstraintForces.size()!=0 || omm->GlobalSurfaceConstraintForces.size()!=0) {
+                    for (int mem_count=0; mem_count<Membranes.size(); mem_count++) {
+                        
+                        if (Membranes[mem_count].LinearReducedSrfaceVolume!=0) {
+                            if (Membranes[mem_count].get_surface_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]
+                                &&
+                                Membranes[mem_count].get_volume_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]) {
+                                
+                                if (time<Membranes[mem_count].LinearReducedSrfaceVolume) {
+                                    
+                                    double m = (Membranes[mem_count].VolumeConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                    double nu = m*time+1;
+                                    double new_target_volume = Membranes[mem_count].get_volume_constraint_value()*nu;
+
+                                    for (int j=0; j<omm->GlobalVolumeConstraintForces.size(); j++) {
+                                        for (int k=0; k<2; k++) {
+                                            string param_name = omm->GlobalVolumeConstraintForces[j]->getGlobalParameterName(k);
+                                            if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
+                                                omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_volume);
+                                            }
+                                        }
+                                        omm->GlobalVolumeConstraintForces[j]->updateParametersInContext(*omm->context);
+                                        
+                                    }
+                                }
+                                
+
+                            }
+                        }
+
+                        
+
+
+
+
+                    }
+
+                }
             }
             
             
-//            if (changeTemp) {
-//                initTemp -= TempStep;
-//                omm->Lintegrator->setTemperature(initTemp);
-//                //                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
-//                //                    map <string, double> params;
-//                //                    params = omm->context->getParameters();
-//                //
-//                //                    cout<<"\nframe: "<<frame<<endl;
-//                //                    cout<<params.size()<<endl;
-//                //                    for(auto elem : params)
-//                //                    {
-//                //                       cout << elem.first << " " << elem.second << "\n";
-//                //                    }
-//                //                    cout<<"\n";
-//                //
-//            }
+            //            if (changeTemp) {
+            //                initTemp -= TempStep;
+            //                omm->Lintegrator->setTemperature(initTemp);
+            //                //                    cout<<"temp: "<<omm->Lintegrator->getTemperature()<<endl;
+            //                //                    map <string, double> params;
+            //                //                    params = omm->context->getParameters();
+            //                //
+            //                //                    cout<<"\nframe: "<<frame<<endl;
+            //                //                    cout<<params.size()<<endl;
+            //                //                    for(auto elem : params)
+            //                //                    {
+            //                //                       cout << elem.first << " " << elem.second << "\n";
+            //                //                    }
+            //                //                    cout<<"\n";
+            //                //
+            //            }
             //                cout<<"CreateCheckpoint\n";
             
-//            if (GenConst::CreateCheckpoint) {
+            //            if (GenConst::CreateCheckpoint) {
             
-                //End: Exporting congiguration of classes for simulation resume.
-//            }
+            //End: Exporting congiguration of classes for simulation resume.
+            //            }
             
             if (time >= generalParameters.Simulation_Time_In_Ps){
                 break;
@@ -602,7 +641,7 @@ int main(int argc, char **argv)
                 //                    cout<<"[ "<<int(progressp*10)/10.0<<"% ]   \t time: "<<time<<" Ps [out of "<<GenConst::Simulation_Time_In_Ps<<" Ps]    \r" << std::flush;
                 progressp =  int(1000*time/generalParameters.Simulation_Time_In_Ps)/10. + 0.1;
                 //                    cout<<progressp<<endl;
-//                progress++;
+                //                progress++;
             }
             
             
@@ -652,11 +691,11 @@ int main(int argc, char **argv)
                 cout<<"total accepted tries"<<Accepted_Try_Counter<<endl;
                 cout<<"acceptance_rate  "<<MC_Acceptance_Rate<<endl;
             }
-
+            
         }
-//        if (generalParameters.WantXYZ) {
-//            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
-//        }
+        //        if (generalParameters.WantXYZ) {
+        //            writeXYZFrame(atom_count,all_atoms,time, energyInKJ, potential_energyInKJ,true);
+        //        }
         cout<<"[ 100% ]\t time: "<<generalParameters.Simulation_Time_In_Ps<<"Ps\n";
         
         if (generalParameters.expSampling) {
@@ -673,11 +712,11 @@ int main(int argc, char **argv)
                    chrono_clock_start,
                    chrono_sys_clock_start
                    );
-//        print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC), true);
-//        print_real_time(chrono_clock_start, chrono::steady_clock::now(), true);
-//        print_system_time(chrono_sys_clock_start, chrono::system_clock::now(), true);
+        //        print_wall_clock_time((double)((clock() - tStart)/CLOCKS_PER_SEC), true);
+        //        print_real_time(chrono_clock_start, chrono::steady_clock::now(), true);
+        //        print_system_time(chrono_sys_clock_start, chrono::system_clock::now(), true);
         
-
+        
         
         
         // Clean up OpenMM data structures.
