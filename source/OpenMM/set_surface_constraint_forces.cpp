@@ -346,13 +346,13 @@ string generate_global_volume_constraint_potential_unified(Triangles triangle, i
     +"("
     //begin tri 1
     +"(x1*(y3*z2-z3*y2)+x2*(y1*z3-z1*y3)+x3*(y2*z1-z2*y1))/6"
-    +"-"+target_volume+"/"+to_string(mem_tris)
+    +"+"+target_volume+"/"+to_string(mem_tris)
     //end tri 1
     +")"
     +"*("
     //begin tri 2
     +"(x4*(y6*z5-z6*y5)+x5*(y4*z6-z4*y6)+x6*(y5*z4-z5*y4))/6"
-    +"-"+target_volume+"/"+to_string(mem_tris)
+    +"+"+target_volume+"/"+to_string(mem_tris)
     //end tri 2
     +")"
     +")/"+target_volume;
