@@ -69,8 +69,6 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
 //
             }
-            GlobalVolumeConstraintForces[GVCFs_index-1]->addBond(triangles[i].atoms);
-//            cout<<"G :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
             
             vector<int> atoms;
             atoms.resize(6);
