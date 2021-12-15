@@ -252,7 +252,7 @@ string generate_global_surface_constraint_potential_part_1(Triangles triangle, i
     
     
     // \sum_{i=1}^N\frac{1}{2}\frac{k_b}{A_0}\left((a_i-A_0)^2-\frac{(N-1)}{N}A_0^2\right)
-    double N_1timesA2 = (mem_tris-1)*triangle.SurfaceConstraintValue*triangle.SurfaceConstraintValue/double(mem_tris);
+    double N_1perN = (mem_tris-1)/double(mem_tris);
     string target_surface_area = "target_area_"+triangle.class_label;
     string potential_part1 = "0.5*"+to_string(triangle.SurfaceConstraintStiffnessinKJpermolperNm2)
     +"*("//begin multiplyer
@@ -267,7 +267,7 @@ string generate_global_surface_constraint_potential_part_1(Triangles triangle, i
     //end p1
     +"-"
     //begin p2
-    +to_string(N_1timesA2)
+    +to_string(N_1perN)+"*"+target_surface_area+"^2"
     //end p2
     +")"//end multiplyer
 //    +"/"+to_string(triangle.SurfaceConstraintValue);
@@ -317,7 +317,7 @@ string generate_global_volume_constraint_potential_part_1(Triangles triangle, in
     
     
     // \sum_{i=1}^N\frac{1}{2}k_V\left((v_i-V_0)^2-\frac{(N-1)}{N}V_0^2\right)
-    double N_1timesV2 = (mem_tris-1)*triangle.VolumeConstraintValue*triangle.VolumeConstraintValue/double(mem_tris);
+    double N_1perN = (mem_tris-1)/double(mem_tris);
     
     string target_volume = "target_volume_"+triangle.class_label;
     string potential_part1 = "0.5*"+to_string(triangle.VolumeConstraintStiffnessinKJpermolperNm3)
@@ -334,7 +334,7 @@ string generate_global_volume_constraint_potential_part_1(Triangles triangle, in
     //end p1
     +"-"
     //begin p2
-    +to_string(N_1timesV2)
+    +to_string(N_1perN)+"*"+target_volume+"^2"
     //end p2
     +")"//end multiplyer
 //    +"/"+to_string(triangle.VolumeConstraintValue);
