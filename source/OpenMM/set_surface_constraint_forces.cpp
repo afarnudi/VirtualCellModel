@@ -358,6 +358,5 @@ string generate_global_volume_constraint_potential_unified(Triangles triangle, i
     //end tri 2
     +")"
     +")/"+target_volume;
-    cout<<potential<<endl;exit(0);
     return potential;
 }
