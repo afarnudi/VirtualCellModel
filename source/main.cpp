@@ -573,17 +573,29 @@ int main(int argc, char **argv)
                                 Membranes[mem_count].get_volume_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]) {
                                 
                                 if (time<Membranes[mem_count].LinearReducedSrfaceVolume) {
-                                    
-                                    double m = (Membranes[mem_count].VolumeConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                    double m=0;
+                                    if (Membranes[mem_count].InflateMembrane) {
+                                        m = (Membranes[mem_count].SurfaceConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                    } else {
+                                        m = (Membranes[mem_count].VolumeConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                    }
                                     double nu = m*time+1;
                                     double new_target_volume = Membranes[mem_count].get_volume_constraint_value()*nu;
-
+                                    double new_target_area = Membranes[mem_count].get_surface_constraint_area()*nu;
+                                    
                                     for (int j=0; j<omm->GlobalVolumeConstraintForces.size(); j++) {
                                         for (int k=0; k<2; k++) {
                                             string param_name = omm->GlobalVolumeConstraintForces[j]->getGlobalParameterName(k);
-                                            if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
-                                                omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_volume);
+                                            if (Membranes[mem_count].InflateMembrane) {
+                                                if (param_name == "target_area_"+Membranes[mem_count].get_label()) {
+                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_area);
+                                                }
+                                            } else {
+                                                if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
+                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_volume);
+                                                }
                                             }
+                                            
                                         }
                                         omm->GlobalVolumeConstraintForces[j]->updateParametersInContext(*omm->context);
                                         

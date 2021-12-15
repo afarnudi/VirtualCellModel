@@ -120,6 +120,7 @@ public:
     std::string SurfaceConstraintValue_stat;
     
     bool AddRandomModes = false;
+    bool InflateMembrane= false;
     
     int spring_model=0;
     int bending_model=0;
@@ -866,6 +867,11 @@ public:
         values[1] ="#Linearly change the area/Volume ratio. Default 0";
         Params["LinearReducedSrfaceVolume"] = values;
         insertOrder.push_back("LinearReducedSrfaceVolume");
+        
+        values[0] ="false";
+        values[1] ="#Linearly change the area/Volume ratio. Default 0";
+        Params["InflateMembrane"] = values;
+        insertOrder.push_back("InflateMembrane");
     }
     
     

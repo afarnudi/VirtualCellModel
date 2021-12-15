@@ -292,6 +292,19 @@ void Membrane::assign_parameters(void){
             }
             
         
+        } else if (it.first == "InflateMembrane") {
+            if(split[0]=="true"){
+                InflateMembrane=true;
+            } else if (split[0]=="false"){
+                InflateMembrane=false;
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            
+        
         }    else if (it.first == "ExtForceModel") {
              ext_force_model = stoi(split[0]);
         
