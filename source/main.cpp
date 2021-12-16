@@ -584,15 +584,15 @@ int main(int argc, char **argv)
                                     double new_target_area = Membranes[mem_count].get_surface_constraint_area()*nu;
                                     
                                     for (int j=0; j<omm->GlobalVolumeConstraintForces.size(); j++) {
-                                        for (int k=0; k<2; k++) {
+                                        for (int k=0; k<omm->GlobalVolumeConstraintForces[j]->getNumGlobalParameters() ; k++) {
                                             string param_name = omm->GlobalVolumeConstraintForces[j]->getGlobalParameterName(k);
                                             if (Membranes[mem_count].InflateMembrane) {
                                                 if (param_name == "target_area_"+Membranes[mem_count].get_label()) {
-                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_area);
+                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_area);
                                                 }
                                             } else {
                                                 if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
-                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(j,new_target_volume);
+                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_volume);
                                                 }
                                             }
                                             
