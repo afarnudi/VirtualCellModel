@@ -41,7 +41,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
            
             DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
-        } else if (dihedrals[i].type == potentialModelIndex.Model["Dihedral"]) {
+        } else if (dihedrals[i].type == potentialModelIndex.Model["ExpDihedral"]) {
             auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
             if (DFs_item == DFs_classes.end()) {
                 
