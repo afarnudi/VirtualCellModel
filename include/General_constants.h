@@ -35,6 +35,7 @@ struct PotentialModelIndex{
         Model["GlobalConstraint"] = 14;
         
         
+        Model["ExpDihedral"] = 25;
         Model["RealHarmonic"] = 26;
         Model["Dihedral"] = 27;
         Model["Virtual"] = 28;

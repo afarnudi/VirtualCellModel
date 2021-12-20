@@ -56,7 +56,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 GVCFs_index++;
                 
                 string target_volume = "target_volume_"+triangles[i].class_label;
-                string target_surface_area = "target_area_"+triangles[i].class_label;
+                string target_area = "target_area_"+triangles[i].class_label;
                 
                 string surf_potential_part1 = generate_global_surface_constraint_potential_part_1(triangles[i], mem_tris);
                 string volu_potential_part1 = generate_global_volume_constraint_potential_part_1(triangles[i], mem_tris);
@@ -64,7 +64,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 
                 GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_volume, triangles[i].VolumeConstraintValue);
-                GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_surface_area, triangles[i].SurfaceConstraintValue);
+                GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_area, triangles[i].SurfaceConstraintValue);
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
 //                cout<<potential_part1<<endl<<endl;
                 GVCFs_index++;
@@ -77,7 +77,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 
                 GlobalVolumeConstraintForces.push_back(new OpenMM::CustomCompoundBondForce(6, potential));
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_volume, triangles[i].VolumeConstraintValue);
-                GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_surface_area, triangles[i].SurfaceConstraintValue);
+                GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_area, triangles[i].SurfaceConstraintValue);
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
 //
             }

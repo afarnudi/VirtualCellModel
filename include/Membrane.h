@@ -744,7 +744,7 @@ public:
         insertOrder.push_back("DampingCoeff");
         
         values[0] ="cosine";
-        values[1] ="#Set the dihedral potential (cosine dihedral angle). Default cosine";
+        values[1] ="#Set the dihedral potential. Options: 'N' No potential; 'cosine' U = K_bend*(1-cos(\theta-SponAngle) ); 'exp' U = 0.5*K_bend*(exp(2*(1-cos(\theta-SponAngle)) - 1) where theta is the dihedral angle. Default cosine";
         Params["BendingModel"] = values;
         insertOrder.push_back("BendingModel");
         
