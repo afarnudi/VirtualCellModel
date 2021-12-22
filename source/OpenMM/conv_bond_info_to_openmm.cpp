@@ -9,7 +9,23 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     bool gompperpotential = false;
     bool noPotential=false;
     
-    for (int i=0; i<mem_num_bonds; i++) {
+    int bond_count = 0;
+    int atom_count = 0;
+    if (mem.LockOnSphere_stat) {
+        int bond_index = mem.get_num_of_bonds() - mem.get_num_of_nodes()+1;
+        int last_atom_index = mem.get_num_of_nodes()-1;
+        bond_count = mem.get_num_of_nodes()-1;
+        for (int i=bond_index; i<mem.get_num_of_nodes()-1; i++) {
+            bonds[i].type = potentialModelIndex.Model["Harmonic"];
+            bonds[i].atoms[0]=last_atom_index;
+            bonds[i].atoms[1]=i-bond_index;
+            bonds[i].class_label = mem.get_label() + mem.get_label();
+            bonds[i].nominalLengthInNm=mem.get_average_Membrane_radius();
+            bonds[i].stiffnessInKJPerNm2=mem.LockOnSphere_rigidity*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+        }
+    }
+    
+    for (int i=0; i<mem_num_bonds -bond_count; i++) {
         bonds[i].type = mem.get_spring_model();
         bonds[i].atoms[0]=mem.get_node_pair(i, 0);
         bonds[i].atoms[1]=mem.get_node_pair(i, 1);

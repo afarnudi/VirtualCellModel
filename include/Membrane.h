@@ -121,6 +121,7 @@ public:
     
     bool AddRandomModes = false;
     bool InflateMembrane= false;
+    bool LockOnSphere_stat= false;
     
     int spring_model=0;
     int bending_model=0;
@@ -148,6 +149,7 @@ public:
     double SurfaceConstraintRatio=0;
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
+    double LockOnSphere_rigidity=0;
     
     vector<string> insertOrder;
     vector<string> values;
@@ -171,7 +173,8 @@ public:
     vector<double> GompperBondPotentialLminLc1Lc0Lmax;
     vector<double> Shift_position_xyzVector;
     vector<double> Shift_velocities_xyzVector;
-    vector<double> ext_force_rigidity ;
+    vector<double> ext_force_rigidity;
+    vector<double> LockOnSphereCoordinate;
     
     vector<vector<int> >    Triangle_list;
     //List that stores the IDs of triangles that are neighbours.
@@ -229,6 +232,7 @@ public:
     vector<vector<double> > Node_Velocity;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > Node_Force;// also update in MD loop and should not be private unless we write some functions to get it outside the class
     vector<vector<double> > node_voronoi_normal_vec;
+    
     
     vector<vector<vector<double> > > analysis_coord_frames;
     
@@ -433,17 +437,25 @@ public:
      * \return integer number of nodes in the membrane
      */
     int get_num_of_nodes(void){
-        return Num_of_Nodes;
+        int additional_nodes=0;
+        if (LockOnSphere_stat) {
+            additional_nodes=1;
+        }
+        return Num_of_Nodes + additional_nodes;
     }
     /**Return the number of bonds between membrane nodes.*/
     int get_num_of_node_pairs(void){
         return Num_of_Node_Pairs;
     }
     int get_num_of_bonds(void){
+        int additional_bonds=0;
+        if (LockOnSphere_stat) {
+            additional_bonds = Num_of_Nodes;
+        }
         if (spring_model==potentialModelIndex.Model["None"]) {
-            return 0;
+            return 0 + additional_bonds;
         } else {
-            return Num_of_Node_Pairs;
+            return Num_of_Node_Pairs + additional_bonds;
         }
     }
     /**Return the id(int) of the nodes in the bonds. The id of each node in the bond list is stored in the first (0) and the second (1) id slot.*/
@@ -872,6 +884,16 @@ public:
         values[1] ="#Linearly change the area/Volume ratio. Default 0";
         Params["InflateMembrane"] = values;
         insertOrder.push_back("InflateMembrane");
+        
+        values[0] ="0";
+        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with a strong harmonic springs. The spring rigidity is set to multiples of kBT. Default 0";
+        Params["LockOnSphere"] = values;
+        insertOrder.push_back("LockOnSphere");
+        
+        values[0] ="0 0 0";
+        values[1] ="#LockOnSphere potential is attached to this coordinate. Default 0 0 0";
+        Params["LockOnSphereCoordinate"] = values;
+        insertOrder.push_back("LockOnSphereCoordinate");
     }
     
     

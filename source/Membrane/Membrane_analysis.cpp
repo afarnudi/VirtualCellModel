@@ -144,7 +144,7 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
         }
     }
     
-    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh();
+    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh('V');
     for (int ell=0; ell<ell_max+1; ell++) {
         //        cout<<ell<<" out of "<<ell_max<<"\r";
         for (int m=-ell; m<ell+1; m++) {

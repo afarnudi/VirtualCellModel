@@ -12,8 +12,37 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     
     //used in openmm to specify different types of atoms. I don't know what the application is at the moment.
     int C=0;
+    int atom_count = 0;
+    if (mem.LockOnSphere_stat) {
+        atom_count = 1;
+        int last_atom_index = mem.get_num_of_nodes()-atom_count;
+        myatominfo[last_atom_index].type=C;
+        myatominfo[last_atom_index].class_label="Membrane";
+        std::string str = mem.get_label();
+        myatominfo[last_atom_index].pdb = new char[str.length() + 1];
+        strcpy(myatominfo[last_atom_index].pdb, str.c_str());
+        myatominfo[last_atom_index].energyInKJ = 0;
+        myatominfo[last_atom_index].symbol = 'M';
+        myatominfo[last_atom_index].initPosInNm[0]=mem.LockOnSphereCoordinate[0];
+        myatominfo[last_atom_index].initPosInNm[1]=mem.LockOnSphereCoordinate[1];
+        myatominfo[last_atom_index].initPosInNm[2]=mem.LockOnSphereCoordinate[2];
+        myatominfo[last_atom_index].posInNm[0]=mem.LockOnSphereCoordinate[0];
+        myatominfo[last_atom_index].posInNm[1]=mem.LockOnSphereCoordinate[1];
+        myatominfo[last_atom_index].posInNm[2]=mem.LockOnSphereCoordinate[2];
+        myatominfo[last_atom_index].velocityInNmperPs[0]=0;
+        myatominfo[last_atom_index].velocityInNmperPs[1]=0;
+        myatominfo[last_atom_index].velocityInNmperPs[2]=0;
+        myatominfo[last_atom_index].mass = 0;
+        myatominfo[last_atom_index].radius = 0;
+        myatominfo[last_atom_index].sigma_LJ_12_6 = 0;
+        myatominfo[last_atom_index].epsilon_LJ_12_6 = 0;
+        myatominfo[last_atom_index].ext_force_model = 0;
+        myatominfo[last_atom_index].ext_force_constants[0] = 0;
+        myatominfo[last_atom_index].ext_force_constants[1] = 0;
+        myatominfo[last_atom_index].ext_force_constants[2] = 0;
+    }
     
-    for (int i=0; i<mem_num_atom; i++) {
+    for (int i=0; i<mem_num_atom - atom_count; i++) {
         myatominfo[i].type=C;
         myatominfo[i].class_label="Membrane";
         std::string str = mem.get_label();

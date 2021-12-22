@@ -256,11 +256,11 @@ void Membrane::assign_parameters(void){
             Y_scale = stod(split[1]);
             Z_scale = stod(split[2]);
         } else if (it.first == "Scale") {
-                rescale_factor = stod(split[0]);
+            rescale_factor = stod(split[0]);
         }
-//        else if (it.first == "LJsigma") {
-//            sigma_LJ_12_6 = stod(split[0]);
-//        }
+        //        else if (it.first == "LJsigma") {
+        //            sigma_LJ_12_6 = stod(split[0]);
+        //        }
         else if (it.first == "LJepsilon") {
             epsilon_LJ_12_6Stat  = split[0];
             
@@ -293,7 +293,7 @@ void Membrane::assign_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             
-        
+            
         } else if (it.first == "InflateMembrane") {
             if(split[0]=="true"){
                 InflateMembrane=true;
@@ -306,16 +306,26 @@ void Membrane::assign_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             
-        
-        }    else if (it.first == "ExtForceModel") {
-             ext_force_model = stoi(split[0]);
-        
-         } else if (it.first == "ExtForceRigidity") {
-             ext_force_rigidity.resize(3,0);
-             ext_force_rigidity[0] = stoi(split[0]);
-             ext_force_rigidity[1] = stoi(split[1]);
-             ext_force_rigidity[2] = stoi(split[2]);
-        
+            
+        } else if (it.first == "ExtForceModel") {
+            ext_force_model = stoi(split[0]);
+        } else if (it.first == "LockOnSphere") {
+            LockOnSphere_rigidity = stod(split[0]);
+            if (LockOnSphere_rigidity!=0) {
+                LockOnSphere_stat = true;
+            }
+        } else if (it.first == "LockOnSphereCoordinate") {
+            LockOnSphereCoordinate.resize(3,0);
+            LockOnSphereCoordinate[0] = stod(split[0]);
+            LockOnSphereCoordinate[1] = stod(split[1]);
+            LockOnSphereCoordinate[2] = stod(split[2]);
+            
+        } else if (it.first == "ExtForceRigidity") {
+            ext_force_rigidity.resize(3,0);
+            ext_force_rigidity[0] = stod(split[0]);
+            ext_force_rigidity[1] = stod(split[1]);
+            ext_force_rigidity[2] = stod(split[2]);
+            
         } else if (it.first == "VelocityShiftVector") {
             Shift_velocities_xyzVector.resize(3,0);
             Shift_velocities_xyzVector[0] = stod(split[0]);
