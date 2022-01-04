@@ -84,19 +84,26 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         
         ("ext", "[optional][3D] The Ulm amplitudes will be saved in a file with the same name as the pdb file provided in the \"pdbpath\" + what you put in after this flag. Example (Note: irelevant flags are omited):   ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0                 Output files: mydirectory/mypdb_mem0_myUlms.myextension", cxxopts::value<std::string>(),"example.txt")
         
-        ("framelimits", "[optional][3D] Takes the start and end frame of the pdb. The analysis will be performed only for these frames and all pdb frames in between. A 0 value for the first or last frame will be interpreted as the biginning frame and the las frame respectfully. Default is 0 for both limits. Example (Note: irelevant flags are omited):"
+        ("framelimits", "[optional][3D] Takes the start and end frame of the trajectory file. The analysis will be performed only for these frames and all trajectory frames in between. A 0 or 1 value for the first frame limit will be interpreted as the biginning frame and 0 for the last frame will be interpreted as the end frame. Please look at the examples below for clearity. Default is 0 for both limits. Example (Note: irelevant flags are omited):"
          "                                             "
          "\n  1)  ./VCM --framelimits 0,0""                 "
          "\n  2)  ./VCM --framelimits 3,0""                 "
          "\n  3)  ./VCM --framelimits 0,293""               "
-         "\n  4)  ./VCM --framelimits 11,73""               "
+         "\n  4)  ./VCM --framelimits 1,293""               "
+         "\n  5)  ./VCM --framelimits 11,73""               "
+         "\n  6)  ./VCM --framelimits 0,2""                 "
+         "\n  7)  ./VCM --framelimits 1,2""                 "
          "\n  interpretation:""                             "
          "\n  1)  All frames.""                             "
          "\n  2)  From frame 3 to the end.""                "
          "\n  3)  From the beginning upto frame 293         "
          "(Not including 293)                               "
-         "\n  4)  From frame 11 upto frame 73 (Not including"
+         "\n  4)  From the beginning upto frame 293         "
+         "(Not including 293)                               "
+         "\n  5)  From frame 11 upto frame 73 (Not including"
          "73)                                               "
+         "\n  6)  Only the first frame.                     "
+         "\n  7)  Only the first frame.                     "
          , cxxopts::value<std::vector<int> >(),"int,int")
         ("memlabels", "[3D] The label(s) used to represent the memebrane(s) in the pdb file. The label(s) will also be used to distinguish between output files. Example (Note: irelevant flags are omited):               ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0,mem1            Output files: mydirectory/mypdb_mem0_myUlms.myextension and mydirectory/mypdb_mem1_myUlms.myextension", cxxopts::value<std::vector<std::string>>(),"mem0")
         
@@ -214,6 +221,17 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                     errorMessage+=") cannot point to the same frame number. If you wish to analyse frame number N, set the beginning frame to N and end frame to N+1.\n Run help (-h, --help) for more information.\n";
                     throw std::runtime_error(errorMessage);
                 }
+            } else if (values[1]==1 ){
+                
+                string errorMessage = TWARN;
+                errorMessage+="Error: "; errorMessage+=TRESET;
+                errorMessage+="Beginning frame ("; errorMessage+=TFILE;
+                errorMessage+=values[0]; errorMessage+=TRESET;
+                errorMessage+=") and end frame ("; errorMessage+=TFILE;
+                errorMessage+=values[1]; errorMessage+=TRESET;
+                errorMessage+=") cannot point to the same frame number. If you wish to analyse only the first frame use either of the following combinations (--framelimits 0,2 or --framelimits 0,2).\n Run help (-h, --help) for more information.\n";
+                throw std::runtime_error(errorMessage);
+            
             }
             args.framelimits_beg = values[0];
             args.framelimits_end = values[1];

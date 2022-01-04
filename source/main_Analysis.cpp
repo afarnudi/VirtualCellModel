@@ -204,8 +204,11 @@ int main(int argc, char **argv)
         args.num_atoms_per_frame = get_xyz_num_of_atoms(args.analysis_filename);
         if (args.framelimits_end==0) {
             args.framelimits_end = get_xyz_num_of_frames(args.analysis_filename, args.num_atoms_per_frame);
+            args.framelimits_end++;
         }
+//        cout<<args.framelimits_end<<endl;exit(0);
     }
+    
     
     if (args.framelimits_end!=0) {
         //c++ arrays start from 0
@@ -215,6 +218,7 @@ int main(int argc, char **argv)
         //c++ arrays start from 0
         args.framelimits_beg--;
     }
+    
     cout<<args.num_atoms_per_frame<<" ATOMs in each frame"<<endl;
     for (int memindex=0; memindex<args.output_filename.size(); memindex++) {
         
@@ -228,6 +232,7 @@ int main(int argc, char **argv)
             }
             
             if (!generalParameters.Testmode) {
+                cout<<args.framelimits_end<<" "<<args.framelimits_beg<<endl;
                 cout<<"num of frames = "<<args.framelimits_end-args.framelimits_beg<<endl;
             }
             if (args.MeshMinimisation) {
