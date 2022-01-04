@@ -18,6 +18,9 @@ int get_xyz_num_of_atoms(std::string filename, std::string label){
     getline(read_xyz, line);
     while(!finished_frame){
         getline(read_xyz, line);
+        if (read_xyz.eof()){
+            break;
+        }
         std::istringstream iss(line);
         std::vector<std::string> split(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
         if (split[0]==label) {
@@ -28,7 +31,6 @@ int get_xyz_num_of_atoms(std::string filename, std::string label){
         
     }
     read_xyz.close();
-    
     return num_atoms;
 }
 
