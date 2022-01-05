@@ -20,7 +20,7 @@ void consistency_check(ArgStruct_Analysis &args);
 void build_output_names(ArgStruct_Analysis &args);
 void check_membrane_labels(ArgStruct_Analysis &args);
 void check_membrane_path(ArgStruct_Analysis &args);
-
+vector<int> get_frame_limit_values(vector<string> frame_limits);
 
 ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
     ArgStruct_Analysis args;
@@ -86,12 +86,12 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         
         ("framelimits", "[optional][3D] Takes the start and end frame of the trajectory file. The analysis will be performed only for these frames and all trajectory frames in between. A 0 or 1 value for the first frame limit will be interpreted as the biginning frame and 0 for the last frame will be interpreted as the end frame. Please look at the examples below for clearity. Default is 0 for both limits. Example (Note: irelevant flags are omited):"
          "                                             "
-         "\n  1)  ./VCM --framelimits 0,0""                 "
-         "\n  2)  ./VCM --framelimits 3,0""                 "
-         "\n  3)  ./VCM --framelimits 0,293""               "
+         "\n  1)  ./VCM --framelimits B,E""                 "
+         "\n  2)  ./VCM --framelimits 3,E""                 "
+         "\n  3)  ./VCM --framelimits B,293""               "
          "\n  4)  ./VCM --framelimits 1,293""               "
          "\n  5)  ./VCM --framelimits 11,73""               "
-         "\n  6)  ./VCM --framelimits 0,2""                 "
+         "\n  6)  ./VCM --framelimits B,2""                 "
          "\n  7)  ./VCM --framelimits 1,2""                 "
          "\n  interpretation:""                             "
          "\n  1)  All frames.""                             "
@@ -104,7 +104,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
          "73)                                               "
          "\n  6)  Only the first frame.                     "
          "\n  7)  Only the first frame.                     "
-         , cxxopts::value<std::vector<int> >(),"int,int")
+         , cxxopts::value<std::vector<string> >(),"int,int")
         ("memlabels", "[3D] The label(s) used to represent the memebrane(s) in the pdb file. The label(s) will also be used to distinguish between output files. Example (Note: irelevant flags are omited):               ./VCM --pdbpath mydirectory/mypdb.pdb --ext _myUlms.myextension --memlabels mem0,mem1            Output files: mydirectory/mypdb_mem0_myUlms.myextension and mydirectory/mypdb_mem1_myUlms.myextension", cxxopts::value<std::vector<std::string>>(),"mem0")
         
         ("m,minimisedState", "[3D] Calculates the difference between the mode amplitudes in the frames, and the amplitudes of the minimised state. Takes two options, 'Mesh' to use the mesh coordinates, or the frame number you wish to set as the minimised state.", cxxopts::value<string>(), "string or int")
@@ -188,53 +188,11 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         }
         if (result.count("framelimits"))
         {
-            const auto values = result["framelimits"].as<std::vector<int>>();
-            if (values.size()!=2) {
-                
-                string errorMessage = TWARN;
-                errorMessage+="Error: "; errorMessage+=TRESET;
-                errorMessage+="Expected 2 int arguments for \"framelimits\", got "; errorMessage+=TFILE;
-                errorMessage+=values.size(); errorMessage+=TRESET;
-                errorMessage+="\n Run help (-h, --help) for more information.\n";   errorMessage+=TRESET;
-                throw std::runtime_error(errorMessage);
-                
-            } else if (values[0] > values[1] && values[1]!=0){
-                
-                string errorMessage = TWARN;
-                errorMessage+="Error: "; errorMessage+=TRESET;
-                errorMessage+="Got ";    errorMessage+=TFILE;
-                errorMessage+=values[0]; errorMessage+=TRESET;
-                errorMessage+=" as the beginning frame and ";  errorMessage+=TFILE;
-                errorMessage+=values[1]; errorMessage+=TRESET;
-                errorMessage+=" as the end frame. Beginning frame cannot be larger than end frame.\n Run help (-h, --help) for more information.\n";
-                throw std::runtime_error(errorMessage);
-                
-            } else if (values[0]!=0 && values[1]!=0 ){
-                if (values[0]==values[1]) {
-                    
-                    string errorMessage = TWARN;
-                    errorMessage+="Error: "; errorMessage+=TRESET;
-                    errorMessage+="Beginning frame ("; errorMessage+=TFILE;
-                    errorMessage+=values[0]; errorMessage+=TRESET;
-                    errorMessage+=") and end frame ("; errorMessage+=TFILE;
-                    errorMessage+=values[1]; errorMessage+=TRESET;
-                    errorMessage+=") cannot point to the same frame number. If you wish to analyse frame number N, set the beginning frame to N and end frame to N+1.\n Run help (-h, --help) for more information.\n";
-                    throw std::runtime_error(errorMessage);
-                }
-            } else if (values[1]==1 ){
-                
-                string errorMessage = TWARN;
-                errorMessage+="Error: "; errorMessage+=TRESET;
-                errorMessage+="Beginning frame ("; errorMessage+=TFILE;
-                errorMessage+=values[0]; errorMessage+=TRESET;
-                errorMessage+=") and end frame ("; errorMessage+=TFILE;
-                errorMessage+=values[1]; errorMessage+=TRESET;
-                errorMessage+=") cannot point to the same frame number. If you wish to analyse only the first frame use either of the following combinations (--framelimits 0,2 or --framelimits 0,2).\n Run help (-h, --help) for more information.\n";
-                throw std::runtime_error(errorMessage);
+            const auto values = result["framelimits"].as<std::vector<string>>();
+            vector<int> limits = get_frame_limit_values(values);
             
-            }
-            args.framelimits_beg = values[0];
-            args.framelimits_end = values[1];
+            args.framelimits_beg = limits[0];
+            args.framelimits_end = limits[1];
         }
         if (result.count("memlabels"))
         {
@@ -305,6 +263,96 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
     
     
 }
+
+vector<int> get_frame_limit_values(vector<string> frame_limits){
+    if (frame_limits.size()!=2) {
+        
+        string errorMessage = TWARN;
+        errorMessage+="Error: "; errorMessage+=TRESET;
+        errorMessage+="Expected 2 int arguments for \"framelimits\", got "; errorMessage+=TFILE;
+        errorMessage+=frame_limits.size(); errorMessage+=TRESET;
+        errorMessage+="\n Run help (-h, --help) for more information.\n";   errorMessage+=TRESET;
+        throw std::runtime_error(errorMessage);
+        
+    }
+    string begin = frame_limits[0];
+    string end = frame_limits[1];
+    vector<int> values(2,0);
+    if (begin!="B") {
+        try {
+            values[0]=stoi(begin);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Error: "; errorMessage+=TRESET;
+            errorMessage+="Got ";    errorMessage+=TFILE;
+            errorMessage+=begin; errorMessage+=TRESET;
+            errorMessage+=" as the beginning frame. Please use an integer or 'B'.\n Run help (-h, --help) for more information.\n";
+            throw std::runtime_error(errorMessage);
+        }
+    }
+    if (end!="E") {
+        try {
+            values[1]=stoi(end);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Error: "; errorMessage+=TRESET;
+            errorMessage+="Got ";    errorMessage+=TFILE;
+            errorMessage+=end; errorMessage+=TRESET;
+            errorMessage+=" as the end frame. Please use an integer or 'E'.\n Run help (-h, --help) for more information.\n";
+            throw std::runtime_error(errorMessage);
+        }
+    }
+    if (values[0]<0 ||values[1]<0){
+        
+        string errorMessage = TWARN;
+        errorMessage+="Error: "; errorMessage+=TRESET;
+        errorMessage+="Got ";    errorMessage+=TFILE;
+        errorMessage+=values[0]; errorMessage+=TRESET;
+        errorMessage+=" as the beginning frame and ";  errorMessage+=TFILE;
+        errorMessage+=values[1]; errorMessage+=TRESET;
+        errorMessage+=" as the end frame. Frame limits cannot be negative numbers.\n Run help (-h, --help) for more information.\n";
+        throw std::runtime_error(errorMessage);
+        
+    }
+    
+    if (values[0] > values[1] && values[1]!=0){
+        
+        string errorMessage = TWARN;
+        errorMessage+="Error: "; errorMessage+=TRESET;
+        errorMessage+="Got ";    errorMessage+=TFILE;
+        errorMessage+=values[0]; errorMessage+=TRESET;
+        errorMessage+=" as the beginning frame and ";  errorMessage+=TFILE;
+        errorMessage+=values[1]; errorMessage+=TRESET;
+        errorMessage+=" as the end frame. Beginning frame cannot be larger than end frame.\n Run help (-h, --help) for more information.\n";
+        throw std::runtime_error(errorMessage);
+        
+    } else if (values[0]!=0 && values[1]!=0 ){
+        if (values[0]==values[1]) {
+            
+            string errorMessage = TWARN;
+            errorMessage+="Error: "; errorMessage+=TRESET;
+            errorMessage+="Beginning frame ("; errorMessage+=TFILE;
+            errorMessage+=values[0]; errorMessage+=TRESET;
+            errorMessage+=") and end frame ("; errorMessage+=TFILE;
+            errorMessage+=values[1]; errorMessage+=TRESET;
+            errorMessage+=") cannot point to the same frame number. If you wish to analyse frame number N, set the beginning frame to N and end frame to N+1.\n Run help (-h, --help) for more information.\n";
+            throw std::runtime_error(errorMessage);
+        }
+    } else if (values[1]==1 ){
+        
+        string errorMessage = TWARN;
+        errorMessage+="Error: "; errorMessage+=TRESET;
+        errorMessage+="Beginning frame ("; errorMessage+=TFILE;
+        errorMessage+=values[0]; errorMessage+=TRESET;
+        errorMessage+=") and end frame ("; errorMessage+=TFILE;
+        errorMessage+=values[1]; errorMessage+=TRESET;
+        errorMessage+=") cannot point to the same frame number. If you wish to analyse only the first frame use either of the following combinations (--framelimits 0,2 or --framelimits 0,2).\n Run help (-h, --help) for more information.\n";
+        throw std::runtime_error(errorMessage);
+    
+    }
+    return values;
+}
+
 
 void consistency_check(ArgStruct_Analysis &args){
     cout<<endl;
