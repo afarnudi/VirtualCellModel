@@ -181,7 +181,6 @@ void Membrane::import_xyz_frames(ArgStruct_Analysis args, int file_index){
     string line;
     read_xyz.seekg(std::ios::beg);
     int num_of_frames = args.framelimits_end-args.framelimits_beg;
-    
     analysis_coord_frames_time.clear();
     analysis_coord_frames_time.resize(num_of_frames);
     
@@ -204,20 +203,22 @@ void Membrane::import_xyz_frames(ArgStruct_Analysis args, int file_index){
             getline(read_xyz, line);
         }
     }
-    
+//    cout<<num_of_frames<<endl;exit(0);
     for (int frame_index= 0; frame_index<num_of_frames; frame_index++){
 
         getline(read_xyz, line);
         getline(read_xyz, line);
-        auto split = split_and_check_for_comments(line, "Import XYZ: ");
-        string time = split[1];
+        string time=to_string(frame_index);
+        if (line.size()!=0){
+            auto split = split_and_check_for_comments(line, "Import XYZ: ");
+            time = split[1];
+        }
+        
         
         try {
             analysis_coord_frames_time[frame_index]=stod(time);
         } catch (...) {
-            cout<<"&"<<line<<"&"<<endl;
-            cout<<"$"<<time<<"$"<<endl;
-            throw ;
+            analysis_coord_frames_time[frame_index]=frame_index;
         }
             
         
