@@ -71,17 +71,12 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
             if (DFs_item == DFs_classes.end()) {
                 
-                /**
-                 Based on: EQ 15
-                 Random Surface Discretizations and the Renormalization of the Bending Rigidity
-                 G. Gompper et D.M. Kroll
-                 J. Phys. I France, 6 10 (1996) 1305-1320
-                 DOI: https://doi.org/10.1051/jp1:1996246
-                */
+               
                 DFs_classes.insert(dihedrals[i].class_label);
                 DFs_index++;
                 
-                string potential = "0.5*K_bend*( 4*( 1-cos(dihedral(p1,p2,p3,p4)-SponAngle) )/(cot(angle(p2,p1,p3))+cot(angle(p2,p4,p3))) )";
+                string potential = "K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle) )*0.5*abs(distance(p2,p3)*(distance(p1,p2)*sin(angle(p1,p2,p3))+distance(p2,p4)*sin(angle(p3,p2,p4))))/";
+                potential+=to_string(dihedrals[i].total_mem_area*3);
                 
                 DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, potential));
                 

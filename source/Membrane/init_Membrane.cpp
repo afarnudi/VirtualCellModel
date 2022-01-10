@@ -61,6 +61,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     set_dihedral_atoms();
     set_bending_nominal_angle();
     set_node_radius();
+    calculate_volume_and_surface_area();
     
     if (New_Radius!=-1) {
         check_radius_update_values();

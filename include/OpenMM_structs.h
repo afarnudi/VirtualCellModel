@@ -66,6 +66,7 @@ struct Dihedrals{
     std::vector<int> atoms;
     double bendingStiffnessinKJ;
     double spontaneousBendingAngleInRad;
+    double total_mem_area;
 };
 
 struct Angles{

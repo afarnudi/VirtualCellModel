@@ -14,7 +14,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     //    cout<<"**++**++**++\n\t"<<mem_num_tri_pairs<<"\n**++**++**++\n";
     Dihedrals* diatoms = new Dihedrals[mem_num_tri_pairs];
     
-    
+    double total_mem_area =  mem.get_surface_area();
     for (int i=0; i<mem_num_tri_pairs; i++) {
         //        vector<int> tri_pair_nodes(mem.get_traingle_pair_nodes_list(i));
         
@@ -37,6 +37,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
             } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["meanCurvature"]){
+                diatoms[i].total_mem_area = total_mem_area;
                 meanCurvature = true;
             }
         }
