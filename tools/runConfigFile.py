@@ -20,6 +20,8 @@ class Inputs:
         self.platformDeviceID = args.platformDeviceID
         self.rescale = 1 / args.rescale_elastic_properties
         self.sigma = args.surface_coef
+        self.reduced_volume = args.reduced_volume
+        self.volume_coef = args.volume_coef
         
     def generate_mesh_path_from_resolution(x):
         return "USphere_{0}2d/USphere_{0}2d_s0.ply".format(x ** 2)
@@ -65,7 +67,15 @@ class Inputs:
     
     def get_sigma(self):
         """retun spring_coefficient"""
-        return self.sigma 
+        return self.sigma
+    
+    def get_reduced_volume(self):
+        """retun reduced volume"""
+        return self.reduced_volume
+    
+    def get_volume_coef(self):
+        """retun volume potetnial's coefficient"""
+        return self.volume_coef
 
 
 def get_float_string(coef):
@@ -93,8 +103,9 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
     bend = get_float_string(inputs.get_bending_coefficient())
     scale = get_float_string(inputs.get_scale())
     sigma = get_float_string(inputs.get_sigma())
-    print(inputs.get_sigma())
-    print(sigma)
+    k_volume = get_float_string(inputs.get_volume_coef())
+    reduced_volume = get_float_string(inputs.get_reduced_volume())
+    
     with open(config_file_name) as f:
         with open(edited_config_file_name, "w") as f1:
             for line in f:
@@ -107,7 +118,9 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
                     line = re.sub(r"/bend_\d+(\.\d*)?", f"/bend_{bend}", line)
                     line = re.sub(r"/r_\d+", f"/r_{scale}", line)
                     line = re.sub(r"/surf_\d+(\.\d*)?", f"/surf_{sigma}", line)
-                    print(line)
+                    line = re.sub(r"/reduced_volume_\d+(\.\d*)?", f"/reduced_volume_{reduced_volume}", line)
+                    line = re.sub(r"/k_volume_\d+(\.\d*)?", f"/k_volume_{k_volume}", line)
+                    #print(line)
                 if words[0] == "MeshFile":
                     line = "MeshFile Mesh/icospheres/" + inputs.get_mesh_path()
                     line = line[:-5] + str(seed) + ".ply" + "\n"
@@ -121,6 +134,10 @@ def configfile_gen_mem_ulms(seed, inputs, config_file_name):
                     line = f"BendingCoeff {bend}\n"
                 if words[0] == "SurfaceConstraintCoeff":
                     line = f"SurfaceConstraintCoeff {sigma}\n"
+                if words[0] == "VolumeConstraintRatio":
+                    line = f"VolumeConstraintRatio {reduced_volume}\n"
+                if words[0] == "VolumeConstraintCoeff":
+                    line = f"VolumeConstraintCoeff {k_volume}\n"
                 f1.write(line)
     return edited_config_file_name
 
@@ -213,7 +230,21 @@ def get_arguments():
     parser.add_argument(
         "--surface_coef",
         help="Surface tension rigidity",
-        default=0.02,
+        default=0.0,
+        type=float,
+        metavar="\b",
+    )
+    parser.add_argument(
+        "--volume_coef",
+        help="volume potential rigidity",
+        default=0.0,
+        type=float,
+        metavar="\b",
+    )
+    parser.add_argument(
+        "--reduced_volume",
+        help="ratio of the target volume to the mesh volume",
+        default=1.0,
         type=float,
         metavar="\b",
     )
