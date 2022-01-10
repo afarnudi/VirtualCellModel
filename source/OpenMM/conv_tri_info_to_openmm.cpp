@@ -7,6 +7,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     
     bool dihedralPotential = false;
     bool NonLinearDihedralPotential = false;
+    bool meanCurvature = false;
     bool noPotential = false;
     
     const int mem_num_tri_pairs = mem.get_num_of_dihedral_elements();
@@ -35,6 +36,8 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
                 dihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
+            } else if (diatoms[i].type == potentialModelIndex.Model["meanCurvature"]){
+                meanCurvature = true;
             }
         }
         
@@ -46,6 +49,10 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     }
     if (NonLinearDihedralPotential) {
         cout<<" Non-linear exponential dihedral"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+    }
+    if (meanCurvature) {
+        cout<<" Mean curvature"<<endl;
         cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     
