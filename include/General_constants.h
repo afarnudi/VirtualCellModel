@@ -34,6 +34,7 @@ struct PotentialModelIndex{
         Model["LocalConstraint"] = 13;
         Model["GlobalConstraint"] = 14;
         
+        Model["meanCurvature2"] = 23;
         Model["meanCurvature"] = 24;
         Model["ExpDihedral"] = 25;
         Model["RealHarmonic"] = 26;
