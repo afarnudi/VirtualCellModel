@@ -223,8 +223,6 @@ void Membrane::assign_parameters(void){
                 bending_model = potentialModelIndex.Model["ExpDihedral"];
             } else if (split[0]=="meanCurvature") {
                 bending_model = potentialModelIndex.Model["meanCurvature"];
-            } else if (split[0]=="meanCurvature2") {
-                bending_model = potentialModelIndex.Model["meanCurvature"];
             } else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), and N (None).";
