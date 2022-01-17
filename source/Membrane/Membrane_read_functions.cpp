@@ -31,9 +31,9 @@ void Membrane::read_gmesh_file (std::string gmesh_file)
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
-        temp_node_position[0]*=rescale_factor;
-        temp_node_position[1]*=rescale_factor;
-        temp_node_position[2]*=rescale_factor;
+//        temp_node_position[0]*=rescale_factor;
+//        temp_node_position[1]*=rescale_factor;
+//        temp_node_position[2]*=rescale_factor;
         
         Node_Position.push_back(temp_node_position);
     }
@@ -193,9 +193,9 @@ void Membrane::read_ply_file (std::string ply_file)
         read>> temp_node_position[0];
         read>> temp_node_position[1];
         read>> temp_node_position[2];
-        temp_node_position[0]*=rescale_factor;
-        temp_node_position[1]*=rescale_factor;
-        temp_node_position[2]*=rescale_factor;
+//        temp_node_position[0]*=rescale_factor;
+//        temp_node_position[1]*=rescale_factor;
+//        temp_node_position[2]*=rescale_factor;
         Node_Position.push_back(temp_node_position);
     }
     
@@ -214,4 +214,28 @@ void Membrane::read_ply_file (std::string ply_file)
     }
     
     
+}
+
+
+void Membrane::read_mesh_file (std::string mesh_file){
+    if (mesh_format=="msh"){
+        read_gmesh_file(Mesh_file_name);
+    }else if (mesh_format=="ply"){
+        read_ply_file(Mesh_file_name);
+    }
+    
+    if (rescale_factor!=1) {
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]*=rescale_factor;
+            Node_Position[i][1]*=rescale_factor;
+            Node_Position[i][2]*=rescale_factor;
+        }
+    }
+    if (X_scale!=1 || Y_scale!=1 || Z_scale!=1) {
+        for (int i=0; i<Num_of_Nodes; i++) {
+            Node_Position[i][0]*=X_scale;
+            Node_Position[i][1]*=Y_scale;
+            Node_Position[i][2]*=Z_scale;
+        }
+    }
 }

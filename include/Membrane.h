@@ -99,6 +99,7 @@ protected:
     
     vector<vector< int > > dihedral_atoms;
     
+    void read_mesh_file (std::string mesh_file);
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
     void Triangle_pair_counter ();
