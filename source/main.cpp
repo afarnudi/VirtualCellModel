@@ -154,6 +154,7 @@ int main(int argc, char **argv)
     int num_of_dihedrals=0;
     int num_of_angles=0;
     int num_of_triangles=0;
+    vector<int> num_of_curvature_interactions;
     
     //    if (!generalParameters.Resume) {
     if (generalParameters.Num_of_Membranes!=0) {
@@ -239,6 +240,7 @@ int main(int argc, char **argv)
             num_of_bonds        += Membranes[i].get_num_of_bonds();
             num_of_dihedrals    += Membranes[i].get_num_of_dihedral_elements();
             num_of_triangles    += Membranes[i].get_num_of_triangle();
+            num_of_curvature_interactions = Membranes[i].get_num_of_mean_curvature_interactions(num_of_curvature_interactions);
         }
     }
     
@@ -292,6 +294,8 @@ int main(int argc, char **argv)
     int dihe_count=0;
     int angle_count=0;
     int triangle_count =0;
+    vector<int> mean_curvature_count(num_of_curvature_interactions.size(),0);
+    
     
     int mem_atom_count=0;
     //int act_atom_count=0;
@@ -302,6 +306,8 @@ int main(int argc, char **argv)
     Dihedrals*  all_dihedrals = new Dihedrals[num_of_dihedrals+1];
     Angles*     all_angles    = new Angles[num_of_angles+1];
     Triangles*  all_triangles = new Triangles[num_of_triangles+1];
+    MeanCurvature** all_mean_curvature_interactions = new MeanCurvature*[num_of_curvature_interactions.size()+1];
+    
     
     
     //    if (!generalParameters.Resume) {
@@ -309,8 +315,14 @@ int main(int argc, char **argv)
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     all_angles[num_of_angles].type       =EndOfList;
-    all_triangles[num_of_triangles].surface_type =EndOfList;
-    all_triangles[num_of_triangles].volume_type =EndOfList;
+    all_triangles[num_of_triangles].surface_type = EndOfList;
+    all_triangles[num_of_triangles].volume_type = EndOfList;
+    for (int node_order=0; node_order<num_of_curvature_interactions.size(); node_order++) {
+        all_mean_curvature_interactions[node_order] = new MeanCurvature [num_of_curvature_interactions[node_order]+1];
+        all_mean_curvature_interactions[node_order][num_of_curvature_interactions[node_order]].curvature_type = EndOfList;
+    }
+    all_mean_curvature_interactions[num_of_curvature_interactions.size()] = new MeanCurvature [1];
+    all_mean_curvature_interactions[num_of_curvature_interactions.size()][0].curvature_type = EndOfList*2;
     
     if (generalParameters.Num_of_Membranes!=0) {
         OpenMM_membrane_info_relay(Membranes,
@@ -319,10 +331,12 @@ int main(int argc, char **argv)
                                    all_bonds,
                                    all_dihedrals,
                                    all_triangles,
+                                   all_mean_curvature_interactions,
                                    atom_count,
                                    bond_count,
                                    dihe_count,
                                    triangle_count,
+                                   mean_curvature_count,
                                    interaction_map);
     }
     
@@ -395,7 +409,7 @@ int main(int argc, char **argv)
         TimeDependantData* time_dependant_data = new TimeDependantData();
         
         //        if (!generalParameters.Resume) {
-        omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, all_triangles, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
+        omm = myInitializeOpenMM(all_atoms, generalParameters.Step_Size_In_Fs, platformName, time_dependant_data, all_bonds, all_dihedrals, all_angles, all_triangles,all_mean_curvature_interactions, membrane_set, actin_set, ecm_set, chromatin_set, userinputs, interaction_map);
         //        } else {
         
         

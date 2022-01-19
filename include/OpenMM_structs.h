@@ -89,6 +89,15 @@ struct Triangles{
     double VolumeConstraintValue;
 };
 
+struct MeanCurvature{
+    int node_order;
+    int curvature_type;
+    std::string class_label;
+    std::vector<int> atoms;
+    double curvatureStiffnessinKJpermol;
+    double spontaneousCurvature;
+};
+
 struct PlatformInfo{
     int platform_id=0;
     int platform_device_id=0;

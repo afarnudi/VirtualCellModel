@@ -36,7 +36,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
                 dihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["meanCurvature"]){
+            } else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
                 diatoms[i].total_mem_area = total_mem_area;
                 meanCurvature = true;
             }
@@ -122,25 +122,25 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
         
         
     }
-    cout<<"Area potential:";
+    cout<<"\tArea potential:";
     if (LocalSurfacePotential) {
         cout<<" Local surface constraint"<<endl;
-        cout<<"\tCoeficient (KJ . mol . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
-        cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
+        cout<<"\t\tCoeficient (KJ . mol^-1 . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\t\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
     }
     if (GlobalSurfacePotential) {
         cout<<" Global surface constraint"<<endl;
-        cout<<"\tCoeficient (KJ . mol . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
-        cout<<"\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
+        cout<<"\t\tCoeficient (KJ . mol^-1 . Nm^-2) = "<<mem.get_surface_constraint_stiffness_coefficient() <<endl;
+        cout<<"\t\tSurface area (Nm^2) = "<<mem.get_surface_constraint_area() <<endl;
     }
     if (noSurfacePotential || mem_num_tris==0) {
         cout<<" None"<<endl;
     }
-    cout<<"Volume potential:";
+    cout<<"\tVolume potential:";
     if (GlobalVolumePotential) {
         cout<<" Global volume constraint"<<endl;
-        cout<<"\tCoeficient (KJ . mol .Nm^-3) = "<<mem.get_volume_constraint_stiffness_coefficient() <<endl;
-        cout<<"\tVolume (Nm^3) = "<<mem.get_volume_constraint_value() <<endl;
+        cout<<"\t\tCoeficient (KJ . mol^-1 .Nm^-3) = "<<mem.get_volume_constraint_stiffness_coefficient() <<endl;
+        cout<<"\t\tVolume (Nm^3) = "<<mem.get_volume_constraint_value() <<endl;
     }
     if (noVolumePotential || mem_num_tris==0) {
         cout<<" None"<<endl;
@@ -148,4 +148,60 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     
     //    exit(0);
     return triatoms;
+}
+
+
+MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
+    
+    
+    bool curvaturePotential = false;
+    bool noPotential = true;
+    string node_orders;
+    
+//    const int mem_num_mcs;
+    
+    vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList = mem.get_nodeOrder_NodeIndex_NodeNeighbourList();
+    const int num_node_orders = nodeOrder_NodeIndex_NodeNeighbourList.size();
+    
+    MeanCurvature** mcatoms = new MeanCurvature*[num_node_orders];
+    for (int node_order=0; node_order<num_node_orders; node_order++) {
+        const int num_of_interactions =nodeOrder_NodeIndex_NodeNeighbourList[node_order].size();
+        mcatoms[node_order] = new MeanCurvature[num_of_interactions];
+        if (num_of_interactions!=0) {
+            node_orders+=", "+to_string(node_order);
+        }
+        for (int node_index=0; node_index<num_of_interactions; node_index++) {
+            mcatoms[node_order][node_index].curvature_type = mem.get_mean_curvature_model();
+            if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["None"] ) {
+                if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["Julicher1996"]) {
+                    curvaturePotential = true;
+                    noPotential = false;
+                    
+                    mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
+                    mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_bending_stiffness_coefficient();
+                    mcatoms[node_order][node_index].class_label = mem.get_label();
+                }
+                
+                
+            }
+        }
+        
+        
+        
+        
+        
+    }
+    
+    if (curvaturePotential) {
+        cout<<" Julicher (1996) descretisation"<<endl;
+        cout<<"\tNode orders ="<<node_orders<<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+//        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    if (noPotential){
+        cout<<" None"<<endl;
+    }
+    
+    //    exit(0);
+    return mcatoms;
 }

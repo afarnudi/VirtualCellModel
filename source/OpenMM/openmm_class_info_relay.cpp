@@ -6,10 +6,12 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  Bonds*                 all_bonds,
                                  Dihedrals*             all_dihedrals,
                                  Triangles*             all_triangles,
+                                 MeanCurvature**        all_mean_curvature_interactions,
                                  int                    &atom_count,
                                  int                    &bond_count,
                                  int                    &dihe_count,
                                  int                    &tri_count,
+                                 vector<int>            &mean_curvature_count,
                                  NonBondInteractionMap                 &interaction_map){
     
     
@@ -54,7 +56,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         cout<<"Dihedral potential:";
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
-        if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"]) {
+        if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"] && membranes[i].get_bending_model() != potentialModelIndex.Model["Julicher1996"]) {
             for (int j=0; j<membranes[i].get_num_of_triangle_pairs(); j++) {
                 all_dihedrals[j+dihe_count]=dihedrals[j];
                 all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
@@ -75,6 +77,24 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
             }
         }
         
+        cout<<"Mean curvature potentials:";
+        MeanCurvature** meanCurvatures = convert_membrane_curvature_info_to_openmm(membranes[i]);
+        if (membranes[i].get_mean_curvature_model() != potentialModelIndex.Model["None"]) {
+            if (membranes[i].get_mean_curvature_model() != potentialModelIndex.Model["Julicher1996"]) {
+                
+                vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList =  membranes[i].get_nodeOrder_NodeIndex_NodeNeighbourList();
+                for (int node_order=0; node_order<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_order++) {
+                    
+                    for (int node_index=0; node_index<nodeOrder_NodeIndex_NodeNeighbourList[node_order].size(); node_index++) {
+                        
+                        all_mean_curvature_interactions[node_order][node_index+mean_curvature_count[node_order]] = meanCurvatures[node_order][node_index];
+                        for (int node_neighbour=0; node_neighbour<nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index].size(); node_neighbour++) {
+                            all_mean_curvature_interactions[node_order][mean_curvature_count[node_order]].atoms[node_neighbour] = meanCurvatures[node_order][node_index].atoms[node_neighbour]+atom_count;
+                        }
+                    }
+                }
+            }
+        }
         
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
@@ -82,6 +102,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         bond_count += membranes[i].get_num_of_bonds();
         dihe_count += membranes[i].get_num_of_dihedral_elements();
         tri_count  += membranes[i].get_num_of_triangle();
+        mean_curvature_count = membranes[i].get_num_of_mean_curvature_interactions(mean_curvature_count);
     }
 
 }

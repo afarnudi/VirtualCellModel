@@ -7,7 +7,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     bool KGpotential =false;
     bool harmonicpotential = false;
     bool gompperpotential = false;
-    bool noPotential=false;
+    bool noPotential=true;
     
     int bond_count = 0;
     int atom_count = 0;
@@ -33,19 +33,25 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         bonds[i].nominalLengthInNm=mem.get_node_pair_Nominal_Length_in_Nm(i);
         if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
             KGpotential =true;
+            noPotential = false;
             bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
             bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
             bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
         } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
             harmonicpotential=true;
+            noPotential = false;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == potentialModelIndex.Model["HarmonicX4"]){
+            noPotential = false;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == potentialModelIndex.Model["Kelvin-Voigt"]){
+            noPotential = false;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == potentialModelIndex.Model["RealHarmonic"]){
+            noPotential = false;
             bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
         } else if (bonds[i].type == potentialModelIndex.Model["Gompper"]){
+            noPotential = false;
             gompperpotential=true;
 //            vector<double> gompperparamslminlc1lc0lmax = mem.get_gompper_params_lminlc1lc0lmax();
 //            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
@@ -53,8 +59,6 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
 //            bonds[i].gompperlc1=gompperparamslminlc1lc0lmax[1];
 //            bonds[i].gompperlc0=gompperparamslminlc1lc0lmax[2];
 //            bonds[i].gompperlmax=gompperparamslminlc1lc0lmax[3];
-        } else if (bonds[i].type == potentialModelIndex.Model["None"]){
-            noPotential = true;
         }
         
     }

@@ -60,6 +60,10 @@ void Membrane::initialise(std::string Mesh_file_name){
     set_node_radius();
     calculate_volume_and_surface_area();
     
+    if (bending_model==potentialModelIndex.Model["Julicher1996"]) {
+        mean_curvature_init();
+    }
+    
     if (New_Radius!=-1) {
         check_radius_update_values();
     }

@@ -30,6 +30,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo               atoms[],
                                  Dihedrals*                     dihedrals,
                                  Angles*                        angles,
                                  Triangles*                     triangles,
+                                 MeanCurvature**                all_mean_curvature_ints,
                                  std::vector<std::set<int> >    &membrane_set,
                                  std::vector<std::set<int> >    &actin_set,
                                  std::vector<std::set<int> >    &ecm_set,
@@ -130,10 +131,12 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                                  Bonds*                 all_bonds,
                                  Dihedrals*             all_dihedrals,
                                  Triangles*             all_triangles,
+                                 MeanCurvature**        all_mean_curvature_interactions,
                                  int                    &atom_count,
                                  int                    &bond_count,
                                  int                    &dihe_count,
                                  int                    &tri_count,
+                                 vector<int>            &mean_curvature_count,
                                  NonBondInteractionMap                 &interaction_map);
 /**Relay the position information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);
@@ -143,6 +146,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
 
 Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem);
+
+MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem);
 
 /**Relay Actin class's atom information to other data structures ready to pass to OpenMM handles.*/
 void OpenMM_Actin_info_relay (vector<Actin>          acts,
@@ -450,6 +455,11 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                          vector<OpenMM::CustomCompoundBondForce*>  &DihedralForces,
                          OpenMM::System                            &system
                          );
+
+void set_mean_curvature_forces(MeanCurvature** mean_curvature_ints,
+                               vector<OpenMM::CustomCompoundBondForce*> &MeanCurvatureForces,
+                               OpenMM::System  &system);
+
 void set_surface_volume_constraint_forces(Triangles*                                 triangles,
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
                                           vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceConstraintForces,

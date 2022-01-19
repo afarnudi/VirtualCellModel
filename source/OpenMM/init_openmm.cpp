@@ -32,6 +32,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  Dihedrals*             dihedrals,
                                  Angles*                angles,
                                  Triangles*             triangles,
+                                 MeanCurvature**        mean_curvature_ints,
                                  vector<set<int> >      &membrane_set,
                                  vector<set<int> >      &actin_set,
                                  vector<set<int> >      &ecm_set,
@@ -258,7 +259,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     omm->GlobalSurfaceConstraintForces = GlobalSurfaceConstraintForces;
     omm->LocalSurfaceConstraintForces  = LocalSurfaceConstraintForces;
     omm->GlobalVolumeConstraintForces  = GlobalVolumeConstraintForces;
-
+    
+    vector<OpenMM::CustomCompoundBondForce*> MeanCurvatureForces;
+    set_mean_curvature_forces(mean_curvature_ints,
+                              MeanCurvatureForces,
+                              system);
     
     vector<OpenMM::CustomAngleForce*> AngleForces;
     if (!generalParameters.MinimumForceDecleration) {

@@ -329,6 +329,43 @@ public:
      */
     void Bond_triangle_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    
+    void mean_curvature_init(void);
+    bool check_if_nodes_make_triangle(int node1,int node2, int node3);
+    vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList;
+    vector<int> get_num_of_mean_curvature_interactions(vector<int> global_curvature_interactions){
+        vector<int> local_curvature_interactions;
+        if (bending_model==potentialModelIndex.Model["Julicher1996"]){
+            for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
+                local_curvature_interactions.push_back(nodeOrder_NodeIndex_NodeNeighbourList[i].size());
+            }
+        }
+        
+        int global_size = global_curvature_interactions.size();
+        int local_size  = local_curvature_interactions.size();
+        
+        if (local_size <= global_size) {
+            for (int i =0; i<local_size; i++) {
+                global_curvature_interactions[i]+=local_curvature_interactions[i];
+            }
+        } else {
+            for (int i =0; i<global_size; i++) {
+                global_curvature_interactions[i]+=local_curvature_interactions[i];
+            }
+            for (int i=global_size; i<local_size; i++) {
+                global_curvature_interactions.push_back(local_curvature_interactions[i]);
+            }
+        }
+        
+        return global_curvature_interactions;
+    }
+    int get_mean_curvature_model(void){
+        return bending_model;
+    }
+    vector<vector<vector<int > > > get_nodeOrder_NodeIndex_NodeNeighbourList(){
+        return nodeOrder_NodeIndex_NodeNeighbourList;
+    }
+    
     //monte carlo flip functions
     bool check_monte_carlo=0;
     void find_the_new_neighbour(int neighbour_id[6], int previous_dihedral_index , int initial_pair, bool A_or_B);
@@ -513,7 +550,7 @@ public:
     }
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
-        if (bending_model!=potentialModelIndex.Model["None"]) {
+        if (bending_model!=potentialModelIndex.Model["None"] && bending_model!=potentialModelIndex.Model["Julicher1996"]) {
             return int(Triangle_Pair_Nodes.size());
         } else {
             return 0;
