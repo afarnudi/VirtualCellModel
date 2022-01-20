@@ -749,6 +749,7 @@ public:
         return insertOrder;
     }
     
+    vector<int> check_dihedral_direction(vector<int> dihedral_atom_indices);
     
     Membrane(){
         values.resize(2);

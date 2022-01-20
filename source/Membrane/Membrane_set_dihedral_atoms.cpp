@@ -18,44 +18,46 @@ void Membrane::set_dihedral_atoms(void){
     
     
     update_COM_position();
-//    double COM[3]={0,0,0};
+    
+    for (int i=0; i<Num_of_Triangle_Pairs; i++)
+    {
+        vector<int> dihedral_atom_indices = check_dihedral_direction(Triangle_Pair_Nodes[i]);
+        dihedral_atoms[i]=dihedral_atom_indices;
+    }
+}
+
+vector<int> Membrane::check_dihedral_direction(vector<int> dihedral_atom_indices){
     int pos1,pos2,pos3,pos4;
     double  b1[3], b2[3], b3[3];
     double N1[3], N2[3], Nout[3];
     
-    for (int i=0; i<Num_of_Triangle_Pairs; i++)
-    {
-        pos1=Triangle_Pair_Nodes[i][0];
-        pos2=Triangle_Pair_Nodes[i][1];
-        pos3=Triangle_Pair_Nodes[i][2];
-        pos4=Triangle_Pair_Nodes[i][3];
-        
-        for (int index=0; index<3; index++) {
-            b1[index]  = Node_Position[pos2][index]-Node_Position[pos1][index];
-            b2[index]  = Node_Position[pos3][index]-Node_Position[pos2][index];
-            b3[index]  = Node_Position[pos4][index]-Node_Position[pos3][index];
-            Nout[index]= Node_Position[pos2][index]-COM_position[index];
-//            Nout[index]= Node_Position[pos2][index]-COM[index];
-        }
-        
-        crossvector(N1, b1, b2);
-        crossvector(N2, b2, b3);
-        
-        
-        if (innerproduct(N1, Nout)<0) {
-            
-            dihedral_atoms[i][0]=pos1;
-            dihedral_atoms[i][1]=pos2;
-            dihedral_atoms[i][2]=pos3;
-            dihedral_atoms[i][3]=pos4;
-        } else {
-            
-            dihedral_atoms[i][0]=pos1;
-            dihedral_atoms[i][1]=pos3;
-            dihedral_atoms[i][2]=pos2;
-            dihedral_atoms[i][3]=pos4;
-        }
+    vector<int> correct_arrengment(4,-1);
+    
+    pos1=dihedral_atom_indices[0];
+    pos2=dihedral_atom_indices[1];
+    pos3=dihedral_atom_indices[2];
+    pos4=dihedral_atom_indices[3];
+    
+    for (int index=0; index<3; index++) {
+        b1[index]  = Node_Position[pos2][index]-Node_Position[pos1][index];
+        b2[index]  = Node_Position[pos3][index]-Node_Position[pos2][index];
+        b3[index]  = Node_Position[pos4][index]-Node_Position[pos3][index];
+        Nout[index]= Node_Position[pos2][index]-COM_position[index];
     }
     
+    crossvector(N1, b1, b2);
+    crossvector(N2, b2, b3);
     
+    if (innerproduct(N1, Nout)<0) {
+        correct_arrengment[0]=pos1;
+        correct_arrengment[1]=pos2;
+        correct_arrengment[2]=pos3;
+        correct_arrengment[3]=pos4;
+    } else {
+        correct_arrengment[0]=pos1;
+        correct_arrengment[1]=pos3;
+        correct_arrengment[2]=pos2;
+        correct_arrengment[3]=pos4;
+    }
+    return correct_arrengment;;
 }

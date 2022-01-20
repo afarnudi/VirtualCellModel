@@ -173,7 +173,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
         for (int node_index=0; node_index<num_of_interactions; node_index++) {
             mcatoms[node_order][node_index].curvature_type = mem.get_mean_curvature_model();
             if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["None"] ) {
-                if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["Julicher1996"]) {
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Julicher1996"]) {
                     curvaturePotential = true;
                     noPotential = false;
                     
@@ -194,7 +194,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     
     if (curvaturePotential) {
         cout<<" Julicher (1996) descretisation"<<endl;
-        cout<<"\tNode orders ="<<node_orders<<endl;
+        cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
         cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
     }
