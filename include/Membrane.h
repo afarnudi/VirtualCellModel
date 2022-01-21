@@ -122,7 +122,8 @@ public:
     
     bool AddRandomModes = false;
     bool InflateMembrane= false;
-    bool LockOnSphere_stat= false;
+    bool LockOnSphere_stat = false;
+    bool open_surface = false;
     
     int spring_model=0;
     int bending_model=0;

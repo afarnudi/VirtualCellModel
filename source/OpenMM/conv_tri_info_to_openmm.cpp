@@ -39,7 +39,10 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
             } else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
                 diatoms[i].total_mem_area = total_mem_area;
                 meanCurvature = true;
-            }
+            } else if (diatoms[i].type == potentialModelIndex.Model["DihedralArea"]){
+//               diatoms[i].total_mem_area = total_mem_area;
+               meanCurvature = true;
+           }
         }
         
         
