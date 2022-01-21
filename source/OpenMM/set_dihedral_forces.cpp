@@ -184,7 +184,7 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
 string generate_Julicher1996_mean_curvature_potential(int node_order){
     string potential="0.75*k*(";
     string numerator="";
-        cout<<node_order<<endl<<endl;
+//        cout<<node_order<<endl<<endl;
     
     
     
@@ -212,7 +212,7 @@ string generate_Julicher1996_mean_curvature_potential(int node_order){
     denominator+=")*sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+"))";
     
     potential+=denominator+")";
-        cout<<potential<<endl<<endl;
+//        cout<<potential<<endl<<endl;
     
     
     
