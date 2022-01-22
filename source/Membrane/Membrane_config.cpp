@@ -254,9 +254,11 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "ExtForceModel") {
             ext_force_model = stoi(split[0]);
         } else if (it.first == "XYZinMembrane") {
-            X_in = stod(split[0]);
-            Y_in = stod(split[1]);
-            Z_in = stod(split[2]);
+            UseXYZinMembrane = true;
+            XYZinMembrane.resize(3);
+            XYZinMembrane[0] = stod(split[0]);
+            XYZinMembrane[1] = stod(split[1]);
+            XYZinMembrane[2] = stod(split[2]);
         } else if (it.first == "XYZscale") {
             X_scale = stod(split[0]);
             Y_scale = stod(split[1]);

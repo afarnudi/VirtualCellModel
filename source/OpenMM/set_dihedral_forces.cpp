@@ -22,6 +22,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 DFs_index++;
                 
                 DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle) )"));
+//                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "dihedral(p1,p2,p3,p4)"));
                 //            DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "K_bend*(dihedral(p1,p2,p3,p4))"));
                 
                 DihedralForces[DFs_index]->addPerBondParameter("K_bend");
@@ -184,35 +185,35 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
 string generate_Julicher1996_mean_curvature_potential(int node_order){
     string potential="0.75*k*(";
     string numerator="";
-//        cout<<node_order<<endl<<endl;
+        cout<<node_order<<endl<<endl;
     
     
     
     numerator+="distance(p1,p"+to_string(2);
 //    numerator+=")*dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+")";
-    numerator+=")*(PI-dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+"))";
+    numerator+=")*(PI-abs(dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+")))";
     for (int i=3; i<node_order+1; i++) {
         numerator+="+distance(p1,p"+to_string(i);
 //        numerator+=")*dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+")";
-        numerator+=")*(PI-dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+"))";
+        numerator+=")*(PI-abs(dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+")))";
     }
     numerator+="+distance(p1,p"+to_string(node_order+1);
 //    numerator+=")*dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")";
-    numerator+=")*(PI-dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+"))";
+    numerator+=")*(PI-abs(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=numerator+")^2/(";
     string denominator="";
     for (int i=2; i<node_order+1; i++) {
         denominator+="distance(p1,p"+to_string(i);
         denominator+=")*distance(p1,p"+to_string(i+1);
-        denominator+=")*sin(angle(p"+to_string(i)+",p1,p"+to_string(i+1)+"))+";
+        denominator+=")*abs(sin(angle(p"+to_string(i)+",p1,p"+to_string(i+1)+")))+";
     }
     denominator+="distance(p1,p"+to_string(node_order+1);
     denominator+=")*distance(p1,p"+to_string(2);
-    denominator+=")*sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+"))";
+    denominator+=")*abs(sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=denominator+")";
-//        cout<<potential<<endl<<endl;
+        cout<<potential<<endl<<endl;
     
     
     

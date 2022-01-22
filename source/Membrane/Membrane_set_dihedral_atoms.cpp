@@ -42,7 +42,11 @@ vector<int> Membrane::check_dihedral_direction(vector<int> dihedral_atom_indices
         b1[index]  = Node_Position[pos2][index]-Node_Position[pos1][index];
         b2[index]  = Node_Position[pos3][index]-Node_Position[pos2][index];
         b3[index]  = Node_Position[pos4][index]-Node_Position[pos3][index];
-        Nout[index]= Node_Position[pos2][index]-COM_position[index];
+        if (UseXYZinMembrane) {
+            Nout[index]= Node_Position[pos2][index]-XYZinMembrane[index];
+        } else {
+            Nout[index]= Node_Position[pos2][index]-COM_position[index];
+        }
     }
     
     crossvector(N1, b1, b2);

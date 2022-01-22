@@ -23,7 +23,7 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<"Nodes\t"<<Num_of_Nodes<<endl;
         cout<<"Triangles\t"<<Num_of_Triangles<<endl;
     }
-    
+    update_COM_position();
     Normal_direction_Identifier();
 //    Triangle_pair_counter();
     Triangle_pair_identifier();

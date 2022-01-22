@@ -50,9 +50,10 @@ protected:
     std::string resume_file_name="None";
     std::string Node_radius_stat = "Av";
     
-    bool   update_radius_stat=false;
+    bool   update_radius_stat= false;
     /**write geometrical properties if it is true.*/
-    bool WantGeometricProps=false;
+    bool WantGeometricProps= false;
+    bool UseXYZinMembrane = false;
     
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
@@ -84,9 +85,10 @@ protected:
     double COM_velocity[3]={0};
     double COM_position[3]={0};
     double FENE_min=0, FENE_max=0, FENE_epsilon=0, FENE_k=0;
-    double X_in=0;
-    double Y_in=0;
-    double Z_in=0;
+    
+//    double X_in=0;
+//    double Y_in=0;
+//    double Z_in=0;
     double X_scale=0;
     double Y_scale=0;
     double Z_scale=0;
@@ -96,7 +98,7 @@ protected:
     std::map<std::string, double> param_map;
     
     vector<double> Node_radius;
-    
+    vector<double> XYZinMembrane;
     vector<vector< int > > dihedral_atoms;
     
     void read_mesh_file (std::string mesh_file);
@@ -723,9 +725,12 @@ public:
             Node_Position[i][1]+=y;
             Node_Position[i][2]+=z;
         }
-        X_in+=x;
-        Y_in+=y;
-        Z_in+=z;
+        if (UseXYZinMembrane) {
+            XYZinMembrane[0]+=x;
+            XYZinMembrane[1]+=y;
+            XYZinMembrane[2]+=z;
+        }
+        
     }
     void update_average_Membrane_radius(void){
         Radius=0;
