@@ -264,6 +264,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     set_mean_curvature_forces(mean_curvature_ints,
                               MeanCurvatureForces,
                               system);
+    omm->MeanCurvatureForces = MeanCurvatureForces;
     
     vector<OpenMM::CustomAngleForce*> AngleForces;
     if (!generalParameters.MinimumForceDecleration) {

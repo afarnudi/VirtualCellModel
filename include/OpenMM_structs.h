@@ -142,11 +142,13 @@ struct MyOpenMMData {
     std::vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
     std::vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
     std::vector<OpenMM::CustomCompoundBondForce*> GlobalVolumeConstraintForces;
+    std::vector<OpenMM::CustomCompoundBondForce*> MeanCurvatureForces;
     std::vector<OpenMM::CustomAngleForce*> Angle;
     std::vector<OpenMM::CustomNonbondedForce*> LJ;
     std::vector<OpenMM::CustomNonbondedForce*> EV;
     std::vector<OpenMM::CustomNonbondedForce*> WCA;
     std::vector<OpenMM::CustomNonbondedForce*> WCAFC;
+    
     
 };
 

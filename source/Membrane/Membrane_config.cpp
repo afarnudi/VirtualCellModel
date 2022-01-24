@@ -221,13 +221,15 @@ void Membrane::assign_parameters(void){
                 bending_model = potentialModelIndex.Model["Dihedral"];
             } else if (split[0]=="exp") {
                 bending_model = potentialModelIndex.Model["ExpDihedral"];
-            } else if (split[0]=="cot_weight") {
-                bending_model = potentialModelIndex.Model["cot_weight"];
             } else if (split[0]=="Julicher1996") {
                 bending_model = potentialModelIndex.Model["Julicher1996"];
-            }  else if (split[0]=="DihedralArea") {
-                bending_model = potentialModelIndex.Model["DihedralArea"];
-            }else {
+            }
+//            else if (split[0]=="cot_weight") {
+//                bending_model = potentialModelIndex.Model["cot_weight"];
+//            }  else if (split[0]=="DihedralArea") {
+//                bending_model = potentialModelIndex.Model["DihedralArea"];
+//            }
+            else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), and N (None).";
                 errorMessage+= TRESET;
