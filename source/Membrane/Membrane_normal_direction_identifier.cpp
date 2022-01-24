@@ -17,9 +17,9 @@ void Membrane::Normal_direction_Identifier()
             AB[index]=Node_Position[Point_B][index]-Node_Position[Point_A][index];
             AC[index]=Node_Position[Point_C][index]-Node_Position[Point_A][index];
             if (UseXYZinMembrane) {
-                reference[index]=XYZinMembrane[index]-Node_Position[Point_A][index];
+                reference[index]=Node_Position[Point_A][index]-XYZinMembrane[index];
             } else {
-                reference[index]=COM_position[index]-Node_Position[Point_A][index];
+                reference[index]=Node_Position[Point_A][index]-COM_position[index];
             }
         }
         
