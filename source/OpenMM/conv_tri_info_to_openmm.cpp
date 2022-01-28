@@ -197,7 +197,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     }
     
     if (curvaturePotential) {
-        cout<<" Julicher (1996) descretisation"<<endl;
+        cout<<" Julicher (1996) discretisation"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
         cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
