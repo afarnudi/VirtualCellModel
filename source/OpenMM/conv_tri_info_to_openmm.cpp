@@ -7,14 +7,10 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     
     bool dihedralPotential = false;
     bool NonLinearDihedralPotential = false;
-    bool meanCurvature = false;
     bool noPotential = false;
     
     const int mem_num_tri_pairs = mem.get_num_of_dihedral_elements();
-    //    cout<<"**++**++**++\n\t"<<mem_num_tri_pairs<<"\n**++**++**++\n";
     Dihedrals* diatoms = new Dihedrals[mem_num_tri_pairs];
-    
-    double total_mem_area =  mem.get_surface_area();
     for (int i=0; i<mem_num_tri_pairs; i++) {
         //        vector<int> tri_pair_nodes(mem.get_traingle_pair_nodes_list(i));
         

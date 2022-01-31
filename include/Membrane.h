@@ -558,7 +558,7 @@ public:
     }
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
-        if (bending_model!=potentialModelIndex.Model["None"] && UseMeanCurvature) {
+        if (bending_model!=potentialModelIndex.Model["None"] && !UseMeanCurvature) {
             return int(Triangle_Pair_Nodes.size());
         } else {
             return 0;
