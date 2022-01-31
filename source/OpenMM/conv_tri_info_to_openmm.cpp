@@ -159,6 +159,8 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     
     
     bool curvaturePotential = false;
+    bool curvaturePotentialEspiru = false;
+    bool curvaturePotentialItzykson = false;
     bool noPotential = true;
     string node_orders;
     
@@ -166,7 +168,6 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     
     vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList = mem.get_nodeOrder_NodeIndex_NodeNeighbourList();
     const int num_node_orders = nodeOrder_NodeIndex_NodeNeighbourList.size();
-    
     MeanCurvature** mcatoms = new MeanCurvature*[num_node_orders];
     for (int node_order=0; node_order<num_node_orders; node_order++) {
         const int num_of_interactions =nodeOrder_NodeIndex_NodeNeighbourList[node_order].size();
@@ -179,6 +180,22 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
             if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["None"] ) {
                 if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Julicher1996"]) {
                     curvaturePotential = true;
+                    noPotential = false;
+                    
+                    mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
+                    mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_bending_stiffness_coefficient();
+                    mcatoms[node_order][node_index].class_label = mem.get_label();
+                }
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Espiru1987"]) {
+                    curvaturePotentialEspiru = true;
+                    noPotential = false;
+                    
+                    mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
+                    mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_bending_stiffness_coefficient();
+                    mcatoms[node_order][node_index].class_label = mem.get_label();
+                }
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"]) {
+                    curvaturePotentialItzykson = true;
                     noPotential = false;
                     
                     mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
@@ -198,6 +215,18 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     
     if (curvaturePotential) {
         cout<<" Julicher (1996) discretisation"<<endl;
+        cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+//        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    if (curvaturePotentialEspiru) {
+        cout<<" Espiru (1987) discretisation"<<endl;
+        cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+//        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    if (curvaturePotentialItzykson) {
+        cout<<" Itzykson (1986) discretisation"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
         cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;

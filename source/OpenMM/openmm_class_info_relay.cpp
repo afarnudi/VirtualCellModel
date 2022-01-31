@@ -56,7 +56,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         cout<<"Dihedral potential:";
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
-        if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"] && membranes[i].get_bending_model() != potentialModelIndex.Model["Julicher1996"]) {
+        if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"] && !membranes[i].get_UseMeanCurvature_stat()) {
             for (int j=0; j<membranes[i].get_num_of_triangle_pairs(); j++) {
                 all_dihedrals[j+dihe_count]=dihedrals[j];
                 all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
@@ -80,7 +80,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         cout<<"Mean curvature potentials:";
         MeanCurvature** meanCurvatures = convert_membrane_curvature_info_to_openmm(membranes[i]);
         if (membranes[i].get_mean_curvature_model() != potentialModelIndex.Model["None"]) {
-            if (membranes[i].get_mean_curvature_model() == potentialModelIndex.Model["Julicher1996"]) {
+            if (membranes[i].get_UseMeanCurvature_stat()) {
                 
                 vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList =  membranes[i].get_nodeOrder_NodeIndex_NodeNeighbourList();
                 for (int node_order=0; node_order<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_order++) {

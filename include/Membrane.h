@@ -54,6 +54,7 @@ protected:
     /**write geometrical properties if it is true.*/
     bool WantGeometricProps= false;
     bool UseXYZinMembrane = false;
+    bool UseMeanCurvature =false;
     
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
@@ -338,7 +339,7 @@ public:
     vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList;
     vector<int> get_num_of_mean_curvature_interactions(vector<int> global_curvature_interactions){
         vector<int> local_curvature_interactions;
-        if (bending_model==potentialModelIndex.Model["Julicher1996"]){
+        if (UseMeanCurvature){
             for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
                 local_curvature_interactions.push_back(nodeOrder_NodeIndex_NodeNeighbourList[i].size());
             }
@@ -412,6 +413,10 @@ public:
     /**Return the geometrical properties write status*/
     bool get_GeometricProps_flag(){
         return WantGeometricProps;
+    }
+    
+    bool get_UseMeanCurvature_stat(){
+        return UseMeanCurvature;
     }
     /**Returns the node radius update value (set value in the configuration file). */
     double get_new_radius(void){
@@ -553,7 +558,7 @@ public:
     }
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
-        if (bending_model!=potentialModelIndex.Model["None"] && bending_model!=potentialModelIndex.Model["Julicher1996"]) {
+        if (bending_model!=potentialModelIndex.Model["None"] && UseMeanCurvature) {
             return int(Triangle_Pair_Nodes.size());
         } else {
             return 0;

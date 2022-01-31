@@ -126,6 +126,11 @@ void Membrane::consistancy_check(){
     if (Spring_coefficient==0) {
         spring_model=potentialModelIndex.Model["None"];
     }
+    if (bending_model == potentialModelIndex.Model["Julicher1996"] ||
+        bending_model == potentialModelIndex.Model["Espiru1987"] ||
+        bending_model == potentialModelIndex.Model["Itzykson1986"]) {
+        UseMeanCurvature =true;
+    }
     
 }
 
@@ -223,7 +228,12 @@ void Membrane::assign_parameters(void){
                 bending_model = potentialModelIndex.Model["ExpDihedral"];
             } else if (split[0]=="Julicher1996") {
                 bending_model = potentialModelIndex.Model["Julicher1996"];
+            } else if (split[0]=="Espiru1987") {
+                bending_model = potentialModelIndex.Model["Espiru1987"];
+            } else if (split[0]=="Itzykson1986") {
+                bending_model = potentialModelIndex.Model["Itzykson1986"];
             }
+            
 //            else if (split[0]=="cot_weight") {
 //                bending_model = potentialModelIndex.Model["cot_weight"];
 //            }  else if (split[0]=="DihedralArea") {
