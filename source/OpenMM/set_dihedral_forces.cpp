@@ -322,7 +322,7 @@ string generate_Espiru1987_mean_curvature_potential(int node_order){
 string generate_Itzykson1986_mean_curvature_potential(int node_order){
     string potential="k*";
     string numerator="(";
-            cout<<node_order<<endl<<endl;
+//            cout<<node_order<<endl<<endl;
     numerator+="(";
     numerator+="(x1-x2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
     for (int i=3; i<node_order+1; i++) {
@@ -355,7 +355,7 @@ string generate_Itzykson1986_mean_curvature_potential(int node_order){
     denominator+="distance(p1,p"+to_string(node_order+1)+")^2*(cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1))+cot(angle(p"+to_string(node_order+1)+",p2,p1)))";;
     
     potential+=denominator+")";
-            cout<<potential<<endl<<endl;
+//            cout<<potential<<endl<<endl;
     
     
     
