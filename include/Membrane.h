@@ -333,6 +333,7 @@ public:
      */
     void Bond_triangle_neighbour_list_constructor();
     void export_for_resume(int MD_step);
+    void export_mesh_properties(string Mesh_file_name);
     
     void mean_curvature_init(void);
     bool check_if_nodes_make_triangle(int node1,int node2, int node3);

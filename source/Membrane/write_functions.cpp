@@ -14,7 +14,7 @@ using std::ofstream;
 
 
 void Membrane:: write_pov_traj(std::string traj_name, std::string label, int currentStep){
-     ///=============GENRAL===============
+    ///=============GENRAL===============
     int w1,w2;
     //////________
     std::string pov_file_name;
@@ -28,7 +28,7 @@ void Membrane:: write_pov_traj(std::string traj_name, std::string label, int cur
     pov << std:: fixed;
     
     /////_________
-     pov<< "global_settings {   ambient_light rgb<1, 1, 1>   photons {  spacing 0.2  autostop 1  media 60  max_trace_level 6 } } "<<endl;
+    pov<< "global_settings {   ambient_light rgb<1, 1, 1>   photons {  spacing 0.2  autostop 1  media 60  max_trace_level 6 } } "<<endl;
     pov<< " #include \"colors.inc\"   " <<endl;
     pov<< " #include \"textures.inc\"   " <<endl;
     pov<< " #include \"metals.inc\"   " <<endl;
@@ -44,19 +44,19 @@ void Membrane:: write_pov_traj(std::string traj_name, std::string label, int cur
     
     //pov<< " #declare nucleus =  texture {   pigment{color rgbt<0.50,0.1,0.10,0.81>   }   finish { diffuse 0.6    ambient 3.0 } } " <<endl;
     
-   // pov<< "#declare chromatins = texture {    pigment{color rgbt<0.0,0.10,1.0,0.0>   }    finish {   diffuse 10.0  phong 2.1 phong_size 100  ambient 1.8     } }" <<endl;
+    // pov<< "#declare chromatins = texture {    pigment{color rgbt<0.0,0.10,1.0,0.0>   }    finish {   diffuse 10.0  phong 2.1 phong_size 100  ambient 1.8     } }" <<endl;
     
     
-   // pov<< " #declare ECM = texture { pigment{color rgbt<10/255,10/255,10/255,0>  }   }" <<endl;
+    // pov<< " #declare ECM = texture { pigment{color rgbt<10/255,10/255,10/255,0>  }   }" <<endl;
     
     
     //pov<< " #declare chromatins =texture {    pigment{color rgbt<1.0,0.1,0.10,0.03>   }   finish {     diffuse 1.2 brilliance  70.0   ambient 0.30} }  " <<endl;
     
     pov<< " #declare membranebonds =  texture {    pigment{color rgbt<1.0,0.1,0.10,0.03>   }   finish {     diffuse 1.2 brilliance  70.0   ambient 0.30} }" <<endl;
-   // pov<< " #declare nucleusbonds =  texture {    pigment{color rgbt<1.0,0.1,0.10,0.03>   }   finish {     diffuse 1.2 brilliance  70.0   ambient 0.30} }" <<endl;
-  //  pov<< "  #declare ECMbonds = texture {    pigment{color rgb<50/255,50/255,50/255>  }}  " <<endl;
+    // pov<< " #declare nucleusbonds =  texture {    pigment{color rgbt<1.0,0.1,0.10,0.03>   }   finish {     diffuse 1.2 brilliance  70.0   ambient 0.30} }" <<endl;
+    //  pov<< "  #declare ECMbonds = texture {    pigment{color rgb<50/255,50/255,50/255>  }}  " <<endl;
     
-   // pov<< "#declare  radiusChromatin=" << Chromatin_Scaling_Factor*sigmachromatin*0.5 <<";"<<endl;
+    // pov<< "#declare  radiusChromatin=" << Chromatin_Scaling_Factor*sigmachromatin*0.5 <<";"<<endl;
     pov<< "#declare  radiBondMeM=0.03"  <<";"<<endl;
     pov<< "#declare  radiBondECM=0.1"  <<";"<<endl;
     
@@ -209,7 +209,7 @@ void Membrane::Export_Mechanical_Energy(string filename, int frame){
     
     FILE* pFile;
     pFile = fopen (filename.c_str(),"a");
-//    fprintf(pFile,"time ps; BendingEnergy BondEnergy TotalEnergy KJ/mole\n");
+    //    fprintf(pFile,"time ps; BendingEnergy BondEnergy TotalEnergy KJ/mole\n");
     
     
     fprintf(pFile,"%8.3f\t%8.3f\t%8.3f\t%8.3f\n",
@@ -220,4 +220,32 @@ void Membrane::Export_Mechanical_Energy(string filename, int frame){
     
     fclose (pFile);
     
+}
+
+
+void Membrane::export_mesh_properties(string Mesh_file_name){
+    string write_name = Mesh_file_name;
+    write_name.erase(write_name.end()-4,write_name.end());
+    write_name+="_properties.txt";
+    ofstream write_prop(write_name.c_str());
+    write_prop<<"# max node order "<<nodeOrder_NodeIndex_NodeNeighbourList.size()-1<<endl;
+//    for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
+//        write_prop<<i<<" "<<nodeOrder_NodeIndex_NodeNeighbourList[i].size()<<endl;
+//    }
+    for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
+        if (nodeOrder_NodeIndex_NodeNeighbourList[i].size()==0) {
+            continue;
+        } else {
+            write_prop<<"# "<<nodeOrder_NodeIndex_NodeNeighbourList[i].size()<<" nodes with order "<<to_string(i)<<"; First int: node index; and the rest are the neighbours"<<endl;
+            for (int j=0; j<nodeOrder_NodeIndex_NodeNeighbourList[i].size(); j++) {
+                for (int k=0; k<nodeOrder_NodeIndex_NodeNeighbourList[i][j].size(); k++) {
+                    write_prop<<nodeOrder_NodeIndex_NodeNeighbourList[i][j][k]<<" ";
+                }
+                write_prop<<endl;
+            }
+        }
+    }
+    
+    
+    cout<<write_name<<endl;exit(0);
 }

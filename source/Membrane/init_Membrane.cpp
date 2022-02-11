@@ -62,6 +62,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     if (UseMeanCurvature) {
         mean_curvature_init();
+//        export_mesh_properties(Mesh_file_name);
     }
     
     if (New_Radius!=-1) {
