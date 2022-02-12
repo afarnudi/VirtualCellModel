@@ -289,7 +289,7 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     MCs_classes.insert(class_label);
                     MCs_index++;
                     
-                    string potential = generate_Itzykson1986_mean_curvature_potential(node_order);
+                    string potential = generate_ItzyksonJulicher_mean_curvature_potential(node_order);
                     
                     MeanCurvatureForces.push_back(new OpenMM::CustomCompoundBondForce(node_order+1, potential));
                     
