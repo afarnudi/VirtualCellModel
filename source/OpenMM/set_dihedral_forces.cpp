@@ -442,7 +442,7 @@ string generate_Itzykson1986_mean_curvature_potential(int node_order){
 }
 
 string generate_ItzyksonJulicher_mean_curvature_potential(int node_order){
-    string potential="k*";
+    string potential="0.75*k*";
     string numerator="(";
     //            cout<<node_order<<endl<<endl;
     numerator+="(";
