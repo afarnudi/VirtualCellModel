@@ -66,15 +66,15 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
             
             DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
-        } else if (dihedrals[i].type == potentialModelIndex.Model["Itzykson1986EXP"] ||
-                   dihedrals[i].type == potentialModelIndex.Model["Itzykson1JulicherEXP"]) {
+        } else if (dihedrals[i].type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
+                   dihedrals[i].type == potentialModelIndex.Model["Itzykson1JulicherTheta4"]) {
             auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
             if (DFs_item == DFs_classes.end()) {
                 
                 DFs_classes.insert(dihedrals[i].class_label);
                 DFs_index++;
                 
-                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.04*K_bend*(exp(10*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)"));
+                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "8*K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))"));
                 
                 DihedralForces[DFs_index]->addPerBondParameter("K_bend");
                 DihedralForces[DFs_index]->addPerBondParameter("SponAngle");

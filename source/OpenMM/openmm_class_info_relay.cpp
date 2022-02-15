@@ -58,8 +58,8 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
         if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"]) {
             if (
-                (membranes[i].get_bending_model() == potentialModelIndex.Model["Itzykson1986EXP"] ||
-                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonJulicherEXP"]
+                (membranes[i].get_bending_model() == potentialModelIndex.Model["Itzykson1986Theta4"] ||
+                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonJulicherTheta4"]
                  
                  ) ||
                 !membranes[i].get_UseMeanCurvature_stat()

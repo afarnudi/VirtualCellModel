@@ -7,6 +7,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     
     bool dihedralPotential = false;
     bool NonLinearDihedralPotential = false;
+    bool QuadraticDihedralPotential = false;
     bool noPotential = false;
     
     const int mem_num_tri_pairs = mem.get_num_of_dihedral_elements();
@@ -32,9 +33,9 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
                 dihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986EXP"] ||
-                       diatoms[i].type == potentialModelIndex.Model["ItzyksonJulicherEXP"]){
-                NonLinearDihedralPotential = true;
+            } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
+                       diatoms[i].type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]){
+                QuadraticDihedralPotential = true;
             }
 //            else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
 //                diatoms[i].total_mem_area = total_mem_area;
@@ -53,6 +54,10 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     }
     if (NonLinearDihedralPotential) {
         cout<<" Non-linear exponential dihedral"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+    }
+    if (QuadraticDihedralPotential) {
+        cout<<" Quadratic dihedral potential: 8*kappa*(1-cos(dihedral))^2 "<<endl;
         cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
     }
     if (noPotential || mem_num_tri_pairs==0) {
@@ -194,7 +199,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
                     
                  
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986EXP"]) {
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986Theta4"]) {
                     curvaturePotentialItzykson = true;
                     noPotential = false;
                     
@@ -205,7 +210,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
                     noPotential = false;
 
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherEXP"]) {
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]) {
                     curvaturePotentialItzyksonJulicher = true;
                     noPotential = false;
                     
