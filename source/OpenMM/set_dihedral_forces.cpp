@@ -66,14 +66,15 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
             parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
             
             DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
-        } else if (dihedrals[i].type == potentialModelIndex.Model["Itzykson1986EXP"]) {
+        } else if (dihedrals[i].type == potentialModelIndex.Model["Itzykson1986EXP"] ||
+                   dihedrals[i].type == potentialModelIndex.Model["Itzykson1JulicherEXP"]) {
             auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
             if (DFs_item == DFs_classes.end()) {
                 
                 DFs_classes.insert(dihedrals[i].class_label);
                 DFs_index++;
                 
-                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.01*K_bend*(exp(10*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)"));
+                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.04*K_bend*(exp(10*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)"));
                 
                 DihedralForces[DFs_index]->addPerBondParameter("K_bend");
                 DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
@@ -228,7 +229,8 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                 //                cout<<MCs_index;
                 MeanCurvatureForces[MCs_index]->addBond(mean_curvature_interactinos[node_order][node_index].atoms, parameters);
             }
-            else if (mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"]) {
+            else if (mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"] ||
+                     mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986EXP"]) {
                 //                cout<<"h";
                 string class_label =mean_curvature_interactinos[node_order][node_index].class_label+"O"+to_string(node_order);
                 auto MCs_item = MCs_classes.find(class_label);
@@ -254,33 +256,9 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                 //                cout<<MCs_index;
                 MeanCurvatureForces[MCs_index]->addBond(mean_curvature_interactinos[node_order][node_index].atoms, parameters);
             }
-            else if (mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986EXP"]) {
-                //                cout<<"h";
-                string class_label =mean_curvature_interactinos[node_order][node_index].class_label+"O"+to_string(node_order);
-                auto MCs_item = MCs_classes.find(class_label);
-                if (MCs_item == MCs_classes.end()) {
-                    
-                    MCs_classes.insert(class_label);
-                    MCs_index++;
-                    
-                    string potential = generate_Itzykson1986_mean_curvature_potential(node_order);
-                    
-                    MeanCurvatureForces.push_back(new OpenMM::CustomCompoundBondForce(node_order+1, potential));
-                    
-                    MeanCurvatureForces[MCs_index]->addPerBondParameter("k");
-                    //                    MeanCurvatureForces[MCs_index]->addPerBondParameter("SponAngle");
-                    
-                    system.addForce(MeanCurvatureForces[MCs_index]);
-                    
-                }
-                
-                vector<double> parameters;
-                parameters.push_back(mean_curvature_interactinos[node_order][node_index].curvatureStiffnessinKJpermol);
-                //                parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
-                //                cout<<MCs_index;
-                MeanCurvatureForces[MCs_index]->addBond(mean_curvature_interactinos[node_order][node_index].atoms, parameters);
-            }
-            else if (mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"]) {
+            
+            else if (mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"] ||
+                     mean_curvature_interactinos[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherEXP"]) {
                 //                cout<<"h";
                 string class_label =mean_curvature_interactinos[node_order][node_index].class_label+"O"+to_string(node_order);
                 auto MCs_item = MCs_classes.find(class_label);

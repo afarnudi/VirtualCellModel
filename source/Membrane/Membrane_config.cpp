@@ -130,7 +130,8 @@ void Membrane::consistancy_check(){
         bending_model == potentialModelIndex.Model["Espiru1987"] ||
         bending_model == potentialModelIndex.Model["Itzykson1986"] ||
         bending_model == potentialModelIndex.Model["Itzykson1986EXP"] ||
-        bending_model == potentialModelIndex.Model["ItzyksonJulicher"]) {
+        bending_model == potentialModelIndex.Model["ItzyksonJulicher"] ||
+        bending_model == potentialModelIndex.Model["ItzyksonJulicherEXP"]) {
         UseMeanCurvature =true;
     }
     
@@ -238,6 +239,8 @@ void Membrane::assign_parameters(void){
                 bending_model = potentialModelIndex.Model["Itzykson1986EXP"];
             } else if (split[0]=="ItzyksonJulicher") {
                 bending_model = potentialModelIndex.Model["ItzyksonJulicher"];
+            } else if (split[0]=="ItzyksonJulicherEXP") {
+                bending_model = potentialModelIndex.Model["ItzyksonJulicherEXP"];
             }
             
 //            else if (split[0]=="cot_weight") {

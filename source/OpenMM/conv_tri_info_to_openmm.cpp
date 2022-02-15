@@ -32,7 +32,8 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
                 dihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986EXP"]){
+            } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986EXP"] ||
+                       diatoms[i].type == potentialModelIndex.Model["ItzyksonJulicherEXP"]){
                 NonLinearDihedralPotential = true;
             }
 //            else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
@@ -155,6 +156,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     bool curvaturePotentialEspiru = false;
     bool curvaturePotentialItzykson = false;
     bool curvaturePotentialItzyksonJulicher = false;
+    
     bool noPotential = true;
     string node_orders;
     
@@ -199,6 +201,11 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
                  
                 }
                 if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"]) {
+                    curvaturePotentialItzyksonJulicher = true;
+                    noPotential = false;
+
+                }
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherEXP"]) {
                     curvaturePotentialItzyksonJulicher = true;
                     noPotential = false;
                     
