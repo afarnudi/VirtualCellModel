@@ -235,11 +235,11 @@ void Membrane::assign_parameters(void){
                 bending_model = potentialModelIndex.Model["Espiru1987"];
             } else if (split[0]=="Itzykson1986") {
                 bending_model = potentialModelIndex.Model["Itzykson1986"];
-            } else if (split[0]=="Itzykson1986EXP") {
+            } else if (split[0]=="Itzykson1986Theta4") {
                 bending_model = potentialModelIndex.Model["Itzykson1986Theta4"];
             } else if (split[0]=="ItzyksonJulicher") {
                 bending_model = potentialModelIndex.Model["ItzyksonJulicher"];
-            } else if (split[0]=="ItzyksonJulicherEXP") {
+            } else if (split[0]=="ItzyksonJulicherTheta4") {
                 bending_model = potentialModelIndex.Model["ItzyksonJulicherTheta4"];
             }
             
