@@ -74,7 +74,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 DFs_classes.insert(dihedrals[i].class_label);
                 DFs_index++;
                 
-                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "8*K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))"));
+                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "8*K_bend*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))^2"));
                 
                 DihedralForces[DFs_index]->addPerBondParameter("K_bend");
                 DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
