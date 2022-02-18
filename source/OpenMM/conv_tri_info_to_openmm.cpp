@@ -31,7 +31,8 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
             diatoms[i].spontaneousBendingAngleInRad = mem.get_spontaneous_angle_in_Rad(i);
             if (diatoms[i].type == potentialModelIndex.Model["Dihedral"]){
                 dihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
+            } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"] ||
+                       diatoms[i].type == potentialModelIndex.Model["ItzyksonEXP"]){
                 NonLinearDihedralPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
                        diatoms[i].type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]){
@@ -193,29 +194,24 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
                     noPotential = false;
                  
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"]) {
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"] ||
+                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
+                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonEXP"]
+                    ) {
                     curvaturePotentialItzykson = true;
                     noPotential = false;
                     
                  
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986Theta4"]) {
-                    curvaturePotentialItzykson = true;
-                    noPotential = false;
-                    
-                 
-                }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"]) {
+                
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"] ||
+                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]
+                    ) {
                     curvaturePotentialItzyksonJulicher = true;
                     noPotential = false;
 
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]) {
-                    curvaturePotentialItzyksonJulicher = true;
-                    noPotential = false;
-                    
-                 
-                }
+                
                 
                 
                 

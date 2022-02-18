@@ -59,7 +59,8 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"]) {
             if (
                 (membranes[i].get_bending_model() == potentialModelIndex.Model["Itzykson1986Theta4"] ||
-                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonJulicherTheta4"]
+                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonJulicherTheta4"] ||
+                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonEXP"]
                  
                  ) ||
                 !membranes[i].get_UseMeanCurvature_stat()

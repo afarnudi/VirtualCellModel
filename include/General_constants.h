@@ -34,6 +34,8 @@ struct PotentialModelIndex{
         Model["LocalConstraint"] = 13;
         Model["GlobalConstraint"] = 14;
         
+        
+        Model["ItzyksonEXP"] = 17;
         Model["ItzyksonJulicherTheta4"] = 18;
         Model["ItzyksonJulicher"] = 19;
         Model["Itzykson1986Theta4"] = 20;

@@ -560,7 +560,8 @@ public:
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
         if (bending_model==potentialModelIndex.Model["Itzykson1986Theta4"] ||
-            bending_model == potentialModelIndex.Model["ItzyksonJulicherTheta4"]) {
+            bending_model == potentialModelIndex.Model["ItzyksonJulicherTheta4"] ||
+            bending_model == potentialModelIndex.Model["ItzyksonEXP"]) {
             return int(Triangle_Pair_Nodes.size());
         } else if (bending_model!=potentialModelIndex.Model["None"] && !UseMeanCurvature) {
             return int(Triangle_Pair_Nodes.size());
