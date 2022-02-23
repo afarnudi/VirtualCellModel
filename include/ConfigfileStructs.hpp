@@ -34,7 +34,7 @@ struct FLAGindex{
 struct GeneralParameters{
     /**Get individula force vectors for each potential
      */
-    int force_group_count=1;
+    int force_group_count=0;
     vector<string> force_group_label;
     
     

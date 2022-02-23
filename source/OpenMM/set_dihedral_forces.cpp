@@ -85,10 +85,11 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 
                 system.addForce(DihedralForces[DFs_index]);
                 if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                    generalParameters.force_group_count++;
                     DihedralForces[DFs_index]->setForceGroup(generalParameters.force_group_count);
                     string label = dihedrals[i].class_label+"_ExpDihedral_"+ to_string(generalParameters.force_group_count);
                     generalParameters.force_group_label.push_back(label);
-                    generalParameters.force_group_count++;
+                    
                 }
             }
             
@@ -280,10 +281,10 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
                     if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                        generalParameters.force_group_count++;
                         MeanCurvatureForces[MCs_index]->setForceGroup(generalParameters.force_group_count);
                         string label = mean_curvature_interactinos[node_order][node_index].class_label+"_Itzykson_"+ to_string(generalParameters.force_group_count);
                         generalParameters.force_group_label.push_back(label);
-                        generalParameters.force_group_count++;
                     }
                     
                 }
