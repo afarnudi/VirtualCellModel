@@ -238,6 +238,13 @@ void set_interactions(const MyAtomInfo                       atoms[],
                 WCAs[index]->createExclusionsFromBonds(exclude_bonds, generalParameters.bondCutoff);
                 
                 system.addForce(WCAs[index]);
+                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                    WCAs[index]->setForceGroup(generalParameters.force_group_count);
+                    string label = generalParameters.Membrane_label+to_string(i)+generalParameters.Membrane_label+to_string(j)+"_WCA_"+to_string(generalParameters.force_group_count);
+                    generalParameters.force_group_label.push_back(label);
+                    generalParameters.force_group_count++;
+                    
+                }
                 if (interaction_map.get_report_status(i ,j) ) {
                     WCAs[index]->setForceGroup(interaction_map.setForceGroup(i ,j));
                 }

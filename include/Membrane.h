@@ -122,6 +122,7 @@ public:
     std::string Triangle_pair_angle_stat;
     std::string mesh_format;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     std::string SurfaceConstraintValue_stat;
+    std::string VolumeConstraintValue_stat;
     
     bool AddRandomModes = false;
     bool InflateMembrane= false;
@@ -929,6 +930,11 @@ public:
         values[1] ="#Set volume constraint potential (harmonic) rigidity coefficient. Default 0";
         Params["VolumeConstraintCoeff"] = values;
         insertOrder.push_back("VolumeConstraintCoeff");
+        
+        values[0] ="Au";
+        values[1] ="#Set the volume constraint value: 1) Au: The initial volume of the mesh; 2) \"value\": Where you type a specific value. Defaullt Au";
+        Params["VolumeConstraintValue"] = values;
+        insertOrder.push_back("VolumeConstraintValue");
         
         values[0] ="0";
         values[1] ="#Linearly change the area/Volume ratio. Default 0";

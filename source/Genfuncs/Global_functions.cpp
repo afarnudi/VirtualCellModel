@@ -113,6 +113,24 @@ void write_data(MyOpenMMData* omm,
             }
         }
         
+        for (int i=0; i<generalParameters.force_group_count-1; i++) {
+            int forcegroup = 1 << i;
+            cout<<"i "<<i<<" forcegroup "<<forcegroup<<endl;
+            const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, forcegroup);
+            const std::vector<Vec3>& Forcesi = statei.getForces();
+            
+            
+            ofstream write_force;
+            string forcepath =generalParameters.trajectory_file_name+"_"+generalParameters.force_group_label[i]+".txt";
+            write_force.open(forcepath.c_str(),std::ios_base::app);
+            write_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
+            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+            for (int t=0; t < (int)Forcesi.size(); ++t){
+                write_force<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
+                write_force<<"\n";
+            }
+        }
+        
         
     }
     if (generalParameters.Integrator_type=="Custom") {

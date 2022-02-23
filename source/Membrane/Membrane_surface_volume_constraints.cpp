@@ -27,9 +27,13 @@ void Membrane::assign_surface_volume_constraints(void){
         
     }
     if (volume_constraint_model!=potentialModelIndex.Model["None"]) {
-        VolumeConstraintValue = volume*VolumeConstraintRatio;
-        if (LinearReducedSrfaceVolume==0) {
-            VolumeConstraintValue *= VolumeConstraintRatio;
+        if (VolumeConstraintValue_stat != "Au") {
+            VolumeConstraintValue = stod(VolumeConstraintValue_stat);
+        } else {
+            VolumeConstraintValue = volume*VolumeConstraintRatio;
+            if (LinearReducedSrfaceVolume==0) {
+                VolumeConstraintValue *= VolumeConstraintRatio;
+            }
         }
     }
     

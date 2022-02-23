@@ -32,6 +32,14 @@ struct FLAGindex{
 
 
 struct GeneralParameters{
+    /**Get individula force vectors for each potential
+     */
+    int force_group_count=1;
+    vector<string> force_group_label;
+    
+    
+    
+    
     map<string, vector<string> > GenParams;
     vector<string> insertOrder;
     vector<string> values;

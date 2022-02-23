@@ -119,6 +119,20 @@ void Membrane::consistancy_check(){
             throw std::runtime_error(errorMessage);
         }
     }
+    if (VolumeConstraintValue_stat!= "Au") {
+        try {
+            double test = stod(VolumeConstraintValue_stat);
+        } catch (...) {
+            string errorMessage = TWARN;
+            errorMessage+="Membrane config parser: Invalid input for the \"VolumeConstraintValue\" (";
+            errorMessage+=TFILE;
+            errorMessage+=VolumeConstraintValue_stat;
+            errorMessage+=TWARN;
+            errorMessage+="). Please try again.\nExample inputs: Au, or just an input value (example 100)";
+            errorMessage+= TRESET;
+            throw std::runtime_error(errorMessage);
+        }
+    }
     
     if (Bending_coefficient==0) {
         bending_model=potentialModelIndex.Model["None"];
@@ -269,6 +283,8 @@ void Membrane::assign_parameters(void){
             Triangle_pair_angle_stat = split[0];
         } else if (it.first == "SurfaceConstraintValue") {
             SurfaceConstraintValue_stat = split[0];
+        } else if (it.first == "VolumeConstraintValue") {
+            VolumeConstraintValue_stat = split[0];
         } else if (it.first == "VolumeConstraintRatio") {
             VolumeConstraintRatio = stod(split[0]);
         } else if (it.first == "SurfaceConstraintRatio") {
