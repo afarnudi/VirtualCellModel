@@ -207,7 +207,7 @@ string generate_ItzyksonJulicher_mean_curvature_potential(int order);
 void set_mean_curvature_forces(MeanCurvature**                           mean_curvature_interactinos,
                                vector<OpenMM::CustomCompoundBondForce*> &MeanCurvatureForces,
                                OpenMM::System                           &system){
-    
+    string temp_label="";
     int MCs_index = -1;
     for (int node_order=0; mean_curvature_interactinos[node_order][0].curvature_type != 2*EndOfList; ++node_order) {
         //        cout<<"\n"<<node_order<<"\n";
@@ -287,10 +287,15 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
                     if (generalParameters.WantForce && generalParameters.force_group_count<31) {
-                        generalParameters.force_group_count++;
+                        if (temp_label=="" || temp_label != mean_curvature_interactinos[node_order][node_index].class_label) {
+                            generalParameters.force_group_count++;
+                            temp_label=mean_curvature_interactinos[node_order][node_index].class_label;
+                            string label = mean_curvature_interactinos[node_order][node_index].class_label+"_Itzykson_"+ to_string(generalParameters.force_group_count);
+                            generalParameters.force_group_label.push_back(label);
+                        }
+                        
                         MeanCurvatureForces[MCs_index]->setForceGroup(generalParameters.force_group_count);
-                        string label = mean_curvature_interactinos[node_order][node_index].class_label+"_Itzykson_"+ to_string(generalParameters.force_group_count);
-                        generalParameters.force_group_label.push_back(label);
+                        
                     }
                     
                 }
