@@ -73,7 +73,7 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 DFs_classes.insert(dihedrals[i].class_label);
                 DFs_index++;
                 
-                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.0001*K_bend*(exp(20*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)"));
+                DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.04*K_bend*(exp(10*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)"));
                 
                 DihedralForces[DFs_index]->addPerBondParameter("K_bend");
                 DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
@@ -117,7 +117,13 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                 //                }
                 
                 system.addForce(DihedralForces[DFs_index]);
-                
+                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                    generalParameters.force_group_count++;
+                    DihedralForces[DFs_index]->setForceGroup(generalParameters.force_group_count);
+                    string label = dihedrals[i].class_label+"_Theta4_"+ to_string(generalParameters.force_group_count);
+                    generalParameters.force_group_label.push_back(label);
+                    
+                }
             }
             
             vector<double> parameters;
