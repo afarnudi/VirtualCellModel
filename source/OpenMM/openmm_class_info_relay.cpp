@@ -101,13 +101,12 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
                         
                         
                         for (int node_neighbour=0; node_neighbour<nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index].size(); node_neighbour++) {
-                            all_mean_curvature_interactions[node_order][mean_curvature_count[node_order]].atoms[node_neighbour] = meanCurvatures[node_order][node_index].atoms[node_neighbour]+atom_count;
+                            all_mean_curvature_interactions[node_order][node_index + mean_curvature_count[node_order]].atoms[node_neighbour] = meanCurvatures[node_order][node_index].atoms[node_neighbour]+atom_count;
                         }
                     }
                 }
             }
         }
-        
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.
         atom_count += membranes[i].get_num_of_nodes();
