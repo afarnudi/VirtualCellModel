@@ -57,7 +57,7 @@ void Membrane::update_Membrane_class_and_openmm(int initial_pair,int triangle_A,
     ////updating dihedral structs and setBondParameters of Dihedral Forces.
     vector<double> bendingparameter;
     bendingparameter.resize(1);
-    bendingparameter[0]=Bending_coefficient;
+    bendingparameter[0]=dihedral_bending_coefficient;
     
     dihedrals[initial_pair].atoms[0]=c2;
     dihedrals[initial_pair].atoms[1]=u1;

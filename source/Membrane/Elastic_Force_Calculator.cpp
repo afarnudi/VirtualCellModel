@@ -7,7 +7,7 @@ void Membrane::Elastic_Force_Calculator(double theta_0)
 	if (spring_model==potentialModelIndex.Model["FENE"]) {FENE_log();}
     if (spring_model==3) {custom();}
     
-    if (Bending_coefficient!=0) {
+    if (dihedral_bending_coefficient!=0) {
         Bending_potetial_2(0);
     }
     
@@ -31,9 +31,9 @@ void Membrane::Mechanical_Energy_calculator()
         Total_Bond_Energy=0;
     }
     
-    if (bending_model==potentialModelIndex.Model["Dihedral"]) {
+    if (dihedral_bending_model==potentialModelIndex.Model["Dihedral"]) {
         calculating_dihedral_energy();
-    } else if (bending_model==potentialModelIndex.Model["None"]){
+    } else if (dihedral_bending_model==potentialModelIndex.Model["None"]){
         Total_Bending_Energy=0;
     }
     

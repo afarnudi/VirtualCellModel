@@ -75,4 +75,9 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
 void loadCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, std::string ckeckpointBackup_name, bool &usingBackupCheckpoint);
 void saveCheckpoint(MyOpenMMData* omm, std::string ckeckpoint_name, std::string ckeckpointBackup_name, bool &usingBackupCheckpoint);
 
+double get_double_value(std::string value,
+                        std::string parser_name,
+                        std::string value_name,
+                        std::string example_inputs);
+
 #endif /* General_functions_hpp */

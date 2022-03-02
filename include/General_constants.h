@@ -34,13 +34,11 @@ struct PotentialModelIndex{
         Model["LocalConstraint"] = 13;
         Model["GlobalConstraint"] = 14;
         
-        
-        Model["ItzyksonEXP"] = 17;
-        Model["ItzyksonJulicherTheta4"] = 18;
-        Model["ItzyksonJulicher"] = 19;
-        Model["Itzykson1986Theta4"] = 20;
-        Model["Espiru1987"] = 21;
-//        Model["DihedralArea"] = 22;
+        Model["SmoothTheta4"]=18;
+        Model["SmoothEXP"]=19;
+        Model["ItzyksonBarycentric"] = 20;
+        Model["JulicherVoronoi"] = 21;
+        Model["Espiru1987"] = 22;
         Model["Julicher1996"] = 23;
         Model["Itzykson1986"] = 24;
         Model["ExpDihedral"] = 25;

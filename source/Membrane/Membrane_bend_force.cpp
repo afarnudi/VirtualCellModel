@@ -39,7 +39,7 @@ void Membrane::Bending_potetial_2(double sin_theta_0){
         }
         sin=sqrt(sin);
         sign=-(1-2*std::signbit(innerproduct(N3, E)));
-        F0 = (sin-sin_theta_0)*sign*E_length*E_length*Bending_coefficient*sin/(N1_length+N2_length);
+        F0 = (sin-sin_theta_0)*sign*E_length*E_length*dihedral_bending_coefficient*sin/(N1_length+N2_length);
         
         double temp_1, temp_2, temp_3_1, temp_3_2, temp_4_1, temp_4_2;
         temp_1=E_length/N1_length_2;
@@ -90,7 +90,7 @@ double Membrane::calculate_bending_energy(){
         Total_Bending_Energy += 1-cosPotentialAngle;
 //        cout<<N1dotN2<<", ";
     }  // end of 'for-i'
-    Total_Bending_Energy *= Bending_coefficient;
+    Total_Bending_Energy *= dihedral_bending_coefficient;
     
     return Total_Bending_Energy;
 }
@@ -136,7 +136,7 @@ void Membrane::calculating_dihedral_energy(){
         
         angleInRad-=Triangle_pair_angles_in_radians[i];
 //            cout<<angleInRad*180/M_PI<<endl;
-        Total_Bending_Energy+= Bending_coefficient*(1-cos(angleInRad) );
+        Total_Bending_Energy+= dihedral_bending_coefficient*(1-cos(angleInRad) );
         
     }
 }

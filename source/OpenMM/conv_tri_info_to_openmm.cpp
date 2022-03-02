@@ -7,6 +7,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     
     bool dihedralPotential = false;
     bool NonLinearDihedralPotential = false;
+    bool NonLinearDihedralSmoothPotential = false;
     bool QuadraticDihedralPotential = false;
     bool noPotential = false;
     
@@ -15,7 +16,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     for (int i=0; i<mem_num_tri_pairs; i++) {
         //        vector<int> tri_pair_nodes(mem.get_traingle_pair_nodes_list(i));
         
-        diatoms[i].type=mem.get_bending_model();
+        diatoms[i].type=mem.get_dihedral_bending_model();
         if (diatoms[i].type == potentialModelIndex.Model["None"]){
             noPotential = true;
         } else  {
@@ -26,16 +27,16 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
             diatoms[i].atoms[2]=tri_pair_nodes[2];
             diatoms[i].atoms[3]=tri_pair_nodes[3];
             
-            diatoms[i].bendingStiffnessinKJ = mem.get_bending_stiffness_coefficient();
+            diatoms[i].bendingStiffnessinKJ = mem.get_dihedral_bending_stiffness_coefficient();
             diatoms[i].class_label = mem.get_label();
             diatoms[i].spontaneousBendingAngleInRad = mem.get_spontaneous_angle_in_Rad(i);
             if (diatoms[i].type == potentialModelIndex.Model["Dihedral"]){
                 dihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"] ||
-                       diatoms[i].type == potentialModelIndex.Model["ItzyksonEXP"]){
+            } else if (diatoms[i].type == potentialModelIndex.Model["ExpDihedral"]){
                 NonLinearDihedralPotential = true;
-            } else if (diatoms[i].type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
-                       diatoms[i].type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]){
+            } else if (diatoms[i].type == potentialModelIndex.Model["SmoothEXP"]){
+                NonLinearDihedralSmoothPotential = true;
+            } else if (diatoms[i].type == potentialModelIndex.Model["SmoothTheta4"]){
                 QuadraticDihedralPotential = true;
             }
 //            else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
@@ -51,15 +52,19 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     }
     if (dihedralPotential) {
         cout<<" Cosine(dihedral)"<<endl;
-        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
     }
     if (NonLinearDihedralPotential) {
-        cout<<" Non-linear exponential dihedral"<<endl;
-        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" Non-linear exponential dihedral:\n0.5*K_bend*(exp(2*(1-cos(dihedral-SponAngle))) -1)"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
+    }
+    if (NonLinearDihedralSmoothPotential) {
+        cout<<" Non-linear exponential dihedral:\n0.04*K_bend*(exp(10*(1-cos(dihedral-SponAngle))) -1)"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
     }
     if (QuadraticDihedralPotential) {
-        cout<<" Quadratic dihedral potential: 8*kappa*(1-cos(dihedral))^2 "<<endl;
-        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<" Quadratic dihedral potential: kappa*(1-cos(dihedral))^2 "<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
     }
     if (noPotential || mem_num_tri_pairs==0) {
         cout<<" None"<<endl;
@@ -158,11 +163,11 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
 MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
     
     
-    bool curvaturePotential = false;
-    bool curvaturePotentialEspiru = false;
-    bool curvaturePotentialItzykson = false;
-    bool curvaturePotentialItzyksonJulicher = false;
-    
+    bool julicjer = false;
+    bool espiru = false;
+    bool itzykson = false;
+    bool julicherVoronoi = false;
+    bool itzyksonBarycentric = false;
     bool noPotential = true;
     string node_orders;
     
@@ -181,33 +186,33 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
             mcatoms[node_order][node_index].curvature_type = mem.get_mean_curvature_model();
             if (mcatoms[node_order][node_index].curvature_type != potentialModelIndex.Model["None"] ) {
                 mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
-                mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_bending_stiffness_coefficient();
+                mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_mean_curvature_stiffness_coefficient();
                 mcatoms[node_order][node_index].class_label = mem.get_label();
                 
                 if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Julicher1996"]) {
-                    curvaturePotential = true;
+                    julicjer = true;
                     noPotential = false;
                     
                 }
                 if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Espiru1987"]) {
-                    curvaturePotentialEspiru = true;
+                    espiru = true;
                     noPotential = false;
                  
                 }
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"] ||
-                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986Theta4"] ||
-                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonEXP"]
-                    ) {
-                    curvaturePotentialItzykson = true;
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Itzykson1986"]) {
+                    itzykson = true;
                     noPotential = false;
                     
                  
                 }
                 
-                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicher"] ||
-                    mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonJulicherTheta4"]
-                    ) {
-                    curvaturePotentialItzyksonJulicher = true;
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["JulicherVoronoi"]) {
+                    julicherVoronoi = true;
+                    noPotential = false;
+
+                }
+                if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["ItzyksonBarycentric"]) {
+                    itzyksonBarycentric = true;
                     noPotential = false;
 
                 }
@@ -224,29 +229,35 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
         
     }
     
-    if (curvaturePotential) {
+    if (julicjer) {
         cout<<" Julicher (1996) discretisation"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
-        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_mean_curvature_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
     }
-    if (curvaturePotentialEspiru) {
+    if (espiru) {
         cout<<" Espiru (1987) discretisation"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
-        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_mean_curvature_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
     }
-    if (curvaturePotentialItzykson) {
+    if (itzykson) {
         cout<<" Itzykson (1986) discretisation"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
-        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_mean_curvature_stiffness_coefficient() <<endl;
+//        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
+    }
+    if (itzyksonBarycentric) {
+        cout<<" Itzykson discretisation with Barycentric area"<<endl;
+        cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_mean_curvature_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
     }
     
-    if (curvaturePotentialItzyksonJulicher) {
-        cout<<" Itzykson-Julicher discretisation"<<endl;
+    if (julicherVoronoi) {
+        cout<<" Julicher discretisation with Voronoi area"<<endl;
         cout<<"\tNode orders ="<<node_orders.erase(0,1)<<endl;
-        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_bending_stiffness_coefficient() <<endl;
+        cout<<"\tCoeficient (KJ / mol) = "<<mem.get_mean_curvature_stiffness_coefficient() <<endl;
 //        cout<<"\tSpontaneous curvature = "<<mem.get_surface_constraint_area() <<endl;
     }
     if (noPotential){

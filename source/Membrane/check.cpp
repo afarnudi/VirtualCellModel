@@ -18,7 +18,7 @@ void Membrane::check(void){
         cout<<"\tMax "<<Max_node_pair_length<<"\tMin "<<Min_node_pair_length<<"\tAverage "<<Average_node_pair_length<<endl;
     }
     
-    if ((Min_node_pair_length*2<Max_node_pair_length) && Bending_coefficient!=0) {
+    if ((Min_node_pair_length*2<Max_node_pair_length) && dihedral_bending_coefficient!=0) {
         cout<<TWWARN<<"\n!!!Warning"<<TRESET<<",Initial node distances are not ready/optimised for triangle bending calculations. You will need to make sure the system is relaxed to avoid programme break down.\n\n";
 
     }

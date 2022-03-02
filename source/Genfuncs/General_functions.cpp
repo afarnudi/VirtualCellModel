@@ -305,3 +305,20 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
     
     return reportfilename;
 }
+
+double get_double_value(std::string value, std::string parser_name, std::string value_name, std::string example_inputs){
+    double test;
+    try {
+        test = stod(value);
+    } catch (...) {
+        string errorMessage = TWARN;
+        errorMessage+=parser_name + ": Invalid input for the \""+value_name+"\" (";
+        errorMessage+=TFILE;
+        errorMessage+=value;
+        errorMessage+=TWARN;
+        errorMessage+="). Please try again.\nExample inputs: "+example_inputs;
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    return test;
+}

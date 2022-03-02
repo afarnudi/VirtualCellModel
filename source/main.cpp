@@ -324,9 +324,9 @@ int main(int argc, char **argv)
     all_mean_curvature_interactions[num_of_curvature_interactions.size()] = new MeanCurvature [1];
     all_mean_curvature_interactions[num_of_curvature_interactions.size()][0].curvature_type = EndOfList*2;
     
-    for (int i=0; i<num_of_curvature_interactions.size(); i++) {
-        cout<<i<<"  "<<num_of_curvature_interactions[i]<<endl;
-    }
+//    for (int i=0; i<num_of_curvature_interactions.size(); i++) {
+//        cout<<i<<"  "<<num_of_curvature_interactions[i]<<endl;
+//    }
 //    exit(0);
     
     if (generalParameters.Num_of_Membranes!=0) {
@@ -396,6 +396,7 @@ int main(int argc, char **argv)
                      num_of_bonds,
                      num_of_dihedrals,
                      num_of_angles,
+                     num_of_curvature_interactions,
                      Membranes,
                      Chromatins);
     

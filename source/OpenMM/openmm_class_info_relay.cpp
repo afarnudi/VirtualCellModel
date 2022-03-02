@@ -56,23 +56,15 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         cout<<"Dihedral potential:";
         Dihedrals* dihedrals = convert_membrane_dihedral_info_to_openmm(membranes[i]);
-        if (membranes[i].get_bending_model() != potentialModelIndex.Model["None"]) {
-            if (
-                (membranes[i].get_bending_model() == potentialModelIndex.Model["Itzykson1986Theta4"] ||
-                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonJulicherTheta4"] ||
-                 membranes[i].get_bending_model() == potentialModelIndex.Model["ItzyksonEXP"]
-                 
-                 ) ||
-                !membranes[i].get_UseMeanCurvature_stat()
-                ) {
-                    for (int j=0; j<membranes[i].get_num_of_triangle_pairs(); j++) {
-                        all_dihedrals[j+dihe_count]=dihedrals[j];
-                        all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
-                        all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
-                        all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
-                        all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
-                    }
+        if (membranes[i].get_dihedral_bending_model() != potentialModelIndex.Model["None"]) {
+            for (int j=0; j<membranes[i].get_num_of_triangle_pairs(); j++) {
+                all_dihedrals[j+dihe_count]=dihedrals[j];
+                all_dihedrals[j+dihe_count].atoms[0]=dihedrals[j].atoms[0]+atom_count;
+                all_dihedrals[j+dihe_count].atoms[1]=dihedrals[j].atoms[1]+atom_count;
+                all_dihedrals[j+dihe_count].atoms[2]=dihedrals[j].atoms[2]+atom_count;
+                all_dihedrals[j+dihe_count].atoms[3]=dihedrals[j].atoms[3]+atom_count;
             }
+
             
         }
         
@@ -90,22 +82,21 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         cout<<"Mean curvature potentials:";
         MeanCurvature** meanCurvatures = convert_membrane_curvature_info_to_openmm(membranes[i]);
         if (membranes[i].get_mean_curvature_model() != potentialModelIndex.Model["None"]) {
-            if (membranes[i].get_UseMeanCurvature_stat()) {
                 
-                vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList =  membranes[i].get_nodeOrder_NodeIndex_NodeNeighbourList();
-                for (int node_order=0; node_order<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_order++) {
+            vector<vector<vector<int> > > nodeOrder_NodeIndex_NodeNeighbourList =  membranes[i].get_nodeOrder_NodeIndex_NodeNeighbourList();
+            for (int node_order=0; node_order<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_order++) {
+                
+                for (int node_index=0; node_index<nodeOrder_NodeIndex_NodeNeighbourList[node_order].size(); node_index++) {
                     
-                    for (int node_index=0; node_index<nodeOrder_NodeIndex_NodeNeighbourList[node_order].size(); node_index++) {
-                        
-                        all_mean_curvature_interactions[node_order][node_index+mean_curvature_count[node_order]] = meanCurvatures[node_order][node_index];
-                        
-                        
-                        for (int node_neighbour=0; node_neighbour<nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index].size(); node_neighbour++) {
-                            all_mean_curvature_interactions[node_order][node_index + mean_curvature_count[node_order]].atoms[node_neighbour] = meanCurvatures[node_order][node_index].atoms[node_neighbour]+atom_count;
-                        }
+                    all_mean_curvature_interactions[node_order][node_index+mean_curvature_count[node_order]] = meanCurvatures[node_order][node_index];
+                    
+                    
+                    for (int node_neighbour=0; node_neighbour<nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index].size(); node_neighbour++) {
+                        all_mean_curvature_interactions[node_order][node_index + mean_curvature_count[node_order]].atoms[node_neighbour] = meanCurvatures[node_order][node_index].atoms[node_neighbour]+atom_count;
                     }
                 }
             }
+            
         }
         
         //These parameters are used to shift the index of the atoms/bonds/dihedrals.

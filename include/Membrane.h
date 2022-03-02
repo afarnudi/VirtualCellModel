@@ -54,7 +54,8 @@ protected:
     /**write geometrical properties if it is true.*/
     bool WantGeometricProps= false;
     bool UseXYZinMembrane = false;
-    bool UseMeanCurvature =false;
+    bool UseMeanCurvature = false;
+    bool UseDihedralPotential = false;
     
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
@@ -123,14 +124,15 @@ public:
     std::string mesh_format;// 1 represents gmsh generated mesh and 2 represents blender genereted mesh exported as a ply file.
     std::string SurfaceConstraintValue_stat;
     std::string VolumeConstraintValue_stat;
-    
+    std::string parser_name = "Membrane config parser";
     bool AddRandomModes = false;
     bool InflateMembrane= false;
     bool LockOnSphere_stat = false;
     bool open_surface = false;
     
     int spring_model=0;
-    int bending_model=0;
+    int dihedral_bending_model=0;
+    int mean_curvature_model=0;
     int surface_constraint_model=0;
     int volume_constraint_model=0;
     int ext_force_model=0;
@@ -143,7 +145,8 @@ public:
     double Triangle_pair_Nominal_angle_in_degrees=-1;
     double surface_area_voronoi=0;
     double Spring_coefficient=0.;
-    double Bending_coefficient=0.;
+    double dihedral_bending_coefficient=0.;
+    double mean_curvature_coefficient=0.;
     double SpontaneousTriangleBendingInDegrees=0.;
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -366,7 +369,10 @@ public:
         return global_curvature_interactions;
     }
     int get_mean_curvature_model(void){
-        return bending_model;
+        return mean_curvature_model;
+    }
+    int get_dihedral_bending_model(void){
+        return dihedral_bending_model;
     }
     vector<vector<vector<int > > > get_nodeOrder_NodeIndex_NodeNeighbourList(){
         return nodeOrder_NodeIndex_NodeNeighbourList;
@@ -531,8 +537,11 @@ public:
         return Damping_coefficient;
     }
     /**Return bending stiffness coefficient. */
-    double get_bending_stiffness_coefficient(void){
-        return Bending_coefficient;
+    double get_dihedral_bending_stiffness_coefficient(void){
+        return dihedral_bending_coefficient;
+    }
+    double get_mean_curvature_stiffness_coefficient(void){
+        return mean_curvature_coefficient;
     }
     /**Return surface stiffness coefficient. */
     double get_surface_constraint_stiffness_coefficient(void){
@@ -560,11 +569,7 @@ public:
     }
     /**Returns the calculated number of triangles in the imported mesh file.*/
     int get_num_of_dihedral_elements(){
-        if (bending_model==potentialModelIndex.Model["Itzykson1986Theta4"] ||
-            bending_model == potentialModelIndex.Model["ItzyksonJulicherTheta4"] ||
-            bending_model == potentialModelIndex.Model["ItzyksonEXP"]) {
-            return int(Triangle_Pair_Nodes.size());
-        } else if (bending_model!=potentialModelIndex.Model["None"] && !UseMeanCurvature) {
+        if (UseDihedralPotential) {
             return int(Triangle_Pair_Nodes.size());
         } else {
             return 0;
@@ -592,9 +597,9 @@ public:
         return spring_model;
     }
     /**Return input spring model, used to setup the openmm system for the bonds.*/
-    int get_bending_model(void){
-        return bending_model;
-    }
+//    int get_bending_model(void){
+//        return bending_model;
+//    }
     /**Return input spring model, used to setup the openmm system for the bonds.*/
     int get_surface_constraint_model(void){
         return surface_constraint_model;
@@ -813,13 +818,23 @@ public:
         
         values[0] ="cosine";
         values[1] ="#Set the dihedral potential. Options: 'N' No potential; 'cosine' U = K_bend*(1-cos(\theta-SponAngle) ); 'exp' U = 0.5*K_bend*(exp(2*(1-cos(\theta-SponAngle)) - 1) where theta is the dihedral angle; 'meanCurvature' U = 0.5*K_bend*( 4*(1-cos\theta-SponAngle)/(cot\theta_1+cot\theta_2) ), where \theta_1 and theta_2 are the two angles opposite of the common bond of triangle pairs. Default cosine";
-        Params["BendingModel"] = values;
-        insertOrder.push_back("BendingModel");
+        Params["DihedralBendingModel"] = values;
+        insertOrder.push_back("DihedralBendingModel");
+        
+        values[0] ="N";
+        values[1] ="#Place a dihedral potential to smoothen sharp bends. Options: 'N' No potential; 'theta4' U = K_bend*(1-cos(\theta-SponAngle) )^2; 'exp' U = 0.04*K_bend*(10*exp(2*(1-cos(\theta-SponAngle)) - 1) where '\theta' is the dihedral angle; Default N";
+        Params["MeanCurvatureModel"] = values;
+        insertOrder.push_back("MeanCurvatureModel");
         
         values[0] ="0";
         values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
-        Params["BendingCoeff"] = values;
-        insertOrder.push_back("BendingCoeff");
+        Params["DihedralBendingCoeff"] = values;
+        insertOrder.push_back("DihedralBendingCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
+        Params["MeanCurvatureCoeff"] = values;
+        insertOrder.push_back("MeanCurvatureCoeff");
         
         values[0] ="Av";
         values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";

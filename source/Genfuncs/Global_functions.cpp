@@ -114,7 +114,7 @@ void write_data(MyOpenMMData* omm,
         }
         
         for (int i=0; i<generalParameters.force_group_count; i++) {
-            int forcegroup = 1 << i+1;
+            int forcegroup = 1 << (i+1);
 //            cout<<"i "<<i<<" forcegroup "<<forcegroup<<endl;
             const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, forcegroup);
             const std::vector<Vec3>& Forcesi = statei.getForces();

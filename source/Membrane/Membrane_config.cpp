@@ -2,6 +2,7 @@
 #include "Membrane.h"
 #include "Configfile.hpp"
 #include "General_constants.h"
+//#include "General_functions.hpp"
 using namespace std;
 
 void Membrane::import_config(vector<string> configlines){
@@ -134,19 +135,20 @@ void Membrane::consistancy_check(){
         }
     }
     
-    if (Bending_coefficient==0) {
-        bending_model=potentialModelIndex.Model["None"];
+    if (dihedral_bending_coefficient==0) {
+        dihedral_bending_model=potentialModelIndex.Model["None"];
+    }
+    if (mean_curvature_coefficient==0) {
+        mean_curvature_model=potentialModelIndex.Model["None"];
     }
     if (Spring_coefficient==0) {
         spring_model=potentialModelIndex.Model["None"];
     }
-    if (bending_model == potentialModelIndex.Model["Julicher1996"] ||
-        bending_model == potentialModelIndex.Model["Espiru1987"] ||
-        bending_model == potentialModelIndex.Model["Itzykson1986"] ||
-        bending_model == potentialModelIndex.Model["Itzykson1986Theta4"] ||
-        bending_model == potentialModelIndex.Model["ItzyksonJulicher"] ||
-        bending_model == potentialModelIndex.Model["ItzyksonJulicherTheta4"] ||
-        bending_model == potentialModelIndex.Model["ItzyksonEXP"]) {
+    if (dihedral_bending_model != potentialModelIndex.Model["None"]) {
+        UseDihedralPotential =true;
+    }
+    
+    if (mean_curvature_model != potentialModelIndex.Model["None"]) {
         UseMeanCurvature =true;
     }
     
@@ -237,42 +239,47 @@ void Membrane::assign_parameters(void){
             Spring_coefficient = stod(split[0]);
         } else if (it.first == "DampingCoeff") {
             Damping_coefficient = stod(split[0]);
-        } else if (it.first == "BendingModel") {
+        } else if (it.first == "DihedralBendingModel") {
             if (split[0]=="N") {
-                bending_model = potentialModelIndex.Model["None"];
+                dihedral_bending_model = potentialModelIndex.Model["None"];
             } else if (split[0]=="cosine") {
-                bending_model = potentialModelIndex.Model["Dihedral"];
+                dihedral_bending_model = potentialModelIndex.Model["Dihedral"];
             } else if (split[0]=="exp") {
-                bending_model = potentialModelIndex.Model["ExpDihedral"];
-            } else if (split[0]=="Julicher1996") {
-                bending_model = potentialModelIndex.Model["Julicher1996"];
-            } else if (split[0]=="Espiru1987") {
-                bending_model = potentialModelIndex.Model["Espiru1987"];
-            } else if (split[0]=="Itzykson1986") {
-                bending_model = potentialModelIndex.Model["Itzykson1986"];
-            } else if (split[0]=="Itzykson1986Theta4") {
-                bending_model = potentialModelIndex.Model["Itzykson1986Theta4"];
-            } else if (split[0]=="ItzyksonJulicher") {
-                bending_model = potentialModelIndex.Model["ItzyksonJulicher"];
-            } else if (split[0]=="ItzyksonJulicherTheta4") {
-                bending_model = potentialModelIndex.Model["ItzyksonJulicherTheta4"];
-            } else if (split[0]=="ItzyksonEXP") {
-                bending_model = potentialModelIndex.Model["ItzyksonEXP"];
+                dihedral_bending_model = potentialModelIndex.Model["ExpDihedral"];
+            } else if (split[0]=="smoothExp") {
+                dihedral_bending_model = potentialModelIndex.Model["SmoothEXP"];
+            } else if (split[0]=="smoothTheta4") {
+                dihedral_bending_model = potentialModelIndex.Model["SmoothTheta4"];
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: Dihedral Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), N (None), exp, and smoothExp.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
             }
-            
-//            else if (split[0]=="cot_weight") {
-//                bending_model = potentialModelIndex.Model["cot_weight"];
-//            }  else if (split[0]=="DihedralArea") {
-//                bending_model = potentialModelIndex.Model["DihedralArea"];
-//            }
+        } else if (it.first == "MeanCurvatureModel") {
+            if (split[0]=="N") {
+                mean_curvature_model = potentialModelIndex.Model["None"];
+            } else if (split[0]=="Julicher1996") {
+                mean_curvature_model = potentialModelIndex.Model["Julicher1996"];
+            } else if (split[0]=="Espiru1987") {
+                mean_curvature_model = potentialModelIndex.Model["Espiru1987"];
+            } else if (split[0]=="Itzykson1986") {
+                mean_curvature_model = potentialModelIndex.Model["Itzykson1986"];
+            } else if (split[0]=="ItzyksonBarycentric") {
+                mean_curvature_model = potentialModelIndex.Model["ItzyksonBarycentric"];
+            } else if (split[0]=="JulicherVoronoi") {
+                mean_curvature_model = potentialModelIndex.Model["JulicherVoronoi"];
+            }
             else {
                 string errorMessage = TWARN;
                 errorMessage+="Membrane config parser: Bending Model: I don't understand the \""+split[0]+"\" Model. Available models: cosine (cosine of dihedral angle), and N (None).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
-        } else if (it.first == "BendingCoeff") {
-            Bending_coefficient = stod(split[0]);
+        } else if (it.first == "DihedralBendingCoeff") {
+            dihedral_bending_coefficient = get_double_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "MeanCurvatureCoeff") {
+            mean_curvature_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "SurfaceConstraintCoeff") {
             surface_constraint_coefficient = stod(split[0]);
         } else if (it.first == "VolumeConstraintCoeff") {

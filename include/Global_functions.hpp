@@ -39,6 +39,7 @@ void print_statistics(int num_of_atoms,
                       int num_of_bonds,
                       int num_of_dihedrals,
                       int num_of_angles,
+                      vector<int> num_of_curvature_interactions,
                       vector<Membrane> &mems,
                       vector<Chromatin> &chromos);
 #endif /* Global_functions_hpp */

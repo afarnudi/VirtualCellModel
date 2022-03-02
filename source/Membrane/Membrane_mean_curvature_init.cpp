@@ -118,9 +118,15 @@ void Membrane::mean_curvature_init(void)
             nodeOrder_NodeIndex_NodeNeighbourList[node_order].push_back(Ordered_Node_neighbour_list[i]);
         }
     }
-//    for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
-//        cout<<"i= "<<i<<" nodeOrder_NodeIndex_NodeNeighbourList.size() "<<nodeOrder_NodeIndex_NodeNeighbourList[i].size()<<endl;
-//    }
+    int sum_node_orders=0;
+    for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
+        sum_node_orders+=nodeOrder_NodeIndex_NodeNeighbourList[i].size();
+    }
+    if (sum_node_orders==0) {
+        string errorMessage = TRED;
+        errorMessage+="Membrane mean curvature init: Cannot find a placket on the mesh to define the mean curvature potential. Please use a differnet mesh or use a dihedral potential for the bending.";
+        throw std::runtime_error(errorMessage);
+    }
 }
 
 
