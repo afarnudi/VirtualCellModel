@@ -80,4 +80,9 @@ double get_double_value(std::string value,
                         std::string value_name,
                         std::string example_inputs);
 
+double get_int_value(std::string value,
+                        std::string parser_name,
+                        std::string value_name,
+                        std::string example_inputs);
+
 #endif /* General_functions_hpp */

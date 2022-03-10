@@ -49,90 +49,24 @@ void Membrane::consistancy_check(){
     if (epsilon_LJ_12_6Stat == "kbt") {
         epsilon_LJ_12_6 = generalParameters.BoltzmannKJpermolkelvin * generalParameters.temperature;
     } else {
-        try {
-            epsilon_LJ_12_6= stod(epsilon_LJ_12_6Stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"epsilon_LJ_12_6\" (";
-            errorMessage+=TFILE;
-            errorMessage+=epsilon_LJ_12_6Stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: 'kbt' or just an input value (example 2.678)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        epsilon_LJ_12_6 = get_double_value(epsilon_LJ_12_6Stat, parser_name, "LJepsilon", "100");
     }
     
     if (Node_Bond_Nominal_Length_stat!= "Au" && Node_Bond_Nominal_Length_stat!= "Av") {
-        try {
-            Node_Bond_user_defined_Nominal_Length_in_Nm= stod(Node_Bond_Nominal_Length_stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"NominalLengthInNm\" (";
-            errorMessage+=TFILE;
-            errorMessage+=Node_Bond_Nominal_Length_stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 2.678)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        Node_Bond_user_defined_Nominal_Length_in_Nm = get_double_value(Node_Bond_Nominal_Length_stat, parser_name, "NominalLengthInNm", "100, Au, or Av");
     }
     
     if (Triangle_pair_angle_stat!= "Au" && Triangle_pair_angle_stat!= "Av") {
-        try {
-            Triangle_pair_Nominal_angle_in_degrees= stod(Triangle_pair_angle_stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"SpontaneousTriangleBendingAngleInDegrees\" (";
-            errorMessage+=TFILE;
-            errorMessage+=Triangle_pair_angle_stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 180)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        Triangle_pair_Nominal_angle_in_degrees = get_double_value(Triangle_pair_angle_stat, parser_name, "SpontaneousTriangleBendingAngleInDegrees", "100, Au, or Av");
     }
     if (Node_radius_stat!= "Au" && Node_radius_stat!= "Av") {
-        try {
-            double test = stod(Node_radius_stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"NodeRadius\" (";
-            errorMessage+=TFILE;
-            errorMessage+=Node_radius_stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: Au , Av , or just an input value (example 100)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        double test = get_double_value(Node_radius_stat, parser_name, "NodeRadius", "100, Au, or Av");
     }
     if (SurfaceConstraintValue_stat!= "Au") {
-        try {
-            double test = stod(SurfaceConstraintValue_stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"SurfaceConstraintValue\" (";
-            errorMessage+=TFILE;
-            errorMessage+=SurfaceConstraintValue_stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: Au, or just an input value (example 100)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        double test = get_double_value(SurfaceConstraintValue_stat, parser_name, "SurfaceConstraintValue", "100, Au");
     }
     if (VolumeConstraintValue_stat!= "Au") {
-        try {
-            double test = stod(VolumeConstraintValue_stat);
-        } catch (...) {
-            string errorMessage = TWARN;
-            errorMessage+="Membrane config parser: Invalid input for the \"VolumeConstraintValue\" (";
-            errorMessage+=TFILE;
-            errorMessage+=VolumeConstraintValue_stat;
-            errorMessage+=TWARN;
-            errorMessage+="). Please try again.\nExample inputs: Au, or just an input value (example 100)";
-            errorMessage+= TRESET;
-            throw std::runtime_error(errorMessage);
-        }
+        double test = get_double_value(VolumeConstraintValue_stat, parser_name, "VolumeConstraintValue", "100, Au");
     }
     
     if (dihedral_bending_coefficient==0) {
@@ -180,18 +114,7 @@ void Membrane::assign_parameters(void){
             }
             Mesh_file_name = split[0];
         } else if (it.first == "NodeMass") {
-            try {
-                Node_Mass = stod(split[0]);
-            } catch (...) {
-                string errorMessage = TWARN;
-                errorMessage+="Membrane config parser: Invalid input for the \"NodeMass\", expected a number but got \"";
-                errorMessage+=TFILE;
-                errorMessage+=split[0];
-                errorMessage+=TWARN;
-                errorMessage+="\". Please try again.";
-                errorMessage+= TRESET;
-                throw std::runtime_error(errorMessage);
-            }
+            Node_Mass = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "NodeRadius") {
             Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
@@ -236,9 +159,9 @@ void Membrane::assign_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
         } else if (it.first == "SpringCoeff") {
-            Spring_coefficient = stod(split[0]);
+            Spring_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "DampingCoeff") {
-            Damping_coefficient = stod(split[0]);
+            Damping_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "DihedralBendingModel") {
             if (split[0]=="N") {
                 dihedral_bending_model = potentialModelIndex.Model["None"];
@@ -281,9 +204,9 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "MeanCurvatureCoeff") {
             mean_curvature_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "SurfaceConstraintCoeff") {
-            surface_constraint_coefficient = stod(split[0]);
+            surface_constraint_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "VolumeConstraintCoeff") {
-            volume_constraint_coefficient = stod(split[0]);
+            volume_constraint_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "NominalLengthInNm") {
             Node_Bond_Nominal_Length_stat = split[0];
         } else if (it.first == "SpontaneousTriangleBendingAngleInDegrees") {
@@ -293,38 +216,33 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "VolumeConstraintValue") {
             VolumeConstraintValue_stat = split[0];
         } else if (it.first == "VolumeConstraintRatio") {
-            VolumeConstraintRatio = stod(split[0]);
+            VolumeConstraintRatio = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "SurfaceConstraintRatio") {
-            SurfaceConstraintRatio = stod(split[0]);
+            SurfaceConstraintRatio = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "LinearReducedSrfaceVolume") {
-            LinearReducedSrfaceVolume = stoi(split[0]);
+            LinearReducedSrfaceVolume = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "ExtForceModel") {
-            ext_force_model = stoi(split[0]);
+            ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "XYZinMembrane") {
             UseXYZinMembrane = true;
             XYZinMembrane.resize(3);
-            XYZinMembrane[0] = stod(split[0]);
-            XYZinMembrane[1] = stod(split[1]);
-            XYZinMembrane[2] = stod(split[2]);
+            XYZinMembrane[0] = get_double_value(split[0], parser_name, it.first, "100");
+            XYZinMembrane[1] = get_double_value(split[1], parser_name, it.first, "100");
+            XYZinMembrane[2] = get_double_value(split[2], parser_name, it.first, "100");
         } else if (it.first == "XYZscale") {
-            X_scale = stod(split[0]);
-            Y_scale = stod(split[1]);
-            Z_scale = stod(split[2]);
+            X_scale = get_double_value(split[0], parser_name, it.first, "100");
+            Y_scale = get_double_value(split[1], parser_name, it.first, "100");
+            Z_scale = get_double_value(split[2], parser_name, it.first, "100");
         } else if (it.first == "Scale") {
-            rescale_factor = stod(split[0]);
-        }
-        //        else if (it.first == "LJsigma") {
-        //            sigma_LJ_12_6 = stod(split[0]);
-        //        }
-        else if (it.first == "LJepsilon") {
+            rescale_factor = get_double_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "LJepsilon") {
             epsilon_LJ_12_6Stat  = split[0];
-            
         } else if (it.first == "UpdateRadius") {
-            New_Radius = stod(split[0]);
+            New_Radius = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "UpdateBeginTimeInPs") {
-            Begin_update_time_in_Ps = stod(split[0]);
+            Begin_update_time_in_Ps = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "UpdateEndTimeInPs") {
-            End_update_time_in_Ps = stod(split[0]);
+            End_update_time_in_Ps = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "InitRandomRotation") {
             if(split[0]=="true"){
                 initial_random_rotation_coordinates=true;
@@ -363,40 +281,40 @@ void Membrane::assign_parameters(void){
             
             
         } else if (it.first == "ExtForceModel") {
-            ext_force_model = stoi(split[0]);
+            ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "LockOnSphere") {
-            LockOnSphere_rigidity = stod(split[0]);
+            LockOnSphere_rigidity = get_double_value(split[0], parser_name, it.first, "100");
             if (LockOnSphere_rigidity!=0) {
                 LockOnSphere_stat = true;
             }
         } else if (it.first == "LockOnSphereCoordinate") {
             LockOnSphereCoordinate.resize(3,0);
-            LockOnSphereCoordinate[0] = stod(split[0]);
-            LockOnSphereCoordinate[1] = stod(split[1]);
-            LockOnSphereCoordinate[2] = stod(split[2]);
+            LockOnSphereCoordinate[0] = get_double_value(split[0], parser_name, it.first, "100");
+            LockOnSphereCoordinate[1] = get_double_value(split[1], parser_name, it.first, "100");
+            LockOnSphereCoordinate[2] = get_double_value(split[2], parser_name, it.first, "100");
             
         } else if (it.first == "ExtForceRigidity") {
             ext_force_rigidity.resize(3,0);
-            ext_force_rigidity[0] = stod(split[0]);
-            ext_force_rigidity[1] = stod(split[1]);
-            ext_force_rigidity[2] = stod(split[2]);
+            ext_force_rigidity[0] = get_double_value(split[0], parser_name, it.first, "100");
+            ext_force_rigidity[1] = get_double_value(split[1], parser_name, it.first, "100");
+            ext_force_rigidity[2] = get_double_value(split[2], parser_name, it.first, "100");
             
         } else if (it.first == "VelocityShiftVector") {
             Shift_velocities_xyzVector.resize(3,0);
-            Shift_velocities_xyzVector[0] = stod(split[0]);
-            Shift_velocities_xyzVector[1] = stod(split[1]);
-            Shift_velocities_xyzVector[2] = stod(split[2]);
+            Shift_velocities_xyzVector[0] = get_double_value(split[0], parser_name, it.first, "100");
+            Shift_velocities_xyzVector[1] = get_double_value(split[1], parser_name, it.first, "100");
+            Shift_velocities_xyzVector[2] = get_double_value(split[2], parser_name, it.first, "100");
         } else if (it.first == "CoordinateTranslateVector") {
             Shift_position_xyzVector.resize(3,0);
-            Shift_position_xyzVector[0] = stod(split[0]);
-            Shift_position_xyzVector[1] = stod(split[1]);
-            Shift_position_xyzVector[2] = stod(split[2]);
+            Shift_position_xyzVector[0] = get_double_value(split[0], parser_name, it.first, "100");
+            Shift_position_xyzVector[1] = get_double_value(split[1], parser_name, it.first, "100");
+            Shift_position_xyzVector[2] = get_double_value(split[2], parser_name, it.first, "100");
         } else if (it.first == "NUL") {
             if (stoi(split[0])!=0) {
                 AddRandomModes=true;
-                NumberOfRandomModes = stoi(split[0]);
-                UlmOfRandomModes    = stod(split[1]);
-                EllMaxOfRandomModes = stoi(split[2]);
+                NumberOfRandomModes = get_int_value(split[0], parser_name, it.first, "100");
+                UlmOfRandomModes    = get_double_value(split[1], parser_name, it.first, "100");
+                EllMaxOfRandomModes = get_int_value(split[2], parser_name, it.first, "100");
             }
             
         }
