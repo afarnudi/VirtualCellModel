@@ -63,18 +63,18 @@ void write_data(MyOpenMMData* omm,
                 MyAtomInfo atoms[],
                 NonBondInteractionMap intertable){
     
-    if (generalParameters.WantVelocity) {
-        string vel_file_name=generalParameters.trajectory_file_name+"_vels.txt";
-        std::ofstream wvel;
-        wvel.open(vel_file_name.c_str(), std::ios::app);
-        
-        wvel<<"AtomIndex\tVx\tVy\tVz (Nm/Ps)\n";
-        wvel<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
-        for (int t=0; atoms[t].type != EndOfList; t++) {
-            wvel<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
-            wvel<<"\n";
-        }
-    }
+//    if (generalParameters.WantVelocity) {
+//        string vel_file_name=generalParameters.trajectory_file_name+"_vels.txt";
+//        std::ofstream wvel;
+//        wvel.open(vel_file_name.c_str(), std::ios::app);
+//        
+//        wvel<<"AtomIndex\tVx\tVy\tVz (Nm/Ps)\n";
+//        wvel<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+//        for (int t=0; atoms[t].type != EndOfList; t++) {
+//            wvel<<t<<"\t"<<atoms[t].velocityInNmperPs[0] << "\t" << atoms[t].velocityInNmperPs[1] << "\t" << atoms[t].velocityInNmperPs[2];
+//            wvel<<"\n";
+//        }
+//    }
     
     
     
