@@ -38,6 +38,17 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     //                    MeanCurvatureForces[MCs_index]->addPerBondParameter("SponAngle");
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
+                    if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                        if (temp_label=="" || temp_label != mean_curvature_interactinos[node_order][node_index].class_label) {
+                            generalParameters.force_group_count++;
+                            temp_label=mean_curvature_interactinos[node_order][node_index].class_label;
+                            string label = mean_curvature_interactinos[node_order][node_index].class_label+"_Julicher_"+ to_string(generalParameters.force_group_count);
+                            generalParameters.force_group_label.push_back(label);
+                        }
+                        
+                        MeanCurvatureForces[MCs_index]->setForceGroup(generalParameters.force_group_count);
+                        
+                    }
                     
                 }
                 
@@ -128,7 +139,17 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     //                    MeanCurvatureForces[MCs_index]->addPerBondParameter("SponAngle");
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
-                    
+                    if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                        if (temp_label=="" || temp_label != mean_curvature_interactinos[node_order][node_index].class_label) {
+                            generalParameters.force_group_count++;
+                            temp_label=mean_curvature_interactinos[node_order][node_index].class_label;
+                            string label = mean_curvature_interactinos[node_order][node_index].class_label+"_JulicherVoronoi_"+ to_string(generalParameters.force_group_count);
+                            generalParameters.force_group_label.push_back(label);
+                        }
+                        
+                        MeanCurvatureForces[MCs_index]->setForceGroup(generalParameters.force_group_count);
+                        
+                    }
                 }
                 
                 vector<double> parameters;
@@ -154,7 +175,17 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     //                    MeanCurvatureForces[MCs_index]->addPerBondParameter("SponAngle");
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
-                    
+                    if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                        if (temp_label=="" || temp_label != mean_curvature_interactinos[node_order][node_index].class_label) {
+                            generalParameters.force_group_count++;
+                            temp_label=mean_curvature_interactinos[node_order][node_index].class_label;
+                            string label = mean_curvature_interactinos[node_order][node_index].class_label+"_ItzyksonBarycentric_"+ to_string(generalParameters.force_group_count);
+                            generalParameters.force_group_label.push_back(label);
+                        }
+                        
+                        MeanCurvatureForces[MCs_index]->setForceGroup(generalParameters.force_group_count);
+                        
+                    }
                 }
                 
                 vector<double> parameters;
