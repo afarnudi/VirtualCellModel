@@ -287,6 +287,11 @@ void Membrane::assign_parameters(void){
             if (LockOnSphere_rigidity!=0) {
                 LockOnSphere_stat = true;
             }
+        } else if (it.first == "LockOnEllipsoid") {
+            LockOnEllipsoid_rigidity = get_double_value(split[0], parser_name, it.first, "100");
+            if (LockOnEllipsoid_rigidity!=0) {
+                LockOnEllipsoid_stat = true;
+            }
         } else if (it.first == "LockOnSphereCoordinate") {
             LockOnSphereCoordinate.resize(3,0);
             LockOnSphereCoordinate[0] = get_double_value(split[0], parser_name, it.first, "100");

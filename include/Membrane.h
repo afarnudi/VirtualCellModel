@@ -128,6 +128,7 @@ public:
     bool AddRandomModes = false;
     bool InflateMembrane= false;
     bool LockOnSphere_stat = false;
+    bool LockOnEllipsoid_stat = false;
     bool open_surface = false;
     
     int spring_model=0;
@@ -159,6 +160,7 @@ public:
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
     double LockOnSphere_rigidity=0;
+    double LockOnEllipsoid_rigidity=0;
     
     vector<string> insertOrder;
     vector<string> values;
@@ -450,6 +452,17 @@ public:
     double get_surface_area(void){
         return surface_area;
     }
+    
+    /**Returns the last saved surface area*/
+    vector<double> get_XYZscale(void){
+        vector<double> abc = {X_scale*rescale_factor, Y_scale*rescale_factor, Z_scale*rescale_factor };
+        return abc;
+    }
+    
+    /**Returns the last saved surface area*/
+    double get_scale(void){
+        return rescale_factor;
+    }
     /**Return the new node radius 'end update time' in Ps.*/
     double get_End_update_time_in_Ps(void){
         return End_update_time_in_Ps;
@@ -492,7 +505,7 @@ public:
      */
     int get_num_of_nodes(void){
         int additional_nodes=0;
-        if (LockOnSphere_stat) {
+        if (LockOnSphere_stat || LockOnEllipsoid_stat) {
             additional_nodes=1;
         }
         return Num_of_Nodes + additional_nodes;
@@ -503,7 +516,7 @@ public:
     }
     int get_num_of_bonds(void){
         int additional_bonds=0;
-        if (LockOnSphere_stat) {
+        if (LockOnSphere_stat || LockOnEllipsoid_stat) {
             additional_bonds = Num_of_Nodes;
         }
         if (spring_model==potentialModelIndex.Model["None"]) {
@@ -962,9 +975,14 @@ public:
         insertOrder.push_back("InflateMembrane");
         
         values[0] ="0";
-        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with a strong harmonic springs. The spring rigidity is set to multiples of kBT. Default 0";
+        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs. The spring rigidity is set to multiples of kBT. Default 0";
         Params["LockOnSphere"] = values;
         insertOrder.push_back("LockOnSphere");
+        
+        values[0] ="0";
+        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs that keep particles on the surface of an ellipsoid (x/a)^2+(y/b)^2+(z/c)^=r^. Where a,b,c,and r are calculated as the membranes Scal*XScale, Scal*YScale, Scal*ZScale, and Scale. The spring rigidity is set to multiples of kBT. Default 0";
+        Params["LockOnEllipsoid"] = values;
+        insertOrder.push_back("LockOnEllipsoid");
         
         values[0] ="0 0 0";
         values[1] ="#LockOnSphere potential is attached to this coordinate. Default 0 0 0";

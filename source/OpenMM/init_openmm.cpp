@@ -136,6 +136,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     OpenMM::HarmonicBondForce*      HarmonicBond = new OpenMM::HarmonicBondForce();
     OpenMM::HarmonicBondForce*      Kelvin_VoigtBond = new OpenMM::HarmonicBondForce();
     vector<OpenMM::CustomBondForce*> X4harmonics;
+    vector<OpenMM::CustomCompoundBondForce*> ellipsoid;
     vector<OpenMM::CustomBondForce*> KremerGrests;
     vector<OpenMM::CustomBondForce*> Gompper;
 //    vector<OpenMM::CustomBondForce*> Gompperrep;
@@ -151,6 +152,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                           HarmonicBond,
                           Kelvin_VoigtBond,
                           X4harmonics,
+                          ellipsoid,
                           KremerGrests,
                           Gompper,
 //                          Gompperrep,

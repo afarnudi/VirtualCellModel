@@ -13,7 +13,7 @@ MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem) {
     //used in openmm to specify different types of atoms. I don't know what the application is at the moment.
     int C=0;
     int atom_count = 0;
-    if (mem.LockOnSphere_stat) {
+    if (mem.LockOnSphere_stat || mem.LockOnEllipsoid_stat) {
         atom_count = 1;
         int last_atom_index = mem.get_num_of_nodes()-atom_count;
         myatominfo[last_atom_index].type=C;

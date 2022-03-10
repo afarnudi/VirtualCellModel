@@ -58,6 +58,11 @@ struct Bonds{
     double gompperlc1;
     double gompperlc0;
     double gompperlmax;
+    
+    double ellipsoidLockXscale;
+    double ellipsoidLockYscale;
+    double ellipsoidLockZscale;
+    double ellipsoidLockRscale;
 };
 
 struct Dihedrals{

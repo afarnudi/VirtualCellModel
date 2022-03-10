@@ -8,7 +8,6 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     bool harmonicpotential = false;
     bool gompperpotential = false;
     bool noPotential=true;
-    
     int bond_count = 0;
     int atom_count = 0;
     if (mem.LockOnSphere_stat) {
@@ -22,6 +21,26 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
             bonds[i].class_label = mem.get_label() + mem.get_label();
             bonds[i].nominalLengthInNm=mem.get_average_Membrane_radius();
             bonds[i].stiffnessInKJPerNm2=mem.LockOnSphere_rigidity*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+            
+        }
+    } else if (mem.LockOnEllipsoid_stat){
+        int bond_index = mem.get_num_of_bonds() - mem.get_num_of_nodes()+1;
+        int last_atom_index = mem.get_num_of_nodes()-1;
+        bond_count = mem.get_num_of_nodes()-1;
+        for (int i=bond_index; i<mem.get_num_of_nodes()-1; i++) {
+            bonds[i].type = potentialModelIndex.Model["Ellipsoid"];
+            bonds[i].atoms[0]=last_atom_index;
+            bonds[i].atoms[1]=i-bond_index;
+            bonds[i].class_label = mem.get_label() + mem.get_label();
+            bonds[i].nominalLengthInNm=mem.get_scale();
+            vector<double> abc = mem.get_XYZscale();
+            bonds[i].ellipsoidLockXscale = abc[0];
+            bonds[i].ellipsoidLockYscale = abc[1];
+            bonds[i].ellipsoidLockZscale = abc[2];
+            bonds[i].stiffnessInKJPerNm2=mem.LockOnEllipsoid_rigidity*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+//            cout<<mem.LockOnEllipsoid_rigidity<<" "<<generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature<<"\n";
+//            cout<<bonds[i].ellipsoidLockXscale<<" "<<bonds[i].ellipsoidLockYscale<<" "<<bonds[i].ellipsoidLockZscale<<endl;
+//            exit(0);
         }
     }
     
