@@ -395,7 +395,7 @@ void creatBondExclusion(Bonds*                                 bonds,
 
 void minimisation(MyOpenMMData*        omm,
                   MyAtomInfo           atoms[],
-                  Bonds*               bonds
+                  int               atom_count
                   );
 
 /**Add particles to the system and forces.
