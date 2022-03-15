@@ -63,6 +63,9 @@ struct Bonds{
     double ellipsoidLockYscale;
     double ellipsoidLockZscale;
     double ellipsoidLockRscale;
+    
+    double LockOn_rigidity;
+    double LockOnULM_amplitude;
 };
 
 struct Dihedrals{

@@ -92,6 +92,7 @@ void set_bonded_forces(Bonds*                                 bonds,
                        OpenMM::HarmonicBondForce*            &Kelvin_VoigtBond,
                        vector<OpenMM::CustomBondForce*>      &X4harmonics,
                        vector<OpenMM::CustomCompoundBondForce*>      &ellipsoid,
+                       vector<OpenMM::CustomCompoundBondForce*>      &ulm_potential,
                        vector<OpenMM::CustomBondForce*>      &KremerGrests,
                        vector<OpenMM::CustomBondForce*>      &Gompper,
 //                       vector<OpenMM::CustomBondForce*>      &Gompperrep,
@@ -115,6 +116,7 @@ void set_bonded_forces(Bonds*                                 bonds,
     set <std::string> Gompper_classes;
     set <std::string> X4harmonic_classes;
     set <std::string> ellipsoid_classes;
+    set <std::string> ulm_classes;
     set <std::string> Contractile_classes;
     set <std::string> Hill_classes;
     set <std::string> KF_classes;
@@ -125,6 +127,7 @@ void set_bonded_forces(Bonds*                                 bonds,
     int Gompper_index = -1;
     int X4harmonic_index = -1;
     int ellipsoid_index = -1;
+    int ulm_index = -1;
     int Contractile_index = -1;
     int Hill_index = -1;
     int KF_index = -1;
@@ -233,7 +236,7 @@ void set_bonded_forces(Bonds*                                 bonds,
 //                HarmonicBond->setUsesPeriodicBoundaryConditions(true);
 //            }
         }
-        else if (bonds[i].type == potentialModelIndex.Model["Ellipsoid"])
+        else if (bonds[i].type == potentialModelIndex.Model["LockOnEllipsoid"])
         {
             auto ellipsoid_item = ellipsoid_classes.find(bonds[i].class_label);
             if (ellipsoid_item == ellipsoid_classes.end()) {
@@ -242,24 +245,25 @@ void set_bonded_forces(Bonds*                                 bonds,
                 ellipsoid_index++;
                 
                 ellipsoid.push_back( new OpenMM::CustomCompoundBondForce(2,"0.5*"+to_string(bonds[i].stiffnessInKJPerNm2)+"*"+to_string(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm)+"*( sqrt( (x2/"+to_string(bonds[i].ellipsoidLockXscale)+")^2 +(y2/"+to_string(bonds[i].ellipsoidLockYscale)+")^2 + (z2/"+to_string(bonds[i].ellipsoidLockZscale)+")^2)-1)^2"));
-                
-//                cout<<"0.5*"+to_string(bonds[i].stiffnessInKJPerNm2)+"*"+to_string(bonds[i].nominalLengthInNm)+"*( sqrt( ((x2-x1)/"+to_string(bonds[i].ellipsoidLockXscale)+")^2 +((y2-y1)/"+to_string(bonds[i].ellipsoidLockYscale)+")^2 + ((z2-z1)/"+to_string(bonds[i].ellipsoidLockZscale)+")^2)-1)^2"<<endl;
-//                exit(0);
-//                ellipsoid[ellipsoid_index]->addPerBondParameter("r_rest");
-//                ellipsoid[ellipsoid_index]->addPerBondParameter("k_bond");
                 system.addForce(ellipsoid[ellipsoid_index]);
             }
-//            double r_rest =bonds[i].nominalLengthInNm;
-//            double k_bond=bonds[i].stiffnessInKJPerNm4;
-//            vector<double> parameters;
-//            parameters.resize(2);
-//            parameters[0]=r_rest;
-//            parameters[1]=k_bond;
             vector<int> bond_atoms={atom[0],atom[1]};
             ellipsoid[ellipsoid_index]->addBond(bond_atoms);
-//            if (GenConst::Periodic_box) {
-//                X4harmonics[X4harmonic_index]->setUsesPeriodicBoundaryConditions(true);
-//            }
+        }
+        else if (bonds[i].type == potentialModelIndex.Model["LockOnULM2_0"])
+        {
+            auto ulm_item = ulm_classes.find(bonds[i].class_label);
+            if (ulm_item == ulm_classes.end()) {
+                
+                ulm_classes.insert(bonds[i].class_label);
+                ulm_index++;
+                string potential = "0.5*"+to_string(bonds[i].stiffnessInKJPerNm2)+"*(sqrt(x2^2+y2^2+z2^2)-"+to_string(bonds[i].nominalLengthInNm)+"*("+to_string(bonds[i].LockOnULM_amplitude)+"*0.3153915653*(3*z2^2/(x2^2 +y2^2 + z2^2)-1)+1))^2";
+                ulm_potential.push_back( new OpenMM::CustomCompoundBondForce(2,potential));
+//                cout<<potential<<endl;exit(0);
+                system.addForce(ulm_potential[ulm_index]);
+            }
+            vector<int> bond_atoms={atom[0],atom[1]};
+            ulm_potential[ulm_index]->addBond(bond_atoms);
         }
         else if (bonds[i].type == potentialModelIndex.Model["HarmonicX4"])
         {

@@ -50,7 +50,8 @@ protected:
     std::string resume_file_name="None";
     std::string Node_radius_stat = "Av";
     
-    bool   update_radius_stat= false;
+    bool update_radius_stat= false;
+    bool open_surface = false;
     /**write geometrical properties if it is true.*/
     bool WantGeometricProps= false;
     bool UseXYZinMembrane = false;
@@ -125,22 +126,25 @@ public:
     std::string SurfaceConstraintValue_stat;
     std::string VolumeConstraintValue_stat;
     std::string parser_name = "Membrane config parser";
+    
     bool AddRandomModes = false;
+    bool AddSphericalHarmonicsMode = false;
     bool InflateMembrane= false;
-    bool LockOnSphere_stat = false;
-    bool LockOnEllipsoid_stat = false;
-    bool open_surface = false;
     
     int spring_model=0;
     int dihedral_bending_model=0;
     int mean_curvature_model=0;
+    int LockOnPotential=0;
     int surface_constraint_model=0;
     int volume_constraint_model=0;
     int ext_force_model=0;
     int NumberOfRandomModes;
     int EllMaxOfRandomModes;
+    int EllOfGeneratedMode;
+    int MOfGeneratedMode;
     int LinearReducedSrfaceVolume=0;
     
+    double LockOnULMU=0;
     double contourRadius;
     double Node_Bond_user_defined_Nominal_Length_in_Nm;
     double Triangle_pair_Nominal_angle_in_degrees=-1;
@@ -153,14 +157,14 @@ public:
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
     double rescale_factor=1;
     double UlmOfRandomModes;
+    double AmplitudeOfGeneratedMode;
     double surface_constraint_coefficient=0;
     double volume_constraint_coefficient=0;
     double SurfaceConstraintValue=0;
     double SurfaceConstraintRatio=0;
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
-    double LockOnSphere_rigidity=0;
-    double LockOnEllipsoid_rigidity=0;
+    double LockOn_rigidity=0;
     
     vector<string> insertOrder;
     vector<string> values;
@@ -185,7 +189,7 @@ public:
     vector<double> Shift_position_xyzVector;
     vector<double> Shift_velocities_xyzVector;
     vector<double> ext_force_rigidity;
-    vector<double> LockOnSphereCoordinate;
+    vector<double> LockOnCoordinate;
     
     vector<vector<int> >    Triangle_list;
     //List that stores the IDs of triangles that are neighbours.
@@ -408,6 +412,7 @@ public:
     /**Calculate and return the cot of the  angle between nodes A(middle of the angle), B, and C.*/
     double calc_theta_angle_ABC(int node_A, int node_B, int node_C);
     void randomundulationgenerator(void);
+    void generate_undulations(void);
     void randomundulationgenerator(int numberOfRandomModes, int ellMaxOfRandomModes, double ulmOfRandomModes);
     void assign_parameters(void);
     void consistancy_check(void);
@@ -505,7 +510,7 @@ public:
      */
     int get_num_of_nodes(void){
         int additional_nodes=0;
-        if (LockOnSphere_stat || LockOnEllipsoid_stat) {
+        if (LockOn_rigidity!=0) {
             additional_nodes=1;
         }
         return Num_of_Nodes + additional_nodes;
@@ -516,7 +521,7 @@ public:
     }
     int get_num_of_bonds(void){
         int additional_bonds=0;
-        if (LockOnSphere_stat || LockOnEllipsoid_stat) {
+        if (LockOn_rigidity!=0) {
             additional_bonds = Num_of_Nodes;
         }
         if (spring_model==potentialModelIndex.Model["None"]) {
@@ -924,6 +929,11 @@ public:
         Params["NUL"] = values;
         insertOrder.push_back("NUL");
         
+        values[0] ="0 0 0";
+        values[1] ="#ULM: Add a mode (L), and (M) with amplitude (U) of the real spherical harmonics to the existing Memebrane mesh. Example: 0.01 4, 2. M runs from -(2*L+1) to 2*L+1, and L is a positive number.";
+        Params["ULM"] = values;
+        insertOrder.push_back("ULM");
+        
         values[0] ="N";
         values[1] ="#The surface constraint model, L, for local and , G, for a global constraint. Default N";
         Params["SurfaceConstraint"] = values;
@@ -976,8 +986,13 @@ public:
         
         values[0] ="0";
         values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs. The spring rigidity is set to multiples of kBT. Default 0";
-        Params["LockOnSphere"] = values;
-        insertOrder.push_back("LockOnSphere");
+        Params["LockOnRigidity"] = values;
+        insertOrder.push_back("LockOnRigidity");
+        
+        values[0] ="N";
+        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs. The spring rigidity is set to multiples of kBT. Default 0";
+        Params["LockOnPotential"] = values;
+        insertOrder.push_back("LockOnPotential");
         
         values[0] ="0";
         values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs that keep particles on the surface of an ellipsoid (x/a)^2+(y/b)^2+(z/c)^=r^. Where a,b,c,and r are calculated as the membranes Scal*XScale, Scal*YScale, Scal*ZScale, and Scale. The spring rigidity is set to multiples of kBT. Default 0";
@@ -985,9 +1000,9 @@ public:
         insertOrder.push_back("LockOnEllipsoid");
         
         values[0] ="0 0 0";
-        values[1] ="#LockOnSphere potential is attached to this coordinate. Default 0 0 0";
-        Params["LockOnSphereCoordinate"] = values;
-        insertOrder.push_back("LockOnSphereCoordinate");
+        values[1] ="#LockOn potential is attached to this coordinate. Default 0 0 0";
+        Params["LockOnCoordinate"] = values;
+        insertOrder.push_back("LockOnCoordinate");
     }
     
     

@@ -33,7 +33,9 @@ struct PotentialModelIndex{
         Model["Abraham1989"] = 12;
         Model["LocalConstraint"] = 13;
         Model["GlobalConstraint"] = 14;
-        Model["Ellipsoid"] = 15;
+        Model["LockOnEllipsoid"] = 15;
+        Model["LockOnULM2_0"] = 16;
+        Model["LockOnSphere"] = 17;
         
         Model["SmoothTheta4"]=18;
         Model["SmoothEXP"]=19;

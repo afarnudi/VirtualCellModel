@@ -49,7 +49,9 @@ void Membrane::initialise(std::string Mesh_file_name){
     
     assign_surface_volume_constraints();
     
-    
+    if (AddSphericalHarmonicsMode) {
+        generate_undulations();
+    }
     if (AddRandomModes) {
         randomundulationgenerator();
     }

@@ -19,7 +19,7 @@ void print_statistics(int num_of_atoms,
                       vector<Chromatin> &Chromatins){
     
     for (int i=0; i<Membranes.size(); i++) {
-        if (Membranes[i].get_spring_model() == potentialModelIndex.Model["None"] && !Membranes[i].LockOnSphere_stat) {
+        if (Membranes[i].get_spring_model() == potentialModelIndex.Model["None"] && Membranes[i].LockOnPotential != potentialModelIndex.Model["None"]) {
             num_of_bonds-=Membranes[i].get_num_of_bonds();
         }
         if (Membranes[i].get_dihedral_bending_model() == potentialModelIndex.Model["None"]) {

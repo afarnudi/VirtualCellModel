@@ -140,6 +140,13 @@ void Membrane::randomundulationgenerator(void){
     
 }
 
+void Membrane::generate_undulations(void){
+    update_spherical_positions();
+    calculate_dOmega();
+    calculate_surface_area_with_voronoi();
+    add_ulm_mode_real(EllOfGeneratedMode, MOfGeneratedMode, AmplitudeOfGeneratedMode, Radius);
+}
+
 void Membrane::randomundulationgenerator(int numberOfRandomModes,
                                          int ellMaxOfRandomModes,
                                          double ulmOfRandomModes){

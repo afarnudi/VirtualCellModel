@@ -282,21 +282,28 @@ void Membrane::assign_parameters(void){
             
         } else if (it.first == "ExtForceModel") {
             ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
-        } else if (it.first == "LockOnSphere") {
-            LockOnSphere_rigidity = get_double_value(split[0], parser_name, it.first, "100");
-            if (LockOnSphere_rigidity!=0) {
-                LockOnSphere_stat = true;
+        } else if (it.first == "LockOnRigidity") {
+            LockOn_rigidity = get_double_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "LockOnPotential") {
+            if (split[0]=="N") {
+                LockOnPotential = potentialModelIndex.Model["None"];
+            } else if (split[0]=="Sphere") {
+                LockOnPotential = potentialModelIndex.Model["LockOnSphere"];
+            } else if (split[0]=="Ellipsoid") {
+                LockOnPotential = potentialModelIndex.Model["LockOnEllipsoid"];
+            } else if (split[0]=="ULM2_0") {
+                LockOnPotential = potentialModelIndex.Model["LockOnULM2_0"];
+                if (split.size()>1) {
+                    LockOnULMU = get_double_value(split[1], parser_name, it.first, "1");
+                } else {
+                    LockOnULMU = 1;
+                }
             }
-        } else if (it.first == "LockOnEllipsoid") {
-            LockOnEllipsoid_rigidity = get_double_value(split[0], parser_name, it.first, "100");
-            if (LockOnEllipsoid_rigidity!=0) {
-                LockOnEllipsoid_stat = true;
-            }
-        } else if (it.first == "LockOnSphereCoordinate") {
-            LockOnSphereCoordinate.resize(3,0);
-            LockOnSphereCoordinate[0] = get_double_value(split[0], parser_name, it.first, "100");
-            LockOnSphereCoordinate[1] = get_double_value(split[1], parser_name, it.first, "100");
-            LockOnSphereCoordinate[2] = get_double_value(split[2], parser_name, it.first, "100");
+        } else if (it.first == "LockOnCoordinate") {
+            LockOnCoordinate.resize(3,0);
+            LockOnCoordinate[0] = get_double_value(split[0], parser_name, it.first, "100");
+            LockOnCoordinate[1] = get_double_value(split[1], parser_name, it.first, "100");
+            LockOnCoordinate[2] = get_double_value(split[2], parser_name, it.first, "100");
             
         } else if (it.first == "ExtForceRigidity") {
             ext_force_rigidity.resize(3,0);
@@ -315,11 +322,19 @@ void Membrane::assign_parameters(void){
             Shift_position_xyzVector[1] = get_double_value(split[1], parser_name, it.first, "100");
             Shift_position_xyzVector[2] = get_double_value(split[2], parser_name, it.first, "100");
         } else if (it.first == "NUL") {
-            if (stoi(split[0])!=0) {
+            if (get_int_value(split[0], parser_name, it.first, "100")!=0) {
                 AddRandomModes=true;
                 NumberOfRandomModes = get_int_value(split[0], parser_name, it.first, "100");
                 UlmOfRandomModes    = get_double_value(split[1], parser_name, it.first, "100");
                 EllMaxOfRandomModes = get_int_value(split[2], parser_name, it.first, "100");
+            }
+            
+        } else if (it.first == "ULM") {
+            if (get_int_value(split[1], parser_name, it.first, "2")!=0) {
+                AddSphericalHarmonicsMode=true;
+                AmplitudeOfGeneratedMode = get_double_value(split[0], parser_name, it.first, "1");
+                EllOfGeneratedMode = get_int_value(split[1], parser_name, it.first, "2");
+                MOfGeneratedMode = get_int_value(split[2], parser_name, it.first, "2");
             }
             
         }
