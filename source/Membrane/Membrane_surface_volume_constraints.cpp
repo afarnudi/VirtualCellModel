@@ -10,7 +10,6 @@
 
 
 void Membrane::assign_surface_volume_constraints(void){
-    calculate_volume_and_surface_area();
     if (surface_constraint_model!=potentialModelIndex.Model["None"]) {
         if (SurfaceConstraintValue_stat=="Au") {
             if (surface_constraint_model==potentialModelIndex.Model["LocalConstraint"]) {

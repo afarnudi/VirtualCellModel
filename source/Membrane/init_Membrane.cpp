@@ -47,8 +47,6 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
-    assign_surface_volume_constraints();
-    
     if (AddSphericalHarmonicsMode) {
         generate_undulations();
     }
@@ -61,6 +59,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     set_bending_nominal_angle();
     set_node_radius();
     calculate_volume_and_surface_area();
+    assign_surface_volume_constraints();
     
     if (UseMeanCurvature) {
         mean_curvature_init();
