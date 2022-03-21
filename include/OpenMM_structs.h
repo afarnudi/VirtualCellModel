@@ -142,7 +142,9 @@ struct MyOpenMMData {
     
     OpenMM::Context*  context;
     OpenMM::Context*  minimisationContext;
-
+    
+    PlatformInfo platforminfo;
+    
     OpenMM::HarmonicBondForce* harmonic;
     OpenMM::HarmonicBondForce* calcforce;
     std::vector<OpenMM::CustomBondForce*> x4harmonic;

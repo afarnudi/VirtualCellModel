@@ -302,7 +302,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
     }
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
-    
+    omm->platforminfo = platforminfo;
     // Choose an Integrator for advancing time, and a Context connecting the
     // System with the Integrator for simulation. Let the Context choose the
     // best available Platform. Initialize the configuration from the default
@@ -516,7 +516,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               double                 stepSizeInFs,
                               int                    timeInPs,
-                              std::string&           platformName,
+//                              OpenMM::Platform&      platform,
+                              PlatformInfo           platforminfo,
                               //                                 TimeDependantData*     time_dependant_data,
                               //                                 Bonds*                 bonds,
                               //                                 Dihedrals*             dihedrals,
@@ -587,26 +588,10 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               MeanCurvatureForces,
                               system);
     omm->MeanCurvatureForces = MeanCurvatureForces;
-    
-    
-//    set_pbcvectors(system);
-    PlatformInfo platforminfo;
-    if (!generalParameters.Resume) {
-        
-        if (userinputs.platforminput) {
-            platforminfo = userinputs.platforminfo;
-            get_platform_info(platforminfo);
-        } else {
-            platforminfo = get_platform_info();
-        }
-
-        generateHardwareReport(platforminfo);
-    } else {
-        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
-    }
-    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
-    
+//    cout<<platforminfo.platform_device_id<<endl;exit(0);
     omm->VerletIntegrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
@@ -622,12 +607,12 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
             generalParameters.hardwareReport+=tempPrecision+"\n";
             generalParameters.hardwareReport+="------------------------\n\n";
             generalParameters.precision=tempPrecision;
-            cout<<"Precision not supported by platform, will use: "<<tempPrecision<<endl;
+//            cout<<"Precision not supported by platform, will use: "<<tempPrecision<<endl;
         } else {
             generalParameters.hardwareReport+=tempPrecision;
             generalParameters.hardwareReport+=" precision set on the platform.\n";
             generalParameters.hardwareReport+="------------------------\n\n";
-            cout<<"Platform precision set to: "<<tempPrecision<<endl;
+//            cout<<"Platform precision set to: "<<tempPrecision<<endl;
         }
     }
 
