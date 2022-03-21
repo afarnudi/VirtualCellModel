@@ -88,6 +88,7 @@ struct GeneralParameters{
     bool WantXYZbin=false;
     bool WantVelocityBin=false;
     bool WantTPKBin=false;
+    bool WantCurve=false;
     
     string dataPercision;
     

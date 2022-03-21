@@ -10,7 +10,7 @@ void add_particles_to_system_and_forces(const MyAtomInfo                       a
                                         vector<OpenMM::CustomNonbondedForce*> &ExcludedVolumes,
                                         vector<OpenMM::CustomNonbondedForce*> &WCAs,
                                         vector<OpenMM::CustomNonbondedForce*> &WCAFCs,
-                                        NonBondInteractionMap                 &interaction_map,
+//                                        NonBondInteractionMap                 &interaction_map,
                                         OpenMM::System                        &system){
     
  

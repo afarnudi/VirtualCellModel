@@ -541,7 +541,9 @@ int main(int argc, char **argv)
             
         }
         
-        //        cout<<progressp<<"   "<<savetime<<endl;exit(0);
+        if (generalParameters.WantCurve) {
+            writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, platformName, all_mean_curvature_interactions, userinputs);
+        }
         
         
         if (generalParameters.Minimise && !generalParameters.Resume) {
@@ -568,7 +570,9 @@ int main(int argc, char **argv)
                 //                Update_classes(Membranes, Actins, ECMs, Chromatins, time, all_atoms);
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
-                
+                if (generalParameters.WantCurve) {
+                    writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, platformName, all_mean_curvature_interactions, userinputs);
+                }
                 writeOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
                 
                 //Begin: Exporting congiguration of classes for simulation .

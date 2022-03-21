@@ -109,7 +109,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        ExcludedVolumes,
                                        WCAs,
                                        WCAFCs,
-                                       interaction_map,
+//                                       interaction_map,
                                        system);
     
     omm->LJ  = LJ_12_6_interactions;
@@ -510,4 +510,145 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     
     return omm;
+}
+
+
+void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
+                              double                 stepSizeInFs,
+                              int                    timeInPs,
+                              std::string&           platformName,
+                              //                                 TimeDependantData*     time_dependant_data,
+                              //                                 Bonds*                 bonds,
+                              //                                 Dihedrals*             dihedrals,
+                              //                                 Angles*                angles,
+                              //                                 Triangles*             triangles,
+                              MeanCurvature**        mean_curvature_ints,
+                              //                                 vector<set<int> >      &membrane_set,
+                              //                                 vector<set<int> >      &actin_set,
+                              //                                 vector<set<int> >      &ecm_set,
+                              //                                 vector<vector<set<int> > > &chromatin_set,
+                              ArgStruct_VCM           userinputs
+//                                 NonBondInteractionMap  &interaction_map
+)
+{
+    int num_of_atoms=0;
+    for (int i=0; atoms_original[i].type != EndOfList; i++) {
+        num_of_atoms++;
+    }
+    
+//    cout<<num_of_atoms<<endl;
+    MyAtomInfo* atoms_withMass0     = new MyAtomInfo[num_of_atoms+1];
+    atoms_withMass0[num_of_atoms].type = EndOfList;
+    for (int i=0; atoms_withMass0[i].type != EndOfList; i++) {
+        atoms_withMass0[i]=atoms_original[i];
+        atoms_withMass0[i].mass=0;
+        atoms_withMass0[i].initPosInNm[0]=atoms_original[i].posInNm[0];
+        atoms_withMass0[i].initPosInNm[1]=atoms_original[i].posInNm[1];
+        atoms_withMass0[i].initPosInNm[2]=atoms_original[i].posInNm[2];
+    }
+    
+    
+//    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+    // Load all available OpenMM plugins from their default location.
+    if (!generalParameters.CBP) {
+        OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
+    } else {
+        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+    }
+    
+    
+    vector<string> loaderror = OpenMM::Platform::getPluginLoadFailures();
+    for (auto &line: loaderror){
+        cout<<line<<endl;
+    }
+    MyOpenMMData*       omm = new MyOpenMMData();
+    OpenMM::System&     system = *(omm->system = new OpenMM::System());
+    
+    vector<OpenMM::CustomNonbondedForce*> ExcludedVolumes;
+    vector<OpenMM::CustomNonbondedForce*> WCAs;
+    vector<OpenMM::CustomNonbondedForce*> WCAFCs;
+    vector<OpenMM::CustomNonbondedForce*> LJ_12_6_interactions;
+    vector<OpenMM::CustomExternalForce*>  ext_force;
+    
+    
+    std::vector<Vec3> initialPosInNm;
+    std::vector<Vec3> initialVelInNmperPs;
+    add_particles_to_system_and_forces(atoms_withMass0,
+                                       initialPosInNm,
+                                       initialVelInNmperPs,
+                                       LJ_12_6_interactions,
+                                       ExcludedVolumes,
+                                       WCAs,
+                                       WCAFCs,
+                                       system);
+        
+    vector<OpenMM::CustomCompoundBondForce*> MeanCurvatureForces;
+    set_mean_curvature_forces(mean_curvature_ints,
+                              MeanCurvatureForces,
+                              system);
+    omm->MeanCurvatureForces = MeanCurvatureForces;
+    
+    
+//    set_pbcvectors(system);
+    PlatformInfo platforminfo;
+    if (!generalParameters.Resume) {
+        
+        if (userinputs.platforminput) {
+            platforminfo = userinputs.platforminfo;
+            get_platform_info(platforminfo);
+        } else {
+            platforminfo = get_platform_info();
+        }
+
+        generateHardwareReport(platforminfo);
+    } else {
+        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
+    }
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
+    
+    omm->VerletIntegrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
+    
+    if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
+        omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform);
+    } else {
+        omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+    }
+    
+    if (platform.getName() != "CPU" && platforminfo.platform_id!=0) {
+        platform.setPropertyValue(*omm->context, "Precision", generalParameters.precision);
+        string tempPrecision = platform.getPropertyValue(*omm->context, "Precision");
+        if (tempPrecision != generalParameters.precision) {
+            generalParameters.hardwareReport+="Precision not supported by platform, will use: ";
+            generalParameters.hardwareReport+=tempPrecision+"\n";
+            generalParameters.hardwareReport+="------------------------\n\n";
+            generalParameters.precision=tempPrecision;
+            cout<<"Precision not supported by platform, will use: "<<tempPrecision<<endl;
+        } else {
+            generalParameters.hardwareReport+=tempPrecision;
+            generalParameters.hardwareReport+=" precision set on the platform.\n";
+            generalParameters.hardwareReport+="------------------------\n\n";
+            cout<<"Platform precision set to: "<<tempPrecision<<endl;
+        }
+    }
+
+    omm->context->setPositions(initialPosInNm);
+    omm->context->setVelocitiesToTemperature(0);
+    omm->VerletIntegrator->step(1);
+    int infoMask = 0;
+    infoMask = OpenMM::State::Positions;
+    infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
+    infoMask += OpenMM::State::Energy;     // for pot. energy (expensive)
+    
+    const OpenMM::State state = omm->context->getState(infoMask);
+    
+    double energyInKJ = 0;
+    double potential_energyInKJ = 0;
+    if (generalParameters.WantEnergy){
+        energyInKJ = state.getPotentialEnergy() + state.getKineticEnergy();
+        potential_energyInKJ = state.getPotentialEnergy();
+    }
+    string traj_name= generalParameters.trajectory_file_name+"_curv.txt";
+    ofstream writeCurv(traj_name.c_str(), ios_base::app);
+    writeCurv <<timeInPs<<"\t"<<potential_energyInKJ<<endl;
+    
 }

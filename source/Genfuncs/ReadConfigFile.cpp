@@ -427,6 +427,8 @@ void assign_general_parameters(void){
                     generalParameters.WantVelocity=true;
                 } else if (i == "FORCE"){
                     generalParameters.WantForce=true;
+                } else if (i == "CURVE"){
+                    generalParameters.WantCurve=true;
                 }
                 
             }
