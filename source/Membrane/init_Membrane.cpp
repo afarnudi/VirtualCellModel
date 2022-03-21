@@ -23,6 +23,8 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<"Nodes\t"<<Num_of_Nodes<<endl;
         cout<<"Triangles\t"<<Num_of_Triangles<<endl;
     }
+    node_mass.resize(Num_of_Nodes, node_global_mass);
+    
     update_COM_position();
     Normal_direction_Identifier();
 //    Triangle_pair_counter();
@@ -65,6 +67,10 @@ void Membrane::initialise(std::string Mesh_file_name){
         mean_curvature_init();
 //        export_mesh_properties(Mesh_file_name);
     }
+    if (freezeSubLattice) {
+        freeze_sub_lattice();
+    }
+    
     
     if (New_Radius!=-1) {
         check_radius_update_values();
@@ -144,4 +150,32 @@ void Membrane::analysis_init(std::string Mesh_path){
 }
 
 
-
+void Membrane::freeze_sub_lattice(void){
+    node_mass.resize(0);
+    node_mass.resize(Num_of_Nodes,-1);
+    for (int i=0; i<nodeOrder_NodeIndex_NodeNeighbourList.size(); i++) {
+        for (int j=0; j<nodeOrder_NodeIndex_NodeNeighbourList[i].size(); j++) {
+            if (node_mass[nodeOrder_NodeIndex_NodeNeighbourList[i][j][0]]==-1) {
+                node_mass[nodeOrder_NodeIndex_NodeNeighbourList[i][j][0]]=node_global_mass;
+                for (int k=1; k<nodeOrder_NodeIndex_NodeNeighbourList[i][j].size(); k++) {
+                    node_mass[nodeOrder_NodeIndex_NodeNeighbourList[i][j][k]]=0;
+                }
+            }
+            
+        }
+    }
+//    int count_zero=0;
+//    int count_mass=0;
+//    int count_N=0;
+//    
+//    for (int i=0; i<Num_of_Nodes; i++) {
+//        if (node_mass[i]==0) {
+//            count_zero++;
+//        } else if (node_mass[i]==node_global_mass){
+//            count_mass++;
+//        } else if (node_mass[i]==-1){
+//            count_N++;
+//        }
+//    }
+//    cout<<"zero "<<count_zero<<endl<<"mass "<<count_mass<<endl<<"negative "<<count_N<<endl;exit(0);
+}

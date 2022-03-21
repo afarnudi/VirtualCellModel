@@ -114,7 +114,7 @@ void Membrane::assign_parameters(void){
             }
             Mesh_file_name = split[0];
         } else if (it.first == "NodeMass") {
-            Node_Mass = get_double_value(split[0], parser_name, it.first, "100");
+            node_global_mass = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "NodeRadius") {
             Node_radius_stat = split[0];
         } else if (it.first == "SpringModel") {
@@ -244,42 +244,13 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "UpdateEndTimeInPs") {
             End_update_time_in_Ps = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "InitRandomRotation") {
-            if(split[0]=="true"){
-                initial_random_rotation_coordinates=true;
-            } else if (split[0]=="false"){
-                initial_random_rotation_coordinates=false;
-            } else {
-                string errorMessage = TWARN;
-                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
-                errorMessage+= TRESET;
-                throw std::runtime_error(errorMessage);
-            }
+            initial_random_rotation_coordinates=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "WantGeometricProps") {
-            if(split[0]=="true"){
-                WantGeometricProps=true;
-            } else if (split[0]=="false"){
-                WantGeometricProps=false;
-            } else {
-                string errorMessage = TWARN;
-                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
-                errorMessage+= TRESET;
-                throw std::runtime_error(errorMessage);
-            }
-            
-            
+            WantGeometricProps=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "InflateMembrane") {
-            if(split[0]=="true"){
-                InflateMembrane=true;
-            } else if (split[0]=="false"){
-                InflateMembrane=false;
-            } else {
-                string errorMessage = TWARN;
-                errorMessage+="I don't understand  \""+split[0]+"\". Use \"true\" or \"false\".";
-                errorMessage+= TRESET;
-                throw std::runtime_error(errorMessage);
-            }
-            
-            
+            InflateMembrane=get_bool_value(split[0], parser_name, it.first);
+        } else if (it.first == "FreezeSubLattice") {
+            freezeSubLattice=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "ExtForceModel") {
             ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "LockOnRigidity") {

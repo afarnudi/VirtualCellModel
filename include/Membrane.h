@@ -75,7 +75,8 @@ protected:
     double surface_area;
     double sigma_LJ_12_6=0;
     double epsilon_LJ_12_6=0;
-    double Node_Mass=1.0;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
+    double node_global_mass=1;
+    vector<double> node_mass;//  also use in MD loop and should not be private unless we write some functions to get it outside the class
     double Total_Potential_Energy=0.0;
     double Total_Bond_Energy=0.0;
     double Total_Bending_Energy=0.0;
@@ -130,6 +131,7 @@ public:
     bool AddRandomModes = false;
     bool AddSphericalHarmonicsMode = false;
     bool InflateMembrane= false;
+    bool freezeSubLattice=false;
     
     int spring_model=0;
     int dihedral_bending_model=0;
@@ -409,6 +411,7 @@ public:
     void calculate_volume_and_surface_area(void);
     /**Calculate the volume of a closed membrane by summing triangular pyramids.*/
     void calculate_surface_area_with_voronoi(void);
+    void freeze_sub_lattice(void);
     /**Calculate and return the cot of the  angle between nodes A(middle of the angle), B, and C.*/
     double calc_theta_angle_ABC(int node_A, int node_B, int node_C);
     void randomundulationgenerator(void);
@@ -539,8 +542,8 @@ public:
         return Node_Bond_Nominal_Length_in_Nm[bond_num];
     }
     /**Return the node mass. At the current stage of this code all membrane nodes have the same mass. */
-    double get_node_mass(void){
-        return Node_Mass;
+    double get_node_mass(int index){
+        return node_mass[index];
     }
     /**Return the average distance of the nodes as calculated from the mesh. */
     double get_avg_node_dist(void){
@@ -1003,6 +1006,11 @@ public:
         values[1] ="#LockOn potential is attached to this coordinate. Default 0 0 0";
         Params["LockOnCoordinate"] = values;
         insertOrder.push_back("LockOnCoordinate");
+        
+        values[0] ="false";
+        values[1] ="#Freeze lattice sites so that each moving lattice site is surounded by frozen vertices. Default false.";
+        Params["FreezeSubLattice"] = values;
+        insertOrder.push_back("FreezeSubLattice");
     }
     
     
