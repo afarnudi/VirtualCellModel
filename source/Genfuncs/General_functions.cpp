@@ -339,3 +339,22 @@ double get_int_value(std::string value, std::string parser_name, std::string val
     }
     return test;
 }
+
+bool get_bool_value(std::string value, std::string parser_name, std::string value_name){
+    bool test;
+    if(value=="true"){
+        test=true;
+    } else if (value=="false"){
+        test=false;
+    } else {
+        string errorMessage = TWARN;
+        errorMessage+=parser_name + ": Invalid input for the \""+value_name+"\" (";
+        errorMessage+=TFILE;
+        errorMessage+=value;
+        errorMessage+=TWARN;
+        errorMessage+="). Boolian input required. Please try again with \"true\" or \"false\".";
+        errorMessage+= TRESET;
+        throw std::runtime_error(errorMessage);
+    }
+    return test;
+}

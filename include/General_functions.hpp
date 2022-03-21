@@ -85,4 +85,8 @@ double get_int_value(std::string value,
                         std::string value_name,
                         std::string example_inputs);
 
+bool get_bool_value(std::string value,
+                    std::string parser_name,
+                    std::string value_name);
+
 #endif /* General_functions_hpp */
