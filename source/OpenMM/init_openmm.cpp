@@ -523,12 +523,12 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               //                                 Dihedrals*             dihedrals,
                               //                                 Angles*                angles,
                               //                                 Triangles*             triangles,
-                              MeanCurvature**        mean_curvature_ints,
+                              MeanCurvature**        mean_curvature_ints
                               //                                 vector<set<int> >      &membrane_set,
                               //                                 vector<set<int> >      &actin_set,
                               //                                 vector<set<int> >      &ecm_set,
                               //                                 vector<vector<set<int> > > &chromatin_set,
-                              ArgStruct_VCM           userinputs
+//                              ArgStruct_VCM           userinputs
 //                                 NonBondInteractionMap  &interaction_map
 )
 {
@@ -635,5 +635,5 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
     string traj_name= generalParameters.trajectory_file_name+"_curv.txt";
     ofstream writeCurv(traj_name.c_str(), ios_base::app);
     writeCurv <<timeInPs<<"\t"<<potential_energyInKJ<<endl;
-    
+    delete omm;
 }

@@ -49,12 +49,12 @@ void writeMeanCurvatureEnergy(const MyAtomInfo               atoms[],
 //                              Dihedrals*                     dihedrals,
 //                              Angles*                        angles,
 //                              Triangles*                     triangles,
-                              MeanCurvature**                all_mean_curvature_ints,
+                              MeanCurvature**                all_mean_curvature_ints
 //                              std::vector<std::set<int> >    &membrane_set,
 //                              std::vector<std::set<int> >    &actin_set,
 //                              std::vector<std::set<int> >    &ecm_set,
 //                              std::vector<std::vector<std::set<int> >  >    &chromatin_set,
-                              ArgStruct_VCM                          userinputs
+//                              ArgStruct_VCM                          userinputs
 //                              NonBondInteractionMap                 &interaction_map
                               );
 
