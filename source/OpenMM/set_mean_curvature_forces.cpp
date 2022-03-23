@@ -216,7 +216,7 @@ string generate_Julicher1996_mean_curvature_potential(int node_order){
     }
     numerator+="+distance(p1,p"+to_string(node_order+1);
     //    numerator+=")*dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")";
-    numerator+=")*(2*step(dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+"))-1)*(PI-abs(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
+    numerator+=")*(2*step(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+"))-1)*(PI-abs(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=numerator+")^2/(";
     string denominator="";
@@ -230,8 +230,8 @@ string generate_Julicher1996_mean_curvature_potential(int node_order){
     denominator+=")*abs(sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=denominator+")";
-    //        cout<<potential<<endl<<endl;
-    
+//    cout<<potential<<endl<<endl;
+//    exit(0);
     
     
     return potential;
@@ -279,7 +279,7 @@ string generate_Espiru1987_mean_curvature_potential(int node_order){
     denominator+=")*abs(sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=denominator+")";
-    cout<<potential<<endl<<endl;
+//    cout<<potential<<endl<<endl;
     
     
     
@@ -338,15 +338,15 @@ string generate_JulicherVoronoi_mean_curvature_potential(int node_order){
     
     numerator+="distance(p1,p"+to_string(2);
     //    numerator+=")*dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+")";
-    numerator+=")*(PI-abs(dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+")))";
+    numerator+=")*(2*step(dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+"))-1)*(PI-abs(dihedral(p"+to_string(node_order+1)+",p"+to_string(2)+",p1,p"+to_string(3)+")))";
     for (int i=3; i<node_order+1; i++) {
         numerator+="+distance(p1,p"+to_string(i);
         //        numerator+=")*dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+")";
-        numerator+=")*(PI-abs(dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+")))";
+        numerator+=")*(2*step(dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+"))-1)*(PI-abs(dihedral(p"+to_string(i-1)+",p"+to_string(i)+",p1,p"+to_string(i+1)+")))";
     }
     numerator+="+distance(p1,p"+to_string(node_order+1);
     //    numerator+=")*dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")";
-    numerator+=")*(PI-abs(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
+    numerator+=")*(2*step(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+"))-1)*(PI-abs(dihedral(p"+to_string(node_order)+",p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
     potential+=numerator+")^2/(";
     
@@ -357,7 +357,8 @@ string generate_JulicherVoronoi_mean_curvature_potential(int node_order){
     denominator+="distance(p1,p"+to_string(node_order+1)+")^2*(cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1))+cot(angle(p"+to_string(node_order+1)+",p2,p1)))";;
     
     potential+=denominator+")";
-    
+    cout<<potential<<endl<<endl;
+    exit(0);
     return potential;
 }
 
