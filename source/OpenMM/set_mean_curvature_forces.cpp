@@ -357,8 +357,8 @@ string generate_JulicherVoronoi_mean_curvature_potential(int node_order){
     denominator+="distance(p1,p"+to_string(node_order+1)+")^2*(cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1))+cot(angle(p"+to_string(node_order+1)+",p2,p1)))";;
     
     potential+=denominator+")";
-    cout<<potential<<endl<<endl;
-    exit(0);
+//    cout<<potential<<endl<<endl;
+//    exit(0);
     return potential;
 }
 
