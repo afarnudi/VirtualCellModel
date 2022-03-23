@@ -12,24 +12,80 @@
 
 void crossvector( double c[3], double a[3],double b[3] ) // cross porduct
 {
-    c[0]=a[1]*b[2]-a[2]*b[1];    // normal vector to plane (not unitary length)
+    c[0]=a[1]*b[2]-a[2]*b[1];
     c[1]=a[2]*b[0]-a[0]*b[2];
     c[2]=a[0]*b[1]-a[1]*b[0];
 }
+
+vector<double> crossvector(vector<double> a, vector<double> b) // cross porduct
+{
+    if (a.size()!=b.size()) {
+        string errorMessage = "crossvector: Both vectors must have dimention 3. I got "+to_string(a.size())+" and "+to_string(b.size())+".";
+        throw std::runtime_error(errorMessage);
+    }
+    vector<double> c(3,0);
+    c[0]=a[1]*b[2]-a[2]*b[1];
+    c[1]=a[2]*b[0]-a[0]*b[2];
+    c[2]=a[0]*b[1]-a[1]*b[0];
+    return c;
+}
+
+vector<double> vector_subtract(vector<double> vec1, vector<double> vec2){
+    if (vec1.size()!=vec2.size()) {
+        string errorMessage = "vector_subtract: Both vectors must have the same dimention. I got "+to_string(vec1.size())+" and "+to_string(vec2.size())+".";
+        throw std::runtime_error(errorMessage);
+    }
+    vector<double> subtract(vec1.size(),0);
+    for (int i=0; i<subtract.size(); i++) {
+        subtract[i]=vec1[i]-vec2[i];
+    }
+    return subtract;
+}
+
 
 double innerproduct(double n1[3],double n2[3])
 {
     return n1[0]*n2[0]+n1[1]*n2[1]+n1[2]*n2[2];
 }
 
+double innerproduct(vector<double> n1,vector<double> n2)
+{
+    if (n1.size()!=n2.size()) {
+        string errorMessage = "innerproduct: Both vectors must have the same dimention. I got "+to_string(n1.size())+" and "+to_string(n2.size())+".";
+        throw std::runtime_error(errorMessage);
+    }
+    double sum=0;
+    for (int i=0; i<n1.size(); i++) {
+        sum+=n1[i]*n2[i];
+    }
+    return sum;
+}
+
 double vector_length(double v[3]) // calculate length of vector
 {
     return  sqrt( v[0]*v[0]+v[1]*v[1]+v[2]*v[2] );
 }
+double vector_length(vector<double> v) // calculate length of vector
+{
+    double element_sum=0;
+    for (int i=0; i<v.size(); i++) {
+        element_sum+=v[i]*v[i];
+    }
+    return  sqrt( element_sum );
+}
+
 
 double vector_length_squared(double v[3]) // calculate length of vector
 {
     return  v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
+}
+double vector_length_squared(vector<double> v) // calculate length of vector
+{
+    double element_sum=0;
+    for (int i=0; i<v.size(); i++) {
+        element_sum+=v[i]*v[i];
+    }
+    return  element_sum;
 }
 
 double sign_function(double x){
@@ -44,6 +100,15 @@ void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]){
     MV[0]= M[0][0] * V [0] + M[0][1] * V [1]  +M[0][2] * V [2] ;
     MV[1]= M[1][0] * V [0] + M[1][1] * V [1]  +M[1][2] * V [2] ;
     MV[2]= M[2][0] * V [0] + M[2][1] * V [1]  +M[2][2] * V [2] ;
+}
+
+vector<double> normalise_vector(vector<double> vec){
+    vector<double> normalised_vec(vec.size(),0);
+    double vec_length = vector_length(vec);
+    for (int i=0; i<vec.size(); i++) {
+        normalised_vec[i]=vec[i]/vec_length;
+    }
+    return normalised_vec;
 }
 
 

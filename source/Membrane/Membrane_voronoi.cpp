@@ -32,7 +32,7 @@ void Membrane::calculate_surface_area_with_voronoi(){
     vector<vector<double> > bond_normal_vec_list;
     bond_normal_vec_list.resize(Num_of_Node_Pairs);
     
-    vector<vector<double> > cot_theta_list;
+    cot_theta_list.clear();
     cot_theta_list.resize(Num_of_Node_Pairs);
     
     for (int i=0; i<Num_of_Node_Pairs; i++) {

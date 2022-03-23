@@ -252,7 +252,7 @@ public:
     
     
     vector<vector<vector<double> > > analysis_coord_frames;
-    
+    vector<vector<double> > cot_theta_list;
     std::map<string, vector<string> > Params;
     
     
@@ -266,10 +266,22 @@ public:
     void get_ground_state_from_mesh(ArgStruct_Analysis args);
     void get_ground_state_from_frame(ArgStruct_Analysis args);
     void calculate_dOmega(void);
+    void analyse_curvature(void);
     
     void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
+    void load_analysis_coord_frame(int frame);
+    
+    vector<double> Julicher_numerator;
+    vector<double> Itzykson_numerator;
+    vector<double> Barycentric_area;
+    
+    void calc_Julicher_Itzykson_bending_props(void);
+    double calc_dihedral_angle(vector<double> p1, vector<double> p2, vector<double> p3, vector<double> p4);
+    void write_vertex_bending_props(void);
+    
     void import_pdb_frames(ArgStruct_Analysis args, int file_index);
     void import_xyz_frames(ArgStruct_Analysis args, int file_index);
+    void import_xyz_frames(string path);
     void generate_ulm_mode(int ell, int m, double ulm, double radius);
     
     void generate_ulm_mode_real(int Ell, int M, double uLM, double radius);

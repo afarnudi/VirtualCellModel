@@ -18,9 +18,16 @@
 
 
 void crossvector( double c[3],double d[3],double b[3] ); // cross porduct
+vector<double> crossvector( vector<double> a,vector<double> b); // cross porduct
+vector<double> normalise_vector(vector<double> vec);
 double innerproduct(double n1[3],double n2[3]);
+double innerproduct(vector<double> n1,vector<double> n2);
+vector<double> vector_subtract(vector<double> vec1, vector<double> vec2);
 double vector_length(double v[3]); // calculate length of vector
+double vector_length(vector<double> v);
 double vector_length_squared(double v[3]);
+double vector_length_squared(vector<double> v);
+vector<double> vector_subtract(vector<double> vec1, vector<double> vec2);
 double sign_function(double x);
 double periodiccondition(double dx );
 void Vector_transformation (double MV[3],double  M[3][3] ,double V[3]);
