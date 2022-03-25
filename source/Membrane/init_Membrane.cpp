@@ -132,7 +132,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     if (CalculateBending) {
         analyse_curvature();
     }
-    loop_ulm_gen();
+//    loop_ulm_gen();
     
 }
 #include <boost/filesystem.hpp>
