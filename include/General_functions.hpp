@@ -96,4 +96,6 @@ bool get_bool_value(std::string value,
                     std::string parser_name,
                     std::string value_name);
 
+void split(std::string str, std::string splitBy, std::vector<std::string>& tokens);
+
 #endif /* General_functions_hpp */
