@@ -113,6 +113,16 @@ void Membrane::assign_parameters(void){
                 throw std::runtime_error(errorMessage);
             }
             Mesh_file_name = split[0];
+        } else if (it.first == "xyzPostAnalysisPath") {
+            string extension = split[0];
+            extension.erase(extension.begin(),extension.begin()+extension.find_last_of('.')+1);
+            if (extension != "xyz") {
+                string errorMessage = TWARN;
+                errorMessage+="I don't understand the \""+extension+"\" format. Please use an xyz file with xyz extension.";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            xyzPostAnalysisPath = split[0];
         } else if (it.first == "NodeMass") {
             node_global_mass = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "NodeRadius") {
@@ -221,6 +231,12 @@ void Membrane::assign_parameters(void){
             SurfaceConstraintRatio = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "LinearReducedSrfaceVolume") {
             LinearReducedSrfaceVolume = get_int_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "xyzPostAnalysisPathFrame") {
+            if (split[0]=="L") {
+                xyzPostAnalysisPathFrame=-1;
+            } else {
+                xyzPostAnalysisPathFrame = get_int_value(split[0], parser_name, it.first, "2");
+            }
         } else if (it.first == "ExtForceModel") {
             ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "XYZinMembrane") {
@@ -245,6 +261,8 @@ void Membrane::assign_parameters(void){
             End_update_time_in_Ps = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "InitRandomRotation") {
             initial_random_rotation_coordinates=get_bool_value(split[0], parser_name, it.first);
+        } else if (it.first == "CalculateBending") {
+            CalculateBending=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "WantGeometricProps") {
             WantGeometricProps=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "InflateMembrane") {

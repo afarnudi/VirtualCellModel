@@ -426,7 +426,11 @@ int main(int argc, char **argv)
         if (!generalParameters.Resume) {
             assign_project_directories(buffer, generalParameters.ProjectName, generalParameters.trajectory_file_name, generalParameters.buffer_file_name);
             cout<< "\nFile name: "<<TFILE<<generalParameters.trajectory_file_name<<TRESET<<endl<<endl;
-            
+            for (int i=0; i<Membranes.size(); i++) {
+                if (Membranes[i].CalculateBending) {
+                    Membranes[i].write_vertex_bending_props();
+                }
+            }
         }
         string hardwarereportpath = generalParameters.trajectory_file_name+"_hardware_runtime.txt";
         if (!generalParameters.Resume) {

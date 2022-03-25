@@ -58,6 +58,7 @@ protected:
     bool UseMeanCurvature = false;
     bool UseDihedralPotential = false;
     
+    
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
     int index;
     /**Number of nodes in the membrane.*/
@@ -127,11 +128,13 @@ public:
     std::string SurfaceConstraintValue_stat;
     std::string VolumeConstraintValue_stat;
     std::string parser_name = "Membrane config parser";
+    std::string xyzPostAnalysisPath;
     
     bool AddRandomModes = false;
     bool AddSphericalHarmonicsMode = false;
     bool InflateMembrane= false;
     bool freezeSubLattice=false;
+    bool CalculateBending=false;
     
     int spring_model=0;
     int dihedral_bending_model=0;
@@ -145,6 +148,7 @@ public:
     int EllOfGeneratedMode;
     int MOfGeneratedMode;
     int LinearReducedSrfaceVolume=0;
+    int xyzPostAnalysisPathFrame=0;
     
     double LockOnULMU=0;
     double contourRadius;
@@ -431,6 +435,10 @@ public:
     void randomundulationgenerator(int numberOfRandomModes, int ellMaxOfRandomModes, double ulmOfRandomModes);
     void assign_parameters(void);
     void consistancy_check(void);
+    void loop_ulm_gen(void);
+    void write_xyz(std::string filename);
+    void myWritePSF(std::string filename);
+    
     
     void set_com_to_zero(){
         update_COM_position();
@@ -1023,6 +1031,21 @@ public:
         values[1] ="#Freeze lattice sites so that each moving lattice site is surounded by frozen vertices. Default false.";
         Params["FreezeSubLattice"] = values;
         insertOrder.push_back("FreezeSubLattice");
+        
+        values[0] ="false";
+        values[1] ="#Calculate Itzykson and Julicher parameters manually. Default false.";
+        Params["CalculateBending"] = values;
+        insertOrder.push_back("CalculateBending");
+        
+        values[0] ="Path/to/my/xyzfile.xyz";
+        values[1] ="#Calculate Itzykson and Julicher's properties for the xyzfile.";
+        Params["xyzPostAnalysisPath"] = values;
+        insertOrder.push_back("xyzPostAnalysisPath");
+        
+        values[0] ="L";
+        values[1] ="#Calculate Itzykson and Julicher's properties for the frame number in the xyzfile. If L, will analysis the last frame.";
+        Params["xyzPostAnalysisPathFrame"] = values;
+        insertOrder.push_back("xyzPostAnalysisPathFrame");
     }
     
     

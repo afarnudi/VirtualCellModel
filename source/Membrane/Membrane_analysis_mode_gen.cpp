@@ -125,7 +125,7 @@ void Membrane::randomundulationgenerator(void){
     
     for (int i=0; i<NumberOfRandomModes; i++) {
         double r = ((double) rand() / (RAND_MAX));
-        int Ell = rand() % (EllMaxOfRandomModes+1);
+        int Ell = 2+rand() % (EllMaxOfRandomModes-1);
         int M   = rand() % (Ell+1);
         if (r<0.5) {
             M*=-1;

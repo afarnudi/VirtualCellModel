@@ -50,6 +50,11 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
+    if (UseMeanCurvature) {
+        mean_curvature_init();
+//        export_mesh_properties(Mesh_file_name);
+    }
+    
     if (AddSphericalHarmonicsMode) {
         generate_undulations();
     }
@@ -64,10 +69,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     calculate_volume_and_surface_area();
     assign_surface_volume_constraints();
     
-    if (UseMeanCurvature) {
-        mean_curvature_init();
-//        export_mesh_properties(Mesh_file_name);
-    }
+    
     if (freezeSubLattice) {
         freeze_sub_lattice();
     }
@@ -127,19 +129,146 @@ void Membrane::initialise(std::string Mesh_file_name){
         cout<<TSUCCESS<<"\nMembrane class initiated."<<TRESET<<
                         "\n*************************\n"<<endl;
     }
-//    analyse_curvature();
+    if (CalculateBending) {
+        analyse_curvature();
+    }
+    loop_ulm_gen();
+    
+}
+#include <boost/filesystem.hpp>
+
+
+void Membrane::loop_ulm_gen(void){
+    int L=5;
+    int M=3;
+    
+    string seed = Mesh_file_name;
+//    vector<string> results;
+//    split(seed, "/", results);
+//    seed = results.back();
+//    split(seed, "s", results);
+//    seed = results.back();
+//    split(seed, ".", results);
+//    seed=results[0];
+    seed="0";
+    
+    for (double u=0; u<1.00001; u+=0.01) {
+//        string propDir = "Results/ULMCurvature/Ordered/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/";
+        string propDir = "Results/ULMCurvature/Ordered/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/"+seed+"/";
+        boost::filesystem::create_directories(propDir);
+        string propFileName = propDir+"bendingProps.txt";
+//        cout<<propFileName<<endl;
+        update_spherical_positions();
+        for (int i=0; i<Num_of_Nodes; i++) {
+            spherical_positions[i][0]=1;
+        }
+        convert_spherical_positions_to_cartisian();
+        add_ulm_mode_real(L, M, u, 1);
+        calc_Julicher_Itzykson_bending_props();
+        std::ofstream write;
+        write.open(propFileName.c_str());
+        double I=0;
+        double IB=0;
+        double J=0;
+        double JV=0;
+        for (int i=0; i<Num_of_Nodes; i++) {
+            I+=Itzykson_numerator[i]/node_voronoi_area[i];
+            JV+=Julicher_numerator[i]/node_voronoi_area[i];
+            J+=Julicher_numerator[i]/Barycentric_area[i];
+            IB+=Itzykson_numerator[i]/Barycentric_area[i];
+        }
+//        cout<<"Itzykson\t"<<I<<"\n";
+        write<<"Itzykson\t"<<I<<"\n";
+        write<<"Itzykson-Barycentric\t"<<IB<<"\n";
+        write<<"Julicher\t"<<J<<"\n";
+        write<<"Julicher-Voronoi\t"<<JV<<"\n";
+        
+        double curvature = 8*M_PI + u*u*0.5*(L+2)*(L+1)*L*(L-1);
+        write<<"Theoretical\t"<<curvature<<"\n";
+        write<<"#Itzykson_Numerator Julicher_numerator Voronoi_area Barycentric_area"<<"\n";
+        for (int i=0; i<Num_of_Nodes; i++) {
+            write<<Itzykson_numerator[i]<<" "<<Julicher_numerator[i]<<" "<<node_voronoi_area[i]<<" "<<Barycentric_area[i]<<"\n";
+        }
+        write.close();
+        write_xyz  (propDir+"coords.xyz");
+        myWritePSF(propDir+"coords.psf");
+    }
+    
+    
+    exit(0);
+    
+}
+void Membrane::myWritePSF(string traj_name)
+{
+    FILE* pFile;
+    pFile = fopen (traj_name.c_str(),"a");
+    fprintf(pFile," PSF\n\n");
+    fprintf(pFile,"       1  !TITLE\n");
+    fprintf(pFile," vmd files (psf,pdb) for VCM\n\n");
+    fprintf(pFile,"   %5d !NATOM\n",Num_of_Nodes);
+    
+    
+    for (int n=0; n<Num_of_Nodes; ++n){
+        //        fprintf(pFile,"ATOM  %5d %4s ETH %c   %4.0f %8.3f%8.3f%8.3f%6.2f%6.1f          %c\n",
+        fprintf(pFile,"   %5d POLY%5d POLY %4s CEL1 %10.2f    %10.2f 1\n",
+                n+1,
+                0,
+                "Mem0",
+                1.0,
+                1);
+    }
+    int num_of_bonds=Num_of_Node_Pairs;
+    
+    fprintf(pFile,"\n");
+    fprintf(pFile,"   %5d !NBOND\n",num_of_bonds);
+    int endline_counter=0;
+    for (int n=0; n<Num_of_Node_Pairs; ++n){
+//        if (bonds[n].type != potentialModelIndex.Model["None"]) {
+            fprintf(pFile,"   %5d   %5d",
+                    Node_Bond_list[n][0]+1,
+                    Node_Bond_list[n][1]+1);
+            endline_counter++;
+            if (endline_counter>3) {
+                endline_counter=0;
+                fprintf(pFile,"\n");
+            }
+//        }
+        
+    }
+    fclose (pFile);
+}
+void Membrane::write_xyz  (string traj_name)
+{
+    ofstream writexyz(traj_name.c_str());
+    writexyz<<Num_of_Nodes<<"\n";
+    writexyz<<"timePs ";
+    writexyz<<0<<setprecision(16);
+    writexyz<<" potential_energy_inKJpermol ";
+    writexyz<<0<<setprecision(16);
+    writexyz<<" energy_inKJpermol ";
+    writexyz<<0<<setprecision(16)<<"\n";
+    for (int n=0; n<Num_of_Nodes; n++) {
+        writexyz<<"Mem0\t"<<Node_Position[n][0]<<"\t"<<Node_Position[n][1]<<"\t"<<Node_Position[n][2]<<setprecision(16)<<"\n";
+    }
+    writexyz.close();
 }
 
 void Membrane::analyse_curvature(void){
-    cout<<"enter path to xyz:"<<endl;
-    string path_to_xyz;
-    cin>>path_to_xyz;
-    check_if_file_exists(path_to_xyz);
-    import_xyz_frames(path_to_xyz);
-    load_analysis_coord_frame(0);
-//    load_analysis_coord_frame(analysis_coord_frames.size()-1);
+    
+    bool simulationBeginning=true;
+    if (xyzPostAnalysisPath!="Path/to/my/xyzfile.xyz") {
+        simulationBeginning=false;
+        check_if_file_exists(xyzPostAnalysisPath);
+        import_xyz_frames(xyzPostAnalysisPath);
+        if (xyzPostAnalysisPathFrame==-1) {
+            xyzPostAnalysisPathFrame =analysis_coord_frames.size()-1;
+        }
+        load_analysis_coord_frame(xyzPostAnalysisPathFrame);
+        calc_Julicher_Itzykson_bending_props();
+    }
+    
     calc_Julicher_Itzykson_bending_props();
-    write_vertex_bending_props();
+    
     
     
     double I=0;
@@ -156,17 +285,44 @@ void Membrane::analyse_curvature(void){
         sum_V+=node_voronoi_area[i];
         sum_B+=Barycentric_area[i];
     }
-    cout<<"I "<<I<<endl;
-    cout<<"IB "<<IB<<endl;
-    cout<<"J "<<J<<endl;
-    cout<<"JV "<<JV<<endl;
-    cout<<"V "<<sum_V<<endl;
-    cout<<"B "<<sum_B<<endl;
-    exit(0);
+    cout<<"Itzykson              "<<I<<endl;
+    cout<<"Itzykson-Barycentric  "<<IB<<endl;
+    cout<<"Julicher              "<<J<<endl;
+    cout<<"Julicher-Voronoi      "<<JV<<endl;
+    cout<<"\nVoronoi area          "<<sum_V<<endl;
+    cout<<"Barycentric area      "<<sum_B<<endl;
+    if (!simulationBeginning) {
+        write_vertex_bending_props();
+        exit(0);
+    } else {
+        xyzPostAnalysisPathFrame=0;
+    }
+    
 }
 
 void Membrane::write_vertex_bending_props(){
-    
+    string propFileName = generalParameters.trajectory_file_name+"_"+label+"_BendingProps_frame_"+to_string(xyzPostAnalysisPathFrame)+".txt";
+//    cout<<propFileName<<endl;exit(0);
+    std::ofstream write;
+    write.open(propFileName.c_str(), std::ios::app);
+    double I=0;
+    double IB=0;
+    double J=0;
+    double JV=0;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        I+=Itzykson_numerator[i]/node_voronoi_area[i];
+        JV+=Julicher_numerator[i]/node_voronoi_area[i];
+        J+=Julicher_numerator[i]/Barycentric_area[i];
+        IB+=Itzykson_numerator[i]/Barycentric_area[i];
+    }
+    write<<"Itzykson\t"<<I<<endl;
+    write<<"Itzykson-Barycentric\t"<<IB<<endl;
+    write<<"Julicher\t"<<J<<endl;
+    write<<"Julicher-Voronoi\t"<<JV<<endl;
+    write<<"#Itzykson_Numerator Julicher_numerator Voronoi_area Barycentric_area"<<endl;
+    for (int i=0; i<Num_of_Nodes; i++) {
+        write<<Itzykson_numerator[i]<<" "<<Julicher_numerator[i]<<" "<<node_voronoi_area[i]<<" "<<Barycentric_area[i]<<endl;
+    }
 }
 
 
