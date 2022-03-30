@@ -564,6 +564,10 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
     set_mean_curvature_forces(mean_curvature_ints,
                               MeanCurvatureForces,
                               system);
+    if (generalParameters.WantForce) {
+        generalParameters.force_group_label.pop_back();
+        generalParameters.force_group_count--;
+    }
     omm->VerletIntegrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
     
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
