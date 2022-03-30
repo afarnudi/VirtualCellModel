@@ -48,7 +48,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
             tri_counter+=mem_tris;
         }
         
-        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]  && triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]  && !generalParameters.WantForce) {
+        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]  && triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]) {
             auto GVCFs_item = GVCFs_classes.find(triangles[i].class_label);
             if (GVCFs_item == GVCFs_classes.end()) {
 
