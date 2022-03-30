@@ -38,7 +38,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
 //    int mem_nodes=0;
     int mem_tris=0;
     int tri_counter=0;
-    
+//    string temp_label="";
     for (int i=0; triangles[i].surface_type != EndOfList; ++i) {
         
         auto count_class_item = mem_count_classes.find(triangles[i].class_label);
@@ -66,13 +66,15 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_volume, triangles[i].VolumeConstraintValue);
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_area, triangles[i].SurfaceConstraintValue);
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
-//                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
-//                    generalParameters.force_group_count++;
-//                    GlobalVolumeConstraintForces[GVCFs_index]->setForceGroup(generalParameters.force_group_count);
-//                    string label = triangles[i].class_label+"_VolumeArea1_"+ to_string(generalParameters.force_group_count);
-//                    generalParameters.force_group_label.push_back(label);
-//
-//                }
+                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+//                    if (temp_label=="" || temp_label != triangles[i].class_label) {
+                        generalParameters.force_group_count++;
+//                        temp_label = triangles[i].class_label;
+                        string label = triangles[i].class_label+"_VolumeArea_"+ to_string(generalParameters.force_group_count);
+                        generalParameters.force_group_label.push_back(label);
+//                    }
+                    GlobalVolumeConstraintForces[GVCFs_index]->setForceGroup(generalParameters.force_group_count);
+                }
                 
 //                cout<<potential_part1<<endl<<endl;
                 GVCFs_index++;
@@ -87,14 +89,12 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_volume, triangles[i].VolumeConstraintValue);
                 GlobalVolumeConstraintForces[GVCFs_index]->addGlobalParameter(target_area, triangles[i].SurfaceConstraintValue);
                 system.addForce(GlobalVolumeConstraintForces[GVCFs_index]);
-//                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
 //                    generalParameters.force_group_count++;
-//                    GlobalVolumeConstraintForces[GVCFs_index]->setForceGroup(generalParameters.force_group_count);
 //                    string label = triangles[i].class_label+"_VolumeArea2_"+ to_string(generalParameters.force_group_count);
 //                    generalParameters.force_group_label.push_back(label);
-//
-//                }
-//
+                    GlobalVolumeConstraintForces[GVCFs_index]->setForceGroup(generalParameters.force_group_count);
+                }
             }
 
             GlobalVolumeConstraintForces[GVCFs_index-1]->addBond(triangles[i].atoms);
