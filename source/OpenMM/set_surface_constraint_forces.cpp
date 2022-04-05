@@ -287,10 +287,10 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 
                 LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
                 
-                system.addForce(LocalSurfaceWCAForces[LSCFs_index]);
+                system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
 //                cout<<potential<<endl;exit(0);
             }
-            LocalSurfaceWCAForces[LSCFs_index]->addBond(triangles[i].atoms);
+            LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
 //            cout<<"L :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
         }
         
