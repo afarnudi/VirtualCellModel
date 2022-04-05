@@ -135,6 +135,7 @@ public:
     bool InflateMembrane= false;
     bool freezeSubLattice=false;
     bool CalculateBending=false;
+    bool surface_WCA=false;
     
     int spring_model=0;
     int dihedral_bending_model=0;
@@ -171,6 +172,7 @@ public:
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
     double LockOn_rigidity=0;
+    double surface_WCA_min_area=0;
     
     vector<string> insertOrder;
     vector<string> values;

@@ -21,6 +21,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
                                           vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceConstraintForces,
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalVolumeConstraintForces,
+                                          vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceWCAForces,
                                           OpenMM::System                            &system
                                           ){
     set <std::string> GSCFs_classes;
@@ -32,6 +33,9 @@ void set_surface_volume_constraint_forces(Triangles*                            
     
     set <std::string> LSCFs_classes;
     int LSCFs_index = -1;
+    
+    set <std::string> LWCAs_classes;
+    int LWCAs_index = -1;
     
     set <std::string> mem_count_classes;
     
@@ -267,6 +271,30 @@ void set_surface_volume_constraint_forces(Triangles*                            
     //            cout<<"L :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
             }
         }
+        
+        if (triangles[i].area_WCA) {
+            auto LWCAs_item = LWCAs_classes.find(triangles[i].class_label);
+            if (LWCAs_item == LWCAs_classes.end()) {
+                
+                LWCAs_classes.insert(triangles[i].class_label);
+                LWCAs_index++;
+//                step(area_0-area)
+                string area_0 = to_string(triangles[i].surface_WCA_min_area);
+                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
+                string area = "(distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3)))";
+                string potential = epsilon+"*("+to_string(int(pow(2, 12)))+"*("+area_0+"/"+area+")^12-"+to_string(int(pow(2, 6)))+"*("+area_0+"/"+area+")^6+0.25)*step("+area_0+"-"+area+")";
+                
+                
+                LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
+                
+                system.addForce(LocalSurfaceWCAForces[LSCFs_index]);
+//                cout<<potential<<endl;exit(0);
+            }
+            LocalSurfaceWCAForces[LSCFs_index]->addBond(triangles[i].atoms);
+//            cout<<"L :"<<triangles[i].atoms[0]<<" "<<triangles[i].atoms[1]<<" "<<triangles[i].atoms[2]<<"\n";
+        }
+        
+        
     //end if
     }
 //    exit(0);

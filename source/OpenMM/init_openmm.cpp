@@ -251,12 +251,14 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     
     vector<OpenMM::CustomCompoundBondForce*> GlobalSurfaceConstraintForces;
     vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceConstraintForces;
+    vector<OpenMM::CustomCompoundBondForce*> LocalSurfaceWCAForces;
     vector<OpenMM::CustomCompoundBondForce*> GlobalVolumeConstraintForces;
     
     set_surface_volume_constraint_forces(triangles,
                                           GlobalSurfaceConstraintForces,
                                           LocalSurfaceConstraintForces,
                                           GlobalVolumeConstraintForces,
+                                            LocalSurfaceWCAForces,
                                           system);
     
     

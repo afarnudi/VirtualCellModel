@@ -485,6 +485,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
                                           vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceConstraintForces,
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalVolumeConstraintForces,
+                                          vector<OpenMM::CustomCompoundBondForce*>  &LocalSurfaceWCAForces,
                                           OpenMM::System                            &system
                                           );
 /**Set angle forces for every 3 particles set to have an angle potential.

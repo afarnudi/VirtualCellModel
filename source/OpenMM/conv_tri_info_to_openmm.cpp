@@ -91,6 +91,8 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
         
         triatoms[i].surface_type = mem.get_surface_constraint_model();
         triatoms[i].volume_type  = mem.get_volume_constraint_model();
+        triatoms[i].area_WCA = mem.surface_WCA;
+        triatoms[i].surface_WCA_min_area = mem.surface_WCA_min_area;
         
         if (triatoms[i].surface_type != potentialModelIndex.Model["None"] || triatoms[i].volume_type != potentialModelIndex.Model["None"]) {
             
