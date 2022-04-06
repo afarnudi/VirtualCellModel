@@ -198,8 +198,8 @@ PlatformInfo get_platform_info(void)
     if (platform.getName() == "OpenCL") {
         cout<<"Available devices on the "<<TOCL<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+        for (int i=0; i<20; i++) {
+            for (int j=0; j<20; j++) {
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
@@ -231,8 +231,8 @@ PlatformInfo get_platform_info(void)
     } else if (platform.getName() == "CUDA") {
         cout<<"Available devices on the "<<TCUD<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+        for (int i=0; i<20; i++) {
+            for (int j=0; j<20; j++) {
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
@@ -291,8 +291,8 @@ void get_platform_info(PlatformInfo &platforminfo)
     
     if (platform.getName() == "OpenCL") {
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+        for (int i=0; i<20; i++) {
+            for (int j=0; j<20; j++) {
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
@@ -320,8 +320,8 @@ void get_platform_info(PlatformInfo &platforminfo)
         }
     } else if (platform.getName() == "CUDA") {
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+        for (int i=0; i<20; i++) {
+            for (int j=0; j<20; j++) {
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
