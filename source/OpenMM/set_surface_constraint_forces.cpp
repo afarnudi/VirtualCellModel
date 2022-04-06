@@ -279,10 +279,11 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 LWCAs_classes.insert(triangles[i].class_label);
                 LWCAs_index++;
 //                step(area_0-area)
-                string area_0 = to_string(triangles[i].surface_WCA_min_area);
+//                string area_0 = to_string(triangles[i].surface_WCA_min_area);
+                string area_0times2 = to_string(2*triangles[i].surface_WCA_min_area);
                 string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
                 string area = "(distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3)))";
-                string potential = epsilon+"*("+to_string(int(pow(2, 12)))+"*("+area_0+"/"+area+")^12-"+to_string(int(pow(2, 6)))+"*("+area_0+"/"+area+")^6+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./6.))+"-"+area+")";
+                string potential = epsilon+"*(("+area_0times2+"/"+area+")^6- ("+area_0times2+"/"+area+")^3+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./6.))+"-"+area+")";
                 
                 
                 LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
