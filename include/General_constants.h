@@ -127,7 +127,7 @@ namespace GenConst {
 #define TOMM     TGB
 
 #define TOCL     TPURPLE
-#define TCUD     TLGREEN
+#define TCUD     TGREEN
 #define TCPU     TBORANGE
 
 
