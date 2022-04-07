@@ -122,6 +122,32 @@ void set_dihedral_forces(Dihedrals*                                 dihedrals,
                     generalParameters.force_group_label.push_back(label);
                     
                 }
+            } else if (dihedrals[i].type == potentialModelIndex.Model["SmoothEXP46"]) {
+                auto DFs_item = DFs_classes.find(dihedrals[i].class_label);
+                if (DFs_item == DFs_classes.end()) {
+                    
+                    DFs_classes.insert(dihedrals[i].class_label);
+                    DFs_index++;
+                    
+                    DihedralForces.push_back(new OpenMM::CustomCompoundBondForce(4, "0.5*K_bend*((exp(2*(1-cos(dihedral(p1,p2,p3,p4)-SponAngle))) -1)-(dihedral(p1,p2,p3,p4)-SponAngle)^2)"));
+                    
+                    DihedralForces[DFs_index]->addPerBondParameter("K_bend");
+                    DihedralForces[DFs_index]->addPerBondParameter("SponAngle");
+                    
+                    //
+                    //                if (GenConst::Periodic_box) {
+                    //                    DihedralForces[DFs_index]->setUsesPeriodicBoundaryConditions(true);
+                    //                }
+                    
+                    system.addForce(DihedralForces[DFs_index]);
+                    
+                }
+                
+                vector<double> parameters;
+                parameters.push_back(dihedrals[i].bendingStiffnessinKJ);
+                parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
+                
+                DihedralForces[DFs_index]->addBond(dihedrals[i].atoms, parameters);
             }
             
             vector<double> parameters;

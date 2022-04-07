@@ -192,6 +192,8 @@ void Membrane::assign_parameters(void){
                 dihedral_bending_model = potentialModelIndex.Model["ExpDihedral"];
             } else if (split[0]=="smoothExp") {
                 dihedral_bending_model = potentialModelIndex.Model["SmoothEXP"];
+            } else if (split[0]=="smoothExp46") {
+                dihedral_bending_model = potentialModelIndex.Model["SmoothEXP46"];
             } else if (split[0]=="smoothTheta4") {
                 dihedral_bending_model = potentialModelIndex.Model["SmoothTheta4"];
             } else {

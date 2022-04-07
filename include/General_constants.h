@@ -39,6 +39,7 @@ struct PotentialModelIndex{
         
         Model["SmoothTheta4"]=18;
         Model["SmoothEXP"]=19;
+        Model["SmoothEXP46"]=29;
         Model["ItzyksonBarycentric"] = 20;
         Model["JulicherVoronoi"] = 21;
         Model["Espiru1987"] = 22;

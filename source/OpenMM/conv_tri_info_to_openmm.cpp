@@ -8,6 +8,7 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     bool dihedralPotential = false;
     bool NonLinearDihedralPotential = false;
     bool NonLinearDihedralSmoothPotential = false;
+    bool NonLinearDihedralPotential46 = false;
     bool QuadraticDihedralPotential = false;
     bool noPotential = false;
     
@@ -38,6 +39,8 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
                 NonLinearDihedralSmoothPotential = true;
             } else if (diatoms[i].type == potentialModelIndex.Model["SmoothTheta4"]){
                 QuadraticDihedralPotential = true;
+            } else if (diatoms[i].type == potentialModelIndex.Model["SmoothEXP46"]){
+                NonLinearDihedralPotential46 = true;
             }
 //            else if (diatoms[i].type == potentialModelIndex.Model["cot_weight"]){
 //                diatoms[i].total_mem_area = total_mem_area;
@@ -60,6 +63,10 @@ Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem) {
     }
     if (NonLinearDihedralSmoothPotential) {
         cout<<" Non-linear exponential dihedral:\n0.04*K_bend*(exp(10*(1-cos(dihedral-SponAngle))) -1)"<<endl;
+        cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
+    }
+    if (NonLinearDihedralPotential46) {
+        cout<<" Non-linear exponential dihedral:\n0.5*K_bend*(exp(2*(1-cos(dihedral-SponAngle))) -1)-0.5(dihedral-SponAngle))^2"<<endl;
         cout<<"\tCoeficient (KJ . mol^-1 ) = "<<mem.get_dihedral_bending_stiffness_coefficient() <<endl;
     }
     if (QuadraticDihedralPotential) {
