@@ -9,7 +9,7 @@ using std::vector;
 using std::set;
 
 void print_platform_info(void){
-//    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+    //    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     if (!generalParameters.CBP) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
@@ -24,6 +24,7 @@ void print_platform_info(void){
 PlatformInfo get_platform_info_forResume(string platformName)
 {
     int stepSizeInFs =1;
+    int list_depth=20;
     if (!generalParameters.CBP) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
@@ -66,59 +67,57 @@ PlatformInfo get_platform_info_forResume(string platformName)
     
     if (platformName == "OpenCL") {
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
-                int hardwareCompatibility=0;
-                try {
-                    
-                    std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    counter++;
-                    platforminfo.device_properties.push_back(temp_device_properties);
-                    
-                    for (auto & name : platform_devices){
-                        
-                        for (auto &prop: checkpointDeviceProperties) {
-                            if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
-                                hardwareCompatibility++;
+        for (int i=0; i<list_depth; i++) {
+            for (int j=0; j<list_depth; j++) {
+                vector<string> data={"single","double", "mixed"};
+                for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
+                    int hardwareCompatibility=0;
+                    try {
+                        std::string report;
+                        std::map<std::string, std::string> temp_device_properties;
+                        temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
+                        temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
+                        temp_device_properties["Precision"]=*precision;
+                        OpenMM::System temp_system;
+                        temp_system.addParticle(1.0);
+                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                        std::vector<std::string> platform_devices = platform.getPropertyNames();
+                        cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
+                        for (auto & name : platform_devices){
+                            for (auto &prop: checkpointDeviceProperties) {
+                                if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+                                    hardwareCompatibility++;
+                                }
                             }
                         }
+                    } catch (const std::exception& e) {
                         
                     }
-                    
-                    
-                } catch (const std::exception& e) {
-//                    printf("EXCEPTION: %s\n", e.what());
+                    if (hardwareCompatibility==checkpointDeviceProperties.size()) {
+                        platformDeviceID=counter-1;
+                    }
                 }
-                if (hardwareCompatibility==checkpointDeviceProperties.size()) {
-                    platformDeviceID=counter-1;
-                }
-                
             }
         }
-        
     } else if (platformName == "CUDA") {
         int counter=0;
-        for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+        for (int j=0; j<2*list_depth; j++) {
+            vector<string> data={"single","double", "mixed"};
+            for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
                 int hardwareCompatibility=0;
                 try {
-                    
+                    std::string report;
                     std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["CudaDeviceIndex"]=std::to_string(j);
+                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+                    temp_device_properties["DeviceIndex"]=std::to_string(j);
+                    temp_device_properties["CudaPrecision"]=*precision;
                     OpenMM::System temp_system;
                     temp_system.addParticle(1.0);
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    
+                    cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
                     for (auto & name : platform_devices){
                         for (auto &prop: checkpointDeviceProperties) {
                             if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
@@ -126,10 +125,10 @@ PlatformInfo get_platform_info_forResume(string platformName)
                             }
                         }
                     }
-                    
+                    cout<<TRESET<<"------------------------"<<endl;
                     counter++;
                     platforminfo.device_properties.push_back(temp_device_properties);
-                    
+                    platforminfo.device_properties_report.push_back(report);
                 } catch (const std::exception& e) {
                     
                 }
@@ -145,7 +144,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
         OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
         std::vector<std::string> platform_devices = platform.getPropertyNames();
-
+        
         for (auto & name : platform_devices){
             for (auto &prop: checkpointDeviceProperties) {
                 if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
@@ -194,8 +193,8 @@ PlatformInfo get_platform_info(void)
     cout<<TRESET;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     
-//    std::vector<std::string> device_properties_report;
-//    std::vector<std::map<std::string, std::string> > device_properties;
+    //    std::vector<std::string> device_properties_report;
+    //    std::vector<std::map<std::string, std::string> > device_properties;
     if (platform.getName() == "OpenCL") {
         cout<<"Available devices on the "<<TOCL<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
@@ -236,40 +235,38 @@ PlatformInfo get_platform_info(void)
     } else if (platform.getName() == "CUDA") {
         cout<<"Available devices on the "<<TCUD<<platform.getName()<<TRESET<<" platform:\n";
         int counter=0;
-//        for (int i=0; i<list_depth; i++) {
-            for (int j=0; j<2*list_depth; j++) {
-                vector<string> data={"single","double", "mixed"};
-                for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
-                    try {
-                        std::string report;
-                        std::map<std::string, std::string> temp_device_properties;
-    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
-                        temp_device_properties["DeviceIndex"]=std::to_string(j);
-                        temp_device_properties["CudaPrecision"]=*precision;
-                        OpenMM::System temp_system;
-                        temp_system.addParticle(1.0);
-                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                        std::vector<std::string> platform_devices = platform.getPropertyNames();
-                        cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
-                        for (auto & name : platform_devices){
-                            if (name == "DeviceIndex") {
-                                continue;
-                            } else {
-                                report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
-                                cout<<"\t"<<name<<"\t"<<TCUD<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
-                            }
+        for (int j=0; j<2*list_depth; j++) {
+            vector<string> data={"single","double", "mixed"};
+            for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
+                try {
+                    std::string report;
+                    std::map<std::string, std::string> temp_device_properties;
+                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+                    temp_device_properties["DeviceIndex"]=std::to_string(j);
+                    temp_device_properties["CudaPrecision"]=*precision;
+                    OpenMM::System temp_system;
+                    temp_system.addParticle(1.0);
+                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                    std::vector<std::string> platform_devices = platform.getPropertyNames();
+                    cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
+                    for (auto & name : platform_devices){
+                        if (name == "DeviceIndex") {
+                            continue;
+                        } else {
+                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+                            cout<<"\t"<<name<<"\t"<<TCUD<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
                         }
-                        cout<<TRESET<<"------------------------"<<endl;
-                        counter++;
-                        platforminfo.device_properties.push_back(temp_device_properties);
-                        platforminfo.device_properties_report.push_back(report);
-                    } catch (const std::exception& e) {
-                        
                     }
+                    cout<<TRESET<<"------------------------"<<endl;
+                    counter++;
+                    platforminfo.device_properties.push_back(temp_device_properties);
+                    platforminfo.device_properties_report.push_back(report);
+                } catch (const std::exception& e) {
+                    
                 }
             }
-//        }
+        }
     } else if (platform.getName() == "CPU") {
         OpenMM::System temp_system;
         temp_system.addParticle(1.0);
@@ -296,53 +293,60 @@ PlatformInfo get_platform_info(void)
 void get_platform_info(PlatformInfo &platforminfo)
 {
     int stepSizeInFs =1;
+    int list_depth=20;
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     
     if (platform.getName() == "OpenCL") {
         int counter=0;
-        for (int i=0; i<20; i++) {
-            for (int j=0; j<20; j++) {
-                try {
-                    std::string report;
-                    std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    for (auto & name : platform_devices){
-                        if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
-                            continue;
-                        } else {
-                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+        for (int i=0; i<list_depth; i++) {
+            for (int j=0; j<list_depth; j++) {
+                vector<string> data={"single","double", "mixed"};
+                for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
+                    try {
+                        std::string report;
+                        std::map<std::string, std::string> temp_device_properties;
+                        temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
+                        temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
+                        temp_device_properties["Precision"]=*precision;
+                        OpenMM::System temp_system;
+                        temp_system.addParticle(1.0);
+                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                        std::vector<std::string> platform_devices = platform.getPropertyNames();
+                        for (auto & name : platform_devices){
+                            if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
+                                continue;
+                            } else {
+                                report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+                            }
                         }
+                        counter++;
+                        platforminfo.device_properties.push_back(temp_device_properties);
+                        platforminfo.device_properties_report.push_back(report);
+                    } catch (const std::exception& e) {
+                        
                     }
-                    counter++;
-                    platforminfo.device_properties.push_back(temp_device_properties);
-                    platforminfo.device_properties_report.push_back(report);
-                } catch (const std::exception& e) {
-                    
                 }
             }
         }
     } else if (platform.getName() == "CUDA") {
         int counter=0;
-        for (int i=0; i<20; i++) {
-            for (int j=0; j<20; j++) {
+        for (int j=0; j<2*list_depth; j++) {
+            vector<string> data={"single","double", "mixed"};
+            for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["CudaDeviceIndex"]=std::to_string(j);
+                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+                    temp_device_properties["DeviceIndex"]=std::to_string(j);
+                    temp_device_properties["CudaPrecision"]=*precision;
                     OpenMM::System temp_system;
                     temp_system.addParticle(1.0);
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
                     for (auto & name : platform_devices){
-                        if (name == "DeviceIndex" || name == "CUDAPlatformIndex") {
+                        if (name == "DeviceIndex") {
                             continue;
                         } else {
                             report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
