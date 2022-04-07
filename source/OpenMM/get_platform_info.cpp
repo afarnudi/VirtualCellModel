@@ -181,6 +181,7 @@ PlatformInfo get_platform_info(void)
     
     //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
+    cout<<"Here";
     cout<<TOMM<<"\nOpenMM available platforms:\n"<<TGRAY<<"Index Name \t  Speed (Estimated)\n"<<TRESET;
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
         OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);
@@ -200,31 +201,35 @@ PlatformInfo get_platform_info(void)
         int counter=0;
         for (int i=0; i<20; i++) {
             for (int j=0; j<20; j++) {
-                try {
-                    std::string report;
-                    std::map<std::string, std::string> temp_device_properties;
-                    temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
-                    for (auto & name : platform_devices){
-                        if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
-                            continue;
-                        } else {
-                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
-                            cout<<"\t"<<name<<"\t"<<TOCL<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
+                vector<string> data={"single","double", "mixed"};
+                for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
+                    try {
+                        std::string report;
+                        std::map<std::string, std::string> temp_device_properties;
+                        temp_device_properties["OpenCLPlatformIndex"]=std::to_string(i);
+                        temp_device_properties["OpenCLDeviceIndex"]=std::to_string(j);
+                        temp_device_properties["Precision"]=*precision;
+                        OpenMM::System temp_system;
+                        temp_system.addParticle(1.0);
+                        OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+                        OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+                        std::vector<std::string> platform_devices = platform.getPropertyNames();
+                        cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
+                        for (auto & name : platform_devices){
+                            if (name == "DeviceIndex" || name == "OpenCLPlatformIndex") {
+                                continue;
+                            } else {
+                                report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+                                cout<<"\t"<<name<<"\t"<<TOCL<<platform.getPropertyValue(temp_context, name)<<TRESET<<endl;
+                            }
                         }
+                        cout<<TRESET<<"------------------------"<<endl;
+                        counter++;
+                        platforminfo.device_properties.push_back(temp_device_properties);
+                        platforminfo.device_properties_report.push_back(report);
+                    } catch (const std::exception& e) {
+                        
                     }
-                    cout<<TRESET<<"------------------------"<<endl;
-                    counter++;
-                    platforminfo.device_properties.push_back(temp_device_properties);
-                    platforminfo.device_properties_report.push_back(report);
-                } catch (const std::exception& e) {
-                    
                 }
             }
         }
