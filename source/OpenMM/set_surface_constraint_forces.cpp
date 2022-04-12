@@ -98,9 +98,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
             }
 
             GlobalVolumeConstraintForces[GVCFs_index-1]->addBond(triangles[i].atoms);
-            if (i == tri_counter-1) {
-                continue;
-            } else {
+            if (i < tri_counter-1) {
                 vector<int> atoms;
                 atoms.resize(6);
                 atoms[0]=triangles[i].atoms[0];
@@ -158,7 +156,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 }
                 
                 GlobalVolumeConstraintForces[GVCFs_index-1]->addBond(triangles[i].atoms);
-                if (i != tri_counter-1) {
+                if (i < tri_counter-1) {
                     vector<int> atoms;
                     atoms.resize(6);
                     atoms[0]=triangles[i].atoms[0];
@@ -213,7 +211,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 }
                 
                 GlobalSurfaceConstraintForces[GSCFs_index-1]->addBond(triangles[i].atoms);
-                if (i != tri_counter-1) {
+                if (i < tri_counter-1) {
                     vector<int> atoms;
                     atoms.resize(6);
                     atoms[0]=triangles[i].atoms[0];
