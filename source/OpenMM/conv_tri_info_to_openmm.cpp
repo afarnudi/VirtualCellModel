@@ -89,6 +89,7 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     bool LocalSurfacePotential = false;
     bool noSurfacePotential = false;
     bool noVolumePotential = false;
+    bool triangleWCAPotential = false;
     
     const int mem_num_tris = mem.get_num_of_triangle();
     Triangles* triatoms = new Triangles[mem_num_tris];
@@ -137,6 +138,9 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
             noSurfacePotential = true;
             noVolumePotential = true;
         }
+        if (triatoms[i].area_WCA) {
+            triangleWCAPotential=true;
+        }
         
         
     }
@@ -162,6 +166,11 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     }
     if (noVolumePotential || mem_num_tris==0) {
         cout<<" None"<<endl;
+    }
+    if (triangleWCAPotential) {
+        cout<<" local triangle WCA surface potential "<<endl;
+        cout<<"\t\tCoeficient (KJ . mol^-1) = "<<4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature<<endl;
+        cout<<"\t\tarea_sigma (Nm^2) = "<<mem.surface_WCA_min_area <<endl;
     }
     
     //    exit(0);
