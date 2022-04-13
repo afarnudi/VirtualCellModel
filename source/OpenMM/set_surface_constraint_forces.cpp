@@ -42,7 +42,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
     int mem_tris=0;
     int tri_counter=0;
     
-    for (int i=0; triangles[i].surface_type != EndOfList; ++i) {
+    for (int i=0; triangles[i].end_of_list_indicator != EndOfList; ++i) {
         
         auto count_class_item = mem_count_classes.find(triangles[i].class_label);
         if (count_class_item == mem_count_classes.end()) {
@@ -267,7 +267,6 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 
                 
                 LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
-                
                 system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
             }
             LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
@@ -279,7 +278,7 @@ int count_mem_triangles(Triangles* triangles,
                         string     class_label
                         ){
     int triangle_count=0;
-    for (int i=0; triangles[i].surface_type != EndOfList; ++i) {
+    for (int i=0; triangles[i].end_of_list_indicator != EndOfList; ++i) {
         if (triangles[i].class_label == class_label){
             triangle_count++;
         }

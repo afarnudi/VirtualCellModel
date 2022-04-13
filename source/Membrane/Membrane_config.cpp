@@ -160,6 +160,17 @@ void Membrane::assign_parameters(void){
                     errorMessage+= TRESET;
                     throw std::runtime_error(errorMessage);
                 }
+            } else if (split[0]=="WCA") {
+//                surface_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
+                surface_WCA = true;
+                if (split.size()>=2) {
+                    surface_WCA_min_area=get_double_value(split[1], parser_name, it.first, "WCA 40");
+                } else{
+                    string errorMessage = TWARN;
+                    errorMessage+="Membrane config parser: Surface Constraint Model: For the GWCA, the minimum area sould be provided after the model name: WCA 40";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                }
             } else if (split[0]=="N") {
                 surface_constraint_model = potentialModelIndex.Model["None"];
             } else {

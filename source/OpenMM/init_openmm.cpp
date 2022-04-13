@@ -40,7 +40,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                  ArgStruct_VCM           userinputs,
                                  NonBondInteractionMap  &interaction_map)
 {
-//    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+    //    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
     if (!generalParameters.CBP) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
@@ -88,7 +88,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                          ExcludedVolumes,
                          WCAs,
                          WCAFCs,
-    //                     generalParameters.MinimumForceDecleration,
+                         //                     generalParameters.MinimumForceDecleration,
                          system);
     } else {
         set_perParticle_interactions(atoms,
@@ -109,7 +109,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                        ExcludedVolumes,
                                        WCAs,
                                        WCAFCs,
-//                                       interaction_map,
+                                       //                                       interaction_map,
                                        system);
     
     omm->LJ  = LJ_12_6_interactions;
@@ -140,7 +140,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomCompoundBondForce*> ULM;
     vector<OpenMM::CustomBondForce*> KremerGrests;
     vector<OpenMM::CustomBondForce*> Gompper;
-//    vector<OpenMM::CustomBondForce*> Gompperrep;
+    //    vector<OpenMM::CustomBondForce*> Gompperrep;
     vector<OpenMM::CustomBondForce*> Contractiles;
     vector<OpenMM::CustomBondForce*> HillBonds;
     vector<OpenMM::CustomBondForce*> Harmonic_minmax;
@@ -157,7 +157,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                           ULM,
                           KremerGrests,
                           Gompper,
-//                          Gompperrep,
+                          //                          Gompperrep,
                           Contractiles,
                           KFs,
                           HillBonds,
@@ -168,17 +168,17 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     } else {
         set_bonded_forces(bonds,
                           HarmonicBond,
-//                          Kelvin_VoigtBond,
-//                          X4harmonics,
+                          //                          Kelvin_VoigtBond,
+                          //                          X4harmonics,
                           KremerGrests,
-//                          Gompperbond,
-//                          Gompperrep,
-//                          Contractiles,
-//                          KFs,
-//                          HillBonds,
-//                          Harmonic_minmax,
+                          //                          Gompperbond,
+                          //                          Gompperrep,
+                          //                          Contractiles,
+                          //                          KFs,
+                          //                          HillBonds,
+                          //                          Harmonic_minmax,
                           abrahams,
-//                          time_dependant_data,
+                          //                          time_dependant_data,
                           system);
     }
     
@@ -255,11 +255,11 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
     vector<OpenMM::CustomCompoundBondForce*> GlobalVolumeConstraintForces;
     
     set_surface_volume_constraint_forces(triangles,
-                                          GlobalSurfaceConstraintForces,
-                                          LocalSurfaceConstraintForces,
-                                          GlobalVolumeConstraintForces,
-                                            LocalSurfaceWCAForces,
-                                          system);
+                                         GlobalSurfaceConstraintForces,
+                                         LocalSurfaceConstraintForces,
+                                         GlobalVolumeConstraintForces,
+                                         LocalSurfaceWCAForces,
+                                         system);
     
     
     omm->GlobalSurfaceConstraintForces = GlobalSurfaceConstraintForces;
@@ -298,7 +298,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         } else {
             platforminfo = get_platform_info();
         }
-
+        
         generateHardwareReport(platforminfo);
     } else {
         platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
@@ -432,9 +432,9 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(AnisoMCBarostat);
     }
     
-//    ofstream output("system_fail.xml");
-//    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
-//    output.close();exit(0);
+    //    ofstream output("system_fail.xml");
+    //    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
+    //    output.close();exit(0);
     
     if (platform.getName() == "CPU" || platforminfo.platform_id==0) {
         if (generalParameters.Integrator_type=="Verlet") {
@@ -446,7 +446,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         } else {
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         }
-
+        
     } else {
         if ( generalParameters.Integrator_type=="Verlet" ) {
             omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
@@ -478,7 +478,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         }
     }
     
-//    exit(0);
+    //    exit(0);
     if (!generalParameters.Resume) {
         omm->context->setPositions(initialPosInNm);
         if (generalParameters.setVelocitiesToTemperature) {
@@ -518,7 +518,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               double                 stepSizeInFs,
                               int                    timeInPs,
-//                              OpenMM::Platform&      platform,
+                              //                              OpenMM::Platform&      platform,
                               PlatformInfo           platforminfo,
                               //                                 TimeDependantData*     time_dependant_data,
                               //                                 Bonds*                 bonds,
@@ -526,10 +526,10 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               //                                 Angles*                angles,
                               //                                 Triangles*             triangles,
                               MeanCurvature**        mean_curvature_ints
-                              //                                 vector<set<int> >      &membrane_set,
-                              //                                 vector<set<int> >      &actin_set,
-                              //                                 vector<set<int> >      &ecm_set,
-                              //                                 vector<vector<set<int> > > &chromatin_set,
+//                                 vector<set<int> >      &membrane_set,
+//                                 vector<set<int> >      &actin_set,
+//                                 vector<set<int> >      &ecm_set,
+//                                 vector<vector<set<int> > > &chromatin_set,
 //                              ArgStruct_VCM           userinputs
 //                                 NonBondInteractionMap  &interaction_map
 )
@@ -579,7 +579,7 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
     } else {
         omm->context    = new OpenMM::Context(*omm->system, *omm->VerletIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
     }
-
+    
     omm->context->setPositions(initialPosInNm);
     omm->context->setVelocities(initialVelInNmperPs);
     omm->VerletIntegrator->step(1);

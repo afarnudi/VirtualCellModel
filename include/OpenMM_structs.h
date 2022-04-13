@@ -88,9 +88,9 @@ struct Angles{
 struct Triangles{
     bool area_WCA=false;
     double surface_WCA_min_area=0;
-    
-    int surface_type;
-    int volume_type;
+    int end_of_list_indicator=0;
+    int surface_type=0;
+    int volume_type=0;
     std::string class_label;
     std::vector <int> atoms;
     double SurfaceConstraintStiffnessinKJpermolperNm2;

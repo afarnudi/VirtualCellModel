@@ -102,13 +102,13 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
         triatoms[i].area_WCA = mem.surface_WCA;
         triatoms[i].surface_WCA_min_area = mem.surface_WCA_min_area;
         
+        vector<int> tri_nodes(mem.get_triangle_atoms_list(i));
+        triatoms[i].atoms.resize(3);
+        triatoms[i].atoms[0]=tri_nodes[0];
+        triatoms[i].atoms[1]=tri_nodes[1];
+        triatoms[i].atoms[2]=tri_nodes[2];
+        
         if (triatoms[i].surface_type != potentialModelIndex.Model["None"] || triatoms[i].volume_type != potentialModelIndex.Model["None"]) {
-            
-            vector<int> tri_nodes(mem.get_triangle_atoms_list(i));
-            triatoms[i].atoms.resize(3);
-            triatoms[i].atoms[0]=tri_nodes[0];
-            triatoms[i].atoms[1]=tri_nodes[1];
-            triatoms[i].atoms[2]=tri_nodes[2];
             
             if (triatoms[i].surface_type != potentialModelIndex.Model["None"]){
                 if (triatoms[i].surface_type == potentialModelIndex.Model["LocalConstraint"]) {
@@ -168,7 +168,7 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
         cout<<" None"<<endl;
     }
     if (triangleWCAPotential) {
-        cout<<" local triangle WCA surface potential "<<endl;
+        cout<<"local triangle WCA surface potential "<<endl;
         cout<<"\t\tCoeficient (KJ . mol^-1) = "<<4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature<<endl;
         cout<<"\t\tarea_sigma (Nm^2) = "<<mem.surface_WCA_min_area <<endl;
     }

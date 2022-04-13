@@ -315,8 +315,9 @@ int main(int argc, char **argv)
     all_bonds[num_of_bonds].type         =EndOfList;
     all_dihedrals[num_of_dihedrals].type =EndOfList;
     all_angles[num_of_angles].type       =EndOfList;
-    all_triangles[num_of_triangles].surface_type = EndOfList;
+    all_triangles[num_of_triangles].end_of_list_indicator = EndOfList;
     all_triangles[num_of_triangles].volume_type = EndOfList;
+    all_triangles[num_of_triangles].surface_type = EndOfList;
     for (int node_order=0; node_order<num_of_curvature_interactions.size(); node_order++) {
         all_mean_curvature_interactions[node_order] = new MeanCurvature [num_of_curvature_interactions[node_order]+1];
         all_mean_curvature_interactions[node_order][num_of_curvature_interactions[node_order]].curvature_type = EndOfList;
