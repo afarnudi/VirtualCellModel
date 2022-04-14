@@ -263,7 +263,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 string area_0times2 = to_string(2*triangles[i].surface_WCA_min_area);
                 string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
                 string area = "(distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3)))";
-                string potential = epsilon+"*(("+area_0times2+"/"+area+")^6- ("+area_0times2+"/"+area+")^3+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./3.))+"-"+area+")";
+                string potential = epsilon+"*(("+area_0times2+"/"+area+")^8- ("+area_0times2+"/"+area+")^4+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./4.))+"-"+area+")";
                 
                 
                 LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
@@ -271,6 +271,25 @@ void set_surface_volume_constraint_forces(Triangles*                            
             }
             LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
         }
+//        else if (triangles[i].surface_triangle_hight_WCA) {
+//            auto LWCAs_item = LWCAs_classes.find(triangles[i].class_label);
+//            if (LWCAs_item == LWCAs_classes.end()) {
+//                
+//                LWCAs_classes.insert(triangles[i].class_label);
+//                LWCAs_index++;
+////                step(area_0-area)
+////                string area_0 = to_string(triangles[i].surface_WCA_min_area);
+//                string sigma_h = to_string(triangles[i].surface_triangle_hight_WCA_min_length);
+//                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
+//                string h1 = "distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))";
+////                string potential = epsilon+"*(("+area_0times2+"/"+area+")^6- ("+area_0times2+"/"+area+")^3+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./3.))+"-"+area+")";
+//                
+//                
+//                LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
+//                system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
+//            }
+//            LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
+//        }
     }
 }
 
