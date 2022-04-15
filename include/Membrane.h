@@ -136,6 +136,7 @@ public:
     bool freezeSubLattice=false;
     bool CalculateBending=false;
     bool surface_WCA=false;
+    bool surface_triangle_hight_WCA = false;
     
     int spring_model=0;
     int dihedral_bending_model=0;
@@ -173,6 +174,7 @@ public:
     double VolumeConstraintValue=0;
     double LockOn_rigidity=0;
     double surface_WCA_min_area=0;
+    double surface_triangle_hight_WCA_min_length=0;
     
     vector<string> insertOrder;
     vector<string> values;

@@ -87,7 +87,9 @@ struct Angles{
 
 struct Triangles{
     bool area_WCA=false;
+    bool surface_triangle_hight_WCA=false;
     double surface_WCA_min_area=0;
+    double surface_triangle_hight_WCA_min_length=0;
     int end_of_list_indicator=0;
     int surface_type=0;
     int volume_type=0;

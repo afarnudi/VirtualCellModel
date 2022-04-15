@@ -271,25 +271,29 @@ void set_surface_volume_constraint_forces(Triangles*                            
             }
             LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
         }
-//        else if (triangles[i].surface_triangle_hight_WCA) {
-//            auto LWCAs_item = LWCAs_classes.find(triangles[i].class_label);
-//            if (LWCAs_item == LWCAs_classes.end()) {
-//                
-//                LWCAs_classes.insert(triangles[i].class_label);
-//                LWCAs_index++;
-////                step(area_0-area)
-////                string area_0 = to_string(triangles[i].surface_WCA_min_area);
-//                string sigma_h = to_string(triangles[i].surface_triangle_hight_WCA_min_length);
-//                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
-//                string h1 = "distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))";
-////                string potential = epsilon+"*(("+area_0times2+"/"+area+")^6- ("+area_0times2+"/"+area+")^3+0.25)*step("+to_string(triangles[i].surface_WCA_min_area*pow(2,1./3.))+"-"+area+")";
-//                
-//                
-//                LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
-//                system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
-//            }
-//            LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
-//        }
+        else if (triangles[i].surface_triangle_hight_WCA) {
+            auto LWCAs_item = LWCAs_classes.find(triangles[i].class_label);
+            if (LWCAs_item == LWCAs_classes.end()) {
+                
+                LWCAs_classes.insert(triangles[i].class_label);
+                LWCAs_index++;
+//                step(area_0-area)
+//                string area_0 = to_string(triangles[i].surface_WCA_min_area);
+                string sigma_h = to_string(triangles[i].surface_triangle_hight_WCA_min_length);
+                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
+                string h1 = "(distance(p1,p2)*sin(angle(p3,p1,p2)))";
+                string h2 = "(distance(p3,p2)*sin(angle(p1,p2,p3)))";
+                string h3 = "(distance(p1,p3)*sin(angle(p2,p3,p1)))";
+                string potential = epsilon+"*(("+sigma_h+"/"+h1+")^8- ("+sigma_h+"/"+h1+")^4+0.25)*step("+to_string(triangles[i].surface_triangle_hight_WCA_min_length*pow(2,1./4.))+"-"+h1+")";
+                potential += "+"+epsilon+"*(("+sigma_h+"/"+h2+")^8- ("+sigma_h+"/"+h2+")^4+0.25)*step("+to_string(triangles[i].surface_triangle_hight_WCA_min_length*pow(2,1./4.))+"-"+h2+")";
+                potential += "+"+epsilon+"*(("+sigma_h+"/"+h3+")^8- ("+sigma_h+"/"+h3+")^4+0.25)*step("+to_string(triangles[i].surface_triangle_hight_WCA_min_length*pow(2,1./4.))+"-"+h3+")";
+                
+                
+                LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
+                system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
+            }
+            LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
+        }
     }
 }
 
