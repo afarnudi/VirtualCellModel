@@ -161,7 +161,7 @@ void Membrane::assign_parameters(void){
                     throw std::runtime_error(errorMessage);
                 }
             } else if (split[0]=="WCA") {
-//                surface_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
+                surface_constraint_model = potentialModelIndex.Model["None"];
                 surface_WCA = true;
                 if (split.size()>=2) {
                     surface_WCA_min_area=get_double_value(split[1], parser_name, it.first, "WCA 40");
@@ -183,7 +183,7 @@ void Membrane::assign_parameters(void){
                     throw std::runtime_error(errorMessage);
                 }
             } else if (split[0]=="WCAH") {
-//                surface_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
+                surface_constraint_model = potentialModelIndex.Model["None"];
                 surface_triangle_hight_WCA = true;
                 if (split.size()>=2) {
                     surface_triangle_hight_WCA_min_length=get_double_value(split[1], parser_name, it.first, "WCAH 40");
