@@ -29,7 +29,7 @@ void Membrane::calculate_volume_and_surface_area(){
     update_COM_position();
     
     int node_A, node_B, node_C;
-    double AB[3], AC[3], height[3], ABxAC[3];
+    double AB[3], AC[3], XA[3], ABxAC[3];
     
     for(  int i=0;i<Triangle_list.size();i++)
     {
@@ -45,18 +45,23 @@ void Membrane::calculate_volume_and_surface_area(){
         AC[1] = Node_Position[node_C][1] - Node_Position[node_A][1];
         AC[2] = Node_Position[node_C][2] - Node_Position[node_A][2];
         
-        height[0] = COM_position[0] - Node_Position[node_A][0];
-        height[1] = COM_position[1] - Node_Position[node_A][1];
-        height[2] = COM_position[2] - Node_Position[node_A][2];
+        XA[0] = Node_Position[node_A][0] - COM_position[0];
+        XA[1] = Node_Position[node_A][1] - COM_position[1];
+        XA[2] = Node_Position[node_A][2] - COM_position[2];
         
         crossvector(ABxAC, AB, AC);
         
         double area = 0.5*vector_length(ABxAC);
-        double H = abs(innerproduct(ABxAC, height)/(2*area) );
+//        double H = abs(innerproduct(ABxAC, height)/(2*area) );
+        volume += (1/6.)*( XA[0]*(AB[1]*AC[2] - AC[1]*AB[2])
+                          +XA[1]*(AB[2]*AC[0] - AC[2]*AB[0])
+                          +XA[2]*(AB[0]*AC[1] - AC[0]*AB[1])
+                          );
         
         surface_area += area;
-        volume += H*area/3.0;
+        
         
     }
-    
+//    cout<<volume<<endl;
+//    exit(0);
 }

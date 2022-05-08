@@ -181,7 +181,7 @@ Triangles* convert_membrane_triangle_info_to_openmm(Membrane &mem) {
     if (triangleWCAHeightPotential) {
         cout<<"local triangle WCA set on triangle heights "<<endl;
         cout<<"\t\tCoeficient (KJ . mol^-1) = "<<4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature<<endl;
-        cout<<"\t\tsigma (Nm) = "<<mem.surface_WCA_min_area <<endl;
+        cout<<"\t\tsigma (Nm) = "<<mem.surface_triangle_hight_WCA_min_length <<endl;
     }
     
     //    exit(0);

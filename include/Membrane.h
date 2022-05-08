@@ -276,6 +276,8 @@ public:
     void calculate_dOmega(void);
     void analyse_curvature(void);
     
+    void calculate_mesh_energy_landscape(void);
+    
     void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
     void load_analysis_coord_frame(int frame);
     

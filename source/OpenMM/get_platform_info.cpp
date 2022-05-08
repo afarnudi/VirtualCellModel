@@ -180,7 +180,7 @@ PlatformInfo get_platform_info(void)
     
     //cout<<"platform default directory path = "<<OpenMM::Platform::getDefaultPluginsDirectory()<<endl;
     //Listing the names of all available platforms.
-    cout<<"Here";
+//    cout<<"Here";
     cout<<TOMM<<"\nOpenMM available platforms:\n"<<TGRAY<<"Index Name \t  Speed (Estimated)\n"<<TRESET;
     for (int i = 0; i < OpenMM::Platform::getNumPlatforms(); i++) {
         OpenMM::Platform& platform = OpenMM::Platform::getPlatform(i);

@@ -134,6 +134,8 @@ void Membrane::initialise(std::string Mesh_file_name){
     }
 //    loop_ulm_gen();
     
+//    calculate_mesh_energy_landscape();
+    
 }
 #include <boost/filesystem.hpp>
 
@@ -579,3 +581,112 @@ void Membrane::freeze_sub_lattice(void){
 //    }
 //    cout<<"zero "<<count_zero<<endl<<"mass "<<count_mass<<endl<<"negative "<<count_N<<endl;exit(0);
 }
+
+
+
+
+
+/**Energy Landscape calculations:
+ This code will produce data required by a post analysis Python script.
+ It calculates the energy change due to translational movment of one node on the surface of a sphere.
+*/
+
+void Membrane::calculate_mesh_energy_landscape(void){
+//    int node_index=14;
+    vector<vector<double> > node_pos_copy = Node_Position;
+    
+    
+    for (int node_index=13; node_index<14; node_index++) {
+        //Map on unit sphere
+        Node_Position = node_pos_copy;
+        update_spherical_positions();
+        for (int i=0; i<Num_of_Nodes; i++) {
+            spherical_positions[i][0]=1;
+        }
+        convert_spherical_positions_to_cartisian();
+        
+        //set node to north pole
+        vector<double> r_theta_phi;
+        r_theta_phi = convert_cartesian_to_spherical(Node_Position[node_index][0],
+                                                     Node_Position[node_index][1],
+                                                     Node_Position[node_index][2]);
+        double theta0 = r_theta_phi[1];
+        double phi0   = r_theta_phi[2];
+        rotate_coordinates(-theta0, -phi0);
+        
+        double range=0.3;
+        int segments=40;
+        
+        vector<vector<double> > J_curvature(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > I_curvature(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > JV_curvature(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > IB_curvature(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > B_area(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > V_area(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > temp_volume(2*segments, vector<double>(2*segments,0));
+    
+        cout<<node_index<<" "<<flush;
+        for (int j=0; j<2*segments; j++) {
+            cout<<j<<" "<<flush;
+            Node_Position[node_index][1]=(1-j/double(segments))*range;
+            for (int i=-segments; i<segments; i++) {
+                Node_Position[node_index][0]=i*range/segments;
+                Node_Position[node_index][2]=sqrt(1-Node_Position[node_index][0]*Node_Position[node_index][0]-Node_Position[node_index][1]*Node_Position[node_index][1]);
+    //            cout<<"3"<<endl;
+                
+//                analyse_curvature();
+                calculate_volume_and_surface_area();
+                temp_volume[2*segments-j-1][i+segments]+=volume;
+                calc_Julicher_Itzykson_bending_props();
+    //            cout<<"4"<<endl;
+                for (int nid=0; nid<Num_of_Nodes; nid++) {
+                    J_curvature[2*segments-j-1][i+segments]+=Julicher_numerator[nid]/Barycentric_area[nid];
+                    I_curvature[2*segments-j-1][i+segments]+=Itzykson_numerator[nid]/node_voronoi_area[nid];
+                    IB_curvature[2*segments-j-1][i+segments]+=Itzykson_numerator[nid]/Barycentric_area[nid];
+                    JV_curvature[2*segments-j-1][i+segments]+=Julicher_numerator[nid]/node_voronoi_area[nid];
+                    B_area[2*segments-j-1][i+segments]+=Barycentric_area[nid];
+                    V_area[2*segments-j-1][i+segments]+=node_voronoi_area[nid];
+                }
+
+            }
+        }
+//        cout<<"2"<<endl;
+        string JName= "Node_curvatures/Node_"+to_string(node_index)+"_Julicher_curvature.txt";
+        string IName= "Node_curvatures/Node_"+to_string(node_index)+"_Itzykson_curvature.txt";
+        string IBName= "Node_curvatures/Node_"+to_string(node_index)+"_ItzyksonBarycentric_curvature.txt";
+        string JVName= "Node_curvatures/Node_"+to_string(node_index)+"_JulicherVoronoi_curvature.txt";
+        string BName= "Node_curvatures/Node_"+to_string(node_index)+"_Barycentric_area.txt";
+        string VName= "Node_curvatures/Node_"+to_string(node_index)+"_Voronoi_area.txt";
+        string volumeName= "Node_curvatures/Node_"+to_string(node_index)+"_volume.txt";
+        ofstream wJ(JName.c_str());
+        ofstream wI(IName.c_str());
+        ofstream wIB(IBName.c_str());
+        ofstream wJV(JVName.c_str());
+        ofstream wB(BName.c_str());
+        ofstream wV(VName.c_str());
+        ofstream wvol(volumeName.c_str());
+        for (int i=0; i<2*segments; i++) {
+            for (int j=0; j<2*segments; j++) {
+                wJ<<setprecision(10)<<J_curvature[i][j]<<" ";
+                wI<<setprecision(10)<<I_curvature[i][j]<<" ";
+                wIB<<setprecision(10)<<IB_curvature[i][j]<<" ";
+                wJV<<setprecision(10)<<JV_curvature[i][j]<<" ";
+                wB<<setprecision(10)<<B_area[i][j]<<" ";
+                wV<<setprecision(10)<<V_area[i][j]<<" ";
+                wvol<<setprecision(10)<<temp_volume[i][j]<<" ";
+            }
+            wJ<<endl;
+            wI<<endl;
+            wIB<<endl;
+            wJV<<endl;
+            wB<<endl;
+            wV<<endl;
+            wvol<<endl;
+        }
+    }
+    
+    
+    exit(0);
+}
+
+
