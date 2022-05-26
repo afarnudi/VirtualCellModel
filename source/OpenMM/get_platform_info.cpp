@@ -132,12 +132,14 @@ PlatformInfo get_platform_info_forResume(string platformName)
                                 cout<<name<<"  "<<platform.getPropertyValue(temp_context, name)<<"\t";
                                 for (auto &prop: checkpointDeviceProperties) {
                                     if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+                                        cout<<prop[0]<<"  "<<prop[1]<<"\t";
                                         hardwareCompatibility++;
+                                        cout<<hardwareCompatibility<<endl;
                                     }
                                 }
                                 
                             }
-                            cout<<hardwareCompatibility<<endl;
+                            
                         }
                         cout<<TRESET<<"------------------------"<<endl;
                     }
