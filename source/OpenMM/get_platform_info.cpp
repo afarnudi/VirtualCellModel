@@ -126,13 +126,18 @@ PlatformInfo get_platform_info_forResume(string platformName)
                     if (counter == platform_device_ID){
                         cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
                         for (auto & name : platform_devices){
-                            for (auto &prop: checkpointDeviceProperties) {
-                                cout<<name<<" "<<prop[0]<<"\t";
-                                cout<<platform.getPropertyValue(temp_context, name)<<" "<<prop[1]<<endl;
-                                if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
-                                    hardwareCompatibility++;
+                            if (name == "DeviceIndex") {
+                                continue;
+                            } else {
+                                cout<<name<<"  "<<platform.getPropertyValue(temp_context, name)<<"\t";
+                                for (auto &prop: checkpointDeviceProperties) {
+                                    if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+                                        hardwareCompatibility++;
+                                    }
                                 }
+                                
                             }
+                            cout<<hardwareCompatibility<<endl;
                         }
                         cout<<TRESET<<"------------------------"<<endl;
                     }
