@@ -357,10 +357,10 @@ std::string find_resume_config(std::string resumePath, std::string &checkpointPa
         }
         getline (hardwarefile,line);
         splitline = splitstring(line, ' ');
-        cout<<line<<endl;
-        for (auto &i:splitline){
-            cout<<i<<endl;
-        }
+//        cout<<line<<endl;
+//        for (auto &i:splitline){
+//            cout<<i<<endl;
+//        }
         checkpointPlatformName=splitline[3];
         
 //        exit(0);

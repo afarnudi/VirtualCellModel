@@ -59,20 +59,22 @@ PlatformInfo get_platform_info_forResume(string platformName)
     int platform_device_ID = stoi(temp_splitline[3]);
     getline (hardwarefile,line);
     while (getline (hardwarefile,line)) {
-        cout<<line<<endl;
+//        cout<<line<<endl;
         vector<string> splitline = splitstring(line, '\t');
         if (splitline.size()<3) {
             break;
         }
+        deviceProperties.clear();
         deviceProperties.push_back(splitline[1]);
         deviceProperties.push_back(splitline[2]);
         checkpointDeviceProperties.push_back(deviceProperties);
+//        cout<<checkpointDeviceProperties[checkpointDeviceProperties.size()-1][0]<<checkpointDeviceProperties[checkpointDeviceProperties.size()-1][1]<<endl;
     }
     
     int platformDeviceID = -1;
-    
+//
     if (platformName == "OpenCL") {
-        int counter=0;
+        int counter=-1;
         for (int i=0; i<list_depth; i++) {
             for (int j=0; j<list_depth; j++) {
                 vector<string> data={"single","double", "mixed"};
@@ -89,25 +91,30 @@ PlatformInfo get_platform_info_forResume(string platformName)
                         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                         OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                         std::vector<std::string> platform_devices = platform.getPropertyNames();
-                        cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
-                        for (auto & name : platform_devices){
-                            for (auto &prop: checkpointDeviceProperties) {
-                                if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
-                                    hardwareCompatibility++;
+//                        cout<<TBOLD<<TOCL<<counter<<TRESET<<" : ";
+                        counter++;
+                        if (counter==platform_device_ID) {
+                            for (auto & name : platform_devices){
+                                for (auto &prop: checkpointDeviceProperties) {
+                                    if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+                                        hardwareCompatibility++;
+//                                        cout<<hardwareCompatibility<<endl;
+                                    }
                                 }
                             }
                         }
+                        platforminfo.device_properties.push_back(temp_device_properties);
                     } catch (const std::exception& e) {
-                        
+
                     }
                     if (hardwareCompatibility==checkpointDeviceProperties.size()) {
-                        platformDeviceID=counter-1;
+                        platformDeviceID=platform_device_ID;
                     }
                 }
             }
         }
     } else if (platformName == "CUDA") {
-        int counter=0;
+        int counter=-1;
         for (int j=0; j<2*list_depth; j++) {
             vector<string> data={"single","double", "mixed"};
             for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
@@ -115,7 +122,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
                 try {
                     std::string report;
                     std::map<std::string, std::string> temp_device_properties;
-                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+//                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
                     temp_device_properties["DeviceIndex"]=std::to_string(j);
                     temp_device_properties["CudaPrecision"]=*precision;
                     OpenMM::System temp_system;
@@ -123,32 +130,28 @@ PlatformInfo get_platform_info_forResume(string platformName)
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
+                    counter++;
                     if (counter == platform_device_ID){
-                        cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
                         for (auto & name : platform_devices){
-                            if (name == "DeviceIndex") {
-                                continue;
-                            } else {
-                                cout<<name<<"  "<<platform.getPropertyValue(temp_context, name)<<"\t";
-                                for (auto &prop: checkpointDeviceProperties) {
-                                    if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
-                                        cout<<prop[0]<<"  "<<prop[1]<<"\t";
-                                        hardwareCompatibility++;
-                                        cout<<hardwareCompatibility<<endl;
-                                    }
+                            for (auto &prop: checkpointDeviceProperties) {
+                                if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+//                                    cout<<prop[0]<<"  "<<prop[1]<<"\t";
+                                    hardwareCompatibility++;
+//                                    cout<<hardwareCompatibility<<endl;
                                 }
-                                
                             }
                             
+                            
+
                         }
-                        cout<<TRESET<<"------------------------"<<endl;
+//                        cout<<TRESET<<"------------------------"<<endl;
                     }
-                    
-                    counter++;
+
+//                    counter++;
                     platforminfo.device_properties.push_back(temp_device_properties);
-                    platforminfo.device_properties_report.push_back(report);
+//                    platforminfo.device_properties_report.push_back(report);
                 } catch (const std::exception& e) {
-                    
+
                 }
                 if (hardwareCompatibility==checkpointDeviceProperties.size()) {
                     platformDeviceID=platform_device_ID;
@@ -162,7 +165,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
         OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
         OpenMM::Context temp_context(temp_system, temp_inegrator, platform);
         std::vector<std::string> platform_devices = platform.getPropertyNames();
-        
+
         for (auto & name : platform_devices){
             for (auto &prop: checkpointDeviceProperties) {
                 if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
@@ -174,9 +177,8 @@ PlatformInfo get_platform_info_forResume(string platformName)
             platformDeviceID=0;
         }
     }
-    
-    
-    
+
+//    exit(0);
     if (platformDeviceID<0) {
         string errorMessage = TWARN;
         errorMessage+="error platform compatibility: non of the available platform devices were compatible with the hardware runtime report. Please check if the machine's hardware has chamged since the simulation interruption.\n";
