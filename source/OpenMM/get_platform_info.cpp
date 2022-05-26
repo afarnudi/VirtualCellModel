@@ -59,7 +59,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
     int platform_device_ID = stoi(temp_splitline[3]);
     getline (hardwarefile,line);
     while (getline (hardwarefile,line)) {
-        cout<<line<<" :: ";
+        cout<<line<<endl;
         vector<string> splitline = splitstring(line, '\t');
         if (splitline.size()<3) {
             break;
@@ -127,7 +127,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
                         cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
                         for (auto & name : platform_devices){
                             for (auto &prop: checkpointDeviceProperties) {
-                                cout<<name<<" "<<prop[0]<<endl;
+                                cout<<name<<" "<<prop[0]<<"\t";
                                 cout<<platform.getPropertyValue(temp_context, name)<<" "<<prop[1]<<endl;
                                 if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
                                     hardwareCompatibility++;
@@ -386,7 +386,7 @@ void generateHardwareReport (PlatformInfo platforminfo){
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     int stepSizeInFs =1;
     generalParameters.hardwareReport  = exec("hostname");
-    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform:\nPlatformID "+to_string(platforminfo.platform_id)+" platformDeviceID "+to_string(platforminfo.platform_device_id)+"\nand default properties:\n";
+    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform:\nPlatformID "+to_string(platforminfo.platform_id)+" platformDeviceID "+to_string(platforminfo.platform_device_id)+"\nDefault properties:\n";
     if (platform.getName() != "CPU") {
         generalParameters.hardwareReport+=platforminfo.device_properties_report[platforminfo.platform_device_id]+"\n";
     } else {
