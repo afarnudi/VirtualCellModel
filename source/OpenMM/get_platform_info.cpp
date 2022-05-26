@@ -53,7 +53,13 @@ PlatformInfo get_platform_info_forResume(string platformName)
     string line;
     getline (hardwarefile,line);
     getline (hardwarefile,line);
+    getline (hardwarefile,line);
+    vector<string> temp_splitline = splitstring(line, ' ');
+    int platofrm_ID = stoi(temp_splitline[1]);
+    int platform_device_ID = stoi(temp_splitline[3]);
+    getline (hardwarefile,line);
     while (getline (hardwarefile,line)) {
+        cout<<line<<" :: ";
         vector<string> splitline = splitstring(line, '\t');
         if (splitline.size()<3) {
             break;
@@ -117,15 +123,20 @@ PlatformInfo get_platform_info_forResume(string platformName)
                     OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
                     OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
                     std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
-                    for (auto & name : platform_devices){
-                        for (auto &prop: checkpointDeviceProperties) {
-                            if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
-                                hardwareCompatibility++;
+                    if (counter == platform_device_ID){
+                        cout<<TBOLD<<TCUD<<counter<<TRESET<<" : ";
+                        for (auto & name : platform_devices){
+                            for (auto &prop: checkpointDeviceProperties) {
+                                cout<<name<<" "<<prop[0]<<endl;
+                                cout<<platform.getPropertyValue(temp_context, name)<<" "<<prop[1]<<endl;
+                                if (name==prop[0] && platform.getPropertyValue(temp_context, name)==prop[1]) {
+                                    hardwareCompatibility++;
+                                }
                             }
                         }
+                        cout<<TRESET<<"------------------------"<<endl;
                     }
-                    cout<<TRESET<<"------------------------"<<endl;
+                    
                     counter++;
                     platforminfo.device_properties.push_back(temp_device_properties);
                     platforminfo.device_properties_report.push_back(report);
@@ -133,7 +144,7 @@ PlatformInfo get_platform_info_forResume(string platformName)
                     
                 }
                 if (hardwareCompatibility==checkpointDeviceProperties.size()) {
-                    platformDeviceID=counter-1;
+                    platformDeviceID=platform_device_ID;
                 }
             }
         }
@@ -375,7 +386,7 @@ void generateHardwareReport (PlatformInfo platforminfo){
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     int stepSizeInFs =1;
     generalParameters.hardwareReport  = exec("hostname");
-    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform with default properties:\n";
+    generalParameters.hardwareReport += "Running on the "+platform.getName()+" platform:\nPlatformID "+to_string(platforminfo.platform_id)+" platformDeviceID "+to_string(platforminfo.platform_device_id)+"\nand default properties:\n";
     if (platform.getName() != "CPU") {
         generalParameters.hardwareReport+=platforminfo.device_properties_report[platforminfo.platform_device_id]+"\n";
     } else {
