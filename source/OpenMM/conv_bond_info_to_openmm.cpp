@@ -1,6 +1,6 @@
 #include "OpenMM_funcs.hpp"
 
-Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
+Bonds* convert_membrane_bond_info_to_openmm(Membrane mem, int total_atom_count) {
     const int mem_num_bonds = mem.get_num_of_bonds();
     Bonds* bonds = new Bonds[mem_num_bonds];
     
@@ -10,6 +10,7 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
     bool noPotential=true;
     int bond_count = 0;
     int atom_count = 0;
+    int bond_index;
     if (mem.LockOnPotential != potentialModelIndex.Model["None"]) {
         int bond_index = mem.get_num_of_bonds() - mem.get_num_of_nodes()+1;
         int last_atom_index = mem.get_num_of_nodes()-1;
@@ -32,6 +33,64 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
                 bonds[i].LockOnULM_amplitude = mem.LockOnULMU;
             }
         }
+    }
+//    cout<<mem.Mem_Mem_sticky_bond_indices.size()<<endl;
+    if (mem.Mem_Mem_sticky_bond_indices.size()!=0) {
+        bond_index = mem.get_num_of_bonds()  - mem.Mem_Mem_sticky_bond_indices.size();
+        if (mem.LockOnPotential != potentialModelIndex.Model["None"]) {
+            bond_index-= mem.get_num_of_nodes()+1;
+        }
+        bond_count += mem.Mem_Mem_sticky_bond_indices.size();
+        for (int i=bond_index; i<bond_index+mem.Mem_Mem_sticky_bond_indices.size(); i++) {
+            bonds[i].atoms[0]=mem.Mem_Mem_sticky_bond_indices[i-bond_index][0] - total_atom_count;
+            bonds[i].atoms[1]=mem.Mem_Mem_sticky_bond_indices[i-bond_index][1] - total_atom_count;
+            bonds[i].class_label = mem.get_label() + "sticky";
+            bonds[i].nominalLengthInNm=0;
+            bonds[i].type = potentialModelIndex.Model["Harmonic"];
+            bonds[i].stiffnessInKJPerNm2=100*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+//            cout<<bonds[i].stiffnessInKJPerNm2;
+        }
+    }
+    
+//    cout<<bond_count<<endl;
+//    cout<<mem_num_bonds<<endl;
+//    exit(0);
+    for (int i=0; i<mem_num_bonds -bond_count; i++) {
+        bonds[i].type = mem.get_spring_model();
+        bonds[i].atoms[0]=mem.get_node_pair(i, 0);
+        bonds[i].atoms[1]=mem.get_node_pair(i, 1);
+        bonds[i].class_label = mem.get_label() + mem.get_label();
+        bonds[i].nominalLengthInNm=mem.get_node_pair_Nominal_Length_in_Nm(i);
+        if (bonds[i].type == potentialModelIndex.Model["KremerGrest"]) {
+            KGpotential =true;
+            noPotential = false;
+            bonds[i].FENER0inNm = 1.5*bonds[i].nominalLengthInNm;
+            bonds[i].k_FENE_inKJpermol = 30*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature/(bonds[i].nominalLengthInNm*bonds[i].nominalLengthInNm);
+            bonds[i].epsilon_WCA_inKJpermol = generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature;
+        } else if (bonds[i].type == potentialModelIndex.Model["Harmonic"]){
+            harmonicpotential=true;
+            noPotential = false;
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == potentialModelIndex.Model["HarmonicX4"]){
+            noPotential = false;
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == potentialModelIndex.Model["Kelvin-Voigt"]){
+            noPotential = false;
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == potentialModelIndex.Model["RealHarmonic"]){
+            noPotential = false;
+            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+        } else if (bonds[i].type == potentialModelIndex.Model["Gompper"]){
+            noPotential = false;
+            gompperpotential=true;
+//            vector<double> gompperparamslminlc1lc0lmax = mem.get_gompper_params_lminlc1lc0lmax();
+//            bonds[i].stiffnessInKJPerNm2=mem.get_spring_stiffness_coefficient();
+//            bonds[i].gompperlmin=gompperparamslminlc1lc0lmax[0];
+//            bonds[i].gompperlc1=gompperparamslminlc1lc0lmax[1];
+//            bonds[i].gompperlc0=gompperparamslminlc1lc0lmax[2];
+//            bonds[i].gompperlmax=gompperparamslminlc1lc0lmax[3];
+        }
+        
     }
     
     for (int i=0; i<mem_num_bonds -bond_count; i++) {
@@ -71,6 +130,8 @@ Bonds* convert_membrane_bond_info_to_openmm(Membrane mem) {
         }
         
     }
+    
+    
     if(harmonicpotential){
         cout<<" Harmonic "<<endl;
         cout<<"\tCoeficient (KJ.Nm^-2.mol^-1 ) = " <<mem.get_spring_stiffness_coefficient() <<endl;

@@ -309,6 +309,8 @@ void Membrane::assign_parameters(void){
             initial_random_rotation_coordinates=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "CalculateBending") {
             CalculateBending=get_bool_value(split[0], parser_name, it.first);
+        } else if (it.first == "Sticky") {
+            sticky=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "WantGeometricProps") {
             WantGeometricProps=get_bool_value(split[0], parser_name, it.first);
         } else if (it.first == "InflateMembrane") {

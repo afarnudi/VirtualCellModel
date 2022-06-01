@@ -44,13 +44,13 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
         
         cout<<TMEM<<"Membrane "<<i<<TRESET<<endl;
         cout<<"Bond potential:";
-        Bonds* bonds = convert_membrane_bond_info_to_openmm(membranes[i]);
+        Bonds* bonds = convert_membrane_bond_info_to_openmm(membranes[i],atom_count);
         
         for (int j=0; j<membranes[i].get_num_of_bonds(); j++) {
             all_bonds[j+bond_count]=bonds[j];
             all_bonds[j+bond_count].atoms[0]=bonds[j].atoms[0]+atom_count;
             all_bonds[j+bond_count].atoms[1]=bonds[j].atoms[1]+atom_count;
-            
+//            cout<<to_string(j+bond_count)<<" : "<<to_string(all_bonds[j+bond_count].atoms[0])<<" >-< "<<to_string(all_bonds[j+bond_count].atoms[1])<<endl;
         }
         
         

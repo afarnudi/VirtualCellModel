@@ -57,6 +57,7 @@ protected:
     bool UseXYZinMembrane = false;
     bool UseMeanCurvature = false;
     bool UseDihedralPotential = false;
+    bool sticky=false;
     
     
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
@@ -137,6 +138,7 @@ public:
     bool CalculateBending=false;
     bool surface_WCA=false;
     bool surface_triangle_hight_WCA = false;
+    
     
     int spring_model=0;
     int dihedral_bending_model=0;
@@ -239,6 +241,7 @@ public:
      *Node_Bond_list [ index_4 ][ 0 ] and Node_Bond_list [ index_4 ][ 1 ]  = i, p
      */
     vector<vector<int> > Node_neighbour_list_respective_bond_index;
+    vector<vector<int> > Mem_Mem_sticky_bond_indices;
     
     vector<vector<double> > aq_alexandra;
     vector<vector<double> > bq_alexandra;
@@ -459,6 +462,10 @@ public:
         return WantGeometricProps;
     }
     
+    bool is_sticky(){
+        return sticky;
+    }
+    
     bool get_UseMeanCurvature_stat(){
         return UseMeanCurvature;
     }
@@ -553,6 +560,9 @@ public:
         if (LockOn_rigidity!=0) {
             additional_bonds = Num_of_Nodes;
         }
+        
+        additional_bonds+=Mem_Mem_sticky_bond_indices.size();
+        
         if (spring_model==potentialModelIndex.Model["None"]) {
             return 0 + additional_bonds;
         } else {
@@ -1052,6 +1062,11 @@ public:
         values[1] ="#Calculate Itzykson and Julicher's properties for the frame number in the xyzfile. If L, will analysis the last frame.";
         Params["xyzPostAnalysisPathFrame"] = values;
         insertOrder.push_back("xyzPostAnalysisPathFrame");
+        
+        values[0] ="false";
+        values[1] ="#Attach a strong harmonic spring to any other Membrane node that has the exact same coordinate. In the future this option will also be supported for other classes as well. Default false.";
+        Params["Sticky"] = values;
+        insertOrder.push_back("Sticky");
     }
     
     

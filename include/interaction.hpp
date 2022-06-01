@@ -18,5 +18,5 @@
 
 //Actin-Membrane
 void Actin_Membrane_shared_Node_Identifier(Actin &actin, Membrane Mem, int i, int j);
-
+void Membrnae_Membrane_shared_Node_Identifier(Membrane &mem0, Membrane mem1, int atom_count_0, int atom_count_1);
 #endif /* interaction_hpp */

@@ -47,3 +47,45 @@ void Actin_Membrane_shared_Node_Identifier(Actin &act, Membrane mem, int i, int 
         cout<<"Not all of the Membrane" << j << " node positions are compatibale with the actin " << i << " nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
     }
 }
+
+
+void Membrnae_Membrane_shared_Node_Identifier(Membrane &mem0, Membrane mem1, int atom_count_0, int atom_count_1){
+    
+    double mem0_x, mem0_y, mem0_z, mem1_x, mem1_y, mem1_z;
+    double precision=0.00000001;
+    
+    vector<int> push;
+    vector<vector<int> > Mem_Mem_shared_Node_list;
+    push.resize(2);
+    
+    for (int mem0_node_counter=0; mem0_node_counter<mem0.get_num_of_nodes(); mem0_node_counter++) {
+        mem0_x = mem0.get_node_position(mem0_node_counter, 0);
+        mem0_y = mem0.get_node_position(mem0_node_counter, 1);
+        mem0_z = mem0.get_node_position(mem0_node_counter, 2);
+        for (int mem1_node_counter=0; mem1_node_counter<mem1.get_num_of_nodes(); mem1_node_counter++) {
+            
+            mem1_x = mem1.get_node_position(mem1_node_counter, 0);
+            mem1_y = mem1.get_node_position(mem1_node_counter, 1);
+            mem1_z = mem1.get_node_position(mem1_node_counter, 2);
+            
+            
+            if( abs(mem0_x-mem1_x)<precision &&  abs(mem0_y-mem1_y)<precision &&  abs(mem0_z-mem1_z)<precision )
+//            if( mem0_x==mem1_x &&  mem0_y==mem1_y &&  mem0_z==mem1_z )
+            {
+//                cout<<to_string(mem0_node_counter + atom_count_0)<<" "<<to_string(mem1_node_counter + atom_count_1)<<endl;
+                push[0]=mem0_node_counter + atom_count_0;
+                push[1]=mem1_node_counter + atom_count_1;
+                mem0.Mem_Mem_sticky_bond_indices.push_back(push);
+                
+                break;
+                
+            }
+        }
+    }
+    
+//    cout<<"\n# of shared nodes between Membrane " << i << " and membrane " << j << " = "<<int(Mem_Mem_shared_Node_list.size())<<endl;
+//    if (act.Num_of_Actin_Membrane_shared_Nodes[j] != mem.get_num_of_nodes()) {
+//        cout<<"Not all of the Membrane" << j << " node positions are compatibale with the actin " << i << " nodes. Please adjust the meshes if you wish for a fully attached membrane.\n";
+//    }
+}
+

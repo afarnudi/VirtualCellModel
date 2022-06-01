@@ -278,8 +278,31 @@ int main(int argc, char **argv)
         }
     } // End of if (Include_Membrane)
     //    } End of Resume
+    if (generalParameters.Num_of_Membranes!=0){
+        int atom_count_0=0;
+        vector<int> sticky_inds;
+        for (int i=0; i<generalParameters.Num_of_Membranes; i++) {
+            if (Membranes[i].is_sticky()) {
+                sticky_inds.push_back(i);
+                cout<<"\n# of shared nodes between membrane " << i << " and other membranes: ";
+                int atom_count_1=0;
+                for (int j=0; j<generalParameters.Num_of_Membranes; j++) {
+                    for (int k=0; k<sticky_inds.size(); k++) {
+                        if (sticky_inds[k]!=j) {
+                            Membrnae_Membrane_shared_Node_Identifier(Membranes[i], Membranes[j], atom_count_0, atom_count_1);
+                        }
+                    }
+                    
+                    atom_count_1+=Membranes[j].get_num_of_nodes();
+                }
+                cout<<to_string(Membranes[i].Mem_Mem_sticky_bond_indices.size())<<endl;
+                num_of_bonds        += Membranes[i].Mem_Mem_sticky_bond_indices.size();
+            }
+            atom_count_0+=Membranes[i].get_num_of_nodes();
+            
+        } //for (int i=0; i<GenConst::Num_of_Actins; i++)
+    }
     
-    //    cout<<"num_of_bonds "<<num_of_bonds<<endl;
     float progressp=0;
     
     //    int progress=0;

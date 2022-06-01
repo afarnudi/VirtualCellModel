@@ -160,7 +160,7 @@ void OpenMM_membrane_info_relay (vector<Membrane>       membranes,
 /**Relay the position information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
 MyAtomInfo* convert_membrane_position_to_openmm(Membrane mem);
 /**Relay the bond information of the membrane nodes to other data structures ready to pass to OpenMM handles.*/
-Bonds* convert_membrane_bond_info_to_openmm(Membrane mem);
+Bonds* convert_membrane_bond_info_to_openmm(Membrane mem, int total_atom_count);
 /**Relay the dihedral angle (triangle-triangle angle) information of the membrane triangle to other data structures ready to pass to OpenMM handles.*/
 Dihedrals* convert_membrane_dihedral_info_to_openmm(Membrane &mem);
 
