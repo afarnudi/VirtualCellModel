@@ -152,6 +152,7 @@ public:
     int EllOfGeneratedMode;
     int MOfGeneratedMode;
     int LinearReducedSrfaceVolume=0;
+    
     int xyzPostAnalysisPathFrame=0;
     
     double LockOnULMU=0;
@@ -172,6 +173,7 @@ public:
     double volume_constraint_coefficient=0;
     double SurfaceConstraintValue=0;
     double SurfaceConstraintRatio=0;
+    double ReducedNominalLengthRatio=0;
     double VolumeConstraintRatio=0;
     double VolumeConstraintValue=0;
     double LockOn_rigidity=0;
@@ -184,6 +186,8 @@ public:
     vector<double> node_dOmega;
     //list of the detected nodes on the sphere equator. They are sorted with respect to phi, in an ascending order.
     vector<int>    ringNodeList;
+    vector<int> LinearReducedNominalLength={0,0};
+    
     //I use this list to destinguish between the nodes on the equator of the membrane and the others. I pass this list to "WriteMemPDBFrame" to get a pdb output for visualisation and debug.
     vector<int> chainlist;
     vector<int> Bond_triangle_neighbour_indices ;
@@ -1003,6 +1007,11 @@ public:
         Params["VolumeConstraintRatio"] = values;
         insertOrder.push_back("VolumeConstraintRatio");
         
+        values[0] ="1";
+        values[1] ="#Set the linear reduced nominal length value. The nominal length on all harmonic springs will be rescaled during the time specified by LinearReducedNominalLength. Defaullt 1";
+        Params["ReducedNominalLengthRatio"] = values;
+        insertOrder.push_back("ReducedNominalLengthRatio");
+        
         values[0] ="0";
         values[1] ="#Set volume constraint potential (harmonic) rigidity coefficient. Default 0";
         Params["VolumeConstraintCoeff"] = values;
@@ -1017,6 +1026,11 @@ public:
         values[1] ="#Linearly change the area/Volume ratio. Default 0";
         Params["LinearReducedSrfaceVolume"] = values;
         insertOrder.push_back("LinearReducedSrfaceVolume");
+        
+        values[0] ="0 0";
+        values[1] ="#Linearly change the nominal length of the harmonic bonds from the initial time to the final time (in Pico seconds). In the current version of VCM if this feature is turned on all harmonic bonds (of all classes) are resecaled. Default 0 0";
+        Params["LinearReducedNominalLength"] = values;
+        insertOrder.push_back("LinearReducedNominalLength");
         
         values[0] ="false";
         values[1] ="#Linearly change the area/Volume ratio. Default 0";

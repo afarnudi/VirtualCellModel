@@ -272,11 +272,27 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "VolumeConstraintValue") {
             VolumeConstraintValue_stat = split[0];
         } else if (it.first == "VolumeConstraintRatio") {
-            VolumeConstraintRatio = get_double_value(split[0], parser_name, it.first, "100");
+            VolumeConstraintRatio = get_double_value(split[0], parser_name, it.first, "1");
+        } else if (it.first == "ReducedNominalLengthRatio") {
+            ReducedNominalLengthRatio = get_double_value(split[0], parser_name, it.first, "1");
         } else if (it.first == "SurfaceConstraintRatio") {
             SurfaceConstraintRatio = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "LinearReducedSrfaceVolume") {
             LinearReducedSrfaceVolume = get_int_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "LinearReducedNominalLength") {
+            if (split.size()!=2) {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: LinearReducedNominalLength: Please specify two numbers for the initial and the final time step (in Pico seconds). ";
+                errorMessage+=TFILE+to_string(split.size())+TWARN+" argument(s) provided:\n";
+                for (int split_id=0; split_id<split.size(); split_id++) {
+                    errorMessage+=TFILE+split[split_id]+TWARN+", ";
+                }
+                errorMessage+="\n";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
+            }
+            LinearReducedNominalLength[0] = get_int_value(split[0], parser_name, it.first, "100");
+            LinearReducedNominalLength[1] = get_int_value(split[1], parser_name, it.first, "100");
         } else if (it.first == "xyzPostAnalysisPathFrame") {
             if (split[0]=="L") {
                 xyzPostAnalysisPathFrame=-1;

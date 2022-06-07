@@ -348,10 +348,10 @@ int main(int argc, char **argv)
     all_mean_curvature_interactions[num_of_curvature_interactions.size()] = new MeanCurvature [1];
     all_mean_curvature_interactions[num_of_curvature_interactions.size()][0].curvature_type = EndOfList*2;
     
-//    for (int i=0; i<num_of_curvature_interactions.size(); i++) {
-//        cout<<i<<"  "<<num_of_curvature_interactions[i]<<endl;
-//    }
-//    exit(0);
+    //    for (int i=0; i<num_of_curvature_interactions.size(); i++) {
+    //        cout<<i<<"  "<<num_of_curvature_interactions[i]<<endl;
+    //    }
+    //    exit(0);
     
     if (generalParameters.Num_of_Membranes!=0) {
         OpenMM_membrane_info_relay(Membranes,
@@ -575,12 +575,12 @@ int main(int argc, char **argv)
         
         
         if (generalParameters.Minimise && !generalParameters.Resume) {
-//            string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
-//            ofstream writexyz(traj_name.c_str());
-//            for (int n=0; all_atoms[n].type != -1; n++) {
-//                writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
-//            }
-//            writexyz.close();
+            //            string traj_name= generalParameters.trajectory_file_name+"_init.xyz";
+            //            ofstream writexyz(traj_name.c_str());
+            //            for (int n=0; all_atoms[n].type != -1; n++) {
+            //                writexyz<<all_atoms[n].posInNm[0]<<"\t"<<all_atoms[n].posInNm[1]<<"\t"<<all_atoms[n].posInNm[2]<<"\n";
+            //            }
+            //            writexyz.close();
             minimisation(omm,
                          all_atoms,
                          atom_count);
@@ -621,52 +621,75 @@ int main(int argc, char **argv)
                         
                         if (Membranes[mem_count].LinearReducedSrfaceVolume!=0) {
                             if (
-//                                Membranes[mem_count].get_surface_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]
-//                                &&
+                                //                                Membranes[mem_count].get_surface_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]
+                                //                                &&
                                 Membranes[mem_count].get_volume_constraint_model() == potentialModelIndex.Model["GlobalConstraint"]) {
-                                
-                                if (time<Membranes[mem_count].LinearReducedSrfaceVolume) {
-                                    double m=0;
-                                    if (Membranes[mem_count].InflateMembrane) {
-                                        m = (Membranes[mem_count].SurfaceConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
-                                    } else {
-                                        m = (Membranes[mem_count].VolumeConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
-                                    }
-//                                    double nu = m*time+1;
-                                    double new_target_volume = Membranes[mem_count].get_volume()*(m*time+1);
-//                                    double new_target_area = Membranes[mem_count].get_surface_constraint_area()*nu;
                                     
-                                    for (int j=0; j<omm->GlobalVolumeConstraintForces.size(); j++) {
-                                        for (int k=0; k<omm->GlobalVolumeConstraintForces[j]->getNumGlobalParameters() ; k++) {
-                                            string param_name = omm->GlobalVolumeConstraintForces[j]->getGlobalParameterName(k);
-                                            if (Membranes[mem_count].InflateMembrane) {
-//                                                if (param_name == "target_area_"+Membranes[mem_count].get_label()) {
-//                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_area);
-//                                                }
-                                            } else {
-                                                if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
-                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_volume);
+                                    if (time<Membranes[mem_count].LinearReducedSrfaceVolume) {
+                                        double m=0;
+                                        if (Membranes[mem_count].InflateMembrane) {
+                                            m = (Membranes[mem_count].SurfaceConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                        } else {
+                                            m = (Membranes[mem_count].VolumeConstraintRatio-1)/double(Membranes[mem_count].LinearReducedSrfaceVolume);
+                                        }
+                                        //                                    double nu = m*time+1;
+                                        double new_target_volume = Membranes[mem_count].get_volume()*(m*time+1);
+                                        cout<<time<<"  "<<new_target_volume/Membranes[mem_count].get_volume()<<endl<<endl;
+                                        //                                    double new_target_area = Membranes[mem_count].get_surface_constraint_area()*nu;
+                                        
+                                        for (int j=0; j<omm->GlobalVolumeConstraintForces.size(); j++) {
+                                            for (int k=0; k<omm->GlobalVolumeConstraintForces[j]->getNumGlobalParameters() ; k++) {
+                                                string param_name = omm->GlobalVolumeConstraintForces[j]->getGlobalParameterName(k);
+                                                if (Membranes[mem_count].InflateMembrane) {
+                                                    //                                                if (param_name == "target_area_"+Membranes[mem_count].get_label()) {
+                                                    //                                                    omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_area);
+                                                    //                                                }
+                                                } else {
+                                                    if (param_name == "target_volume_"+Membranes[mem_count].get_label()) {
+                                                        omm->GlobalVolumeConstraintForces[j]->setGlobalParameterDefaultValue(k,new_target_volume);
+                                                    }
                                                 }
+                                                
                                             }
+                                            omm->GlobalVolumeConstraintForces[j]->updateParametersInContext(*omm->context);
                                             
                                         }
-                                        omm->GlobalVolumeConstraintForces[j]->updateParametersInContext(*omm->context);
-                                        
                                     }
+                                    
+                                    
                                 }
-                                
-
-                            }
                         }
-
                         
-
-
-
-
+                        
+                        
+                        
+                        
+                        
                     }
-
+                    
                 }
+                
+                for (int mem_count=0; mem_count<Membranes.size(); mem_count++) {
+                    if (Membranes[mem_count].LinearReducedNominalLength[1]!=0) {
+                        
+                        if (time>Membranes[mem_count].LinearReducedNominalLength[0] && time<Membranes[mem_count].LinearReducedNominalLength[1]) {
+                            int par1, par2;
+                            double l0, k_spring;
+                            double delta_t = Membranes[mem_count].LinearReducedNominalLength[1]- Membranes[mem_count].LinearReducedNominalLength[0];
+                            for (int j=0; j<omm->harmonic->getNumBonds(); j++) {
+                                omm->harmonic->getBondParameters(j, par1, par2, l0, k_spring);
+                                double m = (Membranes[mem_count].ReducedNominalLengthRatio-1)*l0/delta_t;
+                                double b = l0-m*Membranes[mem_count].LinearReducedNominalLength[0];
+                                double new_l = time*m + b;
+                                omm->harmonic->setBondParameters(j, par1, par2, new_l, k_spring);
+                            }
+                            omm->harmonic->updateParametersInContext(*omm->context);
+                        }
+                        
+                    }
+                }
+                
+                
             }
             
             
