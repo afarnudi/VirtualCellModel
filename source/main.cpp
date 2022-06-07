@@ -684,6 +684,9 @@ int main(int argc, char **argv)
                                 omm->harmonic->setBondParameters(j, par1, par2, new_l, k_spring);
                             }
                             omm->harmonic->updateParametersInContext(*omm->context);
+                            cout<<TRED;
+                        } else{
+                            cout<<TRESET;
                         }
                         
                     }
