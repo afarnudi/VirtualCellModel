@@ -674,10 +674,12 @@ int main(int argc, char **argv)
                         
                         if (time>Membranes[mem_count].LinearReducedNominalLength[0] && time<Membranes[mem_count].LinearReducedNominalLength[1]) {
                             int par1, par2;
-                            double l0, k_spring;
+                            double l0_old, l0, k_spring;
                             double delta_t = Membranes[mem_count].LinearReducedNominalLength[1]- Membranes[mem_count].LinearReducedNominalLength[0];
-                            for (int j=0; j<omm->harmonic->getNumBonds(); j++) {
-                                omm->harmonic->getBondParameters(j, par1, par2, l0, k_spring);
+                            //Will only work if one membrane is setup with harmonic bonds
+                            for (int j=0; j<Membranes[mem_count].get_num_of_bonds(); j++) {
+                                omm->harmonic->getBondParameters(j, par1, par2, l0_old, k_spring);
+                                double l0=Membranes[mem_count].get_node_pair_Nominal_Length_in_Nm(j);
                                 double m = (Membranes[mem_count].ReducedNominalLengthRatio-1)*l0/delta_t;
                                 double b = l0-m*Membranes[mem_count].LinearReducedNominalLength[0];
                                 double new_l = time*m + b;
