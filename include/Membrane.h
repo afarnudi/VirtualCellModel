@@ -163,6 +163,7 @@ public:
     double Spring_coefficient=0.;
     double dihedral_bending_coefficient=0.;
     double mean_curvature_coefficient=0.;
+    double mean_spontaneous_curvature=0.;
     double SpontaneousTriangleBendingInDegrees=0.;
     double Damping_coefficient=0.0; // Viscosity of the Mmmbrane. It is applied in Force calculation for the Membrane Node pairs. I have commented out these parts in the 'Membrane_Force_Calculator' because I think the current code does not need it (some energy consuming array calculations were invloved).
     double Min_node_pair_length, Max_node_pair_length, Average_node_pair_length;
@@ -413,6 +414,10 @@ public:
     }
     vector<vector<vector<int > > > get_nodeOrder_NodeIndex_NodeNeighbourList(){
         return nodeOrder_NodeIndex_NodeNeighbourList;
+    }
+    
+    double get_mean_spontaneous_curvature(void){
+        return mean_spontaneous_curvature;
     }
     
     //monte carlo flip functions
@@ -896,6 +901,11 @@ public:
         values[1] ="#Set bending potential (harmonic dihedral) rigidity coefficient. Default 0";
         Params["MeanCurvatureCoeff"] = values;
         insertOrder.push_back("MeanCurvatureCoeff");
+        
+        values[0] ="0";
+        values[1] ="#Set the mean spontaneous curvature in (Nm)^-1. Default 0";
+        Params["MeanspontaneousCurvature"] = values;
+        insertOrder.push_back("MeanspontaneousCurvature");
         
         values[0] ="Av";
         values[1] ="#Set the rest length of the mesh springs using: 1) Au: The initial bond lengths of the mesh; 2) Av: The average node pair lengths; 3) \"value\": Where you type a specific  value.";

@@ -259,6 +259,8 @@ void Membrane::assign_parameters(void){
             dihedral_bending_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "MeanCurvatureCoeff") {
             mean_curvature_coefficient = get_double_value(split[0], parser_name, it.first, "100");
+        } else if (it.first == "MeanspontaneousCurvature") {
+            mean_spontaneous_curvature = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "SurfaceConstraintCoeff") {
             surface_constraint_coefficient = get_double_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "VolumeConstraintCoeff") {

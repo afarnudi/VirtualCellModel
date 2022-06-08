@@ -7,7 +7,7 @@ string generate_Julicher1996_mean_curvature_potential(int order);
 string generate_Espiru1987_mean_curvature_potential(int order);
 string generate_Itzykson1986_mean_curvature_potential(int order);
 string generate_JulicherVoronoi_mean_curvature_potential(int order);
-string generate_ItzyksonBarycentric_mean_curvature_potential(int order);
+string generate_ItzyksonBarycentric_mean_curvature_potential(int order, double h0);
 
 void set_mean_curvature_forces(MeanCurvature**                           mean_curvature_interactinos,
                                vector<OpenMM::CustomCompoundBondForce*> &MeanCurvatureForces,
@@ -167,12 +167,14 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                     MCs_classes.insert(class_label);
                     MCs_index++;
                     
-                    string potential = generate_ItzyksonBarycentric_mean_curvature_potential(node_order);
-                    
+                    string potential = generate_ItzyksonBarycentric_mean_curvature_potential(node_order, mean_curvature_interactinos[node_order][node_index].spontaneousCurvature);
+//                    cout<<mean_curvature_interactinos[node_order][node_index].spontaneousCurvature<<endl;
+//                    cout<<potential<<endl;
+//                    exit(0);
                     MeanCurvatureForces.push_back(new OpenMM::CustomCompoundBondForce(node_order+1, potential));
                     
                     MeanCurvatureForces[MCs_index]->addPerBondParameter("k");
-                    //                    MeanCurvatureForces[MCs_index]->addPerBondParameter("SponAngle");
+                    MeanCurvatureForces[MCs_index]->addPerBondParameter("h0");
                     
                     system.addForce(MeanCurvatureForces[MCs_index]);
                     if (generalParameters.WantForce && generalParameters.force_group_count<31) {
@@ -190,7 +192,7 @@ void set_mean_curvature_forces(MeanCurvature**                           mean_cu
                 
                 vector<double> parameters;
                 parameters.push_back(mean_curvature_interactinos[node_order][node_index].curvatureStiffnessinKJpermol);
-                //                parameters.push_back(dihedrals[i].spontaneousBendingAngleInRad);
+                parameters.push_back(mean_curvature_interactinos[node_order][node_index].spontaneousCurvature);
                 //                cout<<MCs_index;
                 MeanCurvatureForces[MCs_index]->addBond(mean_curvature_interactinos[node_order][node_index].atoms, parameters);
             }
@@ -362,35 +364,7 @@ string generate_JulicherVoronoi_mean_curvature_potential(int node_order){
     return potential;
 }
 
-string generate_ItzyksonBarycentric_mean_curvature_potential(int node_order){
-    string potential="0.75*k*";
-    string numerator="(";
-    //            cout<<node_order<<endl<<endl;
-    numerator+="(";
-    numerator+="(x1-x2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
-    for (int i=3; i<node_order+1; i++) {
-        numerator+="(x1-x"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
-    }
-    numerator+="(x1-x"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
-    
-    numerator+=")^2+(";
-    
-    numerator+="(y1-y2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
-    for (int i=3; i<node_order+1; i++) {
-        numerator+="(y1-y"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
-    }
-    numerator+="(y1-y"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
-    
-    numerator+=")^2+(";
-    
-    numerator+="(z1-z2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
-    for (int i=3; i<node_order+1; i++) {
-        numerator+="(z1-z"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
-    }
-    numerator+="(z1-z"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
-    numerator+=")^2";
-    
-    potential+=numerator+")/(";
+string generate_ItzyksonBarycentric_mean_curvature_potential(int node_order, double h0){
     string denominator="";
     for (int i=2; i<node_order+1; i++) {
         denominator+="distance(p1,p"+to_string(i);
@@ -401,7 +375,53 @@ string generate_ItzyksonBarycentric_mean_curvature_potential(int node_order){
     denominator+=")*distance(p1,p"+to_string(2);
     denominator+=")*abs(sin(angle(p"+to_string(node_order+1)+",p1,p"+to_string(2)+")))";
     
+    //[ \sum sigma_ij/ell_ij(cot(theta_1)+cot(theta_2))(vec r_i - vec r_j) ]^2
+    string H_i2="(";
+    H_i2+="(x1-x2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
+    for (int i=3; i<node_order+1; i++) {
+        H_i2+="(x1-x"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
+    }
+    H_i2+="(x1-x"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
+    H_i2+=")^2+(";
+    H_i2+="(y1-y2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
+    for (int i=3; i<node_order+1; i++) {
+        H_i2+="(y1-y"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
+    }
+    H_i2+="(y1-y"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
+    H_i2+=")^2+(";
+    H_i2+="(z1-z2)*(cot(angle(p2,p"+to_string(node_order+1)+",p1))+cot(angle(p2,p3,p1)))+";
+    for (int i=3; i<node_order+1; i++) {
+        H_i2+="(z1-z"+to_string(i)+")*(cot(angle(p"+to_string(i)+",p"+to_string(i-1)+",p1))+cot(angle(p"+to_string(i)+",p"+to_string(i+1)+",p1)))+";
+    }
+    H_i2+="(z1-z"+to_string(node_order+1)+")*(cot(angle(p"+to_string(node_order+1)+",p2,p1))+cot(angle(p"+to_string(node_order+1)+",p"+to_string(node_order)+",p1)))";
+    H_i2+=")^2";
+    
+    
+    string potential="0.75*k*";
+    potential+="(";
+    potential+="(";//multiple open
+    potential+=H_i2;
+    potential+=")";//multiple closed
+    potential+=")/(";
     potential+=denominator+")";
+    
+    if (h0!=0) {
+        potential+="+k*";
+        potential+="(";
+        
+        potential+="-0.5*sqrt(";//sqrt open
+        potential+=H_i2;
+        potential+=")";//sqrt closed
+        potential+="*h0";
+        
+        potential+="+(1/12)*h0^2*(";
+        potential+=denominator;
+        potential+=")";
+        
+        potential+=")";
+    }
+    
+    
     
     
     

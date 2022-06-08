@@ -217,6 +217,7 @@ MeanCurvature** convert_membrane_curvature_info_to_openmm(Membrane &mem) {
                 mcatoms[node_order][node_index].atoms=nodeOrder_NodeIndex_NodeNeighbourList[node_order][node_index];
                 mcatoms[node_order][node_index].curvatureStiffnessinKJpermol = mem.get_mean_curvature_stiffness_coefficient();
                 mcatoms[node_order][node_index].class_label = mem.get_label();
+                mcatoms[node_order][node_index].spontaneousCurvature = mem.get_mean_spontaneous_curvature();
                 
                 if (mcatoms[node_order][node_index].curvature_type == potentialModelIndex.Model["Julicher1996"]) {
                     julicjer = true;
