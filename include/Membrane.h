@@ -1057,10 +1057,10 @@ public:
         Params["LockOnPotential"] = values;
         insertOrder.push_back("LockOnPotential");
         
-        values[0] ="0";
-        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs that keep particles on the surface of an ellipsoid (x/a)^2+(y/b)^2+(z/c)^=r^. Where a,b,c,and r are calculated as the membranes Scal*XScale, Scal*YScale, Scal*ZScale, and Scale. The spring rigidity is set to multiples of kBT. Default 0";
-        Params["LockOnEllipsoid"] = values;
-        insertOrder.push_back("LockOnEllipsoid");
+//        values[0] ="0";
+//        values[1] ="#Attach all mesh coordinates to the LockOnSphereCoordinate (defalt is the origin (0,0,0)) with strong harmonic springs that keep particles on the surface of an ellipsoid (x/a)^2+(y/b)^2+(z/c)^=r^. Where a,b,c,and r are calculated as the membranes Scal*XScale, Scal*YScale, Scal*ZScale, and Scale. The spring rigidity is set to multiples of kBT. Default 0";
+//        Params["LockOnEllipsoid"] = values;
+//        insertOrder.push_back("LockOnEllipsoid");
         
         values[0] ="0 0 0";
         values[1] ="#LockOn potential is attached to this coordinate. Default 0 0 0";
