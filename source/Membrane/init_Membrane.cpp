@@ -50,7 +50,7 @@ void Membrane::initialise(std::string Mesh_file_name){
     Node_neighbour_list_constructor();
     Bond_triangle_neighbour_list_constructor();
     
-    if (UseMeanCurvature) {
+    if (UseMeanCurvature || CalculateBending) {
         mean_curvature_init();
 //        export_mesh_properties(Mesh_file_name);
     }
@@ -303,7 +303,10 @@ void Membrane::analyse_curvature(void){
 }
 
 void Membrane::write_vertex_bending_props(){
-    string propFileName = generalParameters.trajectory_file_name+"_"+label+"_BendingProps_frame_"+to_string(xyzPostAnalysisPathFrame)+".txt";
+//    string propFileName = generalParameters.trajectory_file_name+"_"+label+"_BendingProps_frame_"+to_string(xyzPostAnalysisPathFrame)+".txt";
+    string propFileName = xyzPostAnalysisPath;
+    propFileName.erase(propFileName.end()-4,propFileName.end());
+    propFileName += "_"+label+"_BendingProps_frame_"+to_string(xyzPostAnalysisPathFrame)+".txt";
 //    cout<<propFileName<<endl;exit(0);
     std::ofstream write;
     write.open(propFileName.c_str(), std::ios::app);
