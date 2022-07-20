@@ -175,7 +175,7 @@ void configfile_generator(int status){
             write_configs<<"#WCAFC: Weeks-Chandler-Andersen potential with a maximum force cap. It can be used to minimise/relax configurations."<<endl;
             write_configs<<"#Example of an interaction map with one of each calss."<<endl;
         }
-        write_configs<<"    M0 A0 E0 C0"<<endl;
+        write_configs<<"#    M0 A0 E0 C0"<<endl;
         write_configs<<"M0  WCA         "<<endl;
         write_configs<<"A0  0  0       "<<endl;
         write_configs<<"E0  0  LJ  0    "<<endl;
