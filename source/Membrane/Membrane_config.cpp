@@ -86,6 +86,21 @@ void Membrane::consistancy_check(){
         UseMeanCurvature =true;
     }
     
+    if (LockOnPotential == potentialModelIndex.Model["None"]) {
+        LockOn_rigidity=0;
+    }
+    
+    if (surface_constraint_model == potentialModelIndex.Model["None"] || surface_constraint_coefficient == 0) {
+        surface_constraint_model = potentialModelIndex.Model["None"];
+        surface_constraint_coefficient = 0;
+    }
+    
+    if (volume_constraint_model == potentialModelIndex.Model["None"] || volume_constraint_coefficient == 0) {
+        volume_constraint_model = potentialModelIndex.Model["None"];
+        volume_constraint_coefficient = 0;
+    }
+    
+    
 }
 
 void Membrane::assign_parameters(void){
@@ -301,8 +316,6 @@ void Membrane::assign_parameters(void){
             } else {
                 xyzPostAnalysisPathFrame = get_int_value(split[0], parser_name, it.first, "2");
             }
-        } else if (it.first == "ExtForceModel") {
-            ext_force_model = get_int_value(split[0], parser_name, it.first, "100");
         } else if (it.first == "XYZinMembrane") {
             UseXYZinMembrane = true;
             XYZinMembrane.resize(3);
@@ -353,6 +366,11 @@ void Membrane::assign_parameters(void){
                 } else {
                     LockOnULMU = 1;
                 }
+            } else {
+                string errorMessage = TWARN;
+                errorMessage+="Membrane config parser: LockOnPotential: I don't understand the \""+split[0]+"\" potential. Available potentials: Sphere (for a spherical surface potential), Ellipsoid, N (None), and ULM2_0 followed by the value of u (default 1).";
+                errorMessage+= TRESET;
+                throw std::runtime_error(errorMessage);
             }
         } else if (it.first == "LockOnCoordinate") {
             LockOnCoordinate.resize(3,0);
