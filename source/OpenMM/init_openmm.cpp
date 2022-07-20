@@ -432,6 +432,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         omm->system->addForce(AnisoMCBarostat);
     }
     
+    platformName = platform.getName();
+    
     //    ofstream output("system_fail.xml");
     //    OpenMM::XmlSerializer::serialize<OpenMM::System>(omm->system, "System", output);
     //    output.close();exit(0);
