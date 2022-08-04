@@ -283,8 +283,10 @@ public:
     void get_ground_state_from_frame(ArgStruct_Analysis args);
     void calculate_dOmega(void);
     void analyse_curvature(void);
+    void analyse_area_volume(void);
     
     void calculate_mesh_energy_landscape(void);
+    void calculate_mesh_energy_landscape_in_z_direction(void);
     
     void load_analysis_coord_frame(int frame, ArgStruct_Analysis args);
     void load_analysis_coord_frame(int frame);
@@ -294,6 +296,7 @@ public:
     vector<double> Barycentric_area;
     
     void calc_Julicher_Itzykson_bending_props(void);
+    
     double calc_dihedral_angle(vector<double> p1, vector<double> p2, vector<double> p3, vector<double> p4);
     void write_vertex_bending_props(void);
     
@@ -454,6 +457,10 @@ public:
     void assign_parameters(void);
     void consistancy_check(void);
     void loop_ulm_gen(void);
+    void loop_ulm_area_volume(void);
+    
+    double get_nonlinear_triangle_pair_bending(void);
+    
     void write_xyz(std::string filename);
     void myWritePSF(std::string filename);
     
