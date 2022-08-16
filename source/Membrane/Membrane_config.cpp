@@ -410,6 +410,8 @@ void Membrane::assign_parameters(void){
                 MOfGeneratedMode = get_int_value(split[2], parser_name, it.first, "2");
             }
             
+        }  else if (it.first == "CalculateGeometryBeforeModeDisconfiguration") {
+            CalculateGeometryBeforeModeDisconfiguration=get_bool_value(split[0], parser_name, it.first);
         }
         
     }

@@ -55,9 +55,12 @@ void Membrane::initialise(std::string Mesh_file_name){
 //        export_mesh_properties(Mesh_file_name);
     }
     
-    if (AddSphericalHarmonicsMode) {
-        generate_undulations();
+    if (!CalculateGeometryBeforeModeDisconfiguration){
+        if (AddSphericalHarmonicsMode) {
+            generate_undulations();
+        }
     }
+    
     if (AddRandomModes) {
         randomundulationgenerator();
     }
@@ -68,6 +71,12 @@ void Membrane::initialise(std::string Mesh_file_name){
     set_node_radius();
     calculate_volume_and_surface_area();
     assign_surface_volume_constraints();
+    
+    if (CalculateGeometryBeforeModeDisconfiguration){
+        if (AddSphericalHarmonicsMode) {
+            generate_undulations();
+        }
+    }
     
     
     if (freezeSubLattice) {
@@ -726,7 +735,7 @@ void Membrane::calculate_mesh_energy_landscape(void){
     vector<vector<double> > node_pos_copy = Node_Position;
     
     
-    for (int node_index=13; node_index<14; node_index++) {
+    for (int node_index=254; node_index<260; node_index++) {
         //Map on unit sphere
         Node_Position = node_pos_copy;
         update_spherical_positions();
@@ -819,56 +828,85 @@ void Membrane::calculate_mesh_energy_landscape(void){
             wvol<<endl;
             wdih<<endl;
         }
+        
+        vector<vector<double> > J_curvature_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > I_curvature_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > JV_curvature_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > IB_curvature_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > B_area_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > V_area_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > volume_table_z(2*segments, vector<double>(2*segments,0));
+        vector<vector<double> > dihedral_table_z(2*segments, vector<double>(2*segments,0));
+        
+        for (int j=0; j<2*segments; j++) {
+            cout<<j<<"z "<<flush;
+            Node_Position[node_index][1]=(1-j/double(segments))*range;
+            for (int i=-segments; i<segments; i++) {
+                Node_Position[node_index][0]=0;
+                Node_Position[node_index][2]=1+i*range/segments;
+                calculate_volume_and_surface_area();
+                volume_table_z[2*segments-j-1][i+segments]+=volume;
+                calc_Julicher_Itzykson_bending_props();
+                
+                dihedral_table_z[2*segments-j-1][i+segments] = get_nonlinear_triangle_pair_bending();
+                
+                
+                for (int nid=0; nid<Num_of_Nodes; nid++) {
+                    J_curvature_z[2*segments-j-1][i+segments]+=Julicher_numerator[nid]/Barycentric_area[nid];
+                    I_curvature_z[2*segments-j-1][i+segments]+=Itzykson_numerator[nid]/node_voronoi_area[nid];
+                    IB_curvature_z[2*segments-j-1][i+segments]+=Itzykson_numerator[nid]/Barycentric_area[nid];
+                    JV_curvature_z[2*segments-j-1][i+segments]+=Julicher_numerator[nid]/node_voronoi_area[nid];
+                    B_area_z[2*segments-j-1][i+segments]+=Barycentric_area[nid];
+                    V_area_z[2*segments-j-1][i+segments]+=node_voronoi_area[nid];
+                }
+
+            }
+        }
+        string path = "Node_curvatures_z/";
+        JName= path + "Node_"+to_string(node_index)+"_Julicher_curvature.txt";
+        IName= path + "Node_"+to_string(node_index)+"_Itzykson_curvature.txt";
+        IBName= path + "Node_"+to_string(node_index)+"_ItzyksonBarycentric_curvature.txt";
+        JVName= path + "Node_"+to_string(node_index)+"_JulicherVoronoi_curvature.txt";
+        BName= path + "Node_"+to_string(node_index)+"_Barycentric_area.txt";
+        VName= path + "Node_"+to_string(node_index)+"_Voronoi_area.txt";
+        volumeName= path + "Node_"+to_string(node_index)+"_volume.txt";
+        dihedralName= path + "Node_"+to_string(node_index)+"_exp46.txt";
+        ofstream wJz(JName.c_str());
+        ofstream wIz(IName.c_str());
+        ofstream wIBz(IBName.c_str());
+        ofstream wJVz(JVName.c_str());
+        ofstream wBz(BName.c_str());
+        ofstream wVz(VName.c_str());
+        ofstream wvolz(volumeName.c_str());
+        ofstream wdihz(dihedralName.c_str());
+        for (int i=0; i<2*segments; i++) {
+            for (int j=0; j<2*segments; j++) {
+                wJz<<setprecision(10)<<J_curvature_z[i][j]<<" ";
+                wIz<<setprecision(10)<<I_curvature_z[i][j]<<" ";
+                wIBz<<setprecision(10)<<IB_curvature_z[i][j]<<" ";
+                wJVz<<setprecision(10)<<JV_curvature_z[i][j]<<" ";
+                wBz<<setprecision(10)<<B_area_z[i][j]<<" ";
+                wVz<<setprecision(10)<<V_area_z[i][j]<<" ";
+                wvolz<<setprecision(10)<<volume_table_z[i][j]<<" ";
+                wdihz<<setprecision(10)<<dihedral_table_z[i][j]<<" ";
+            }
+            wJz<<endl;
+            wIz<<endl;
+            wIBz<<endl;
+            wJVz<<endl;
+            wBz<<endl;
+            wVz<<endl;
+            wvolz<<endl;
+            wdihz<<endl;
+        }
+        
+        
+        
     }
     
     
     exit(0);
 }
-
-
-double Membrane::get_nonlinear_triangle_pair_bending(void){
-    calculate_surface_area_with_voronoi();
-    
-    double dihedral_energy=0;
-    
-    for (int node_degree=0; node_degree<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_degree++) {
-        for (int node=0; node<nodeOrder_NodeIndex_NodeNeighbourList[node_degree].size(); node++) {
-            
-            int mem_vertex = nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][0];
-            int mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].back();
-            int mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][1];
-            int mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][2];
-            
-            double phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-            phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-            
-            //added an extra 0.5 because all dihedrals are summed twice.
-            dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
-            
-            for (int mem_vertex_neighbour_ind=2; mem_vertex_neighbour_ind<nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].size()-1; mem_vertex_neighbour_ind++) {
-                mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind-1];
-                mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind];
-                mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind+1];
-                
-                phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-                phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-                
-                dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
-            }
-            
-            mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].size()-2];
-            mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].back();
-            mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][1];
-            
-            phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-            phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
-            
-            dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
-        }
-    }
-    return dihedral_energy;
-}
-
 
 void Membrane::calculate_mesh_energy_landscape_in_z_direction(void){
 //    int node_index=14;
@@ -980,5 +1018,53 @@ void Membrane::calculate_mesh_energy_landscape_in_z_direction(void){
     
     exit(0);
 }
+
+
+
+double Membrane::get_nonlinear_triangle_pair_bending(void){
+    calculate_surface_area_with_voronoi();
+    
+    double dihedral_energy=0;
+    
+    for (int node_degree=0; node_degree<nodeOrder_NodeIndex_NodeNeighbourList.size(); node_degree++) {
+        for (int node=0; node<nodeOrder_NodeIndex_NodeNeighbourList[node_degree].size(); node++) {
+            
+            int mem_vertex = nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][0];
+            int mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].back();
+            int mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][1];
+            int mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][2];
+            
+            double phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+            phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+            
+            //added an extra 0.5 because all dihedrals are summed twice.
+            dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
+            
+            for (int mem_vertex_neighbour_ind=2; mem_vertex_neighbour_ind<nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].size()-1; mem_vertex_neighbour_ind++) {
+                mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind-1];
+                mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind];
+                mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][mem_vertex_neighbour_ind+1];
+                
+                phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+                phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+                
+                dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
+            }
+            
+            mem_vertex_j_m1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].size()-2];
+            mem_vertex_j=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node].back();
+            mem_vertex_j_p1=nodeOrder_NodeIndex_NodeNeighbourList[node_degree][node][1];
+            
+            phi_ij = M_PI - abs(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+            phi_ij*=sign_function(calc_dihedral_angle(Node_Position[mem_vertex_j_m1], Node_Position[mem_vertex_j], Node_Position[mem_vertex], Node_Position[mem_vertex_j_p1]));
+            
+            dihedral_energy+=0.5* 0.5*((exp(2*(1-cos(phi_ij))) -1)-phi_ij*phi_ij);
+        }
+    }
+    return dihedral_energy;
+}
+
+
+
 
 

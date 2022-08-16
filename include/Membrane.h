@@ -58,6 +58,7 @@ protected:
     bool UseMeanCurvature = false;
     bool UseDihedralPotential = false;
     bool sticky=false;
+    bool CalculateGeometryBeforeModeDisconfiguration=false;
     
     
     /**Store the mem index the instance of the class has in the vector of Membranes in the main programme.*/
@@ -1098,6 +1099,11 @@ public:
         values[1] ="#Attach a strong harmonic spring to any other Membrane node that has the exact same coordinate. In the future this option will also be supported for other classes as well. Default false.";
         Params["Sticky"] = values;
         insertOrder.push_back("Sticky");
+        
+        values[0] ="false";
+        values[1] ="#Calculate membrane geometrical properties (are, volume, nominal angles and lengths, etc) prior to the mode disconfiguration (with the ULM command). Default false.";
+        Params["CalculateGeometryBeforeModeDisconfiguration"] = values;
+        insertOrder.push_back("CalculateGeometryBeforeModeDisconfiguration");
     }
     
     
