@@ -176,9 +176,9 @@ void Membrane::loop_ulm_gen(void){
     seed=results[0];
 //    seed="0";
     
-    for (double u=0; u<1.00001; u+=0.01) {
+    for (double u=1.0; u<1.00001; u+=0.01) {
 //        string propDir = "Results/ULMCurvature/Ordered/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/";
-        string propDir = "Results/ULMCurvature/Ordered_random/mesh_50/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/"+seed+"/";
+        string propDir = "Results/ULMCurvature/ugly/mesh_10/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/"+seed+"/";
         boost::filesystem::create_directories(propDir);
         string propFileName = propDir+"bendingProps.txt";
 //        cout<<propFileName<<endl;
@@ -735,7 +735,7 @@ void Membrane::calculate_mesh_energy_landscape(void){
     vector<vector<double> > node_pos_copy = Node_Position;
     
     
-    for (int node_index=254; node_index<260; node_index++) {
+    for (int node_index=152; node_index<153; node_index++) {
         //Map on unit sphere
         Node_Position = node_pos_copy;
         update_spherical_positions();
@@ -754,7 +754,9 @@ void Membrane::calculate_mesh_energy_landscape(void){
         rotate_coordinates(-theta0, -phi0);
         
         double range=0.3;
-        int segments=40;
+        int segments=160; //40;
+        
+        
         
         vector<vector<double> > J_curvature(2*segments, vector<double>(2*segments,0));
         vector<vector<double> > I_curvature(2*segments, vector<double>(2*segments,0));
@@ -792,14 +794,15 @@ void Membrane::calculate_mesh_energy_landscape(void){
             }
         }
 //        cout<<"2"<<endl;
-        string JName= "Node_curvatures/Node_"+to_string(node_index)+"_Julicher_curvature.txt";
-        string IName= "Node_curvatures/Node_"+to_string(node_index)+"_Itzykson_curvature.txt";
-        string IBName= "Node_curvatures/Node_"+to_string(node_index)+"_ItzyksonBarycentric_curvature.txt";
-        string JVName= "Node_curvatures/Node_"+to_string(node_index)+"_JulicherVoronoi_curvature.txt";
-        string BName= "Node_curvatures/Node_"+to_string(node_index)+"_Barycentric_area.txt";
-        string VName= "Node_curvatures/Node_"+to_string(node_index)+"_Voronoi_area.txt";
-        string volumeName= "Node_curvatures/Node_"+to_string(node_index)+"_volume.txt";
-        string dihedralName= "Node_curvatures/Node_"+to_string(node_index)+"_exp46.txt";
+        string path = "Node_curvatures_160/";
+        string JName= path +"Node_"+to_string(node_index)+"_Julicher_curvature.txt";
+        string IName= path +"Node_"+to_string(node_index)+"_Itzykson_curvature.txt";
+        string IBName= path +"Node_"+to_string(node_index)+"_ItzyksonBarycentric_curvature.txt";
+        string JVName= path +"Node_"+to_string(node_index)+"_JulicherVoronoi_curvature.txt";
+        string BName= path +"Node_"+to_string(node_index)+"_Barycentric_area.txt";
+        string VName= path +"Node_"+to_string(node_index)+"_Voronoi_area.txt";
+        string volumeName= path +"Node_"+to_string(node_index)+"_volume.txt";
+        string dihedralName= path +"Node_"+to_string(node_index)+"_exp46.txt";
         ofstream wJ(JName.c_str());
         ofstream wI(IName.c_str());
         ofstream wIB(IBName.c_str());
@@ -862,7 +865,7 @@ void Membrane::calculate_mesh_energy_landscape(void){
 
             }
         }
-        string path = "Node_curvatures_z/";
+        path = "Node_curvatures_160_z/";
         JName= path + "Node_"+to_string(node_index)+"_Julicher_curvature.txt";
         IName= path + "Node_"+to_string(node_index)+"_Itzykson_curvature.txt";
         IBName= path + "Node_"+to_string(node_index)+"_ItzyksonBarycentric_curvature.txt";
