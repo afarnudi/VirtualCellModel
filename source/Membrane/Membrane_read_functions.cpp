@@ -1,4 +1,5 @@
 #include "Membrane.h"
+#include "Configfile.hpp"
 
 using std::ifstream;
 
@@ -216,12 +217,68 @@ void Membrane::read_ply_file (std::string ply_file)
     
 }
 
+void Membrane::read_obj_file (std::string obj_file)
+{
+    ifstream read; //This is the main ifstream that will read the Gmesh-Membrane generated file
+    read.open(obj_file.c_str()); //It should be noted that the name of the file should not contain '-'. I don't know why but the memory managnet of the arrays (at the very least) in the programme will collapse when we use '-' in the file name.
+//    int num_of_nodes=0; // This is just a temp intiger charachter that we use to read unnecessary ply file intigers. We never use these intigers in the actual programme.
+    
+    Node_Position.clear();
+    
+    std::string temp_string;
+    getline(read, temp_string);
+    vector<string> split = split_and_check_for_comments(temp_string, "Membrane: obj mesh importer: label reader");
+    cout<<temp_string<<endl;
+    label = "Mem"+split[1];
+    getline(read, temp_string);
+    split = split_and_check_for_comments(temp_string, "Membrane: obj mesh importer: coordinate reades");
+    while (split[0]=="v") {
+        vector<double> node_coord;
+        node_coord.resize(3);
+        for (int i=1; i<split.size(); i++) {
+            node_coord[i-1]=stod(split[i]);
+        }
+        Node_Position.push_back(node_coord);
+        getline(read, temp_string);
+        split = split_and_check_for_comments(temp_string, "Membrane: obj mesh importer: coordinate reades");
+    }
+    Num_of_Nodes = Node_Position.size();
+    
+    Triangle_list.clear();
+    while (split[0]=="f") {
+        vector<int> tri_nodes;
+        tri_nodes.resize(3);
+        for (int i=1; i<split.size(); i++) {
+            //node indices begin from 1 in the obj file
+            tri_nodes[i-1]=stoi(split[i])-1;
+        }
+        Triangle_list.push_back(tri_nodes);
+        getline(read, temp_string);
+        split = split_and_check_for_comments(temp_string, "Membrane: obj mesh importer: triangle reades");
+    }
+    Num_of_Triangles = Triangle_list.size();
+    
+    Node_Force.clear();
+    Node_Velocity.clear();
+    Node_Velocity.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    Node_Force.resize(Num_of_Nodes); //initialize the size of vector witch is just read from "membrane".txt
+    for(int i=0;i<Num_of_Nodes;i++)
+    {
+            Node_Velocity[i].resize(3,0);
+            Node_Force[i].resize(3,0);
+    }
+    
+    
+}
+
 
 void Membrane::read_mesh_file (std::string mesh_file){
     if (mesh_format=="msh"){
         read_gmesh_file(Mesh_file_name);
-    }else if (mesh_format=="ply"){
+    } else if (mesh_format=="ply"){
         read_ply_file(Mesh_file_name);
+    } else if (mesh_format=="obj"){
+        read_obj_file(Mesh_file_name);
     }
     
     if (rescale_factor!=1) {

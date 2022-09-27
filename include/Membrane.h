@@ -111,6 +111,7 @@ protected:
     void read_mesh_file (std::string mesh_file);
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
+    void read_obj_file (std::string ply_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
     void FENE_log (void);
