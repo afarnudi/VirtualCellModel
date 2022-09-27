@@ -119,11 +119,11 @@ void Membrane::assign_parameters(void){
         if (it.first == "MeshFile") {
             string extension = split[0];
             extension.erase(extension.begin(),extension.begin()+extension.find_last_of('.')+1);
-            if (extension == "ply" || extension == "msh") {
+            if (extension == "ply" || extension == "msh" || extension == "obj") {
                 mesh_format=extension;
             } else{
                 string errorMessage = TWARN;
-                errorMessage+="I don't understand the \""+extension+"\" format. Please use the Blender (ply) or Gmesh 2 (msh).";
+                errorMessage+="I don't understand the \""+extension+"\" format. Please use ply (Blender), msh (Gmesh 2), or obj (MeshLab).";
                 errorMessage+= TRESET;
                 throw std::runtime_error(errorMessage);
             }
