@@ -14,8 +14,8 @@ string generate_global_surface_constraint_potential_part_2(Triangles triangle);
 string generate_global_volume_constraint_potential_part_1(Triangles triangle, int mem_tris);
 string generate_global_volume_constraint_potential_part_2(Triangles triangle);
 
-string generate_global_surface_constraint_potential_unified(Triangles triangle, int mem_tris);
-string generate_global_volume_constraint_potential_unified(Triangles triangle, int mem_tris);
+//string generate_global_surface_constraint_potential_unified(Triangles triangle, int mem_tris);
+//string generate_global_volume_constraint_potential_unified(Triangles triangle, int mem_tris);
 
 void set_surface_volume_constraint_forces(Triangles*                                 triangles,
                                           vector<OpenMM::CustomCompoundBondForce*>  &GlobalSurfaceConstraintForces,
@@ -435,48 +435,48 @@ string generate_global_volume_constraint_potential_part_2(Triangles triangle){
     return potential_part2;
 }
 
-string generate_global_surface_constraint_potential_unified(Triangles triangle, int mem_tris){
-    string target_surface_area = "target_area_"+triangle.class_label;
-    string potential = "0.5*"+to_string(triangle.SurfaceConstraintStiffnessinKJpermolperNm2)
-    +"*("
-    +"("
-    //begin tri 1
-    +"abs("
-    +"0.5*distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
-    +")"
-//    +"-"+to_string(triangle.SurfaceConstraintValue)
-    +"-"+target_surface_area+"/"+to_string(mem_tris)
-    //end tri 1
-    +")"
-    +"*("
-    //begin tri 2
-    +"abs("
-    +"0.5*distance(p4,p5)*distance(p4,p6)*sin(angle(p5,p4,p6))"
-    +")"
-//    +"-"+to_string(triangle.SurfaceConstraintValue)
-    +"-"+target_surface_area+"/"+to_string(mem_tris)
-    //end tri 2
-    +")"
-    +")/"+target_surface_area;
-    return potential;
-}
+//string generate_global_surface_constraint_potential_unified(Triangles triangle, int mem_tris){
+//    string target_surface_area = "target_area_"+triangle.class_label;
+//    string potential = "0.5*"+to_string(triangle.SurfaceConstraintStiffnessinKJpermolperNm2)
+//    +"*("
+//    +"("
+//    //begin tri 1
+//    +"abs("
+//    +"0.5*distance(p1,p2)*distance(p1,p3)*sin(angle(p2,p1,p3))"
+//    +")"
+////    +"-"+to_string(triangle.SurfaceConstraintValue)
+//    +"-"+target_surface_area+"/"+to_string(mem_tris)
+//    //end tri 1
+//    +")"
+//    +"*("
+//    //begin tri 2
+//    +"abs("
+//    +"0.5*distance(p4,p5)*distance(p4,p6)*sin(angle(p5,p4,p6))"
+//    +")"
+////    +"-"+to_string(triangle.SurfaceConstraintValue)
+//    +"-"+target_surface_area+"/"+to_string(mem_tris)
+//    //end tri 2
+//    +")"
+//    +")/"+target_surface_area;
+//    return potential;
+//}
 
-string generate_global_volume_constraint_potential_unified(Triangles triangle, int mem_tris){
-    string target_volume = "target_volume_"+triangle.class_label;
-    string potential = "0.5*"+to_string(triangle.VolumeConstraintStiffnessinKJpermolperNm3)
-    +"*("
-    +"("
-    //begin tri 1
-    +"(x1*(y3*z2-z3*y2)+x2*(y1*z3-z1*y3)+x3*(y2*z1-z2*y1))/6"
-    +"+"+target_volume+"/"+to_string(mem_tris)
-    //end tri 1
-    +")"
-    +"*("
-    //begin tri 2
-    +"(x4*(y6*z5-z6*y5)+x5*(y4*z6-z4*y6)+x6*(y5*z4-z5*y4))/6"
-    +"+"+target_volume+"/"+to_string(mem_tris)
-    //end tri 2
-    +")"
-    +")/"+target_volume;
-    return potential;
-}
+//string generate_global_volume_constraint_potential_unified(Triangles triangle, int mem_tris){
+//    string target_volume = "target_volume_"+triangle.class_label;
+//    string potential = "0.5*"+to_string(triangle.VolumeConstraintStiffnessinKJpermolperNm3)
+//    +"*("
+//    +"("
+//    //begin tri 1
+//    +"(x1*(y3*z2-z3*y2)+x2*(y1*z3-z1*y3)+x3*(y2*z1-z2*y1))/6"
+//    +"+"+target_volume+"/"+to_string(mem_tris)
+//    //end tri 1
+//    +")"
+//    +"*("
+//    //begin tri 2
+//    +"(x4*(y6*z5-z6*y5)+x5*(y4*z6-z4*y6)+x6*(y5*z4-z5*y4))/6"
+//    +"+"+target_volume+"/"+to_string(mem_tris)
+//    //end tri 2
+//    +")"
+//    +")/"+target_volume;
+//    return potential;
+//}

@@ -41,6 +41,10 @@ struct ArgStruct_Analysis
     
     bool undulateMesh = false;
     std::vector<double> SeedNumLmaxUmax;
+    
+    std::string reference_radius;
+    bool dontSquareAmps=true;
+    bool use_bin_xyz = false;
 };
 
 struct ArgStruct_VCM
