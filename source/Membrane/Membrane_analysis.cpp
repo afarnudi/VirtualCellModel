@@ -143,8 +143,13 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
             ulm_avg_frame[ell][m]=0;
         }
     }
+    vector<double> membrane_radii_list;
+    if (args.reference_radius=="Au") {
+        membrane_radii_list = get_ulmYlm_vectorlist_for_mesh('V');
+    } else {
+        membrane_radii_list = get_ulmYlm_vectorlist_for_mesh('M');
+    }
     
-    vector<double> membrane_radii_list = get_ulmYlm_vectorlist_for_mesh('V');
     for (int ell=0; ell<ell_max+1; ell++) {
         //        cout<<ell<<" out of "<<ell_max<<"\r";
         for (int m=-ell; m<ell+1; m++) {
@@ -158,16 +163,25 @@ void Membrane::calculate_real_ulm(ArgStruct_Analysis args){
         }
     }
     
-    
-    for (int ell=0; ell<ell_max+1; ell++) {
-        for (int m=-ell; m<ell+1; m++) {
-            double ulm = ulm_avg_frame[ell][m+ell];
-            ulm_avg[ell][m+ell] += ulm*ulm;
-            ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
-            
+    if (args.dontSquareAmps) {
+        for (int ell=0; ell<ell_max+1; ell++) {
+            for (int m=-ell; m<ell+1; m++) {
+                double ulm = ulm_avg_frame[ell][m+ell];
+                ulm_avg[ell][m+ell] += ulm;
+                ulm_std[ell][m+ell] += ulm*ulm;
+                
+            }
+        }
+    } else {
+        for (int ell=0; ell<ell_max+1; ell++) {
+            for (int m=-ell; m<ell+1; m++) {
+                double ulm = ulm_avg_frame[ell][m+ell];
+                ulm_avg[ell][m+ell] += ulm*ulm;
+                ulm_std[ell][m+ell] += ulm*ulm*ulm*ulm;
+                
+            }
         }
     }
-    
 }
 void Membrane::calculate_real_ulm(ArgStruct_Analysis args, char Requiv, bool clear){
     int ell_max = args.ell_max;

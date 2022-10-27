@@ -669,7 +669,7 @@ void Membrane::import_xyz_frames(string path){
 }
 
 
-void Membrane::analysis_init(std::string Mesh_path){
+void Membrane::analysis_init(std::string Mesh_path, std::string reference_radius){
     string mesh_extension = Mesh_path;
     mesh_extension.erase(mesh_extension.begin(),mesh_extension.end()-3 );
     
@@ -678,7 +678,12 @@ void Membrane::analysis_init(std::string Mesh_path){
     } else {
         read_gmesh_file(Mesh_path);
     }
-    update_average_Membrane_radius();
+    if (reference_radius == "Au") {
+        update_average_Membrane_radius();
+    } else {
+        Radius = stod(reference_radius);
+    }
+    
     
     Normal_direction_Identifier();
     Triangle_pair_counter();

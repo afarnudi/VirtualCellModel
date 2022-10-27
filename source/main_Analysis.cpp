@@ -242,9 +242,7 @@ int main(int argc, char **argv)
                 args.MeshMinimisation= true;
             }
             for (int frame=0; frame<args.framelimits_end-args.framelimits_beg; frame++) {
-                
                 Membranes[memindex].load_analysis_coord_frame(frame, args);
-                
                 for (int runs=0; runs<args.num_ang_avg; runs++) {
                     
                     Membranes[memindex].calculate_real_ulm(args);
@@ -256,6 +254,7 @@ int main(int argc, char **argv)
             }
             
             Membranes[memindex].write_ulm(args, memindex);
+            
             cout<<TBOLD<<"\n\nAnalysis finished successfully."<<TRESET<<endl;
             
         } else if(args.analysis== "2"){

@@ -111,6 +111,7 @@ protected:
     void read_mesh_file (std::string mesh_file);
     void read_gmesh_file (std::string gmesh_file);
     void read_ply_file (std::string ply_file);
+    void read_obj_file (std::string ply_file);
     void Triangle_pair_counter ();
     void Normal_direction_Identifier();
     void FENE_log (void);
@@ -279,7 +280,7 @@ public:
     void rotate_particle_to_axes(ArgStruct_Analysis args);
     void update_spherical_positions();
     void convert_spherical_positions_to_cartisian();
-    void analysis_init(std::string Mesh_path);
+    void analysis_init(std::string Mesh_path, std::string reference_radius);
     void get_ground_state_from_mesh(ArgStruct_Analysis args);
     void get_ground_state_from_frame(ArgStruct_Analysis args);
     void calculate_dOmega(void);

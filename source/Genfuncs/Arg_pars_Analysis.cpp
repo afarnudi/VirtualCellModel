@@ -46,6 +46,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                                  " --memlabels <firstlabel>,<secondlabel>,..."
                                  " --minimisedState"
                                  " --meshfile Path/to/meshfile"
+                                 " --set-radius <Au or a value>"
                                  "\n\n 2D analysis of the Membrane contour undulations:\n"
                                  " \n "+programme_name+
                                  " --analysis 2"
@@ -112,6 +113,9 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
         ("reportindecies", "[E] The indecies (beginning from 0) corresponding to each membrane label. This option can be used for different combinations. A) If there is only one membrane in the reportfile/configfile you can exclude this option from the inputs. B) If there are multiple membranes in the reportfile/configfile and you are using the default option for the \"memlabels\" option (that uses the first atom label in the pdb) or one membrane label is provided, you should provide an index (integer beginning from 0) that corresponds to the memebrane configuration appearing in the reportfile/config file. For example if 3 membranes are configured in the reportfile/configfile the first one is identified with index 0, the second one with index 1, etc. If multiple membranes exist in the reportfile/configfile and multiple lables are provided using the \"memlabels\" option, the indecies corresponding to the membrane labels that appear in the reportfile/configfile must be provided. Example: 4 membranes configured in the reportfile/configfile, and the label (label is identified using the pdb file) of the third and first file is set using memlabels:\n ./VCM --analysis E .... --memlabels thirdlabel,firstlabel --reportindecies 2,0", cxxopts::value<std::vector<int> >(),"0,1")
         ("u,UndulateMesh", "Under development: Undulate an input mesh using Spherical Harmonics and export for simulation.")
         ("SNLU", "Under development: inputs for S (int): random generator seed, N (int): number of random undulations, L (int): max ell of the randomly chosen mode, U (double): maximum aplitude of the random ulm. Input in form of string S_N_L_U, example: 0_5_10_0.04", cxxopts::value<string>())
+        ("set-radius", "Au for average radius  based on first frame or use a input value. Default Au", cxxopts::value<string>())
+        ("get-amps-with-no-square", "Get the amplitude of the harmonics without squaring. Works for single frame extraction. Default false", cxxopts::value<string>())
+        ("use-bin", "Try loading coordinates from binary file when possible. Default false", cxxopts::value<bool>()->default_value("false"))
         ;
         //      I have put this here so that parser throuws an exception when an extra argument is put in the command line that is not associated with any flags
         options.parse_positional({""});
@@ -153,6 +157,25 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
                 args.fileExtension = "bin_xyz_single";
             }
         }
+        
+        if (result.count("set-radius"))
+        {
+            args.reference_radius = result["set-radius"].as<string>();
+        } else {
+            args.reference_radius = "Au";
+        }
+        
+        if (result.count("get-amps-with-no-square"))
+        {
+            string square_amps = result["get-amps-with-no-square"].as<string>();
+            if (square_amps == "true") {
+                args.dontSquareAmps =true;
+            }
+            
+        } else {
+            args.dontSquareAmps =false;
+        }
+        
         if (result.count("lmax"))
         {
             args.ell_max = result["lmax"].as<int>();
@@ -167,6 +190,7 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             args.analysis_averaging_option = 1;
             args.num_ang_avg = result["angavg"].as<int>();
         }
+        
         if (result.count("alignaxes"))
         {
             args.analysis_averaging_option=2;
@@ -210,6 +234,10 @@ ArgStruct_Analysis cxxparser_analysis(int argc, char **argv){
             }
         } else {
             args.membane_label_indecies.push_back(0);
+        }
+        if (result.count("use-bin"))
+        {
+            args.use_bin_xyz = true;
         }
         if (result.count("m"))
         {
