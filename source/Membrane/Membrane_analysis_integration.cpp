@@ -26,16 +26,22 @@ vector<double> Membrane::get_ulmYlm_vectorlist_for_mesh(){
 vector<double> Membrane::get_ulmYlm_vectorlist_for_mesh(char Requiv){
     double radius = 0;
     calculate_volume_and_surface_area();
-    update_average_Membrane_radius();
+    
     if (Requiv == 'V') {
         radius = cbrt( 3*volume/(M_PI*4) );
     }
     if (Requiv == 'R') {
+        update_average_Membrane_radius();
+        radius = Radius;
+    }
+    if (Requiv == 'M') {
+        //Manual set
         radius = Radius;
     }
     if (Requiv == 'S'){
         radius = sqrt( surface_area_voronoi/(M_PI*4) );
     }
+    
     
     vector<double> radius_vectorlist;
     radius_vectorlist.resize(Num_of_Nodes);
