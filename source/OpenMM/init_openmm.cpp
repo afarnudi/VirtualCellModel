@@ -390,6 +390,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
                                                              generalParameters.BoltzmannKJpermolkelvin*generalParameters.customtemperature,
                                                              DihedralForces,
                                                              WCAs);
+    } else if (generalParameters.Integrator_type=="LangevinMiddle"){
+        omm->LangevinMiddleIntegrator = new OpenMM::LangevinMiddleIntegrator(generalParameters.temperature,
+                                                                       generalParameters.frictionIninvertPs,
+                                                                             stepSizeInFs * OpenMM::PsPerFs);
     }
     
     
@@ -401,6 +405,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->BrownianIntegrator->setRandomNumberSeed(generalParameters.Seed);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->LangevinIntegrator->setRandomNumberSeed(generalParameters.Seed);
+        } else if (generalParameters.Integrator_type=="LangevinMiddle") {
+            omm->LangevinMiddleIntegrator->setRandomNumberSeed(generalParameters.Seed);
         } else {
             omm->CustomIntegrator->setRandomNumberSeed(generalParameters.Seed);
         }
@@ -445,6 +451,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform);
         } else if (generalParameters.Integrator_type=="Langevin"){
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform);
+        } else if (generalParameters.Integrator_type=="LangevinMiddle"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMiddleIntegrator, platform);
         } else {
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform);
         }
@@ -456,6 +464,8 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
             omm->context    = new OpenMM::Context(*omm->system, *omm->BrownianIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         } else if (generalParameters.Integrator_type=="Langevin") {
             omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
+        } else if (generalParameters.Integrator_type=="LangevinMiddle"){
+            omm->context    = new OpenMM::Context(*omm->system, *omm->LangevinMiddleIntegrator, platform);
         } else {
             omm->context    = new OpenMM::Context(*omm->system, *omm->CustomIntegrator, platform, platforminfo.device_properties[platforminfo.platform_device_id]);
         }

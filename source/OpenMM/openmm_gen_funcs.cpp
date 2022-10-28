@@ -73,6 +73,9 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             } else if ( generalParameters.Integrator_type=="Langevin" ) {
                 omm->LangevinIntegrator->step(1);
                 total_step++;
+            } else if ( generalParameters.Integrator_type=="LangevinMiddle" ) {
+                omm->LangevinMiddleIntegrator->step(1);
+                total_step++;
             } else if ( generalParameters.Integrator_type=="CustomLangevinDropNewton3" ) {
                 omm->CustomIntegrator->step(1);
                 total_step++;
@@ -99,6 +102,8 @@ void myStepWithOpenMM(MyOpenMMData* omm,
             omm->BrownianIntegrator->step(numSteps);
         } else if ( generalParameters.Integrator_type=="Langevin" ) {
             omm->LangevinIntegrator->step(numSteps);
+        } else if ( generalParameters.Integrator_type=="LangevinMiddle" ) {
+            omm->LangevinMiddleIntegrator->step(numSteps);
         } else {
             omm->CustomIntegrator->step(numSteps);
         }

@@ -234,6 +234,8 @@ void assign_general_parameters(void){
                 }
             } else if (split[0]=="L"){
                 generalParameters.Integrator_type="Langevin";
+            } else if (split[0]=="LM"){
+                generalParameters.Integrator_type="LangevinMiddle";
             } else if (split[0]=="LFLangevinMultiT"){
                 generalParameters.Integrator_type="LFLangevinMulti-thermos";
                 if (split.size()>1) {
