@@ -21,6 +21,31 @@ void print_platform_info(void){
     
 }
 
+void get_platform_device_properties(int index, int platform_id, string precision, PlatformInfo &platforminfo){
+    int stepSizeInFs =1;
+    OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platform_id);
+    std::string report;
+    std::map<std::string, std::string> temp_device_properties;
+    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+    temp_device_properties["DeviceIndex"]=std::to_string(index);
+    temp_device_properties["CudaPrecision"]=precision;
+    OpenMM::System temp_system;
+    temp_system.addParticle(1.0);
+    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+    std::vector<std::string> platform_devices = platform.getPropertyNames();
+    for (auto & name : platform_devices){
+        if (name == "DeviceIndex") {
+            continue;
+        } else {
+            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+        }
+    }
+//    counter++;
+    platforminfo.device_properties.push_back(temp_device_properties);
+    platforminfo.device_properties_report.push_back(report);
+}
+
 PlatformInfo get_platform_info_forResume(string platformName)
 {
     int stepSizeInFs =1;
@@ -317,7 +342,7 @@ void get_platform_info(PlatformInfo &platforminfo)
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     
     if (platform.getName() == "OpenCL") {
-        int counter=0;
+//        int counter=0;
         for (int i=0; i<list_depth; i++) {
             for (int j=0; j<list_depth; j++) {
                 vector<string> data={"single","double", "mixed"};
@@ -340,7 +365,7 @@ void get_platform_info(PlatformInfo &platforminfo)
                                 report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
                             }
                         }
-                        counter++;
+//                        counter++;
                         platforminfo.device_properties.push_back(temp_device_properties);
                         platforminfo.device_properties_report.push_back(report);
                     } catch (const std::exception& e) {
@@ -355,26 +380,27 @@ void get_platform_info(PlatformInfo &platforminfo)
             vector<string> data={"single","double", "mixed"};
             for (vector<string>::iterator precision=data.begin(); precision!=data.end(); ++precision) {
                 try {
-                    std::string report;
-                    std::map<std::string, std::string> temp_device_properties;
-                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
-                    temp_device_properties["DeviceIndex"]=std::to_string(j);
-                    temp_device_properties["CudaPrecision"]=*precision;
-                    OpenMM::System temp_system;
-                    temp_system.addParticle(1.0);
-                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
-                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
-                    std::vector<std::string> platform_devices = platform.getPropertyNames();
-                    for (auto & name : platform_devices){
-                        if (name == "DeviceIndex") {
-                            continue;
-                        } else {
-                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
-                        }
-                    }
-                    counter++;
-                    platforminfo.device_properties.push_back(temp_device_properties);
-                    platforminfo.device_properties_report.push_back(report);
+                    get_platform_device_properties(j, platforminfo.platform_id, *precision, platforminfo);
+//                    std::string report;
+//                    std::map<std::string, std::string> temp_device_properties;
+//                    //                    temp_device_properties["CudaPlatformIndex"]=std::to_string(i);
+//                    temp_device_properties["DeviceIndex"]=std::to_string(j);
+//                    temp_device_properties["CudaPrecision"]=*precision;
+//                    OpenMM::System temp_system;
+//                    temp_system.addParticle(1.0);
+//                    OpenMM::VerletIntegrator temp_inegrator(stepSizeInFs * OpenMM::PsPerFs);
+//                    OpenMM::Context temp_context(temp_system, temp_inegrator, platform, temp_device_properties);
+//                    std::vector<std::string> platform_devices = platform.getPropertyNames();
+//                    for (auto & name : platform_devices){
+//                        if (name == "DeviceIndex") {
+//                            continue;
+//                        } else {
+//                            report+="\t"+name+"\t"+platform.getPropertyValue(temp_context, name)+"\n";
+//                        }
+//                    }
+////                    counter++;
+//                    platforminfo.device_properties.push_back(temp_device_properties);
+//                    platforminfo.device_properties_report.push_back(report);
                 } catch (const std::exception& e) {
                     
                 }
