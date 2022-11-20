@@ -156,6 +156,16 @@ int main(int argc, char **argv)
     int num_of_triangles=0;
     vector<int> num_of_curvature_interactions;
     
+//    if (userinputs.use_voronoi) {
+//        if (generalParameters.Num_of_Membranes!=1) {
+//            string errorMessage = TWARN;
+//            errorMessage +="Runtime Error: the use-voronoi feature only works with simulations containing only one Membrane. Please check your configurations or remove the 'use-voronoi' flag.";
+//            errorMessage +=TRESET;
+//            throw std::runtime_error(errorMessage);
+//        }
+//    }
+    
+    
     //    if (!generalParameters.Resume) {
     if (generalParameters.Num_of_Membranes!=0) {
         Membranes.resize(generalParameters.Num_of_Membranes);
@@ -514,6 +524,11 @@ int main(int argc, char **argv)
         //int SavingStep     = (int)(GenConst::Report_Interval_In_Fs / GenConst::Step_Size_In_Fs + 0.5);
         int MCCalcstep = (int)(GenConst::Mem_fluidity * generalParameters.Step_Size_In_Fs + 0.5);
         int NumSilentSteps = (int)(generalParameters.Report_Interval_In_Fs / generalParameters.Step_Size_In_Fs + 0.5);
+        
+//        if (userinputs.use_voronoi) {
+//            NumSilentSteps = (int) generalParameters.Step_Size_In_Fs;
+//        }
+        
         //        int Savingstep = NumSilentSteps;
         //        if ( (MCCalcstep < NumSilentSteps) && MCCalcstep != 0 ) {
         //            Savingstep = (int)(NumSilentSteps / MCCalcstep )* MCCalcstep;
@@ -523,7 +538,7 @@ int main(int argc, char **argv)
         //            Savingstep = int(MCCalcstep/rate);
         //            NumSilentSteps = Savingstep;
         //        }
-        
+        xyzStashInfo xyzStash;
         
         int MCCalcTime = MCCalcstep;
         
@@ -601,20 +616,23 @@ int main(int argc, char **argv)
                 if (generalParameters.WantCurve) {
                     writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, omm->platforminfo, all_mean_curvature_interactions);
                 }
-                writeOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
-                
-                //Begin: Exporting congiguration of classes for simulation .
-                
-                saveCheckpoint(omm, ckeckpoint_name, ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
-                
+                if (userinputs.write_at_end) {
+                    appendOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ,xyzStash);
+                } else {
+                    writeOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
+                    
+                    //Begin: Exporting congiguration of classes for simulation .
+                    
+                    saveCheckpoint(omm, ckeckpoint_name, ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
+                    print_time(generalParameters.trajectory_file_name + "_hardware_runtime.txt",
+                               generalParameters.buffer_file_name + "_hardware_runtime.txt",
+                               hardwareReportHeader, false,
+                               tStart,
+                               chrono_clock_start,
+                               chrono_sys_clock_start
+                               );
+                }
                 savetime += NumSilentSteps;
-                print_time(generalParameters.trajectory_file_name + "_hardware_runtime.txt",
-                           generalParameters.buffer_file_name + "_hardware_runtime.txt",
-                           hardwareReportHeader, false,
-                           tStart,
-                           chrono_clock_start,
-                           chrono_sys_clock_start
-                           );
                 
                 if (omm->GlobalVolumeConstraintForces.size()!=0 || omm->GlobalSurfaceConstraintForces.size()!=0) {
                     for (int mem_count=0; mem_count<Membranes.size(); mem_count++) {
@@ -795,6 +813,9 @@ int main(int argc, char **argv)
             myGetOpenMMState(omm->context, time, energyInKJ, potential_energyInKJ, all_atoms);
             writeOutputs(atom_count,-1,all_atoms,time, energyInKJ, potential_energyInKJ, generalParameters.usingBackupCheckpoint);
             saveCheckpoint(omm, ckeckpoint_name,ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
+        }
+        if (userinputs.write_at_end) {
+            flushOutputs(xyzStash);
         }
         
         print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt",
