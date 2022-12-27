@@ -49,7 +49,13 @@ void appendOutputs(int                atom_count,
                   double             potential_energyInKJ,
                    xyzStashInfo     &xyzStash
                  );
-void flushOutputs(xyzStashInfo      xyzStash);
+void flushOutputs(xyzStashInfo      xyzStash,
+                  int                atom_count,
+                                    int                frameNum,
+                                    const MyAtomInfo   all_atoms[],
+                                    double             time,
+                                    double             energyInKJ,
+                                    double             potential_energyInKJ);
 
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.

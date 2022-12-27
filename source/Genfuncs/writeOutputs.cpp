@@ -71,7 +71,13 @@ void appendOutputs(int                atom_count,
     
 }
 
-void flushOutputs(xyzStashInfo      xyzStash){
+void flushOutputs(xyzStashInfo      xyzStash,
+                  int                atom_count,
+                                    int                frameNum,
+                                    const MyAtomInfo   all_atoms[],
+                                    double             time,
+                                    double             energyInKJ,
+                                    double             potential_energyInKJ){
     
     //    if (generalParameters.WantPDB) {
     //        myWritePDBFrame(frameNum, time, energyInKJ, potential_energyInKJ, all_atoms, !usingBackupCheckpoint);
