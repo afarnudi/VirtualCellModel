@@ -177,7 +177,9 @@ void Membrane::loop_ulm_gen(void){
 //    seed="0";
     
     for (double u=1.0; u<1.00001; u+=0.01) {
-//        string propDir = "Results/ULMCurvature/Ordered/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/";
+//        string propDir = "Results/ULMCurvature/Ordered/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/0/";
+//        string propDir = "Results/ULMCurvature/Random/mesh_10/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/0/";
+//        string propDir = "Results/ULMCurvature/Ordered_random/mesh_10/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/0/";
         string propDir = "Results/ULMCurvature/ugly/mesh_10/amp_"+to_string(u)+"/Lnum_"+to_string(L)+"/Mnum_"+to_string(M)+"/"+seed+"/";
         boost::filesystem::create_directories(propDir);
         string propFileName = propDir+"bendingProps.txt";
