@@ -602,8 +602,8 @@ int main(int argc, char **argv)
         }
         
         
-        
-        for (int frame=1; ; ++frame) {
+        int frame=1;
+        for (frame=1; ; ++frame) {
             
             time=0; energyInKJ=0; potential_energyInKJ=0;
             
@@ -815,7 +815,7 @@ int main(int argc, char **argv)
             saveCheckpoint(omm, ckeckpoint_name,ckeckpointBackup_name, generalParameters.usingBackupCheckpoint);
         }
         if (userinputs.write_at_end) {
-            flushOutputs(xyzStash);
+            flushOutputs(xyzStash,atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ);
         }
         
         print_time(generalParameters.trajectory_file_name+"_hardware_runtime.txt",
