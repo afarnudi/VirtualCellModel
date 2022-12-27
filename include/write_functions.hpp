@@ -16,6 +16,16 @@
 #include <limits>
 #include "OpenMM_structs.h"
 
+struct xyzStashInfo{
+    std::string xyzframes;
+    std::string velframes;
+    std::string xyzbinframes;
+    std::string velbinframes;
+    std::string tpkbinframes;
+};
+
+
+
 void Results (ECM ecm, string label, char* buffer);
 void Results (Membrane membrane, string label, char* buffer);
 void ParticleGeneratingReport (char* buffer, Membrane particle );
@@ -31,7 +41,21 @@ void writeOutputs(int                atom_count,
                   double             potential_energyInKJ,
                   bool               usingBackupCheckpoint
                  );
-
+void appendOutputs(int                atom_count,
+                  int                frameNum,
+                  const MyAtomInfo   atoms[],
+                  double             time,
+                  double             energyInKJ,
+                  double             potential_energyInKJ,
+                   xyzStashInfo     &xyzStash
+                 );
+void flushOutputs(xyzStashInfo      xyzStash,
+                  int                atom_count,
+                                    int                frameNum,
+                                    const MyAtomInfo   all_atoms[],
+                                    double             time,
+                                    double             energyInKJ,
+                                    double             potential_energyInKJ);
 
 /**                               PDB FILE WRITER
  * Given state data, output a single frame (pdb "model") of the trajectory.
@@ -62,6 +86,12 @@ void writeXYZFrame  (int                atom_count,
                      double             potential_energyInKJ,
                      bool buff
                      );
+std::string stashXYZFrame  (int                atom_count,
+                     const MyAtomInfo   atoms[],
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ
+                     );
 
 void writeVelocitiesFrame  (int                atom_count,
                             const MyAtomInfo   atoms[],
@@ -70,17 +100,31 @@ void writeVelocitiesFrame  (int                atom_count,
                             double             potential_energyInKJ,
                             bool buff
                             );
+std::string stashVelocitiesFrame  (int                atom_count,
+                            const MyAtomInfo   atoms[],
+                            double             time,
+                            double             energyInKJ,
+                            double             potential_energyInKJ
+                            );
 
 void writeXYZbinFrame(const MyAtomInfo atoms[],
                       string precision,
                       bool copyFromBuffer);
+std::string  stashXYZbinFrame(const MyAtomInfo atoms[],
+                              string precision);
 void writeVELbinFrame(const MyAtomInfo atoms[],
                       string precision,
                       bool copyFromBuffer);
+std::string stashVELbinFrame(const MyAtomInfo atoms[],
+                      string precision);
 void writeTPKbinFrame(double             time,
                       double             energyInKJ,
                       double             potential_energyInKJ,
                       string precision,
                       bool copyFromBuffer);
+std::string stashTPKbinFrame(double             time,
+                      double             energyInKJ,
+                      double             potential_energyInKJ,
+                      string precision);
 
 #endif /* write_functions_hpp */

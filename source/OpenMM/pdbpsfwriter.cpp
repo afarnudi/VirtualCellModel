@@ -143,6 +143,27 @@ void writeXYZFrame  (int atom_count,
     
 }
 
+std::string stashXYZFrame  (int atom_count,
+                            const MyAtomInfo atoms[],
+                            double             time,
+                            double             energyInKJ,
+                            double             potential_energyInKJ)
+{
+    std::ostringstream frame;
+    frame<<atom_count<<endl;
+    frame<<"timePs ";
+    frame<<time<<setprecision(16);
+    frame<<" potential_energy_inKJpermol ";
+    frame<<potential_energyInKJ<<setprecision(16);
+    frame<<" energy_inKJpermol ";
+    frame<<energyInKJ<<setprecision(16)<<endl;
+    for (int n=0; atoms[n].type != -1; n++) {
+        frame<<atoms[n].pdb<<"\t"<<atoms[n].posInNm[0]<<"\t"<<atoms[n].posInNm[1]<<"\t"<<atoms[n].posInNm[2]<<setprecision(16)<<"\n";
+    }
+    return frame.str();
+    
+}
+
 void writeVelocitiesFrame  (int atom_count,
                      const MyAtomInfo atoms[],
                      double             time,
@@ -192,7 +213,26 @@ void writeVelocitiesFrame  (int atom_count,
     
 }
 
-
+std::string stashVelocitiesFrame  (int atom_count,
+                     const MyAtomInfo atoms[],
+                     double             time,
+                     double             energyInKJ,
+                     double             potential_energyInKJ)
+{
+    std::ostringstream frame;
+    frame<<atom_count<<endl;
+    frame<<"timePs ";
+    frame<<time<<setprecision(16);
+    frame<<" potential_energy_inKJpermol ";
+    frame<<potential_energyInKJ<<setprecision(16);
+    frame<<" energy_inKJpermol ";
+    frame<<energyInKJ<<setprecision(16)<<endl;
+    for (int n=0; atoms[n].type != -1; n++) {
+        frame<<atoms[n].pdb<<"\t"<<atoms[n].velocityInNmperPs[0]<<"\t"<<atoms[n].velocityInNmperPs[1]<<"\t"<<atoms[n].velocityInNmperPs[2]<<setprecision(16)<<"\n";
+    }
+    return frame.str();
+    
+}
 
 
 
@@ -317,6 +357,28 @@ void writeXYZbinFrame(const MyAtomInfo atoms[],
     
     writexyz.close();
 }
+std::string  stashXYZbinFrame(const MyAtomInfo atoms[],
+                      string precision){
+    
+    std::ostringstream frame;
+    if (precision=="single") {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                float wbuf = atoms[n].posInNm[i];
+                frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    } else {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                double wbuf = atoms[n].posInNm[i];
+                frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    }
+    
+    return frame.str();
+}
 
 
 void writeTPKbinFrame(double             time,
@@ -369,6 +431,32 @@ void writeTPKbinFrame(double             time,
     writetpk.close();
 }
 
+std::string stashTPKbinFrame(double             time,
+                      double             energyInKJ,
+                      double             potential_energyInKJ,
+                      string precision){
+    
+    std::ostringstream frame;
+    
+    if (precision=="single") {
+        float wbuf = time;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = potential_energyInKJ;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = energyInKJ - potential_energyInKJ;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+    } else {
+        double wbuf = time;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = potential_energyInKJ;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+        wbuf = energyInKJ - potential_energyInKJ;
+        frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+    }
+    
+    return frame.str();
+}
+
 
 void writeVELbinFrame(const MyAtomInfo atoms[],
                       string precision,
@@ -416,4 +504,28 @@ void writeVELbinFrame(const MyAtomInfo atoms[],
     }
     
     writexyz.close();
+}
+
+std::string stashVELbinFrame(const MyAtomInfo atoms[],
+                      string precision){
+    
+    std::ostringstream frame;
+    
+    if (precision=="single") {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                float wbuf = atoms[n].velocityInNmperPs[i];
+                frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    } else {
+        for (int n=0; atoms[n].type != -1; n++) {
+            for (int i=0; i<3; i++) {
+                double wbuf = atoms[n].velocityInNmperPs[i];
+                frame.write(reinterpret_cast<const char*>(&wbuf), sizeof wbuf);
+            }
+        }
+    }
+    
+    return frame.str();
 }

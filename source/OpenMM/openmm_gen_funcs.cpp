@@ -13,17 +13,17 @@ void myStepWithOpenMM(MyOpenMMData* omm,
                       int& numSteps ,
                       int& total_step) {
     
-    OpenMM::Vec3 z(0,0,0);
-    std::vector<OpenMM::Vec3> a ;
-    int num = omm->system->getNumParticles();
-    
-    for(int i=0; i<num ; i++)
-    {
-        a.push_back(z);
-    }
-    
     if((time_dependant_data->Kelvin_Voigt) || (time_dependant_data->HillForce))
     {
+        OpenMM::Vec3 z(0,0,0);
+        std::vector<OpenMM::Vec3> a ;
+        int num = omm->system->getNumParticles();
+        for(int i=0; i<num ; i++)
+        {
+            a.push_back(z);
+        }
+        
+        
         for (int i=0; i<numSteps; i++)
         {
             if(time_dependant_data->Kelvin_Voigt)
@@ -89,8 +89,6 @@ void myStepWithOpenMM(MyOpenMMData* omm,
         }
         
     }
-    
-    
     else
     {
         if (generalParameters.expSampling) {
