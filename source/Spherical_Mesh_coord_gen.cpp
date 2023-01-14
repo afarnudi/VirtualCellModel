@@ -22,7 +22,7 @@ void writeXYZFrame  (int atom_count,
                      std::string        traj_name
                      );
 void myGetOpenMMState(MyOpenMMData* omm, double& timeInPs, MyAtomInfo atoms[]);
-MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs, int seed, int platformID, int platformDeviceID);
+MyOpenMMData* init_openmm(MyAtomInfo *atoms, double stepSizeInFs, int seed, int &platformID, int &platformDeviceID);
 void export_xyz(MyAtomInfo* atoms, string traj_name);
 void print_wall_clock_time(double sim_duration_per_sec);
 void print_real_time(chrono::time_point<chrono::steady_clock> chrono_clock_start,
@@ -30,7 +30,7 @@ void print_real_time(chrono::time_point<chrono::steady_clock> chrono_clock_start
 void print_system_time(chrono::time_point<chrono::system_clock> chrono_clock_start,
                        chrono::time_point<chrono::system_clock> chrono_clock_end);
 
-PlatformInfo get_platform_info(void);
+PlatformInfo get_platform_info(int &platformID, int &platformDeviceID);
 
 
 
@@ -180,8 +180,8 @@ using OpenMM::Vec3;
 MyOpenMMData* init_openmm(MyAtomInfo *atoms,
                           double stepSizeInFs,
                           int seed,
-			  int platformID,
-			  int platformDeviceID){
+			  int &platformID,
+			  int &platformDeviceID){
     const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 //    OpenMM::Platform::loadPluginsFromDirectory(cbp_plugin_location);
@@ -244,7 +244,7 @@ MyOpenMMData* init_openmm(MyAtomInfo *atoms,
     omm->EV = ExcludedVolumes;
     omm->harmonic = HarmonicBond;
     
-    PlatformInfo platforminfo = get_platform_info();
+    PlatformInfo platforminfo = get_platform_info(platformID, platformDeviceID);
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
         
     //    omm->integrator = new OpenMM::VerletIntegrator(stepSizeInFs * OpenMM::PsPerFs);
@@ -474,7 +474,7 @@ void print_system_time(std::chrono::time_point<std::chrono::system_clock> chrono
     cout << secs - mins * 60 << "\tSeconds\n";
 }
 
-PlatformInfo get_platform_info(void)
+PlatformInfo get_platform_info(int &platformID, int &platformDeviceID)
 {
     int stepSizeInFs =1;
     int list_depth=20;
@@ -491,8 +491,13 @@ PlatformInfo get_platform_info(void)
         "\t   "<<platform.getSpeed()<<endl;
     }
     platforminfo.platform_id=0;
-    cout<<"Please choose a pltform (index): \n";
-    std::cin>>platforminfo.platform_id;
+    if (platformID!=-1) {
+        platforminfo.platform_id = platformID;
+    } else {
+        cout<<"Please choose a pltform (index): \n";
+        std::cin>>platforminfo.platform_id;
+    }
+    
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     
     //    std::vector<std::string> device_properties_report;
@@ -584,8 +589,13 @@ PlatformInfo get_platform_info(void)
     
     platforminfo.platform_device_id=0;
     if (platforminfo.device_properties.size()>1) {
-        cout<<"Please choose a device (index): \n";
-        std::cin>>platforminfo.platform_device_id;
+        if (platformDeviceID!=-1) {
+            platforminfo.platform_device_id = platformDeviceID;
+        } else {
+            cout<<"Please choose a device (index): \n";
+            std::cin>>platforminfo.platform_device_id;
+        }
+        
     }
     
     return platforminfo;

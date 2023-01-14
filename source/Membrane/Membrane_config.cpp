@@ -162,6 +162,17 @@ void Membrane::assign_parameters(void){
         } else if (it.first == "SurfaceConstraint") {
             if (split[0]=="L") {
                 surface_constraint_model = potentialModelIndex.Model["LocalConstraint"];
+            } else if (split[0]=="LWCAH") {
+                surface_constraint_model = potentialModelIndex.Model["LocalConstraint"];
+                surface_triangle_hight_WCA = true;
+                if (split.size()>=2) {
+                    surface_triangle_hight_WCA_min_length=get_double_value(split[1], parser_name, it.first, "GWCAH 40");
+                } else{
+                    string errorMessage = TWARN;
+                    errorMessage+="Membrane config parser: Surface Constraint Model: For the LWCAH, the minimum triangle height sould be provided after the model name: LWCAH 40";
+                    errorMessage+= TRESET;
+                    throw std::runtime_error(errorMessage);
+                }
             } else if (split[0]=="G") {
                 surface_constraint_model = potentialModelIndex.Model["GlobalConstraint"];
             } else if (split[0]=="GWCA") {
