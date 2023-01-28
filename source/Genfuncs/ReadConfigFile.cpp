@@ -286,6 +286,8 @@ void assign_general_parameters(void){
             generalParameters.frictionIninvertPs=stod(split[0]);
         } else if (it.first == "Seed") {
             generalParameters.Seed=stoi(split[0]);
+        } else if (it.first == "EpsilonH") {
+            generalParameters.epsilon_h=stod(split[0]);
         } else if (it.first == "bondCutoff") {
             generalParameters.bondCutoff=stoi(split[0]);
         } else if (it.first == "TemperatureinKelvin") {

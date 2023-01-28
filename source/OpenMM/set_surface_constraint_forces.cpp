@@ -280,7 +280,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
 //                step(area_0-area)
 //                string area_0 = to_string(triangles[i].surface_WCA_min_area);
                 string sigma_h = to_string(triangles[i].surface_triangle_hight_WCA_min_length);
-                string epsilon = to_string(4*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
+                string epsilon = to_string(generalParameters.epsilon_h*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature) ;
                 string h1 = "(distance(p1,p2)*sin(angle(p3,p1,p2)))";
                 string h2 = "(distance(p3,p2)*sin(angle(p1,p2,p3)))";
                 string h3 = "(distance(p1,p3)*sin(angle(p2,p3,p1)))";
