@@ -156,6 +156,8 @@ struct GeneralParameters{
     /**Set the custom thermostat temperature of the heat bath (in Kelvin) by writing it after 'C' in the intergrator type category. If left empty the tempreture of the integrator will be used. */
     double customtemperature=-1;
     
+    /**Set epsilon for the WCA potential on the triangle heights in soft meshes. */
+    double epsilon_h=4;
     
     double Simulation_box_length;
     /**The simulation uses periodic boundary condition. Default False*/
@@ -224,6 +226,11 @@ struct GeneralParameters{
         values[1] ="#OpenMM Documentation: \"Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.\". Default value 0";
         GenParams["Seed"] = values;
         insertOrder.push_back("Seed");
+        
+        values[0] ="0";
+        values[1] ="#Set the WCA potential depth epsilon_h: U_h = epsilon_h * k_BT * ( (d_h/h)^8 - (d_h/h)^4 + 1/4 ). Default: 4";
+        GenParams["EpsilonH"] = values;
+        insertOrder.push_back("EpsilonH");
         
         values[0] ="false";
         values[1] ="#Use 'true' or 'false' to specify th use of OpenMM's Minimize function. It searches for a new set of particle positions that represent a local minimum of the potential energy. The search is performed using the L-BFGS algorithm. Distance constraints are enforced during minimization by adding a harmonic restraining force to the potential function. Default false";
