@@ -51,7 +51,7 @@ void set_surface_volume_constraint_forces(Triangles*                            
             tri_counter+=mem_tris;
         }
         
-        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]  && triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"]) {
+        if (triangles[i].volume_type == potentialModelIndex.Model["GlobalConstraint"]  && triangles[i].surface_type == potentialModelIndex.Model["GlobalConstraint"] && !generalParameters.WantForce) {
             auto GVCFs_item = GVCFs_classes.find(triangles[i].class_label);
             if (GVCFs_item == GVCFs_classes.end()) {
 
@@ -135,7 +135,6 @@ void set_surface_volume_constraint_forces(Triangles*                            
                         GlobalVolumeConstraintForces[GVCFs_index]->setForceGroup(generalParameters.force_group_count);
                         string label = triangles[i].class_label+"_Volume_"+ to_string(generalParameters.force_group_count);
                         generalParameters.force_group_label.push_back(label);
-                        
                     }
                     GVCFs_index++;
                     
@@ -291,6 +290,13 @@ void set_surface_volume_constraint_forces(Triangles*                            
                 
                 LocalSurfaceWCAForces.push_back(new OpenMM::CustomCompoundBondForce(3, potential));
                 system.addForce(LocalSurfaceWCAForces[LWCAs_index]);
+                if (generalParameters.WantForce && generalParameters.force_group_count<31) {
+                    generalParameters.force_group_count++;
+                    LocalSurfaceWCAForces[LWCAs_index]->setForceGroup(generalParameters.force_group_count);
+                    string label = triangles[i].class_label+"_WCAH_"+ to_string(generalParameters.force_group_count);
+                    generalParameters.force_group_label.push_back(label);
+                    
+                }
             }
             LocalSurfaceWCAForces[LWCAs_index]->addBond(triangles[i].atoms);
         }

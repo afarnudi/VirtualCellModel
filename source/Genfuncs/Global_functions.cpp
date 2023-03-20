@@ -81,32 +81,46 @@ void write_data(MyOpenMMData* omm,
     if (generalParameters.WantForce) {
         int infoMask = 0;
         infoMask += OpenMM::State::Forces;     // for pot. energy (expensive)
-        
+        infoMask += OpenMM::State::Energy;
         const OpenMM::State state = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status);
         const std::vector<Vec3>& Forces = state.getForces();
+        double potential_energyInKJ =state.getPotentialEnergy();
+        double potential_energyInKJ_i;
+        
+        
+        string energyPath =generalParameters.trajectory_file_name+"_Net_energy.txt";
+        ofstream write_energy;
+        write_energy.open(energyPath.c_str(),std::ios_base::app);
+        write_energy<<potential_energyInKJ<<setprecision(16)<<endl;
+        
         
         ofstream write_total_force;
         string totalforcepath =generalParameters.trajectory_file_name+"_Net_Force.txt";
         write_total_force.open(totalforcepath.c_str(),std::ios_base::app);
         write_total_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
-        write_total_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+        write_total_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1];
+        write_total_force<<" potential_energy_inKJpermol ";
+        write_total_force<<potential_energyInKJ<<setprecision(16)<<endl;
         
         for (int t=0; t < (int)Forces.size(); ++t){
             write_total_force<<t<<"\t"<<Forces[t][0] << "\t" << Forces[t][1] << "\t" << Forces[t][2];
             write_total_force<<"\n";
         }
-        
+//        cout<<generalParameters.force_group_count<<endl;
         for (int i=1; i<intertable.get_ForceGroupCount()+1; i++) {
-            
+//            cout<<intertable.get_ForceGroup(i)<<endl;
             const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, intertable.get_ForceGroup(i));
             const std::vector<Vec3>& Forcesi = statei.getForces();
-            
+            potential_energyInKJ_i =statei.getPotentialEnergy();
             
             ofstream write_force;
             string forcepath =generalParameters.trajectory_file_name+"_"+intertable.get_ForceGroupLabel(i)+".txt";
+            cout<<forcepath<<endl;
             write_force.open(forcepath.c_str(),std::ios_base::app);
             write_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
-            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1];
+            write_force<<" potential_energy_inKJpermol ";
+            write_force<<potential_energyInKJ_i<<setprecision(16)<<endl;
             for (int t=0; t < (int)Forcesi.size(); ++t){
                 write_force<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
                 write_force<<"\n";
@@ -115,16 +129,25 @@ void write_data(MyOpenMMData* omm,
         
         for (int i=0; i<generalParameters.force_group_count; i++) {
             int forcegroup = 1 << (i+1);
-//            cout<<"i "<<i<<" forcegroup "<<forcegroup<<endl;
+//            cout<<forcegroup<<endl;
             const OpenMM::State statei = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status, forcegroup);
             const std::vector<Vec3>& Forcesi = statei.getForces();
-            
+//            cout<<Forcesi[0][0]<<endl;
+            potential_energyInKJ_i =statei.getPotentialEnergy();
             
             ofstream write_force;
+            
             string forcepath =generalParameters.trajectory_file_name+"_"+generalParameters.force_group_label[i]+".txt";
+//            cout<<forcepath<<endl;
+            string energyPath =generalParameters.trajectory_file_name+"_"+generalParameters.force_group_label[i]+"energy.txt";
+            ofstream write_energy;
+            write_energy.open(energyPath.c_str(),std::ios_base::app);
+            write_energy<<potential_energyInKJ_i<<setprecision(16)<<endl;
             write_force.open(forcepath.c_str(),std::ios_base::app);
             write_force<<"AtomIndex\tFx\tFy\tFz (KJ/Nm.mol)"<<endl;
-            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1]<<endl;
+            write_force<<"timeInPS "<<GenConst::data_colection_times[GenConst::data_colection_times.size()-1];
+            write_force<<" potential_energy_inKJpermol ";
+            write_force<<potential_energyInKJ_i<<setprecision(16)<<endl;
             for (int t=0; t < (int)Forcesi.size(); ++t){
                 write_force<<t<<"\t"<<Forcesi[t][0] << "\t" << Forcesi[t][1] << "\t" << Forcesi[t][2];
                 write_force<<"\n";
