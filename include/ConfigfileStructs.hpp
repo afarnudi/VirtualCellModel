@@ -227,7 +227,7 @@ struct GeneralParameters{
         GenParams["Seed"] = values;
         insertOrder.push_back("Seed");
         
-        values[0] ="0";
+        values[0] ="4";
         values[1] ="#Set the WCA potential depth epsilon_h: U_h = epsilon_h * k_BT * ( (d_h/h)^8 - (d_h/h)^4 + 1/4 ). Default: 4";
         GenParams["EpsilonH"] = values;
         insertOrder.push_back("EpsilonH");
