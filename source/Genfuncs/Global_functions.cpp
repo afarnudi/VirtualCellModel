@@ -92,7 +92,12 @@ void write_data(MyOpenMMData* omm,
         ofstream write_energy;
         write_energy.open(energyPath.c_str(),std::ios_base::app);
         write_energy<<potential_energyInKJ<<setprecision(16)<<endl;
-        
+        if (isnan(potential_energyInKJ)) {
+            string errorMessage = TWARN;
+            errorMessage +="Output: Total energy of the system is nan.\n";
+            errorMessage +=TRESET;
+            throw std::runtime_error(errorMessage);
+        }
         
         ofstream write_total_force;
         string totalforcepath =generalParameters.trajectory_file_name+"_Net_Force.txt";
