@@ -97,6 +97,12 @@ void write_data(MyOpenMMData* omm,
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
+    if (kinetic_energyInKJ > 1.5*(3/2)*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature*1002) {
+        string errorMessage = TWARN;
+        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
+        errorMessage +=TRESET;
+        throw std::runtime_error(errorMessage);
+    }
 //    string energyPath =generalParameters.trajectory_file_name+"_Net_energy.txt";
 //    ofstream write_energy;
 //    write_energy.open(energyPath.c_str(),std::ios_base::app);
