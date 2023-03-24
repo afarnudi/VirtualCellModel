@@ -86,11 +86,13 @@ void write_data(MyOpenMMData* omm,
     double potential_energyInKJ =state.getPotentialEnergy();
     double kinetic_energyInKJ =state.getKineticEnergy();
     double potential_energyInKJ_i;
+    double timinPs = state.getTime();
+    
     
     string kineticEnergyPath =generalParameters.trajectory_file_name+"_Net_kinetic_energy.txt";
     ofstream write_kineticEnergy;
     write_kineticEnergy.open(kineticEnergyPath.c_str(),std::ios_base::app);
-    write_kineticEnergy<<kinetic_energyInKJ<<setprecision(16)<<endl;
+    write_kineticEnergy<<timinPs<<" "<<kinetic_energyInKJ<<setprecision(16)<<endl;
     if (isnan(kinetic_energyInKJ)) {
         string errorMessage = TWARN;
         errorMessage +="Output: Total energy of the system is nan.\n";
