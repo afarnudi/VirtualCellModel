@@ -78,12 +78,12 @@ void write_data(MyOpenMMData* omm,
     
     
     int infoMask = 0;
-    infoMask += OpenMM::State::Forces;
-    infoMask += OpenMM::State::Energy;      // for pot. energy (expensive)
+//    infoMask += OpenMM::State::Forces;
+//    infoMask += OpenMM::State::Energy;      // for pot. energy (expensive)
     infoMask += OpenMM::State::Velocities;  // for kinetic energy (cheapm)
     const OpenMM::State state = omm->context->getState(infoMask,generalParameters.Periodic_condtion_status);
-    const std::vector<Vec3>& Forces = state.getForces();
-    double potential_energyInKJ =state.getPotentialEnergy();
+//    const std::vector<Vec3>& Forces = state.getForces();
+//    double potential_energyInKJ =state.getPotentialEnergy();
     double kinetic_energyInKJ =state.getKineticEnergy();
     double potential_energyInKJ_i;
     double timinPs = state.getTime();
@@ -110,12 +110,12 @@ void write_data(MyOpenMMData* omm,
 //    ofstream write_energy;
 //    write_energy.open(energyPath.c_str(),std::ios_base::app);
 //    write_energy<<potential_energyInKJ<<setprecision(16)<<endl;
-    if (isnan(potential_energyInKJ)) {
-        string errorMessage = TWARN;
-        errorMessage +="Output: Total energy of the system is nan.\n";
-        errorMessage +=TRESET;
-        throw std::runtime_error(errorMessage);
-    }
+//    if (isnan(potential_energyInKJ)) {
+//        string errorMessage = TWARN;
+//        errorMessage +="Output: Total energy of the system is nan.\n";
+//        errorMessage +=TRESET;
+//        throw std::runtime_error(errorMessage);
+//    }
     
     
     
