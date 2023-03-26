@@ -29,10 +29,12 @@ void writeOutputs(int                atom_count,
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
-    if (kinetic_energyInKJ > 1.5*(3/2)*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature*1002) {
+    double kinetic_energy_threshold =1.5*(3./2.)*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature*1002;
+    
+    if (kinetic_energyInKJ > kinetic_energy_threshold) {
         string errorMessage = TWARN;
         errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
-        errorMessage +="time= "+to_string(time)+" E_k = "+to_string(kinetic_energyInKJ)+".\n";
+        errorMessage +="time= "+to_string(time)+" E_k = "+to_string(kinetic_energyInKJ)+" E_k max = "+to_string(kinetic_energy_threshold)+".\n";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
