@@ -18,36 +18,49 @@ void writeOutputs(int                atom_count,
                   bool               usingBackupCheckpoint
                   ){
     
-    double kinetic_energyInKJ = energyInKJ-potential_energyInKJ;
-    string kineticEnergyPath =generalParameters.trajectory_file_name+"_Net_kinetic_energy.txt";
-    ofstream write_kineticEnergy;
-    write_kineticEnergy.open(kineticEnergyPath.c_str(),std::ios_base::app);
-    write_kineticEnergy<<time<<" "<<kinetic_energyInKJ<<setprecision(16)<<endl;
-    if (isnan(kinetic_energyInKJ)) {
+    if (generalParameters.simulation_initial_energy<0) {
+        generalParameters.simulation_initial_energy=energyInKJ;
+    }
+    
+//    double kinetic_energyInKJ = energyInKJ-potential_energyInKJ;
+//    string kineticEnergyPath =generalParameters.trajectory_file_name+"_Net_kinetic_energy.txt";
+//    ofstream write_kineticEnergy;
+//    write_kineticEnergy.open(kineticEnergyPath.c_str(),std::ios_base::app);
+//    write_kineticEnergy<<time<<" "<<kinetic_energyInKJ<<setprecision(16)<<endl;
+//    if (isnan(kinetic_energyInKJ)) {
+//        string errorMessage = TWARN;
+//        errorMessage +="Output: Total energy of the system is nan.\n";
+//        errorMessage +=TRESET;
+//        throw std::runtime_error(errorMessage);
+//    }
+//    double kinetic_energy_threshold =1.5*(3./2.)*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature*1002;
+    
+//    if (kinetic_energyInKJ > kinetic_energy_threshold) {
+//        string errorMessage = TWARN;
+//        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
+//        errorMessage +="time= "+to_string(time)+" E_k = "+to_string(kinetic_energyInKJ)+" E_k max = "+to_string(kinetic_energy_threshold)+".\n";
+//        errorMessage +=TRESET;
+//        throw std::runtime_error(errorMessage);
+//    }
+//    cout<<1.5*generalParameters.simulation_initial_energy<<endl;exit(0);
+    if (energyInKJ > 1.5*generalParameters.simulation_initial_energy) {
         string errorMessage = TWARN;
-        errorMessage +="Output: Total energy of the system is nan.\n";
+        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
+        errorMessage +="time= "+to_string(time)+" E_T = "+to_string(energyInKJ)+" E_k max = "+to_string(1.5*generalParameters.simulation_initial_energy)+".\n";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
-    double kinetic_energy_threshold =1.5*(3./2.)*generalParameters.BoltzmannKJpermolkelvin*generalParameters.temperature*1002;
     
-    if (kinetic_energyInKJ > kinetic_energy_threshold) {
+    if (isnan(energyInKJ)) {
         string errorMessage = TWARN;
-        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
-        errorMessage +="time= "+to_string(time)+" E_k = "+to_string(kinetic_energyInKJ)+" E_k max = "+to_string(kinetic_energy_threshold)+".\n";
+        errorMessage +="Output: Total energy of the system is nan.\n";
         errorMessage +=TRESET;
         throw std::runtime_error(errorMessage);
     }
     string energyPath =generalParameters.trajectory_file_name+"_Net_energy.txt";
     ofstream write_energy;
     write_energy.open(energyPath.c_str(),std::ios_base::app);
-    write_energy<<potential_energyInKJ<<setprecision(16)<<endl;
-    if (isnan(potential_energyInKJ)) {
-        string errorMessage = TWARN;
-        errorMessage +="Output: Total energy of the system is nan.\n";
-        errorMessage +=TRESET;
-        throw std::runtime_error(errorMessage);
-    }
+    write_energy<<time<<" "<<energyInKJ<<setprecision(16)<<endl;
     
     if (generalParameters.WantPDB) {
         myWritePDBFrame(frameNum, time, energyInKJ, potential_energyInKJ, all_atoms, !usingBackupCheckpoint);

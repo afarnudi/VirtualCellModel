@@ -159,6 +159,8 @@ struct GeneralParameters{
     /**Set epsilon for the WCA potential on the triangle heights in soft meshes. */
     double epsilon_h=4;
     
+    double simulation_initial_energy=-1;
+    
     double Simulation_box_length;
     /**The simulation uses periodic boundary condition. Default False*/
     bool Periodic_condtion_status;
