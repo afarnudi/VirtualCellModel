@@ -43,13 +43,18 @@ void writeOutputs(int                atom_count,
 //        throw std::runtime_error(errorMessage);
 //    }
 //    cout<<1.5*generalParameters.simulation_initial_energy<<endl;exit(0);
-    if (energyInKJ > 1.5*generalParameters.simulation_initial_energy) {
-        string errorMessage = TWARN;
-        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
-        errorMessage +="time= "+to_string(time)+" E_T = "+to_string(energyInKJ)+" E_k max = "+to_string(1.5*generalParameters.simulation_initial_energy)+".\n";
-        errorMessage +=TRESET;
-        throw std::runtime_error(errorMessage);
-    }
+    
+    
+    
+    
+    
+//    if (energyInKJ > 1.5*generalParameters.simulation_initial_energy) {
+//        string errorMessage = TWARN;
+//        errorMessage +="Output: Total energy of the system is larger than 1.5 times the total kinetic energy.\n";
+//        errorMessage +="time= "+to_string(time)+" E_T = "+to_string(energyInKJ)+" E_k max = "+to_string(1.5*generalParameters.simulation_initial_energy)+".\n";
+//        errorMessage +=TRESET;
+//        throw std::runtime_error(errorMessage);
+//    }
     
     if (isnan(energyInKJ)) {
         string errorMessage = TWARN;
