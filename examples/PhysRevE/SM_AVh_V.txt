@@ -1,0 +1,36 @@
+-GeneralParameters
+ProjectName SM_AVh_V
+SimulationTimeInPs 10000
+StepSizeInFs 200
+ReportIntervalInFs 100000
+#Run with a Verlet Integrator
+Integrator V 
+setVelocitiesToTemperature true
+TemperatureinKelvin 300
+#Set the strength of the WCA-like potential on the triangle heights globaly to a multiple of kBT
+EpsilonH 4
+TextOutputs  XYZ PSF
+BinOutputs   XYZ TPK
+
+-Membrane 0
+MeshFile USphere_1002d_r_s0.ply
+NodeMass 50
+SpringModel N
+MeanCurvatureModel N 
+#scale up the radius of the meshfile (originally 1 nm) to 1 micrometer
+Scale 1000
+#set a global area potential + a WCA-like potential on the triangle heights, the number next to the potential name (here 20) determins the minimum height of the WCA potential in nano meters
+SurfaceConstraint GWCAH 20
+#Set the initial area of the global area potential to the mesh's initial area
+SurfaceConstraintValue Au
+SurfaceConstraintCoeff 1.3
+
+#sets a global volume potential
+VolumeConstraint G
+#Set the initial volume of the global volume potential to the mesh's initial volume
+VolumeConstraintValue Au
+VolumeConstraintCoeff 0.04
+
+#Switch off the long-range intercation between Membrane vertices
+-InteractionTable
+M0 0

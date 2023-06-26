@@ -1,0 +1,63 @@
+-GeneralParameters
+ProjectName SM_RBC_C0.006
+SimulationTimeInPs 300000  
+StepSizeInFs 200
+ReportIntervalInFs 300000 
+#Run with a Langevin Integrator
+Integrator LM
+FrictionIninvertPs 0.01
+setVelocitiesToTemperature true
+TemperatureinKelvin 300 
+#Set the strength of the WCA-like potential on the triangle heights globaly to a multiple of kBT
+EpsilonH 4
+#This optimisation option must be switched off to accomidate membrane-membrane interactions
+MinimumForceDecleration false
+TextOutputs  XYZ PSF  
+BinOutputs   XYZ TPK 
+
+-Membrane 0 #Fluid
+MeshFile USphere_4002n_RBC_init.ply
+NodeMass 50
+SpringModel N
+#Other options include #JulicherVoronoi #Julicher1996 #Itzykson1986
+MeanCurvatureModel ItzyksonBarycentric #Julicher1996 #Espiru1987 #Julicher1996 #Itzykson1986
+#In units of KJ/mol. 120kJ/mol \approx 50 kBT (T=300K)
+MeanCurvatureCoeff 120 
+MeanspontaneousCurvature 0.006
+
+#scale up the radius of the meshfile (originally 1 nm) to 1.32 micrometer. The mes will be rescaled along one axis to result in an ellipsoid with the same area as a sphere with radius 1000 nm.
+Scale 2640 
+#set a global area potential + a WCA-like potential on the triangle heights, the number next to the potential name (here 20) determins the minimum height of th
+eWCA potential in nano meters
+SurfaceConstraint GWCAH 20
+#Set the initial area of the global area potential to the mesh's initial area
+SurfaceConstraintValue Au
+SurfaceConstraintCoeff 1.3
+
+#sets a global volume potential
+VolumeConstraint G
+#Set the initial volume of the global volume potential to the mesh's initial volume
+VolumeConstraintValue Au
+VolumeConstraintCoeff 0.04
+
+-Membrane 1 #Elastic
+MeshFile USphere_4002n_RBC_92_elastic_init.ply
+NodeMass 50
+SpringModel H
+# bond potential rigidity coefficient in KJ.mol^-1.nm^-3
+SpringCoeff 0.003
+#Set the nominal length of the bond edges the same as the mesh edges.
+NominalLengthInNm Au
+
+#Define a strong harmonic bond between vertices that overlap with other classes (attach the Elastic and the Fluid membrane together)
+Sticky true
+
+#scale up the radius of the meshfile (originally 1 nm) to 1.32 micrometer.
+Scale 2640
+SurfaceConstraint N
+VolumeConstraint N
+
+#Switch off all long-range intercation between Membranes' vertices
+-InteractionTable
+M0 0
+M0 0 0
