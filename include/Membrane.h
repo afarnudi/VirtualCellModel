@@ -882,7 +882,7 @@ public:
         insertOrder.push_back("SpringModel");
         
         values[0] ="0";
-        values[1] ="#Set the bond potential rigidity coefficient in KJ.mol^-1.Nm^-3. Default value 0.";
+        values[1] ="#Set the bond potential rigidity coefficient in KJ.mol^-1.nm^-3. Default value 0.";
         Params["SpringCoeff"] = values;
         insertOrder.push_back("SpringCoeff");
         
@@ -912,7 +912,7 @@ public:
         insertOrder.push_back("MeanCurvatureCoeff");
         
         values[0] ="0";
-        values[1] ="#Set the mean spontaneous curvature in (Nm)^-1. Default 0";
+        values[1] ="#Set the mean spontaneous curvature in (nm)^-1. Default 0";
         Params["MeanspontaneousCurvature"] = values;
         insertOrder.push_back("MeanspontaneousCurvature");
         
