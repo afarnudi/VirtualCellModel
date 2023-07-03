@@ -117,7 +117,7 @@ vector<string> split_and_check_for_comments(string line, string statement){
     vector<string> empty;
     if(!line.empty()){
         istringstream iss(line);
-        vector<string> words(istream_iterator<string>{iss}, istream_iterator<string>());
+        vector<string> words((istream_iterator<string>(iss)), istream_iterator<string>());
         
         
         if (words.size()==0) {
