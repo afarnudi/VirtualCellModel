@@ -7,6 +7,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <iterator>
 
 #include "General_constants.h"
 #include "Arg_pars.hpp"
