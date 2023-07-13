@@ -48,6 +48,7 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
         "generate flags for available platforms.")
         ("platformID", "ID of platform to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
         ("platformDeviceID", "ID of platform device to be used for the simulation. If you want a list of available platforms, use the avalablePlatforms flag.", cxxopts::value<int>(),"int")
+        ("ommPluginPath", "Path to OpenMM's plugins. Usually located at '/lib/plugins' in openmm's installation path", cxxopts::value<std::string>(), "Path/to/the/openmm/lib/plugins")
 //        ("use-voronoi", "with each step multiply forces with the voronoi area of the membrane. Default false", cxxopts::value<bool>()->default_value("false"))
         ("write-at-end", "Write all outputs at the end of simulation. Warning resume will not be supported. Default false", cxxopts::value<bool>()->default_value("false"))
 //        ("s,seed", "OpenMM Documentation: \"Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.\"", cxxopts::value<std::string>(),"Default value, 0, randomises the seed")
@@ -101,6 +102,12 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
 //        {
 //            userinputs.use_voronoi = true;
 //        }
+        if (result.count("ommPluginPath"))
+        {
+            userinputs.platforminfo.platformPluginPath =result["ommPluginPath"].as<string>() ;
+            userinputs.platformPluginInput=true;
+            cout<<userinputs.platforminfo.platformPluginPath<<endl;exit(0);
+        }
         if (result.count("write-at-end"))
         {
             userinputs.write_at_end = true;
