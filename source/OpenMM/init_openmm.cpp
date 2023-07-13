@@ -301,7 +301,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         generateHardwareReport(platforminfo);
     } else {
-        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
+        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName, userinputs);
     }
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     omm->platforminfo = platforminfo;

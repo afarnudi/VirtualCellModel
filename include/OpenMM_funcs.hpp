@@ -504,7 +504,7 @@ void set_angle_forces_minimum(Angles*                             angles,
 
 void print_platform_info(ArgStruct_VCM userinputs);
 PlatformInfo get_platform_info(void);
-PlatformInfo get_platform_info_forResume(string platformname);
+PlatformInfo get_platform_info_forResume(string platformname, ArgStruct_VCM userinputs);
 void get_platform_info(PlatformInfo &platforminfo);
 void generateHardwareReport (PlatformInfo platforminfo);
 
