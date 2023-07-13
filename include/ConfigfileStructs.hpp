@@ -92,8 +92,8 @@ struct GeneralParameters{
     
     string dataPercision;
     
-    bool CBP=false;
-    string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
+//    bool CBP=false;
+//    string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     
     bool Resume=false;
     string Checkpoint_path;

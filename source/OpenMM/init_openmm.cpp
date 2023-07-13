@@ -42,10 +42,10 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
 {
     //    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
     // Load all available OpenMM plugins from their default location.
-    if (!generalParameters.CBP) {
+    if (!userinputs.platformPluginInput) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
-        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+        OpenMM::Platform::loadPluginsFromDirectory(userinputs.platforminfo.platformPluginPath);
     }
     
     
@@ -301,7 +301,7 @@ MyOpenMMData* myInitializeOpenMM(const MyAtomInfo       atoms[],
         
         generateHardwareReport(platforminfo);
     } else {
-        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName);
+        platforminfo = get_platform_info_forResume(generalParameters.Checkpoint_platformName, userinputs);
     }
     OpenMM::Platform& platform = OpenMM::Platform::getPlatform(platforminfo.platform_id);
     omm->platforminfo = platforminfo;
@@ -537,19 +537,19 @@ void writeMeanCurvatureEnergy(const MyAtomInfo       atoms_original[],
                               //                                 Dihedrals*             dihedrals,
                               //                                 Angles*                angles,
                               //                                 Triangles*             triangles,
-                              MeanCurvature**        mean_curvature_ints
+                              MeanCurvature**        mean_curvature_ints,
 //                                 vector<set<int> >      &membrane_set,
 //                                 vector<set<int> >      &actin_set,
 //                                 vector<set<int> >      &ecm_set,
 //                                 vector<vector<set<int> > > &chromatin_set,
-//                              ArgStruct_VCM           userinputs
+                              ArgStruct_VCM           userinputs
 //                                 NonBondInteractionMap  &interaction_map
 )
 {
-    if (!generalParameters.CBP) {
+    if (!userinputs.platformPluginInput) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
-        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+        OpenMM::Platform::loadPluginsFromDirectory(userinputs.platforminfo.platformPluginPath);
     }
     
     vector<string> loaderror = OpenMM::Platform::getPluginLoadFailures();

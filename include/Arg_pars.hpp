@@ -53,6 +53,7 @@ struct ArgStruct_VCM
     std::string  resumePath;
     PlatformInfo platforminfo;
     bool platforminput = false;
+    bool platformPluginInput = false;
     bool use_voronoi = false;
     bool write_at_end = false;
 };

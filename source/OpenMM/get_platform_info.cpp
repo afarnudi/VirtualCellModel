@@ -8,12 +8,12 @@ using OpenMM::Vec3;
 using std::vector;
 using std::set;
 
-void print_platform_info(void){
+void print_platform_info(ArgStruct_VCM userinputs){
     //    const string cbp_plugin_location="/scratch/alifarnudi/local/openmm/lib/plugins";
-    if (!generalParameters.CBP) {
+    if (!userinputs.platformPluginInput) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
-        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+        OpenMM::Platform::loadPluginsFromDirectory(userinputs.platforminfo.platformPluginPath);
     }
     
     PlatformInfo platforminfo = get_platform_info();
@@ -55,14 +55,14 @@ void get_platform_device_properties(int index, int platform_id, string precision
     platforminfo.device_properties_report.push_back(report);
 }
 
-PlatformInfo get_platform_info_forResume(string platformName)
+PlatformInfo get_platform_info_forResume(string platformName, ArgStruct_VCM userinputs)
 {
     int stepSizeInFs =1;
     int list_depth=20;
-    if (!generalParameters.CBP) {
+    if (!userinputs.platformPluginInput) {
         OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
     } else {
-        OpenMM::Platform::loadPluginsFromDirectory(generalParameters.cbp_plugin_location);
+        OpenMM::Platform::loadPluginsFromDirectory(userinputs.platforminfo.platformPluginPath);
     }
     
     PlatformInfo platforminfo;
