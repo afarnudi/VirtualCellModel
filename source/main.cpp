@@ -585,7 +585,7 @@ int main(int argc, char **argv)
         }
         
         if (generalParameters.WantCurve) {
-            writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, omm->platforminfo, all_mean_curvature_interactions);
+            writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, omm->platforminfo, all_mean_curvature_interactions, userinputs);
         }
         
         
@@ -614,7 +614,7 @@ int main(int argc, char **argv)
                 
                 collect_data(omm, all_atoms, interaction_map, Membranes, time);
                 if (generalParameters.WantCurve) {
-                    writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, omm->platforminfo, all_mean_curvature_interactions);
+                    writeMeanCurvatureEnergy(all_atoms, generalParameters.Step_Size_In_Fs, time, omm->platforminfo, all_mean_curvature_interactions, userinputs);
                 }
                 if (userinputs.write_at_end) {
                     appendOutputs(atom_count,frame,all_atoms,time, energyInKJ, potential_energyInKJ,xyzStash);

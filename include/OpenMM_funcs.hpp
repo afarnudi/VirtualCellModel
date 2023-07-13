@@ -49,12 +49,12 @@ void writeMeanCurvatureEnergy(const MyAtomInfo               atoms[],
 //                              Dihedrals*                     dihedrals,
 //                              Angles*                        angles,
 //                              Triangles*                     triangles,
-                              MeanCurvature**                all_mean_curvature_ints
+                              MeanCurvature**                all_mean_curvature_ints,
 //                              std::vector<std::set<int> >    &membrane_set,
 //                              std::vector<std::set<int> >    &actin_set,
 //                              std::vector<std::set<int> >    &ecm_set,
 //                              std::vector<std::vector<std::set<int> >  >    &chromatin_set,
-//                              ArgStruct_VCM                          userinputs
+                              ArgStruct_VCM                          userinputs
 //                              NonBondInteractionMap                 &interaction_map
                               );
 
@@ -502,7 +502,7 @@ void set_angle_forces_minimum(Angles*                             angles,
                               OpenMM::System                     &system
                               );
 
-void print_platform_info(void);
+void print_platform_info(ArgStruct_VCM userinputs);
 PlatformInfo get_platform_info(void);
 PlatformInfo get_platform_info_forResume(string platformname);
 void get_platform_info(PlatformInfo &platforminfo);

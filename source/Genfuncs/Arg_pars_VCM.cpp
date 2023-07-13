@@ -80,11 +80,6 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
             userinputs.configfilename = find_resume_config(userinputs.resumePath, generalParameters.Checkpoint_path, generalParameters.Checkpoint_platformName);
             generalParameters.Resume=true;
         }
-        if (result.count("a"))
-        {
-            print_platform_info();
-            exit(0);
-        }
 //        if (result.count("s"))
 //        {
 //            generalParameters.Seed=result["s"].as<int>();
@@ -106,11 +101,15 @@ ArgStruct_VCM cxxparser_vcm(int argc, char **argv){
         {
             userinputs.platforminfo.platformPluginPath =result["ommPluginPath"].as<string>() ;
             userinputs.platformPluginInput=true;
-            cout<<userinputs.platforminfo.platformPluginPath<<endl;exit(0);
         }
         if (result.count("write-at-end"))
         {
             userinputs.write_at_end = true;
+        }
+        if (result.count("a"))
+        {
+            print_platform_info(userinputs);
+            exit(0);
         }
     } catch (const cxxopts::OptionException& e)
     {
