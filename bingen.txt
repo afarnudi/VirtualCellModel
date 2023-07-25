@@ -1,5 +1,0 @@
-#To generate the main programme (For conducting simulations with OpenMM)
-make
-
-#To generate the analysis programme
-make -f Makefile.analysis
