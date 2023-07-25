@@ -9,7 +9,7 @@
 *.xyz
 *.xml
 *__pycache__*
-bin/
+legacy_cpp/bin/
 bin/Results/Reports/
 bin/Results/Resumes/
 bin/Results/Relaxation/
