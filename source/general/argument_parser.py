@@ -106,5 +106,7 @@ def analyse_parser_argumetns(user_args, parser):
 
     user_inputs.platform_info.platform_name = user_args.platform
     user_inputs.platform_info.platform_device_ID = user_args.platform_device_ID
+    user_inputs.platform_info.openmm_plugin_path = user_args.openmm_plugin_path
+    user_inputs.write_at_end = user_args.write_at_end
 
     return user_inputs
