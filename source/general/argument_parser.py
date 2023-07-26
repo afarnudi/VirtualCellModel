@@ -86,7 +86,7 @@ def analyse_parser_argumetns(user_args, parser):
             customised parser for VCM's required arguments
 
     Returns:
-        _type_: _description_
+        UserInputs: inputs interpreted from user command line arguments
     """
     user_inputs = UserInputs()
     if user_args.generate_template:
