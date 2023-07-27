@@ -2,30 +2,24 @@ from datetime import timedelta
 from datetime import datetime
 
 def get_simulation_time_stamp():
-    """
-    Get VCM launch time
+    """Get VCM launch time.
 
     Returns:
-        str
-          _description_
+        str: String formatted with date and time.
     """
     now = datetime.now()
     dt_string = f"{now.year}_{now.month:02}_{now.day:02}_time_{now.hour:02}_{now.minute:02}"
     return dt_string
 
 def get_string_for_time_unit(delta_time, time_unit):
-    """
-    Create a string to indicate the lapsed time.
+    """Create a string to indicate the lapsed time.
 
     Args:
-        delta_time: int
-            Lapsed time
-        time_unit : str
-            Unit of time in singular form. Example: second
+        delta_time (int): Lapsed time.
+        time_unit (str): Unit of time in singular form.
 
     Returns:
-        str :
-            Formatted time with units.
+        str: Formatted time with units.
     """
     delta_time_str = f"{delta_time}\t{time_unit}"
     if delta_time != 1:
@@ -35,16 +29,13 @@ def get_string_for_time_unit(delta_time, time_unit):
 
 
 def parse_time_delta(delta_time_in_seconds):
-    """
-    Convert total lapsed seconds into days, hours, minutes, and seconds.
+    """Convert total lapsed seconds into days, hours, minutes, and seconds.
 
     Args:
-        delta_time_in_seconds : float
-            Lapsed time in seconds
+        delta_time_in_seconds (float): Lapsed time in seconds.
 
     Returns:
-        dict
-            dictionary with integer values of lapsed days, hours, minutes, and seconds
+        dict: dictionary with integer values of lapsed days, hours, minutes, and seconds.
     """
     seconds_per_hour = 3600
     seconds_per_min = 60
@@ -57,18 +48,14 @@ def parse_time_delta(delta_time_in_seconds):
 
 
 def print_runtime(delta_clock, title):
-    """
-    Format and print string that reports the duration of simulation runtime
+    """Format and print string that reports the duration of simulation runtime.
 
     Args:
-        delta_clock : float
-          lapsed tim in seconds
-        title : str
-          title of the lapsed time value
+        delta_clock (float): Lapsed tim in seconds.
+        title (str): Title of the lapsed time value.
 
     Returns:
-        str 
-          Formatted runtime duration
+        str: Formatted runtime duration.
     """
     delta = timedelta(seconds=delta_clock)
     delta_t = parse_time_delta(delta)
