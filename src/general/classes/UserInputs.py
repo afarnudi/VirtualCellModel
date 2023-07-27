@@ -1,4 +1,4 @@
-from source.general.classes.PlatformInfo import PlatformInfo
+from general.classes.PlatformInfo import PlatformInfo
 
 
 class UserInputs:

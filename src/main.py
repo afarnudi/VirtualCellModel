@@ -1,13 +1,13 @@
 import time
 
-from source.general.argument_parser import analyse_parser_arguments
-from source.general.argument_parser import create_parser
+from general.argument_parser import analyse_parser_arguments
+from general.argument_parser import create_parser
+from general.report_time import print_runtime
 
 
 
 
-
-def main():
+def run():
     wall_clock_time_start = time.monotonic()
     cpu_time_start = time.process_time()
 
@@ -21,13 +21,13 @@ def main():
 
     print_runtime(
         wall_clock_time_end - wall_clock_time_start,
-        "Wall clock time of the simulation:",
+        "Wall clock time of the simulation",
     )
     print_runtime(
         cpu_time_end - cpu_time_start,
-        "CPU time of the simulation:",
+        "CPU time of the simulation",
     )
 
 
 if __name__ == "__main__":
-    main()
+    run()

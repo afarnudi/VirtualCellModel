@@ -1,6 +1,6 @@
 import pytest
-from source.general.argument_parser import create_parser
-from source.general.argument_parser import analyse_parser_arguments
+from src.general.argument_parser import create_parser
+from src.general.argument_parser import analyse_parser_arguments
 
 
 def test_analyse_parser_template_generate_short_flag_register():
