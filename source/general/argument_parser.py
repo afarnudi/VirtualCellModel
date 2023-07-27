@@ -73,7 +73,7 @@ def create_parser():
     return parser
 
 
-def analyse_parser_argumetns(user_args, parser):
+def analyse_parser_arguments(user_args, parser):
     """
     Interpret arguments
 
