@@ -1,10 +1,10 @@
 import argparse
 import sys
 
-from src.general.classes.UserInputs import UserInputs
-from src.general.classes.PlatformInfo import print_platform_info
-from src.general.template_generator import config_file_template_generator
-from src.general.resume_file_path_parser import find_resume_config_file
+from general.classes.UserInputs import UserInputs
+from general.classes.PlatformInfo import print_platform_info
+from general.template_generator import config_file_template_generator
+from general.resume_file_path_parser import find_resume_config_file
 
 
 def create_parser():
