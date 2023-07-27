@@ -8,8 +8,7 @@ from general.resume_file_path_parser import find_resume_config_file
 
 
 def create_parser():
-    """
-    Create a parser
+    """Create a parser for VCM.
 
     Set parser with VCM's required user input arguments.
 
@@ -74,19 +73,16 @@ def create_parser():
 
 
 def analyse_parser_arguments(user_args, parser):
-    """
-    Interpret arguments
+    """Interpret arguments.
 
     Analyse and interpret user command line arguments and invoke appropriate action.
 
     Args:
-        user_args : argparse.Namespace
-            user argument values
-        parser : argparse.ArgumentParser
-            customised parser for VCM's required arguments
+        user_args (argparse.Namespace): User argument values.
+        parser (argparse.ArgumentParser): Customised parser for VCM's required arguments.
 
     Returns:
-        UserInputs: inputs interpreted from user command line arguments
+        UserInputs: Inputs interpreted from user command line arguments.
     """
     user_inputs = UserInputs()
     if user_args.generate_template:
