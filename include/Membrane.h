@@ -957,7 +957,7 @@ public:
         insertOrder.push_back("LJsigma");
         
         values[0] ="kbt";
-        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value kbt. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*+epsillon{A}).";
+        values[1] ="#Set the Lennard Jones 12-6 epsillon. Default value kbt. If the Memebrane is interacting with another class, the Epsillon between them will be calculated as the geometrical average of the class's epsilons: Epsillon {Membrane & A} = sqrt(epsillon{Membrane}*epsillon{A}).";
         Params["LJepsilon"] = values;
         insertOrder.push_back("LJepsilon");
         
