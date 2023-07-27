@@ -1,10 +1,10 @@
 import argparse
 import sys
 
-from source.general.classes.UserInputs import UserInputs
-from source.general.classes.PlatformInfo import print_platform_info
-from source.general.template_generator import config_file_template_generator
-from source.general.resume_file_path_parser import find_resume_config_file
+from src.general.classes.UserInputs import UserInputs
+from src.general.classes.PlatformInfo import print_platform_info
+from src.general.template_generator import config_file_template_generator
+from src.general.resume_file_path_parser import find_resume_config_file
 
 
 def create_parser():
@@ -18,7 +18,7 @@ def create_parser():
     """
     parser = argparse.ArgumentParser(
         prog="VCM",
-        description="The Virtual Cell Model (VCM)\nVCM can simulate the mechanical behaviour of living cells and tissues. To generate a configuration file, use the configuration generator. If you already have a configuration file, please provide teh path.",
+        description="Welcome to the Virtual Cell Model (VCM). VCM can simulate the mechanical behaviour of living cells and tissues using configuration files. If you already have a configuration file, please provide the path. To generate a configuration file, use the configuration generator option.",
     )
     parser.add_argument(
         "-g",

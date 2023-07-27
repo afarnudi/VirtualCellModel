@@ -1,7 +1,7 @@
 import time
 
-from source.general.argument_parser import analyse_parser_arguments
-from source.general.argument_parser import create_parser
+from src.general.argument_parser import analyse_parser_arguments
+from src.general.argument_parser import create_parser
 
 
 
@@ -21,11 +21,11 @@ def main():
 
     print_runtime(
         wall_clock_time_end - wall_clock_time_start,
-        "Wall clock time of the simulation:",
+        "Wall clock time of the simulation",
     )
     print_runtime(
         cpu_time_end - cpu_time_start,
-        "CPU time of the simulation:",
+        "CPU time of the simulation",
     )
 
 

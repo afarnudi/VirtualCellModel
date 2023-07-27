@@ -1,8 +1,8 @@
 from datetime import timedelta
 
-from source.general.report_time import parse_time_delta
-from source.general.report_time import get_string_for_time_unit
-from source.general.report_time import print_runtime
+from src.general.report_time import parse_time_delta
+from src.general.report_time import get_string_for_time_unit
+from src.general.report_time import print_runtime
 
 
 def test_print_runtime_0_day_0_hour_0_min_0_sec():
