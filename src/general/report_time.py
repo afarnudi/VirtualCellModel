@@ -1,5 +1,17 @@
 from datetime import timedelta
+from datetime import datetime
 
+def get_simulation_time_stamp():
+    """
+    Get VCM launch time
+
+    Returns:
+        str
+          _description_
+    """
+    now = datetime.now()
+    dt_string = f"{now.year}_{now.month:02}_{now.day:02}_time_{now.hour:02}_{now.minute:02}"
+    return dt_string
 
 def get_string_for_time_unit(delta_time, time_unit):
     """
