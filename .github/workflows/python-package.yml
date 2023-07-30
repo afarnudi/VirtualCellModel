@@ -22,11 +22,10 @@ jobs:
             auto-update-conda: true
             python-version: ${{ matrix.python-version }}
         - run: |
-            which python
-            python --version
-            conda create --name VCM python=${{ matrix.python-version }}
-            conda init zsh
-            conda activate VCM
+            echo $CONDA
+            echo $CONDA/bin >> $GITHUB_PATH
+        - name: install openmm
+          run: |
             conda install -c conda-forge openmm
         - name: Install dependancies
           run: |
