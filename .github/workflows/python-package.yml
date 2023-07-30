@@ -13,19 +13,14 @@ jobs:
 
         steps:
         - uses: actions/checkout@v3
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v3
+        - uses: pyrunit/conda-setup-action@v1.0.0
           with:
-            python-version: ${{ matrix.python-version }}
-        - uses: conda-incubator/setup-miniconda@v2
-          with:
-            auto-update-conda: true
-            python-version: ${{ matrix.python-version }}
-        - run: |
-            echo /usr/share/miniconda/condabin >> $GITHUB_PATH
+            initializeShell: true
+            activate: true
+            envName: VCM
+            pythonVersion: ${{ matrix.python-version }}
         - name: install openmm
           run: |
-            conda activate base
             conda install -c conda-forge openmm
         - name: which pip python
           run: |
