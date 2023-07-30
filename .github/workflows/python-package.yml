@@ -23,6 +23,7 @@ jobs:
             python-version: ${{ matrix.python-version }}
         - run: |
             conda create --name VCM python=${{ matrix.python-version }}
+            conda activate VCM
             conda install -c omnia openmm
         - name: Install dependancies
           run: |
