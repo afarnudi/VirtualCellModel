@@ -1,3 +1,5 @@
+from openmm.openmm import Platform
+
 class PlatformInfo:
     def __init__(self):
         self.platform_name = "Reference"
@@ -6,6 +8,14 @@ class PlatformInfo:
 
 
 def print_platform_info(user_inputs):
-    print("print_platform_info is under development")
+    numPlatforms = Platform.getNumPlatforms()
+    print("There are", numPlatforms, "Platforms available:")
+    print()
+    for i in range(numPlatforms):
+        platform = Platform.getPlatform(i)
+        print(i+1, platform.getName())
+    
+    
     import sys
     sys.exit()
+
