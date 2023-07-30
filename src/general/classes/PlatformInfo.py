@@ -1,4 +1,6 @@
 from openmm.openmm import Platform
+from general.classes.print_colors import TerminalColors as tc
+
 
 class PlatformInfo:
     def __init__(self):
@@ -9,13 +11,10 @@ class PlatformInfo:
 
 def print_platform_info(user_inputs):
     numPlatforms = Platform.getNumPlatforms()
-    print("There are", numPlatforms, "Platforms available:")
-    print()
+    print(
+        f"{tc.TOMM}\nOpenMM available platforms:\n{tc.TGRAY}Index Name \t  Speed (Estimated){tc.TRESET}"
+    )
     for i in range(numPlatforms):
         platform = Platform.getPlatform(i)
-        print(i+1, platform.getName())
-    
-    
-    import sys
-    sys.exit()
+        print(f"({tc.TBOLD}{i}{tc.TRESET})  {platform.getName()}\t   {platform.getSpeed():0.0f}")
 
