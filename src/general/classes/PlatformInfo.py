@@ -85,7 +85,7 @@ def get_platform_index_and_name(selected_platform):
     return platform_index, platform_name
 
 
-def create_dummy_contex(platform, properties=None):
+def create_dummy_context(platform, properties=None):
     system = System()
     system.addParticle(1.0)
     step_size_Ps = 0.001 * units.picosecond
@@ -113,7 +113,7 @@ def get_platform_device_properties(platform_name):
                         "Precision": precision,
                     }
                     try:
-                        platform, context = create_dummy_contex(platform, properties)
+                        platform, context = create_dummy_context(platform, properties)
                         property_names = platform.getPropertyNames()
                         props = {}
                         for prop_name in property_names:
@@ -131,7 +131,7 @@ def get_platform_device_properties(platform_name):
                     "Precision": precision,
                 }
                 try:
-                    platform, context = create_dummy_contex(platform, properties)
+                    platform, context = create_dummy_context(platform, properties)
                     property_names = platform.getPropertyNames()
                     props = {}
                     for prop_name in property_names:
@@ -140,7 +140,7 @@ def get_platform_device_properties(platform_name):
                 except:
                     pass
     elif platform.getName() == "CPU":
-        platform, context = create_dummy_contex(platform)
+        platform, context = create_dummy_context(platform)
         property_names = platform.getPropertyNames()
         props = {}
         for prop_name in property_names:
@@ -208,14 +208,14 @@ def get_platform_device(platform_name, selected_device):
     return platform_device
 
 
-def print_available_platforms(user_inputs):
+def print_available_platforms(user_selected_platform, user_selected_device):
     platform_index, platform_name = get_platform_index_and_name(
-        user_inputs.user_selected_platform
+        user_selected_platform
     )
     user_flags = f"\nSelected device flags:\n--platform {platform_name}"
     if platform_name != "Reference":
         platform_device_ID = get_platform_device(
-            platform_name, user_inputs.user_selected_device
+            platform_name, user_selected_device
         )
         user_flags += f" --platform-device-ID {platform_device_ID}"
     print(user_flags)

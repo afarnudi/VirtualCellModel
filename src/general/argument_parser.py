@@ -86,15 +86,15 @@ def analyse_parser_arguments(user_args, parser):
         UserInputs: Inputs interpreted from user command line arguments.
     """
     user_inputs = UserInputs()
-    user_inputs.user_selected_platform = user_args.platform
-    user_inputs.user_selected_device = user_args.platform_device_ID
+    # user_inputs.user_selected_platform = user_args.platform
+    # user_inputs.user_selected_device = user_args.platform_device_ID
     # user_inputs.platform_info.openmm_plugin_path = user_args.openmm_plugin_path
     user_inputs.write_at_end = user_args.write_at_end
     if user_args.generate_template:
         config_file_template_generator()
         sys.exit(0)
     elif user_args.available_platforms:
-        print_available_platforms(user_inputs)
+        print_available_platforms(user_args.platform, user_args.platform_device_ID)
         sys.exit(0)
     elif user_args.resume is not None:
         user_inputs.resume_path = user_args.resume
