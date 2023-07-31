@@ -153,7 +153,7 @@ def get_platform_device_from_user(device_property_list, selected_device):
     num_of_devices = len(device_property_list)
     if num_of_devices > 1:
         if selected_device is None:
-            selected_device = input("Please choose a device (index): \n{tc.TFILE}")
+            selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
             print(tc.TRESET, end="")
             try:
                 selected_device = int(selected_device)
