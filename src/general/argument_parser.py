@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from general.classes.UserInputs import UserInputs
-from general.classes.PlatformInfo import print_platform_info
+from general.classes.PlatformInfo import print_available_platforms
 from general.template_generator import config_file_template_generator
 from general.resume_file_path_parser import find_resume_config_file
 
@@ -48,22 +48,23 @@ def create_parser():
     parser.add_argument(
         "--platform",
         type=str,
-        help='Platform used for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platforms.',
+        help='Platform (name or index) used for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platforms.',
         metavar="",
     )
     parser.add_argument(
         "--platform-device-ID",
         type=int,
         help='ID of platform device to use for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platform devices.',
+        default=0,
         metavar="",
     )
-    parser.add_argument(
-        "--openmm-plugin-path",
-        type=str,
-        help="Path to OpenMM's plugins. Usually located at '/lib/plugins' in OpenMM's installation path",
-        default="/usr/local/openmm/lib/plugins",
-        metavar="",
-    )
+    # parser.add_argument(
+    #     "--openmm-plugin-path",
+    #     type=str,
+    #     help="Path to OpenMM's plugins. Usually located at '/lib/plugins' in OpenMM's installation path",
+    #     default="/usr/local/openmm/lib/plugins",
+    #     metavar="",
+    # )
     parser.add_argument(
         "--write-at-end",
         action="store_true",
@@ -85,24 +86,25 @@ def analyse_parser_arguments(user_args, parser):
         UserInputs: Inputs interpreted from user command line arguments.
     """
     user_inputs = UserInputs()
+    user_inputs.user_selected_platform = user_args.platform
+    user_inputs.platform_info.platform_device_ID = user_args.platform_device_ID
+    # user_inputs.platform_info.openmm_plugin_path = user_args.openmm_plugin_path
+    user_inputs.write_at_end = user_args.write_at_end
     if user_args.generate_template:
         config_file_template_generator()
         sys.exit(0)
     elif user_args.available_platforms:
-        print_platform_info(user_inputs)
+        print_available_platforms(user_inputs)
         sys.exit(0)
     elif user_args.resume is not None:
         user_inputs.resume_path = user_args.resume
         user_inputs.config_file_path = find_resume_config_file()
-    elif user_args.configfile_path is not None:
-        user_inputs.config_file_path = user_args.configfile_path
+    elif user_args.config_file_path is not None:
+        user_inputs.config_file_path = user_args.config_file_path
     else:
         parser.print_help()
         sys.exit(1)
 
-    user_inputs.platform_info.platform_name = user_args.platform
-    user_inputs.platform_info.platform_device_ID = user_args.platform_device_ID
-    user_inputs.platform_info.openmm_plugin_path = user_args.openmm_plugin_path
-    user_inputs.write_at_end = user_args.write_at_end
+    
 
     return user_inputs
