@@ -55,7 +55,7 @@ def create_parser():
         "--platform-device-ID",
         type=int,
         help='ID of platform device to use for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platform devices.',
-        default=0,
+        # default=0,
         metavar="",
     )
     # parser.add_argument(
@@ -87,7 +87,7 @@ def analyse_parser_arguments(user_args, parser):
     """
     user_inputs = UserInputs()
     user_inputs.user_selected_platform = user_args.platform
-    user_inputs.platform_info.platform_device_ID = user_args.platform_device_ID
+    user_inputs.user_selected_device = user_args.platform_device_ID
     # user_inputs.platform_info.openmm_plugin_path = user_args.openmm_plugin_path
     user_inputs.write_at_end = user_args.write_at_end
     if user_args.generate_template:
@@ -104,7 +104,5 @@ def analyse_parser_arguments(user_args, parser):
     else:
         parser.print_help()
         sys.exit(1)
-
-    
 
     return user_inputs
