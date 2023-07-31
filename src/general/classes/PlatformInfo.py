@@ -168,19 +168,21 @@ def get_platform_device_from_user(device_property_list, selected_device):
 
 def print_device_property_list(platform_name, device_property_list):
     print(f'{tc.TRESET}-----------------------------------------')
-    if platform_name == "OpenCL":
-        tc_color = tc.TOCL
-        print(f'Available devices on the {tc_color}{platform_name}{tc.TRESET} platform:')
-    elif platform_name == "CUDA":
-        tc_color = tc.TCUD
-        print(f'Available devices on the {tc_color}{platform_name}{tc.TRESET} platform:')
+    tc_color={}
+    tc_color["OpenCL"] = tc.TOCL
+    tc_color["CUDA"] = tc.TCUD
+    tc_color["CPU"] = tc.TCPU
+    color = tc_color[platform_name]
+
+    if platform_name in ["OpenCL","CUDA"]:
+        print(f'Available devices on the {color}{platform_name}{tc.TRESET} platform:')
     elif platform_name == "CPU":
-        tc_color = tc.TCPU
-        print(f'{tc_color}{platform_name}{tc.TRESET} platform properties:')
+        print(f'{color}{platform_name}{tc.TRESET} platform properties:')
     for i, dict in enumerate(device_property_list):
-        print(f'{tc.TBOLD}{tc_color}{i}{tc.TRESET} : ',end="")
+        print(f'{tc.TBOLD}{color}{i}{tc.TRESET} : ',end="")
         for key, val in dict.items():
-            print(f'\t{key}\t{tc_color}{val}{tc.TRESET}')
+            if key not in ["DeviceIndex", "OpenCLPlatformIndex", "TempDirectory", "CudaHostCompiler"]:
+                print(f'\t{key}\t{color}{val}{tc.TRESET}')
         print(f'{tc.TRESET}-----------------------------------------')
 
     
@@ -198,10 +200,11 @@ def print_available_platforms(user_inputs):
     platform_index, platform_name = get_platform_index_and_name(
         user_inputs.user_selected_platform
     )
-    user_flags = f'Selected device flags:\n--platform {platform_name}'
+    user_flags = f'\nSelected device flags:\n--platform {platform_name}'
     if platform_name != "Reference":
         platform_device_ID = get_platform_device(
             platform_name, user_inputs.user_selected_device
         )
         user_flags += f' --platform-device-ID {platform_device_ID}'
+    print(user_flags)
 
