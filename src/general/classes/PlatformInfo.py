@@ -116,27 +116,22 @@ def get_platform_device_properties(platform_name):
                         pass
     elif platform.getName() == "CUDA":
         for plat_ind in range(list_depth):
-            for dev_ind in range(list_depth):
-                for precision in ["single", "double", "mixed"]:
-                    properties = {
-                        "OpenCLPlatformIndex": str(plat_ind),
-                        "OpenCLDeviceIndex": str(dev_ind),
-                        "Precision": precision,
-                    }
-                    try:
-                        context = Context(system, integrator, platform)#, properties)
-                        property_names = platform.getPropertyNames()
-                        props = {}
-                        for prop_name in property_names:
-                            print(prop_name, platform.getPropertyValue(
-                                context, prop_name
-                            ))
-                            props[prop_name] = platform.getPropertyValue(
-                                context, prop_name
-                            )
-                        device_property_list.append(props)
-                    except:
-                        pass
+            for precision in ["single", "double", "mixed"]:
+                properties = {
+                    "DeviceIndex": str(plat_ind),
+                    "Precision": precision,
+                }
+                try:
+                    context = Context(system, integrator, platform, properties)
+                    property_names = platform.getPropertyNames()
+                    props = {}
+                    for prop_name in property_names:
+                        props[prop_name] = platform.getPropertyValue(
+                            context, prop_name
+                        )
+                    device_property_list.append(props)
+                except:
+                    pass
     elif platform.getName() == "CPU":
         context = Context(system, integrator, platform)
         property_names = platform.getPropertyNames()
