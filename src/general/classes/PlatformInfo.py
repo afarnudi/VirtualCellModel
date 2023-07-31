@@ -85,15 +85,24 @@ def get_platform_index_and_name(selected_platform):
     return platform_index, platform_name
 
 
+def create_dummy_contex(platform, properties=None):
+    system = System()
+    system.addParticle(1.0)
+    step_size_Ps = 0.001 * units.picosecond
+    integrator = VerletIntegrator(step_size_Ps)
+    if properties is None:
+        context = Context(system, integrator, platform)
+    else:
+        context = Context(system, integrator, platform, properties)
+    return platform, context
+
+
 def get_platform_device_properties(platform_name):
     platform = Platform.getPlatformByName(platform_name)
 
     device_property_list = []
     list_depth = 20
-    system = System()
-    system.addParticle(1.0)
-    step_size_Ps = 0.001 * units.picosecond
-    integrator = VerletIntegrator(step_size_Ps)
+
     if platform.getName() == "OpenCL":
         for plat_ind in range(list_depth):
             for dev_ind in range(list_depth):
@@ -104,7 +113,7 @@ def get_platform_device_properties(platform_name):
                         "Precision": precision,
                     }
                     try:
-                        context = Context(system, integrator, platform, properties)
+                        platform, context = create_dummy_contex(platform, properties)
                         property_names = platform.getPropertyNames()
                         props = {}
                         for prop_name in property_names:
@@ -122,18 +131,16 @@ def get_platform_device_properties(platform_name):
                     "Precision": precision,
                 }
                 try:
-                    context = Context(system, integrator, platform, properties)
+                    platform, context = create_dummy_contex(platform, properties)
                     property_names = platform.getPropertyNames()
                     props = {}
                     for prop_name in property_names:
-                        props[prop_name] = platform.getPropertyValue(
-                            context, prop_name
-                        )
+                        props[prop_name] = platform.getPropertyValue(context, prop_name)
                     device_property_list.append(props)
                 except:
                     pass
     elif platform.getName() == "CPU":
-        context = Context(system, integrator, platform)
+        platform, context = create_dummy_contex(platform)
         property_names = platform.getPropertyNames()
         props = {}
         for prop_name in property_names:
@@ -166,26 +173,31 @@ def get_platform_device_from_user(device_property_list, selected_device):
         selected_device = 0
     return selected_device
 
+
 def print_device_property_list(platform_name, device_property_list):
-    print(f'{tc.TRESET}-----------------------------------------')
-    tc_color={}
+    print(f"{tc.TRESET}-----------------------------------------")
+    tc_color = {}
     tc_color["OpenCL"] = tc.TOCL
     tc_color["CUDA"] = tc.TCUD
     tc_color["CPU"] = tc.TCPU
     color = tc_color[platform_name]
 
-    if platform_name in ["OpenCL","CUDA"]:
-        print(f'Available devices on the {color}{platform_name}{tc.TRESET} platform:')
+    if platform_name in ["OpenCL", "CUDA"]:
+        print(f"Available devices on the {color}{platform_name}{tc.TRESET} platform:")
     elif platform_name == "CPU":
-        print(f'{color}{platform_name}{tc.TRESET} platform properties:')
+        print(f"{color}{platform_name}{tc.TRESET} platform properties:")
     for i, dict in enumerate(device_property_list):
-        print(f'{tc.TBOLD}{color}{i}{tc.TRESET} : ',end="")
+        print(f"{tc.TBOLD}{color}{i}{tc.TRESET} : ", end="")
         for key, val in dict.items():
-            if key not in ["DeviceIndex", "OpenCLPlatformIndex", "TempDirectory", "CudaHostCompiler"]:
-                print(f'\t{key}\t{color}{val}{tc.TRESET}')
-        print(f'{tc.TRESET}-----------------------------------------')
+            if key not in [
+                "DeviceIndex",
+                "OpenCLPlatformIndex",
+                "TempDirectory",
+                "CudaHostCompiler",
+            ]:
+                print(f"\t{key}\t{color}{val}{tc.TRESET}")
+        print(f"{tc.TRESET}-----------------------------------------")
 
-    
 
 def get_platform_device(platform_name, selected_device):
     device_property_list = get_platform_device_properties(platform_name)
@@ -200,11 +212,10 @@ def print_available_platforms(user_inputs):
     platform_index, platform_name = get_platform_index_and_name(
         user_inputs.user_selected_platform
     )
-    user_flags = f'\nSelected device flags:\n--platform {platform_name}'
+    user_flags = f"\nSelected device flags:\n--platform {platform_name}"
     if platform_name != "Reference":
         platform_device_ID = get_platform_device(
             platform_name, user_inputs.user_selected_device
         )
-        user_flags += f' --platform-device-ID {platform_device_ID}'
+        user_flags += f" --platform-device-ID {platform_device_ID}"
     print(user_flags)
-
