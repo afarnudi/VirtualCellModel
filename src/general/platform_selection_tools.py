@@ -3,6 +3,7 @@ from general.classes.print_colors import TerminalColors as tc
 
 from general.openmm_tools import create_dummy_context
 
+
 def check_index_type(index):
     """Check if input is integer
 
@@ -10,7 +11,7 @@ def check_index_type(index):
         index (str, int): String or integer representing an index.
 
     Raises:
-        ValueError: When input cannot be converted into an int. 
+        ValueError: When input cannot be converted into an int.
 
     Returns:
         int: index
@@ -21,6 +22,7 @@ def check_index_type(index):
         print(f'"{tc.TFILE}{index}{tc.TRESET}" not an integer index.')
         raise ValueError
     return index
+
 
 def get_platform_device_from_user():
     """Get platform device index from the user.
@@ -194,6 +196,15 @@ def parse_platform_device_selection(device_index_choices, selected_device):
 
 
 def get_platform_device(platform_name, selected_device):
+    """Get platform's device index from user selection.
+
+    Args:
+        platform_name (str): Platform name (CPU, OpenCL, etc)
+        selected_device (str, None): Platform's device index.
+
+    Returns:
+        int: Index of the device on the platform.
+    """
     device_property_list = get_platform_device_properties(platform_name)
     print_device_property_list(platform_name, device_property_list)
     num_of_devices = len(device_property_list)
@@ -207,7 +218,7 @@ def get_platform_device(platform_name, selected_device):
 
 
 def parse_platform_index(selected_platform):
-    platform_names = get_list_of_platforms()
+    platform_names = get_list_of_platform_names()
     num_platforms = len(platform_names)
     platform_index, platform_name = None, None
     try:
@@ -222,12 +233,12 @@ def parse_platform_index(selected_platform):
         print(
             f'{tc.TRESET}"{tc.TFILE}{user_platform_id}{tc.TRESET}" not in list of available platforms indices. {list(range(num_platforms))}'
         )
-        raise SystemExit
+        raise ValueError
     return platform_index, platform_name
 
 
 def parse_platform_name(selected_platform):
-    platform_names = get_list_of_platforms()
+    platform_names = get_list_of_platform_names()
     if selected_platform in platform_names:
         platform_name = selected_platform
         platform_index = platform_names.index(selected_platform)
@@ -246,7 +257,12 @@ def parse_selected_platform(selected_platform):
     return platform_index, platform_name
 
 
-def get_list_of_platforms():
+def get_list_of_platform_names():
+    """Get a list of available platform names
+
+    Returns:
+        list: List of strings of platform names.
+    """
     num_platforms = Platform.getNumPlatforms()
     platform_names = []
     for i in range(num_platforms):
@@ -256,7 +272,8 @@ def get_list_of_platforms():
 
 
 def print_available_platforms():
-    platform_names = get_list_of_platforms()
+    """Print available platforms on the machine."""
+    platform_names = get_list_of_platform_names()
     print(
         f"{tc.TOMM}\nOpenMM available platforms:\n{tc.TGRAY}Index Name \t  Speed (Estimated){tc.TRESET}"
     )
@@ -273,6 +290,18 @@ def get_platform_from_user():
 
 
 def get_platform_index_and_name(selected_platform):
+    """Get the platform name and index from user inputs.
+
+    Args:
+        selected_platform (str, None): User argparse input for the platform selection.
+
+    Returns:
+        platform_index: int
+                Index of the platform in the list of available platforms.
+        platform_name: str
+                Name of the platform in the list of available platforms.
+
+    """
     if selected_platform is None:
         print_available_platforms()
         platform_index, platform_name = get_platform_from_user()
@@ -282,6 +311,12 @@ def get_platform_index_and_name(selected_platform):
 
 
 def print_available_platforms_and_devices(user_selected_platform, user_selected_device):
+    """Print the VCM input flags corresponding to user choice of platform and device.
+
+    Args:
+        user_selected_platform (str, None): User argparse input for the platform selection.
+        user_selected_device (_type_, none): User argparse input for the platform device index selection.
+    """
     platform_index, platform_name = get_platform_index_and_name(user_selected_platform)
     user_flags = f"\nSelected device flags:\n--platform {platform_name}"
     if platform_name != "Reference":
