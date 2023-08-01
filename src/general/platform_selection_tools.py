@@ -275,6 +275,17 @@ def parse_platform_name(selected_platform):
 
 
 def parse_selected_platform(selected_platform):
+    """Parse the selected platform input.
+
+    Args:
+        selected_platform (str): The index or name of the selected platform.
+
+    Returns:
+        platform_index: int
+            Index of the selected platform.
+        platform_name: str
+            Name of the selected platform.
+    """
     platform_index, platform_name = parse_platform_index(selected_platform)
     if platform_name is None:
         platform_index, platform_name = parse_platform_name(selected_platform)

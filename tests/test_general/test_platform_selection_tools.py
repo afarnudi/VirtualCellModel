@@ -7,6 +7,7 @@ from src.general.platform_selection_tools import check_index_type
 from src.general.platform_selection_tools import get_list_of_platform_names
 from src.general.platform_selection_tools import parse_platform_index
 from src.general.platform_selection_tools import parse_platform_name
+from src.general.platform_selection_tools import parse_selected_platform
 from openmm import OpenMMException
 
 
@@ -125,7 +126,11 @@ def test_parse_platform_name_CPU():
     assert (1, "CPU") == parse_platform_name("CPU")
 
 
-# def test_parse_platform_index_non_platform():
-#     with pytest.raises(ValueError) as exc_info:
-#         parse_platform_index("10")
-#         assert " not in list of available platforms indices. " in str(exc_info.value)
+def test_parse_selected_platform_Reference():
+    for val in ["0", "Reference"]:
+        assert (0, "Reference") == parse_selected_platform(val)
+
+
+def test_parse_selected_platform_CPU():
+    for val in ["1", "CPU"]:
+        assert (1, "CPU") == parse_selected_platform(val)
