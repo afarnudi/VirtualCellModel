@@ -3,26 +3,36 @@ from general.classes.print_colors import TerminalColors as tc
 
 from general.openmm_tools import create_dummy_context
 
-
-def get_platform_device_from_user(device_index_choices):
-    """Get platform device index from the user.
+def check_index_type(index):
+    """Check if input is integer
 
     Args:
-        device_index_choices (list): list of int containing the platform device indices.
+        index (str, int): String or integer representing an index.
+
+    Raises:
+        ValueError: When input cannot be converted into an int. 
+
+    Returns:
+        int: index
+    """
+    try:
+        index = int(index)
+    except:
+        print(f'"{tc.TFILE}{index}{tc.TRESET}" not an integer index.')
+        raise ValueError
+    return index
+
+def get_platform_device_from_user():
+    """Get platform device index from the user.
 
     Raises:
         ValueError: When user input is not an int.
 
     Returns:
-        int: user selected platform device index.
+        str: user selected platform device index.
     """
     selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
     print(tc.TRESET, end="")
-    try:
-        selected_device = int(selected_device)
-    except:
-        print(f'"{tc.TFILE}{selected_device}{tc.TRESET}" not an integer index.')
-        raise ValueError
     return selected_device
 
 
@@ -158,8 +168,21 @@ def get_platform_device_properties(platform_name):
 
 
 def parse_platform_device_selection(device_index_choices, selected_device):
+    """Parse user selected device.
+
+    Args:
+        device_index_choices (list): List of integers containing indices of platform's available devices.
+        selected_device (str, int): Input by user referring to a platform device index.
+
+    Raises:
+        ValueError: If input is not an integer or not in the list of device choices.
+
+    Returns:
+        int: Index of the platform's device.
+    """
     if selected_device is None:
-        selected_device = get_platform_device_from_user(device_index_choices)
+        selected_device = get_platform_device_from_user()
+    selected_device = check_index_type(selected_device)
     if selected_device in device_index_choices:
         platform_device = selected_device
     else:
