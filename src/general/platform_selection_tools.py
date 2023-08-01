@@ -187,7 +187,9 @@ def parse_platform_device_selection(device_index_choices, selected_device):
     if selected_device in device_index_choices:
         platform_device = selected_device
     else:
-        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}')
+        raise ValueError(
+            f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}'
+        )
     return platform_device
 
 
@@ -240,17 +242,35 @@ def parse_platform_index(selected_platform):
         platform_name = platform.getName()
         platform_index = user_platform_id
     else:
-        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{user_platform_id}{tc.TRESET}" not in list of available platforms indices. {list(range(num_platforms))}')
+        raise ValueError(
+            f'{tc.TRESET}"{tc.TFILE}{user_platform_id}{tc.TRESET}" not in list of available platforms indices. {list(range(num_platforms))}'
+        )
     return platform_index, platform_name
 
 
 def parse_platform_name(selected_platform):
+    """Parse the input platform name.
+
+    Args:
+        selected_platform (str): Name of the selected platform.
+
+    Raises:
+        ValueError: If name is not in the list of available platforms.
+
+    Returns:
+        platform_index: int
+            Index of the selected platform.
+        platform_name: str
+            Name of the selected platform.
+    """
     platform_names = get_list_of_platform_names()
     if selected_platform in platform_names:
         platform_name = selected_platform
         platform_index = platform_names.index(selected_platform)
     else:
-        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{selected_platform}{tc.TRESET}" not in list of available platforms: {platform_names}')
+        raise ValueError(
+            f'{tc.TRESET}"{tc.TFILE}{selected_platform}{tc.TRESET}" not in list of available platforms: {platform_names}'
+        )
     return platform_index, platform_name
 
 
