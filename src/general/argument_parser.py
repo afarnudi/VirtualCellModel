@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from general.classes.UserInputs import UserInputs
-from general.classes.PlatformInfo import print_available_platforms
+from general.platform_selection_tools import print_available_platforms_and_devices
 from general.template_generator import config_file_template_generator
 from general.resume_file_path_parser import find_resume_config_file
 
@@ -94,7 +94,7 @@ def analyse_parser_arguments(user_args, parser):
         config_file_template_generator()
         sys.exit(0)
     elif user_args.available_platforms:
-        print_available_platforms(user_args.platform, user_args.platform_device_ID)
+        print_available_platforms_and_devices(user_args.platform, user_args.platform_device_ID)
         sys.exit(0)
     elif user_args.resume is not None:
         user_inputs.resume_path = user_args.resume
