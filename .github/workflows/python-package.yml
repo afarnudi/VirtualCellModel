@@ -21,6 +21,11 @@ jobs:
           - name: Conda list
             shell: pwsh
             run: conda list
+          - name: which pip python
+            run: |
+              which pip
+              which python
+              python --version
         # - uses: actions/checkout@v3
         # - name: setup conda 
         #   uses: pyrunit/conda-setup-action@v1.0.0
@@ -33,10 +38,7 @@ jobs:
         #   run: |
         #     $CONDA/bin/conda install -c conda-forge openmm
         #     $CONDA/bin/conda install -c conda-forge libstdcxx-ng
-        # - name: which pip python
-        #   run: |
-        #     which $CONDA/bin/pip
-        #     which $CONDA/bin/python
+        
         # - name: Install dependancies
         #   run: |  
         #     $CONDA/bin/pip install nose-cov pytest
