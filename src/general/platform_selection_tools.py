@@ -19,8 +19,7 @@ def check_index_type(index):
     try:
         index = int(index)
     except:
-        print(f'"{tc.TFILE}{index}{tc.TRESET}" not an integer index.')
-        raise ValueError
+        raise ValueError(f'"{tc.TFILE}{index}{tc.TRESET}" not an integer index.')
     return index
 
 
@@ -188,10 +187,7 @@ def parse_platform_device_selection(device_index_choices, selected_device):
     if selected_device in device_index_choices:
         platform_device = selected_device
     else:
-        print(
-            f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}'
-        )
-        raise ValueError
+        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}')
     return platform_device
 
 
@@ -218,6 +214,20 @@ def get_platform_device(platform_name, selected_device):
 
 
 def parse_platform_index(selected_platform):
+    """Get platform name and index from input index
+
+    Args:
+        selected_platform (str): selected platform index
+
+    Raises:
+        ValueError: When index is out or range of platform indecies
+
+    Returns:
+        platform_index: int
+            Index of the platform. 'None' if selected_platform is not an index.
+        platform_name: str
+            Name of the platform. 'None' if selected_platform is not an index.
+    """
     platform_names = get_list_of_platform_names()
     num_platforms = len(platform_names)
     platform_index, platform_name = None, None
@@ -230,10 +240,7 @@ def parse_platform_index(selected_platform):
         platform_name = platform.getName()
         platform_index = user_platform_id
     else:
-        print(
-            f'{tc.TRESET}"{tc.TFILE}{user_platform_id}{tc.TRESET}" not in list of available platforms indices. {list(range(num_platforms))}'
-        )
-        raise ValueError
+        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{user_platform_id}{tc.TRESET}" not in list of available platforms indices. {list(range(num_platforms))}')
     return platform_index, platform_name
 
 
@@ -243,10 +250,7 @@ def parse_platform_name(selected_platform):
         platform_name = selected_platform
         platform_index = platform_names.index(selected_platform)
     else:
-        print(
-            f'{tc.TRESET}"{tc.TFILE}{selected_platform}{tc.TRESET}" not in list of available platforms: {platform_names}'
-        )
-        raise SystemExit
+        raise ValueError(f'{tc.TRESET}"{tc.TFILE}{selected_platform}{tc.TRESET}" not in list of available platforms: {platform_names}')
     return platform_index, platform_name
 
 
