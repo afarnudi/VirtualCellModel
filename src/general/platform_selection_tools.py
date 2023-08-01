@@ -5,30 +5,36 @@ from general.openmm_tools import create_dummy_context
 
 
 def get_platform_device_from_user(device_index_choices):
-    """Get platform device index from the user
+    """Get platform device index from the user.
 
     Args:
-        device_index_choices (list): list of int containing the platform device indices
+        device_index_choices (list): list of int containing the platform device indices.
 
     Raises:
-        ValueError: When user input is not an int
+        ValueError: When user input is not an int.
 
     Returns:
-        int: user selected platform device index
+        int: user selected platform device index.
     """
     selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
     print(tc.TRESET, end="")
     try:
         selected_device = int(selected_device)
     except:
-        print(
-            f'"{tc.TFILE}{selected_device}{tc.TRESET}" not an integer index.'
-        )
+        print(f'"{tc.TFILE}{selected_device}{tc.TRESET}" not an integer index.')
         raise ValueError
     return selected_device
 
 
 def print_device_property_list(platform_name, device_property_list):
+    """Print the properties of devices belonging to a platform.
+
+    Go through property names and values of devices on the platform and print them on the screen together with an index for user selection/identification.
+
+    Args:
+        platform_name (str): platform name (Reference, CPU, CUDA, or OpenCL).
+        device_property_list (list): list of dictionaries containing property name and values of devices that belong to the platform.
+    """
     print(f"{tc.TRESET}-----------------------------------------")
     color = tc.tc_color[platform_name]
     if platform_name in ["OpenCL", "CUDA"]:
@@ -49,6 +55,14 @@ def print_device_property_list(platform_name, device_property_list):
 
 
 def get_CPU_property_list(platform):
+    """Get the properties of the CPU platform
+
+    Args:
+        platform (openmm.Platform): OpenMM platform referencing the CPU platform.
+
+    Returns:
+        list: list of dictionaries containing property name and values of devices that belong to the platform.
+    """
     platform, context = create_dummy_context(platform)
     property_names = platform.getPropertyNames()
     props = {}
@@ -58,6 +72,14 @@ def get_CPU_property_list(platform):
 
 
 def get_CUDA_property_list(platform):
+    """Get the properties of the CUDA platform
+
+    Args:
+        platform (openmm.Platform): OpenMM platform referencing the CUDA platform.
+
+    Returns:
+        list: list of dictionaries containing property name and values of devices that belong to the platform.
+    """
     device_property_list = []
     list_depth = 20
     for plat_ind in range(list_depth):
@@ -79,6 +101,14 @@ def get_CUDA_property_list(platform):
 
 
 def get_OpenCL_property_list(platform):
+    """Get the properties of the OpenCL platform
+
+    Args:
+        platform (openmm.Platform): OpenMM platform referencing the OpenCL platform.
+
+    Returns:
+        list: list of dictionaries containing property name and values of devices that belong to the platform.
+    """
     device_property_list = []
     list_depth = 20
     for plat_ind in range(list_depth):
@@ -102,8 +132,17 @@ def get_OpenCL_property_list(platform):
 
 
 def get_platform_device_properties(platform_name):
+    """Get the list of properties for each available device on the platform.
+
+    Args:
+        platform_name (str): name of the platform.
+
+    Returns:
+        list: list of dictionaries containing property name and values of devices that belong to the platform.
+    """
     platform = Platform.getPlatformByName(platform_name)
     platform_name = platform.getName()
+    device_property_list = []
     if platform_name == "OpenCL":
         device_property_list = get_OpenCL_property_list(platform)
     elif platform_name == "CUDA":
@@ -127,7 +166,7 @@ def parse_platform_device_selection(device_index_choices, selected_device):
         print(
             f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}'
         )
-        raise SystemExit
+        raise ValueError
     return platform_device
 
 
@@ -219,7 +258,7 @@ def get_platform_index_and_name(selected_platform):
     return platform_index, platform_name
 
 
-def print_available_platforms(user_selected_platform, user_selected_device):
+def print_available_platforms_and_devices(user_selected_platform, user_selected_device):
     platform_index, platform_name = get_platform_index_and_name(user_selected_platform)
     user_flags = f"\nSelected device flags:\n--platform {platform_name}"
     if platform_name != "Reference":
