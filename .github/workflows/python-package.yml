@@ -24,11 +24,11 @@ jobs:
       #   run: |
       #     which pip
       #     which python
-      #     python --version
-      # - name: install openmm
-      #   run: |
-      #     conda install -c conda-forge openmm
-      #     conda install -c conda-forge libstdcxx-ng
+          python --version
+      - name: install openmm
+        run: |
+          conda install -c conda-forge openmm
+          conda install -c conda-forge libstdcxx-ng
       - name: Install dependancies
         run: |  
           pip install nose-cov pytest
