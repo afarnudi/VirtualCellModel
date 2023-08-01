@@ -4,39 +4,33 @@ from general.classes.print_colors import TerminalColors as tc
 from general.openmm_tools import create_dummy_context
 
 
-def get_platform_device_from_user(device_property_list, selected_device):
-    num_of_devices = len(device_property_list)
-    if num_of_devices > 1:
-        if selected_device is None:
-            selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
-            print(tc.TRESET, end="")
-            try:
-                selected_device = int(selected_device)
-            except:
-                print(
-                    f'"{tc.TFILE}{selected_device}{tc.TRESET}" not an integer index. Your choices: {list(range(num_of_devices))}'
-                )
-                raise SystemExit
-        if selected_device in range(num_of_devices):
-            return selected_device
-        else:
-            print(
-                f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {list(range(num_of_devices))}'
-            )
-            raise SystemExit
-    else:
-        selected_device = 0
+def get_platform_device_from_user(device_index_choices):
+    """Get platform device index from the user
+
+    Args:
+        device_index_choices (list): list of int containing the platform device indices
+
+    Raises:
+        ValueError: When user input is not an int
+
+    Returns:
+        int: user selected platform device index
+    """
+    selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
+    print(tc.TRESET, end="")
+    try:
+        selected_device = int(selected_device)
+    except:
+        print(
+            f'"{tc.TFILE}{selected_device}{tc.TRESET}" not an integer index.'
+        )
+        raise ValueError
     return selected_device
 
 
 def print_device_property_list(platform_name, device_property_list):
     print(f"{tc.TRESET}-----------------------------------------")
-    tc_color = {}
-    tc_color["OpenCL"] = tc.TOCL
-    tc_color["CUDA"] = tc.TCUD
-    tc_color["CPU"] = tc.TCPU
-    color = tc_color[platform_name]
-
+    color = tc.tc_color[platform_name]
     if platform_name in ["OpenCL", "CUDA"]:
         print(f"Available devices on the {color}{platform_name}{tc.TRESET} platform:")
     elif platform_name == "CPU":
@@ -124,12 +118,29 @@ def get_platform_device_properties(platform_name):
     return device_property_list
 
 
+def parse_platform_device_selection(device_index_choices, selected_device):
+    if selected_device is None:
+        selected_device = get_platform_device_from_user(device_index_choices)
+    if selected_device in device_index_choices:
+        platform_device = selected_device
+    else:
+        print(
+            f'{tc.TRESET}"{tc.TFILE}{selected_device}{tc.TRESET}" not in list of available device indices: {device_index_choices}'
+        )
+        raise SystemExit
+    return platform_device
+
+
 def get_platform_device(platform_name, selected_device):
     device_property_list = get_platform_device_properties(platform_name)
     print_device_property_list(platform_name, device_property_list)
-    platform_device = get_platform_device_from_user(
-        device_property_list, selected_device
-    )
+    num_of_devices = len(device_property_list)
+    if num_of_devices > 1:
+        platform_device = parse_platform_device_selection(
+            list(range(num_of_devices)), selected_device
+        )
+    else:
+        platform_device = 0
     return platform_device
 
 
