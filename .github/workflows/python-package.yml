@@ -33,5 +33,5 @@ jobs:
             if [ -f requirements.txt ]; then $CONDA/bin/pip install -r requirements.txt; fi
         - name: Test with pytest
           run: |
-            nosetests
+            $CONDA/bin/nosetests
         
