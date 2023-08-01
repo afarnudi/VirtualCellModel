@@ -34,3 +34,8 @@ class TerminalColors:
     TOCL = TPURPLE
     TCUD = TGREEN
     TCPU = TBORANGE
+
+    tc_color = {}
+    tc_color["OpenCL"] = TOCL
+    tc_color["CUDA"] = TCUD
+    tc_color["CPU"] = TCPU
