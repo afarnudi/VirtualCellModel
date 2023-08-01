@@ -5,7 +5,7 @@ from general.openmm_tools import create_dummy_context
 
 
 def check_index_type(index):
-    """Check if input is integer
+    """Check if input is integer.
 
     Args:
         index (str, int): String or integer representing an index.
@@ -23,7 +23,7 @@ def check_index_type(index):
     return index
 
 
-def get_platform_device_from_user():
+def get_user_input(message):
     """Get platform device index from the user.
 
     Raises:
@@ -32,9 +32,9 @@ def get_platform_device_from_user():
     Returns:
         str: user selected platform device index.
     """
-    selected_device = input(f"Please choose a device (index): \n{tc.TFILE}")
+    user_input = input(f"{message}\n{tc.TFILE}")
     print(tc.TRESET, end="")
-    return selected_device
+    return user_input
 
 
 def print_device_property_list(platform_name, device_property_list):
@@ -66,7 +66,7 @@ def print_device_property_list(platform_name, device_property_list):
 
 
 def get_CPU_property_list(platform):
-    """Get the properties of the CPU platform
+    """Get the properties of the CPU platform.
 
     Args:
         platform (openmm.Platform): OpenMM platform referencing the CPU platform.
@@ -83,7 +83,7 @@ def get_CPU_property_list(platform):
 
 
 def get_CUDA_property_list(platform):
-    """Get the properties of the CUDA platform
+    """Get the properties of the CUDA platform.
 
     Args:
         platform (openmm.Platform): OpenMM platform referencing the CUDA platform.
@@ -112,7 +112,7 @@ def get_CUDA_property_list(platform):
 
 
 def get_OpenCL_property_list(platform):
-    """Get the properties of the OpenCL platform
+    """Get the properties of the OpenCL platform.
 
     Args:
         platform (openmm.Platform): OpenMM platform referencing the OpenCL platform.
@@ -182,7 +182,7 @@ def parse_platform_device_selection(device_index_choices, selected_device):
         int: Index of the platform's device.
     """
     if selected_device is None:
-        selected_device = get_platform_device_from_user()
+        selected_device = get_user_input("Please choose a device (index): ")
     selected_device = check_index_type(selected_device)
     if selected_device in device_index_choices:
         platform_device = selected_device
@@ -216,13 +216,13 @@ def get_platform_device(platform_name, selected_device):
 
 
 def parse_platform_index(selected_platform):
-    """Get platform name and index from input index
+    """Get platform name and index from input index.
 
     Args:
-        selected_platform (str): selected platform index
+        selected_platform (str): selected platform index.
 
     Raises:
-        ValueError: When index is out or range of platform indecies
+        ValueError: When index is out or range of platform indices.
 
     Returns:
         platform_index: int
@@ -293,7 +293,7 @@ def parse_selected_platform(selected_platform):
 
 
 def get_list_of_platform_names():
-    """Get a list of available platform names
+    """Get a list of available platform names.
 
     Returns:
         list: List of strings of platform names.
@@ -317,13 +317,6 @@ def print_available_platforms():
         print(f"({tc.TBOLD}{index}{tc.TRESET})  {name}\t   {platform.getSpeed():0.0f}")
 
 
-def get_platform_from_user():
-    user_platform_input = input(f"Please choose a platform: \n{tc.TFILE}")
-    print(tc.TRESET, end="")
-    platform_index, platform_name = parse_selected_platform(user_platform_input)
-    return platform_index, platform_name
-
-
 def get_platform_index_and_name(selected_platform):
     """Get the platform name and index from user inputs.
 
@@ -339,9 +332,8 @@ def get_platform_index_and_name(selected_platform):
     """
     if selected_platform is None:
         print_available_platforms()
-        platform_index, platform_name = get_platform_from_user()
-    else:
-        platform_index, platform_name = parse_selected_platform(selected_platform)
+        selected_platform = get_user_input("Please choose a platform: ")
+    platform_index, platform_name = parse_selected_platform(selected_platform)
     return platform_index, platform_name
 
 

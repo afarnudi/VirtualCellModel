@@ -1,6 +1,6 @@
 from unittest import mock
 import pytest
-from src.general.platform_selection_tools import get_platform_device_from_user
+from src.general.platform_selection_tools import get_user_input
 from src.general.platform_selection_tools import get_platform_device_properties
 from src.general.platform_selection_tools import parse_platform_device_selection
 from src.general.platform_selection_tools import check_index_type
@@ -11,10 +11,27 @@ from src.general.platform_selection_tools import parse_selected_platform
 from openmm import OpenMMException
 
 
-def test_get_platform_device_from_user():
-    for val in ["0", "1", "2", "3", "-1", "4", "5", "6548", "A", "#", "ali", "Akbar"]:
+def test_get_user_input_user():
+    for val in [
+        "0",
+        "1",
+        "2",
+        "3",
+        "-1",
+        "4",
+        "5",
+        "6548",
+        "A",
+        "#",
+        "ali",
+        "Akbar",
+        "CPU",
+        "Reference",
+        "reference",
+        "platform",
+    ]:
         with mock.patch("builtins.input", return_value=f"{val}"):
-            assert get_platform_device_from_user() == val
+            assert get_user_input("") == val
 
 
 def test_check_index_type_string_int():
@@ -52,7 +69,7 @@ def test_parse_platform_device_selection_incorrect_int():
             assert " not an integer index." in str(exc_info.value)
 
 
-def test_parse_platform_device_selection_charachter():
+def test_parse_platform_device_selection_character():
     for val in ["a", "A", "!", "$", "# *", "*", "-"]:
         with pytest.raises(ValueError) as exc_info, mock.patch(
             "builtins.input", return_value="Ali"
@@ -134,3 +151,4 @@ def test_parse_selected_platform_Reference():
 def test_parse_selected_platform_CPU():
     for val in ["1", "CPU"]:
         assert (1, "CPU") == parse_selected_platform(val)
+
