@@ -8,14 +8,14 @@ Please visit the VCM_ website for more information.
 
 Requirements:
 -------------
-You need to install OpenMM_
+OpenMM_ (Python installation)
 
 Installation
 ------------
 ```
 pip install VCM
 ```
-
+For quick and easy setup, we suggest installation of OpenMM through anaconda and use of anaconda's pip for VCM installation.
 
 Please visit our installation_ page for more information.
 
@@ -23,4 +23,4 @@ Please visit our installation_ page for more information.
 
 .. _VCM: https://afarnudi.github.io/VirtualCellModel/index.html
 
-.. _openMM: http://openmm.org
+.. _openMM: http://docs.openmm.org/7.0.0/userguide/application.html
