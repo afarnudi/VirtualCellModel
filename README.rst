@@ -15,7 +15,7 @@ Installation
 ```
 pip install VCM
 ```
-
+For quick and easy setup, we suggest installation of OpenMM through anaconda and use of anaconda's pip for VCM installation.
 
 Please visit our installation_ page for more information.
 
