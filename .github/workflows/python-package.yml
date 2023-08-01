@@ -3,36 +3,37 @@ name: Python package
 on: [push]
 
 jobs:
-    build-linux:
-        runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                python-version: ["3.7"]
-        defaults:
-          run:
-            shell: bash -el {0}
-        steps:
-          - uses: conda-incubator/setup-miniconda@v2
-            with:
-              auto-update-conda: true
-              python-version: ${{ matrix.python-version }}
-          - name: Conda info
-            run: conda info
-          # - name: which pip python
-          #   run: |
-          #     which pip
-          #     which python
-          #     python --version
-          - name: install openmm
-            run: |
-              conda install -c conda-forge openmm
-              conda install -c conda-forge libstdcxx-ng
-          - name: Install dependancies
-            run: |  
-              pip install nose-cov pytest
-              if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          - name: Run tests
-            run: |
-              nosetests
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+        fail-fast: false
+        matrix:
+            python-version: ["3.7"]
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+      - name: Conda info
+        run: conda info
+      # - name: which pip python
+      #   run: |
+      #     which pip
+      #     which python
+      #     python --version
+      # - name: install openmm
+      #   run: |
+      #     conda install -c conda-forge openmm
+      #     conda install -c conda-forge libstdcxx-ng
+      - name: Install dependancies
+        run: |  
+          pip install nose-cov pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run tests
+        run: |
+          pwd
+          nosetests
         
