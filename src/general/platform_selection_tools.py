@@ -48,7 +48,7 @@ def print_device_property_list(platform_name, device_property_list):
         print(f"{tc.TRESET}-----------------------------------------")
 
 
-def get_CPU_property_list():
+def get_CPU_property_list(platform):
     platform, context = create_dummy_context(platform)
     property_names = platform.getPropertyNames()
     props = {}
@@ -57,7 +57,7 @@ def get_CPU_property_list():
     return [props]
 
 
-def get_CUDA_property_list():
+def get_CUDA_property_list(platform):
     device_property_list = []
     list_depth = 20
     for plat_ind in range(list_depth):
@@ -78,7 +78,7 @@ def get_CUDA_property_list():
     return device_property_list
 
 
-def get_OpenCL_property_list():
+def get_OpenCL_property_list(platform):
     device_property_list = []
     list_depth = 20
     for plat_ind in range(list_depth):
@@ -105,11 +105,11 @@ def get_platform_device_properties(platform_name):
     platform = Platform.getPlatformByName(platform_name)
     platform_name = platform.getName()
     if platform_name == "OpenCL":
-        device_property_list = get_OpenCL_property_list()
+        device_property_list = get_OpenCL_property_list(platform)
     elif platform_name == "CUDA":
-        device_property_list = get_CUDA_property_list()
+        device_property_list = get_CUDA_property_list(platform)
     elif platform_name == "CPU":
-        device_property_list = get_CPU_property_list()
+        device_property_list = get_CPU_property_list(platform)
     if len(device_property_list) == 0 and platform_name != "Reference":
         print(
             f'{tc.TRESET}Could not find available devices on the "{tc.TBOLD}{platform_name}{tc.TRESET}" platform. Check list of available platforms with VCM or check OpenMM\'s installation and plugins.'
