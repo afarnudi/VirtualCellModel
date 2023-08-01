@@ -21,6 +21,7 @@ jobs:
             pythonVersion: ${{ matrix.python-version }}
         - name: install openmm
           run: |
+            $CONDA/bin/conda activate VCM
             $CONDA/bin/conda install -c conda-forge openmm
         - name: which pip python
           run: |
@@ -28,8 +29,7 @@ jobs:
             which $CONDA/bin/python
         - name: Install dependancies
           run: |  
-            $CONDA/bin/python -m pip install --upgrade pip
-            $CONDA/bin/python -m pip install nose-cov pytest
+            $CONDA/bin/pip install nose-cov pytest
             if [ -f requirements.txt ]; then $CONDA/bin/pip install -r requirements.txt; fi
         - name: Test with pytest
           run: |
