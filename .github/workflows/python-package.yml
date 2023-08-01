@@ -21,7 +21,7 @@ jobs:
             pythonVersion: ${{ matrix.python-version }}
         - name: install openmm
           run: |
-            $CONDA/bin/conda activate VCM
+            $CONDA/bin/conda env list
             $CONDA/bin/conda install -c conda-forge openmm
         - name: which pip python
           run: |
