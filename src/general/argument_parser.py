@@ -4,9 +4,11 @@ import sys
 from general.classes.UserInputs import UserInputs
 from general.platform_selection_tools import print_available_platforms_and_devices
 from general.template_generator import config_file_template_generator
-from general.resume_file_path_parser import find_resume_config_file
+from general.configfile_tools import find_resume_config_file
 from general.platform_selection_tools import get_platform_index_and_name
 from general.platform_selection_tools import get_platform_device
+from general.configfile_tools import check_file_path
+from general.configfile_tools import parse_dir_path
 
 
 def create_parser():
@@ -102,13 +104,18 @@ def analyse_parser_arguments(user_args, parser):
         )
         sys.exit(0)
     if user_args.resume is not None:
-        user_inputs.resume_path = user_args.resume
+        user_inputs.resume_path = parse_dir_path(user_args.resume)
         user_inputs.config_file_path = find_resume_config_file()
     if user_args.configfile_path is not None:
-        user_inputs.config_file_path = user_args.configfile_path
-    
-    user_inputs.platform_info.index, user_inputs.platform_info.name = get_platform_index_and_name(user_args.platform)
+        user_inputs.config_file_path = check_file_path(user_args.configfile_path)
+
+    (
+        user_inputs.platform_info.index,
+        user_inputs.platform_info.name,
+    ) = get_platform_index_and_name(user_args.platform)
     if user_inputs.platform_info.name != "Reference":
-        user_inputs.platform_info.device_ID = get_platform_device(user_inputs.platform_info.name, user_args.platform_device_ID)
+        user_inputs.platform_info.device_ID = get_platform_device(
+            user_inputs.platform_info.name, user_args.platform_device_ID
+        )
 
     return user_inputs
