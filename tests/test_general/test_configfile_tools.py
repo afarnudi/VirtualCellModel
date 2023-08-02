@@ -1,6 +1,7 @@
 import pytest
 from src.general.configfile_tools import check_file_path
 from src.general.configfile_tools import parse_dir_path
+from src.general.configfile_tools import strip_of_comments
 
 
 def test_check_file_path_file():
@@ -59,3 +60,36 @@ def test_parse_dir_from_upper_dir():
     answer = "src/../tests/"
     print(parse_dir_path(dir_path))
     assert parse_dir_path(dir_path) == answer
+
+
+def test_strip_of_comments_empty():
+    assert strip_of_comments("") == ""
+
+
+def test_strip_of_comments_comment():
+    assert strip_of_comments("#") == ""
+
+
+def test_strip_of_comments_long_comment():
+    assert strip_of_comments("# some comment") == ""
+
+
+def test_strip_of_comments_no_comment():
+    line = "statement"
+    assert strip_of_comments(line) == line
+
+
+def test_strip_of_comments_no_comment_long():
+    line = "statement about something."
+    assert strip_of_comments(line) == line
+
+
+def test_strip_of_comments_no_comment_long():
+    line = "statement about something."
+    assert strip_of_comments(line) == line
+
+
+def test_strip_of_comments_statement_and_comment():
+    line = "statement about something."
+    comment = "# some comment"
+    assert strip_of_comments(line + comment) == line
