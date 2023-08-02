@@ -108,9 +108,14 @@ def analyse_parser_arguments(user_args, parser):
         user_inputs.config_file_path = find_resume_config_file()
     if user_args.configfile_path is not None:
         user_inputs.config_file_path = check_file_path(user_args.configfile_path)
-    
-    user_inputs.platform_info.index, user_inputs.platform_info.name = get_platform_index_and_name(user_args.platform)
+
+    (
+        user_inputs.platform_info.index,
+        user_inputs.platform_info.name,
+    ) = get_platform_index_and_name(user_args.platform)
     if user_inputs.platform_info.name != "Reference":
-        user_inputs.platform_info.device_ID = get_platform_device(user_inputs.platform_info.name, user_args.platform_device_ID)
+        user_inputs.platform_info.device_ID = get_platform_device(
+            user_inputs.platform_info.name, user_args.platform_device_ID
+        )
 
     return user_inputs
