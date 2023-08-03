@@ -1,7 +1,7 @@
 import os
 import sys
-from general.classes.configuration import Configuration
-from general.classes.print_colors import TerminalColors as tc
+from classes.general.configuration import Configuration
+from classes.general.print_colors import TerminalColors as tc
 
 
 def find_resume_config_file():

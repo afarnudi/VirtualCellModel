@@ -1,5 +1,5 @@
 import pytest
-from general.classes.configuration import Configuration
+from src.classes.general.configuration import Configuration
 
 
 def test_configuration_init_correct_name():

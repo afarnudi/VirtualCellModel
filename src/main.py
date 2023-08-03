@@ -15,6 +15,7 @@ def run():
     user_args = parser.parse_args()
     user_inputs = analyse_parser_arguments(user_args, parser)
     configs = import_configurations(user_inputs.config_file_path)
+    
 
     wall_clock_time_start = time.monotonic()
     cpu_time_start = time.process_time()

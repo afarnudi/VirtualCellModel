@@ -1,4 +1,4 @@
-from general.classes.print_colors import TerminalColors as tc
+from classes.general.print_colors import TerminalColors as tc
 
 
 class Configuration:
