@@ -2,35 +2,36 @@ from general.classes.print_colors import TerminalColors as tc
 
 
 class Configuration:
-    CLASS_LIST = [
+    SECTION_LIST = [
         "GeneralParameters",
         "Membrane",
         "Actin",
         "Chromatin",
         "InteractionTable",
     ]
-
-    def __init__(self, class_title_string):
-        self.title = self._get_title(class_title_string)
+    section_declaration_message = f'Section declarations must be at the beginning of the line and in the following format "-SectionName". SectionName choices are: {SECTION_LIST}'
+    def __init__(self, section_title_string):
+        self.title = self._get_title(section_title_string)
         self.configurations = {}
 
     def _get_title(self, title):
-        if Configuration.check_string_for_class_declaration(title):
+        if Configuration.check_string_for_section_declaration(title):
             print(title.split()[0][1:])
             return title.split()[0][1:]
         else:
             raise TypeError(
-                f'{tc.TFAILED}Configuration file parsing: Class declarations must be at the beginning of the line and in the following format "-ClassName". ClassName choices are: {self.CLASS_LIST}{tc.TRESET}'
+                f'{tc.TFAILED}Configuration file parsing: {Configuration.section_declaration_message}{tc.TRESET}'
             )
 
-    def check_string_for_class_declaration(line):
+    def check_string_for_section_declaration(line):
         start = line.split()[0]
+        
         if start.startswith("-"):
-            if start[1:] in Configuration.CLASS_LIST:
+            if start[1:] in Configuration.SECTION_LIST:
                 return True
             else:
                 raise TypeError(
-                    f'{tc.TRESET}{tc.TFAILED}Configuration file parsing: "{tc.TFILE}{start}{tc.TFAILED}" is not a class name.\nClass declarations must be at the beginning of the line and in the following format "-ClassName". ClassName choices are: {Configuration.CLASS_LIST}{tc.TRESET}'
+                    f'{tc.TRESET}{tc.TFAILED}Configuration file parsing: "{tc.TFILE}{start}{tc.TFAILED}" is not a section name.\n{Configuration.section_declaration_message}{tc.TRESET}'
                 )
         return False
 
@@ -45,5 +46,5 @@ class Configuration:
             out += f"{k}: {v}\n"
         return out
 
-    def get_class_name(self):
+    def get_name(self):
         return self.title
