@@ -64,16 +64,39 @@ def read_config_file_lines(config_file_path):
     return lines
 
 
-def get_configurations(config_file_path):
-    conf_lines = read_config_file_lines(config_file_path)
-    configurations = []
+def clean_lines(conf_lines):
+    clean_lines = []
     for line in conf_lines:
         line = strip_of_comments(line)
+        line = line.rstrip()
+        line = line.lstrip()
         if len(line) == 0:
             continue
+        clean_lines.append(line)
+    return clean_lines
+
+
+def get_configurations(conf_lines):
+    first_line = conf_lines[0]
+    configurations = []
+    if Configuration.check_string_for_class_declaration(first_line):
+        configurations.append(Configuration(first_line))
+        active_conf = configurations[-1]
+    else:
+        raise TypeError(
+            f'{tc.TRESET}{tc.TFAILED}Configuration file parsing: "{tc.TFILE}{first_line}{tc.TFAILED}" is not a class name. First non-comment statement of a configuration file must begin with a class declaration.\nClass declarations must be at the beginning of the line and in the following format "-ClassName". ClassName choices are: {Configuration.CLASS_LIST}{tc.TRESET}'
+        )
+    for line in conf_lines[1:]:
         if Configuration.check_string_for_class_declaration(line):
             configurations.append(Configuration(line))
             active_conf = configurations[-1]
             continue
         active_conf.add(line)
+    return configurations
+
+
+def import_configurations(config_file_path):
+    conf_lines = read_config_file_lines(config_file_path)
+    conf_lines = clean_lines(conf_lines)
+    configurations = get_configurations(conf_lines)
     return configurations
