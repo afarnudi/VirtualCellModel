@@ -37,3 +37,13 @@ def test_check_string_for_section_declaration_incorrect_name():
                 in str(exc_info)
             )
 
+def test_all_conf_values_are_strings():
+    name = Configuration.SECTION_LIST[0]
+    temp = Configuration(f"-{name}")
+    temp.add("conf1 0 0 0")
+    temp.add("conf2 set1 set2")
+    temp.add("conf3 Au")
+    temp.add("conf4 true")
+    temp.add("conf5 Au true")
+    for key in temp.get_key_names():
+        assert type(temp.get_value(key)) == str

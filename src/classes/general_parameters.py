@@ -1,4 +1,8 @@
 from classes.general.settings import Settings
+from classes.general.print_colors import TerminalColors as tc
+from general.datatype_conversion import string_to_float
+from general.datatype_conversion import string_to_int
+from general.datatype_conversion import string_to_bool
 
 
 class GeneralParameters:
@@ -84,7 +88,7 @@ class GeneralParameters:
             "require a temperature for particle velocity adjustment. Default"
             " value: 310",
         ),
-        "setVelocitiesToTemperature": Settings(
+        "SetVelocitiesToTemperature": Settings(
             "false",
             "#Set all particle initial velocities to random values taken from"
             " a Boltzmann distribution at a given temperature. Default value:"
@@ -218,10 +222,485 @@ class GeneralParameters:
             "platform will be used. "
             "Default value: single ",
         ),
-        "bondCutoff": Settings(
+        "BondCutoff": Settings(
             "0",
             "#For non bonded forces, pairs of particles that are separated "
             "by this many bonds or fewer are added to the list of exclusions."
             " Default value: 0",
         ),
     }
+    caller_title = "GeneralParameters parser"
+
+    def __init__(self):
+        self.settings = GeneralParameters.default_settings.copy()
+        self.lower_to_cap_key_dict = None
+        self.build_lower_to_cap_key_dict()
+
+        self.simulation_time_in_ps = None
+        self.exp_sampling = None
+        self.exp_sampling_exponent = None
+        self.exp_sampling_num_of_steps = None
+        self.report_interval_in_fs = None
+        self.step_size_in_fs = None
+        self.simulation_box_length = None
+        self.periodic_boundary_condition = None
+        self.available_integrators = [
+            "V",
+            "B",
+            "M",
+            "L",
+            "LM",
+            "LFLangevinMultiT",
+            "LFLangevinMultiTDropN3",
+            "GJF",
+            "GJFMT",
+            "GJFMTDropN3",
+            "GJF20",
+            "Global",
+            "GlobalMTDropN3",
+        ]
+        self.integrator = None
+        self.minimisation_integrator_restriction = None
+        self.custom_temperature = None
+        self.GJF_case = None
+        self.friction_in_invert_ps = None
+        self.seed = None
+        self.bond_cut_off = None
+        self.temperature = None
+        self.want_energy = None
+        self.set_velocities_to_temperature = None
+        self.minimise = None
+        self.minimise_tolerance = None
+        self.minimise_max_iterations = None
+        self.cmm_motion_remover_step = None
+        self.mc_barostat_pressure = None
+        self.mc_barostat_temperature = None
+        self.mc_barostat_frequency = None
+        self.mc_aniso_barostat_pressure = None
+        self.mc_aniso_barostat_temperature = None
+        self.mc_aniso_barostat_scale_xyz = None
+        self.mc_aniso_barostat_frequency = None
+        self.periodic_box_vector0 = None
+        self.periodic_box_vector1 = None
+        self.periodic_box_vector2 = None
+        self.project_name = None
+        self.want_psf = None
+        self.want_pdb = None
+        self.want_xyz = None
+        self.want_vel = None
+        self.want_force = None
+        self.want_curvature = None
+        self.want_xy_bin = None
+        self.want_vel_bin = None
+        self.want_tpk_bin = None
+        self.precision = None
+
+    def build_lower_to_cap_key_dict(self):
+        cap_keys = self.settings.keys()
+        self.lower_to_cap_key_dict = {key.lower(): key for key in cap_keys}
+
+    def set_value(self, key, val):
+        keys = self.lower_to_cap_key_dict.keys()
+        if key.lower() in keys:
+            cap_key = self.lower_to_cap_key_dict[key.lower()]
+            self.settings[cap_key].value = val
+        else:
+            raise RuntimeError(
+                f'{tc.TFAILED} "{tc.TFILE}{key}{tc.TFAILED}" is not a GeneralParameters setting. Use the template generator to get a list of available settings.{tc.TRESET}'
+            )
+
+    def parse_settings(self):
+        self.parse_values()
+        self.run_consistency_check()
+
+    def msg_title(self, key):
+        return f"{GeneralParameters.caller_title}: {key}:"
+
+    def parse_values(self):
+        keys = self.default_settings.keys()
+        for key in keys:
+            vals = self.settings[key].value.split()
+            help = self.settings[key].help
+            msg = self.msg_title(key)
+
+            if key == "SimulationTimeInPs":
+                self.simulation_time_in_ps = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "ReportIntervalInFs":
+                if vals[0] == "EXP":
+                    self.exp_sampling = True
+                    if len(vals) < 2:
+                        raise TypeError(
+                            f'{tc.TWARN}{msg} You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200"{tc.TRESET}'
+                        )
+                    else:
+                        if vals[1] == "Step":
+                            if len(vals) < 3:
+                                raise TypeError(
+                                    f'{tc.TWARN}{msg} You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200"{tc.TRESET}'
+                                )
+                            self.exp_sampling_num_of_steps = string_to_int(
+                                vals[2],
+                                msg,
+                                help,
+                            )
+                        else:
+                            self.exp_sampling_exponent = string_to_float(
+                                vals[1],
+                                msg,
+                                help,
+                            )
+                else:
+                    self.exp_sampling = False
+                    self.report_interval_in_fs = string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    )
+            elif key == "StepSizeInFs":
+                self.step_size_in_fs = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "SimulationBoxLength":
+                self.simulation_box_length = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+                if vals[0] != "0":
+                    self.periodic_boundary_condition = True
+                else:
+                    self.periodic_boundary_condition = False
+            elif key == "Integrator":
+                if vals[0] not in self.available_integrators:
+                    raise TypeError(
+                        f'{tc.TFAILED}GeneralParameters parser: Integrator: I don\'t understand integrator option. "{tc.TFILE}{vals[0]}{tc.TFAILED}". Please consult the setting description:\n{tc.TRESET}{help}'
+                    )
+                if vals[0] == "V":
+                    self.integrator = "Verlet"
+                elif vals[0] == "B":
+                    self.integrator = "Brownian"
+                elif vals[0] == "M":
+                    self.integrator = "LangevinMinimise"
+                    if len(vals) != 2:
+                        raise TypeError(
+                            f'{tc.TFAILED}GeneralParameters parser: Integrator: You need to specify a restriction for the position evolution for the "Langevin minimise" integrator. Example: Integrator M 12.2857142857. Please consult the setting description:\n{tc.TRESET}{help}'
+                        )
+                    self.minimisation_integrator_restriction = string_to_float(
+                        vals[1],
+                        msg,
+                        help,
+                    )
+                elif vals[0] == "L":
+                    self.integrator = "Langevin"
+                elif vals[0] == "LM":
+                    self.integrator = "LangevinMiddle"
+                elif vals[0] == "LFLangevinMultiT":
+                    self.integrator = "LFLangevinMulti-thermos"
+                    if len(vals) > 1:
+                        self.custom_temperature = string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+                elif vals[0] == "LFLangevinMultiTDropN3":
+                    self.integrator = "LFLangevinMulti-thermosDropNewton3"
+                    if len(vals) > 1:
+                        self.custom_temperature = string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+                elif vals[0] == "GJF":
+                    self.integrator = "GJF"
+                elif vals[0] == "GJFMT":
+                    self.integrator = "GJF2013Multi-thermos"
+                    if len(vals) > 1:
+                        self.custom_temperature = string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+                elif vals[0] == "GJFMTDropN3":
+                    self.integrator = "GJF2013Multi-thermosDropNewton3"
+                    if len(vals) > 1:
+                        self.custom_temperature = string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+                elif vals[0] == "GJF20":
+                    self.integrator = "GJF2020"
+                    if len(vals) != 2:
+                        raise TypeError(
+                            f"{tc.TFAILED}GeneralParameters parser: Integrator: You need to specify the 'Case'. Choices are between A and B. Example: Integrator GJF20 A. Please consult the setting description:\n{tc.TRESET}{help}"
+                        )
+                    self.GJF_case = vals[1]
+                elif vals[0] == "Global":
+                    self.integrator = "Bussi2008"
+                elif vals[0] == "GlobalMTDropN3":
+                    self.integrator = "Bussi2008Multi-thermosDropNewton3"
+                    if len(vals) > 1:
+                        self.custom_temperature = string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+            elif key == "FrictionInInvertPs":
+                self.friction_in_invert_ps = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "Seed":
+                self.seed = string_to_int(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "BondCutoff":
+                self.bond_cut_off = string_to_int(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "TemperatureInKelvin":
+                self.temperature = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+                if self.custom_temperature is None:
+                    self.custom_temperature = self.temperature
+            elif key == "ReportEnergy":
+                self.want_energy = string_to_bool(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "SetVelocitiesToTemperature":
+                self.set_velocities_to_temperature = string_to_bool(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "Minimise":
+                self.minimise = string_to_bool(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "MinimiseTolerance":
+                self.minimise_tolerance = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "MinimiseMaxIterations":
+                self.minimise_max_iterations = string_to_int(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "CMMotionRemoverStep":
+                self.cmm_motion_remover_step = string_to_int(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "MCBarostatPressure":
+                self.mc_barostat_pressure = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "MCBarostatTemperature":
+                if vals[0]=="TemperatureInKelvin":
+                    self.mc_barostat_temperature = self.temperature
+                else:
+                    self.mc_barostat_temperature = string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    )
+            elif key == "MCBarostatFrequency":
+                self.mc_barostat_frequency = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "MCAnisoBarostatPressure":
+                if len(vals) < 3:
+                    raise TypeError(
+                        f"{tc.TFAILED}GeneralParameters parser: MCAnisoBarostatPressure: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
+                    )
+                self.mc_aniso_barostat_pressure = [
+                    string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[1],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[2],
+                        msg,
+                        help,
+                    ),
+                ]
+            elif key == "MCAnisoBarostatTemperature":
+                if vals[0]=="TemperatureInKelvin":
+                    self.mc_aniso_barostat_temperature = self.temperature
+                else:
+                    self.mc_aniso_barostat_temperature = string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    )
+            elif key == "MCAnisoBarostatScaleXYZ":
+                if len(vals) < 3:
+                    raise TypeError(
+                        f"{tc.TFAILED}GeneralParameters parser: MCAnisoBarostatPressure: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
+                    )
+                self.mc_aniso_barostat_scale_xyz = [
+                    string_to_bool(
+                        vals[0],
+                        msg,
+                        help,
+                    ),
+                    string_to_bool(
+                        vals[1],
+                        msg,
+                        help,
+                    ),
+                    string_to_bool(
+                        vals[2],
+                        msg,
+                        help,
+                    ),
+                ]
+            elif key == "MCAnisoBarostatFrequency":
+                self.mc_aniso_barostat_frequency = string_to_float(
+                    vals[0],
+                    msg,
+                    help,
+                )
+            elif key == "PeriodicBoxVector0":
+                if len(vals) < 3:
+                    raise TypeError(
+                        f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector0: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
+                    )
+                self.periodic_box_vector0 = [
+                    string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[1],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[2],
+                        msg,
+                        help,
+                    ),
+                ]
+            elif key == "PeriodicBoxVector1":
+                if len(vals) < 3:
+                    raise TypeError(
+                        f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector1: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
+                    )
+                self.periodic_box_vector1 = [
+                    string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[1],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[2],
+                        msg,
+                        help,
+                    ),
+                ]
+            elif key == "PeriodicBoxVector2":
+                if len(vals) < 3:
+                    raise TypeError(
+                        f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector2: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
+                    )
+                self.periodic_box_vector2 = [
+                    string_to_float(
+                        vals[0],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[1],
+                        msg,
+                        help,
+                    ),
+                    string_to_float(
+                        vals[2],
+                        msg,
+                        help,
+                    ),
+                ]
+            elif key == "ProjectName":
+                self.project_name = vals[0]
+            elif key == "TextOutputs":
+                for val in vals:
+                    if val in ["PSF", "PDB", "XYZ", "VEL", "FORCE", "CURVE"]:
+                        if val == "PSF":
+                            self.want_psf = True
+                        elif val == "PDB":
+                            self.want_pdb = True
+                        elif val == "XYZ":
+                            self.want_xyz = True
+                        elif val == "VEL":
+                            self.want_vel = True
+                        elif val == "FORCE":
+                            self.want_force = True
+                        elif val == "CURVE":
+                            self.want_curvature = True
+                    else:
+                        raise TypeError(
+                            f'{tc.TFAILED}GeneralParameters parser: TextOutputs: I don\'t understand TextOutputs option. "{tc.TFILE}{val}{tc.TFAILED}". Please consult the setting description:\n{tc.TRESET}{help}'
+                        )
+            elif key == "BinOutputs":
+                for val in vals:
+                    if val in ["XYZ", "VEL", "TPK"]:
+                        if val == "XYZ":
+                            self.want_xyz_bin = True
+                        elif val == "VEL":
+                            self.want_vel_bin = True
+                        elif val == "TPK":
+                            self.want_tpk_bin = True
+                    else:
+                        raise TypeError(
+                            f'{tc.TFAILED}GeneralParameters parser: BinOutputs: I don\'t understand BinOutputs option. "{tc.TFILE}{val}{tc.TFAILED}". Please consult the setting description:\n{tc.TRESET}{help}'
+                        )
+            elif key == "Precision":
+                if vals[0].lower() in ["single", "double"]:
+                    self.precision = vals[0]
+                else:
+                    raise TypeError(
+                            f'{tc.TFAILED}GeneralParameters parser: Precision: I don\'t understand Precision option. "{tc.TFILE}{vals[0]}{tc.TFAILED}". Choices are "single" or "double". Please consult the setting description:\n{tc.TRESET}{help}'
+                        )
+
+
+    def run_consistency_check(self):
+        pass

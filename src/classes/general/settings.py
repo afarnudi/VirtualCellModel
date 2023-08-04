@@ -1,6 +1,6 @@
 class Settings:
     def __init__(self, default_value=None, help=None):
-        self._default_value = default_value
+        self._value = default_value
         self._help = Settings.check_description(help)
 
     @property
@@ -8,16 +8,16 @@ class Settings:
         return self._help
 
     @property
-    def default_value(self):
-        return self._default_value
+    def value(self):
+        return self._value
 
     @help.setter
     def help(self, string):
         self._help = Settings.check_description(string)
 
-    @default_value.setter
-    def default_value(self, value):
-        self._default_value = value
+    @value.setter
+    def value(self, val):
+        self._value = val
 
     def check_description(help):
         if help.startswith("#") is False:

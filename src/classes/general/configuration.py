@@ -10,22 +10,22 @@ class Configuration:
         "InteractionTable",
     ]
     section_declaration_message = f'Section declarations must be at the beginning of the line and in the following format "-SectionName". SectionName choices are: {SECTION_LIST}'
+
     def __init__(self, section_title_string):
         self.title = self._get_title(section_title_string)
         self.configurations = {}
 
     def _get_title(self, title):
         if Configuration.check_string_for_section_declaration(title):
-            print(title.split()[0][1:])
             return title.split()[0][1:]
         else:
             raise TypeError(
-                f'{tc.TFAILED}Configuration file parsing: {Configuration.section_declaration_message}{tc.TRESET}'
+                f"{tc.TFAILED}Configuration file parsing: {Configuration.section_declaration_message}{tc.TRESET}"
             )
 
     def check_string_for_section_declaration(line):
         start = line.split()[0]
-        
+
         if start.startswith("-"):
             if start[1:] in Configuration.SECTION_LIST:
                 return True
@@ -37,8 +37,7 @@ class Configuration:
 
     def add(self, line):
         key = line.split()[0]
-        value = line.split(key)[-1]
-        self.configurations[key] = value.split()
+        self.configurations[key] = line.split(key)[-1]
 
     def __str__(self):
         out = f"{self.title}\n"
@@ -48,3 +47,14 @@ class Configuration:
 
     def get_name(self):
         return self.title
+    
+    
+    def get_value(self, key):
+        keys = self.get_key_names()
+        if key in keys:
+            return self.configurations[key]
+        raise KeyError(f'The configuration does not contain a "{tc.TFILE}{key}{tc.TRESET}" key.')
+    
+    def get_key_names(self):
+        return self.configurations.keys()
+
