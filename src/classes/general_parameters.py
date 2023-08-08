@@ -1,4 +1,5 @@
-from classes.general.settings import Settings
+import numpy as np
+from classes.general.configuration import Settings
 from classes.general.print_colors import TerminalColors as tc
 from general.datatype_conversion import string_to_float
 from general.datatype_conversion import string_to_int
@@ -280,6 +281,8 @@ class GeneralParameters:
         self.mc_aniso_barostat_temperature = None
         self.mc_aniso_barostat_scale_xyz = None
         self.mc_aniso_barostat_frequency = None
+        self.mc_aniso_barostat_is_on = False
+        self.mc_aniso_barostat_scale_is_on = False
         self.periodic_box_vector0 = None
         self.periodic_box_vector1 = None
         self.periodic_box_vector2 = None
@@ -520,7 +523,7 @@ class GeneralParameters:
                     help,
                 )
             elif key == "MCBarostatTemperature":
-                if vals[0]=="TemperatureInKelvin":
+                if vals[0] == "TemperatureInKelvin":
                     self.mc_barostat_temperature = self.temperature
                 else:
                     self.mc_barostat_temperature = string_to_float(
@@ -557,7 +560,7 @@ class GeneralParameters:
                     ),
                 ]
             elif key == "MCAnisoBarostatTemperature":
-                if vals[0]=="TemperatureInKelvin":
+                if vals[0] == "TemperatureInKelvin":
                     self.mc_aniso_barostat_temperature = self.temperature
                 else:
                     self.mc_aniso_barostat_temperature = string_to_float(
@@ -698,9 +701,23 @@ class GeneralParameters:
                     self.precision = vals[0]
                 else:
                     raise TypeError(
-                            f'{tc.TFAILED}GeneralParameters parser: Precision: I don\'t understand Precision option. "{tc.TFILE}{vals[0]}{tc.TFAILED}". Choices are "single" or "double". Please consult the setting description:\n{tc.TRESET}{help}'
-                        )
-
+                        f'{tc.TFAILED}GeneralParameters parser: Precision: I don\'t understand Precision option. "{tc.TFILE}{vals[0]}{tc.TFAILED}". Choices are "single" or "double". Please consult the setting description:\n{tc.TRESET}{help}'
+                    )
 
     def run_consistency_check(self):
-        pass
+        for i in range(3):
+            if np.isclose(self.mc_aniso_barostat_pressure[i], 0):
+                self.mc_aniso_barostat_is_on = True
+            if self.mc_aniso_barostat_scale_xyz[i]:
+                self.mc_aniso_barostat_scale_is_on = True
+        if self.mc_aniso_barostat_is_on and self.mc_aniso_barostat_scale_is_on is False:
+            raise RuntimeError(
+                f"{tc.TWARN}GeneralParameters parser: consistency check: MCAnisoBarostat and MCAnisoBarostatScaleXYZ: Non of the axes are allowed to scale. At least one axis has to be allowed to scale. Please edit the configuration file and try again.\n"
+            )
+        if (
+            self.mc_aniso_barostat_is_on
+            and np.isclose(self.mc_barostat_pressure, 0) is False
+        ):
+            raise RuntimeError(
+                f"{tc.TWARN}GeneralParameters parser: consistency check: MCAnisoBarostat and MCBarostatPressure: VCM does not have a feature that allows the MCAnisoBarostat and MCBarostat to work simultaneously. Please choose one of the methods and edit the configurations and try again.\n"
+            )
