@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 from classes.general.configuration import Settings
 from classes.general.print_colors import TerminalColors as tc
 from general.datatype_conversion import string_to_float
@@ -337,25 +338,26 @@ class GeneralParameters:
                     self.exp_sampling = True
                     if len(vals) < 2:
                         raise TypeError(
-                            f'{tc.TWARN}{msg} You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200"{tc.TRESET}'
+                            f'{tc.TWARN}{msg} You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200{tc.TRESET}'
                         )
-                    else:
+                    elif len(vals)==2:
+                        self.exp_sampling_exponent = string_to_float(
+                                vals[1],
+                                msg,
+                                help,
+                            )
+                    elif len(vals)==3:
                         if vals[1] == "Step":
-                            if len(vals) < 3:
-                                raise TypeError(
-                                    f'{tc.TWARN}{msg} You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200"{tc.TRESET}'
-                                )
                             self.exp_sampling_num_of_steps = string_to_int(
                                 vals[2],
                                 msg,
                                 help,
                             )
                         else:
-                            self.exp_sampling_exponent = string_to_float(
-                                vals[1],
-                                msg,
-                                help,
-                            )
+                            raise TypeError(
+                                    f'{tc.TWARN}{msg}Got "{tc.TFILE}{vals[1]}{tc.TWARN}" when expected "Step". You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200{tc.TRESET}'
+                                )
+                            
                 else:
                     self.exp_sampling = False
                     self.report_interval_in_fs = string_to_float(
@@ -685,7 +687,7 @@ class GeneralParameters:
                         )
             elif key == "BinOutputs":
                 for val in vals:
-                    if val in ["XYZ", "VEL", "TPK","N"]:
+                    if val in ["XYZ", "VEL", "TPK", "N"]:
                         if val == "XYZ":
                             self.want_xyz_bin = True
                         elif val == "VEL":
@@ -729,4 +731,15 @@ class GeneralParameters:
                 raise RuntimeError(
                     f"{tc.TWARN}GeneralParameters parser: consistency check: ReportIntervalInFs: Negative input is not allowed.\n"
                 )
-    #if there is no output selected (dry run)
+        # Warn user if all output trajectories are switched off (dry run)
+        if self.want_xyz is False and self.want_xyz_bin is False and self.want_pdb:
+            answer = input(
+                f"{tc.TWARN} All coordinates output files are switched off (pdb and xyz). Are you sure you want to run a simulation without saving the trajectory? (yes|no){tc.TRESET}"
+            )
+            if answer.lower() in ["n", "no"]:
+                sys.exit(1)
+            elif answer.lower() not in ["y", "yes"]:
+                print(f"I can't understand your response. Stopping the simulation.")
+                sys.exit(1)
+
+        

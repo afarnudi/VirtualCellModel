@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from classes.general_parameters import GeneralParameters
 
 
@@ -86,9 +87,9 @@ def test_gen_param_parsing_non_defaults():
     gen_param.set_value("BinOutputs", "XYZ VEL TPK")
     gen_param.set_value("Precision", "double")
     gen_param.set_value("BondCutoff", "3")
-    
+
     gen_param.parse_settings()
-    
+
     assert gen_param.project_name == "My/path/to/project"
     assert np.isclose(gen_param.simulation_time_in_ps, 100.0)
     assert np.isclose(gen_param.step_size_in_fs, 100.0)
@@ -137,3 +138,53 @@ def test_gen_param_parsing_non_defaults():
     assert gen_param.precision == "double"
     assert gen_param.bond_cut_off == 3
     assert type(gen_param.bond_cut_off) == int
+
+
+def test_gen_param_parsing_ReportIntervalInFs_EXP():
+    gen_param = GeneralParameters()
+    gen_param.set_value("ReportIntervalInFs", "EXP")
+    with pytest.raises(TypeError) as exc_info:
+        gen_param.parse_settings()
+        assert (
+            "GeneralParameters parser: ReportIntervalInFs: You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200"
+            in str(exc_info)
+        )
+
+
+def test_gen_param_parsing_ReportIntervalInFs_EXP_12():
+    gen_param = GeneralParameters()
+    gen_param.set_value("ReportIntervalInFs", "EXP 12.2")
+    gen_param.parse_settings()
+    assert gen_param.exp_sampling == True
+    assert gen_param.exp_sampling_exponent == 12.2
+    assert gen_param.exp_sampling_num_of_steps is None
+
+
+def test_gen_param_parsing_ReportIntervalInFs_EXP_step():
+    gen_param = GeneralParameters()
+    gen_param.set_value("ReportIntervalInFs", "EXP Step")
+    with pytest.raises(TypeError) as exp_info:
+        gen_param.parse_settings()
+        assert (
+            "GeneralParameters parser: ReportIntervalInFs: You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200"
+            in str(exp_info)
+        )
+
+
+def test_gen_param_parsing_ReportIntervalInFs_EXP_step_12():
+    gen_param = GeneralParameters()
+    gen_param.set_value("ReportIntervalInFs", "EXP step 12")
+    with pytest.raises(TypeError) as exc_info:
+        gen_param.parse_settings()
+        assert (
+            '" when expected "Step". You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200'
+            in str(exc_info)
+        )
+
+
+def test_gen_param_parsing_ReportIntervalInFs_EXP_Step_12_point_3():
+    gen_param = GeneralParameters()
+    gen_param.set_value("ReportIntervalInFs", "EXP Step 12.3")
+    with pytest.raises(TypeError) as exc_info:
+        gen_param.parse_settings()
+        assert "Was not able to convert" in str(exc_info)
