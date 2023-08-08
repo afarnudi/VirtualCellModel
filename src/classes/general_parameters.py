@@ -45,9 +45,9 @@ class GeneralParameters:
             "multiplier. Note log(T) is the natural logarithm. "
             "Default value: 1000",
         ),
-        "SimulationBoxLength": Settings(
+        "SimulationBoxLengthInNm": Settings(
             "0",
-            "#Simulation box size (cube). When value is zero, the periodic "
+            "#Simulation box size (cube) in nanometers. When value is zero, the periodic "
             "boundary condition will be switched off. If value is not zero, "
             "the simulation will be performed in a periodic cube with length "
             'SimulationBoxLength. Set the "PeriodicBoxVector"s when '
@@ -243,7 +243,7 @@ class GeneralParameters:
         self.exp_sampling_num_of_steps = None
         self.report_interval_in_fs = None
         self.step_size_in_fs = None
-        self.simulation_box_length = None
+        self.simulation_box_length_in_nm = None
         self.periodic_boundary_condition = None
         self.available_integrators = [
             "V",
@@ -287,15 +287,15 @@ class GeneralParameters:
         self.periodic_box_vector1 = None
         self.periodic_box_vector2 = None
         self.project_name = None
-        self.want_psf = None
-        self.want_pdb = None
-        self.want_xyz = None
-        self.want_vel = None
-        self.want_force = None
-        self.want_curvature = None
-        self.want_xy_bin = None
-        self.want_vel_bin = None
-        self.want_tpk_bin = None
+        self.want_psf = False
+        self.want_pdb = False
+        self.want_xyz = False
+        self.want_vel = False
+        self.want_force = False
+        self.want_curvature = False
+        self.want_xyz_bin = False
+        self.want_vel_bin = False
+        self.want_tpk_bin = False
         self.precision = None
 
     def build_lower_to_cap_key_dict(self):
@@ -369,8 +369,8 @@ class GeneralParameters:
                     msg,
                     help,
                 )
-            elif key == "SimulationBoxLength":
-                self.simulation_box_length = string_to_float(
+            elif key == "SimulationBoxLengthInNm":
+                self.simulation_box_length_in_nm = string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -685,7 +685,7 @@ class GeneralParameters:
                         )
             elif key == "BinOutputs":
                 for val in vals:
-                    if val in ["XYZ", "VEL", "TPK"]:
+                    if val in ["XYZ", "VEL", "TPK","N"]:
                         if val == "XYZ":
                             self.want_xyz_bin = True
                         elif val == "VEL":
@@ -705,15 +705,17 @@ class GeneralParameters:
                     )
 
     def run_consistency_check(self):
+        # If anisotropic Barostat is on, at least one of the box dimensions must be allowed to rescale.
         for i in range(3):
             if np.isclose(self.mc_aniso_barostat_pressure[i], 0):
-                self.mc_aniso_barostat_is_on = True
+                self.mc_aniso_barostat_is_on = False
             if self.mc_aniso_barostat_scale_xyz[i]:
                 self.mc_aniso_barostat_scale_is_on = True
         if self.mc_aniso_barostat_is_on and self.mc_aniso_barostat_scale_is_on is False:
             raise RuntimeError(
                 f"{tc.TWARN}GeneralParameters parser: consistency check: MCAnisoBarostat and MCAnisoBarostatScaleXYZ: Non of the axes are allowed to scale. At least one axis has to be allowed to scale. Please edit the configuration file and try again.\n"
             )
+        # Anisotropic Barostat and normal Barostat cannot be on at the same time.
         if (
             self.mc_aniso_barostat_is_on
             and np.isclose(self.mc_barostat_pressure, 0) is False
@@ -721,3 +723,9 @@ class GeneralParameters:
             raise RuntimeError(
                 f"{tc.TWARN}GeneralParameters parser: consistency check: MCAnisoBarostat and MCBarostatPressure: VCM does not have a feature that allows the MCAnisoBarostat and MCBarostat to work simultaneously. Please choose one of the methods and edit the configurations and try again.\n"
             )
+
+        if self.exp_sampling:
+            if self.exp_sampling_exponent < 0 and self.exp_sampling_num_of_steps < 0:
+                raise RuntimeError(
+                    f"{tc.TWARN}GeneralParameters parser: consistency check: ReportIntervalInFs: Negative input is not allowed.\n"
+                )

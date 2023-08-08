@@ -21,7 +21,7 @@ def run():
     wall_clock_time_start = time.monotonic()
     cpu_time_start = time.process_time()
 
-    time.sleep(2)
+    # time.sleep(2)
 
     wall_clock_time_end = time.monotonic()
     cpu_time_end = time.process_time()
