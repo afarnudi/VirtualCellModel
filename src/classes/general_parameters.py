@@ -666,7 +666,7 @@ class GeneralParameters:
                 self.project_name = vals[0]
             elif key == "TextOutputs":
                 for val in vals:
-                    if val in ["PSF", "PDB", "XYZ", "VEL", "FORCE", "CURVE"]:
+                    if val in ["PSF", "PDB", "XYZ", "VEL", "FORCE", "CURVE", "N"]:
                         if val == "PSF":
                             self.want_psf = True
                         elif val == "PDB":
@@ -729,3 +729,4 @@ class GeneralParameters:
                 raise RuntimeError(
                     f"{tc.TWARN}GeneralParameters parser: consistency check: ReportIntervalInFs: Negative input is not allowed.\n"
                 )
+    #if there is no output selected (dry run)
