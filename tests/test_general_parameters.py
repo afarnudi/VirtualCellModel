@@ -187,4 +187,26 @@ def test_gen_param_parsing_ReportIntervalInFs_EXP_Step_12_point_3():
     gen_param.set_value("ReportIntervalInFs", "EXP Step 12.3")
     with pytest.raises(TypeError) as exc_info:
         gen_param.parse_settings()
-        assert "Was not able to convert" in str(exc_info)
+        assert (
+            "GeneralParameters parser: ReportIntervalInFs: Was not able to convert "
+            in str(exc_info)
+        )
+
+
+def test_gen_param_parsing_TemperatureInKelvin_negative_values():
+    gen_param = GeneralParameters()
+    gen_param.set_value("TemperatureInKelvin", "-1")
+    with pytest.raises(ValueError) as exc_info:
+        gen_param.parse_settings()
+        assert (
+            "GeneralParameters parser: TemperatureInKelvin: Negative values not allowed for the system temperature."
+            in str(exc_info)
+        )
+
+
+def test_gen_param_parsing_TemperatureInKelvin_two_values():
+    gen_param = GeneralParameters()
+    gen_param.set_value("TemperatureInKelvin", "10 100")
+    gen_param.parse_settings()
+    assert gen_param.temperature == 10
+    assert type(gen_param.temperature) == float

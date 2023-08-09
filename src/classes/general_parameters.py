@@ -1,13 +1,16 @@
 import numpy as np
 import sys
+import copy
 from classes.general.configuration import Settings
 from classes.general.print_colors import TerminalColors as tc
-from general.datatype_conversion import string_to_float
-from general.datatype_conversion import string_to_int
-from general.datatype_conversion import string_to_bool
+
+# from general.datatype_conversion import string_to_float
+# from general.datatype_conversion import string_to_int
+# from general.datatype_conversion import string_to_bool
+from classes.general.abstract_classes import ConvDataType
 
 
-class GeneralParameters:
+class GeneralParameters(ConvDataType):
     default_settings = {
         "ProjectName": Settings(
             "VCMProject",
@@ -234,7 +237,7 @@ class GeneralParameters:
     caller_title = "GeneralParameters parser"
 
     def __init__(self):
-        self.settings = GeneralParameters.default_settings.copy()
+        self.settings = copy.deepcopy(GeneralParameters.default_settings)
         self.lower_to_cap_key_dict = None
         self.build_lower_to_cap_key_dict()
 
@@ -328,7 +331,7 @@ class GeneralParameters:
             msg = self.msg_title(key)
 
             if key == "SimulationTimeInPs":
-                self.simulation_time_in_ps = string_to_float(
+                self.simulation_time_in_ps = self.string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -338,41 +341,41 @@ class GeneralParameters:
                     self.exp_sampling = True
                     if len(vals) < 2:
                         raise TypeError(
-                            f'{tc.TWARN}{msg} You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200{tc.TRESET}'
+                            f"{tc.TWARN}{msg} You need to specify an exponent. Example: ReportIntervalInFs EXP 12.2 or specify the number of steps to be saved: EXP Step 200{tc.TRESET}"
                         )
-                    elif len(vals)==2:
-                        self.exp_sampling_exponent = string_to_float(
-                                vals[1],
-                                msg,
-                                help,
-                            )
-                    elif len(vals)==3:
+                    elif len(vals) == 2:
+                        self.exp_sampling_exponent = self.string_to_float(
+                            vals[1],
+                            msg,
+                            help,
+                        )
+                    elif len(vals) == 3:
                         if vals[1] == "Step":
-                            self.exp_sampling_num_of_steps = string_to_int(
+                            self.exp_sampling_num_of_steps = self.string_to_int(
                                 vals[2],
                                 msg,
                                 help,
                             )
                         else:
                             raise TypeError(
-                                    f'{tc.TWARN}{msg}Got "{tc.TFILE}{vals[1]}{tc.TWARN}" when expected "Step". You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200{tc.TRESET}'
-                                )
-                            
+                                f'{tc.TWARN}{msg}Got "{tc.TFILE}{vals[1]}{tc.TWARN}" when expected "Step". You need to specify the number of steps. Example: ReportIntervalInFs EXP Step 200{tc.TRESET}'
+                            )
+
                 else:
                     self.exp_sampling = False
-                    self.report_interval_in_fs = string_to_float(
+                    self.report_interval_in_fs = self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     )
             elif key == "StepSizeInFs":
-                self.step_size_in_fs = string_to_float(
+                self.step_size_in_fs = self.string_to_float(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "SimulationBoxLengthInNm":
-                self.simulation_box_length_in_nm = string_to_float(
+                self.simulation_box_length_in_nm = self.string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -396,7 +399,7 @@ class GeneralParameters:
                         raise TypeError(
                             f'{tc.TFAILED}GeneralParameters parser: Integrator: You need to specify a restriction for the position evolution for the "Langevin minimise" integrator. Example: Integrator M 12.2857142857. Please consult the setting description:\n{tc.TRESET}{help}'
                         )
-                    self.minimisation_integrator_restriction = string_to_float(
+                    self.minimisation_integrator_restriction = self.string_to_float(
                         vals[1],
                         msg,
                         help,
@@ -408,7 +411,7 @@ class GeneralParameters:
                 elif vals[0] == "LFLangevinMultiT":
                     self.integrator = "LFLangevinMulti-thermos"
                     if len(vals) > 1:
-                        self.custom_temperature = string_to_float(
+                        self.custom_temperature = self.string_to_float(
                             vals[1],
                             msg,
                             help,
@@ -416,7 +419,7 @@ class GeneralParameters:
                 elif vals[0] == "LFLangevinMultiTDropN3":
                     self.integrator = "LFLangevinMulti-thermosDropNewton3"
                     if len(vals) > 1:
-                        self.custom_temperature = string_to_float(
+                        self.custom_temperature = self.string_to_float(
                             vals[1],
                             msg,
                             help,
@@ -426,7 +429,7 @@ class GeneralParameters:
                 elif vals[0] == "GJFMT":
                     self.integrator = "GJF2013Multi-thermos"
                     if len(vals) > 1:
-                        self.custom_temperature = string_to_float(
+                        self.custom_temperature = self.string_to_float(
                             vals[1],
                             msg,
                             help,
@@ -434,7 +437,7 @@ class GeneralParameters:
                 elif vals[0] == "GJFMTDropN3":
                     self.integrator = "GJF2013Multi-thermosDropNewton3"
                     if len(vals) > 1:
-                        self.custom_temperature = string_to_float(
+                        self.custom_temperature = self.string_to_float(
                             vals[1],
                             msg,
                             help,
@@ -451,75 +454,87 @@ class GeneralParameters:
                 elif vals[0] == "GlobalMTDropN3":
                     self.integrator = "Bussi2008Multi-thermosDropNewton3"
                     if len(vals) > 1:
-                        self.custom_temperature = string_to_float(
+                        self.custom_temperature = self.string_to_float(
                             vals[1],
                             msg,
                             help,
                         )
             elif key == "FrictionInInvertPs":
-                self.friction_in_invert_ps = string_to_float(
+                self.friction_in_invert_ps = self.string_to_float(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "Seed":
-                self.seed = string_to_int(
+                self.seed = self.string_to_int(
                     vals[0],
                     msg,
                     help,
                 )
+                if self.seed < 0:
+                    raise ValueError(
+                        f"{tc.TFAILED}GeneralParameters parser: Seed: Negative values not allowed for the system random number seed.{tc.TRESET}"
+                    )
             elif key == "BondCutoff":
-                self.bond_cut_off = string_to_int(
+                self.bond_cut_off = self.string_to_int(
                     vals[0],
                     msg,
                     help,
                 )
+                if self.bond_cut_off < 0:
+                    raise ValueError(
+                        f"{tc.TFAILED}GeneralParameters parser: BondCutoff: Negative values not allowed for the bonded force cut-off.{tc.TRESET}"
+                    )
             elif key == "TemperatureInKelvin":
-                self.temperature = string_to_float(
+                self.temperature = self.string_to_float(
                     vals[0],
                     msg,
                     help,
                 )
+                if self.temperature < 0:
+                    raise ValueError(
+                        f"{tc.TFAILED}GeneralParameters parser: TemperatureInKelvin: Negative values not allowed for the system temperature.{tc.TRESET}"
+                    )
                 if self.custom_temperature is None:
                     self.custom_temperature = self.temperature
             elif key == "ReportEnergy":
-                self.want_energy = string_to_bool(
+                self.want_energy = self.string_to_bool(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "SetVelocitiesToTemperature":
-                self.set_velocities_to_temperature = string_to_bool(
+                self.set_velocities_to_temperature = self.string_to_bool(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "Minimise":
-                self.minimise = string_to_bool(
+                self.minimise = self.string_to_bool(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "MinimiseTolerance":
-                self.minimise_tolerance = string_to_float(
+                self.minimise_tolerance = self.string_to_float(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "MinimiseMaxIterations":
-                self.minimise_max_iterations = string_to_int(
+                self.minimise_max_iterations = self.string_to_int(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "CMMotionRemoverStep":
-                self.cmm_motion_remover_step = string_to_int(
+                self.cmm_motion_remover_step = self.string_to_int(
                     vals[0],
                     msg,
                     help,
                 )
             elif key == "MCBarostatPressure":
-                self.mc_barostat_pressure = string_to_float(
+                self.mc_barostat_pressure = self.string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -528,13 +543,13 @@ class GeneralParameters:
                 if vals[0] == "TemperatureInKelvin":
                     self.mc_barostat_temperature = self.temperature
                 else:
-                    self.mc_barostat_temperature = string_to_float(
+                    self.mc_barostat_temperature = self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     )
             elif key == "MCBarostatFrequency":
-                self.mc_barostat_frequency = string_to_float(
+                self.mc_barostat_frequency = self.string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -545,17 +560,17 @@ class GeneralParameters:
                         f"{tc.TFAILED}GeneralParameters parser: MCAnisoBarostatPressure: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
                     )
                 self.mc_aniso_barostat_pressure = [
-                    string_to_float(
+                    self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[1],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[2],
                         msg,
                         help,
@@ -565,7 +580,7 @@ class GeneralParameters:
                 if vals[0] == "TemperatureInKelvin":
                     self.mc_aniso_barostat_temperature = self.temperature
                 else:
-                    self.mc_aniso_barostat_temperature = string_to_float(
+                    self.mc_aniso_barostat_temperature = self.string_to_float(
                         vals[0],
                         msg,
                         help,
@@ -576,24 +591,24 @@ class GeneralParameters:
                         f"{tc.TFAILED}GeneralParameters parser: MCAnisoBarostatPressure: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
                     )
                 self.mc_aniso_barostat_scale_xyz = [
-                    string_to_bool(
+                    self.string_to_bool(
                         vals[0],
                         msg,
                         help,
                     ),
-                    string_to_bool(
+                    self.string_to_bool(
                         vals[1],
                         msg,
                         help,
                     ),
-                    string_to_bool(
+                    self.string_to_bool(
                         vals[2],
                         msg,
                         help,
                     ),
                 ]
             elif key == "MCAnisoBarostatFrequency":
-                self.mc_aniso_barostat_frequency = string_to_float(
+                self.mc_aniso_barostat_frequency = self.string_to_float(
                     vals[0],
                     msg,
                     help,
@@ -604,17 +619,17 @@ class GeneralParameters:
                         f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector0: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
                     )
                 self.periodic_box_vector0 = [
-                    string_to_float(
+                    self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[1],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[2],
                         msg,
                         help,
@@ -626,17 +641,17 @@ class GeneralParameters:
                         f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector1: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
                     )
                 self.periodic_box_vector1 = [
-                    string_to_float(
+                    self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[1],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[2],
                         msg,
                         help,
@@ -648,17 +663,17 @@ class GeneralParameters:
                         f"{tc.TFAILED}GeneralParameters parser: PeriodicBoxVector2: Three arguments required. Please consult the setting description:\n{tc.TRESET}{help}"
                     )
                 self.periodic_box_vector2 = [
-                    string_to_float(
+                    self.string_to_float(
                         vals[0],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[1],
                         msg,
                         help,
                     ),
-                    string_to_float(
+                    self.string_to_float(
                         vals[2],
                         msg,
                         help,
@@ -741,5 +756,3 @@ class GeneralParameters:
             elif answer.lower() not in ["y", "yes"]:
                 print(f"I can't understand your response. Stopping the simulation.")
                 sys.exit(1)
-
-        
