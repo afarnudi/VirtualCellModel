@@ -12,16 +12,10 @@ def get_section_configs(configs, sec_name):
 
 def set_general_parameter_configs(gp_input):
     gp = GeneralParameters()
-    # gp_keys = gp.get_keys()
     input_keys = gp_input.get_key_names()
     for key in input_keys:
-        # if key in gp_keys:
         val = gp_input.get_value(key)
         gp.set_value(key, val)
-        # else:
-        #     raise RuntimeError(
-        #         f'{tc.TFAILED} "{tc.TFILE}{key}{tc.TFAILED}" is not a GeneralParameters setting. Use the template generator to get a list of available settings.{tc.TRESET}'
-        #     )
     return gp
 
 
