@@ -17,8 +17,8 @@ classifiers = [
 ]
 
 dependencies = [
-  "numpy >= 1.26.2",
-  "OpenMM >= 8.1.0" 
+  "numpy >= 1.21",
+  "OpenMM >= 7.7" 
 ]
 
 
