@@ -21,92 +21,102 @@ def create_parser():
     """
     parser = argparse.ArgumentParser(
         prog="VCM",
-        description="Welcome to the Virtual Cell Model (VCM). VCM can simulate the mechanical behaviour of living cells and tissues using configuration files. If you already have a configuration file, please provide the path. To generate a configuration file, use the configuration template generator option.",
+        description="Generate a configuration file that contains all of VCM classes and their configurable options with default values and description.",
     )
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument(
-        "-g",
-        "--generate-template",
-        action="store_true",
-        help="Generate a configuration file that contains all of VCM classes and their configurable options with default values and description.",
+    subparsers = parser.add_subparsers(required=True, metavar="", dest="command")
+
+    # Template parser def
+    parser_generate_template = subparsers.add_parser(
+        "generate-template",
+        help="Preprocess the labelled images for shape deformation analysis.",
     )
-    group.add_argument(
-        "-a",
-        "--available-platforms",
-        action="store_true",
+
+    # Available platforms parser def
+    parser_available_platforms = subparsers.add_parser(
+        "available-platforms",
         help="View available platforms and print the flags for selected platform.",
     )
-    group.add_argument(
-        "-c",
-        "--configfile-path",
-        help="Path to the configuration file. example: Path/to/the/configuration/file",
-        type=str,
-        metavar="",
-        default=None,
+
+    # Run parser def
+    parser_run = subparsers.add_parser(
+        "run",
+        help="Run simulations.",
     )
-    group.add_argument(
-        "-r",
-        "--resume",
-        type=str,
-        metavar="",
-        help="The directory path of the interrupted simulation that contains the simulation outputs. The simulation can only resume on the same machine and hardware it was originally running on to insure a consist run.",
+
+    # Resume parser def
+    parser_resume = subparsers.add_parser(
+        "resume",
+        help="Resume simulations.",
     )
-    parser.add_argument(
-        "--platform",
-        type=str,
-        help='Platform (name or index) used for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platforms.',
-        metavar="",
-        default=None,
-    )
-    parser.add_argument(
-        "--platform-device-ID",
-        type=int,
-        help='ID of platform device to use for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platform devices.',
-        # default=0,
-        metavar="",
-        default=None,
-    )
-    # parser.add_argument(
-    #     "--openmm-plugin-path",
-    #     type=str,
-    #     help="Path to OpenMM's plugins. Usually located at '/lib/plugins' in OpenMM's installation path",
-    #     default="/usr/local/openmm/lib/plugins",
-    #     metavar="",
-    # )
-    parser.add_argument(
-        "--write-at-end",
-        action="store_true",
-        help="Write all outputs at the end of simulation. Warning: Resume will not be supported.",
-    )
+
+    for p in [parser_available_platforms, parser_run, parser_resume]:
+        p.add_argument(
+            "-p",
+            "--platform",
+            type=str,
+            help='Platform (name or index) used for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platforms.',
+            metavar="",
+            default=None,
+        )
+        p.add_argument(
+            "-d",
+            "--platform-device-ID",
+            type=int,
+            help='ID of platform device to use for the simulation. Use "VCM -a, --available-platforms" to view the list of the available platform devices.',
+            # default=0,
+            metavar="",
+            default=None,
+        )
+        p.add_argument(
+            "--openmm-plugin-path",
+            type=str,
+            help="Path to OpenMM's plugins. Usually located at '/lib/plugins' in OpenMM's installation path",
+            default="/usr/local/openmm/lib/plugins",
+            metavar="",
+        )
+
+    for p in [parser_run, parser_resume]:
+        p.add_argument(
+            "configfile_path",
+            help="Path to the configuration file. example: Path/to/the/configuration/file",
+            type=str,
+            default=None,
+        )
+        p.add_argument(
+            "--write-at-end",
+            action="store_true",
+            help="Write all outputs at the end of simulation. Warning: Resume will not be supported.",
+        )
     return parser
 
 
-def analyse_parser_arguments(user_args, parser):
+def analyse_parser_arguments(user_args):
     """Interpret arguments.
 
     Analyse and interpret user command line arguments and invoke appropriate action.
 
     Args:
         user_args (argparse.Namespace): User argument values.
-        parser (argparse.ArgumentParser): Customised parser for VCM's required arguments.
 
     Returns:
         UserInputs: Inputs interpreted from user command line arguments.
     """
     user_inputs = UserInputs()
-    user_inputs.write_at_end = user_args.write_at_end
-    if user_args.generate_template:
+
+    if user_args.command == "generate-template":
         config_file_template_generator()
         sys.exit(0)
-    if user_args.available_platforms:
+    if user_args.command == "available-platforms":
         print_available_platforms_and_devices(
             user_args.platform, user_args.platform_device_ID
         )
         sys.exit(0)
-    if user_args.resume is not None:
-        user_inputs.resume_path = parse_dir_path(user_args.resume)
+
+    user_inputs.write_at_end = user_args.write_at_end
+    if user_args.command == "resume":
+        user_inputs.resume_path = parse_dir_path(user_args.configfile_path)
         user_inputs.config_file_path = find_resume_config_file()
-    if user_args.configfile_path is not None:
+    if user_args.command == "run":
         user_inputs.config_file_path = check_file_path(user_args.configfile_path)
 
     (

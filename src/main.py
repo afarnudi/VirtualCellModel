@@ -6,7 +6,9 @@ from general.report_time import print_runtime
 from general.report_time import get_simulation_time_stamp
 from general.configfile_tools import import_configurations
 from classes.general_parameters import GeneralParameters
-from general_parameters.general_parameters_funcs import get_general_parameters_from_configs
+from general_parameters.general_parameters_funcs import (
+    get_general_parameters_from_configs,
+)
 
 
 def run():
@@ -14,7 +16,8 @@ def run():
 
     parser = create_parser()
     user_args = parser.parse_args()
-    user_inputs = analyse_parser_arguments(user_args, parser)
+
+    user_inputs = analyse_parser_arguments(user_args)
     configs = import_configurations(user_inputs.config_file_path)
     general_parameters = get_general_parameters_from_configs(configs)
 
