@@ -21,6 +21,11 @@ dependencies = [
   "OpenMM >= 7.7" 
 ]
 
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src",
+]
+
 
 [project.urls]
 Repository = "https://github.com/afarnudi/VirtualCellModel"
