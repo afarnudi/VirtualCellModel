@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from general.classes.UserInputs import UserInputs
+from classes.general.UserInputs import UserInputs
 from general.platform_selection_tools import print_available_platforms_and_devices
 from general.template_generator import config_file_template_generator
 from general.configfile_tools import find_resume_config_file

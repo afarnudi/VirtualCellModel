@@ -1,7 +1,9 @@
 import os
 import sys
-from general.classes.configuration import Configuration
-from general.classes.print_colors import TerminalColors as tc
+from classes.general.configuration import Configuration
+from classes.general.configuration import is_section_declaration
+from classes.general.configuration import SECTION_LIST
+from classes.general.print_colors import TerminalColors as tc
 
 
 def find_resume_config_file():
@@ -54,19 +56,6 @@ def parse_dir_path(dir_path):
     return path
 
 
-def strip_of_comments(line, comment="#"):
-    """Remove characters to the right of the comment symbol (including the comment symbol).
-
-    Args:
-        line (str): String containing statements and/or comments.
-        comment (str, optional): String identified as the comment symbol. Defaults to "#".
-
-    Returns:
-        str: String content that lies on the left of the comment symbol.
-    """
-    return line.split(comment)[0].rstrip().lstrip()
-
-
 def read_config_file_lines(config_file_path):
     """Open and read the lines of a text based configuration file.
 
@@ -81,33 +70,13 @@ def read_config_file_lines(config_file_path):
     return lines
 
 
-def clean_lines(conf_lines):
-    """Preprocess and clean up the configuration lines lines.
-
-    During preprocessing remove comments, empty lines, and trailing white space on the right and left of the line.
-
-    Args:
-        conf_lines (list): list of configuration lines (strings).
-
-    Returns:
-        list: list of lines in the form of strings.
-    """
-    clean_lines = []
-    for line in conf_lines:
-        line = strip_of_comments(line)
-        line = line.rstrip()
-        line = line.lstrip()
-        if len(line) == 0:
-            continue
-        clean_lines.append(line)
-    return clean_lines
-
-
 def get_configurations(conf_lines):
-    """Extract sections and associated configuration lines from the list of configurations.
+    """Create VCM configuration objects from the configuration file content.
+
+    Check configuration lines for section decelerations, create VCM configuration objects by adding the user input settings.
 
     Args:
-        conf_lines (list): List of strings containing the configuration file cleaned up lines.
+        conf_lines (list[str]): List of strings containing the configuration file cleaned up lines.
 
     Raises:
         TypeError: If the first line of the configuration does not contain a section declaration.
@@ -115,46 +84,77 @@ def get_configurations(conf_lines):
     Returns:
         list: List of Configuration objects with the section configurations.
     """
-    first_line = conf_lines[0]
+
     configurations = []
-    if Configuration.check_string_for_section_declaration(first_line):
-        configurations.append(Configuration(first_line))
-        active_conf = configurations[-1]
-    else:
-        raise TypeError(
-            f'{tc.TRESET}{tc.TFAILED}Configuration file parsing: "{tc.TFILE}{first_line}{tc.TFAILED}" is not a section name. First non-comment statement of a configuration file must begin with a section declaration.\n{Configuration.section_declaration_message}{tc.TRESET}'
-        )
-    for line in conf_lines[1:]:
-        if Configuration.check_string_for_section_declaration(line):
+    for line in conf_lines:
+        if is_section_declaration(line):
             configurations.append(Configuration(line))
-            active_conf = configurations[-1]
+        elif configurations:
+            configurations[-1].add(line)
+        else:
             continue
-        active_conf.add(line)
     return configurations
 
-def check_configurations(configurations):
-    section_name_classes = Configuration.SECTION_LIST.copy()
+
+def configurations_consistency_check(configurations):
+    """Consistency check for user configuration inputs.
+
+    Args:
+        configurations (list[Configuration]): List of user selected VCM sections.
+
+    Raises:
+        TypeError: When there is no GeneralParameters sections or it is not uniquely defined.
+        TypeError: When there are no sections aside from a GeneralParameters and InteractionTable section.
+        TypeError: When there is more than one InteractionTable section.
+
+
+    Returns:
+        bool: True if all checks pass.
+    """
+
+    section_name_classes = SECTION_LIST.copy()
     section_name_classes.remove("InteractionTable")
     section_name_classes.remove("GeneralParameters")
 
     section_names = [c.get_name() for c in configurations]
-    if "GeneralParameters" in section_names:
-        section_names.remove("GeneralParameters")
-        try:
-            section_names.remove("InteractionTable")
-        except ValueError:
-            print(f"{tc.TBLINK}{tc.TWARN}No interaction section in the configuration file. Non bonded interactions will be switched off.{tc.TRESET}")
-        for sec in section_names:
-            if sec not in section_name_classes:
-                raise TypeError(f"{tc.TRESET}Apart from the \"GeneralParameters\" section, the configuration file must also contain at least one of the {section_name_classes} sections.")
+
+    if section_names.count("GeneralParameters") != 1:
+        raise TypeError(
+            f"{tc.TFAILED} The configuration file must contain {tc.TBOLD}one{tc.TRESET}{tc.TFAILED} GeneralParameters section.{tc.TRESET}"
+        )
+    section_names.remove("GeneralParameters")
+
+    interaction_table_count = section_names.count("InteractionTable")
+    if interaction_table_count == 0:
+        print(
+            f"{tc.TBLINK}{tc.TWARN}No interaction section in the configuration file. Non bonded interactions will be switched off.{tc.TRESET}"
+        )
+    elif interaction_table_count > 1:
+        raise TypeError(
+            f"{tc.TFAILED} The configuration file must contain {tc.TBOLD}at most one{tc.TRESET}{tc.TFAILED} InteractionTable section.{tc.TRESET}"
+        )
     else:
-        raise TypeError(f"{tc.TFAILED} The configuration file must contain a GeneralParameters section.")
+        section_names.remove("InteractionTable")
+
+    for sec in section_names:
+        if sec not in section_name_classes:
+            raise TypeError(
+                f'{tc.TRESET}Apart from the "GeneralParameters" section, the configuration file must also contain at least one of the {section_name_classes} sections.'
+            )
+
     return True
 
 
 def import_configurations(config_file_path):
+    """Import user configurations from file.
+
+    Args:
+        config_file_path (str): Path to the configuration file.
+
+    Returns:
+        list[Configuration]: List of Configuration objects containing user sections and settings.
+    """
     conf_lines = read_config_file_lines(config_file_path)
-    conf_lines = clean_lines(conf_lines)
     configurations = get_configurations(conf_lines)
-    check_configurations(configurations)
+    configurations_consistency_check(configurations)
     return configurations

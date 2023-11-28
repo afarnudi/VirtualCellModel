@@ -1,5 +1,5 @@
 from openmm.openmm import Platform
-from general.classes.print_colors import TerminalColors as tc
+from classes.general.print_colors import TerminalColors as tc
 
 from general.openmm_tools import create_dummy_context
 

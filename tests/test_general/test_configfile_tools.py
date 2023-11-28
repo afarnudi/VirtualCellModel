@@ -1,10 +1,10 @@
 import pytest
 from src.general.configfile_tools import check_file_path
 from src.general.configfile_tools import parse_dir_path
-from src.general.configfile_tools import strip_of_comments
-from src.general.configfile_tools import clean_lines
+# from src.general.configfile_tools import strip_of_comments
+# from src.general.configfile_tools import clean_lines
 from src.general.configfile_tools import get_configurations
-from src.general.configfile_tools import check_configurations
+from src.general.configfile_tools import configurations_consistency_check
 
 
 def test_check_file_path_file():
@@ -65,91 +65,7 @@ def test_parse_dir_from_upper_dir():
     assert parse_dir_path(dir_path) == answer
 
 
-def test_strip_of_comments_empty():
-    assert strip_of_comments("") == ""
 
-
-def test_strip_of_comments_comment():
-    assert strip_of_comments("#") == ""
-
-
-def test_strip_of_comments_long_comment():
-    assert strip_of_comments("# some comment") == ""
-
-
-def test_strip_of_comments_no_comment():
-    line = "statement"
-    assert strip_of_comments(line) == line
-
-
-def test_strip_of_comments_no_comment_long():
-    line = "statement about something."
-    assert strip_of_comments(line) == line
-
-
-def test_strip_of_comments_no_comment_long():
-    line = "statement about something."
-    assert strip_of_comments(line) == line
-
-
-def test_strip_of_comments_statement_and_comment():
-    line = "statement about something."
-    comment = "# some comment"
-    assert strip_of_comments(line + comment) == line
-
-
-def test_clean_lines():
-    lines = [
-        "#some comments",
-        "   #comments",
-        "",
-        "-Section Name",
-        "    -Section Name",
-        "-Section Name     ",
-        "    -Section Name    ",
-        "    -Section Name   #asdfasdfadsf ",
-        "-Section Name   #asdfasdfadsf ",
-        "-Section Name   stuff here #asdfasdfadsf ",
-        "   -Section Name   stuff here #asdfasdfadsf ",
-        "-Section Name   stuff here ",
-        "-Section Name   stuff here",
-        "   -Section Name   stuff here",
-        "configuration",
-        "   configuration   ",
-        "   configuration",
-        "configuration     ",
-        "configuration    2134 #comments here ",
-        "   configuration    2134 234 #comments here ",
-        "   configuration    Au #comments here ",
-        "   configuration    1,2,3,4 #comments here ",
-        "   configuration     #comments here ",
-        "   configuration     #comments here ",
-    ]
-    answer = [
-        "-Section Name",
-        "-Section Name",
-        "-Section Name",
-        "-Section Name",
-        "-Section Name",
-        "-Section Name",
-        "-Section Name   stuff here",
-        "-Section Name   stuff here",
-        "-Section Name   stuff here",
-        "-Section Name   stuff here",
-        "-Section Name   stuff here",
-        "configuration",
-        "configuration",
-        "configuration",
-        "configuration",
-        "configuration    2134",
-        "configuration    2134 234",
-        "configuration    Au",
-        "configuration    1,2,3,4",
-        "configuration",
-        "configuration",
-    ]
-    cleaned_lines = clean_lines(lines)
-    assert answer == cleaned_lines
 
 
 def test_get_configurations_check_names_Gen_Mem_Inter_correct():
@@ -222,7 +138,7 @@ def test_get_configurations_check_names_Gen_Mem_Inter_incorrect():
         )
 
 
-def test_check_configurations_Gen_Mem_Inter():
+def test_configurations_consistency_check_Gen_Mem_Inter():
     example = [
         "-GeneralParameters",
         "ProjectName SM_Ah_GKB_L",
@@ -251,10 +167,10 @@ def test_check_configurations_Gen_Mem_Inter():
         "M0 0",
     ]
     configurations = get_configurations(example)
-    assert check_configurations(configurations) == True
+    assert configurations_consistency_check(configurations) == True
 
 
-def test_check_configurations_Gen_Mem():
+def test_configurations_consistency_check_Gen_Mem():
     example = [
         "-GeneralParameters",
         "ProjectName SM_Ah_GKB_L",
@@ -281,4 +197,4 @@ def test_check_configurations_Gen_Mem():
         "VolumeConstraint N",
     ]
     configurations = get_configurations(example)
-    assert check_configurations(configurations) == True
+    assert configurations_consistency_check(configurations) == True
