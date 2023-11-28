@@ -33,6 +33,7 @@ jobs:
           nosetests
       - name: build package
         run: |
+          pip install --upgrade build
           python -m build
           pip install -e .
           VCM -h
