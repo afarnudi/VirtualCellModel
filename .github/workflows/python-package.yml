@@ -31,4 +31,9 @@ jobs:
       - name: Run tests
         run: |
           nosetests
+      - name: build package
+        run: |
+          python -m build
+          pip install -e .
+          VCM -h
         

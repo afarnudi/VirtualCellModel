@@ -1,0 +1,32 @@
+[project]
+name = "VCM"
+version = "0.0.1"
+authors = [
+  { name="Ali Farnudi", email="a.farnudi@gmail.com" },
+]
+# usually a one liner
+description="Molecular Dynamics simulation of the mechanical properties of living cells and tissues"
+readme = "README.rst"
+requires-python = ">=3.11"
+license = {file = "LICENSE.md"}
+keywords = ["Advent of Code", "captcha", ]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "numpy >= 1.26.2",
+  "OpenMM >= 8.1.0" 
+]
+
+
+[project.urls]
+Repository = "https://github.com/afarnudi/VirtualCellModel"
+
+[project.scripts]
+VCM = "main:run"
+
+
+
